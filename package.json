@@ -1,0 +1,27 @@
+{
+  "name": "markdownlint",
+  "version": "0.0.1",
+  "description": "A linting tool for Markdown files",
+  "main": "markdownlint.js",
+  "author": "David Anson (http://dlaa.me/)",
+  "license": "MIT",
+  "homepage": "https://github.com/DavidAnson/markdownlint",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidAnson/markdownlint.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DavidAnson/markdownlint/issues"
+  },
+  "scripts": {
+    "test": "nodeunit"
+  },
+  "devDependencies": {
+    "nodeunit": "^0.9.0"
+  },
+  "keywords": [
+    "markdown",
+    "lint",
+    "md"
+  ]
+}
