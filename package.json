@@ -2,7 +2,7 @@
   "name": "markdownlint",
   "version": "0.0.1",
   "description": "A linting tool for Markdown files",
-  "main": "markdownlint.js",
+  "main": "lib/markdownlint.js",
   "author": "David Anson (http://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
