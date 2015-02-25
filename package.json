@@ -14,9 +14,11 @@
     "url": "https://github.com/DavidAnson/markdownlint/issues"
   },
   "scripts": {
-    "test": "nodeunit"
+    "test": "nodeunit",
+    "lint": "eslint lib test"
   },
   "devDependencies": {
+    "eslint": "^0.15.0",
     "nodeunit": "^0.9.0"
   },
   "keywords": [
