@@ -12,7 +12,7 @@ function createTestForFile(file) {
       { "encoding": "utf8" },
       function readFileCallback(err, contents) {
         test.ifError(err);
-        var lines = contents.split(/\r\n|\n/g);
+        var lines = contents.split(/\r\n|\r|\n/g);
         var results = {};
         lines.forEach(function forLine(line, lineNum) {
           var match = line.match(/\{(MD\d+)(?::(\d+))?\}/);

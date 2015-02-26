@@ -17,6 +17,9 @@
     "test": "nodeunit",
     "lint": "eslint lib test"
   },
+  "dependencies": {
+    "markdown-it": "^3.0.7"
+  },
   "devDependencies": {
     "eslint": "^0.15.0",
     "nodeunit": "^0.9.0"
