@@ -15,6 +15,7 @@
   },
   "scripts": {
     "test": "nodeunit",
+    "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib test"
   },
   "dependencies": {
