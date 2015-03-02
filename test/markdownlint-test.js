@@ -3,16 +3,35 @@
 var fs = require("fs");
 var path = require("path");
 var markdownlint = require("../lib/markdownlint");
-
-var encodingUtf8 = { "encoding": "utf8" };
+var Q = require("q");
 
 function createTestForFile(file) {
   return function testForFile(test) {
-    test.expect(4);
-    fs.readFile(file, encodingUtf8, function readFileCallback(err, contents) {
-        test.ifError(err);
-        var lines = contents.split(/\r\n|\r|\n/g);
-        function lintFile(config) {
+    test.expect(1);
+    var configFile = file.replace(/\.md$/, ".json");
+    var actualPromise = Q.nfcall(fs.stat, configFile)
+      .then(
+        function configFileExists() {
+          return Q.nfcall(fs.readFile, configFile, { "encoding": "utf8" })
+            .then(
+              function configFileContents(contents) {
+                return JSON.parse(contents);
+              });
+        },
+        function noConfigFile() {
+          return null;
+        })
+      .then(
+        function lintWithConfig(config) {
+          return Q.nfcall(markdownlint, {
+            "files": [ file ],
+            "config": config
+          });
+        });
+    var expectedPromise = Q.nfcall(fs.readFile, file, { "encoding": "utf8" })
+      .then(
+        function fileContents(contents) {
+          var lines = contents.split(/\r\n|\r|\n/g);
           var results = {};
           lines.forEach(function forLine(line, lineNum) {
             var match = line.match(/\{(MD\d+)(?::(\d+))?\}/);
@@ -23,32 +42,18 @@ function createTestForFile(file) {
               results[rule] = errors;
             }
           });
-          markdownlint({
-            "files": [ file ],
-            "config": config
-          }, function markdownlintCallback(errr, actual) {
-            test.ifError(errr);
-            var expected = {};
-            expected[file] = results;
-            test.deepEqual(actual, expected, "Line numbers are not correct.");
-            test.done();
-          });
-        }
-        var configFile = file.replace(/\.md$/, ".json");
-        fs.stat(configFile, function statCallback(errr /*, stats*/) {
-          if (errr) {
-            test.ok(true, "Replacement for ifError of readFile");
-            lintFile();
-          } else {
-            fs.readFile(configFile, encodingUtf8,
-              function readFile(errrr, configContents) {
-                test.ifError(errrr);
-                var config = JSON.parse(configContents);
-                lintFile(config);
-              });
-          }
+          return results;
         });
-      });
+    Q.all([ actualPromise, expectedPromise ])
+      .then(
+        function compareResults(fulfillments) {
+          var actual = fulfillments[0];
+          var results = fulfillments[1];
+          var expected = {};
+          expected[file] = results;
+          test.deepEqual(actual, expected, "Line numbers are not correct.");
+        })
+      .done(test.done, test.done);
   };
 }
 

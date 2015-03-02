@@ -23,7 +23,8 @@
   },
   "devDependencies": {
     "eslint": "^0.15.0",
-    "nodeunit": "^0.9.0"
+    "nodeunit": "^0.9.0",
+    "q": "^1.2.0"
   },
   "keywords": [
     "markdown",
