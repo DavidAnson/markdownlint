@@ -1,36 +1,6 @@
 {
-  "MD001": true,
-  "MD002": true,
+  "default": true,
   "MD003": {
     "style": "setext"
-  },
-  "MD004": true,
-  "MD005": true,
-  "MD006": true,
-  "MD007": true,
-  "MD008": true,
-  "MD009": true,
-  "MD010": true,
-  "MD011": true,
-  "MD012": true,
-  "MD013": true,
-  "MD014": true,
-  "MD015": true,
-  "MD016": true,
-  "MD017": true,
-  "MD018": true,
-  "MD019": true,
-  "MD020": true,
-  "MD021": true,
-  "MD022": true,
-  "MD023": true,
-  "MD024": true,
-  "MD025": true,
-  "MD026": true,
-  "MD027": true,
-  "MD028": true,
-  "MD029": true,
-  "MD030": true,
-  "MD031": true,
-  "MD032": true
+  }
 }
