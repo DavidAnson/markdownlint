@@ -34,11 +34,12 @@ function createTestForFile(file) {
           var lines = contents.split(/\r\n|\r|\n/g);
           var results = {};
           lines.forEach(function forLine(line, lineNum) {
-            var match = line.match(/\{(MD\d+)(?::(\d+))?\}/);
-            if (match) {
+            var regex = /\{(MD\d+)(?::(\d+))?\}/g;
+            var match;
+            while ((match = regex.exec(line))) {
               var rule = match[1];
               var errors = results[rule] || [];
-              errors.push(lineNum + 1);
+              errors.push(match[2] ? parseInt(match[2], 10) : lineNum + 1);
               results[rule] = errors;
             }
           });
