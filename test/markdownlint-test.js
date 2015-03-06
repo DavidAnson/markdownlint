@@ -31,7 +31,7 @@ function createTestForFile(file) {
     var expectedPromise = Q.nfcall(fs.readFile, file, { "encoding": "utf8" })
       .then(
         function fileContents(contents) {
-          var lines = contents.split(/\r\n|\r|\n/g);
+          var lines = contents.split(/\r\n|\r|\n/);
           var results = {};
           lines.forEach(function forLine(line, lineNum) {
             var regex = /\{(MD\d+)(?::(\d+))?\}/g;
