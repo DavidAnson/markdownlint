@@ -127,7 +127,7 @@
         "max-depth": [2, 4],
         "max-len": [2, 80, 2],
         "max-nested-callbacks": [2, 2],
-        "max-params": [2, 3],
+        "max-params": [2, 4],
         "max-statements": [0, 10],
         "new-cap": 2,
         "new-parens": 2,
