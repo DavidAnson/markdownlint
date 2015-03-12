@@ -66,3 +66,39 @@ fs.readdirSync(__dirname).forEach(function forFile(file) {
     module.exports[file] = createTestForFile(path.join(__dirname, file));
   }
 });
+
+module.exports.missingOptions = function missingOptions(test) {
+  test.expect(2);
+  markdownlint(null, function callback(err, result) {
+    test.ifError(err);
+    test.ok(result, "Did not get result for missing options.");
+    test.done();
+  });
+};
+
+module.exports.missingFiles = function missingFiles(test) {
+  test.expect(2);
+  markdownlint({}, function callback(err, result) {
+    test.ifError(err);
+    test.ok(result, "Did not get result for missing files.");
+    test.done();
+  });
+};
+
+module.exports.missingCallback = function missingCallback(test) {
+  test.expect(0);
+  markdownlint();
+  test.done();
+};
+
+module.exports.badFile = function badFile(test) {
+  test.expect(3);
+  markdownlint({
+    "files": [ "./badFile" ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for bad file.");
+    test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
+    test.ok(!result, "Got result for bad file.");
+    test.done();
+  });
+};
