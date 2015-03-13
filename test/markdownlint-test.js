@@ -2,9 +2,9 @@
 
 var fs = require("fs");
 var path = require("path");
+var Q = require("q");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
-var Q = require("q");
 
 function createTestForFile(file) {
   return function testForFile(test) {
@@ -66,6 +66,19 @@ fs.readdirSync(__dirname).forEach(function forFile(file) {
     module.exports[file] = createTestForFile(path.join(__dirname, file));
   }
 });
+
+module.exports.projectFiles = function projectFiles(test) {
+  test.expect(2);
+  var options = {
+    "files": [ "README.md" ]
+  };
+  markdownlint(options, function callback(err, actual) {
+    test.ifError(err);
+    var expected = { "README.md": {} };
+    test.deepEqual(actual, expected, "Issue(s) with project files.");
+    test.done();
+  });
+};
 
 module.exports.missingOptions = function missingOptions(test) {
   test.expect(2);
