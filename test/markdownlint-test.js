@@ -80,6 +80,44 @@ module.exports.projectFiles = function projectFiles(test) {
   });
 };
 
+module.exports.resultFormatting = function resultFormatting(test) {
+  test.expect(3);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ]
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD002": [ 3 ],
+        "MD018": [ 1 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {
+        "MD002": [ 1 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    var actualMessage = actualResult.toString();
+    var expectedMessage =
+      "./test/atx_header_spacing.md: 3: MD002" +
+      " First header should be a h1 header\n" +
+      "./test/atx_header_spacing.md: 1: MD018" +
+      " No space after hash on atx style header\n" +
+      "./test/atx_header_spacing.md: 3: MD019" +
+      " Multiple spaces after hash on atx style header\n" +
+      "./test/atx_header_spacing.md: 5: MD019" +
+      " Multiple spaces after hash on atx style header\n" +
+      "./test/first_header_bad_atx.md: 1: MD002" +
+      " First header should be a h1 header";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
 module.exports.missingOptions = function missingOptions(test) {
   test.expect(2);
   markdownlint(null, function callback(err, result) {
