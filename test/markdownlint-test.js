@@ -118,6 +118,20 @@ module.exports.resultFormatting = function resultFormatting(test) {
   });
 };
 
+module.exports.filesNotModified = function filesNotModified(test) {
+  test.expect(2);
+  var files = [
+    "./test/atx_header_spacing.md",
+    "./test/first_header_bad_atx.md"
+  ];
+  var expectedFiles = files.slice();
+  markdownlint({ "files": files }, function callback(err) {
+    test.ifError(err);
+    test.deepEqual(files, expectedFiles, "Files modified.");
+    test.done();
+  });
+};
+
 module.exports.missingOptions = function missingOptions(test) {
   test.expect(2);
   markdownlint(null, function callback(err, result) {
