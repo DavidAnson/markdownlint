@@ -18,7 +18,7 @@
     "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib test & eslint --rule \"no-console: 0\" example",
-    "example": "cd example & node standalone.js"
+    "example": "cd example & node standalone.js & gulp markdownlint"
   },
   "dependencies": {
     "markdown-it": "^3.0.7"
