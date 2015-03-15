@@ -65,7 +65,7 @@ See [Rules.md](doc/Rules.md) for more details.
 Invoke `markdownlint` and use the `result` object's `toString` method:
 
 ```js
-var markdownlint = require("../lib/markdownlint");
+var markdownlint = require("markdownlint");
 
 var options = {
   "files": [ "good.md", "bad.md" ]
@@ -113,7 +113,7 @@ Integration with the [gulp](http://gulpjs.com/) build system is straightforward:
 ```js
 var gulp = require("gulp");
 var through2 = require("through2");
-var markdownlint = require("../lib/markdownlint");
+var markdownlint = require("markdownlint");
 
 gulp.task("markdownlint", function task() {
   return gulp.src("*.md", { "read": false })
@@ -139,6 +139,46 @@ bad.md: 3: MD010 Hard tabs
 bad.md: 1: MD018 No space after hash on atx style header
 bad.md: 3: MD018 No space after hash on atx style header
 [00:00:00] Finished 'markdownlint' after 10 ms
+```
+
+Integration with the [Grunt](http://gruntjs.com/) build system is similar:
+
+```js
+var markdownlint = require("markdownlint");
+
+module.exports = function wrapper(grunt) {
+  grunt.initConfig({
+    "markdownlint": {
+      "example": {
+        "src": [ "*.md" ]
+      }
+    }
+  });
+
+  grunt.registerMultiTask("markdownlint", function task() {
+    var done = this.async();
+    markdownlint(
+      { "files": this.filesSrc },
+      function callback(err, result) {
+        var resultString = err || ((result || "").toString());
+        if (resultString) {
+          grunt.fail.warn("\n" + resultString + "\n");
+        }
+        done(!err || !resultString);
+      });
+  });
+};
+```
+
+Outputs:
+
+```text
+Running "markdownlint:example" (markdownlint) task
+Warning:
+bad.md: 3: MD010 Hard tabs
+bad.md: 1: MD018 No space after hash on atx style header
+bad.md: 3: MD018 No space after hash on atx style header
+ Use --force to continue.
 ```
 
 ## Release History
