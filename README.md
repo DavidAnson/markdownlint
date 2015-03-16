@@ -60,6 +60,71 @@ cases come directly from that project.
 
 See [Rules.md](doc/Rules.md) for more details.
 
+## API
+
+```js
+/**
+ * Lint specified Markdown files according to configurable rules.
+ *
+ * @param {Object} options Configuration options.
+ * @param {Function} callback Callback (err, result) function.
+ * @returns {void}
+ */
+function markdownlint(options, callback) { ... }
+```
+
+### options
+
+Type: `Object`
+
+Configures the function.
+
+#### options.files
+
+Type: `Array` of `String`
+
+List of files to lint.
+
+Each array element should be a single file (via relative or absolute path);
+[globbing](http://en.wikipedia.org/wiki/Glob_%28programming%29) is the caller's
+responsibility.
+
+Example: `[ "one.md", "dir/two.md" ]`
+
+#### options.config
+
+Type: `Object` mapping `String` to `Object | Boolean`
+
+Configures the rules to use.
+
+Object keys are rule names and values are the rule's configuration.
+The value `false` disables a rule, `true` enables its default configuration,
+and passing an object customizes its settings. Setting the special `default`
+rule to `true` or `false` includes/excludes all rules by default.
+
+Example:
+
+```json
+{
+  "default": true,
+  "MD007": {
+    "indent": 4
+  },
+  "MD013": {
+    "line_length": 100
+  },
+  "MD029": false
+}
+```
+
+### callback
+
+Type: `Function` taking (`Error`, `Object`)
+
+Function to call upon completion.
+
+See below for an example of the structure of the `result` object.
+
 ## Usage
 
 Invoke `markdownlint` and use the `result` object's `toString` method:

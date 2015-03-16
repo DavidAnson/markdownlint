@@ -13,7 +13,7 @@ function createTestForFile(file) {
     var actualPromise = Q.nfcall(fs.stat, configFile)
       .then(
         function configFileExists() {
-          return Q.nfcall(fs.readFile, configFile, { "encoding": "utf8" })
+          return Q.nfcall(fs.readFile, configFile, shared.utf8Encoding)
             .then(
               function configFileContents(contents) {
                 return JSON.parse(contents);
@@ -29,7 +29,7 @@ function createTestForFile(file) {
             "config": config
           });
         });
-    var expectedPromise = Q.nfcall(fs.readFile, file, { "encoding": "utf8" })
+    var expectedPromise = Q.nfcall(fs.readFile, file, shared.utf8Encoding)
       .then(
         function fileContents(contents) {
           var lines = contents.split(shared.newLineRe);
