@@ -29,36 +29,54 @@ cases come directly from that project.
 
 ## Rules
 
-* MD001 - Header levels should only increment by one level at a time
-* MD002 - First header should be a h1 header
-* MD003 - Header style
-* MD004 - Unordered list style
-* MD005 - Inconsistent indentation for list items at the same level
-* MD006 - Consider starting bulleted lists at the beginning of the line
-* MD007 - Unordered list indentation
-* MD009 - Trailing spaces
-* MD010 - Hard tabs
-* MD011 - Reversed link syntax
-* MD012 - Multiple consecutive blank lines
-* MD013 - Line length
-* MD014 - Dollar signs used before commands without showing output
-* MD018 - No space after hash on atx style header
-* MD019 - Multiple spaces after hash on atx style header
-* MD020 - No space inside hashes on closed atx style header
-* MD021 - Multiple spaces inside hashes on closed atx style header
-* MD022 - Headers should be surrounded by blank lines
-* MD023 - Headers must start at the beginning of the line
-* MD024 - Multiple headers with the same content
-* MD025 - Multiple top level headers in the same document
-* MD026 - Trailing punctuation in header
-* MD027 - Multiple spaces after blockquote symbol
-* MD028 - Blank line inside blockquote
-* MD029 - Ordered list item prefix
-* MD030 - Spaces after list markers
-* MD031 - Fenced code blocks should be surrounded by blank lines
-* MD032 - Lists should be surrounded by blank lines
+* **MD001** - Header levels should only increment by one level at a time
+* **MD002** - First header should be a h1 header
+* **MD003** - Header style
+* **MD004** - Unordered list style
+* **MD005** - Inconsistent indentation for list items at the same level
+* **MD006** - Consider starting bulleted lists at the beginning of the line
+* **MD007** - Unordered list indentation
+* **MD009** - Trailing spaces
+* **MD010** - Hard tabs
+* **MD011** - Reversed link syntax
+* **MD012** - Multiple consecutive blank lines
+* **MD013** - Line length
+* **MD014** - Dollar signs used before commands without showing output
+* **MD018** - No space after hash on atx style header
+* **MD019** - Multiple spaces after hash on atx style header
+* **MD020** - No space inside hashes on closed atx style header
+* **MD021** - Multiple spaces inside hashes on closed atx style header
+* **MD022** - Headers should be surrounded by blank lines
+* **MD023** - Headers must start at the beginning of the line
+* **MD024** - Multiple headers with the same content
+* **MD025** - Multiple top level headers in the same document
+* **MD026** - Trailing punctuation in header
+* **MD027** - Multiple spaces after blockquote symbol
+* **MD028** - Blank line inside blockquote
+* **MD029** - Ordered list item prefix
+* **MD030** - Spaces after list markers
+* **MD031** - Fenced code blocks should be surrounded by blank lines
+* **MD032** - Lists should be surrounded by blank lines
 
 See [Rules.md](doc/Rules.md) for more details.
+
+## Tags
+
+* **atx** - MD018, MD019
+* **atx_closed** - MD020, MD021
+* **blank_lines** - MD012, MD022, MD031, MD032
+* **blockquote** - MD027, MD028
+* **bullet** - MD004, MD005, MD006, MD007, MD032
+* **code** - MD014, MD031
+* **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
+  MD024, MD025, MD026
+* **indentation** - MD005, MD006, MD007, MD027
+* **line_length** - MD013
+* **links** - MD011
+* **ol** - MD029, MD030, MD032
+* **spaces** - MD018, MD019, MD020, MD021, MD023
+* **ul** - MD004, MD005, MD006, MD007, MD030, MD032
+* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030
 
 ## API
 
@@ -93,7 +111,7 @@ Example: `[ "one.md", "dir/two.md" ]`
 
 #### options.config
 
-Type: `Object` mapping `String` to `Object | Boolean`
+Type: `Object` mapping `String` to `Boolean | Object`
 
 Configures the rules to use.
 
@@ -165,10 +183,10 @@ Outputs:
 
 ```json
 {
-  'good.md': {},
-  'bad.md': {
-    MD010: [ 3 ],
-    MD018: [ 1, 3 ]
+  "good.md": {},
+  "bad.md": {
+    "MD010": [ 3 ],
+    "MD018": [ 1, 3 ]
   }
 }
 ```
