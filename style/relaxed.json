@@ -1,0 +1,9 @@
+{
+  "comment": "Relaxed rules",
+
+  "default": true,
+  "whitespace": false,
+  "line_length": false,
+  "MD006": false,
+  "MD007": false
+}

@@ -118,6 +118,164 @@ module.exports.resultFormatting = function resultFormatting(test) {
   });
 };
 
+module.exports.defaultTrue = function defaultTrue(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "default": true
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD002": [ 3 ],
+        "MD018": [ 1 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {
+        "MD002": [ 1 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.defaultFalse = function defaultFalse(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "default": false
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {},
+      "./test/first_header_bad_atx.md": {}
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.disableRules = function disableRules(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "MD002": false,
+      "default": true,
+      "MD019": false
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD018": [ 1 ]
+      },
+      "./test/first_header_bad_atx.md": {}
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.enableRules = function enableRules(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "MD002": true,
+      "default": false,
+      "MD019": true
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD002": [ 3 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {
+        "MD002": [ 1 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.disableTag = function disableTag(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "default": true,
+      "spaces": false
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD002": [ 3 ]
+      },
+      "./test/first_header_bad_atx.md": {
+        "MD002": [ 1 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.enableTag = function enableTag(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "default": false,
+      "spaces": true
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD018": [ 1 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {}
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
 module.exports.filesNotModified = function filesNotModified(test) {
   test.expect(2);
   var files = [
