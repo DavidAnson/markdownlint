@@ -138,8 +138,8 @@ Example:
   "default": true,
   "MD003": { "style": "atx_closed" },
   "MD007": { "indent": 4 },
-  "MD009": false
-  "whitespace": false,
+  "MD009": false,
+  "whitespace": false
 }
 ```
 
