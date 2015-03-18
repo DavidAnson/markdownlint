@@ -44,7 +44,11 @@ function createTestForFile(file) {
               results[rule] = errors;
             }
           });
-          return results;
+          var sortedResults = {};
+          Object.keys(results).sort().forEach(function forKey(key) {
+            sortedResults[key] = results[key];
+          });
+          return sortedResults;
         });
     Q.all([ actualPromise, expectedPromise ])
       .then(
@@ -270,6 +274,85 @@ module.exports.enableTag = function enableTag(test) {
         "MD019": [ 3, 5 ]
       },
       "./test/first_header_bad_atx.md": {}
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.styleAll = function styleAll(test) {
+  test.expect(2);
+  var options = {
+    "files": [ "./test/break-all-the-rules.md" ],
+    "config": require("../style/all.json")
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/break-all-the-rules.md": {
+        "MD001": [ 3 ],
+        "MD002": [ 1 ],
+        "MD003": [ 5, 30 ],
+        "MD004": [ 8 ],
+        "MD005": [ 12 ],
+        "MD006": [ 8 ],
+        "MD007": [ 8, 11 ],
+        "MD009": [ 14 ],
+        "MD010": [ 14 ],
+        "MD011": [ 16 ],
+        "MD012": [ 18 ],
+        "MD013": [ 21 ],
+        "MD014": [ 23 ],
+        "MD018": [ 25 ],
+        "MD019": [ 27 ],
+        "MD020": [ 29 ],
+        "MD021": [ 30 ],
+        "MD022": [ 30 ],
+        "MD023": [ 30 ],
+        "MD024": [ 34 ],
+        "MD026": [ 40 ],
+        "MD027": [ 42 ],
+        "MD028": [ 43 ],
+        "MD029": [ 47 ],
+        "MD030": [ 8 ],
+        "MD031": [ 50 ],
+        "MD032": [ 51 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.styleRelaxed = function styleRelaxed(test) {
+  test.expect(2);
+  var options = {
+    "files": [ "./test/break-all-the-rules.md" ],
+    "config": require("../style/relaxed.json")
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/break-all-the-rules.md": {
+        "MD001": [ 3 ],
+        "MD002": [ 1 ],
+        "MD003": [ 5, 30 ],
+        "MD004": [ 8 ],
+        "MD005": [ 12 ],
+        "MD011": [ 16 ],
+        "MD014": [ 23 ],
+        "MD018": [ 25 ],
+        "MD019": [ 27 ],
+        "MD020": [ 29 ],
+        "MD021": [ 30 ],
+        "MD022": [ 30 ],
+        "MD023": [ 30 ],
+        "MD024": [ 34 ],
+        "MD026": [ 40 ],
+        "MD029": [ 47 ],
+        "MD031": [ 50 ],
+        "MD032": [ 51 ]
+      }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.done();
