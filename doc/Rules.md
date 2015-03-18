@@ -53,7 +53,7 @@ The first header in the document should be a h1 header:
 
 Tags: headers
 
-Parameters: style
+Parameters: style ("consistent", "atx", "atx_closed", "setext"; default "consistent")
 
 This rule is triggered when different header styles (atx, setext, and 'closed'
 atx) are used in the same document:
@@ -79,7 +79,7 @@ document.
 
 Tags: bullet, ul
 
-Parameters: style
+Parameters: style ("consistent", "asterisk", "plus", "dash"; default "consistent")
 
 This rule is triggered when the symbols used in the document for unordered
 list items do not match the configured unordered list style:
@@ -149,7 +149,7 @@ characters if you use 4 space tabs, or 1 character if you use 2 space tabs).
 
 Tags: bullet, ul, indentation
 
-Parameters: indent
+Parameters: indent (number; default 2)
 
 This rule is triggered when list items are not indented by the configured
 number of spaces (default: 2).
@@ -244,7 +244,7 @@ lines inside code blocks.
 
 Tags: line_length
 
-Parameters: line_length
+Parameters: line_length (number; default 80)
 
 This rule is triggered when there are lines that are longer than the
 configured line length (default: 80 characters). To fix this, split the line
@@ -463,7 +463,7 @@ should be contained within this header.
 
 Tags: headers
 
-Parameters: punctuation
+Parameters: punctuation (string; default ".,;:!?")
 
 This rule is triggered on any header that has a punctuation character as the
 last character in the line:
@@ -531,7 +531,7 @@ separate blockquotes.
 
 Tags: ol
 
-Parameters: style
+Parameters: style ("one", "ordered"; default "one")
 
 This rule is triggered on ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
@@ -553,7 +553,7 @@ Example valid list if the style is configured as 'ordered':
 
 Tags: ol, ul, whitespace
 
-Parameters: ul_single, ol_single, ul_multi, ol_multi
+Parameters: ul_single, ol_single, ul_multi, ol_multi (number, default 1)
 
 This rule checks for the number of spaces between a list marker (e.g. '`-`',
 '`*`', '`+`' or '`1.`') and the text of the list item.

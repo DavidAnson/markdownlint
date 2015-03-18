@@ -125,22 +125,37 @@ Configures the rules to use.
 Object keys are rule names and values are the rule's configuration.
 The value `false` disables a rule, `true` enables its default configuration,
 and passing an object customizes its settings. Setting the special `default`
-rule to `true` or `false` includes/excludes all rules by default.
+rule to `true` or `false` includes/excludes all rules by default. Enabling or
+disabling a tag name (ex: `whitespace`) affects all rules having that tag.
+
+The `default` rule is applied first, then keys are processed in order from top
+to bottom with later values overriding earlier ones.
 
 Example:
 
 ```json
 {
   "default": true,
-  "MD007": {
-    "indent": 4
-  },
-  "MD013": {
-    "line_length": 100
-  },
-  "MD029": false
+  "MD003": { "style": "atx_closed" },
+  "MD007": { "indent": 4 },
+  "MD009": false
+  "whitespace": false,
 }
 ```
+
+Sets of rules (known as a "style") can be stored separately and loaded as
+[JSON](http://en.wikipedia.org/wiki/JSON).
+
+Example:
+
+```js
+var options = {
+  "files": [ "..." ],
+  "config": require("style/relaxed.json")
+};
+```
+
+See the [style](style) directory for more samples.
 
 ### callback
 
