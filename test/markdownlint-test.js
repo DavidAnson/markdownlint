@@ -174,6 +174,32 @@ module.exports.defaultFalse = function defaultFalse(test) {
   });
 };
 
+module.exports.defaultUndefined = function defaultUndefined(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {}
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD002": [ 3 ],
+        "MD018": [ 1 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {
+        "MD002": [ 1 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
 module.exports.disableRules = function disableRules(test) {
   test.expect(2);
   var options = {
