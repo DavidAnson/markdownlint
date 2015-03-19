@@ -65,9 +65,7 @@ function createTestForFile(file) {
   };
 }
 
-/* eslint-disable no-sync, for synchronous test method creation */
-fs.readdirSync("./test").forEach(function forFile(file) {
-/* eslint-enable no-sync */
+fs.readdirSync("./test").forEach(function forFile(file) { // eslint-disable-line
   if (file.match(/\.md$/)) {
     module.exports[file] = createTestForFile(path.join("./test", file));
   }
