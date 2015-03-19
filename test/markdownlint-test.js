@@ -514,7 +514,7 @@ module.exports.doc = function doc(test) {
       var inHeading = false;
       var rule = null;
       md.parse(contents, {}).forEach(function forToken(token) {
-        if ((token.type === "heading_open") && (token.hLevel === 2)) {
+        if ((token.type === "heading_open") && (token.tag === "h2")) {
           inHeading = true;
         } else if (token.type === "heading_close") {
           inHeading = false;

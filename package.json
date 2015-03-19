@@ -21,7 +21,7 @@
     "example": "cd example & node standalone.js & grunt markdownlint & gulp markdownlint"
   },
   "dependencies": {
-    "markdown-it": "^3.0.7"
+    "markdown-it": "^4.0.1"
   },
   "devDependencies": {
     "eslint": "^0.15.0",
