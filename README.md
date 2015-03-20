@@ -87,6 +87,8 @@ See [Rules.md](doc/Rules.md) for more details.
 
 ## API
 
+Standard asynchronous interface:
+
 ```js
 /**
  * Lint specified Markdown files according to configurable rules.
@@ -96,6 +98,18 @@ See [Rules.md](doc/Rules.md) for more details.
  * @returns {void}
  */
 function markdownlint(options, callback) { ... }
+```
+
+Synchronous interface (for build scripts, etc.):
+
+```js
+/**
+ * Lint specified Markdown files according to configurable rules.
+ *
+ * @param {Object} options Configuration options.
+ * @returns {Object} Result object.
+ */
+function markdownlint.sync(options) { ... }
 ```
 
 ### options
@@ -161,9 +175,14 @@ See the [style](style) directory for more samples.
 
 Type: `Function` taking (`Error`, `Object`)
 
-Function to call upon completion.
+Standard completion callback.
 
-See below for an example of the structure of the `result` object.
+### result
+
+Type: `Object`
+
+Call `result.toString()` for convenience or see below for an example of the
+structure of the `result` object.
 
 ## Usage
 
@@ -183,7 +202,14 @@ markdownlint(options, function callback(err, result) {
 });
 ```
 
-Outputs:
+Or invoke `markdownlint.sync` for a synchronous call:
+
+```js
+var result = markdownlint.sync(options);
+console.log(result.toString());
+```
+
+Output of both calls:
 
 ```text
 bad.md: 3: MD010 Hard tabs
@@ -191,7 +217,7 @@ bad.md: 1: MD018 No space after hash on atx style header
 bad.md: 3: MD018 No space after hash on atx style header
 ```
 
-Or examine the `result` object directly:
+To examine the `result` object directly:
 
 ```js
 markdownlint(options, function callback(err, result) {
@@ -201,7 +227,7 @@ markdownlint(options, function callback(err, result) {
 });
 ```
 
-Outputs:
+Output:
 
 ```json
 {
@@ -236,7 +262,7 @@ gulp.task("markdownlint", function task() {
 });
 ```
 
-Outputs:
+Output:
 
 ```text
 [00:00:00] Starting 'markdownlint'...
@@ -275,7 +301,7 @@ module.exports = function wrapper(grunt) {
 };
 ```
 
-Outputs:
+Output:
 
 ```text
 Running "markdownlint:example" (markdownlint) task

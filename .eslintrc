@@ -87,7 +87,7 @@
         "no-space-before-semi": 2,
         "no-spaced-func": 2,
         "no-sparse-arrays": 2,
-        "no-sync": 2,
+        "no-sync": 0,
         "no-ternary": 0,
         "no-trailing-spaces": 2,
         "no-throw-literal": 2,

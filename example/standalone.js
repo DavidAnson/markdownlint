@@ -19,3 +19,7 @@ markdownlint(options, function callback(err, result) {
     console.dir(result, { "colors": true });
   }
 });
+
+// Make a synchronous call
+var result = markdownlint.sync(options);
+console.log(result.toString());
