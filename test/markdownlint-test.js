@@ -498,7 +498,7 @@ module.exports.badFileSync = function badFileSync(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(143);
+  test.expect(144);
   fs.readFile("README.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -555,7 +555,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(87);
+  test.expect(90);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

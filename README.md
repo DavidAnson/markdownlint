@@ -63,6 +63,7 @@ cases come directly from that project.
 * **MD030** - Spaces after list markers
 * **MD031** - Fenced code blocks should be surrounded by blank lines
 * **MD032** - Lists should be surrounded by blank lines
+* **MD033** - Inline HTML
 
 See [Rules.md](doc/Rules.md) for more details.
 

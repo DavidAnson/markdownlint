@@ -5,5 +5,6 @@
   "whitespace": false,
   "line_length": false,
   "MD006": false,
-  "MD007": false
+  "MD007": false,
+  "MD033": false
 }
