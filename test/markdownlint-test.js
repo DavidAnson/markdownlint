@@ -498,7 +498,15 @@ module.exports.badFileSync = function badFileSync(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(144);
+  test.expect(80);
+  var tagToRules = {};
+  rules.forEach(function forRule(rule) {
+    rule.tags.forEach(function forTag(tag) {
+      var tagRules = tagToRules[tag] || [];
+      tagRules.push(rule.name);
+      tagToRules[tag] = tagRules;
+    });
+  });
   fs.readFile("README.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -507,8 +515,6 @@ module.exports.readme = function readme(test) {
       var inRules = false;
       var seenTags = false;
       var inTags = false;
-      var docTags = [];
-      var usedTags = [];
       md.parse(contents, {}).forEach(function forToken(token) {
         if (token.type === "bullet_list_open") {
           if (!seenRules) {
@@ -524,38 +530,32 @@ module.exports.readme = function readme(test) {
         } else if (token.type === "inline") {
           if (inRules) {
             var rule = rulesLeft.shift();
-            var expected = "**" + rule.name + "** - " + rule.desc;
-            test.equal(token.content, expected, "Rule mismatch.");
+            test.ok(rule,
+              "Missing rule implementation for " + token.content + ".");
+            if (rule) {
+              var expected = "**" + rule.name + "** - " + rule.desc;
+              test.equal(token.content, expected, "Rule mismatch.");
+            }
           } else if (inTags) {
             var parts = token.content.replace(/\*\*/g, "").split(/ - |, |,\n/);
             var tag = parts.shift();
-            docTags.push(tag);
-            parts.forEach(function forPart(part) {
-              var found = rules.some(function forRule(r) {
-                if (r.name === part) {
-                  test.ok(r.tags.indexOf(tag) !== -1, "Missing tag.");
-                  r.tags.forEach(function forTag(t) {
-                    if (usedTags.indexOf(t) === -1) {
-                      usedTags.push(t);
-                    }
-                  });
-                  return true;
-                }
-                return false;
-              });
-              test.ok(found, "Unknown rule." + part);
-            });
+            test.deepEqual(parts, tagToRules[tag] || [],
+              "Rule mismatch for tag " + tag + ".");
+            delete tagToRules[tag];
           }
         }
       });
-      test.ok(!rulesLeft.length, "Missing rule.");
-      test.deepEqual(docTags, usedTags.sort(), "Tag mismatch.");
+      var ruleLeft = rulesLeft.shift();
+      test.ok(!ruleLeft,
+        "Missing rule documentation for " + (ruleLeft || {}).name + ".");
+      var tagLeft = Object.keys(tagToRules).shift();
+      test.ok(!tagLeft, "Undocumented tag " + tagLeft + ".");
       test.done();
     });
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(90);
+  test.expect(123);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -569,19 +569,27 @@ module.exports.doc = function doc(test) {
           inHeading = false;
         } else if (token.type === "inline") {
           if (inHeading) {
-            test.ok(!rule, "Missing tags.");
+            test.ok(!rule,
+              "Missing tags for rule " + (rule || {}).name + ".");
             rule = rulesLeft.shift();
-            var expected = rule.name + " - " + rule.desc;
-            test.equal(token.content, expected, "Rule mismatch.");
-          } else if (/^Tags: /.test(token.content)) {
+            test.ok(rule,
+              "Missing rule implementation for " + token.content + ".");
+            if (rule) {
+              var expected = rule.name + " - " + rule.desc;
+              test.equal(token.content, expected, "Rule mismatch.");
+            }
+          } else if (/^Tags: /.test(token.content) && rule) {
             var tags = token.content.split(/, |: | /).slice(1);
-            test.deepEqual(tags, rule.tags, "Tag mismatch.");
+            test.deepEqual(tags, rule.tags,
+              "Tag mismatch for rule " + rule.name + ".");
             rule = null;
           }
         }
       });
-      test.ok(!rulesLeft.length, "Missing rule.");
-      test.ok(!rule, "Missing tags.");
+      var ruleLeft = rulesLeft.shift();
+      test.ok(!ruleLeft,
+        "Missing rule documentation for " + (ruleLeft || {}).name + ".");
+      test.ok(!rule, "Missing tags for rule " + (rule || {}).name + ".");
       test.done();
     });
 };

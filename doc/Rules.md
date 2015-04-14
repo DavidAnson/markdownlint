@@ -698,3 +698,25 @@ To fix this, use 'pure' markdown instead of including raw HTML:
 Rationale: Raw HTML is allowed in markdown, but this rule is included for
 those who want their documents to only include "pure" markdown, or for those
 who are rendering markdown documents in something other than HTML.
+
+## MD034 - Bare URL used
+
+Tags: links, url
+
+This rule is triggered whenever a URL is given that isn't surrounded by angle
+brackets:
+
+    For more information, see http://www.example.com/.
+
+To fix this, add angle brackets around the URL:
+
+    For more information, see <http://www.example.com/>.
+
+Rationale: Without angle brackets, the URL isn't converted into a link in many
+markdown parsers.
+
+Note: if you do want a bare URL without it being converted into a link,
+enclose it in a code block, otherwise in some markdown parsers it _will_ be
+converted:
+
+    `http://www.example.com`
