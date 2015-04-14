@@ -15,5 +15,8 @@
     "ul_multi": 3,
     "ol_multi": 2
   },
-  "MD033": false
+  "MD033": false,
+  "MD035": {
+    "style": "---"
+  }
 }
