@@ -66,6 +66,7 @@ cases come directly from that project.
 * **MD033** - Inline HTML
 * **MD034** - Bare URL used
 * **MD035** - Horizontal rule style
+* **MD036** - Emphasis used instead of a header
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -77,9 +78,10 @@ See [Rules.md](doc/Rules.md) for more details.
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
 * **code** - MD014, MD031
+* **emphasis** - MD036
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
-  MD024, MD025, MD026
+  MD024, MD025, MD026, MD036
 * **hr** - MD035
 * **html** - MD033
 * **indentation** - MD005, MD006, MD007, MD027
