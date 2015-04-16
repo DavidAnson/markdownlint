@@ -794,3 +794,33 @@ sections:
 
 Note: this rule looks for paragraphs that consist entirely of emphasized text.
 It won't fire on emphasis used within regular text.
+
+## MD037 - Spaces inside emphasis markers
+
+Tags: whitespace, emphasis
+
+This rule is triggered when emphasis markers (bold, italic) are used, but they
+have spaces between the markers and the text:
+
+    Here is some ** bold ** text.
+
+    Here is some * italic * text.
+
+    Here is some more __ bold __ text.
+
+    Here is some more _ italic _ text.
+
+To fix this, remove the spaces around the emphasis markers:
+
+    Here is some **bold** text.
+
+    Here is some *italic* text.
+
+    Here is some more __bold__ text.
+
+    Here is some more _italic_ text.
+
+Rationale: Emphasis is only parsed as such when the asterisks/underscores
+aren't completely surrounded by spaces. This rule attempts to detect where
+they were surrounded by spaces, but it appears that emphasized text was
+intended by the author.

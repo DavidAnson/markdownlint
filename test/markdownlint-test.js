@@ -498,7 +498,7 @@ module.exports.badFileSync = function badFileSync(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(86);
+  test.expect(88);
   var tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -555,7 +555,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(131);
+  test.expect(135);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

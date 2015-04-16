@@ -67,6 +67,7 @@ cases come directly from that project.
 * **MD034** - Bare URL used
 * **MD035** - Horizontal rule style
 * **MD036** - Emphasis used instead of a header
+* **MD037** - Spaces inside emphasis markers
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -78,7 +79,7 @@ See [Rules.md](doc/Rules.md) for more details.
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
 * **code** - MD014, MD031
-* **emphasis** - MD036
+* **emphasis** - MD036, MD037
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
   MD024, MD025, MD026, MD036
@@ -91,7 +92,7 @@ See [Rules.md](doc/Rules.md) for more details.
 * **spaces** - MD018, MD019, MD020, MD021, MD023
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
-* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030
+* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037
 
 ## API
 
