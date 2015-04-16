@@ -68,6 +68,8 @@ cases come directly from that project.
 * **MD035** - Horizontal rule style
 * **MD036** - Emphasis used instead of a header
 * **MD037** - Spaces inside emphasis markers
+* **MD038** - Spaces inside code span elements
+* **MD039** - Spaces inside link text
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -78,7 +80,7 @@ See [Rules.md](doc/Rules.md) for more details.
 * **blank_lines** - MD012, MD022, MD031, MD032
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
-* **code** - MD014, MD031
+* **code** - MD014, MD031, MD038
 * **emphasis** - MD036, MD037
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
@@ -87,12 +89,12 @@ See [Rules.md](doc/Rules.md) for more details.
 * **html** - MD033
 * **indentation** - MD005, MD006, MD007, MD027
 * **line_length** - MD013
-* **links** - MD011, MD034
+* **links** - MD011, MD034, MD039
 * **ol** - MD029, MD030, MD032
 * **spaces** - MD018, MD019, MD020, MD021, MD023
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
-* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037
+* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039
 
 ## API
 
