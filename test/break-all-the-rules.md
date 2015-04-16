@@ -47,5 +47,29 @@ Note: Can not break MD025 and MD002 in the same file
 2. list {MD029}
 
 ```js
-``` {MD031}
+```
 * list {MD032}
+
+{MD031:50}
+
+<br/> {MD033}
+
+http://example.com/page {MD034}
+
+---
+
+***
+
+{MD035:61}
+
+_Section {MD036} Header_
+
+Emphasis *with * space {MD037}
+
+Code `with ` space {MD038}
+
+[link with space ](link) {MD039}
+
+```
+code fence without language {MD040:73}
+```

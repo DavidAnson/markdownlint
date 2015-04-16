@@ -389,7 +389,15 @@ module.exports.styleAll = function styleAll(test) {
         "MD029": [ 47 ],
         "MD030": [ 8 ],
         "MD031": [ 50 ],
-        "MD032": [ 51 ]
+        "MD032": [ 51 ],
+        "MD033": [ 55 ],
+        "MD034": [ 57 ],
+        "MD035": [ 61 ],
+        "MD036": [ 65 ],
+        "MD037": [ 67 ],
+        "MD038": [ 69 ],
+        "MD039": [ 71 ],
+        "MD040": [ 73 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -424,7 +432,9 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD026": [ 40 ],
         "MD029": [ 47 ],
         "MD031": [ 50 ],
-        "MD032": [ 51 ]
+        "MD032": [ 51 ],
+        "MD035": [ 61 ],
+        "MD036": [ 65 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
