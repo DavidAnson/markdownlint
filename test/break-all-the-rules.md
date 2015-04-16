@@ -46,6 +46,6 @@ Note: Can not break MD025 and MD002 in the same file
 1. list
 2. list {MD029}
 
-```
+```js
 ``` {MD031}
 * list {MD032}

@@ -29,5 +29,5 @@ The following code block doesn't have any dollar signs, and shouldn't fire:
 The following (fenced) code block doesn't have any content at all, and
 shouldn't fire:
 
-```
+```bash
 ```

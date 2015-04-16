@@ -853,3 +853,22 @@ This rule is triggered on links that have spaces surrounding the link text:
 To fix this, remove the spaces surrounding the link text:
 
     [a link](http://www.example.com/)
+
+## MD040 - Fenced code blocks should have a language specified
+
+Tags: code, language
+
+This rule is triggered when fenced code blocks are used, but a language isn't
+specified:
+
+    ```
+    #!/bin/bash
+    echo Hello world
+    ```
+
+To fix this, add a language specifier to the code block:
+
+    ```bash
+    #!/bin/bash
+    echo Hello world
+    ```
