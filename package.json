@@ -21,10 +21,10 @@
     "example": "cd example & node standalone.js & grunt markdownlint & gulp markdownlint"
   },
   "dependencies": {
-    "markdown-it": "^4.0.1"
+    "markdown-it": "^4.1.1"
   },
   "devDependencies": {
-    "eslint": "^0.17.1",
+    "eslint": "^0.19.0",
     "istanbul": "^0.3.8",
     "nodeunit": "^0.9.1",
     "q": "^1.2.0"
