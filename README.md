@@ -327,9 +327,10 @@ bad.md: 3: MD018 No space after hash on atx style header
 
 ## History
 
-* 0.0.1 - Initial release.
+* 0.0.1 - Initial release, includes tests MD001-MD032.
 * 0.0.2 - Improve documentation, tests, and code.
 * 0.0.3 - Add synchronous API, improve documentation and code.
+* 0.0.4 - Add tests MD033-MD040, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
