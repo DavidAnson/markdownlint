@@ -10,9 +10,7 @@
     "type": "git",
     "url": "https://github.com/DavidAnson/markdownlint.git"
   },
-  "bugs": {
-    "url": "https://github.com/DavidAnson/markdownlint/issues"
-  },
+  "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "scripts": {
     "test": "nodeunit",
     "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
@@ -32,6 +30,8 @@
   "keywords": [
     "markdown",
     "lint",
-    "md"
+    "md",
+    "check",
+    "validate"
   ]
 }

@@ -325,7 +325,7 @@ bad.md: 3: MD018 No space after hash on atx style header
  Use --force to continue.
 ```
 
-## Release History
+## History
 
 * 0.0.1 - Initial release.
 * 0.0.2 - Improve documentation, tests, and code.
