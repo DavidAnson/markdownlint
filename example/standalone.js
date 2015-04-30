@@ -3,7 +3,11 @@
 var markdownlint = require("../lib/markdownlint");
 
 var options = {
-  "files": [ "good.md", "bad.md" ]
+  "files": [ "good.md", "bad.md" ],
+  "strings": {
+    "good.string": "# good.string\n\nThis string passes all rules.",
+    "bad.string": "#bad.string\n\n#This string fails\tsome rules."
+  }
 };
 
 // Uses result.toString for pretty formatting

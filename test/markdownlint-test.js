@@ -158,6 +158,27 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
   test.done();
 };
 
+module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
+  test.expect(2);
+  var options = {
+    "strings": {
+      "lf": "One\nTwo\n#Three",
+      "crlf": "One\r\nTwo\r\n#Three",
+      "mixed": "One\r\nTwo\n#Three"
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "lf": { "MD018": [ 3 ] },
+      "crlf": { "MD018": [ 3 ] },
+      "mixed": { "MD018": [ 3 ] }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
 module.exports.defaultTrue = function defaultTrue(test) {
   test.expect(2);
   var options = {
@@ -442,7 +463,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
   });
 };
 
-module.exports.filesNotModified = function filesNotModified(test) {
+module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
   test.expect(2);
   var files = [
     "./test/atx_header_spacing.md",
@@ -460,16 +481,16 @@ module.exports.missingOptions = function missingOptions(test) {
   test.expect(2);
   markdownlint(null, function callback(err, result) {
     test.ifError(err);
-    test.ok(result, "Did not get result for missing options.");
+    test.deepEqual(result, {}, "Did not get empty result for missing options.");
     test.done();
   });
 };
 
-module.exports.missingFiles = function missingFiles(test) {
+module.exports.missingFilesAndStrings = function missingFilesAndStrings(test) {
   test.expect(2);
   markdownlint({}, function callback(err, result) {
     test.ifError(err);
-    test.ok(result, "Did not get result for missing files.");
+    test.ok(result, "Did not get result for missing files/strings.");
     test.done();
   });
 };
@@ -494,17 +515,38 @@ module.exports.badFile = function badFile(test) {
 };
 
 module.exports.badFileSync = function badFileSync(test) {
-  test.expect(3);
+  test.expect(4);
   test.throws(function badFileCall() {
     markdownlint.sync({
       "files": [ "./badFile" ]
     });
   }, function testError(err) {
+    test.ok(err, "Did not get an error for bad file.");
     test.ok(err instanceof Error, "Error not instance of Error.");
     test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
     return true;
   }, "Did not get exception for bad file.");
   test.done();
+};
+
+module.exports.missingStringValue = function missingStringValue(test) {
+  test.expect(2);
+  markdownlint({
+    "strings": {
+      "undefined": undefined,
+      "null": null,
+      "empty": ""
+    }
+  }, function callback(err, result) {
+    test.ifError(err);
+    var expectedResult = {
+      "undefined": {},
+      "null": {},
+      "empty": {}
+    };
+    test.deepEqual(result, expectedResult, "Did not get empty results.");
+    test.done();
+  });
 };
 
 module.exports.readme = function readme(test) {

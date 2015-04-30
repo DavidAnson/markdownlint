@@ -143,6 +143,25 @@ responsibility.
 
 Example: `[ "one.md", "dir/two.md" ]`
 
+#### options.strings
+
+Type: `Object` mapping `String` to `String`
+
+Map of identifiers to strings for linting.
+
+When Markdown content is not available as files, it can be passed as strings.
+The keys of the `strings` object are used to identify each input value in the
+`result` summary.
+
+Example:
+
+```json
+{
+  "readme": "# README\n...",
+  "changelog": "# CHANGELOG\n..."
+}
+```
+
 #### options.config
 
 Type: `Object` mapping `String` to `Boolean | Object`
@@ -205,7 +224,11 @@ Invoke `markdownlint` and use the `result` object's `toString` method:
 var markdownlint = require("markdownlint");
 
 var options = {
-  "files": [ "good.md", "bad.md" ]
+  "files": [ "good.md", "bad.md" ],
+  "strings": {
+    "good.string": "# good.string\n\nThis string passes all rules.",
+    "bad.string": "#bad.string\n\n#This string fails\tsome rules."
+  }
 };
 
 markdownlint(options, function callback(err, result) {
@@ -225,6 +248,9 @@ console.log(result.toString());
 Output of both calls:
 
 ```text
+bad.string: 3: MD010 Hard tabs
+bad.string: 1: MD018 No space after hash on atx style header
+bad.string: 3: MD018 No space after hash on atx style header
 bad.md: 3: MD010 Hard tabs
 bad.md: 1: MD018 No space after hash on atx style header
 bad.md: 3: MD018 No space after hash on atx style header
@@ -244,6 +270,11 @@ Output:
 
 ```json
 {
+  "good.string": {},
+  "bad.string": {
+    "MD010": [ 3 ],
+    "MD018": [ 1, 3 ]
+  },
   "good.md": {},
   "bad.md": {
     "MD010": [ 3 ],
@@ -331,6 +362,7 @@ bad.md: 3: MD018 No space after hash on atx style header
 * 0.0.2 - Improve documentation, tests, and code.
 * 0.0.3 - Add synchronous API, improve documentation and code.
 * 0.0.4 - Add tests MD033-MD040, update dependencies.
+* *PENDING* - Add `strings` option to enable file-less scenarios.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
