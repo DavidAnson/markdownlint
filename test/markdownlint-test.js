@@ -162,14 +162,16 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
   var options = {
     "strings": {
+      "cr": "One\rTwo\r#Three",
       "lf": "One\nTwo\n#Three",
       "crlf": "One\r\nTwo\r\n#Three",
-      "mixed": "One\r\nTwo\n#Three"
+      "mixed": "One\rTwo\n#Three"
     }
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
     var expectedResult = {
+      "cr": { "MD018": [ 3 ] },
       "lf": { "MD018": [ 3 ] },
       "crlf": { "MD018": [ 3 ] },
       "mixed": { "MD018": [ 3 ] }
