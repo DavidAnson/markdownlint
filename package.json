@@ -15,13 +15,15 @@
     "test": "nodeunit",
     "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
-    "lint": "eslint lib test & eslint --rule \"no-console: 0, no-shadow: 0\" example",
+    "lint": "eslint lib test & eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0\" demo & eslint --rule \"no-console: 0, no-shadow: 0\" example",
+    "build-demo": "browserify lib/markdownlint.js --standalone markdownlint --exclude markdown-it --outfile demo/markdownlint-browser.js",
     "example": "npm install through2 & cd example & node standalone.js & grunt markdownlint & gulp markdownlint"
   },
   "dependencies": {
     "markdown-it": "^4.1.1"
   },
   "devDependencies": {
+    "browserify": "^10.0.0",
     "eslint": "^0.19.0",
     "istanbul": "^0.3.8",
     "nodeunit": "^0.9.1",

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="utf-8"/>
+  <link href="default.css" rel="stylesheet" type="text/css"/>
+  <meta name="description" content="Demo for markdownlint, a Node.js style checker and lint tool for Markdown files."/>
+  <title>markdownlint demo</title>
+</head>
+<body>
+  <div class="flex-rows inset">
+    <div class="flex-columns">
+      <header>markdownlint demo</header>
+      <div class="flex-fill"></div>
+      <form>
+        <input id="openFile" type="file"/>
+      </form>
+    </div>
+    <div class="flex-fill flex-columns">
+      <textarea id="markdown" class="flex-fill outlined" autofocus="autofocus"></textarea>
+      <div id="markup" class="flex-fill outlined overflow-auto-scroll"></div>
+    </div>
+    <div class="flex-fill flex-columns">
+      <div id="numbered" class="flex-fill outlined overflow-auto-scroll"></div>
+      <div id="violations" class="flex-fill outlined overflow-auto-scroll"></div>
+    </div>
+    <div>
+      <footer>Copyright &copy; 2015 by <a href="//dlaa.me/">David Anson</a></footer>
+    </div>
+  </div>
+  <script src="../node_modules/markdown-it/dist/markdown-it.min.js"></script>
+  <script src="require-stub.js"></script>
+  <script src="markdownlint-browser.js"></script>
+  <script src="default.js"></script>
+</body>
+</html>
