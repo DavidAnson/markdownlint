@@ -7,6 +7,7 @@ var Q = require("q");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
 var rules = require("../lib/rules");
+var polyfills = require("../demo/browser-polyfills");
 
 function createTestForFile(file) {
   return function testForFile(test) {
@@ -664,6 +665,34 @@ module.exports.typeAllFiles = function typeAllFiles(test) {
         content = content.slice(0, -1);
       }
     }
+  });
+  test.done();
+};
+
+module.exports.trimPolyfills = function trimPolyfills(test) {
+  var inputs = [
+    "text text",
+    " text text ",
+    "   text text   ",
+    // ECMAScript Whitespace
+    "\u0009 text text \u0009",
+    "\u000b text text \u000b",
+    "\u000c text text \u000c",
+    "\u0020 text text \u0020",
+    "\u00a0 text text \u00a0",
+    "\ufeff text text \ufeff",
+    // ECMAScript LineTerminator
+    "\u000a text text \u000a",
+    "\u000d text text \u000d",
+    "\u2028 text text \u2028",
+    "\u2029 text text \u2029"
+  ];
+  test.expect(inputs.length * 2);
+  inputs.forEach(function forInput(input) {
+    test.equal(polyfills.trimLeftPolyfill.call(input), input.trimLeft(),
+      "trimLeft incorrect for '" + input + "'");
+    test.equal(polyfills.trimRightPolyfill.call(input), input.trimRight(),
+      "trimRight incorrect for '" + input + "'");
   });
   test.done();
 };
