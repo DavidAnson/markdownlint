@@ -31,6 +31,9 @@ textarea {
   flex-grow: 1;
   flex-basis: 0;
 }
+.highlight {
+  background: yellow;
+}
 .inset {
   box-sizing: border-box;
   padding: 2px;
