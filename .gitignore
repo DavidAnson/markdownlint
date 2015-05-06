@@ -1,4 +1,5 @@
 coverage
+demo/markdown-it.min.js
 demo/markdownlint-browser.js
 node_modules
 npm-debug.log
