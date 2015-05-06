@@ -8,10 +8,14 @@ body {
 }
 header {
   font-size: 140%;
+  font-weight: bold;
 }
 footer {
   font-size: 90%;
-  text-align: right;
+}
+form {
+  margin-top: auto;
+  margin-bottom: auto;
 }
 textarea {
   padding: 0;
@@ -36,11 +40,16 @@ textarea {
 }
 .inset {
   box-sizing: border-box;
-  padding: 2px;
+  padding: 4px;
+}
+.inset-side {
+  box-sizing: border-box;
+  padding-left: 2px;
+  padding-right: 2px;
 }
 .outlined {
   border: 1px solid black;
-  margin: 1px;
+  margin: 2px;
 }
 .overflow-auto-scroll {
   overflow-x: auto;

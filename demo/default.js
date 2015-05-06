@@ -44,7 +44,7 @@
           function replacer(match, p1, p2, p3) {
             var ruleRef = rulesMd + "#" + p2.toLowerCase() + "---" +
               p3.toLowerCase().replace(/ /g, "-");
-            return "<a href='#" + p1 + "'><em>" + p1 + "</em></a> - " +
+            return "&nbsp;<a href='#" + p1 + "'><em>" + p1 + "</em></a> - " +
               "<a href='" + ruleRef + "' target='_blank'>" + p2 + "</a> " + p3;
           });
       }).join("<br/>");
