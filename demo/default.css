@@ -6,6 +6,27 @@ body {
   font-family: "Segoe UI", GillSans, Helvetica, sans-serif;
   font-weight: lighter;
 }
+blockquote {
+  background: rgba(0, 0, 0, 0.05);
+}
+h1 {
+  font-size: 130%;
+}
+h2 {
+  font-size: 125%;
+}
+h3 {
+  font-size: 120%;
+}
+h4 {
+  font-size: 115%;
+}
+h5 {
+  font-size: 110%;
+}
+h6 {
+  font-size: 105%;
+}
 header {
   font-size: 140%;
   font-weight: bold;
@@ -50,6 +71,7 @@ textarea {
 .outlined {
   border: 1px solid black;
   margin: 2px;
+  padding-left: 3px;
 }
 .overflow-auto-scroll {
   overflow-x: auto;
