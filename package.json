@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "browserify": "^10.0.0",
-    "eslint": "^0.19.0",
+    "eslint": "^0.20.0",
     "istanbul": "^0.3.8",
     "nodeunit": "^0.9.1",
     "q": "^1.2.0"
