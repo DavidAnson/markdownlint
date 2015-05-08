@@ -33,6 +33,14 @@ cases come directly from that project.
 > If you need a Ruby implementation or a [CLI](http://en.wikipedia.org/wiki/Command-line_interface),
 > please consider the [mdl](https://rubygems.org/gems/mdl) gem.
 
+## Demonstration
+
+[`markdownlint` demo](http://dlaa.me/markdownlint/), an interactive, in-browser
+playground for learning and exploring.
+
+> *Note*: `markdownlint` is not intended for use in the browser; the demo has
+> polyfills and avoids referencing the `fs` module.
+
 ## Rules
 
 * **MD001** - Header levels should only increment by one level at a time
@@ -362,7 +370,8 @@ bad.md: 3: MD018 No space after hash on atx style header
 * 0.0.2 - Improve documentation, tests, and code.
 * 0.0.3 - Add synchronous API, improve documentation and code.
 * 0.0.4 - Add tests MD033-MD040, update dependencies.
-* *PENDING* - Add `strings` option to enable file-less scenarios.
+* *PENDING* - Add `strings` option to enable file-less scenarios, add in-browser
+  demo.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
