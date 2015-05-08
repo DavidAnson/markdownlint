@@ -95,7 +95,7 @@
 
   // Handle violation navigation
   function onLineNumberClick(e) {
-    var line = document.getElementById("l" + e.target.innerText);
+    var line = document.getElementById("l" + e.target.textContent);
     if (line) {
       var highlighted = document.getElementsByClassName("highlight");
       Array.prototype.forEach.call(highlighted, function forElement(element) {
