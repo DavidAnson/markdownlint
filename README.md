@@ -376,9 +376,9 @@ bad.md: 3: MD018 No space after hash on atx style header
 [npm-url]: https://www.npmjs.com/package/markdownlint
 [github-tag-image]: https://img.shields.io/github/tag/DavidAnson/markdownlint.svg
 [github-tag-url]: https://github.com/DavidAnson/markdownlint
-[travis-image]: https://img.shields.io/travis/DavidAnson/markdownlint.svg
+[travis-image]: https://img.shields.io/travis/DavidAnson/markdownlint/master.svg
 [travis-url]: https://travis-ci.org/DavidAnson/markdownlint
-[coveralls-image]: https://img.shields.io/coveralls/DavidAnson/markdownlint.svg
+[coveralls-image]: https://img.shields.io/coveralls/DavidAnson/markdownlint/master.svg
 [coveralls-url]: https://coveralls.io/r/DavidAnson/markdownlint
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: http://opensource.org/licenses/MIT
