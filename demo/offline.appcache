@@ -1,12 +1,10 @@
 CACHE MANIFEST
-# 2015-05-08
-browser-polyfills.js
+# 2015-06-17
 default.css
 default.htm
 default.js
 favicon.ico
 markdown-it.min.js
 markdownlint-browser.js
-require-stub.js
 NETWORK:
 *
