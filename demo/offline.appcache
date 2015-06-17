@@ -5,6 +5,6 @@ default.htm
 default.js
 favicon.ico
 markdown-it.min.js
-markdownlint-browser.js
+markdownlint-browser.min.js
 NETWORK:
 *
