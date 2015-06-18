@@ -16,7 +16,7 @@
     "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib test & eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo & eslint --rule \"no-console: 0, no-shadow: 0\" example",
-    "build-demo": "copy node_modules\\markdown-it\\dist\\markdown-it.min.js demo & browserify demo/browser-polyfills.js lib/markdownlint.js --standalone markdownlint --outfile demo/markdownlint-browser.js & uglifyjs demo/markdownlint-browser.js --compress --mangle --output demo/markdownlint-browser.min.js",
+    "build-demo": "copy node_modules\\markdown-it\\dist\\markdown-it.min.js demo & copy demo\\file-header.js demo\\markdownlint-browser.js & browserify demo/browser-polyfills.js lib/markdownlint.js --standalone markdownlint >> demo\\markdownlint-browser.js & uglifyjs demo/markdownlint-browser.js --compress --mangle --comments --output demo/markdownlint-browser.min.js",
     "example": "npm install through2 & cd example & node standalone.js & grunt markdownlint & gulp markdownlint"
   },
   "dependencies": {
