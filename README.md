@@ -38,9 +38,6 @@ cases come directly from that project.
 [`markdownlint` demo](http://dlaa.me/markdownlint/), an interactive, in-browser
 playground for learning and exploring.
 
-> *Note*: `markdownlint` is not intended for use in the browser; the demo has
-> polyfills and avoids referencing the `fs` module.
-
 ## Rules
 
 * **MD001** - Header levels should only increment by one level at a time
@@ -362,6 +359,34 @@ bad.md: 3: MD010 Hard tabs
 bad.md: 1: MD018 No space after hash on atx style header
 bad.md: 3: MD018 No space after hash on atx style header
  Use --force to continue.
+```
+
+## Browser
+
+`markdownlint` works in the browser.
+
+Generate normal and minified scripts with:
+
+```shell
+npm run build-demo
+```
+
+Then reference `markdown-it` and `markdownlint`:
+
+```html
+<script src="demo/markdown-it.min.js"></script>
+<script src="demo/markdownlint-browser.min.js"></script>
+```
+
+And call it like so:
+
+```js
+var options = {
+  "strings": {
+    "content": "Some Markdown to lint."
+  }
+};
+var results = window.markdownlint.sync(options).toString();
 ```
 
 ## History
