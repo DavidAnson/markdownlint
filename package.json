@@ -20,12 +20,12 @@
     "example": "npm install through2 & cd example & node standalone.js & grunt markdownlint & gulp markdownlint"
   },
   "dependencies": {
-    "markdown-it": "^4.2.1"
+    "markdown-it": "^4.2.2"
   },
   "devDependencies": {
-    "browserify": "^10.1.3",
-    "eslint": "^0.21.0",
-    "istanbul": "^0.3.13",
+    "browserify": "^10.2.4",
+    "eslint": "^0.23.0",
+    "istanbul": "^0.3.15",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
     "uglify-js": "^2.4.23"
