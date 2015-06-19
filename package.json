@@ -15,19 +15,21 @@
     "test": "nodeunit",
     "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
-    "lint": "eslint lib test & eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo & eslint --rule \"no-console: 0, no-shadow: 0\" example",
-    "build-demo": "copy node_modules\\markdown-it\\dist\\markdown-it.min.js demo & copy demo\\file-header.js demo\\markdownlint-browser.js & browserify demo/browser-polyfills.js lib/markdownlint.js --standalone markdownlint >> demo\\markdownlint-browser.js & uglifyjs demo/markdownlint-browser.js --compress --mangle --comments --output demo/markdownlint-browser.min.js",
-    "example": "npm install through2 & cd example & node standalone.js & grunt markdownlint & gulp markdownlint"
+    "lint": "eslint lib test && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo && eslint --rule \"no-console: 0, no-shadow: 0\" example",
+    "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && browserify browser-polyfills.js ../lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
+    "example": "npm install through2 && cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
   "dependencies": {
     "markdown-it": "^4.2.2"
   },
   "devDependencies": {
     "browserify": "^10.2.4",
+    "cpy": "^3.3.0",
     "eslint": "^0.23.0",
     "istanbul": "^0.3.15",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
+    "rimraf": "^2.4.0",
     "uglify-js": "^2.4.23"
   },
   "keywords": [
