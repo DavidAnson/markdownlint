@@ -396,6 +396,7 @@ var results = window.markdownlint.sync(options).toString();
 * 0.0.3 - Add synchronous API, improve documentation and code.
 * 0.0.4 - Add tests MD033-MD040, update dependencies.
 * 0.0.5 - Add `strings` option to enable file-less scenarios, add in-browser demo.
+* 0.0.6 - Improve performance, simplify in-browser, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
