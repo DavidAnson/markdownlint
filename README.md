@@ -77,6 +77,7 @@ playground for learning and exploring.
 * **MD039** - Spaces inside link text
 * **MD040** - Fenced code blocks should have a language specified
 * **MD041** - First line in file should be a top level header
+* **ignore** - Ignore certain parts of the markdown file (can be `RegExp`, `Function`, `"frontmatter"`), should be used with disabled `MD012`
 
 See [Rules.md](doc/Rules.md) for more details.
 
