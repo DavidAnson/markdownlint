@@ -76,6 +76,7 @@ playground for learning and exploring.
 * **MD038** - Spaces inside code span elements
 * **MD039** - Spaces inside link text
 * **MD040** - Fenced code blocks should have a language specified
+* **ignore** - Ignore certain parts of the markdown file (can be `RegExp`, `Function`, `"frontmatter"`), should be used with disabled `MD012`
 
 See [Rules.md](doc/Rules.md) for more details.
 
