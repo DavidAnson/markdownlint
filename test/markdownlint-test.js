@@ -3,11 +3,14 @@
 var fs = require("fs");
 var path = require("path");
 var md = require("markdown-it")();
+var assign = require("lodash.assign");
+var clone = require("lodash.clone");
 var Q = require("q");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
 var rules = require("../lib/rules");
 var polyfills = require("../demo/browser-polyfills");
+var defaultConfig = require("./markdownlint-test-default-config.json");
 
 function createTestForFile(file) {
   return function testForFile(test) {
@@ -27,9 +30,10 @@ function createTestForFile(file) {
         })
       .then(
         function lintWithConfig(config) {
+          var mergedConfig = assign(clone(defaultConfig), config);
           return Q.nfcall(markdownlint, {
             "files": [ file ],
-            "config": config
+            "config": mergedConfig
           });
         });
     var expectedPromise = Q.nfcall(fs.readFile, file, shared.utf8Encoding)
@@ -91,7 +95,8 @@ module.exports.resultFormatting = function resultFormatting(test) {
     "files": [
       "./test/atx_header_spacing.md",
       "./test/first_header_bad_atx.md"
-    ]
+    ],
+    "config": defaultConfig
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
@@ -129,7 +134,8 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
     "files": [
       "./test/atx_header_spacing.md",
       "./test/first_header_bad_atx.md"
-    ]
+    ],
+    "config": defaultConfig
   };
   var actualResult = markdownlint.sync(options);
   var expectedResult = {
@@ -167,7 +173,8 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
       "lf": "One\nTwo\n#Three",
       "crlf": "One\r\nTwo\r\n#Three",
       "mixed": "One\rTwo\n#Three"
-    }
+    },
+    "config": defaultConfig
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
@@ -199,10 +206,12 @@ module.exports.defaultTrue = function defaultTrue(test) {
       "./test/atx_header_spacing.md": {
         "MD002": [ 3 ],
         "MD018": [ 1 ],
-        "MD019": [ 3, 5 ]
+        "MD019": [ 3, 5 ],
+        "MD041": [ 1 ]
       },
       "./test/first_header_bad_atx.md": {
-        "MD002": [ 1 ]
+        "MD002": [ 1 ],
+        "MD041": [ 1 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -247,10 +256,12 @@ module.exports.defaultUndefined = function defaultUndefined(test) {
       "./test/atx_header_spacing.md": {
         "MD002": [ 3 ],
         "MD018": [ 1 ],
-        "MD019": [ 3, 5 ]
+        "MD019": [ 3, 5 ],
+        "MD041": [ 1 ]
       },
       "./test/first_header_bad_atx.md": {
-        "MD002": [ 1 ]
+        "MD002": [ 1 ],
+        "MD041": [ 1 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -268,7 +279,8 @@ module.exports.disableRules = function disableRules(test) {
     "config": {
       "MD002": false,
       "default": true,
-      "MD019": false
+      "MD019": false,
+      "MD041": false
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -329,10 +341,12 @@ module.exports.disableTag = function disableTag(test) {
     test.ifError(err);
     var expectedResult = {
       "./test/atx_header_spacing.md": {
-        "MD002": [ 3 ]
+        "MD002": [ 3 ],
+        "MD041": [ 1 ]
       },
       "./test/first_header_bad_atx.md": {
-        "MD002": [ 1 ]
+        "MD002": [ 1 ],
+        "MD041": [ 1 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -421,7 +435,8 @@ module.exports.styleAll = function styleAll(test) {
         "MD037": [ 67 ],
         "MD038": [ 69 ],
         "MD039": [ 71 ],
-        "MD040": [ 73 ]
+        "MD040": [ 73 ],
+        "MD041": [ 1 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -539,7 +554,8 @@ module.exports.missingStringValue = function missingStringValue(test) {
       "undefined": undefined,
       "null": null,
       "empty": ""
-    }
+    },
+    "config": defaultConfig
   }, function callback(err, result) {
     test.ifError(err);
     var expectedResult = {
@@ -553,7 +569,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(95);
+  test.expect(97);
   var tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -610,7 +626,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(147);
+  test.expect(151);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

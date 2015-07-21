@@ -76,6 +76,7 @@ playground for learning and exploring.
 * **MD038** - Spaces inside code span elements
 * **MD039** - Spaces inside link text
 * **MD040** - Fenced code blocks should have a language specified
+* **MD041** - First line in file should be a top level header
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -90,7 +91,7 @@ See [Rules.md](doc/Rules.md) for more details.
 * **emphasis** - MD036, MD037
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
-  MD024, MD025, MD026, MD036
+  MD024, MD025, MD026, MD036, MD041
 * **hr** - MD035
 * **html** - MD033
 * **indentation** - MD005, MD006, MD007, MD027

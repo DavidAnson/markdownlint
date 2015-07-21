@@ -872,3 +872,22 @@ To fix this, add a language specifier to the code block:
     #!/bin/bash
     echo Hello world
     ```
+
+## MD041 - First line in file should be a top level header
+
+Tags: headers
+
+This rule is triggered when the first line in the file isn't a top level (h1)
+header:
+
+    ```
+    This is a file without a header
+    ```
+
+To fix this, add a header to the top of your file:
+
+    ```
+    # File with header
+
+    This is a file with a top level header
+    ```

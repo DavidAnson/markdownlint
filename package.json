@@ -27,6 +27,8 @@
     "cpy": "^3.3.0",
     "eslint": "^0.23.0",
     "istanbul": "^0.3.15",
+    "lodash.assign": "^3.2.0",
+    "lodash.clone": "^3.0.2",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
     "rimraf": "^2.4.0",

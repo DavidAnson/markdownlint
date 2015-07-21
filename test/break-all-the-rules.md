@@ -1,4 +1,4 @@
-## Header 1 {MD002}
+## Header 1 {MD002} {MD041}
 
 #### Header 2 {MD001}
 
