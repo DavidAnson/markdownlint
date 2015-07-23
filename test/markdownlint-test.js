@@ -189,6 +189,30 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   });
 };
 
+module.exports.inputOnlyNewline = function inputOnlyNewline(test) {
+  test.expect(2);
+  var options = {
+    "strings": {
+      "cr": "\r",
+      "lf": "\n",
+      "crlf": "\r\n"
+    },
+    "config": {
+      "default": false
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "cr": {},
+      "lf": {},
+      "crlf": {}
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
 module.exports.defaultTrue = function defaultTrue(test) {
   test.expect(2);
   var options = {
