@@ -77,7 +77,6 @@ playground for learning and exploring.
 * **MD039** - Spaces inside link text
 * **MD040** - Fenced code blocks should have a language specified
 * **MD041** - First line in file should be a top level header
-* **ignore** - Ignore certain parts of the markdown file (can be `RegExp`, `Function`, `"frontmatter"`), should be used with disabled `MD012`
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -167,6 +166,34 @@ Example:
   "readme": "# README\n...",
   "changelog": "# CHANGELOG\n..."
 }
+```
+
+#### options.frontMatter
+
+Type: `RegExp`
+
+Matches any [front matter](http://jekyllrb.com/docs/frontmatter/) found at the
+beginning of a file.
+
+Some Markdown content begins with metadata; the default `RegExp` for this option
+ignores common forms of "front matter". To match differently, specify a custom
+`RegExp` or use the value `null` to disable the feature.
+
+Note: Matches must occur at the start of the file.
+
+Default:
+
+```js
+/^---$[^]*?^---$(\r\n|\r|\n)/m
+```
+
+Ignores:
+
+```text
+---
+layout: post
+title: Title
+---
 ```
 
 #### options.config

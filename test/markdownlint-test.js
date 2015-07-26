@@ -505,6 +505,48 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
   });
 };
 
+module.exports.nullFrontMatter = function nullFrontMatter(test) {
+  test.expect(2);
+  markdownlint({
+    "strings": {
+      "content": "---\n\t\n---\n# Header\n"
+    },
+    "frontMatter": null,
+    "config": {
+      "default": false,
+      "MD010": true
+    }
+  }, function callback(err, result) {
+    test.ifError(err);
+    var expectedResult = {
+      "content": { "MD010": [ 2 ] }
+    };
+    test.deepEqual(result, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.customFrontMatter = function customFrontMatter(test) {
+  test.expect(2);
+  markdownlint({
+    "strings": {
+      "content": "<head>\n\t\n</head>\n# Header\n"
+    },
+    "frontMatter": /<head>[^]*<\/head>/,
+    "config": {
+      "default": false,
+      "MD010": true
+    }
+  }, function callback(err, result) {
+    test.ifError(err);
+    var expectedResult = {
+      "content": {}
+    };
+    test.deepEqual(result, expectedResult, "Did not get empty results.");
+    test.done();
+  });
+};
+
 module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
   test.expect(2);
   var files = [
