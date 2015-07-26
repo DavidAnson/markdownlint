@@ -168,6 +168,34 @@ Example:
 }
 ```
 
+#### options.frontMatter
+
+Type: `RegExp`
+
+Matches any [front matter](http://jekyllrb.com/docs/frontmatter/) found at the
+beginning of a file.
+
+Some Markdown content begins with metadata; the default `RegExp` for this option
+ignores common forms of "front matter". To match differently, specify a custom
+`RegExp` or use the value `null` to disable the feature.
+
+Note: Matches must occur at the start of the file.
+
+Default:
+
+```js
+/^---$[^]*?^---$(\r\n|\r|\n)/m
+```
+
+Ignores:
+
+```text
+---
+layout: post
+title: Title
+---
+```
+
 #### options.config
 
 Type: `Object` mapping `String` to `Boolean | Object`
