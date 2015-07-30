@@ -23,16 +23,16 @@
     "markdown-it": "^4.2.2"
   },
   "devDependencies": {
-    "browserify": "^10.2.4",
-    "cpy": "^3.3.0",
-    "eslint": "^0.23.0",
-    "istanbul": "^0.3.15",
+    "browserify": "^11.0.1",
+    "cpy": "^3.4.0",
+    "eslint": "^0.24.1",
+    "istanbul": "^0.3.17",
     "lodash.assign": "^3.2.0",
     "lodash.clone": "^3.0.2",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
-    "rimraf": "^2.4.0",
-    "uglify-js": "^2.4.23"
+    "rimraf": "^2.4.2",
+    "uglify-js": "^2.4.24"
   },
   "keywords": [
     "markdown",
