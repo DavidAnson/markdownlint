@@ -20,7 +20,7 @@
     "example": "npm install through2 && cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
   "dependencies": {
-    "markdown-it": "^4.2.2"
+    "markdown-it": "^4.4.0"
   },
   "devDependencies": {
     "browserify": "^11.0.1",
