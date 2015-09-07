@@ -733,17 +733,28 @@ module.exports.doc = function doc(test) {
 
 module.exports.typeAllFiles = function typeAllFiles(test) {
   // Simulates typing each test file to validate handling of partial input
+  function validate(file, content) {
+    var results = markdownlint.sync({
+      "strings": {
+        "content": content
+      }
+    });
+    var contentLineCount = content.split(shared.newLineRe).length;
+    Object.keys(results.content).forEach(function forKey(ruleName) {
+      results.content[ruleName].forEach(function forLine(line) {
+        test.ok((line >= 1) && (line <= contentLineCount),
+          "Line number out of range: " + line +
+            " (" + file + ", " + content.length + ", " + ruleName + ")");
+      });
+    });
+  }
   var files = fs.readdirSync("./test");
   files.forEach(function forFile(file) {
     if (/\.md$/.test(file)) {
       var content = fs.readFileSync(
         path.join("./test", file), shared.utf8Encoding);
       while (content) {
-        markdownlint.sync({
-          "strings": {
-            "content": content
-          }
-        });
+        validate(file, content);
         content = content.slice(0, -1);
       }
     }
