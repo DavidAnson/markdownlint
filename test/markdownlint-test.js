@@ -349,6 +349,35 @@ module.exports.enableRules = function enableRules(test) {
   });
 };
 
+module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "Md002": true,
+      "DeFaUlT": false,
+      "Md019": true
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD002": [ 3 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {
+        "MD002": [ 1 ]
+      }
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
 module.exports.disableTag = function disableTag(test) {
   test.expect(2);
   var options = {
@@ -388,6 +417,32 @@ module.exports.enableTag = function enableTag(test) {
     "config": {
       "default": false,
       "spaces": true
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "./test/atx_header_spacing.md": {
+        "MD018": [ 1 ],
+        "MD019": [ 3, 5 ]
+      },
+      "./test/first_header_bad_atx.md": {}
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.enableTagMixedCase = function enableTagMixedCase(test) {
+  test.expect(2);
+  var options = {
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": {
+      "DeFaUlT": false,
+      "SpAcEs": true
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -632,6 +687,14 @@ module.exports.missingStringValue = function missingStringValue(test) {
     test.deepEqual(result, expectedResult, "Did not get empty results.");
     test.done();
   });
+};
+
+module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
+  test.expect(37);
+  rules.forEach(function forRule(rule) {
+    test.equal(rule.name, rule.name.toUpperCase(), "Rule name not upper-case.");
+  });
+  test.done();
 };
 
 module.exports.readme = function readme(test) {
