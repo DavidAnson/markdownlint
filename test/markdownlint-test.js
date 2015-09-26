@@ -3,8 +3,6 @@
 var fs = require("fs");
 var path = require("path");
 var md = require("markdown-it")();
-var assign = require("lodash.assign");
-var clone = require("lodash.clone");
 var Q = require("q");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
@@ -26,11 +24,11 @@ function createTestForFile(file) {
               });
         },
         function noConfigFile() {
-          return null;
+          return {};
         })
       .then(
         function lintWithConfig(config) {
-          var mergedConfig = assign(clone(defaultConfig), config);
+          var mergedConfig = shared.assign(shared.clone(defaultConfig), config);
           return Q.nfcall(markdownlint, {
             "files": [ file ],
             "config": mergedConfig
@@ -416,7 +414,8 @@ module.exports.enableTag = function enableTag(test) {
     ],
     "config": {
       "default": false,
-      "spaces": true
+      "spaces": true,
+      "notatag": true
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -442,7 +441,8 @@ module.exports.enableTagMixedCase = function enableTagMixedCase(test) {
     ],
     "config": {
       "DeFaUlT": false,
-      "SpAcEs": true
+      "SpAcEs": true,
+      "NoTaTaG": true
     }
   };
   markdownlint(options, function callback(err, actualResult) {

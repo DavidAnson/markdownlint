@@ -10,7 +10,7 @@
   var openFile = document.getElementById("openFile");
 
   // Variables
-  var markdownit = window.markdownit();
+  var markdownit = window.markdownit({ "html": true });
   var newLineRe = /\r\n|\r|\n/;
   var rulesMd = "https://github.com/DavidAnson/markdownlint" +
     "/blob/master/doc/Rules.md";

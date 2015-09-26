@@ -104,6 +104,33 @@ See [Rules.md](doc/Rules.md) for more details.
 * **url** - MD034
 * **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039
 
+## Configuration
+
+Rules can be enabled, disabled, and configured via `options.config` (described
+below) to define the expected behavior for a set of inputs. To enable or disable
+rules within a file, add one of these markers to the appropriate place (HTML
+comments don't appear in the final markup):
+
+* Disable all rules: `<!-- markdownlint-disable -->`
+* Enable all rules: `<!-- markdownlint-enable -->`
+* Disable one or more rules: `<!-- markdownlint-disable MD001 MD002 -->`
+* Enable one or more rules: `<!-- markdownlint-enable MD001 MD002 -->`
+
+For example:
+
+```md
+<!-- markdownlint-disable MD037 -->
+deliberate space * in * emphasis
+<!-- markdownlint-enable MD037 -->
+```
+
+Changes take effect starting with the line a comment is on, so the following
+has no effect:
+
+```md
+space * in * emphasis <!-- markdownlint-disable --> <!-- markdownlint-enable -->
+```
+
 ## API
 
 Standard asynchronous interface:
@@ -209,7 +236,8 @@ rule to `true` or `false` includes/excludes all rules by default. Enabling or
 disabling a tag name (ex: `whitespace`) affects all rules having that tag.
 
 The `default` rule is applied first, then keys are processed in order from top
-to bottom with later values overriding earlier ones.
+to bottom with later values overriding earlier ones. Keys (including rule names,
+tags, and `default`) are not case-sensitive.
 
 Example:
 
