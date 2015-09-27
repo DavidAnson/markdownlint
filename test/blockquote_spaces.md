@@ -10,9 +10,11 @@ This tests other things embedded in the blockquote:
 >  *foo* {MD027}
 >  **bar** {MD027}
 >   "Baz" {MD027}
-> *foo*
-> **bar**
-> 'baz'
+>   `qux` {MD027}
+> *foo* more text
+> **bar** more text
+> 'baz' more text
+> `qux` more text
 
 Test the first line being indented too much:
 
