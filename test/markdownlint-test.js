@@ -41,7 +41,7 @@ function createTestForFile(file) {
           var results = {};
           lines.forEach(function forLine(line, lineNum) {
             var regex = /\{(MD\d+)(?::(\d+))?\}/g;
-            var match;
+            var match = null;
             while ((match = regex.exec(line))) {
               var rule = match[1];
               var errors = results[rule] || [];

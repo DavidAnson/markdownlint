@@ -114,7 +114,7 @@
   markdown.addEventListener("input", onMarkdownInput);
   violations.addEventListener("click", onLineNumberClick, true);
 
-  /*eslint-disable max-len */
+  /* eslint-disable max-len */
   markdown.value = [
     "## Introduction",
     "",
@@ -140,6 +140,6 @@
     "",
     "[`markdownlint/Ruby`](https://github.com/mivok/markdownlint) for the inspiration and [`markdown-it`](https://github.com/markdown-it/markdown-it) for the parser and interactive demo idea!"
   ].join("\n");
-  /*eslint-enable max-len */
+  /* eslint-enable max-len */
   onMarkdownInput();
 }());

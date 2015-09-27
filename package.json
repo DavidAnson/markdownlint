@@ -25,7 +25,7 @@
   "devDependencies": {
     "browserify": "^11.2.0",
     "cpy": "^3.4.1",
-    "eslint": "^0.24.1",
+    "eslint": "^1.5.1",
     "istanbul": "^0.3.21",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
