@@ -1,27 +1,29 @@
 # header
 
-```fence {MD014}
+```fence
 $ code
 ```
 
 text
 
-```fence {MD014}
+```fence
 $ code
 ```
 
 text
 
-```fence {MD014}
+```fence
 $ code
 $ code
 ```
 
 text
 
-```fence {MD014}
+```fence
 $ code
 $ code
 ```
 
 text
+
+{MD014:3} {MD014:9} {MD014:15} {MD014:22}
