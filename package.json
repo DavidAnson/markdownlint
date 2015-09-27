@@ -23,13 +23,13 @@
     "markdown-it": "^4.4.0"
   },
   "devDependencies": {
-    "browserify": "^11.0.1",
-    "cpy": "^3.4.0",
+    "browserify": "^11.2.0",
+    "cpy": "^3.4.1",
     "eslint": "^0.24.1",
-    "istanbul": "^0.3.17",
+    "istanbul": "^0.3.21",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
-    "rimraf": "^2.4.2",
+    "rimraf": "^2.4.3",
     "uglify-js": "^2.4.24"
   },
   "keywords": [
