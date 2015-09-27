@@ -3,6 +3,7 @@ node_js:
   - "0.10"
   - "0.12"
   - iojs
+  - "4"
 script: "npm run-script test-cover"
 after_script: "npm install coveralls && cat ./coverage/lcov.info | coveralls"
 sudo: false
