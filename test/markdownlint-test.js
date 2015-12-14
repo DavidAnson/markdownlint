@@ -755,13 +755,22 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(151);
+  test.expect(199);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
       var rulesLeft = rules.slice();
       var inHeading = false;
       var rule = null;
+      var ruleHasTags = true;
+      var ruleUsesParams = null;
+      var tagParameterRe = /, |: | /;
+      function testTagsAndParams() {
+        test.ok(ruleHasTags,
+          "Missing tags for rule " + (rule || {}).name + ".");
+        test.ok(!ruleUsesParams,
+          "Missing parameters for rule " + (rule || {}).name + ".");
+      }
       md.parse(contents, {}).forEach(function forToken(token) {
         if ((token.type === "heading_open") && (token.tag === "h2")) {
           inHeading = true;
@@ -769,27 +778,43 @@ module.exports.doc = function doc(test) {
           inHeading = false;
         } else if (token.type === "inline") {
           if (inHeading) {
-            test.ok(!rule,
-              "Missing tags for rule " + (rule || {}).name + ".");
+            testTagsAndParams();
             rule = rulesLeft.shift();
+            ruleHasTags = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
-            if (rule) {
-              var expected = rule.name + " - " + rule.desc;
-              test.equal(token.content, expected, "Rule mismatch.");
+            test.equal(token.content, rule.name + " - " + rule.desc,
+              "Rule mismatch.");
+            ruleUsesParams = rule.func.toString()
+              .match(/params\.options\.[_a-z]*/gi);
+            if (ruleUsesParams) {
+              ruleUsesParams = ruleUsesParams.map(function forUse(use) {
+                return use.split(".").pop();
+              });
             }
           } else if (/^Tags: /.test(token.content) && rule) {
-            var tags = token.content.split(/, |: | /).slice(1);
+            var tags = token.content.split(tagParameterRe).slice(1);
             test.deepEqual(tags, rule.tags,
               "Tag mismatch for rule " + rule.name + ".");
-            rule = null;
+            ruleHasTags = true;
+          } else if (/^Parameters: /.test(token.content) && rule) {
+            var inDetails = false;
+            var parameters = token.content.split(tagParameterRe)
+              .slice(1)
+              .filter(function forPart(part) {
+                inDetails = inDetails || (part[0] === "(");
+                return !inDetails;
+              });
+            test.deepEqual(parameters, ruleUsesParams,
+              "Missing parameter for rule " + rule.name);
+            ruleUsesParams = null;
           }
         }
       });
       var ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
         "Missing rule documentation for " + (ruleLeft || {}).name + ".");
-      test.ok(!rule, "Missing tags for rule " + (rule || {}).name + ".");
+      testTagsAndParams();
       test.done();
     });
 };
