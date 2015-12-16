@@ -709,6 +709,8 @@ items with hanging indents are okay:
 
 Tags: html
 
+Parameters: allowed_elements (array of string; default empty)
+
 This rule is triggered whenever raw HTML is used in a markdown document:
 
     <h1>Inline HTML header</h1>
@@ -720,6 +722,8 @@ To fix this, use 'pure' markdown instead of including raw HTML:
 Rationale: Raw HTML is allowed in markdown, but this rule is included for
 those who want their documents to only include "pure" markdown, or for those
 who are rendering markdown documents in something other than HTML.
+
+Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
 
 ## MD034 - Bare URL used
 
