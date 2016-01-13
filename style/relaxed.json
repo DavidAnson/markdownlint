@@ -4,10 +4,10 @@
   "default": true,
   "whitespace": false,
   "line_length": false,
-  "MD006": false,
-  "MD007": false,
-  "MD033": false,
-  "MD034": false,
-  "MD040": false,
-  "MD041": false
+  "ul-start-left": false,
+  "ul-indent": false,
+  "no-inline-html": false,
+  "no-bare-urls": false,
+  "fenced-code-language": false,
+  "first-line-h1": false
 }

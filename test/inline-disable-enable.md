@@ -60,9 +60,9 @@ hard	tab / space * in * emphasis / space ` in ` code
 
 hard	tab {MD010} / space * in * emphasis {MD037} / space ` in ` code {MD038}
 
-<!-- markdownlint-disable NotATag MD038 -->
+<!-- markdownlint-disable NotATag no-space-in-code -->
 hard	tab {MD010} / space * in * emphasis {MD037} / space ` in ` code
-<!-- markdownlint-enable NotATag MD038 -->
+<!-- markdownlint-enable NotATag nO-sPaCe-In-CoDe -->
 
 hard	tab {MD010} / space * in * emphasis {MD037} / space ` in ` code {MD038}
 

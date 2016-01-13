@@ -24,6 +24,6 @@ markdownlint(options, function callback(err, result) {
   }
 });
 
-// Make a synchronous call
+// Make a synchronous call, passing true to toString()
 var result = markdownlint.sync(options);
-console.log(result.toString());
+console.log(result.toString(true));

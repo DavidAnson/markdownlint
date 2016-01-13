@@ -77,7 +77,8 @@ fs.readdirSync("./test").forEach(function forFile(file) {
 module.exports.projectFiles = function projectFiles(test) {
   test.expect(2);
   var options = {
-    "files": [ "README.md" ]
+    "files": [ "README.md" ],
+    "config": { "MD013": false }
   };
   markdownlint(options, function callback(err, actual) {
     test.ifError(err);
@@ -88,7 +89,7 @@ module.exports.projectFiles = function projectFiles(test) {
 };
 
 module.exports.resultFormatting = function resultFormatting(test) {
-  test.expect(3);
+  test.expect(4);
   var options = {
     "files": [
       "./test/atx_header_spacing.md",
@@ -121,13 +122,26 @@ module.exports.resultFormatting = function resultFormatting(test) {
       " Multiple spaces after hash on atx style header\n" +
       "./test/first_header_bad_atx.md: 1: MD002" +
       " First header should be a h1 header";
-    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+    actualMessage = actualResult.toString(true);
+    expectedMessage =
+      "./test/atx_header_spacing.md: 3: first-header-h1" +
+      " First header should be a h1 header\n" +
+      "./test/atx_header_spacing.md: 1: no-missing-space-atx" +
+      " No space after hash on atx style header\n" +
+      "./test/atx_header_spacing.md: 3: no-multiple-space-atx" +
+      " Multiple spaces after hash on atx style header\n" +
+      "./test/atx_header_spacing.md: 5: no-multiple-space-atx" +
+      " Multiple spaces after hash on atx style header\n" +
+      "./test/first_header_bad_atx.md: 1: first-header-h1" +
+      " First header should be a h1 header";
+    test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
     test.done();
   });
 };
 
 module.exports.resultFormattingSync = function resultFormattingSync(test) {
-  test.expect(2);
+  test.expect(3);
   var options = {
     "files": [
       "./test/atx_header_spacing.md",
@@ -159,7 +173,20 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
     " Multiple spaces after hash on atx style header\n" +
     "./test/first_header_bad_atx.md: 1: MD002" +
     " First header should be a h1 header";
-  test.equal(actualMessage, expectedMessage, "Incorrect message.");
+  test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+  actualMessage = actualResult.toString(true);
+  expectedMessage =
+    "./test/atx_header_spacing.md: 3: first-header-h1" +
+    " First header should be a h1 header\n" +
+    "./test/atx_header_spacing.md: 1: no-missing-space-atx" +
+    " No space after hash on atx style header\n" +
+    "./test/atx_header_spacing.md: 3: no-multiple-space-atx" +
+    " Multiple spaces after hash on atx style header\n" +
+    "./test/atx_header_spacing.md: 5: no-multiple-space-atx" +
+    " Multiple spaces after hash on atx style header\n" +
+    "./test/first_header_bad_atx.md: 1: first-header-h1" +
+    " First header should be a h1 header";
+  test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
   test.done();
 };
 
@@ -302,7 +329,7 @@ module.exports.disableRules = function disableRules(test) {
       "MD002": false,
       "default": true,
       "MD019": false,
-      "MD041": false
+      "first-line-h1": false
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -328,7 +355,7 @@ module.exports.enableRules = function enableRules(test) {
     "config": {
       "MD002": true,
       "default": false,
-      "MD019": true
+      "no-multiple-space-atx": true
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -357,7 +384,7 @@ module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
     "config": {
       "Md002": true,
       "DeFaUlT": false,
-      "Md019": true
+      "nO-mUlTiPlE-sPaCe-AtX": true
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -697,6 +724,23 @@ module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
   test.done();
 };
 
+module.exports.uniqueAliases = function uniqueAliases(test) {
+  test.expect(74);
+  var tags = [];
+  rules.forEach(function forRule(rule) {
+    Array.prototype.push.apply(tags, rule.tags);
+  });
+  var aliases = [];
+  rules.forEach(function forRule(rule) {
+    rule.aliases.forEach(function forAlias(alias) {
+      test.ok(tags.indexOf(alias) === -1, "Alias not unique in tags.");
+      test.ok(aliases.indexOf(alias) === -1, "Alias not unique in aliases.");
+      aliases.push(alias);
+    });
+  });
+  test.done();
+};
+
 module.exports.readme = function readme(test) {
   test.expect(97);
   var tagToRules = {};
@@ -733,7 +777,8 @@ module.exports.readme = function readme(test) {
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             if (rule) {
-              var expected = "**" + rule.name + "** - " + rule.desc;
+              var expected = "**" + rule.name + "** *" +
+                rule.aliases.join(", ") + "* - " + rule.desc;
               test.equal(token.content, expected, "Rule mismatch.");
             }
           } else if (inTags) {
@@ -755,7 +800,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(199);
+  test.expect(274);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -763,11 +808,14 @@ module.exports.doc = function doc(test) {
       var inHeading = false;
       var rule = null;
       var ruleHasTags = true;
+      var ruleHasAliases = true;
       var ruleUsesParams = null;
-      var tagParameterRe = /, |: | /;
-      function testTagsAndParams() {
+      var tagAliasParameterRe = /, |: | /;
+      function testTagsAliasesParams() {
         test.ok(ruleHasTags,
           "Missing tags for rule " + (rule || {}).name + ".");
+        test.ok(ruleHasAliases,
+          "Missing aliases for rule " + (rule || {}).name + ".");
         test.ok(!ruleUsesParams,
           "Missing parameters for rule " + (rule || {}).name + ".");
       }
@@ -778,9 +826,9 @@ module.exports.doc = function doc(test) {
           inHeading = false;
         } else if (token.type === "inline") {
           if (inHeading) {
-            testTagsAndParams();
+            testTagsAliasesParams();
             rule = rulesLeft.shift();
-            ruleHasTags = false;
+            ruleHasTags = ruleHasAliases = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             test.equal(token.content, rule.name + " - " + rule.desc,
@@ -793,13 +841,16 @@ module.exports.doc = function doc(test) {
               });
             }
           } else if (/^Tags: /.test(token.content) && rule) {
-            var tags = token.content.split(tagParameterRe).slice(1);
-            test.deepEqual(tags, rule.tags,
-              "Tag mismatch for rule " + rule.name + ".");
+            test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
+              rule.tags, "Tag mismatch for rule " + rule.name + ".");
             ruleHasTags = true;
+          } else if (/^Aliases: /.test(token.content) && rule) {
+            test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
+              rule.aliases, "Alias mismatch for rule " + rule.name + ".");
+            ruleHasAliases = true;
           } else if (/^Parameters: /.test(token.content) && rule) {
             var inDetails = false;
-            var parameters = token.content.split(tagParameterRe)
+            var parameters = token.content.split(tagAliasParameterRe)
               .slice(1)
               .filter(function forPart(part) {
                 inDetails = inDetails || (part[0] === "(");
@@ -814,7 +865,7 @@ module.exports.doc = function doc(test) {
       var ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
         "Missing rule documentation for " + (ruleLeft || {}).name + ".");
-      testTagsAndParams();
+      testTagsAliasesParams();
       test.done();
     });
 };

@@ -8,6 +8,8 @@ versions of the examples.
 
 Tags: headers
 
+Aliases: header-increment
+
 This rule is triggered when you skip header levels in a markdown document, for
 example:
 
@@ -37,6 +39,8 @@ level at a time:
 
 Tags: headers
 
+Aliases: first-header-h1
+
 This rule is triggered when the first header in the document isn't a h1 header:
 
     ## This isn't a H1 header
@@ -52,6 +56,8 @@ The first header in the document should be a h1 header:
 ## MD003 - Header style
 
 Tags: headers
+
+Aliases: header-style
 
 Parameters: style ("consistent", "atx", "atx_closed", "setext", "setext_with_atx"; default "consistent")
 
@@ -90,6 +96,8 @@ consistent within the document.
 
 Tags: bullet, ul
 
+Aliases: ul-style
+
 Parameters: style ("consistent", "asterisk", "plus", "dash"; default "consistent")
 
 This rule is triggered when the symbols used in the document for unordered
@@ -114,6 +122,8 @@ document.
 
 Tags: bullet, ul, indentation
 
+Aliases: list-indent
+
 This rule is triggered when list items are parsed as being at the same level,
 but don't have the same indentation:
 
@@ -133,6 +143,8 @@ for the list to fix it:
 ## MD006 - Consider starting bulleted lists at the beginning of the line
 
 Tags: bullet, ul, indentation
+
+Aliases: ul-start-left
 
 This rule is triggered when top level lists don't start at the beginning of a
 line:
@@ -159,6 +171,8 @@ characters if you use 4 space tabs, or 1 character if you use 2 space tabs).
 ## MD007 - Unordered list indentation
 
 Tags: bullet, ul, indentation
+
+Aliases: ul-indent
 
 Parameters: indent (number; default 2)
 
@@ -193,6 +207,8 @@ for a description of the problem.
 
 Tags: whitespace
 
+Aliases: no-trailing-spaces
+
 Parameters: br_spaces (number; default: 0)
 
 This rule is triggered on any lines that end with whitespace. To fix this,
@@ -210,6 +226,8 @@ set to the default of 0.
 ## MD010 - Hard tabs
 
 Tags: whitespace, hard_tab
+
+Aliases: no-hard-tabs
 
 This rule is triggered by any lines that contain hard tab characters instead
 of using spaces for indentation. To fix this, replace any hard tab characters
@@ -231,6 +249,8 @@ Corrected example:
 
 Tags: links
 
+Aliases: no-reversed-links
+
 This rule is triggered when text that appears to be a link is encountered, but
 where the syntax appears to have been reversed (the `[]` and `()` are
 reversed):
@@ -244,6 +264,8 @@ To fix this, swap the `[]` and `()` around:
 ## MD012 - Multiple consecutive blank lines
 
 Tags: whitespace, blank_lines
+
+Aliases: no-multiple-blanks
 
 This rule is triggered when there are multiple consecutive blank lines in the
 document:
@@ -266,6 +288,8 @@ lines inside code blocks.
 
 Tags: line_length
 
+Aliases: line-length
+
 Parameters: line_length, code_blocks, tables (number; default 80, boolean; default true)
 
 This rule is triggered when there are lines that are longer than the
@@ -286,6 +310,8 @@ rules. Still, some languages do not lend themselves to short lines.
 ## MD014 - Dollar signs used before commands without showing output
 
 Tags: code
+
+Aliases: commands-show-output
 
 This rule is triggered when there are code blocks showing shell commands to be
 typed, and the shell commands are preceded by dollar signs ($):
@@ -320,6 +346,8 @@ for more information.
 
 Tags: headers, atx, spaces
 
+Aliases: no-missing-space-atx
+
 This rule is triggered when spaces are missing after the hash characters
 in an atx style header:
 
@@ -338,6 +366,8 @@ space:
 
 Tags: headers, atx, spaces
 
+Aliases: no-multiple-space-atx
+
 This rule is triggered when more than one space is used to separate the
 header text from the hash characters in an atx style header:
 
@@ -355,6 +385,8 @@ space:
 ## MD020 - No space inside hashes on closed atx style header
 
 Tags: headers, atx_closed, spaces
+
+Aliases: no-missing-space-closed-atx
 
 This rule is triggered when spaces are missing inside the hash characters
 in a closed atx style header:
@@ -376,6 +408,8 @@ Note: this rule will fire if either side of the header is missing spaces.
 
 Tags: headers, atx_closed, spaces
 
+Aliases: no-multiple-space-closed-atx
+
 This rule is triggered when more than one space is used to separate the
 header text from the hash characters in a closed atx style header:
 
@@ -396,6 +430,8 @@ spaces.
 ## MD022 - Headers should be surrounded by blank lines
 
 Tags: headers, blank_lines
+
+Aliases: blanks-around-headers
 
 This rule is triggered when headers (any style) are either not preceded or not
 followed by a blank line:
@@ -425,6 +461,8 @@ regular text.
 
 Tags: headers, spaces
 
+Aliases: header-start-left
+
 This rule is triggered when a header is indented by one or more spaces:
 
     Some text
@@ -443,6 +481,8 @@ parsed as headers, and will instead appear as regular text.
 ## MD024 - Multiple headers with the same content
 
 Tags: headers
+
+Aliases: no-duplicate-header
 
 This rule is triggered if there are multiple headers in the document that have
 the same text:
@@ -464,6 +504,8 @@ this.
 ## MD025 - Multiple top level headers in the same document
 
 Tags: headers
+
+Aliases: single-h1
 
 This rule is triggered when a top level header is in use (the first line of
 the file is a h1 header), and more than one h1 header is in use in the
@@ -492,6 +534,8 @@ should be contained within this header.
 
 Tags: headers
 
+Aliases: no-trailing-punctuation
+
 Parameters: punctuation (string; default ".,;:!?")
 
 This rule is triggered on any header that has a punctuation character as the
@@ -512,6 +556,8 @@ in an FAQ.
 
 Tags: blockquote, whitespace, indentation
 
+Aliases: no-multiple-space-blockquote
+
 This rule is triggered when blockquotes have more than one space after the
 blockquote (`>`) symbol:
 
@@ -526,6 +572,8 @@ To fix, remove any extraneous space:
 ## MD028 - Blank line inside blockquote
 
 Tags: blockquote, whitespace
+
+Aliases: no-blanks-blockquote
 
 This rule is triggered when two blockquote blocks are separated by nothing
 except for a blank line:
@@ -560,6 +608,8 @@ separate blockquotes.
 
 Tags: ol
 
+Aliases: ol-prefix
+
 Parameters: style ("one", "ordered"; default "one")
 
 This rule is triggered on ordered lists that do not either start with '1.' or
@@ -581,6 +631,8 @@ Example valid list if the style is configured as 'ordered':
 ## MD030 - Spaces after list markers
 
 Tags: ol, ul, whitespace
+
+Aliases: list-marker-space
 
 Parameters: ul_single, ol_single, ul_multi, ol_multi (number, default 1)
 
@@ -641,6 +693,8 @@ for your selected document style.
 
 Tags: code, blank_lines
 
+Aliases: blanks-around-fences
+
 This rule is triggered when fenced code blocks are either not preceded or not
 followed by a blank line:
 
@@ -675,6 +729,8 @@ not parse fenced code blocks that don't have blank lines before and after them.
 ## MD032 - Lists should be surrounded by blank lines
 
 Tags: bullet, ul, ol, blank_lines
+
+Aliases: blanks-around-lists
 
 This rule is triggered when lists (of any kind) are either not preceded or not
 followed by a blank line:
@@ -716,6 +772,8 @@ items with hanging indents are okay:
 
 Tags: html
 
+Aliases: no-inline-html
+
 Parameters: allowed_elements (array of string; default empty)
 
 This rule is triggered whenever raw HTML is used in a markdown document:
@@ -735,6 +793,8 @@ Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
 ## MD034 - Bare URL used
 
 Tags: links, url
+
+Aliases: no-bare-urls
 
 This rule is triggered whenever a URL is given that isn't surrounded by angle
 brackets:
@@ -757,6 +817,8 @@ converted:
 ## MD035 - Horizontal rule style
 
 Tags: hr
+
+Aliases: hr-style
 
 Parameters: style ("consistent", "---", "***", or other string specifying the
 horizontal rule; default "consistent")
@@ -792,6 +854,8 @@ is allowed.
 
 Tags: headers, emphasis
 
+Aliases: no-emphasis-as-header
+
 This check looks for instances where emphasized (i.e. bold or italic) text is
 used to separate sections, where a header should be used instead:
 
@@ -820,6 +884,8 @@ It won't fire on emphasis used within regular text.
 ## MD037 - Spaces inside emphasis markers
 
 Tags: whitespace, emphasis
+
+Aliases: no-space-in-emphasis
 
 This rule is triggered when emphasis markers (bold, italic) are used, but they
 have spaces between the markers and the text:
@@ -851,6 +917,8 @@ intended by the author.
 
 Tags: whitespace, code
 
+Aliases: no-space-in-code
+
 This rule is triggered on code span elements that have spaces right inside the
 backticks:
 
@@ -868,6 +936,8 @@ To fix this, remove the spaces inside the codespan markers:
 
 Tags: whitespace, links
 
+Aliases: no-space-in-links
+
 This rule is triggered on links that have spaces surrounding the link text:
 
     [ a link ](http://www.example.com/)
@@ -879,6 +949,8 @@ To fix this, remove the spaces surrounding the link text:
 ## MD040 - Fenced code blocks should have a language specified
 
 Tags: code, language
+
+Aliases: fenced-code-language
 
 This rule is triggered when fenced code blocks are used, but a language isn't
 specified:
@@ -898,6 +970,8 @@ To fix this, add a language specifier to the code block:
 ## MD041 - First line in file should be a top level header
 
 Tags: headers
+
+Aliases: first-line-h1
 
 This rule is triggered when the first line in the file isn't a top level (h1)
 header:
