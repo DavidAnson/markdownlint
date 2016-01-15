@@ -23,14 +23,14 @@
     "markdown-it": "^5.1.0"
   },
   "devDependencies": {
-    "browserify": "^11.2.0",
-    "cpy": "^3.4.1",
+    "browserify": "^13.0.0",
+    "cpy-cli": "^1.0.0",
     "eslint": "^1.10.3",
-    "istanbul": "^0.3.21",
+    "istanbul": "^0.4.2",
     "nodeunit": "^0.9.1",
     "q": "^1.4.0",
-    "rimraf": "^2.4.3",
-    "uglify-js": "^2.4.24"
+    "rimraf": "^2.5.0",
+    "uglify-js": "^2.6.1"
   },
   "keywords": [
     "markdown",
