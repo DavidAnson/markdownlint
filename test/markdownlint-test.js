@@ -755,16 +755,19 @@ module.exports.readme = function readme(test) {
     function readFile(err, contents) {
       test.ifError(err);
       var rulesLeft = rules.slice();
+      var seenRelated = false;
       var seenRules = false;
       var inRules = false;
       var seenTags = false;
       var inTags = false;
       md.parse(contents, {}).forEach(function forToken(token) {
         if (token.type === "bullet_list_open") {
-          if (!seenRules) {
+          if (!seenRelated) {
+            seenRelated = true;
+          } else if (seenRelated && !seenRules) {
             seenRules = true;
             inRules = true;
-          } else if (!seenTags) {
+          } else if (seenRelated && seenRules && !seenTags) {
             seenTags = true;
             inTags = true;
           }

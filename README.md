@@ -30,8 +30,10 @@ was inspired by - and heavily influenced by - Mark Harrison's
 [Ruby](https://www.ruby-lang.org/). The rules, rule documentation, and test
 cases come directly from that project.
 
-> If you need a Ruby implementation or a [CLI](http://en.wikipedia.org/wiki/Command-line_interface),
-> please consider the [mdl](https://rubygems.org/gems/mdl) gem.
+### Related
+
+* [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
+* [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
 
 ## Demonstration
 
