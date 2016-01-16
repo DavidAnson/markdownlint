@@ -643,6 +643,19 @@ module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
   });
 };
 
+module.exports.filesArrayAsString = function filesArrayAsString(test) {
+  test.expect(2);
+  markdownlint({
+    "files": "README.md",
+    "config": { "MD013": false }
+  }, function callback(err, actual) {
+    test.ifError(err);
+    var expected = { "README.md": {} };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.done();
+  });
+};
+
 module.exports.missingOptions = function missingOptions(test) {
   test.expect(2);
   markdownlint(null, function callback(err, result) {
