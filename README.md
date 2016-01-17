@@ -470,6 +470,7 @@ var results = window.markdownlint.sync(options).toString();
 * 0.0.6 - Improve performance, simplify in-browser, update dependencies.
 * 0.0.7 - Add MD041, improve MD003, ignore front matter, update dependencies.
 * 0.0.8 - Support disabling/enabling rules inline, improve code fence, dependencies.
+* 0.1.0 - Add aliases, exceptions for MD033, exclusions for MD013, dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
