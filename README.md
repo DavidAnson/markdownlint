@@ -34,6 +34,7 @@ cases come directly from that project.
 
 * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
 * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
+* [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) - command-line interface for this package
 
 ## Demonstration
 
