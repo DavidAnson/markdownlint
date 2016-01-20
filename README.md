@@ -32,6 +32,7 @@ cases come directly from that project.
 
 ### Related
 
+* [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
 * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
 * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
 
