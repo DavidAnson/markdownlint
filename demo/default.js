@@ -26,6 +26,10 @@
     var padding = lines.length.toString().replace(/\d/g, " ");
     numbered.innerHTML = lines
       .map(function mapNumberedLine(line, index) {
+        line = line
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;");
         index++;
         var paddedIndex = (padding + index).slice(-padding.length);
         return "<span id='l" + index + "'><em>" + paddedIndex + "</em>: " +
