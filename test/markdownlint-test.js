@@ -4,6 +4,7 @@ var fs = require("fs");
 var path = require("path");
 var md = require("markdown-it")();
 var Q = require("q");
+var glob = require("glob");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
 var rules = require("../lib/rules");
@@ -886,7 +887,7 @@ module.exports.doc = function doc(test) {
     });
 };
 
-module.exports.typeAllFiles = function typeAllFiles(test) {
+module.exports.typeTestFiles = function typeTestFiles(test) {
   // Simulates typing each test file to validate handling of partial input
   function validate(file, content) {
     var results = markdownlint.sync({
@@ -915,6 +916,23 @@ module.exports.typeAllFiles = function typeAllFiles(test) {
     }
   });
   test.done();
+};
+
+module.exports.parseAllFiles = function parseAllFiles(test) {
+  var globOptions = {
+    // "cwd": "/",
+    "realpath": true
+  };
+  glob("**/*.{md,markdown}", globOptions, function globCallback(err, matches) {
+    test.ifError(err);
+    var markdownlintOptions = {
+      "files": matches
+    };
+    markdownlint(markdownlintOptions, function markdownlintCallback(errr) {
+      test.ifError(errr);
+      test.done();
+    });
+  });
 };
 
 module.exports.trimPolyfills = function trimPolyfills(test) {
