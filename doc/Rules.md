@@ -59,7 +59,8 @@ Tags: headers
 
 Aliases: header-style
 
-Parameters: style ("consistent", "atx", "atx_closed", "setext", "setext_with_atx"; default "consistent")
+Parameters: style ("consistent", "atx", "atx_closed", "setext",
+"setext_with_atx", "setext_with_atx_closed"; default "consistent")
 
 This rule is triggered when different header styles (atx, setext, and 'closed'
 atx) are used in the same document:
@@ -77,8 +78,8 @@ Be consistent with the style of header used in a document:
 
     ## ATX style H2
 
-The setext_with_atx doc style allows atx-style headers of level 3 or more in
-documents with setext style headers:
+The setext_with_atx and settext_with_atx_closed doc styles allows atx-style
+headers of level 3 or more in documents with setext style headers:
 
     Setext style H1
     ===============
@@ -89,8 +90,8 @@ documents with setext style headers:
     ### ATX style H3
 
 Note: the configured header style can be a specific style to use (atx,
-atx_closed, setext, setext_with_atx), or simply require that the usage be
-consistent within the document.
+atx_closed, setext, setext_with_atx, setext_with_atx_closed), or simply require
+that the usage be consistent within the document.
 
 ## MD004 - Unordered list style
 
