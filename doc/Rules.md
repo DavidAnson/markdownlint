@@ -78,7 +78,7 @@ Be consistent with the style of header used in a document:
 
     ## ATX style H2
 
-The setext_with_atx and settext_with_atx_closed doc styles allows atx-style
+The setext_with_atx and settext_with_atx_closed doc styles allow atx-style
 headers of level 3 or more in documents with setext style headers:
 
     Setext style H1
