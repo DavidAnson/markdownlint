@@ -25,13 +25,13 @@
   "devDependencies": {
     "browserify": "^13.0.0",
     "cpy-cli": "^1.0.0",
-    "eslint": "^1.10.3",
+    "eslint": "^2.2.0",
     "glob": "^7.0.0",
     "istanbul": "^0.4.2",
     "nodeunit": "^0.9.1",
-    "q": "^1.4.0",
-    "rimraf": "^2.5.0",
-    "uglify-js": "^2.6.1"
+    "q": "^1.4.1",
+    "rimraf": "^2.5.2",
+    "uglify-js": "^2.6.2"
   },
   "keywords": [
     "markdown",
