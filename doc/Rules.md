@@ -34,7 +34,6 @@ level at a time:
 
     ### Another Header 3
 
-
 ## MD002 - First header should be a h1 header
 
 Tags: headers
@@ -156,7 +155,6 @@ line:
       * List item
 
 To fix, ensure that top level list items are not indented:
-
 
     Some test
 

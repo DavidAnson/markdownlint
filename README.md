@@ -1,6 +1,6 @@
 # markdownlint
 
-> A Node.js style checker and lint tool for Markdown files.
+> A Node.js style checker and lint tool for Markdown/CommonMark files.
 
 [![npm version][npm-image]][npm-url]
 [![GitHub tag][github-tag-image]][github-tag-url]
@@ -20,7 +20,8 @@ The [Markdown](http://en.wikipedia.org/wiki/Markdown) markup language is
 designed to be easy to read, write, and understand. It succeeds - and its
 flexibility is both a benefit and a drawback. Many styles are possible, so
 formatting can be inconsistent. Some constructs don't work well in all
-parsers and should be avoided.
+parsers and should be avoided. The [CommonMark](http://commonmark.org/)
+specification standardizes parsers - but not authors.
 
 `markdownlint` is a [static analysis](http://en.wikipedia.org/wiki/Static_program_analysis)
 tool for [Node.js](https://nodejs.org/) and [io.js](https://iojs.org/) with a

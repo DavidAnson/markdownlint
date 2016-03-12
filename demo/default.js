@@ -122,7 +122,7 @@
   markdown.value = [
     "## Introduction",
     "",
-    "`markdownlint` is a [Node.js](https://nodejs.org/)/[io.js](https://iojs.org/) style checker and lint tool for [Markdown](http://en.wikipedia.org/wiki/Markdown) files to automatically validate content, prevent rendering problems, and promote consistency.",
+    "`markdownlint` is a [Node.js](https://nodejs.org/)/[io.js](https://iojs.org/) style checker and lint tool for [Markdown](http://en.wikipedia.org/wiki/Markdown)/[CommonMark](http://commonmark.org/) files to automatically validate content, prevent rendering problems, and promote consistency.",
     "This page offers an easy way to try it out interactively!",
     "",
     "####  Instructions",
