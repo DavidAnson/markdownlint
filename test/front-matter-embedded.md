@@ -1,7 +1,7 @@
 Text text text
 
 ---
-layout: post
+layout: post {MD002} {MD022}
 hard:	tab {MD010}
 title: embedded
 ---
