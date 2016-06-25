@@ -260,6 +260,10 @@ To fix this, swap the `[]` and `()` around:
 
     [Correct link syntax](http://www.example.com/)
 
+Note: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style footnotes do not trigger this rule:
+
+    For (example)[^1]
+
 ## MD012 - Multiple consecutive blank lines
 
 Tags: whitespace, blank_lines
