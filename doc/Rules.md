@@ -167,6 +167,16 @@ or the tab key is used to indent. Starting a list 1 space in means that the
 indent of the first nested list is less than the indent of the second level (3
 characters if you use 4 space tabs, or 1 character if you use 2 space tabs).
 
+Note: This rule is triggered for the following scenario because the unordered
+sublist is not recognized as such by the parser. Not being nested 3 characters
+as required by the outer ordered list, it creates a top-level unordered list
+instead.
+
+    1. List item
+      - List item
+      - List item
+    1. List item
+
 ## MD007 - Unordered list indentation
 
 Tags: bullet, ul, indentation
@@ -201,6 +211,10 @@ In addition, this is a compatibility issue with multi-markdown parsers, which
 require a 4 space indents. See
 <http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting>
 for a description of the problem.
+
+Note: This rule applies to a sublist only if its parent lists are all also
+unordered (otherwise, extra indentation of ordered lists interferes with the
+rule).
 
 ## MD009 - Trailing spaces
 
