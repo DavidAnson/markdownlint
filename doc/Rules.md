@@ -1004,3 +1004,25 @@ To fix this, add a header to the top of your file:
 
     This is a file with a top level header
     ```
+
+## MD042 - No empty links
+
+Tags: links
+
+Aliases: no-empty-links
+
+This rule is triggered when an empty link is encountered:
+
+    [an empty link]()
+
+To fix the violation, provide a destination for the link:
+
+    [a valid link](https://example.com/)
+
+Empty fragments will trigger this rule:
+
+    [an empty fragment](#)
+
+But non-empty fragments will not:
+
+    [a valid fragment](#fragment)

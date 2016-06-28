@@ -73,3 +73,5 @@ Code `with ` space {MD038}
 ```
 code fence without language {MD040:73}
 ```
+
+[empty link]() {MD042}

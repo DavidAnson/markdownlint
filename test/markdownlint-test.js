@@ -543,7 +543,8 @@ module.exports.styleAll = function styleAll(test) {
         "MD038": [ 69 ],
         "MD039": [ 71 ],
         "MD040": [ 73 ],
-        "MD041": [ 1 ]
+        "MD041": [ 1 ],
+        "MD042": [ 77 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -580,7 +581,8 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD031": [ 50 ],
         "MD032": [ 51 ],
         "MD035": [ 61 ],
-        "MD036": [ 65 ]
+        "MD036": [ 65 ],
+        "MD042": [ 77 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -731,7 +733,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
-  test.expect(37);
+  test.expect(38);
   rules.forEach(function forRule(rule) {
     test.equal(rule.name, rule.name.toUpperCase(), "Rule name not upper-case.");
   });
@@ -739,7 +741,7 @@ module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
 };
 
 module.exports.uniqueAliases = function uniqueAliases(test) {
-  test.expect(74);
+  test.expect(76);
   var tags = [];
   rules.forEach(function forRule(rule) {
     Array.prototype.push.apply(tags, rule.tags);
@@ -756,7 +758,7 @@ module.exports.uniqueAliases = function uniqueAliases(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(97);
+  test.expect(99);
   var tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -817,7 +819,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(274);
+  test.expect(281);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -848,14 +850,16 @@ module.exports.doc = function doc(test) {
             ruleHasTags = ruleHasAliases = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
-            test.equal(token.content, rule.name + " - " + rule.desc,
-              "Rule mismatch.");
-            ruleUsesParams = rule.func.toString()
-              .match(/params\.options\.[_a-z]*/gi);
-            if (ruleUsesParams) {
-              ruleUsesParams = ruleUsesParams.map(function forUse(use) {
-                return use.split(".").pop();
-              });
+            if (rule) {
+              test.equal(token.content, rule.name + " - " + rule.desc,
+                "Rule mismatch.");
+              ruleUsesParams = rule.func.toString()
+                .match(/params\.options\.[_a-z]*/gi);
+              if (ruleUsesParams) {
+                ruleUsesParams = ruleUsesParams.map(function forUse(use) {
+                  return use.split(".").pop();
+                });
+              }
             }
           } else if (/^Tags: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
@@ -882,7 +886,9 @@ module.exports.doc = function doc(test) {
       var ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
         "Missing rule documentation for " + (ruleLeft || {}).name + ".");
-      testTagsAliasesParams();
+      if (rule) {
+        testTagsAliasesParams();
+      }
       test.done();
     });
 };

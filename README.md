@@ -81,6 +81,7 @@ playground for learning and exploring.
 * **MD039** *no-space-in-links* - Spaces inside link text
 * **MD040** *fenced-code-language* - Fenced code blocks should have a language specified
 * **MD041** *first-line-h1* - First line in file should be a top level header
+* **MD042** *no-empty-links* - No empty links
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -101,7 +102,7 @@ See [Rules.md](doc/Rules.md) for more details.
 * **indentation** - MD005, MD006, MD007, MD027
 * **language** - MD040
 * **line_length** - MD013
-* **links** - MD011, MD034, MD039
+* **links** - MD011, MD034, MD039, MD042
 * **ol** - MD029, MD030, MD032
 * **spaces** - MD018, MD019, MD020, MD021, MD023
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
