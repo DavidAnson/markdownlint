@@ -632,6 +632,44 @@ module.exports.customFrontMatter = function customFrontMatter(test) {
   });
 };
 
+module.exports.readmeHeaders = function readmeHeaders(test) {
+  test.expect(2);
+  markdownlint({
+    "files": "README.md",
+    "config": {
+      "default": false,
+      "MD043": {
+        "headers": [
+          "# markdownlint",
+          "## Install",
+          "## Overview",
+          "### Related",
+          "## Demonstration",
+          "## Rules / Aliases",
+          "## Tags",
+          "## Configuration",
+          "## API",
+          "### options",
+          "#### options.files",
+          "#### options.strings",
+          "#### options.frontMatter",
+          "#### options.config",
+          "### callback",
+          "### result",
+          "## Usage",
+          "## Browser",
+          "## History"
+        ]
+      }
+    }
+  }, function callback(err, result) {
+    test.ifError(err);
+    var expected = { "README.md": {} };
+    test.deepEqual(result, expected, "Unexpected issues.");
+    test.done();
+  });
+};
+
 module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
   test.expect(2);
   var files = [
@@ -733,7 +771,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
-  test.expect(38);
+  test.expect(39);
   rules.forEach(function forRule(rule) {
     test.equal(rule.name, rule.name.toUpperCase(), "Rule name not upper-case.");
   });
@@ -741,7 +779,7 @@ module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
 };
 
 module.exports.uniqueAliases = function uniqueAliases(test) {
-  test.expect(76);
+  test.expect(78);
   var tags = [];
   rules.forEach(function forRule(rule) {
     Array.prototype.push.apply(tags, rule.tags);
@@ -758,7 +796,7 @@ module.exports.uniqueAliases = function uniqueAliases(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(99);
+  test.expect(101);
   var tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -819,7 +857,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(281);
+  test.expect(289);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

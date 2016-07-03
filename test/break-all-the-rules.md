@@ -2,7 +2,7 @@
 
 #### Header 2 {MD001}
 
-# Header 3 {MD003} #
+# Header 3 {MD003} {MD043} #
 
 * list
  +  list {MD004} {MD006} {MD007} {MD030}

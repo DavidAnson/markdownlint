@@ -222,7 +222,7 @@ Tags: whitespace
 
 Aliases: no-trailing-spaces
 
-Parameters: br_spaces (number; default: 0)
+Parameters: br_spaces (number; default 0)
 
 This rule is triggered on any lines that end with whitespace. To fix this,
 find the line that is triggered and remove any trailing spaces from the end.
@@ -651,7 +651,7 @@ Tags: ol, ul, whitespace
 
 Aliases: list-marker-space
 
-Parameters: ul_single, ol_single, ul_multi, ol_multi (number, default 1)
+Parameters: ul_single, ol_single, ul_multi, ol_multi (number; default 1)
 
 This rule checks for the number of spaces between a list marker (e.g. '`-`',
 '`*`', '`+`' or '`1.`') and the text of the list item.
@@ -1026,3 +1026,54 @@ Empty fragments will trigger this rule:
 But non-empty fragments will not:
 
     [a valid fragment](#fragment)
+
+## MD043 - Required header structure
+
+Tags: headers
+
+Aliases: required-headers
+
+Parameters: headers (array of string; default `null` for disabled)
+
+This rule is triggered when the headers in a file do not match the array of
+headers passed to the rule. It can be used to enforce a standard header
+structure for a set of files.
+
+To require exactly the following structure:
+
+    # Head
+    ## Item
+    ### Detail
+
+Set the `headers` parameter to:
+
+    [
+        "# Head",
+        "## Item",
+        "### Detail"
+    ]
+
+To allow optional headers as with the following structure:
+
+    # Head
+    ## Item
+    ### Detail (optional)
+    ## Foot
+    ### Notes (optional)
+
+Use the special value `"*"` meaning "one or more unspecified headers" and set
+the `headers` parameter to:
+
+    [
+        "# Head",
+        "## Item",
+        "*",
+        "## Foot",
+        "*"
+    ]
+
+When an error is detected, this rule outputs the line number of the first
+problematic header (otherwise, it outputs the last line number of the file).
+
+Note that while the `headers` parameter uses the "## Text" ATX header style for
+simplicity, a file may use any supported header style.

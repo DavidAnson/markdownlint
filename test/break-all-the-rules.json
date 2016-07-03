@@ -1,4 +1,11 @@
 {
   "default": true,
-  "MD041": true
+  "MD041": true,
+  "MD043": {
+    "headers": [
+      "## Header 1 {MD002} {MD041}",
+      "#### Header 2 {MD001}",
+      "# Broken"
+    ]
+  }
 }
