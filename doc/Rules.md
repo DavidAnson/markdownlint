@@ -98,7 +98,8 @@ Tags: bullet, ul
 
 Aliases: ul-style
 
-Parameters: style ("consistent", "asterisk", "plus", "dash"; default "consistent")
+Parameters: style ("consistent", "asterisk", "plus", "dash", "sublist"; default
+"consistent")
 
 This rule is triggered when the symbols used in the document for unordered
 list items do not match the configured unordered list style:
@@ -114,9 +115,19 @@ document:
     * Item 2
     * Item 3
 
-Note: the configured list style can be a specific symbol to use (asterisk,
-plus, dash), or simply require that the usage be consistent within the
-document.
+The configured list style can be a specific symbol to use (asterisk, plus, dash),
+can require that usage be consistent within the document, or can require that each
+sublist have a consistent symbol that is different from its parent list.
+
+For example, the following is valid for the `sublist` style because the outer-most
+indent uses asterisk, the middle indent uses plus, and the inner-most indent uses dash:
+
+    * Item 1
+      + Item 2
+        - Item 3
+      + Item 4
+    * Item 4
+      + Item 5
 
 ## MD005 - Inconsistent indentation for list items at the same level
 
