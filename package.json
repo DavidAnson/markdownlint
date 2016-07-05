@@ -1,6 +1,6 @@
 {
   "name": "markdownlint",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
   "main": "lib/markdownlint.js",
   "author": "David Anson (http://dlaa.me/)",
@@ -17,7 +17,7 @@
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib test && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo && eslint --rule \"no-console: 0, no-shadow: 0\" example",
     "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && browserify browser-polyfills.js ../lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
-    "build-example": "npm install grunt grunt-cli gulp through2",
+    "build-example": "npm install --ignore-scripts grunt grunt-cli gulp through2",
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
   "dependencies": {
