@@ -114,7 +114,7 @@ module.exports.resultFormatting = function resultFormatting(test) {
     var actualMessage = actualResult.toString();
     var expectedMessage =
       "./test/atx_header_spacing.md: 3: MD002" +
-      " First header should be a h1 header\n" +
+      " First header should be a top level header\n" +
       "./test/atx_header_spacing.md: 1: MD018" +
       " No space after hash on atx style header\n" +
       "./test/atx_header_spacing.md: 3: MD019" +
@@ -122,12 +122,12 @@ module.exports.resultFormatting = function resultFormatting(test) {
       "./test/atx_header_spacing.md: 5: MD019" +
       " Multiple spaces after hash on atx style header\n" +
       "./test/first_header_bad_atx.md: 1: MD002" +
-      " First header should be a h1 header";
+      " First header should be a top level header";
     test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
     actualMessage = actualResult.toString(true);
     expectedMessage =
       "./test/atx_header_spacing.md: 3: first-header-h1" +
-      " First header should be a h1 header\n" +
+      " First header should be a top level header\n" +
       "./test/atx_header_spacing.md: 1: no-missing-space-atx" +
       " No space after hash on atx style header\n" +
       "./test/atx_header_spacing.md: 3: no-multiple-space-atx" +
@@ -135,7 +135,7 @@ module.exports.resultFormatting = function resultFormatting(test) {
       "./test/atx_header_spacing.md: 5: no-multiple-space-atx" +
       " Multiple spaces after hash on atx style header\n" +
       "./test/first_header_bad_atx.md: 1: first-header-h1" +
-      " First header should be a h1 header";
+      " First header should be a top level header";
     test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
     test.done();
   });
@@ -165,7 +165,7 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
   var actualMessage = actualResult.toString();
   var expectedMessage =
     "./test/atx_header_spacing.md: 3: MD002" +
-    " First header should be a h1 header\n" +
+    " First header should be a top level header\n" +
     "./test/atx_header_spacing.md: 1: MD018" +
     " No space after hash on atx style header\n" +
     "./test/atx_header_spacing.md: 3: MD019" +
@@ -173,12 +173,12 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
     "./test/atx_header_spacing.md: 5: MD019" +
     " Multiple spaces after hash on atx style header\n" +
     "./test/first_header_bad_atx.md: 1: MD002" +
-    " First header should be a h1 header";
+    " First header should be a top level header";
   test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
   actualMessage = actualResult.toString(true);
   expectedMessage =
     "./test/atx_header_spacing.md: 3: first-header-h1" +
-    " First header should be a h1 header\n" +
+    " First header should be a top level header\n" +
     "./test/atx_header_spacing.md: 1: no-missing-space-atx" +
     " No space after hash on atx style header\n" +
     "./test/atx_header_spacing.md: 3: no-multiple-space-atx" +
@@ -186,7 +186,7 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
     "./test/atx_header_spacing.md: 5: no-multiple-space-atx" +
     " Multiple spaces after hash on atx style header\n" +
     "./test/first_header_bad_atx.md: 1: first-header-h1" +
-    " First header should be a h1 header";
+    " First header should be a top level header";
   test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
   test.done();
 };
@@ -857,7 +857,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(289);
+  test.expect(292);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

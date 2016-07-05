@@ -45,7 +45,7 @@ playground for learning and exploring.
 ## Rules / Aliases
 
 * **MD001** *header-increment* - Header levels should only increment by one level at a time
-* **MD002** *first-header-h1* - First header should be a h1 header
+* **MD002** *first-header-h1* - First header should be a top level header
 * **MD003** *header-style* - Header style
 * **MD004** *ul-style* - Unordered list style
 * **MD005** *list-indent* - Inconsistent indentation for list items at the same level

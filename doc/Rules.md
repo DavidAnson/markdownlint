@@ -34,11 +34,13 @@ level at a time:
 
     ### Another Header 3
 
-## MD002 - First header should be a h1 header
+## MD002 - First header should be a top level header
 
 Tags: headers
 
 Aliases: first-header-h1
+
+Parameters: level (number; default 1)
 
 This rule is triggered when the first header in the document isn't a h1 header:
 
@@ -51,6 +53,9 @@ The first header in the document should be a h1 header:
     # Start with a H1 header
 
     ## Then use a H2 for subsections
+
+Note: The `level` parameter can be used to change the top level (ex: to h2) in
+cases where an h1 is added externally.
 
 ## MD003 - Header style
 
@@ -535,6 +540,8 @@ Tags: headers
 
 Aliases: single-h1
 
+Parameters: level (number; default 1)
+
 This rule is triggered when a top level header is in use (the first line of
 the file is a h1 header), and more than one h1 header is in use in the
 document:
@@ -557,6 +564,9 @@ Rationale: A top level header is a h1 on the first line of the file, and
 serves as the title for the document. If this convention is in use, then there
 can not be more than one title for the document, and the entire document
 should be contained within this header.
+
+Note: The `level` parameter can be used to change the top level (ex: to h2) in
+cases where an h1 is added externally.
 
 ## MD026 - Trailing punctuation in header
 
@@ -1001,6 +1011,8 @@ Tags: headers
 
 Aliases: first-line-h1
 
+Parameters: level (number; default 1)
+
 This rule is triggered when the first line in the file isn't a top level (h1)
 header:
 
@@ -1015,6 +1027,9 @@ To fix this, add a header to the top of your file:
 
     This is a file with a top level header
     ```
+
+Note: The `level` parameter can be used to change the top level (ex: to h2) in
+cases where an h1 is added externally.
 
 ## MD042 - No empty links
 
