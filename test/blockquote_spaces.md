@@ -21,3 +21,11 @@ Test the first line being indented too much:
 >  Foo {MD027}
 >  Bar {MD027}
 > Baz
+
+Nested blockquote
+
+>  A {MD027}
+>
+> >  B {MD027}
+>
+>  C {MD027}
