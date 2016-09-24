@@ -33,3 +33,8 @@ even though the emphasized text is on its own line.
 
 This is another **normal** paragraph with some text in it. This also should
 not trigger the rule.
+
+**This is an entire paragraph that has been emphasized, and shouldn't be
+detected as a header because it's on multiple lines**
+
+**This also shouldn't be detected as a header as it ends in punctuation.**

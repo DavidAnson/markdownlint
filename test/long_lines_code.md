@@ -9,6 +9,13 @@ Here is a short line in a code block.
 Here is a very very very very very very very very very very very very very very very very very very very long line in a code block.
 ```
 
+```text
+test
+test
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+```
+
 This is a short line.
 
 | First Header  | Second Header | Third Header  | Fourth Header | Fifth Header  | Sixth  Header |
