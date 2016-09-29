@@ -34,6 +34,7 @@ cases come directly from that project.
 ### Related
 
 * [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
+* [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
 * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
 * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
 

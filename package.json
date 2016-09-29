@@ -3,7 +3,7 @@
   "version": "0.2.0",
   "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
   "main": "lib/markdownlint.js",
-  "author": "David Anson (http://dlaa.me/)",
+  "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
   "repository": {
@@ -37,8 +37,8 @@
   "keywords": [
     "markdown",
     "lint",
+    "markdownlint",
     "md",
-    "check",
     "validate"
   ],
   "browser": {
