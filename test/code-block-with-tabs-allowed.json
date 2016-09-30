@@ -1,0 +1,6 @@
+{
+  "default": true,
+  "MD010": {
+    "code_blocks": false
+  }
+}
