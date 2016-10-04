@@ -306,6 +306,8 @@ Tags: whitespace, blank_lines
 
 Aliases: no-multiple-blanks
 
+Parameters: maximum (number; default 1)
+
 This rule is triggered when there are multiple consecutive blank lines in the
 document:
 
@@ -322,6 +324,9 @@ To fix this, delete the offending lines:
 
 Note: this rule will not be triggered if there are multiple consecutive blank
 lines inside code blocks.
+
+Note: The `maximum` parameter can be used to configure the maximum number of
+consecutive blank lines.
 
 ## MD013 - Line length
 
