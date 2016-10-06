@@ -15,7 +15,8 @@
     "test": "nodeunit",
     "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
-    "lint": "eslint lib test && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo && eslint --rule \"no-console: 0, no-shadow: 0\" example",
+    "lint": "eslint lib test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo && eslint --rule \"no-console: 0, no-shadow: 0\" example",
+    "build-config-schema": "node schema/build-config-schema.js",
     "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && browserify browser-polyfills.js ../lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
     "build-example": "npm install --ignore-scripts grunt grunt-cli gulp through2",
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
@@ -32,6 +33,7 @@
     "nodeunit": "^0.9.1",
     "q": "^1.4.1",
     "rimraf": "^2.5.3",
+    "tv4": "^1.2.7",
     "uglify-js": "^2.7.0"
   },
   "keywords": [

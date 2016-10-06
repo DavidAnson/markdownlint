@@ -272,6 +272,9 @@ var options = {
 
 See the [style](style) directory for more samples.
 
+See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
+for the [JSON Schema](http://json-schema.org/) of the `options.config` object.
+
 ### callback
 
 Type: `Function` taking (`Error`, `Object`)

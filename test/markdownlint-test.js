@@ -5,11 +5,13 @@ var path = require("path");
 var md = require("markdown-it")();
 var Q = require("q");
 var glob = require("glob");
+var tv4 = require("tv4");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
 var rules = require("../lib/rules");
 var polyfills = require("../demo/browser-polyfills");
 var defaultConfig = require("./markdownlint-test-default-config.json");
+var configSchema = require("../schema/markdownlint-config-schema.json");
 
 function createTestForFile(file) {
   return function testForFile(test) {
@@ -977,6 +979,20 @@ module.exports.parseAllFiles = function parseAllFiles(test) {
       test.done();
     });
   });
+};
+
+module.exports.validateConfigSchema = function validateConfigSchema(test) {
+  var testDirectory = __dirname;
+  var testFiles = fs.readdirSync(testDirectory);
+  testFiles.filter(function filterFile(file) {
+    return file.endsWith(".json");
+  }).forEach(function forFile(file) {
+    var data = fs.readFileSync(path.join(testDirectory, file));
+    test.ok(
+      tv4.validate(JSON.parse(data), configSchema),
+      file + "\n" + JSON.stringify(tv4.error, null, 2));
+  });
+  test.done();
 };
 
 module.exports.trimPolyfills = function trimPolyfills(test) {
