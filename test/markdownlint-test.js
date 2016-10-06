@@ -982,10 +982,11 @@ module.exports.parseAllFiles = function parseAllFiles(test) {
 };
 
 module.exports.validateConfigSchema = function validateConfigSchema(test) {
+  var jsonFileRe = /\.json$/i;
   var testDirectory = __dirname;
   var testFiles = fs.readdirSync(testDirectory);
   testFiles.filter(function filterFile(file) {
-    return file.endsWith(".json");
+    return jsonFileRe.test(file);
   }).forEach(function forFile(file) {
     var data = fs.readFileSync(path.join(testDirectory, file));
     test.ok(
