@@ -16,14 +16,14 @@ npm install markdownlint --save-dev
 
 ## Overview
 
-The [Markdown](http://en.wikipedia.org/wiki/Markdown) markup language is
+The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language is
 designed to be easy to read, write, and understand. It succeeds - and its
 flexibility is both a benefit and a drawback. Many styles are possible, so
 formatting can be inconsistent. Some constructs don't work well in all
 parsers and should be avoided. The [CommonMark](http://commonmark.org/)
 specification standardizes parsers - but not authors.
 
-`markdownlint` is a [static analysis](http://en.wikipedia.org/wiki/Static_program_analysis)
+`markdownlint` is a [static analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
 tool for [Node.js](https://nodejs.org/) and [io.js](https://iojs.org/) with a
 library of rules to enforce standards and consistency for Markdown files. It
 was inspired by - and heavily influenced by - Mark Harrison's
@@ -40,7 +40,7 @@ cases come directly from that project.
 
 ## Demonstration
 
-[`markdownlint` demo](http://dlaa.me/markdownlint/), an interactive, in-browser
+[`markdownlint` demo](https://dlaa.me/markdownlint/), an interactive, in-browser
 playground for learning and exploring.
 
 ## Rules / Aliases
@@ -178,7 +178,7 @@ Type: `Array` of `String`
 List of files to lint.
 
 Each array element should be a single file (via relative or absolute path);
-[globbing](http://en.wikipedia.org/wiki/Glob_%28programming%29) is the caller's
+[globbing](https://en.wikipedia.org/wiki/Glob_%28programming%29) is the caller's
 responsibility.
 
 Example: `[ "one.md", "dir/two.md" ]`
@@ -206,7 +206,7 @@ Example:
 
 Type: `RegExp`
 
-Matches any [front matter](http://jekyllrb.com/docs/frontmatter/) found at the
+Matches any [front matter](https://jekyllrb.com/docs/frontmatter/) found at the
 beginning of a file.
 
 Some Markdown content begins with metadata; the default `RegExp` for this option
@@ -259,7 +259,7 @@ Example:
 ```
 
 Sets of rules (known as a "style") can be stored separately and loaded as
-[JSON](http://en.wikipedia.org/wiki/JSON).
+[JSON](https://en.wikipedia.org/wiki/JSON).
 
 Example:
 
@@ -491,4 +491,4 @@ var results = window.markdownlint.sync(options).toString();
 [coveralls-image]: https://img.shields.io/coveralls/DavidAnson/markdownlint/master.svg
 [coveralls-url]: https://coveralls.io/r/DavidAnson/markdownlint
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
-[license-url]: http://opensource.org/licenses/MIT
+[license-url]: https://opensource.org/licenses/MIT
