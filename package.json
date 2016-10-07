@@ -12,8 +12,9 @@
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "scripts": {
-    "test": "nodeunit",
-    "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit",
+    "test": "nodeunit test/markdownlint-test.js",
+    "test-cover": "istanbul cover node_modules/nodeunit/bin/nodeunit test/markdownlint-test.js",
+    "test-extra": "nodeunit test/markdownlint-test-extra.js",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo && eslint --rule \"no-console: 0, no-shadow: 0\" example",
     "build-config-schema": "node schema/build-config-schema.js",
