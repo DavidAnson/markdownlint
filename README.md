@@ -371,8 +371,8 @@ Output:
 {
   "good.md": {},
   "bad.md": {
-    MD010: [ 3 ],
-    MD018: [ 1, 3 ]
+    "MD010": [ 3 ],
+    "MD018": [ 1, 3 ]
   }
 }
 ```
@@ -403,24 +403,24 @@ And the `result` object becomes:
 {
   "good.md": [],
   "bad.md": [
-    { lineNumber: 3,
-      ruleName: "MD010",
-      ruleAlias: "no-hard-tabs",
-      ruleDescription: "Hard tabs",
-      errorDetail: "Column: 17",
-      errorContext: null },
-    { lineNumber: 1,
-      ruleName: "MD018",
-      ruleAlias: "no-missing-space-atx",
-      ruleDescription: "No space after hash on atx style header",
-      errorDetail: null,
-      errorContext: "#bad.md" },
-    { lineNumber: 3,
-      ruleName: "MD018",
-      ruleAlias: "no-missing-space-atx",
-      ruleDescription: "No space after hash on atx style header",
-      errorDetail: null,
-      errorContext: "#This file fails\tsome rules." }
+    { "lineNumber": 3,
+      "ruleName": "MD010",
+      "ruleAlias": "no-hard-tabs",
+      "ruleDescription": "Hard tabs",
+      "errorDetail": "Column: 17",
+      "errorContext": null },
+    { "lineNumber": 1,
+      "ruleName": "MD018",
+      "ruleAlias": "no-missing-space-atx",
+      "ruleDescription": "No space after hash on atx style header",
+      "errorDetail": null,
+      "errorContext": "#bad.md" },
+    { "lineNumber": 3,
+      "ruleName": "MD018",
+      "ruleAlias": "no-missing-space-atx",
+      "ruleDescription": "No space after hash on atx style header",
+      "errorDetail": null,
+      "errorContext": "#This file fails\tsome rules." }
   ]
 }
 ```
