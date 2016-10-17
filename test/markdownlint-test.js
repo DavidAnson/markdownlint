@@ -80,7 +80,7 @@ module.exports.projectFiles = function projectFiles(test) {
   test.expect(2);
   var options = {
     "files": [ "README.md" ],
-    "config": { "MD013": false }
+    "config": { "MD013": { "line_length": 150 } }
   };
   markdownlint(options, function callback(err, actual) {
     test.ifError(err);
@@ -90,7 +90,7 @@ module.exports.projectFiles = function projectFiles(test) {
   });
 };
 
-module.exports.resultFormatting = function resultFormatting(test) {
+module.exports.resultFormattingV0 = function resultFormattingV0(test) {
   test.expect(4);
   var options = {
     "files": [
@@ -142,14 +142,15 @@ module.exports.resultFormatting = function resultFormatting(test) {
   });
 };
 
-module.exports.resultFormattingSync = function resultFormattingSync(test) {
+module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
   test.expect(3);
   var options = {
     "files": [
       "./test/atx_header_spacing.md",
       "./test/first_header_bad_atx.md"
     ],
-    "config": defaultConfig
+    "config": defaultConfig,
+    "resultVersion": 0
   };
   var actualResult = markdownlint.sync(options);
   var expectedResult = {
@@ -190,6 +191,93 @@ module.exports.resultFormattingSync = function resultFormattingSync(test) {
     " First header should be a top level header";
   test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
   test.done();
+};
+
+module.exports.resultFormattingV1 = function resultFormattingV1(test) {
+  test.expect(3);
+  var options = {
+    "strings": {
+      "truncate":
+        "#  Multiple spaces inside hashes on closed atx style header  #"
+    },
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": defaultConfig,
+    "resultVersion": 1
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "truncate": [
+        { "lineNumber": 1,
+          "ruleName": "MD021",
+          "ruleAlias": "no-multiple-space-closed-atx",
+          "ruleDescription":
+            "Multiple spaces inside hashes on closed atx style header",
+          "errorDetail": null,
+          "errorContext": "#  Multiple spa...style header  #" }
+      ],
+      "./test/atx_header_spacing.md": [
+        { "lineNumber": 3,
+          "ruleName": "MD002",
+          "ruleAlias": "first-header-h1",
+          "ruleDescription": "First header should be a top level header",
+          "errorDetail": "Expected: h1; Actual: h2",
+          "errorContext": null },
+        { "lineNumber": 1,
+          "ruleName": "MD018",
+          "ruleAlias": "no-missing-space-atx",
+          "ruleDescription": "No space after hash on atx style header",
+          "errorDetail": null,
+          "errorContext": "#Header 1 {MD018}" },
+        { "lineNumber": 3,
+          "ruleName": "MD019",
+          "ruleAlias": "no-multiple-space-atx",
+          "ruleDescription": "Multiple spaces after hash on atx style header",
+          "errorDetail": null,
+          "errorContext": "##  Header 2 {MD019}" },
+        { "lineNumber": 5,
+          "ruleName": "MD019",
+          "ruleAlias": "no-multiple-space-atx",
+          "ruleDescription": "Multiple spaces after hash on atx style header",
+          "errorDetail": null,
+          "errorContext": "##   Header 3 {MD019}" }
+      ],
+      "./test/first_header_bad_atx.md": [
+        { "lineNumber": 1,
+          "ruleName": "MD002",
+          "ruleAlias": "first-header-h1",
+          "ruleDescription": "First header should be a top level header",
+          "errorDetail": "Expected: h1; Actual: h2",
+          "errorContext": null }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    var actualMessage = actualResult.toString();
+    var expectedMessage =
+      "truncate: 1: MD021/no-multiple-space-closed-atx" +
+      " Multiple spaces inside hashes on closed atx style header" +
+      " [Context: \"#  Multiple spa...style header  #\"]\n" +
+      "./test/atx_header_spacing.md: 3: MD002/first-header-h1" +
+      " First header should be a top level header" +
+      " [Expected: h1; Actual: h2]\n" +
+      "./test/atx_header_spacing.md: 1: MD018/no-missing-space-atx" +
+      " No space after hash on atx style header" +
+      " [Context: \"#Header 1 {MD018}\"]\n" +
+      "./test/atx_header_spacing.md: 3: MD019/no-multiple-space-atx" +
+      " Multiple spaces after hash on atx style header" +
+      " [Context: \"##  Header 2 {MD019}\"]\n" +
+      "./test/atx_header_spacing.md: 5: MD019/no-multiple-space-atx" +
+      " Multiple spaces after hash on atx style header" +
+      " [Context: \"##   Header 3 {MD019}\"]\n" +
+      "./test/first_header_bad_atx.md: 1: MD002/first-header-h1" +
+      " First header should be a top level header" +
+      " [Expected: h1; Actual: h2]";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
 };
 
 module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
@@ -639,6 +727,9 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
     "files": "README.md",
     "config": {
       "default": false,
+      "MD013": {
+        "line_length": 150
+      },
       "MD043": {
         "headers": [
           "# markdownlint",
@@ -655,6 +746,7 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
           "#### options.strings",
           "#### options.frontMatter",
           "#### options.config",
+          "#### options.resultVersion",
           "### callback",
           "### result",
           "## Usage",
@@ -689,7 +781,7 @@ module.exports.filesArrayAsString = function filesArrayAsString(test) {
   test.expect(2);
   markdownlint({
     "files": "README.md",
-    "config": { "MD013": false }
+    "config": { "MD013": { "line_length": 150 } }
   }, function callback(err, actual) {
     test.ifError(err);
     var expected = { "README.md": {} };

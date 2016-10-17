@@ -24,6 +24,14 @@ markdownlint(options, function callback(err, result) {
   }
 });
 
+// Again, using resultVersion 1 for more detail
+options.resultVersion = 1;
+markdownlint(options, function callback(err, result) {
+  if (!err) {
+    console.dir(result, { "colors": true });
+  }
+});
+
 // Make a synchronous call, passing true to toString()
 var result = markdownlint.sync(options);
 console.log(result.toString(true));

@@ -275,6 +275,20 @@ See the [style](style) directory for more samples.
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
 for the [JSON Schema](http://json-schema.org/) of the `options.config` object.
 
+#### options.resultVersion
+
+Type: `Number`
+
+Specifies which version of the `result` object to return (see the "Usage" section
+below for examples).
+
+Passing a `resultVersion` of `0` corresponds to the original, simple format where
+each error is identified by rule name and line number. This is the default.
+
+Passing a `resultVersion` of `1` corresponds to a more detailed format where each
+error includes information about the line number, rule name, alias, description,
+as well as any additional detail or context that is available.
+
 ### callback
 
 Type: `Function` taking (`Error`, `Object`)
@@ -322,7 +336,8 @@ bad.md: 1: MD018 No space after hash on atx style header
 bad.md: 3: MD018 No space after hash on atx style header
 ```
 
-Or invoke `markdownlint.sync` for a synchronous call:
+Or invoke `markdownlint.sync` for a synchronous call and/or pass `true` to `toString`
+to use rule aliases instead of names:
 
 ```js
 var result = markdownlint.sync(options);
@@ -354,16 +369,59 @@ Output:
 
 ```json
 {
-  "good.string": {},
-  "bad.string": {
-    "MD010": [ 3 ],
-    "MD018": [ 1, 3 ]
-  },
   "good.md": {},
   "bad.md": {
-    "MD010": [ 3 ],
-    "MD018": [ 1, 3 ]
+    MD010: [ 3 ],
+    MD018: [ 1, 3 ]
   }
+}
+```
+
+For more detailed error reporting, set `options.resultVersion` to `1`:
+
+```js
+var options = {
+  "files": [ "good.md", "bad.md" ],
+  "resultVersion": 1
+};
+```
+
+With that, the output of `result.toString` looks like:
+
+```text
+bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
+bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.string"]
+bad.string: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This string fails    some rules."]
+bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
+bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.md"]
+bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This file fails    some rules."]
+```
+
+And the `result` object becomes:
+
+```json
+{
+  "good.md": [],
+  "bad.md": [
+    { lineNumber: 3,
+      ruleName: "MD010",
+      ruleAlias: "no-hard-tabs",
+      ruleDescription: "Hard tabs",
+      errorDetail: "Column: 17",
+      errorContext: null },
+    { lineNumber: 1,
+      ruleName: "MD018",
+      ruleAlias: "no-missing-space-atx",
+      ruleDescription: "No space after hash on atx style header",
+      errorDetail: null,
+      errorContext: "#bad.md" },
+    { lineNumber: 3,
+      ruleName: "MD018",
+      ruleAlias: "no-missing-space-atx",
+      ruleDescription: "No space after hash on atx style header",
+      errorDetail: null,
+      errorContext: "#This file fails\tsome rules." }
+  ]
 }
 ```
 

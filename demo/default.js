@@ -15,6 +15,14 @@
   var rulesMd = "https://github.com/DavidAnson/markdownlint" +
     "/blob/master/doc/Rules.md";
 
+  // Sanitize string for HTML display
+  function sanitize(str) {
+    return str
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+
   // Handle input
   function onMarkdownInput() {
     // Markdown
@@ -26,10 +34,7 @@
     var padding = lines.length.toString().replace(/\d/g, " ");
     numbered.innerHTML = lines
       .map(function mapNumberedLine(line, index) {
-        line = line
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;");
+        line = sanitize(line);
         index++;
         var paddedIndex = (padding + index).slice(-padding.length);
         return "<span id='l" + index + "'><em>" + paddedIndex + "</em>: " +
@@ -42,19 +47,27 @@
       },
       "config": {
         "MD013": false
-      }
+      },
+      "resultVersion": 1
     };
-    var results = window.markdownlint.sync(options).toString();
-    violations.innerHTML = results.split(newLineRe)
-      .map(function mapResultLine(line) {
-        return line.replace(/^content: (\d+): (MD\d\d\d) (.*)$/,
-          function replacer(match, p1, p2, p3) {
-            var ruleRef = rulesMd + "#" + p2.toLowerCase() + "---" +
-              p3.toLowerCase().replace(/ /g, "-");
-            return "<a href='#" + p1 + "'><em>" + p1 + "</em></a> - " +
-              "<a href='" + ruleRef + "'>" + p2 + "</a> " + p3;
-          });
-      }).join("<br/>");
+    var results = window.markdownlint.sync(options);
+    violations.innerHTML = results.content.map(function mapResult(result) {
+      var ruleRef = rulesMd + "#" + result.ruleName.toLowerCase() + "---" +
+        result.ruleDescription.toLowerCase().replace(/ /g, "-");
+      return "<a href='#" + result.lineNumber + "'><em>" + result.lineNumber +
+        "</em></a> - <a href='" + ruleRef + "'>" + result.ruleName + "</a> " +
+        result.ruleDescription +
+        (result.errorDetail ?
+          " [<span class='detail'>" +
+            sanitize(result.errorDetail) +
+            "</span>]" :
+          "") +
+        (result.errorContext ?
+          " [<span class='detail'>Context: \"" +
+            sanitize(result.errorContext) +
+            "\"</span>]" :
+          "");
+    }).join("<br/>");
   }
 
   // Load from a string or File object

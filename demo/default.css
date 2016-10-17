@@ -42,6 +42,11 @@ textarea {
   padding: 0;
   resize: none;
 }
+.detail {
+  font-size: 80%;
+  font-style: italic;
+  white-space: pre-wrap;
+}
 .flex-rows {
   display: flex;
   flex-direction: column;
