@@ -1,0 +1,82 @@
+[
+    {
+        "lineNumber": 3,
+        "ruleName": "MD031",
+        "ruleAlias": "blanks-around-fences",
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "errorDetail": null,
+        "errorContext": "```"
+    },
+    {
+        "lineNumber": 4,
+        "ruleName": "MD032",
+        "ruleAlias": "blanks-around-lists",
+        "ruleDescription": "Lists should be surrounded by blank lines",
+        "errorDetail": null,
+        "errorContext": "* List"
+    },
+    {
+        "lineNumber": 6,
+        "ruleName": "MD033",
+        "ruleAlias": "no-inline-html",
+        "ruleDescription": "Inline HTML",
+        "errorDetail": "Element: hr",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 8,
+        "ruleName": "MD034",
+        "ruleAlias": "no-bare-urls",
+        "ruleDescription": "Bare URL used",
+        "errorDetail": null,
+        "errorContext": "http://example.com"
+    },
+    {
+        "lineNumber": 11,
+        "ruleName": "MD035",
+        "ruleAlias": "hr-style",
+        "ruleDescription": "Horizontal rule style",
+        "errorDetail": "Expected: ---; Actual: ***",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 13,
+        "ruleName": "MD036",
+        "ruleAlias": "no-emphasis-as-header",
+        "ruleDescription": "Emphasis used instead of a header",
+        "errorDetail": null,
+        "errorContext": "Emphasis"
+    },
+    {
+        "lineNumber": 15,
+        "ruleName": "MD037",
+        "ruleAlias": "no-space-in-emphasis",
+        "ruleDescription": "Spaces inside emphasis markers",
+        "errorDetail": null,
+        "errorContext": "* inside *"
+    },
+    {
+        "lineNumber": 17,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "` inside `"
+    },
+    {
+        "lineNumber": 19,
+        "ruleName": "MD039",
+        "ruleAlias": "no-space-in-links",
+        "ruleDescription": "Spaces inside link text",
+        "errorDetail": null,
+        "errorContext": "[ inside ]"
+    },
+    {
+        "lineNumber": 21,
+        "ruleName": "MD040",
+        "ruleAlias": "fenced-code-language",
+        "ruleDescription": "Fenced code blocks should have a language specified",
+        "errorDetail": null,
+        "errorContext": "```"
+    }
+]

@@ -1,0 +1,74 @@
+[
+    {
+        "lineNumber": 3,
+        "ruleName": "MD001",
+        "ruleAlias": "header-increment",
+        "ruleDescription": "Header levels should only increment by one level at a time",
+        "errorDetail": "Expected: h3; Actual: h4",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 1,
+        "ruleName": "MD002",
+        "ruleAlias": "first-header-h1",
+        "ruleDescription": "First header should be a top level header",
+        "errorDetail": "Expected: h1; Actual: h2",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 5,
+        "ruleName": "MD003",
+        "ruleAlias": "header-style",
+        "ruleDescription": "Header style",
+        "errorDetail": "Expected: atx; Actual: atx_closed",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 10,
+        "ruleName": "MD004",
+        "ruleAlias": "ul-style",
+        "ruleDescription": "Unordered list style",
+        "errorDetail": "Expected: asterisk; Actual: dash",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 8,
+        "ruleName": "MD005",
+        "ruleAlias": "list-indent",
+        "ruleDescription": "Inconsistent indentation for list items at the same level",
+        "errorDetail": "Expected: 0; Actual: 1",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 12,
+        "ruleName": "MD006",
+        "ruleAlias": "ul-start-left",
+        "ruleDescription": "Consider starting bulleted lists at the beginning of the line",
+        "errorDetail": "Expected: 0; Actual: 1",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 12,
+        "ruleName": "MD007",
+        "ruleAlias": "ul-indent",
+        "ruleDescription": "Unordered list indentation",
+        "errorDetail": "Expected: 2; Actual: 1",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 15,
+        "ruleName": "MD009",
+        "ruleAlias": "no-trailing-spaces",
+        "ruleDescription": "Trailing spaces",
+        "errorDetail": "Expected: 0; Actual: 1",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 17,
+        "ruleName": "MD010",
+        "ruleAlias": "no-hard-tabs",
+        "ruleDescription": "Hard tabs",
+        "errorDetail": "Column: 5",
+        "errorContext": null
+    }
+]

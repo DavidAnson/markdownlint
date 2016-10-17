@@ -1,0 +1,74 @@
+[
+    {
+        "lineNumber": 1,
+        "ruleName": "MD022",
+        "ruleAlias": "blanks-around-headers",
+        "ruleDescription": "Headers should be surrounded by blank lines",
+        "errorDetail": null,
+        "errorContext": "# Heading"
+    },
+    {
+        "lineNumber": 1,
+        "ruleName": "MD023",
+        "ruleAlias": "header-start-left",
+        "ruleDescription": "Headers must start at the beginning of the line",
+        "errorDetail": null,
+        "errorContext": " # Heading"
+    },
+    {
+        "lineNumber": 4,
+        "ruleName": "MD024",
+        "ruleAlias": "no-duplicate-header",
+        "ruleDescription": "Multiple headers with the same content",
+        "errorDetail": null,
+        "errorContext": "# Heading"
+    },
+    {
+        "lineNumber": 4,
+        "ruleName": "MD025",
+        "ruleAlias": "single-h1",
+        "ruleDescription": "Multiple top level headers in the same document",
+        "errorDetail": null,
+        "errorContext": "# Heading"
+    },
+    {
+        "lineNumber": 6,
+        "ruleName": "MD026",
+        "ruleAlias": "no-trailing-punctuation",
+        "ruleDescription": "Trailing punctuation in header",
+        "errorDetail": "Punctuation: '.'",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 8,
+        "ruleName": "MD027",
+        "ruleAlias": "no-multiple-space-blockquote",
+        "ruleDescription": "Multiple spaces after blockquote symbol",
+        "errorDetail": null,
+        "errorContext": ">  Multiple spaces"
+    },
+    {
+        "lineNumber": 9,
+        "ruleName": "MD028",
+        "ruleAlias": "no-blanks-blockquote",
+        "ruleDescription": "Blank line inside blockquote",
+        "errorDetail": null,
+        "errorContext": null
+    },
+    {
+        "lineNumber": 13,
+        "ruleName": "MD029",
+        "ruleAlias": "ol-prefix",
+        "ruleDescription": "Ordered list item prefix",
+        "errorDetail": "Expected: 1; Actual: 2",
+        "errorContext": null
+    },
+    {
+        "lineNumber": 13,
+        "ruleName": "MD030",
+        "ruleAlias": "list-marker-space",
+        "ruleDescription": "Spaces after list markers",
+        "errorDetail": "Expected: 1; Actual: 2",
+        "errorContext": null
+    }
+]

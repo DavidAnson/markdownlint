@@ -1,0 +1,26 @@
+[
+    {
+        "lineNumber": 1,
+        "ruleName": "MD041",
+        "ruleAlias": "first-line-h1",
+        "ruleDescription": "First line in file should be a top level header",
+        "errorDetail": null,
+        "errorContext": "Not a header"
+    },
+    {
+        "lineNumber": 3,
+        "ruleName": "MD042",
+        "ruleAlias": "no-empty-links",
+        "ruleDescription": "No empty links",
+        "errorDetail": null,
+        "errorContext": "[empty]"
+    },
+    {
+        "lineNumber": 4,
+        "ruleName": "MD043",
+        "ruleAlias": "required-headers",
+        "ruleDescription": "Required header structure",
+        "errorDetail": null,
+        "errorContext": "# Header"
+    }
+]

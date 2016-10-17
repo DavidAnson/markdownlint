@@ -15,15 +15,14 @@ var configSchema = require("../schema/markdownlint-config-schema.json");
 function createTestForFile(file) {
   return function testForFile(test) {
     test.expect(1);
+    var detailedResults = /[\/\\]detailed-results-/.test(file);
+    var resultsFile = file.replace(/\.md$/, ".results.json");
     var configFile = file.replace(/\.md$/, ".json");
     var actualPromise = Q.nfcall(fs.stat, configFile)
       .then(
         function configFileExists() {
           return Q.nfcall(fs.readFile, configFile, shared.utf8Encoding)
-            .then(
-              function configFileContents(contents) {
-                return JSON.parse(contents);
-              });
+            .then(JSON.parse);
         },
         function noConfigFile() {
           return {};
@@ -33,30 +32,34 @@ function createTestForFile(file) {
           var mergedConfig = shared.assign(shared.clone(defaultConfig), config);
           return Q.nfcall(markdownlint, {
             "files": [ file ],
-            "config": mergedConfig
+            "config": mergedConfig,
+            "resultVersion": detailedResults ? 1 : 0
           });
         });
-    var expectedPromise = Q.nfcall(fs.readFile, file, shared.utf8Encoding)
-      .then(
-        function fileContents(contents) {
-          var lines = contents.split(shared.newLineRe);
-          var results = {};
-          lines.forEach(function forLine(line, lineNum) {
-            var regex = /\{(MD\d+)(?::(\d+))?\}/g;
-            var match = null;
-            while ((match = regex.exec(line))) {
-              var rule = match[1];
-              var errors = results[rule] || [];
-              errors.push(match[2] ? parseInt(match[2], 10) : lineNum + 1);
-              results[rule] = errors;
-            }
+    var expectedPromise = detailedResults ?
+      Q.nfcall(fs.readFile, resultsFile, shared.utf8Encoding)
+        .then(JSON.parse) :
+      Q.nfcall(fs.readFile, file, shared.utf8Encoding)
+        .then(
+          function fileContents(contents) {
+            var lines = contents.split(shared.newLineRe);
+            var results = {};
+            lines.forEach(function forLine(line, lineNum) {
+              var regex = /\{(MD\d+)(?::(\d+))?\}/g;
+              var match = null;
+              while ((match = regex.exec(line))) {
+                var rule = match[1];
+                var errors = results[rule] || [];
+                errors.push(match[2] ? parseInt(match[2], 10) : lineNum + 1);
+                results[rule] = errors;
+              }
+            });
+            var sortedResults = {};
+            Object.keys(results).sort().forEach(function forKey(key) {
+              sortedResults[key] = results[key];
+            });
+            return sortedResults;
           });
-          var sortedResults = {};
-          Object.keys(results).sort().forEach(function forKey(key) {
-            sortedResults[key] = results[key];
-          });
-          return sortedResults;
-        });
     Q.all([ actualPromise, expectedPromise ])
       .then(
         function compareResults(fulfillments) {
@@ -1026,10 +1029,11 @@ module.exports.doc = function doc(test) {
 
 module.exports.validateConfigSchema = function validateConfigSchema(test) {
   var jsonFileRe = /\.json$/i;
+  var resultsFileRe = /\.results\.json$/i;
   var testDirectory = __dirname;
   var testFiles = fs.readdirSync(testDirectory);
   testFiles.filter(function filterFile(file) {
-    return jsonFileRe.test(file);
+    return jsonFileRe.test(file) && !resultsFileRe.test(file);
   }).forEach(function forFile(file) {
     var data = fs.readFileSync(path.join(testDirectory, file));
     test.ok(
