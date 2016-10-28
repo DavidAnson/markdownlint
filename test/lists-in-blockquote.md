@@ -25,26 +25,26 @@ Text
 Text
 
 > 1. Item
->    1. Item {MD027}
+>    1. Item
 
 Text
 
 > - Item
->   - Item {MD027}
+>   - Item
 
 Text
 
    > 1. Item
-   >    1. Item {MD027}
-   >    1.  Item {MD027} {MD030}
+   >    1. Item
+   >    1.  Item {MD030}
 
 Text
 
    > * Item
-   >   * Item {MD027}
-   >   *  Item {MD027} {MD030}
-   >    * Item {MD027} {MD005}
-   >  * Item {MD027} {MD005}
+   >   * Item
+   >   *  Item {MD030}
+   >    * Item {MD005}
+   >  * Item {MD005}
 
 Text
 
