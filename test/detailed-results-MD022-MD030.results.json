@@ -5,7 +5,8 @@
         "ruleAlias": "blanks-around-headers",
         "ruleDescription": "Headers should be surrounded by blank lines",
         "errorDetail": null,
-        "errorContext": "# Heading"
+        "errorContext": "# Heading",
+        "errorRange": null
     },
     {
         "lineNumber": 1,
@@ -13,7 +14,8 @@
         "ruleAlias": "header-start-left",
         "ruleDescription": "Headers must start at the beginning of the line",
         "errorDetail": null,
-        "errorContext": " # Heading"
+        "errorContext": " # Heading",
+        "errorRange": [1, 2]
     },
     {
         "lineNumber": 4,
@@ -21,7 +23,8 @@
         "ruleAlias": "no-duplicate-header",
         "ruleDescription": "Multiple headers with the same content",
         "errorDetail": null,
-        "errorContext": "# Heading"
+        "errorContext": "# Heading",
+        "errorRange": null
     },
     {
         "lineNumber": 4,
@@ -29,7 +32,8 @@
         "ruleAlias": "single-h1",
         "ruleDescription": "Multiple top level headers in the same document",
         "errorDetail": null,
-        "errorContext": "# Heading"
+        "errorContext": "# Heading",
+        "errorRange": null
     },
     {
         "lineNumber": 6,
@@ -37,7 +41,8 @@
         "ruleAlias": "no-trailing-punctuation",
         "ruleDescription": "Trailing punctuation in header",
         "errorDetail": "Punctuation: '.'",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [19, 1]
     },
     {
         "lineNumber": 8,
@@ -45,7 +50,8 @@
         "ruleAlias": "no-multiple-space-blockquote",
         "ruleDescription": "Multiple spaces after blockquote symbol",
         "errorDetail": null,
-        "errorContext": ">  Multiple spaces"
+        "errorContext": ">  Multiple spaces",
+        "errorRange": [1, 4]
     },
     {
         "lineNumber": 9,
@@ -53,7 +59,8 @@
         "ruleAlias": "no-blanks-blockquote",
         "ruleDescription": "Blank line inside blockquote",
         "errorDetail": null,
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": null
     },
     {
         "lineNumber": 13,
@@ -61,7 +68,8 @@
         "ruleAlias": "ol-prefix",
         "ruleDescription": "Ordered list item prefix",
         "errorDetail": "Expected: 1; Actual: 2",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [1, 4]
     },
     {
         "lineNumber": 13,
@@ -69,6 +77,7 @@
         "ruleAlias": "list-marker-space",
         "ruleDescription": "Spaces after list markers",
         "errorDetail": "Expected: 1; Actual: 2",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [1, 4]
     }
 ]

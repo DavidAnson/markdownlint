@@ -408,19 +408,22 @@ And the `result` object becomes:
       "ruleAlias": "no-hard-tabs",
       "ruleDescription": "Hard tabs",
       "errorDetail": "Column: 17",
-      "errorContext": null },
+      "errorContext": null,
+      "errorRange": [ 17, 1 ] },
     { "lineNumber": 1,
       "ruleName": "MD018",
       "ruleAlias": "no-missing-space-atx",
       "ruleDescription": "No space after hash on atx style header",
       "errorDetail": null,
-      "errorContext": "#bad.md" },
+      "errorContext": "#bad.md",
+      "errorRange": [ 1, 2 ] },
     { "lineNumber": 3,
       "ruleName": "MD018",
       "ruleAlias": "no-missing-space-atx",
       "ruleDescription": "No space after hash on atx style header",
       "errorDetail": null,
-      "errorContext": "#This file fails\tsome rules." }
+      "errorContext": "#This file fails\tsome rules.",
+      "errorRange": [ 1, 2 ] }
   ]
 }
 ```

@@ -5,7 +5,8 @@
         "ruleAlias": "first-line-h1",
         "ruleDescription": "First line in file should be a top level header",
         "errorDetail": null,
-        "errorContext": "Not a header"
+        "errorContext": "Not a header",
+        "errorRange": null
     },
     {
         "lineNumber": 3,
@@ -13,7 +14,8 @@
         "ruleAlias": "no-empty-links",
         "ruleDescription": "No empty links",
         "errorDetail": null,
-        "errorContext": "[empty]"
+        "errorContext": "[empty]",
+        "errorRange": [4, 7]
     },
     {
         "lineNumber": 4,
@@ -21,6 +23,7 @@
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
         "errorDetail": null,
-        "errorContext": "# Header"
+        "errorContext": "# Header",
+        "errorRange": null
     }
 ]

@@ -5,7 +5,8 @@
         "ruleAlias": "no-reversed-links",
         "ruleDescription": "Reversed link syntax",
         "errorDetail": "(reversed)[link]",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [3, 16]
     },
     {
         "lineNumber": 5,
@@ -13,7 +14,8 @@
         "ruleAlias": "no-multiple-blanks",
         "ruleDescription": "Multiple consecutive blank lines",
         "errorDetail": "Expected: 1; Actual: 2",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": null
     },
     {
         "lineNumber": 6,
@@ -21,7 +23,8 @@
         "ruleAlias": "line-length",
         "ruleDescription": "Line length",
         "errorDetail": "Expected: 80; Actual: 99",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [81, 19]
     },
     {
         "lineNumber": 8,
@@ -29,7 +32,8 @@
         "ruleAlias": "commands-show-output",
         "ruleDescription": "Dollar signs used before commands without showing output",
         "errorDetail": null,
-        "errorContext": "$ command with no output"
+        "errorContext": "$ command with no output",
+        "errorRange": [5, 2]
     },
     {
         "lineNumber": 10,
@@ -37,7 +41,8 @@
         "ruleAlias": "no-missing-space-atx",
         "ruleDescription": "No space after hash on atx style header",
         "errorDetail": null,
-        "errorContext": "#No space A"
+        "errorContext": "#No space A",
+        "errorRange": [1, 2]
     },
     {
         "lineNumber": 12,
@@ -45,7 +50,8 @@
         "ruleAlias": "no-multiple-space-atx",
         "ruleDescription": "Multiple spaces after hash on atx style header",
         "errorDetail": null,
-        "errorContext": "#  Multiple spaces A"
+        "errorContext": "#  Multiple spaces A",
+        "errorRange": [1, 4]
     },
     {
         "lineNumber": 14,
@@ -53,7 +59,8 @@
         "ruleAlias": "no-missing-space-closed-atx",
         "ruleDescription": "No space inside hashes on closed atx style header",
         "errorDetail": null,
-        "errorContext": "#No space B#"
+        "errorContext": "#No space B#",
+        "errorRange": [1, 2]
     },
     {
         "lineNumber": 16,
@@ -61,6 +68,7 @@
         "ruleAlias": "no-multiple-space-closed-atx",
         "ruleDescription": "Multiple spaces inside hashes on closed atx style header",
         "errorDetail": null,
-        "errorContext": "#  Multiple spaces B  #"
+        "errorContext": "#  Multiple spaces B  #",
+        "errorRange": [1, 4]
     }
 ]

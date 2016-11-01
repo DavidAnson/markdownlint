@@ -5,7 +5,8 @@
         "ruleAlias": "blanks-around-fences",
         "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
         "errorDetail": null,
-        "errorContext": "```"
+        "errorContext": "```",
+        "errorRange": null
     },
     {
         "lineNumber": 4,
@@ -13,7 +14,8 @@
         "ruleAlias": "blanks-around-lists",
         "ruleDescription": "Lists should be surrounded by blank lines",
         "errorDetail": null,
-        "errorContext": "* List"
+        "errorContext": "* List",
+        "errorRange": null
     },
     {
         "lineNumber": 6,
@@ -21,7 +23,8 @@
         "ruleAlias": "no-inline-html",
         "ruleDescription": "Inline HTML",
         "errorDetail": "Element: hr",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [7, 5]
     },
     {
         "lineNumber": 8,
@@ -29,7 +32,8 @@
         "ruleAlias": "no-bare-urls",
         "ruleDescription": "Bare URL used",
         "errorDetail": null,
-        "errorContext": "http://example.com"
+        "errorContext": "http://example.com",
+        "errorRange": [6, 18]
     },
     {
         "lineNumber": 11,
@@ -37,7 +41,8 @@
         "ruleAlias": "hr-style",
         "ruleDescription": "Horizontal rule style",
         "errorDetail": "Expected: ---; Actual: ***",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": null
     },
     {
         "lineNumber": 13,
@@ -45,7 +50,8 @@
         "ruleAlias": "no-emphasis-as-header",
         "ruleDescription": "Emphasis used instead of a header",
         "errorDetail": null,
-        "errorContext": "Emphasis"
+        "errorContext": "Emphasis",
+        "errorRange": null
     },
     {
         "lineNumber": 15,
@@ -53,7 +59,8 @@
         "ruleAlias": "no-space-in-emphasis",
         "ruleDescription": "Spaces inside emphasis markers",
         "errorDetail": null,
-        "errorContext": "* inside *"
+        "errorContext": "* inside *",
+        "errorRange": [7, 10]
     },
     {
         "lineNumber": 17,
@@ -61,7 +68,8 @@
         "ruleAlias": "no-space-in-code",
         "ruleDescription": "Spaces inside code span elements",
         "errorDetail": null,
-        "errorContext": "` inside `"
+        "errorContext": "` inside `",
+        "errorRange": [7, 10]
     },
     {
         "lineNumber": 19,
@@ -69,7 +77,8 @@
         "ruleAlias": "no-space-in-links",
         "ruleDescription": "Spaces inside link text",
         "errorDetail": null,
-        "errorContext": "[ inside ]"
+        "errorContext": "[ inside ]",
+        "errorRange": [7, 10]
     },
     {
         "lineNumber": 21,
@@ -77,6 +86,7 @@
         "ruleAlias": "fenced-code-language",
         "ruleDescription": "Fenced code blocks should have a language specified",
         "errorDetail": null,
-        "errorContext": "```"
+        "errorContext": "```",
+        "errorRange": null
     }
 ]

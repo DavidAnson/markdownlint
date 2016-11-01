@@ -5,7 +5,8 @@
         "ruleAlias": "header-increment",
         "ruleDescription": "Header levels should only increment by one level at a time",
         "errorDetail": "Expected: h3; Actual: h4",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": null
     },
     {
         "lineNumber": 1,
@@ -13,7 +14,8 @@
         "ruleAlias": "first-header-h1",
         "ruleDescription": "First header should be a top level header",
         "errorDetail": "Expected: h1; Actual: h2",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": null
     },
     {
         "lineNumber": 5,
@@ -21,7 +23,8 @@
         "ruleAlias": "header-style",
         "ruleDescription": "Header style",
         "errorDetail": "Expected: atx; Actual: atx_closed",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": null
     },
     {
         "lineNumber": 10,
@@ -29,7 +32,8 @@
         "ruleAlias": "ul-style",
         "ruleDescription": "Unordered list style",
         "errorDetail": "Expected: asterisk; Actual: dash",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [1, 2]
     },
     {
         "lineNumber": 8,
@@ -37,7 +41,8 @@
         "ruleAlias": "list-indent",
         "ruleDescription": "Inconsistent indentation for list items at the same level",
         "errorDetail": "Expected: 0; Actual: 1",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [1, 3]
     },
     {
         "lineNumber": 12,
@@ -45,7 +50,8 @@
         "ruleAlias": "ul-start-left",
         "ruleDescription": "Consider starting bulleted lists at the beginning of the line",
         "errorDetail": "Expected: 0; Actual: 1",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [1, 3]
     },
     {
         "lineNumber": 12,
@@ -53,7 +59,8 @@
         "ruleAlias": "ul-indent",
         "ruleDescription": "Unordered list indentation",
         "errorDetail": "Expected: 2; Actual: 1",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [1, 3]
     },
     {
         "lineNumber": 15,
@@ -61,7 +68,8 @@
         "ruleAlias": "no-trailing-spaces",
         "ruleDescription": "Trailing spaces",
         "errorDetail": "Expected: 0; Actual: 1",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [5, 1]
     },
     {
         "lineNumber": 17,
@@ -69,6 +77,7 @@
         "ruleAlias": "no-hard-tabs",
         "ruleDescription": "Hard tabs",
         "errorDetail": "Column: 5",
-        "errorContext": null
+        "errorContext": null,
+        "errorRange": [5, 1]
     }
 ]

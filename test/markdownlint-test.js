@@ -220,7 +220,8 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleDescription":
             "Multiple spaces inside hashes on closed atx style header",
           "errorDetail": null,
-          "errorContext": "#  Multiple spa...style header  #" }
+          "errorContext": "#  Multiple spa...style header  #",
+          "errorRange": [ 1, 4 ] }
       ],
       "./test/atx_header_spacing.md": [
         { "lineNumber": 3,
@@ -228,25 +229,29 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleAlias": "first-header-h1",
           "ruleDescription": "First header should be a top level header",
           "errorDetail": "Expected: h1; Actual: h2",
-          "errorContext": null },
+          "errorContext": null,
+          "errorRange": null },
         { "lineNumber": 1,
           "ruleName": "MD018",
           "ruleAlias": "no-missing-space-atx",
           "ruleDescription": "No space after hash on atx style header",
           "errorDetail": null,
-          "errorContext": "#Header 1 {MD018}" },
+          "errorContext": "#Header 1 {MD018}",
+          "errorRange": [ 1, 2 ] },
         { "lineNumber": 3,
           "ruleName": "MD019",
           "ruleAlias": "no-multiple-space-atx",
           "ruleDescription": "Multiple spaces after hash on atx style header",
           "errorDetail": null,
-          "errorContext": "##  Header 2 {MD019}" },
+          "errorContext": "##  Header 2 {MD019}",
+          "errorRange": [ 1, 5 ] },
         { "lineNumber": 5,
           "ruleName": "MD019",
           "ruleAlias": "no-multiple-space-atx",
           "ruleDescription": "Multiple spaces after hash on atx style header",
           "errorDetail": null,
-          "errorContext": "##   Header 3 {MD019}" }
+          "errorContext": "##   Header 3 {MD019}",
+          "errorRange": [ 1, 6 ] }
       ],
       "./test/first_header_bad_atx.md": [
         { "lineNumber": 1,
@@ -254,7 +259,8 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleAlias": "first-header-h1",
           "ruleDescription": "First header should be a top level header",
           "errorDetail": "Expected: h1; Actual: h2",
-          "errorContext": null }
+          "errorContext": null,
+          "errorRange": null }
       ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -279,6 +285,38 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
       " First header should be a top level header" +
       " [Expected: h1; Actual: h2]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
+module.exports.resultFormattingV1BadRegExp = function resultFormattingV1(test) {
+  test.expect(3);
+  var md010 = rules[8];
+  test.equal(md010.name, "MD010", "Wrong rule.");
+  var md010RegExp = md010.regexp;
+  md010.regexp = /X/;
+  var options = {
+    "strings": {
+      "tab": "\t."
+    },
+    "config": defaultConfig,
+    "resultVersion": 1
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "tab": [
+        { "lineNumber": 1,
+          "ruleName": "MD010",
+          "ruleAlias": "no-hard-tabs",
+          "ruleDescription": "Hard tabs",
+          "errorDetail": "Column: 1",
+          "errorContext": null,
+          "errorRange": null }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    md010.regexp = md010RegExp;
     test.done();
   });
 };

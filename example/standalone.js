@@ -20,7 +20,7 @@ markdownlint(options, function callback(err, result) {
 // Examines the result object directly
 markdownlint(options, function callback(err, result) {
   if (!err) {
-    console.dir(result, { "colors": true });
+    console.dir(result, { "colors": true, "depth": null });
   }
 });
 
@@ -28,7 +28,7 @@ markdownlint(options, function callback(err, result) {
 options.resultVersion = 1;
 markdownlint(options, function callback(err, result) {
   if (!err) {
-    console.dir(result, { "colors": true });
+    console.dir(result, { "colors": true, "depth": null });
   }
 });
 
