@@ -542,6 +542,8 @@ var results = window.markdownlint.sync(options).toString();
 * 0.1.0 - Add aliases, exceptions for MD033, exclusions for MD013, dependencies.
 * 0.1.1 - Fix bug handling HTML in tables, reference markdownlint-cli.
 * 0.2.0 - Add MD042/MD043, enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041, dependencies.
+* 0.3.0 - More detailed error reporting with `resultVersion`, enhance MD010/MD012/MD036,
+          fixes for MD027/MD029/MD030, include JSON schema, dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
