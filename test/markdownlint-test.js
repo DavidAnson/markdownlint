@@ -15,7 +15,7 @@ var configSchema = require("../schema/markdownlint-config-schema.json");
 function createTestForFile(file) {
   return function testForFile(test) {
     test.expect(1);
-    var detailedResults = /[\/\\]detailed-results-/.test(file);
+    var detailedResults = /[/\\]detailed-results-/.test(file);
     var resultsFile = file.replace(/\.md$/, ".results.json");
     var configFile = file.replace(/\.md$/, ".json");
     var actualPromise = Q.nfcall(fs.stat, configFile)

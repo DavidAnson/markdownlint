@@ -129,6 +129,7 @@
         "no-useless-constructor": "error",
         "no-useless-escape": "error",
         "no-useless-rename": "error",
+        "no-useless-return": "error",
         "no-void": "error",
         "no-var": "off",
         "no-warning-comments": "error",
