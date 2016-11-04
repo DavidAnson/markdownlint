@@ -62,3 +62,30 @@ Text
 > * Item
 >>* Item
 >> * Item
+
+Text
+
+> Quoted text
+>
+> * A list
+> * of items
+>
+> More quoted text
+
+Text
+
+> Quoted text
+>
+> > * A list
+> > * of items
+>
+> More quoted text
+
+Text
+
+> Quoted text
+>
+> > * A list
+> > * of items
+> >
+> > More quoted text
