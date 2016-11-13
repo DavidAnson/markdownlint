@@ -4,3 +4,4 @@ demo/markdownlint-browser.js
 demo/markdownlint-browser.min.js
 node_modules
 npm-debug.log
+.vscode
