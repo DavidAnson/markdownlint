@@ -18,12 +18,21 @@
         "errorRange": [4, 7]
     },
     {
-        "lineNumber": 4,
+        "lineNumber": 6,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
         "errorDetail": null,
         "errorContext": "# Header",
+        "errorRange": null
+    },
+    {
+        "lineNumber": 5,
+        "ruleName": "MD044",
+        "ruleAlias": "proper-names",
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "errorDetail": "Expected: markdownlint; Actual: MARKDOWNLINT",
+        "errorContext": null,
         "errorRange": null
     }
 ]

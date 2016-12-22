@@ -84,6 +84,7 @@ playground for learning and exploring.
 * **MD041** *first-line-h1* - First line in file should be a top level header
 * **MD042** *no-empty-links* - No empty links
 * **MD043** *required-headers* - Required header structure
+* **MD044** *proper-names* - Proper names should have the correct capitalization
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -107,6 +108,7 @@ See [Rules.md](doc/Rules.md) for more details.
 * **links** - MD011, MD034, MD039, MD042
 * **ol** - MD029, MD030, MD032
 * **spaces** - MD018, MD019, MD020, MD021, MD023
+* **spelling** - MD044
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
 * **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039

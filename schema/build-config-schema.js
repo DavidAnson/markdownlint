@@ -212,6 +212,18 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD044":
+      scheme.properties = {
+        "names": {
+          "description": "List of proper names",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      };
+      break;
     default:
       custom = false;
       break;

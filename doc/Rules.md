@@ -1119,3 +1119,23 @@ problematic header (otherwise, it outputs the last line number of the file).
 
 Note that while the `headers` parameter uses the "## Text" ATX header style for
 simplicity, a file may use any supported header style.
+
+## MD044 - Proper names should have the correct capitalization
+
+Tags: spelling
+
+Aliases: proper-names
+
+Parameters: names (array of string; default `null` for disabled)
+
+This rule is triggered when any of the strings in the `names` array do not have
+the specified capitalization. It can be used to enforce a standard letter case
+for the names of projects and products.
+
+For example, the language "JavaScript" is usually written with both the 'J' and
+'S' capitalized - though sometimes the 's' or 'j' appear in lower-case. To enforce
+the proper capitalization, specify the desired letter case in the `names` array:
+
+    [
+        "JavaScript"
+    ]

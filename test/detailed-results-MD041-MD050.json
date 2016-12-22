@@ -5,5 +5,10 @@
     "headers": [
       "# Header"
     ]
+  },
+  "MD044": {
+    "names": [
+      "markdownlint"
+    ]
   }
 }
