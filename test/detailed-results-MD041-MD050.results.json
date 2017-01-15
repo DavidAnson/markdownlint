@@ -15,10 +15,19 @@
         "ruleDescription": "No empty links",
         "errorDetail": null,
         "errorContext": "[empty]",
-        "errorRange": [4, 7]
+        "errorRange": [4, 9]
     },
     {
-        "lineNumber": 6,
+        "lineNumber": 5,
+        "ruleName": "MD042",
+        "ruleAlias": "no-empty-links",
+        "ruleDescription": "No empty links",
+        "errorDetail": null,
+        "errorContext": "[empty]",
+        "errorRange": [4, 10]
+    },
+    {
+        "lineNumber": 8,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
@@ -27,7 +36,7 @@
         "errorRange": null
     },
     {
-        "lineNumber": 5,
+        "lineNumber": 7,
         "ruleName": "MD044",
         "ruleAlias": "proper-names",
         "ruleDescription": "Proper names should have the correct capitalization",
