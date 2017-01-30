@@ -598,7 +598,7 @@ To fix this, remove any trailing punctuation:
 
 Note: The punctuation parameter can be used to specify what characters class
 as punctuation at the end of the header. For example, you can set it to
-`'.,;:!'` to allow headers with question marks in them, such as might be used
+`".,;:!"` to allow headers with question marks in them, such as might be used
 in an FAQ.
 
 ## MD027 - Multiple spaces after blockquote symbol
