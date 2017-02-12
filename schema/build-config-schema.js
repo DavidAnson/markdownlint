@@ -129,6 +129,11 @@ rules.forEach(function forRule(rule) {
           "description": "Include tables",
           "type": "boolean",
           "default": true
+        },
+        "headers": {
+          "description": "Include headers",
+          "type": "boolean",
+          "default": true
         }
       };
       break;

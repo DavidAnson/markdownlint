@@ -323,6 +323,11 @@
           "description": "Include tables",
           "type": "boolean",
           "default": true
+        },
+        "headers": {
+          "description": "Include headers",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -347,6 +352,11 @@
         },
         "tables": {
           "description": "Include tables",
+          "type": "boolean",
+          "default": true
+        },
+        "headers": {
+          "description": "Include headers",
           "type": "boolean",
           "default": true
         }
