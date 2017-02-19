@@ -986,6 +986,11 @@ To fix this, remove the spaces inside the codespan markers:
 
     `some text`
 
+Note: A single leading or trailing space is allowed if used to separate codespan
+markers from an embedded backtick:
+
+    `` ` embedded backtick``
+
 ## MD039 - Spaces inside link text
 
 Tags: whitespace, links
