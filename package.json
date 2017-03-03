@@ -26,16 +26,16 @@
     "markdown-it": "^8.0.1"
   },
   "devDependencies": {
-    "browserify": "^13.1.1",
+    "browserify": "^14.1.0",
     "cpy-cli": "^1.0.1",
-    "eslint": "^3.10.0",
+    "eslint": "^3.16.1",
     "glob": "^7.1.1",
     "istanbul": "^0.4.5",
-    "nodeunit": "^0.10.2",
+    "nodeunit": "^0.11.0",
     "q": "^1.4.1",
-    "rimraf": "^2.5.4",
+    "rimraf": "^2.6.1",
     "tv4": "^1.2.7",
-    "uglify-js": "^2.7.4"
+    "uglify-js": "^2.8.5"
   },
   "keywords": [
     "markdown",
