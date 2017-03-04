@@ -129,6 +129,11 @@ rules.forEach(function forRule(rule) {
           "description": "Include tables",
           "type": "boolean",
           "default": true
+        },
+        "headers": {
+          "description": "Include headers",
+          "type": "boolean",
+          "default": true
         }
       };
       break;
@@ -204,6 +209,18 @@ rules.forEach(function forRule(rule) {
       scheme.properties = {
         "headers": {
           "description": "List of headers",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      };
+      break;
+    case "MD044":
+      scheme.properties = {
+        "names": {
+          "description": "List of proper names",
           "type": "array",
           "items": {
             "type": "string"

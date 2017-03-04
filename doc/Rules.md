@@ -334,7 +334,7 @@ Tags: line_length
 
 Aliases: line-length
 
-Parameters: line_length, code_blocks, tables (number; default 80, boolean; default true)
+Parameters: line_length, code_blocks, tables, headers (number; default 80, boolean; default true)
 
 This rule is triggered when there are lines that are longer than the
 configured line length (default: 80 characters). To fix this, split the line
@@ -344,8 +344,8 @@ This rule has an exception where there is no whitespace beyond the configured
 line length. This allows you to still include items such as long URLs without
 being forced to break them in the middle.
 
-You also have the option to exclude this rule for code blocks and tables. To
-do this, set the `code_blocks` and/or `tables` parameters to false.
+You have the option to exclude this rule for code blocks, tables, or headers.
+To do so, set the `code_blocks`, `tables`, or `headers` parameter(s) to false.
 
 Code blocks are included in this rule by default since it is often a
 requirement for document readability, and tentatively compatible with code
@@ -986,6 +986,11 @@ To fix this, remove the spaces inside the codespan markers:
 
     `some text`
 
+Note: A single leading or trailing space is allowed if used to separate codespan
+markers from an embedded backtick:
+
+    `` ` embedded backtick``
+
 ## MD039 - Spaces inside link text
 
 Tags: whitespace, links
@@ -1032,17 +1037,13 @@ Parameters: level (number; default 1)
 This rule is triggered when the first line in the file isn't a top level (h1)
 header:
 
-    ```
     This is a file without a header
-    ```
 
 To fix this, add a header to the top of your file:
 
-    ```
     # File with header
 
     This is a file with a top level header
-    ```
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
 cases where an h1 is added externally.
@@ -1119,3 +1120,23 @@ problematic header (otherwise, it outputs the last line number of the file).
 
 Note that while the `headers` parameter uses the "## Text" ATX header style for
 simplicity, a file may use any supported header style.
+
+## MD044 - Proper names should have the correct capitalization
+
+Tags: spelling
+
+Aliases: proper-names
+
+Parameters: names (array of string; default `null` for disabled)
+
+This rule is triggered when any of the strings in the `names` array do not have
+the specified capitalization. It can be used to enforce a standard letter case
+for the names of projects and products.
+
+For example, the language "JavaScript" is usually written with both the 'J' and
+'S' capitalized - though sometimes the 's' or 'j' appear in lower-case. To enforce
+the proper capitalization, specify the desired letter case in the `names` array:
+
+    [
+        "JavaScript"
+    ]

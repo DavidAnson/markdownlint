@@ -7,5 +7,10 @@
       "#### Header 2 {MD001}",
       "# Broken"
     ]
+  },
+  "MD044": {
+    "names": [
+      "markdownlint"
+    ]
   }
 }

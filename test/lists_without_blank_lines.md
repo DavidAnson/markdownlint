@@ -19,8 +19,8 @@ text
 text
 
 text
-10. list {MD032}
-20. list
+1. list {MD032}
+2. list
 
 text
 

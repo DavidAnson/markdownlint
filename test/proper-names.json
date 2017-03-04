@@ -1,0 +1,13 @@
+{
+  "default": true,
+  "MD044": {
+    "names": [
+      "markdownlint",
+      "JavaScript",
+      "Node.js",
+      "GitHub",
+      "npm",
+      "Internet Explorer"
+    ]
+  }
+}

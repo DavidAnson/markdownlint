@@ -905,7 +905,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
-  test.expect(39);
+  test.expect(40);
   rules.forEach(function forRule(rule) {
     test.equal(rule.name, rule.name.toUpperCase(), "Rule name not upper-case.");
   });
@@ -913,7 +913,7 @@ module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
 };
 
 module.exports.uniqueAliases = function uniqueAliases(test) {
-  test.expect(78);
+  test.expect(80);
   var tags = [];
   rules.forEach(function forRule(rule) {
     Array.prototype.push.apply(tags, rule.tags);
@@ -930,7 +930,7 @@ module.exports.uniqueAliases = function uniqueAliases(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(101);
+  test.expect(104);
   var tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -991,7 +991,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(295);
+  test.expect(303);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

@@ -323,6 +323,11 @@
           "description": "Include tables",
           "type": "boolean",
           "default": true
+        },
+        "headers": {
+          "description": "Include headers",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -347,6 +352,11 @@
         },
         "tables": {
           "description": "Include tables",
+          "type": "boolean",
+          "default": true
+        },
+        "headers": {
+          "description": "Include headers",
           "type": "boolean",
           "default": true
         }
@@ -871,6 +881,44 @@
       },
       "additionalProperties": false
     },
+    "MD044": {
+      "description": "MD044/proper-names - Proper names should have the correct capitalization",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "names": {
+          "description": "List of proper names",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "proper-names": {
+      "description": "MD044/proper-names - Proper names should have the correct capitalization",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "names": {
+          "description": "List of proper names",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      },
+      "additionalProperties": false
+    },
     "headers": {
       "description": "headers - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -968,6 +1016,11 @@
     },
     "language": {
       "description": "language - MD040",
+      "type": "boolean",
+      "default": true
+    },
+    "spelling": {
+      "description": "spelling - MD044",
       "type": "boolean",
       "default": true
     }
