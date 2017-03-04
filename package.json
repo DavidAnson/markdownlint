@@ -23,7 +23,7 @@
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
   "dependencies": {
-    "markdown-it": "^8.0.1"
+    "markdown-it": "^8.3.0"
   },
   "devDependencies": {
     "browserify": "^14.1.0",
