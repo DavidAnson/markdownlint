@@ -40,7 +40,19 @@ text ```code``` text ``code `` text {MD038}
 
 ``embedded ` backtick`` text `code`
 
-`backslash does not escape \` backtick`
+`backslash does not escape \` backtick in code span `
+
+escaped \` backtick is ignored outside `code span`
+
+`code` then escaped \` backtick
+
+``code`` then escaped \` backtick then `code`
+
+multiple \` escaped backticks \` in text
+
+\` escaped backtick \` at start of text
+
+text and ``\`code with ignored escaped \` backticks``
 
 `` ` `` text `code`
 
