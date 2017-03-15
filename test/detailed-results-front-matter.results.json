@@ -1,0 +1,20 @@
+[
+    {
+        "lineNumber": 6,
+        "ruleName": "MD009",
+        "ruleAlias": "no-trailing-spaces",
+        "ruleDescription": "Trailing spaces",
+        "errorDetail": "Expected: 0; Actual: 1",
+        "errorContext": null,
+        "errorRange": [5, 1]
+    },
+    {
+        "lineNumber": 4,
+        "ruleName": "MD041",
+        "ruleAlias": "first-line-h1",
+        "ruleDescription": "First line in file should be a top level header",
+        "errorDetail": null,
+        "errorContext": "Text",
+        "errorRange": null
+    }
+]
