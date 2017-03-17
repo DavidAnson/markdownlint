@@ -36,10 +36,30 @@ Code in `javascript` {MD044}
 
 Execute `via the node.js engine` {MD044}
 
+HTML <u>javascript</u> {MD033} {MD044}
+
 * Use NPM {MD044}
 
 > Run Markdownlint on your README {MD044}
 
+    javascript is code {MD044}
+    node.js is runtime {MD044}
+
+```js
+javascript is code {MD044}
+node.js is runtime {MD044}
+```
+
 Upload the code (to github) {MD044}
 
 Link to [github](https://github.com/). {MD044}
+
+Link to [GitHub](https://github.com/).
+
+Link to [markdownlint](https://github.com/DavidAnson/MARKDOWNLINT).
+
+Bare URL https://github.com/DavidAnson/markdownlint {MD034} {MD044}
+
+A short paragraph
+about node.js and {MD044}
+javascript. {MD044}
