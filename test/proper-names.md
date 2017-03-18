@@ -58,7 +58,7 @@ Link to [GitHub](https://github.com/).
 
 Link to [markdownlint](https://github.com/DavidAnson/MARKDOWNLINT).
 
-Bare URL https://github.com/DavidAnson/markdownlint {MD034} {MD044}
+Bare URL exempt https://github.com/DavidAnson/MARKDOWNLINT {MD034}
 
 A short paragraph
 about node.js and {MD044}
