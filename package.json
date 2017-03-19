@@ -23,19 +23,19 @@
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
   "dependencies": {
-    "markdown-it": "^8.3.0"
+    "markdown-it": "^8.3.1"
   },
   "devDependencies": {
     "browserify": "^14.1.0",
     "cpy-cli": "^1.0.1",
-    "eslint": "^3.16.1",
+    "eslint": "^3.18.0",
     "glob": "^7.1.1",
     "istanbul": "^0.4.5",
     "nodeunit": "^0.11.0",
     "q": "^1.4.1",
     "rimraf": "^2.6.1",
     "tv4": "^1.2.7",
-    "uglify-js": "^2.8.5"
+    "uglify-js": "^2.8.13"
   },
   "keywords": [
     "markdown",
