@@ -226,6 +226,11 @@ rules.forEach(function forRule(rule) {
             "type": "string"
           },
           "default": null
+        },
+        "code_blocks": {
+          "description": "Include code blocks",
+          "type": "boolean",
+          "default": true
         }
       };
       break;

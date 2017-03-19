@@ -1127,7 +1127,7 @@ Tags: spelling
 
 Aliases: proper-names
 
-Parameters: names (array of string; default `null` for disabled)
+Parameters: names, code_blocks (string array; default `null`, boolean; default `true`)
 
 This rule is triggered when any of the strings in the `names` array do not have
 the specified capitalization. It can be used to enforce a standard letter case
@@ -1140,3 +1140,5 @@ the proper capitalization, specify the desired letter case in the `names` array:
     [
         "JavaScript"
     ]
+
+Set the `code_blocks` parameter to `false` to disable this rule for code blocks.

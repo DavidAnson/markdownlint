@@ -896,6 +896,11 @@
             "type": "string"
           },
           "default": null
+        },
+        "code_blocks": {
+          "description": "Include code blocks",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -915,6 +920,11 @@
             "type": "string"
           },
           "default": null
+        },
+        "code_blocks": {
+          "description": "Include code blocks",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
