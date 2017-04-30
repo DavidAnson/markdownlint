@@ -45,48 +45,46 @@ playground for learning and exploring.
 
 ## Rules / Aliases
 
-* **MD001** *header-increment* - Header levels should only increment by one level at a time
-* **MD002** *first-header-h1* - First header should be a top level header
-* **MD003** *header-style* - Header style
-* **MD004** *ul-style* - Unordered list style
-* **MD005** *list-indent* - Inconsistent indentation for list items at the same level
-* **MD006** *ul-start-left* - Consider starting bulleted lists at the beginning of the line
-* **MD007** *ul-indent* - Unordered list indentation
-* **MD009** *no-trailing-spaces* - Trailing spaces
-* **MD010** *no-hard-tabs* - Hard tabs
-* **MD011** *no-reversed-links* - Reversed link syntax
-* **MD012** *no-multiple-blanks* - Multiple consecutive blank lines
-* **MD013** *line-length* - Line length
-* **MD014** *commands-show-output* - Dollar signs used before commands without showing output
-* **MD018** *no-missing-space-atx* - No space after hash on atx style header
-* **MD019** *no-multiple-space-atx* - Multiple spaces after hash on atx style header
-* **MD020** *no-missing-space-closed-atx* - No space inside hashes on closed atx style header
-* **MD021** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style header
-* **MD022** *blanks-around-headers* - Headers should be surrounded by blank lines
-* **MD023** *header-start-left* - Headers must start at the beginning of the line
-* **MD024** *no-duplicate-header* - Multiple headers with the same content
-* **MD025** *single-h1* - Multiple top level headers in the same document
-* **MD026** *no-trailing-punctuation* - Trailing punctuation in header
-* **MD027** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
-* **MD028** *no-blanks-blockquote* - Blank line inside blockquote
-* **MD029** *ol-prefix* - Ordered list item prefix
-* **MD030** *list-marker-space* - Spaces after list markers
-* **MD031** *blanks-around-fences* - Fenced code blocks should be surrounded by blank lines
-* **MD032** *blanks-around-lists* - Lists should be surrounded by blank lines
-* **MD033** *no-inline-html* - Inline HTML
-* **MD034** *no-bare-urls* - Bare URL used
-* **MD035** *hr-style* - Horizontal rule style
-* **MD036** *no-emphasis-as-header* - Emphasis used instead of a header
-* **MD037** *no-space-in-emphasis* - Spaces inside emphasis markers
-* **MD038** *no-space-in-code* - Spaces inside code span elements
-* **MD039** *no-space-in-links* - Spaces inside link text
-* **MD040** *fenced-code-language* - Fenced code blocks should have a language specified
-* **MD041** *first-line-h1* - First line in file should be a top level header
-* **MD042** *no-empty-links* - No empty links
-* **MD043** *required-headers* - Required header structure
-* **MD044** *proper-names* - Proper names should have the correct capitalization
-
-See [Rules.md](doc/Rules.md) for more details.
+* **[MD001](doc/MD001.md)** *header-increment* - Header levels should only increment by one level at a time
+* **[MD002](doc/MD002.md)** *first-header-h1* - First header should be a top level header
+* **[MD003](doc/MD003.md)** *header-style* - Header style
+* **[MD004](doc/MD004.md)** *ul-style* - Unordered list style
+* **[MD005](doc/MD005.md)** *list-indent* - Inconsistent indentation for list items at the same level
+* **[MD006](doc/MD006.md)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line
+* **[MD007](doc/MD007.md)** *ul-indent* - Unordered list indentation
+* **[MD009](doc/MD009.md)** *no-trailing-spaces* - Trailing spaces
+* **[MD010](doc/MD010.md)** *no-hard-tabs* - Hard tabs
+* **[MD011](doc/MD011.md)** *no-reversed-links* - Reversed link syntax
+* **[MD012](doc/MD012.md)** *no-multiple-blanks* - Multiple consecutive blank lines
+* **[MD013](doc/MD013.md)** *line-length* - Line length
+* **[MD014](doc/MD014.md)** *commands-show-output* - Dollar signs used before commands without showing output
+* **[MD018](doc/MD018.md)** *no-missing-space-atx* - No space after hash on atx style header
+* **[MD019](doc/MD019.md)** *no-multiple-space-atx* - Multiple spaces after hash on atx style header
+* **[MD020](doc/MD020.md)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style header
+* **[MD021](doc/MD021.md)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style header
+* **[MD022](doc/MD022.md)** *blanks-around-headers* - Headers should be surrounded by blank lines
+* **[MD023](doc/MD023.md)** *header-start-left* - Headers must start at the beginning of the line
+* **[MD024](doc/MD024.md)** *no-duplicate-header* - Multiple headers with the same content
+* **[MD025](doc/MD025.md)** *single-h1* - Multiple top level headers in the same document
+* **[MD026](doc/MD026.md)** *no-trailing-punctuation* - Trailing punctuation in header
+* **[MD027](doc/MD027.md)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
+* **[MD028](doc/MD028.md)** *no-blanks-blockquote* - Blank line inside blockquote
+* **[MD029](doc/MD029.md)** *ol-prefix* - Ordered list item prefix
+* **[MD030](doc/MD030.md)** *list-marker-space* - Spaces after list markers
+* **[MD031](doc/MD031.md)** *blanks-around-fences* - Fenced code blocks should be surrounded by blank lines
+* **[MD032](doc/MD032.md)** *blanks-around-lists* - Lists should be surrounded by blank lines
+* **[MD033](doc/MD033.md)** *no-inline-html* - Inline HTML
+* **[MD034](doc/MD034.md)** *no-bare-urls* - Bare URL used
+* **[MD035](doc/MD035.md)** *hr-style* - Horizontal rule style
+* **[MD036](doc/MD036.md)** *no-emphasis-as-header* - Emphasis used instead of a header
+* **[MD037](doc/MD037.md)** *no-space-in-emphasis* - Spaces inside emphasis markers
+* **[MD038](doc/MD038.md)** *no-space-in-code* - Spaces inside code span elements
+* **[MD039](doc/MD039.md)** *no-space-in-links* - Spaces inside link text
+* **[MD040](doc/MD040.md)** *fenced-code-language* - Fenced code blocks should have a language specified
+* **[MD041](doc/MD041.md)** *first-line-h1* - First line in file should be a top level header
+* **[MD042](doc/MD042.md)** *no-empty-links* - No empty links
+* **[MD043](doc/MD043.md)** *required-headers* - Required header structure
+* **[MD044](doc/MD044.md)** *proper-names* - Proper names should have the correct capitalization
 
 ## Tags
 
