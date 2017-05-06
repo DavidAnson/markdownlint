@@ -35,7 +35,6 @@ rules.forEach(function forRule(rule) {
   switch (rule.name) {
     case "MD002":
     case "MD025":
-    case "MD041":
       scheme.properties = {
         "level": {
           "description": "Header level",
@@ -202,6 +201,20 @@ rules.forEach(function forRule(rule) {
           "description": "Horizontal rule style",
           "type": "string",
           "default": "consistent"
+        }
+      };
+      break;
+    case "MD041":
+      scheme.properties = {
+        "level": {
+          "description": "Header level",
+          "type": "integer",
+          "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title:"
         }
       };
       break;

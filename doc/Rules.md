@@ -1032,7 +1032,7 @@ Tags: headers
 
 Aliases: first-line-h1
 
-Parameters: level (number; default 1)
+Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
 
 This rule is triggered when the first line in the file isn't a top level (h1)
 header:
@@ -1045,8 +1045,14 @@ To fix this, add a header to the top of your file:
 
     This is a file with a top level header
 
-Note: The `level` parameter can be used to change the top level (ex: to h2) in
-cases where an h1 is added externally.
+The `level` parameter can be used to change the top level (ex: to h2) in cases
+where an h1 is added externally.
+
+If front matter is present and contains a [YAML](https://en.wikipedia.org/wiki/YAML)
+`title` property (commonly used with blog posts), this rule will not report a
+violation. To use a different property name in front matter, specify the text
+of a regular expression via the `front_matter_title` parameter. To disable the
+use of front matter by this rule, specify `""` for `front_matter_title`.
 
 ## MD042 - No empty links
 

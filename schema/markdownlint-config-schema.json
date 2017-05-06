@@ -813,6 +813,11 @@
           "description": "Header level",
           "type": "integer",
           "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title:"
         }
       },
       "additionalProperties": false
@@ -829,6 +834,11 @@
           "description": "Header level",
           "type": "integer",
           "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title:"
         }
       },
       "additionalProperties": false
