@@ -4,6 +4,8 @@ This document contains a description of all rules, what they are checking for,
 as well as an examples of documents that break the rule and corrected
 versions of the examples.
 
+<a name="md001"></a>
+
 ## MD001 - Header levels should only increment by one level at a time
 
 Tags: headers
@@ -34,6 +36,8 @@ level at a time:
 
     ### Another Header 3
 
+<a name="md002"></a>
+
 ## MD002 - First header should be a top level header
 
 Tags: headers
@@ -56,6 +60,8 @@ The first header in the document should be a h1 header:
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
 cases where an h1 is added externally.
+
+<a name="md003"></a>
 
 ## MD003 - Header style
 
@@ -97,6 +103,8 @@ Note: the configured header style can be a specific style to use (atx,
 atx_closed, setext, setext_with_atx, setext_with_atx_closed), or simply require
 that the usage be consistent within the document.
 
+<a name="md004"></a>
+
 ## MD004 - Unordered list style
 
 Tags: bullet, ul
@@ -134,6 +142,8 @@ indent uses asterisk, the middle indent uses plus, and the inner-most indent use
     * Item 4
       + Item 5
 
+<a name="md005"></a>
+
 ## MD005 - Inconsistent indentation for list items at the same level
 
 Tags: bullet, ul, indentation
@@ -155,6 +165,8 @@ for the list to fix it:
       * Nested Item 1
       * Nested Item 2
       * Nested Item 3
+
+<a name="md006"></a>
 
 ## MD006 - Consider starting bulleted lists at the beginning of the line
 
@@ -192,6 +204,8 @@ instead.
       - List item
       - List item
     1. List item
+
+<a name="md007"></a>
 
 ## MD007 - Unordered list indentation
 
@@ -232,6 +246,8 @@ Note: This rule applies to a sublist only if its parent lists are all also
 unordered (otherwise, extra indentation of ordered lists interferes with the
 rule).
 
+<a name="md009"></a>
+
 ## MD009 - Trailing spaces
 
 Tags: whitespace
@@ -251,6 +267,8 @@ Note: you have to set br_spaces to 2 or higher for this exception to take
 effect - you can't insert a br element with just a single trailing space, so
 if you set br_spaces to 1, the exception will be disabled, just as if it was
 set to the default of 0.
+
+<a name="md010"></a>
 
 ## MD010 - Hard tabs
 
@@ -280,6 +298,8 @@ You have the option to exclude this rule for code blocks. To do so, set the
 `code_blocks` parameter to `false`. Code blocks are included by default since
 handling of tabs by tools is often inconsistent (ex: using 4 vs. 8 spaces).
 
+<a name="md011"></a>
+
 ## MD011 - Reversed link syntax
 
 Tags: links
@@ -299,6 +319,8 @@ To fix this, swap the `[]` and `()` around:
 Note: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style footnotes do not trigger this rule:
 
     For (example)[^1]
+
+<a name="md012"></a>
 
 ## MD012 - Multiple consecutive blank lines
 
@@ -328,6 +350,8 @@ lines inside code blocks.
 Note: The `maximum` parameter can be used to configure the maximum number of
 consecutive blank lines.
 
+<a name="md013"></a>
+
 ## MD013 - Line length
 
 Tags: line_length
@@ -350,6 +374,8 @@ To do so, set the `code_blocks`, `tables`, or `headers` parameter(s) to false.
 Code blocks are included in this rule by default since it is often a
 requirement for document readability, and tentatively compatible with code
 rules. Still, some languages do not lend themselves to short lines.
+
+<a name="md014"></a>
 
 ## MD014 - Dollar signs used before commands without showing output
 
@@ -386,6 +412,8 @@ are omitted when they are not needed. See
 <http://www.cirosantilli.com/markdown-styleguide/#dollar-signs-in-shell-code>
 for more information.
 
+<a name="md018"></a>
+
 ## MD018 - No space after hash on atx style header
 
 Tags: headers, atx, spaces
@@ -406,6 +434,8 @@ space:
 
     ## Header 2
 
+<a name="md019"></a>
+
 ## MD019 - Multiple spaces after hash on atx style header
 
 Tags: headers, atx, spaces
@@ -425,6 +455,8 @@ space:
     # Header 1
 
     ## Header 2
+
+<a name="md020"></a>
 
 ## MD020 - No space inside hashes on closed atx style header
 
@@ -448,6 +480,8 @@ space:
 
 Note: this rule will fire if either side of the header is missing spaces.
 
+<a name="md021"></a>
+
 ## MD021 - Multiple spaces inside hashes on closed atx style header
 
 Tags: headers, atx_closed, spaces
@@ -470,6 +504,8 @@ space:
 
 Note: this rule will fire if either side of the header contains multiple
 spaces.
+
+<a name="md022"></a>
 
 ## MD022 - Headers should be surrounded by blank lines
 
@@ -501,6 +537,8 @@ Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
 not parse headers that don't have a blank line before, and will parse them as
 regular text.
 
+<a name="md023"></a>
+
 ## MD023 - Headers must start at the beginning of the line
 
 Tags: headers, spaces
@@ -521,6 +559,8 @@ To fix this, ensure that all headers start at the beginning of the line:
 
 Rationale: Headers that don't start at the beginning of the line will not be
 parsed as headers, and will instead appear as regular text.
+
+<a name="md024"></a>
 
 ## MD024 - Multiple headers with the same content
 
@@ -544,6 +584,8 @@ To fix this, ensure that the content of each header is different:
 Rationale: Some markdown parses generate anchors for headers based on the
 header name, and having headers with the same content can cause problems with
 this.
+
+<a name="md025"></a>
 
 ## MD025 - Multiple top level headers in the same document
 
@@ -579,6 +621,8 @@ should be contained within this header.
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
 cases where an h1 is added externally.
 
+<a name="md026"></a>
+
 ## MD026 - Trailing punctuation in header
 
 Tags: headers
@@ -601,6 +645,8 @@ as punctuation at the end of the header. For example, you can set it to
 `".,;:!"` to allow headers with question marks in them, such as might be used
 in an FAQ.
 
+<a name="md027"></a>
+
 ## MD027 - Multiple spaces after blockquote symbol
 
 Tags: blockquote, whitespace, indentation
@@ -617,6 +663,8 @@ To fix, remove any extraneous space:
 
     > This is a blockquote with correct
     > indentation.
+
+<a name="md028"></a>
 
 ## MD028 - Blank line inside blockquote
 
@@ -653,6 +701,8 @@ Rationale: Some markdown parsers will treat two blockquotes separated by one
 or more blank lines as the same blockquote, while others will treat them as
 separate blockquotes.
 
+<a name="md029"></a>
+
 ## MD029 - Ordered list item prefix
 
 Tags: ol
@@ -676,6 +726,8 @@ Example valid list if the style is configured as 'ordered':
     1. Do this.
     2. Do that.
     3. Done.
+
+<a name="md030"></a>
 
 ## MD030 - Spaces after list markers
 
@@ -738,6 +790,8 @@ inside the list:
 To fix this, ensure the correct number of spaces are used after list marker
 for your selected document style.
 
+<a name="md031"></a>
+
 ## MD031 - Fenced code blocks should be surrounded by blank lines
 
 Tags: code, blank_lines
@@ -774,6 +828,8 @@ and after (except where the block is at the beginning or end of the document):
 
 Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
 not parse fenced code blocks that don't have blank lines before and after them.
+
+<a name="md032"></a>
 
 ## MD032 - Lists should be surrounded by blank lines
 
@@ -817,6 +873,8 @@ items with hanging indents are okay:
     * This is
       okay
 
+<a name="md033"></a>
+
 ## MD033 - Inline HTML
 
 Tags: html
@@ -838,6 +896,8 @@ those who want their documents to only include "pure" markdown, or for those
 who are rendering markdown documents in something other than HTML.
 
 Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
+
+<a name="md034"></a>
 
 ## MD034 - Bare URL used
 
@@ -862,6 +922,8 @@ enclose it in a code block, otherwise in some markdown parsers it _will_ be
 converted:
 
     `http://www.example.com`
+
+<a name="md035"></a>
 
 ## MD035 - Horizontal rule style
 
@@ -899,6 +961,8 @@ want to configure the rule to match a specific style, the parameter given to
 the 'style' option is a string containing the exact horizontal rule text that
 is allowed.
 
+<a name="md036"></a>
+
 ## MD036 - Emphasis used instead of a header
 
 Tags: headers, emphasis
@@ -935,6 +999,8 @@ multi-line emphasized paragraphs, and paragraphs ending in punctuation.
 Similarly to rule MD026, you can configure what characters are recognized as
 punctuation.
 
+<a name="md037"></a>
+
 ## MD037 - Spaces inside emphasis markers
 
 Tags: whitespace, emphasis
@@ -967,6 +1033,8 @@ aren't completely surrounded by spaces. This rule attempts to detect where
 they were surrounded by spaces, but it appears that emphasized text was
 intended by the author.
 
+<a name="md038"></a>
+
 ## MD038 - Spaces inside code span elements
 
 Tags: whitespace, code
@@ -991,6 +1059,8 @@ markers from an embedded backtick:
 
     `` ` embedded backtick``
 
+<a name="md039"></a>
+
 ## MD039 - Spaces inside link text
 
 Tags: whitespace, links
@@ -1004,6 +1074,8 @@ This rule is triggered on links that have spaces surrounding the link text:
 To fix this, remove the spaces surrounding the link text:
 
     [a link](http://www.example.com/)
+
+<a name="md040"></a>
 
 ## MD040 - Fenced code blocks should have a language specified
 
@@ -1025,6 +1097,8 @@ To fix this, add a language specifier to the code block:
     #!/bin/bash
     echo Hello world
     ```
+
+<a name="md041"></a>
 
 ## MD041 - First line in file should be a top level header
 
@@ -1054,6 +1128,8 @@ violation. To use a different property name in front matter, specify the text
 of a regular expression via the `front_matter_title` parameter. To disable the
 use of front matter by this rule, specify `""` for `front_matter_title`.
 
+<a name="md042"></a>
+
 ## MD042 - No empty links
 
 Tags: links
@@ -1075,6 +1151,8 @@ Empty fragments will trigger this rule:
 But non-empty fragments will not:
 
     [a valid fragment](#fragment)
+
+<a name="md043"></a>
 
 ## MD043 - Required header structure
 
@@ -1126,6 +1204,8 @@ problematic header (otherwise, it outputs the last line number of the file).
 
 Note that while the `headers` parameter uses the "## Text" ATX header style for
 simplicity, a file may use any supported header style.
+
+<a name="md044"></a>
 
 ## MD044 - Proper names should have the correct capitalization
 

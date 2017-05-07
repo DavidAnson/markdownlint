@@ -968,7 +968,8 @@ module.exports.readme = function readme(test) {
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             if (rule) {
-              var expected = "**" + rule.name + "** *" +
+              var expected = "**[" + rule.name + "](doc/Rules.md#" +
+                rule.name.toLowerCase() + ")** *" +
                 rule.aliases.join(", ") + "* - " + rule.desc;
               test.equal(token.content, expected, "Rule mismatch.");
             }
