@@ -1,0 +1,38 @@
+[
+    {
+        "lineNumber": 3,
+        "ruleName": "MD030",
+        "ruleAlias": "list-marker-space",
+        "ruleDescription": "Spaces after list markers",
+        "errorDetail": "Expected: 1; Actual: 0",
+        "errorContext": null,
+        "errorRange": null
+    },
+    {
+        "lineNumber": 5,
+        "ruleName": "MD030",
+        "ruleAlias": "list-marker-space",
+        "ruleDescription": "Spaces after list markers",
+        "errorDetail": "Expected: 1; Actual: 0",
+        "errorContext": null,
+        "errorRange": null
+    },
+    {
+        "lineNumber": 11,
+        "ruleName": "MD030",
+        "ruleAlias": "list-marker-space",
+        "ruleDescription": "Spaces after list markers",
+        "errorDetail": "Expected: 1; Actual: 2",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
+        "lineNumber": 13,
+        "ruleName": "MD030",
+        "ruleAlias": "list-marker-space",
+        "ruleDescription": "Spaces after list markers",
+        "errorDetail": "Expected: 1; Actual: 2",
+        "errorContext": null,
+        "errorRange": [1, 4]
+    }
+]
