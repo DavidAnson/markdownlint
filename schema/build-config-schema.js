@@ -91,6 +91,11 @@ rules.forEach(function forRule(rule) {
           "description": "Spaces for line break",
           "type": "integer",
           "default": 0
+        },
+        "list_item_empty_lines": {
+          "description": "Allow spaces for empty lines in list items",
+          "type": "boolean",
+          "default": false
         }
       };
       break;
