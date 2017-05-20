@@ -7,6 +7,11 @@
       "type": "boolean",
       "default": true
     },
+    "extends": {
+      "description": "Path to configuration file to extend",
+      "type": "string",
+      "default": null
+    },
     "MD001": {
       "description": "MD001/header-increment - Header levels should only increment by one level at a time",
       "type": "boolean",

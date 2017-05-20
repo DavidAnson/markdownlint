@@ -87,7 +87,7 @@ module.exports.projectFiles = function projectFiles(test) {
   };
   markdownlint(options, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "README.md": {} };
+    var expected = { "README.md": { "MD024": [ 392, 398 ] } };
     test.deepEqual(actual, expected, "Issue(s) with project files.");
     test.done();
   });
@@ -782,14 +782,19 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
           "## Tags",
           "## Configuration",
           "## API",
-          "### options",
-          "#### options.files",
-          "#### options.strings",
-          "#### options.frontMatter",
-          "#### options.config",
-          "#### options.resultVersion",
-          "### callback",
-          "### result",
+          "### Linting",
+          "#### options",
+          "##### options.files",
+          "##### options.strings",
+          "##### options.frontMatter",
+          "##### options.config",
+          "##### options.resultVersion",
+          "#### callback",
+          "#### result",
+          "### Config",
+          "#### file",
+          "#### callback",
+          "#### result",
           "## Usage",
           "## Browser",
           "## History"
@@ -798,7 +803,7 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
     }
   }, function callback(err, result) {
     test.ifError(err);
-    var expected = { "README.md": {} };
+    var expected = { "README.md": { "MD024": [ 392, 398 ] } };
     test.deepEqual(result, expected, "Unexpected issues.");
     test.done();
   });
@@ -825,7 +830,7 @@ module.exports.filesArrayAsString = function filesArrayAsString(test) {
     "config": { "MD013": { "line_length": 150 } }
   }, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "README.md": {} };
+    var expected = { "README.md": { "MD024": [ 392, 398 ] } };
     test.deepEqual(actual, expected, "Unexpected issues.");
     test.done();
   });
@@ -1107,5 +1112,168 @@ module.exports.trimPolyfills = function trimPolyfills(test) {
     test.equal(polyfills.trimRightPolyfill.call(input), input.trimRight(),
       "trimRight incorrect for '" + input + "'");
   });
+  test.done();
+};
+
+module.exports.configSingle = function configSingle(test) {
+  test.expect(2);
+  markdownlint.readConfig("./test/config-child.json",
+    function callback(err, actual) {
+      test.ifError(err);
+      var expected = require("./config-child.json");
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.done();
+    });
+};
+
+module.exports.configAbsolute = function configAbsolute(test) {
+  test.expect(2);
+  markdownlint.readConfig(path.join(__dirname, "config-child.json"),
+    function callback(err, actual) {
+      test.ifError(err);
+      var expected = require("./config-child.json");
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.done();
+    });
+};
+
+module.exports.configMultiple = function configMultiple(test) {
+  test.expect(2);
+  markdownlint.readConfig("./test/config-grandparent.json",
+    function callback(err, actual) {
+      test.ifError(err);
+      var expected = shared.assign(shared.assign(shared.assign({},
+        require("./config-child.json")),
+        require("./config-parent.json")),
+        require("./config-grandparent.json"));
+      delete expected.extends;
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.done();
+    });
+};
+
+module.exports.configBadFile = function configBadFile(test) {
+  test.expect(4);
+  markdownlint.readConfig("./test/config/config-badfile.json",
+    function callback(err, result) {
+      test.ok(err, "Did not get an error for bad file.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
+      test.ok(!result, "Got result for bad file.");
+      test.done();
+    });
+};
+
+module.exports.configBadChildFile = function configBadChildFile(test) {
+  test.expect(4);
+  markdownlint.readConfig("./test/config/config-badchildfile.json",
+    function callback(err, result) {
+      test.ok(err, "Did not get an error for bad child file.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.equal(err.code, "ENOENT",
+        "Error code for bad child file not ENOENT.");
+      test.ok(!result, "Got result for bad child file.");
+      test.done();
+    });
+};
+
+module.exports.configBadJson = function configBadJson(test) {
+  test.expect(3);
+  markdownlint.readConfig("./test/config/config-badjson.json",
+    function callback(err, result) {
+      test.ok(err, "Did not get an error for bad JSON.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.ok(!result, "Got result for bad JSON.");
+      test.done();
+    });
+};
+
+module.exports.configBadChildJson = function configBadChildJson(test) {
+  test.expect(3);
+  markdownlint.readConfig("./test/config/config-badchildjson.json",
+    function callback(err, result) {
+      test.ok(err, "Did not get an error for bad child JSON.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.ok(!result, "Got result for bad child JSON.");
+      test.done();
+    });
+};
+
+module.exports.configSingleSync = function configSingleSync(test) {
+  test.expect(1);
+  var actual = markdownlint.readConfigSync("./test/config-child.json");
+  var expected = require("./config-child.json");
+  test.deepEqual(actual, expected, "Config object not correct.");
+  test.done();
+};
+
+module.exports.configAbsoluteSync = function configAbsoluteSync(test) {
+  test.expect(1);
+  var actual = markdownlint.readConfigSync(
+    path.join(__dirname, "config-child.json"));
+  var expected = require("./config-child.json");
+  test.deepEqual(actual, expected, "Config object not correct.");
+  test.done();
+};
+
+module.exports.configMultipleSync = function configMultipleSync(test) {
+  test.expect(1);
+  var actual = markdownlint.readConfigSync("./test/config-grandparent.json");
+  var expected = shared.assign(shared.assign(shared.assign({},
+    require("./config-child.json")),
+    require("./config-parent.json")),
+    require("./config-grandparent.json"));
+  delete expected.extends;
+  test.deepEqual(actual, expected, "Config object not correct.");
+  test.done();
+};
+
+module.exports.configBadFileSync = function configBadFileSync(test) {
+  test.expect(4);
+  test.throws(function badFileCall() {
+    markdownlint.readConfigSync("./test/config-badfile.json");
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for bad file.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
+    return true;
+  }, "Did not get exception for bad file.");
+  test.done();
+};
+
+module.exports.configBadChildFileSync = function configBadChildFileSync(test) {
+  test.expect(4);
+  test.throws(function badChildFileCall() {
+    markdownlint.readConfigSync("./test/config-badfile.json");
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for bad child file.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.code, "ENOENT", "Error code for bad child file not ENOENT.");
+    return true;
+  }, "Did not get exception for bad child file.");
+  test.done();
+};
+
+module.exports.configBadJsonSync = function configBadJsonSync(test) {
+  test.expect(3);
+  test.throws(function badJsonCall() {
+    markdownlint.readConfigSync("./test/config-badjson.json");
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for bad JSON.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    return true;
+  }, "Did not get exception for bad JSON.");
+  test.done();
+};
+
+module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
+  test.expect(3);
+  test.throws(function badChildJsonCall() {
+    markdownlint.readConfigSync("./test/config-badchildjson.json");
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for bad child JSON.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    return true;
+  }, "Did not get exception for bad child JSON.");
   test.done();
 };

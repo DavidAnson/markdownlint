@@ -13,6 +13,11 @@ var schema = {
       "description": "Default state for all rules",
       "type": "boolean",
       "default": true
+    },
+    "extends": {
+      "description": "Path to configuration file to extend",
+      "type": "string",
+      "default": null
     }
   },
   "additionalProperties": false

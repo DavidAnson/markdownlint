@@ -28,8 +28,8 @@ tool for [Node.js](https://nodejs.org/) and [io.js](https://iojs.org/) with a
 library of rules to enforce standards and consistency for Markdown files. It
 was inspired by - and heavily influenced by - Mark Harrison's
 [markdownlint](https://github.com/mivok/markdownlint) for
-[Ruby](https://www.ruby-lang.org/). The rules, rule documentation, and test
-cases come directly from that project.
+[Ruby](https://www.ruby-lang.org/). The initial rules, rule documentation, and
+test cases came directly from that project.
 
 ### Related
 
@@ -142,11 +142,13 @@ space * in * emphasis <!-- markdownlint-disable --> <!-- markdownlint-enable -->
 
 ## API
 
+### Linting
+
 Standard asynchronous interface:
 
 ```js
 /**
- * Lint specified Markdown files according to configurable rules.
+ * Lint specified Markdown files.
  *
  * @param {Object} options Configuration options.
  * @param {Function} callback Callback (err, result) function.
@@ -159,7 +161,7 @@ Synchronous interface (for build scripts, etc.):
 
 ```js
 /**
- * Lint specified Markdown files according to configurable rules.
+ * Lint specified Markdown files synchronously.
  *
  * @param {Object} options Configuration options.
  * @returns {Object} Result object.
@@ -167,13 +169,13 @@ Synchronous interface (for build scripts, etc.):
 function markdownlint.sync(options) { ... }
 ```
 
-### options
+#### options
 
 Type: `Object`
 
 Configures the function.
 
-#### options.files
+##### options.files
 
 Type: `Array` of `String`
 
@@ -185,7 +187,7 @@ responsibility.
 
 Example: `[ "one.md", "dir/two.md" ]`
 
-#### options.strings
+##### options.strings
 
 Type: `Object` mapping `String` to `String`
 
@@ -204,7 +206,7 @@ Example:
 }
 ```
 
-#### options.frontMatter
+##### options.frontMatter
 
 Type: `RegExp`
 
@@ -232,7 +234,7 @@ title: Title
 ---
 ```
 
-#### options.config
+##### options.config
 
 Type: `Object` mapping `String` to `Boolean | Object`
 
@@ -277,7 +279,46 @@ See the [style](style) directory for more samples.
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
 for the [JSON Schema](http://json-schema.org/) of the `options.config` object.
 
-#### options.resultVersion
+For more advanced scenarios, styles can reference and extend other styles. The
+`readConfig` and `readConfigSync` functions can be used to read such styles.
+
+For example, assuming a `base.json` configuration file:
+
+```json
+{
+  "default": true
+}
+```
+
+And a `custom.json` configuration file:
+
+```json
+{
+  "extends": "base.json",
+  "line-length": false
+}
+```
+
+Then code like the following:
+
+```js
+var options = {
+  "config": markdownlint.readConfigSync("./custom.json")
+};
+```
+
+Merges `custom.json` and `base.json` and is equivalent to:
+
+```js
+var options = {
+  "config": {
+    "default": true,
+    "line-length": false
+  }
+};
+```
+
+##### options.resultVersion
 
 Type: `Number`
 
@@ -291,19 +332,74 @@ Passing a `resultVersion` of `1` corresponds to a more detailed format where eac
 error includes information about the line number, rule name, alias, description,
 as well as any additional detail or context that is available.
 
-### callback
+#### callback
 
 Type: `Function` taking (`Error`, `Object`)
 
 Standard completion callback.
 
-### result
+#### result
 
 Type: `Object`
 
 Call `result.toString()` for convenience or see below for an example of the
 structure of the `result` object. Passing the value `true` to `toString()`
 uses rule aliases (ex: `no-hard-tabs`) instead of names (ex: `MD010`).
+
+### Config
+
+The `options.config` configuration object is simple and can be loaded as JSON
+in many cases. To take advantage of shared configuration where one file `extends`
+another, the following functions are useful.
+
+Asynchronous interface:
+
+```js
+/**
+ * Read specified configuration file.
+ *
+ * @param {String} file Configuration file name/path.
+ * @param {Function} callback Callback (err, result) function.
+ * @returns {void}
+ */
+function readConfig(file, callback) { ... }
+```
+
+Synchronous interface:
+
+```js
+/**
+ * Read specified configuration file synchronously.
+ *
+ * @param {String} file Configuration file name/path.
+ * @returns {Object} Configuration object.
+ */
+function readConfigSync(file) { ... }
+```
+
+#### file
+
+Type: `String`
+
+Location of JSON configuration file to read.
+
+The `file` is resolved relative to the current working directory. If an `extends`
+key is present once read, its value will be resolved as a path relative to `file`
+and loaded recursively. Settings from a file referenced by `extends` are applied
+first, then those of `file` are applied on top (overriding any of the same keys
+appearing in the referenced file).
+
+#### callback
+
+Type: `Function` taking (`Error`, `Object`)
+
+Standard completion callback.
+
+#### result
+
+Type: `Object`
+
+Configuration object.
 
 ## Usage
 
