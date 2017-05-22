@@ -206,34 +206,6 @@ Example:
 }
 ```
 
-##### options.frontMatter
-
-Type: `RegExp`
-
-Matches any [front matter](https://jekyllrb.com/docs/frontmatter/) found at the
-beginning of a file.
-
-Some Markdown content begins with metadata; the default `RegExp` for this option
-ignores common forms of "front matter". To match differently, specify a custom
-`RegExp` or use the value `null` to disable the feature.
-
-Note: Matches must occur at the start of the file.
-
-Default:
-
-```js
-/^---$[^]*?^---$(\r\n|\r|\n)/m
-```
-
-Ignores:
-
-```text
----
-layout: post
-title: Title
----
-```
-
 ##### options.config
 
 Type: `Object` mapping `String` to `Boolean | Object`
@@ -317,6 +289,45 @@ var options = {
   }
 };
 ```
+
+##### options.frontMatter
+
+Type: `RegExp`
+
+Matches any [front matter](https://jekyllrb.com/docs/frontmatter/) found at the
+beginning of a file.
+
+Some Markdown content begins with metadata; the default `RegExp` for this option
+ignores common forms of "front matter". To match differently, specify a custom
+`RegExp` or use the value `null` to disable the feature.
+
+Note: Matches must occur at the start of the file.
+
+Default:
+
+```js
+/^---$[^]*?^---$(\r\n|\r|\n)/m
+```
+
+Ignores:
+
+```text
+---
+layout: post
+title: Title
+---
+```
+
+##### options.noInlineConfig
+
+Type: `Boolean`
+
+Disables the use of HTML comments like `<!-- markdownlint-disable -->` to toggle
+rules within the body of Markdown content.
+
+By default, properly-formatted inline comments can be used to create exceptions
+for parts of a document. Setting `noInlineConfig` to `true` ignores all such
+comments.
 
 ##### options.resultVersion
 

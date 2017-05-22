@@ -83,11 +83,15 @@ module.exports.projectFiles = function projectFiles(test) {
   test.expect(2);
   var options = {
     "files": [ "README.md" ],
-    "config": { "MD013": { "line_length": 150 } }
+    "noInlineConfig": true,
+    "config": {
+      "MD013": { "line_length": 150 },
+      "MD024": false
+    }
   };
   markdownlint(options, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "README.md": { "MD024": [ 392, 398 ] } };
+    var expected = { "README.md": {} };
     test.deepEqual(actual, expected, "Issue(s) with project files.");
     test.done();
   });
@@ -762,10 +766,42 @@ module.exports.customFrontMatter = function customFrontMatter(test) {
   });
 };
 
+module.exports.noInlineConfig = function noInlineConfig(test) {
+  test.expect(2);
+  markdownlint({
+    "strings": {
+      "content": [
+        "# Heading",
+        "",
+        "\tTab",
+        "",
+        "<!-- markdownlint-disable-->",
+        "",
+        "\tTab",
+        "",
+        "<!-- markdownlint-enable-->",
+        "",
+        "\tTab"
+      ].join("\n")
+    },
+    "noInlineConfig": true
+  }, function callback(err, result) {
+    test.ifError(err);
+    var expectedResult = {
+      "content": {
+        "MD010": [ 3, 7, 11 ]
+      }
+    };
+    test.deepEqual(result, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
 module.exports.readmeHeaders = function readmeHeaders(test) {
   test.expect(2);
   markdownlint({
     "files": "README.md",
+    "noInlineConfig": true,
     "config": {
       "default": false,
       "MD013": {
@@ -786,8 +822,9 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
           "#### options",
           "##### options.files",
           "##### options.strings",
-          "##### options.frontMatter",
           "##### options.config",
+          "##### options.frontMatter",
+          "##### options.noInlineConfig",
           "##### options.resultVersion",
           "#### callback",
           "#### result",
@@ -803,7 +840,7 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
     }
   }, function callback(err, result) {
     test.ifError(err);
-    var expected = { "README.md": { "MD024": [ 392, 398 ] } };
+    var expected = { "README.md": {} };
     test.deepEqual(result, expected, "Unexpected issues.");
     test.done();
   });
@@ -827,10 +864,14 @@ module.exports.filesArrayAsString = function filesArrayAsString(test) {
   test.expect(2);
   markdownlint({
     "files": "README.md",
-    "config": { "MD013": { "line_length": 150 } }
+    "noInlineConfig": true,
+    "config": {
+      "MD013": { "line_length": 150 },
+      "MD024": false
+    }
   }, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "README.md": { "MD024": [ 392, 398 ] } };
+    var expected = { "README.md": {} };
     test.deepEqual(actual, expected, "Unexpected issues.");
     test.done();
   });
