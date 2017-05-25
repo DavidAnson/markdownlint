@@ -37,6 +37,7 @@ test cases came directly from that project.
 * [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
 * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
 * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
+* [remark-lint](https://github.com/wooorm/remark-lint) - linter based on [remark](https://github.com/wooorm/remark)
 
 ## Demonstration
 
