@@ -4,6 +4,7 @@ node_js:
   - "0.12"
   - "4"
   - "6"
+  - "8"
   - iojs
 script: "npm run-script test-cover"
 after_script: "npm install coveralls && cat ./coverage/lcov.info | coveralls"
