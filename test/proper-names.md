@@ -2,6 +2,12 @@
 
 Markdownlint is a tool {MD044}
 
+Quoted "Markdownlint" {MD044}
+
+Emphasized *Markdownlint* {MD044}
+
+Emphasized _Markdownlint_ {MD044}
+
 JavaScript is a language
 
 JavaScript is not Java
