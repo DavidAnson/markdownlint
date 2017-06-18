@@ -27,7 +27,7 @@ specification standardizes parsers - but not authors.
 tool for [Node.js](https://nodejs.org/) and [io.js](https://iojs.org/) with a
 library of rules to enforce standards and consistency for Markdown files. It
 was inspired by - and heavily influenced by - Mark Harrison's
-[markdownlint](https://github.com/mivok/markdownlint) for
+[markdownlint](https://github.com/markdownlint/markdownlint) for
 [Ruby](https://www.ruby-lang.org/). The initial rules, rule documentation, and
 test cases came directly from that project.
 

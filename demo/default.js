@@ -161,7 +161,7 @@
     "",
     "#### Thanks",
     "",
-    "[`markdownlint/Ruby`](https://github.com/mivok/markdownlint) for the inspiration and [`markdown-it`](https://github.com/markdown-it/markdown-it) for the parser and interactive demo idea!"
+    "[`markdownlint/Ruby`](https://github.com/markdownlint/markdownlint) for the inspiration and [`markdown-it`](https://github.com/markdown-it/markdown-it) for the parser and interactive demo idea!"
   ].join("\n");
   /* eslint-enable max-len */
   onMarkdownInput();
