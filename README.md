@@ -301,15 +301,13 @@ Some Markdown content begins with metadata; the default `RegExp` for this option
 ignores common forms of "front matter". To match differently, specify a custom
 `RegExp` or use the value `null` to disable the feature.
 
-Note: Matches must occur at the start of the file.
-
-Default:
+The default value:
 
 ```js
-/^---$[^]*?^---$(\r\n|\r|\n)/m
+/^(---|\+\+\+)$[^]*?^\1$(\r\n|\r|\n)/m
 ```
 
-Ignores:
+Ignores [YAML](https://en.wikipedia.org/wiki/YAML) and [TOML](https://en.wikipedia.org/wiki/TOML) such as:
 
 ```text
 ---
@@ -317,6 +315,8 @@ layout: post
 title: Title
 ---
 ```
+
+Note: Matches must occur at the start of the file.
 
 ##### options.noInlineConfig
 
