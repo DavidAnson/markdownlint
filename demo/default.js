@@ -47,8 +47,7 @@
       },
       "config": {
         "MD013": false
-      },
-      "resultVersion": 1
+      }
     };
     var results = window.markdownlint.sync(options);
     violations.innerHTML = results.content.map(function mapResult(result) {

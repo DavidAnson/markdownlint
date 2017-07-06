@@ -12,7 +12,8 @@ module.exports.typeTestFiles = function typeTestFiles(test) {
     var results = markdownlint.sync({
       "strings": {
         "content": content
-      }
+      },
+      "resultVersion": 0
     });
     var contentLineCount = content.split(shared.newLineRe).length;
     Object.keys(results.content).forEach(function forKey(ruleName) {

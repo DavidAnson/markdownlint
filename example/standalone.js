@@ -10,28 +10,20 @@ var options = {
   }
 };
 
-// Uses result.toString for pretty formatting
+// Makes a synchronous call, using result.toString for pretty formatting
+var result = markdownlint.sync(options);
+console.log(result.toString());
+
+// Makes an asynchronous call
 markdownlint(options, function callback(err, result) {
   if (!err) {
     console.log(result.toString());
   }
 });
 
-// Examines the result object directly
+// Displays the result object directly
 markdownlint(options, function callback(err, result) {
   if (!err) {
     console.dir(result, { "colors": true, "depth": null });
   }
 });
-
-// Again, using resultVersion 1 for more detail
-options.resultVersion = 1;
-markdownlint(options, function callback(err, result) {
-  if (!err) {
-    console.dir(result, { "colors": true, "depth": null });
-  }
-});
-
-// Make a synchronous call, passing true to toString()
-var result = markdownlint.sync(options);
-console.log(result.toString(true));

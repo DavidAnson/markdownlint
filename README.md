@@ -337,11 +337,11 @@ Specifies which version of the `result` object to return (see the "Usage" sectio
 below for examples).
 
 Passing a `resultVersion` of `0` corresponds to the original, simple format where
-each error is identified by rule name and line number. This is the default.
+each error is identified by rule name and line number. This is deprecated.
 
-Passing a `resultVersion` of `1` corresponds to a more detailed format where each
-error includes information about the line number, rule name, alias, description,
-as well as any additional detail or context that is available.
+Passing a `resultVersion` of `1` corresponds to a detailed format where each error
+includes information about the line number, rule name, alias, description, as well
+as any additional detail or context that is available. This is the default.
 
 #### callback
 
@@ -437,31 +437,21 @@ markdownlint(options, function callback(err, result) {
 Output:
 
 ```text
-bad.string: 3: MD010 Hard tabs
-bad.string: 1: MD018 No space after hash on atx style header
-bad.string: 3: MD018 No space after hash on atx style header
-bad.md: 3: MD010 Hard tabs
-bad.md: 1: MD018 No space after hash on atx style header
-bad.md: 3: MD018 No space after hash on atx style header
+bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
+bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.string"]
+bad.string: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This string fails some rules."]
+bad.string: 1: MD041/first-line-h1 First line in file should be a top level header [Context: "#bad.string"]
+bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
+bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.md"]
+bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This file fails       some rules."]
+bad.md: 1: MD041/first-line-h1 First line in file should be a top level header [Context: "#bad.md"]
 ```
 
-Or invoke `markdownlint.sync` for a synchronous call and/or pass `true` to `toString`
-to use rule aliases instead of names:
+Or invoke `markdownlint.sync` for a synchronous call:
 
 ```js
 var result = markdownlint.sync(options);
-console.log(result.toString(true));
-```
-
-Output:
-
-```text
-bad.string: 3: no-hard-tabs Hard tabs
-bad.string: 1: no-missing-space-atx No space after hash on atx style header
-bad.string: 3: no-missing-space-atx No space after hash on atx style header
-bad.md: 3: no-hard-tabs Hard tabs
-bad.md: 1: no-missing-space-atx No space after hash on atx style header
-bad.md: 3: no-missing-space-atx No space after hash on atx style header
+console.log(result.toString());
 ```
 
 To examine the `result` object directly:
@@ -469,44 +459,12 @@ To examine the `result` object directly:
 ```js
 markdownlint(options, function callback(err, result) {
   if (!err) {
-    console.dir(result, { "colors": true });
+    console.dir(result, { "colors": true, "depth": null });
   }
 });
 ```
 
 Output:
-
-```json
-{
-  "good.md": {},
-  "bad.md": {
-    "MD010": [ 3 ],
-    "MD018": [ 1, 3 ]
-  }
-}
-```
-
-For more detailed error reporting, set `options.resultVersion` to `1`:
-
-```js
-var options = {
-  "files": [ "good.md", "bad.md" ],
-  "resultVersion": 1
-};
-```
-
-With that, the output of `result.toString` looks like:
-
-```text
-bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
-bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.string"]
-bad.string: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This string fails    some rules."]
-bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
-bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.md"]
-bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This file fails    some rules."]
-```
-
-And the `result` object becomes:
 
 ```json
 {
@@ -532,7 +490,14 @@ And the `result` object becomes:
       "ruleDescription": "No space after hash on atx style header",
       "errorDetail": null,
       "errorContext": "#This file fails\tsome rules.",
-      "errorRange": [ 1, 2 ] }
+      "errorRange": [ 1, 2 ] },
+    { "lineNumber": 1,
+      "ruleName": "MD041",
+      "ruleAlias": "first-line-h1",
+      "ruleDescription": "First line in file should be a top level header",
+      "errorDetail": null,
+      "errorContext": "#bad.md",
+      "errorRange": null }
   ]
 }
 ```
@@ -564,9 +529,10 @@ Output:
 
 ```text
 [00:00:00] Starting 'markdownlint'...
-bad.md: 3: MD010 Hard tabs
-bad.md: 1: MD018 No space after hash on atx style header
-bad.md: 3: MD018 No space after hash on atx style header
+bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
+bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.md"]
+bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This file fails       some rules."]
+bad.md: 1: MD041/first-line-h1 First line in file should be a top level header [Context: "#bad.md"]
 [00:00:00] Finished 'markdownlint' after 10 ms
 ```
 
@@ -604,9 +570,10 @@ Output:
 ```text
 Running "markdownlint:example" (markdownlint) task
 Warning:
-bad.md: 3: MD010 Hard tabs
-bad.md: 1: MD018 No space after hash on atx style header
-bad.md: 3: MD018 No space after hash on atx style header
+bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
+bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#bad.md"]
+bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style header [Context: "#This file fails       some rules."]
+bad.md: 1: MD041/first-line-h1 First line in file should be a top level header [Context: "#bad.md"]
  Use --force to continue.
 ```
 
