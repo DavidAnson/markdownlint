@@ -1142,6 +1142,158 @@ module.exports.validateConfigSchema = function validateConfigSchema(test) {
   test.done();
 };
 
+module.exports.clearHtmlCommentTextValid =
+function clearHtmlCommentTextValid(test) {
+  test.expect(1);
+  var validComments = [
+    "<!-- text -->",
+    "<!--text-->",
+    "<!-- -->",
+    "<!---->",
+    "<!---text-->",
+    "<!--text-text-->",
+    "<!--- -->",
+    "<!--",
+    "-->",
+    "<!--",
+    "",
+    "-->",
+    "<!--",
+    "",
+    "",
+    "-->",
+    "<!--",
+    "",
+    " text ",
+    "",
+    "-->",
+    "<!--text",
+    "",
+    "text-->",
+    "text<!--text-->text",
+    "text<!--",
+    "-->text",
+    "text<!--",
+    "text",
+    "-->text",
+    "<!--text--><!--text-->",
+    "text<!--text-->text<!--text-->text",
+    "<!--",
+    "text"
+  ];
+  var validResult = [
+    "<!--      -->",
+    "<!--    -->",
+    "<!-- -->",
+    "<!---->",
+    "<!--     -->",
+    "<!--         -->",
+    "<!--  -->",
+    "<!--",
+    "-->",
+    "<!--",
+    "",
+    "-->",
+    "<!--",
+    "",
+    "",
+    "-->",
+    "<!--",
+    "",
+    "     \\",
+    "",
+    "-->",
+    "<!--   \\",
+    "",
+    "    -->",
+    "text<!--    -->text",
+    "text<!--",
+    "-->text",
+    "text<!--",
+    "   \\",
+    "-->text",
+    "<!--    --><!--    -->",
+    "text<!--    -->text<!--    -->text",
+    "<!--",
+    "    \\"
+  ];
+  var actual = shared.clearHtmlCommentText(validComments.join("\n"));
+  var expected = validResult.join("\n");
+  test.equal(actual, expected);
+  test.done();
+};
+
+module.exports.clearHtmlCommentTextInvalid =
+function clearHtmlCommentTextInvalid(test) {
+  test.expect(1);
+  var invalidComments = [
+    "<!>",
+    "<!->",
+    "<!-->",
+    "<!--->",
+    "<!-->-->",
+    "<!--->-->",
+    "<!----->",
+    "<!------>",
+    "<!-- -- -->",
+    "<!-->-->",
+    "<!--> -->",
+    "<!--->-->",
+    "<!-->text-->",
+    "<!--->text-->",
+    "<!--text--->",
+    "<!--te--xt-->"
+  ];
+  var actual = shared.clearHtmlCommentText(invalidComments.join("\n"));
+  var expected = invalidComments.join("\n");
+  test.equal(actual, expected);
+  test.done();
+};
+
+module.exports.clearHtmlCommentTextNonGreedy =
+function clearHtmlCommentTextNonGreedy(test) {
+  test.expect(1);
+  var nonGreedyComments = [
+    "<!-- text --> -->",
+    "<!---text --> -->",
+    "<!--t--> -->",
+    "<!----> -->"
+  ];
+  var nonGreedyResult = [
+    "<!--      --> -->",
+    "<!--      --> -->",
+    "<!-- --> -->",
+    "<!----> -->"
+  ];
+  var actual = shared.clearHtmlCommentText(nonGreedyComments.join("\n"));
+  var expected = nonGreedyResult.join("\n");
+  test.equal(actual, expected);
+  test.done();
+};
+
+module.exports.clearHtmlCommentTextEmbedded =
+function clearHtmlCommentTextEmbedded(test) {
+  test.expect(1);
+  var embeddedComments = [
+    "text<!--text-->text",
+    "<!-- markdownlint-disable MD010 -->",
+    "text<!--text-->text",
+    "text<!-- markdownlint-disable MD010 -->text",
+    "text<!--text-->text"
+  ];
+  var embeddedResult = [
+    "text<!--    -->text",
+    "<!-- markdownlint-disable MD010 -->",
+    "text<!--    -->text",
+    "text<!-- markdownlint-disable MD010 -->text",
+    "text<!--    -->text"
+  ];
+  var actual = shared.clearHtmlCommentText(embeddedComments.join("\n"));
+  var expected = embeddedResult.join("\n");
+  test.equal(actual, expected);
+  test.done();
+};
+
 module.exports.trimPolyfills = function trimPolyfills(test) {
   var inputs = [
     "text text",

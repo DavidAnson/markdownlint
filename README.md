@@ -115,6 +115,12 @@ See [Rules.md](doc/Rules.md) for more details.
 
 ## Configuration
 
+Text passed to `markdownlint` is parsed as Markdown, analyzed, and any issues reported.
+Two kinds of text are ignored:
+
+* [HTML comments](https://www.w3.org/TR/html5/syntax.html#comments)
+* [Front matter](https://jekyllrb.com/docs/frontmatter/) (see `options.frontMatter` below)
+
 Rules can be enabled, disabled, and configured via `options.config` (described
 below) to define the expected behavior for a set of inputs. To enable or disable
 rules within a file, add one of these markers to the appropriate place (HTML
