@@ -1349,9 +1349,10 @@ module.exports.configMultiple = function configMultiple(test) {
   markdownlint.readConfig("./test/config-grandparent.json",
     function callback(err, actual) {
       test.ifError(err);
-      var expected = shared.assign(shared.assign(shared.assign({},
-        require("./config-child.json")),
-        require("./config-parent.json")),
+      var expected = shared.assign(
+        shared.assign(
+          shared.assign({}, require("./config-child.json")),
+          require("./config-parent.json")),
         require("./config-grandparent.json"));
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
@@ -1426,9 +1427,10 @@ module.exports.configAbsoluteSync = function configAbsoluteSync(test) {
 module.exports.configMultipleSync = function configMultipleSync(test) {
   test.expect(1);
   var actual = markdownlint.readConfigSync("./test/config-grandparent.json");
-  var expected = shared.assign(shared.assign(shared.assign({},
-    require("./config-child.json")),
-    require("./config-parent.json")),
+  var expected = shared.assign(
+    shared.assign(
+      shared.assign({}, require("./config-child.json")),
+      require("./config-parent.json")),
     require("./config-grandparent.json"));
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
