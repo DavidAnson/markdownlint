@@ -631,6 +631,8 @@ var results = window.markdownlint.sync(options).toString();
   * 0.4.1 - Fixes for MD038/front matter, improvements to MD044, update dependencies.
 * 0.5.0 - Add shareable configuration, noInlineConfig option, README links, fix MD030,
           improve MD009/MD041, update dependencies.
+* 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments, TOML
+          front matter, fixes for MD044, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
