@@ -1,6 +1,6 @@
 -   id: markdownlint
     name: markdownlint
-    description: "Check the style of Markdown/Commonmark files"
+    description: "Checks the style of Markdown/Commonmark files."
     entry: markdownlint
     language: node
     types: [markdown]
