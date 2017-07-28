@@ -1,0 +1,7 @@
+-   id: markdownlint
+    name: markdownlint
+    description: "Checks the style of Markdown/Commonmark files."
+    entry: markdownlint
+    language: node
+    types: [markdown]
+    minimum_pre_commit_version: 0.15.0
