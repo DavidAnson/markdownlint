@@ -224,7 +224,7 @@ rules.forEach(function forRule(rule) {
         "front_matter_title": {
           "description": "RegExp for matching title in front matter",
           "type": "string",
-          "default": "^\\s*title:"
+          "default": "^\\s*title\\s*[:=]"
         }
       };
       break;
