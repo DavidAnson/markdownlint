@@ -57,3 +57,19 @@ Text
 Text
 
 >>  >> Text {MD027}
+
+Text
+
+ > >  Text {MD027}
+
+Text
+
+  > >  Text {MD027}
+
+Text
+
+   > >  Text {MD027}
+
+Text
+
+ >  > Text {MD027}

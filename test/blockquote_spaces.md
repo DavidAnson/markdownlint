@@ -21,3 +21,15 @@ Test the first line being indented too much:
 >  Foo {MD027}
 >  Bar {MD027}
 > Baz
+
+Test spaces before the blockquote:
+
+ >  Text {MD027}
+
+Text
+
+  >  Text {MD027}
+
+Text
+
+   >  Text {MD027}

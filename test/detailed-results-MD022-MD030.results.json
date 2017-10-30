@@ -54,6 +54,33 @@
         "errorRange": [1, 4]
     },
     {
+        "lineNumber": 15,
+        "ruleName": "MD027",
+        "ruleAlias": "no-multiple-space-blockquote",
+        "ruleDescription": "Multiple spaces after blockquote symbol",
+        "errorDetail": null,
+        "errorContext": "> >  Multiple spaces, multiple...",
+        "errorRange": [ 1, 6 ]
+    },
+    {
+        "lineNumber": 17,
+        "ruleName": "MD027",
+        "ruleAlias": "no-multiple-space-blockquote",
+        "ruleDescription": "Multiple spaces after blockquote symbol",
+        "errorDetail": null,
+        "errorContext": "> > >  Multiple spaces, multip...",
+        "errorRange": [ 1, 8 ]
+    },
+    {
+        "lineNumber": 19,
+        "ruleName": "MD027",
+        "ruleAlias": "no-multiple-space-blockquote",
+        "ruleDescription": "Multiple spaces after blockquote symbol",
+        "errorDetail": null,
+        "errorContext": ">  > > Multiple spaces, multip...",
+        "errorRange": [ 1, 8 ]
+    },
+    {
         "lineNumber": 9,
         "ruleName": "MD028",
         "ruleAlias": "no-blanks-blockquote",
