@@ -72,6 +72,60 @@
         "errorRange": [7, 10]
     },
     {
+        "lineNumber": 24,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "`` inside ``",
+        "errorRange": [ 7, 12 ]
+    },
+    {
+        "lineNumber": 25,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "` code`",
+        "errorRange": [ 19, 7 ]
+    },
+    {
+        "lineNumber": 26,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "` elements`",
+        "errorRange": [ 26, 11 ]
+    },
+    {
+        "lineNumber": 27,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "`` code``",
+        "errorRange": [ 21, 9 ]
+    },
+    {
+        "lineNumber": 28,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "``  ` embedded backtick``",
+        "errorRange": [ 1, 25 ]
+    },
+    {
+        "lineNumber": 29,
+        "ruleName": "MD038",
+        "ruleAlias": "no-space-in-code",
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "``embedded backtick`  ``",
+        "errorRange": [ 1, 24 ]
+    },
+    {
         "lineNumber": 19,
         "ruleName": "MD039",
         "ruleAlias": "no-space-in-links",
