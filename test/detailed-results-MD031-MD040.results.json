@@ -63,6 +63,51 @@
         "errorRange": [7, 10]
     },
     {
+        "lineNumber": 31,
+        "ruleName": "MD037",
+        "ruleAlias": "no-space-in-emphasis",
+        "ruleDescription": "Spaces inside emphasis markers",
+        "errorDetail": null,
+        "errorContext": "* some*",
+        "errorRange": [ 17, 7 ]
+    },
+    {
+        "lineNumber": 32,
+        "ruleName": "MD037",
+        "ruleAlias": "no-space-in-emphasis",
+        "ruleDescription": "Spaces inside emphasis markers",
+        "errorDetail": null,
+        "errorContext": "*some *",
+        "errorRange": [ 17, 7 ]
+    },
+    {
+        "lineNumber": 33,
+        "ruleName": "MD037",
+        "ruleAlias": "no-space-in-emphasis",
+        "ruleDescription": "Spaces inside emphasis markers",
+        "errorDetail": null,
+        "errorContext": "**some **",
+        "errorRange": [ 17, 9 ]
+    },
+    {
+        "lineNumber": 34,
+        "ruleName": "MD037",
+        "ruleAlias": "no-space-in-emphasis",
+        "ruleDescription": "Spaces inside emphasis markers",
+        "errorDetail": null,
+        "errorContext": "_ some_",
+        "errorRange": [ 17, 7 ]
+    },
+    {
+        "lineNumber": 35,
+        "ruleName": "MD037",
+        "ruleAlias": "no-space-in-emphasis",
+        "ruleDescription": "Spaces inside emphasis markers",
+        "errorDetail": null,
+        "errorContext": "__ some __",
+        "errorRange": [ 19, 10 ]
+    },
+    {
         "lineNumber": 17,
         "ruleName": "MD038",
         "ruleAlias": "no-space-in-code",
