@@ -27,7 +27,7 @@
         "errorRange": [4, 10]
     },
     {
-        "lineNumber": 8,
+        "lineNumber": 14,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
@@ -42,6 +42,24 @@
         "ruleDescription": "Proper names should have the correct capitalization",
         "errorDetail": "Expected: markdownlint; Actual: MARKDOWNLINT",
         "errorContext": null,
-        "errorRange": null
+        "errorRange": [29, 12]
+    },
+    {
+        "lineNumber": 10,
+        "ruleName": "MD044",
+        "ruleAlias": "proper-names",
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
+        "errorContext": null,
+        "errorRange": [7, 12]
+    },
+    {
+        "lineNumber": 13,
+        "ruleName": "MD044",
+        "ruleAlias": "proper-names",
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "errorDetail": "Expected: markdownlint; Actual: MarkDownLint",
+        "errorContext": null,
+        "errorRange": [1, 12]
     }
 ]
