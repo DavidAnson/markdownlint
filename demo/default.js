@@ -66,12 +66,12 @@
             sanitize(result.errorContext) +
             "\"</span>]" :
           "");
-      /* + (result.errorRange ?
-        " <u style='white-space: pre-wrap'>" +
-          lines[result.lineNumber - 1].substr(
-            result.errorRange[0] - 1, result.errorRange[1]) +
-          "</u>" :
-        ""); */
+      // + (result.errorRange ?
+      //     " <u style='white-space: pre-wrap'>" +
+      //       lines[result.lineNumber - 1].substr(
+      //         result.errorRange[0] - 1, result.errorRange[1]) +
+      //     "</u>" :
+      //     "");
     }).join("<br/>");
   }
 
