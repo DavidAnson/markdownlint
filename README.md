@@ -635,6 +635,7 @@ var results = window.markdownlint.sync(options).toString();
 * 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments, TOML
           front matter, fixes for MD044, update dependencies.
   * 0.6.1 - Update `markdown-it` versioning, exclude demo/test from publishing.
+  * 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
