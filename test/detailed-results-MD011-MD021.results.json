@@ -1,6 +1,6 @@
 [
     {
-        "lineNumber": 3,
+        "lineNumber": 5,
         "ruleName": "MD011",
         "ruleAlias": "no-reversed-links",
         "ruleDescription": "Reversed link syntax",
@@ -9,7 +9,7 @@
         "errorRange": [3, 16]
     },
     {
-        "lineNumber": 5,
+        "lineNumber": 7,
         "ruleName": "MD012",
         "ruleAlias": "no-multiple-blanks",
         "ruleDescription": "Multiple consecutive blank lines",
@@ -18,7 +18,7 @@
         "errorRange": null
     },
     {
-        "lineNumber": 6,
+        "lineNumber": 8,
         "ruleName": "MD013",
         "ruleAlias": "line-length",
         "ruleDescription": "Line length",
@@ -27,7 +27,7 @@
         "errorRange": [81, 19]
     },
     {
-        "lineNumber": 8,
+        "lineNumber": 10,
         "ruleName": "MD014",
         "ruleAlias": "commands-show-output",
         "ruleDescription": "Dollar signs used before commands without showing output",
@@ -36,39 +36,57 @@
         "errorRange": [5, 2]
     },
     {
-        "lineNumber": 10,
+        "lineNumber": 12,
         "ruleName": "MD018",
         "ruleAlias": "no-missing-space-atx",
         "ruleDescription": "No space after hash on atx style header",
         "errorDetail": null,
-        "errorContext": "#No space A",
-        "errorRange": [1, 2]
+        "errorContext": "##No space A",
+        "errorRange": [1, 3]
     },
     {
-        "lineNumber": 12,
+        "lineNumber": 14,
         "ruleName": "MD019",
         "ruleAlias": "no-multiple-space-atx",
         "ruleDescription": "Multiple spaces after hash on atx style header",
         "errorDetail": null,
-        "errorContext": "#  Multiple spaces A",
-        "errorRange": [1, 4]
+        "errorContext": "##  Multiple spaces B",
+        "errorRange": [1, 5]
     },
     {
-        "lineNumber": 14,
+        "lineNumber": 16,
         "ruleName": "MD020",
         "ruleAlias": "no-missing-space-closed-atx",
         "ruleDescription": "No space inside hashes on closed atx style header",
         "errorDetail": null,
-        "errorContext": "#No space B#",
-        "errorRange": [1, 2]
+        "errorContext": "##No space C ##",
+        "errorRange": [1, 3]
     },
     {
-        "lineNumber": 16,
+        "lineNumber": 18,
+        "ruleName": "MD020",
+        "ruleAlias": "no-missing-space-closed-atx",
+        "ruleDescription": "No space inside hashes on closed atx style header",
+        "errorDetail": null,
+        "errorContext": "## No space D##",
+        "errorRange": [13, 3]
+    },
+    {
+        "lineNumber": 20,
         "ruleName": "MD021",
         "ruleAlias": "no-multiple-space-closed-atx",
         "ruleDescription": "Multiple spaces inside hashes on closed atx style header",
         "errorDetail": null,
-        "errorContext": "#  Multiple spaces B  #",
-        "errorRange": [1, 4]
+        "errorContext": "##  Multiple spaces E ##",
+        "errorRange": [1, 5]
+    },
+    {
+        "lineNumber": 22,
+        "ruleName": "MD021",
+        "ruleAlias": "no-multiple-space-closed-atx",
+        "ruleDescription": "Multiple spaces inside hashes on closed atx style header",
+        "errorDetail": null,
+        "errorContext": "## Multiple spaces F  ##",
+        "errorRange": [20, 5]
     }
 ]

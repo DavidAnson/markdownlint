@@ -1,3 +1,5 @@
+# Top level header
+
 <!-- markdownlint-disable MD003 -->
 
 A (reversed)[link] example.
@@ -7,10 +9,14 @@ A (reversed)[link] example.
 
     $ command with no output
 
-#No space A
+##No space A
 
-#  Multiple spaces A
+##  Multiple spaces B
 
-#No space B#
+##No space C ##
 
-#  Multiple spaces B  #
+## No space D##
+
+##  Multiple spaces E ##
+
+## Multiple spaces F  ##
