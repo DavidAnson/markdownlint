@@ -636,6 +636,7 @@ var results = window.markdownlint.sync(options).toString();
           front matter, fixes for MD044, update dependencies.
   * 0.6.1 - Update `markdown-it` versioning, exclude demo/test from publishing.
   * 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update dependencies.
+  * 0.6.3 - Improve highlighting for MD020.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
