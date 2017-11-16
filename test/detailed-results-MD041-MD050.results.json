@@ -14,7 +14,7 @@
         "ruleAlias": "no-empty-links",
         "ruleDescription": "No empty links",
         "errorDetail": null,
-        "errorContext": "[empty]",
+        "errorContext": "[empty]()",
         "errorRange": [4, 9]
     },
     {
@@ -23,11 +23,29 @@
         "ruleAlias": "no-empty-links",
         "ruleDescription": "No empty links",
         "errorDetail": null,
-        "errorContext": "[empty]",
+        "errorContext": "[empty]()",
         "errorRange": [4, 10]
     },
     {
-        "lineNumber": 14,
+        "lineNumber": 7,
+        "ruleName": "MD042",
+        "ruleAlias": "no-empty-links",
+        "ruleDescription": "No empty links",
+        "errorDetail": null,
+        "errorContext": "[empty]()",
+        "errorRange": [4, 11]
+    },
+    {
+        "lineNumber": 17,
+        "ruleName": "MD042",
+        "ruleAlias": "no-empty-links",
+        "ruleDescription": "No empty links",
+        "errorDetail": null,
+        "errorContext": "[empty one]()",
+        "errorRange": [25, 13]
+    },
+    {
+        "lineNumber": 18,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
@@ -36,7 +54,7 @@
         "errorRange": null
     },
     {
-        "lineNumber": 7,
+        "lineNumber": 9,
         "ruleName": "MD044",
         "ruleAlias": "proper-names",
         "ruleDescription": "Proper names should have the correct capitalization",
@@ -45,7 +63,7 @@
         "errorRange": [29, 12]
     },
     {
-        "lineNumber": 10,
+        "lineNumber": 12,
         "ruleName": "MD044",
         "ruleAlias": "proper-names",
         "ruleDescription": "Proper names should have the correct capitalization",
@@ -54,7 +72,7 @@
         "errorRange": [7, 12]
     },
     {
-        "lineNumber": 13,
+        "lineNumber": 15,
         "ruleName": "MD044",
         "ruleAlias": "proper-names",
         "ruleDescription": "Proper names should have the correct capitalization",
