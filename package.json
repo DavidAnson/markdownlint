@@ -40,9 +40,9 @@
   "keywords": [
     "markdown",
     "lint",
-    "markdownlint",
     "md",
-    "validate"
+    "CommonMark",
+    "markdownlint"
   ],
   "browser": {
     "markdown-it": "./demo/markdown-it-stub.js"
