@@ -612,6 +612,18 @@ var options = {
 var results = window.markdownlint.sync(options).toString();
 ```
 
+## Examples
+
+For ideas how to integrate `markdownlint` into your workflow, refer to the following projects:
+
+* [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
+* [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
+* [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
+* [Sinon.JS](http://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
+* [sonarwhal](https://sonarwhal.com/) ([Search repository](https://github.com/sonarwhal/sonarwhal/search?q=markdownlint))
+* [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
+* [webpack](https://webpack.js.org/) ([Search repository](https://github.com/webpack/webpack.js.org/search?q=markdownlint))
+
 ## History
 
 * 0.0.1 - Initial release, includes tests MD001-MD032.

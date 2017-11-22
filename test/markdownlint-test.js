@@ -848,6 +848,7 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
           "#### result",
           "## Usage",
           "## Browser",
+          "## Examples",
           "## History"
         ]
       }
