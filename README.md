@@ -649,6 +649,7 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
   * 0.6.1 - Update `markdown-it` versioning, exclude demo/test from publishing.
   * 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update dependencies.
   * 0.6.3 - Improve highlighting for MD020.
+  * 0.6.4 - Improve MD029/MD042, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
