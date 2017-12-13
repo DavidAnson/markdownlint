@@ -717,11 +717,11 @@ Tags: ol
 
 Aliases: ol-prefix
 
-Parameters: style ("one", "ordered"; default "one")
+Parameters: style ("one", "ordered", "one_or_ordered"; default "one_or_ordered")
 
 This rule is triggered on ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
-configured style, which defaults to 'one').
+configured style).
 
 Example valid list if the style is configured as 'one':
 
@@ -733,6 +733,13 @@ Example valid list if the style is configured as 'ordered':
 
     1. Do this.
     2. Do that.
+    3. Done.
+
+Both examples are valid when the style is configured as 'one_or_ordered'.
+
+Example invalid list for all styles:
+
+    1. Do this.
     3. Done.
 
 <a name="md030"></a>

@@ -555,9 +555,10 @@
           "type": "string",
           "enum": [
             "one",
-            "ordered"
+            "ordered",
+            "one_or_ordered"
           ],
-          "default": "one"
+          "default": "one_or_ordered"
         }
       },
       "additionalProperties": false
@@ -575,9 +576,10 @@
           "type": "string",
           "enum": [
             "one",
-            "ordered"
+            "ordered",
+            "one_or_ordered"
           ],
-          "default": "one"
+          "default": "one_or_ordered"
         }
       },
       "additionalProperties": false

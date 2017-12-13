@@ -44,7 +44,7 @@ Note: Can not break MD025 and MD002 in the same file
 > {MD028:43}
 
 1. list
-2. list {MD029}
+3. list {MD029}
 
 ```js
 ```

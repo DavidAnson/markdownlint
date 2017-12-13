@@ -163,9 +163,10 @@ rules.forEach(function forRule(rule) {
           "type": "string",
           "enum": [
             "one",
-            "ordered"
+            "ordered",
+            "one_or_ordered"
           ],
-          "default": "one"
+          "default": "one_or_ordered"
         }
       };
       break;

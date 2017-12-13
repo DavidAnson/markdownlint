@@ -94,7 +94,7 @@
         "ruleName": "MD029",
         "ruleAlias": "ol-prefix",
         "ruleDescription": "Ordered list item prefix",
-        "errorDetail": "Expected: 1; Actual: 2; Style: 1/1/1",
+        "errorDetail": "Expected: 2; Actual: 3; Style: 1/2/3",
         "errorContext": null,
         "errorRange": [1, 4]
     },

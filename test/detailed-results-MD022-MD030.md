@@ -10,7 +10,7 @@ Text
 > Blank line above
 
 1. Alpha
-2.  Beta
+3.  Beta
 
 > >  Multiple spaces, multiple blockquotes
 > >
