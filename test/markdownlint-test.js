@@ -8,7 +8,6 @@ var tv4 = require("tv4");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
 var rules = require("../lib/rules");
-var polyfills = require("../demo/browser-polyfills");
 var defaultConfig = require("./markdownlint-test-default-config.json");
 var configSchema = require("../schema/markdownlint-config-schema.json");
 
@@ -1295,7 +1294,7 @@ function clearHtmlCommentTextEmbedded(test) {
   test.done();
 };
 
-module.exports.trimPolyfills = function trimPolyfills(test) {
+module.exports.trimLeftRight = function trimLeftRight(test) {
   var inputs = [
     "text text",
     " text text ",
@@ -1315,9 +1314,9 @@ module.exports.trimPolyfills = function trimPolyfills(test) {
   ];
   test.expect(inputs.length * 2);
   inputs.forEach(function forInput(input) {
-    test.equal(polyfills.trimLeftPolyfill.call(input), input.trimLeft(),
+    test.equal(shared.trimLeft(input), input.trimLeft(),
       "trimLeft incorrect for '" + input + "'");
-    test.equal(polyfills.trimRightPolyfill.call(input), input.trimRight(),
+    test.equal(shared.trimRight(input), input.trimRight(),
       "trimRight incorrect for '" + input + "'");
   });
   test.done();
