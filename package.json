@@ -26,6 +26,7 @@
     "markdown-it": "8.4.0"
   },
   "devDependencies": {
+    "@types/node": "^8.5.1",
     "browserify": "^14.5.0",
     "cpy-cli": "^1.0.1",
     "eslint": "^4.13.1",
