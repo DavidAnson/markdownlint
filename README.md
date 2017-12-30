@@ -86,6 +86,7 @@ playground for learning and exploring.
 * **[MD042](doc/Rules.md#md042)** *no-empty-links* - No empty links
 * **[MD043](doc/Rules.md#md043)** *required-headers* - Required header structure
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
+* **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have ALT Text attribute
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -113,6 +114,8 @@ See [Rules.md](doc/Rules.md) for more details.
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
 * **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039
+* **accessibility** - MD045
+* **images** - MD045
 
 ## Configuration
 
