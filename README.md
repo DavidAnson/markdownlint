@@ -92,6 +92,7 @@ See [Rules.md](doc/Rules.md) for more details.
 
 ## Tags
 
+* **accessibility** - MD045
 * **atx** - MD018, MD019
 * **atx_closed** - MD020, MD021
 * **blank_lines** - MD012, MD022, MD031, MD032
@@ -104,6 +105,7 @@ See [Rules.md](doc/Rules.md) for more details.
   MD024, MD025, MD026, MD036, MD041, MD043
 * **hr** - MD035
 * **html** - MD033
+* **images** - MD045
 * **indentation** - MD005, MD006, MD007, MD027
 * **language** - MD040
 * **line_length** - MD013
@@ -114,8 +116,6 @@ See [Rules.md](doc/Rules.md) for more details.
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
 * **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039
-* **accessibility** - MD045
-* **images** - MD045
 
 ## Configuration
 

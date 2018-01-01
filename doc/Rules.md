@@ -1241,7 +1241,7 @@ Set the `code_blocks` parameter to `false` to disable this rule for code blocks.
 
 ## MD045 - Images should have ALT Text attribute
 
-Tags: images, accessibility
+Tags: accessibility, images
 
 Aliases: no-alt-text
 
