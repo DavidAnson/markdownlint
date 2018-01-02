@@ -15,3 +15,11 @@ name wrong twice:
 MarkDownLint.
 
 A [normal](link) and an [empty one]() and a [fragment](#one).
+
+An image without alt text ![](image.jpg)
+
+![](image.jpg)
+
+A reference image without alt text ![][reference]
+
+[reference]: image.jpg  "title"
