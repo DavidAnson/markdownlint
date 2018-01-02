@@ -45,7 +45,7 @@
         "errorRange": [25, 13]
     },
     {
-        "lineNumber": 22,
+        "lineNumber": 25,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
@@ -91,6 +91,15 @@
     },
     {
         "lineNumber": 21,
+        "ruleName": "MD045",
+        "ruleAlias": "no-alt-text",
+        "ruleDescription": "Images should have ALT Text attribute",
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null
+    },
+    {
+        "lineNumber": 23,
         "ruleName": "MD045",
         "ruleAlias": "no-alt-text",
         "ruleDescription": "Images should have ALT Text attribute",
