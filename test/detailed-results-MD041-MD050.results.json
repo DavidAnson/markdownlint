@@ -45,7 +45,7 @@
         "errorRange": [25, 13]
     },
     {
-        "lineNumber": 25,
+        "lineNumber": 20,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
@@ -84,25 +84,7 @@
         "lineNumber": 19,
         "ruleName": "MD045",
         "ruleAlias": "no-alt-text",
-        "ruleDescription": "Images should have ALT Text attribute",
-        "errorDetail": null,
-        "errorContext": null,
-        "errorRange": null
-    },
-    {
-        "lineNumber": 21,
-        "ruleName": "MD045",
-        "ruleAlias": "no-alt-text",
-        "ruleDescription": "Images should have ALT Text attribute",
-        "errorDetail": null,
-        "errorContext": null,
-        "errorRange": null
-    },
-    {
-        "lineNumber": 23,
-        "ruleName": "MD045",
-        "ruleAlias": "no-alt-text",
-        "ruleDescription": "Images should have ALT Text attribute",
+        "ruleDescription": "Images should have alternate text (alt text)",
         "errorDetail": null,
         "errorContext": null,
         "errorRange": null

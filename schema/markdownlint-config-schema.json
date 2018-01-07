@@ -957,12 +957,12 @@
       "additionalProperties": false
     },
     "MD045": {
-      "description": "MD045/no-alt-text - Images should have ALT Text attribute",
+      "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
       "type": "boolean",
       "default": true
     },
     "no-alt-text": {
-      "description": "MD045/no-alt-text - Images should have ALT Text attribute",
+      "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
       "type": "boolean",
       "default": true
     },
@@ -1071,13 +1071,13 @@
       "type": "boolean",
       "default": true
     },
-    "images": {
-      "description": "images - MD045",
+    "accessibility": {
+      "description": "accessibility - MD045",
       "type": "boolean",
       "default": true
     },
-    "accessibility": {
-      "description": "accessibility - MD045",
+    "images": {
+      "description": "images - MD045",
       "type": "boolean",
       "default": true
     }
