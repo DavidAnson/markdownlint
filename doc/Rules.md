@@ -1243,3 +1243,35 @@ the proper capitalization, specify the desired letter case in the `names` array:
     ]
 
 Set the `code_blocks` parameter to `false` to disable this rule for code blocks.
+
+<a name="md045"></a>
+
+## MD045 - Images should have alternate text (alt text)
+
+Tags: accessibility, images
+
+Aliases: no-alt-text
+
+This rule is triggered when an image is missing alternate text (alt text) information.
+Alternate text is important for accessibility, describing the content of an image for
+people who may not be able to see it.
+
+Alternate text is commonly specified inline as:
+
+```md
+![Alternate text](image.jpg)
+```
+
+Or with reference syntax as:
+
+```md
+![Alternate text][ref]
+
+...
+
+[ref]: image.jpg "Optional title"
+```
+
+Guidance for writing alternate text is available from the [W3C](https://www.w3.org/WAI/alt/),
+[Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
+[other locations](https://www.phase2technology.com/blog/no-more-excuses-definitive-guide-alt-text-field).

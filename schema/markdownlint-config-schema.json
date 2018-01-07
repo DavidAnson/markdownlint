@@ -956,6 +956,16 @@
       },
       "additionalProperties": false
     },
+    "MD045": {
+      "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
+      "type": "boolean",
+      "default": true
+    },
+    "no-alt-text": {
+      "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
+      "type": "boolean",
+      "default": true
+    },
     "headers": {
       "description": "headers - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1058,6 +1068,16 @@
     },
     "spelling": {
       "description": "spelling - MD044",
+      "type": "boolean",
+      "default": true
+    },
+    "accessibility": {
+      "description": "accessibility - MD045",
+      "type": "boolean",
+      "default": true
+    },
+    "images": {
+      "description": "images - MD045",
       "type": "boolean",
       "default": true
     }

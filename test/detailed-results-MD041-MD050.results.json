@@ -45,7 +45,7 @@
         "errorRange": [25, 13]
     },
     {
-        "lineNumber": 18,
+        "lineNumber": 20,
         "ruleName": "MD043",
         "ruleAlias": "required-headers",
         "ruleDescription": "Required header structure",
@@ -79,5 +79,14 @@
         "errorDetail": "Expected: markdownlint; Actual: MarkDownLint",
         "errorContext": null,
         "errorRange": [1, 12]
+    },
+    {
+        "lineNumber": 19,
+        "ruleName": "MD045",
+        "ruleAlias": "no-alt-text",
+        "ruleDescription": "Images should have alternate text (alt text)",
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null
     }
 ]
