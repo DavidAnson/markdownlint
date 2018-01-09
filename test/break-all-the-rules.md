@@ -77,3 +77,5 @@ code fence without language {MD040:73}
 [empty link]() {MD042}
 
 markdownLint {MD044}
+
+![](image.jpg) {MD045}

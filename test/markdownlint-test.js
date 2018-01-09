@@ -688,7 +688,8 @@ module.exports.styleAll = function styleAll(test) {
         "MD039": [ 71 ],
         "MD040": [ 73 ],
         "MD041": [ 1 ],
-        "MD042": [ 77 ]
+        "MD042": [ 77 ],
+        "MD045": [ 81 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -727,7 +728,8 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD032": [ 51 ],
         "MD035": [ 61 ],
         "MD036": [ 65 ],
-        "MD042": [ 77 ]
+        "MD042": [ 77 ],
+        "MD045": [ 81 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
