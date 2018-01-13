@@ -51,10 +51,11 @@
     };
     var results = window.markdownlint.sync(options);
     violations.innerHTML = results.content.map(function mapResult(result) {
-      var ruleRef = rulesMd + "#" + result.ruleName.toLowerCase() + "---" +
+      var ruleName = result.ruleNames[0];
+      var ruleRef = rulesMd + "#" + ruleName.toLowerCase() + "---" +
         result.ruleDescription.toLowerCase().replace(/ /g, "-");
       return "<a href='#" + result.lineNumber + "'><em>" + result.lineNumber +
-        "</em></a> - <a href='" + ruleRef + "'>" + result.ruleName + "</a> " +
+        "</em></a> - <a href='" + ruleRef + "'>" + ruleName + "</a> " +
         result.ruleDescription +
         (result.errorDetail ?
           " [<span class='detail'>" +

@@ -351,7 +351,11 @@ each error is identified by rule name and line number. This is deprecated.
 
 Passing a `resultVersion` of `1` corresponds to a detailed format where each error
 includes information about the line number, rule name, alias, description, as well
-as any additional detail or context that is available. This is the default.
+as any additional detail or context that is available. This is deprecated.
+
+Passing a `resultVersion` of `2` corresponds to a detailed format where each error
+includes information about the line number, rule names, description, as well as any
+additional detail or context that is available. This is the default.
 
 #### callback
 
@@ -481,29 +485,25 @@ Output:
   "good.md": [],
   "bad.md": [
     { "lineNumber": 3,
-      "ruleName": "MD010",
-      "ruleAlias": "no-hard-tabs",
+      "ruleNames": [ "MD010", "no-hard-tabs" ],
       "ruleDescription": "Hard tabs",
       "errorDetail": "Column: 17",
       "errorContext": null,
       "errorRange": [ 17, 1 ] },
     { "lineNumber": 1,
-      "ruleName": "MD018",
-      "ruleAlias": "no-missing-space-atx",
+      "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style header",
       "errorDetail": null,
       "errorContext": "#bad.md",
       "errorRange": [ 1, 2 ] },
     { "lineNumber": 3,
-      "ruleName": "MD018",
-      "ruleAlias": "no-missing-space-atx",
+      "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style header",
       "errorDetail": null,
       "errorContext": "#This file fails\tsome rules.",
       "errorRange": [ 1, 2 ] },
     { "lineNumber": 1,
-      "ruleName": "MD041",
-      "ruleAlias": "first-line-h1",
+      "ruleNames": [ "MD041", "first-line-h1" ],
       "ruleDescription": "First line in file should be a top level header",
       "errorDetail": null,
       "errorContext": "#bad.md",

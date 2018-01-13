@@ -32,7 +32,7 @@ function createTestForFile(file) {
           return Q.nfcall(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
-            "resultVersion": detailedResults ? 1 : 0
+            "resultVersion": detailedResults ? 2 : 0
           });
         });
     var expectedPromise = detailedResults ?
@@ -211,7 +211,8 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
       "./test/atx_header_spacing.md",
       "./test/first_header_bad_atx.md"
     ],
-    "config": defaultConfig
+    "config": defaultConfig,
+    "resultVersion": 1
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
@@ -292,10 +293,11 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
   });
 };
 
-module.exports.resultFormattingV1BadRegExp = function resultFormattingV1(test) {
+module.exports.resultFormattingV1BadRegExp =
+function resultFormattingV1BadRegExp(test) {
   test.expect(3);
   var md010 = rules[8];
-  test.equal(md010.name, "MD010", "Wrong rule.");
+  test.equal(md010.names[0], "MD010", "Wrong rule.");
   var md010RegExp = md010.regexp;
   md010.regexp = /X/;
   var options = {
@@ -312,6 +314,123 @@ module.exports.resultFormattingV1BadRegExp = function resultFormattingV1(test) {
         { "lineNumber": 1,
           "ruleName": "MD010",
           "ruleAlias": "no-hard-tabs",
+          "ruleDescription": "Hard tabs",
+          "errorDetail": "Column: 1",
+          "errorContext": null,
+          "errorRange": null }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    md010.regexp = md010RegExp;
+    test.done();
+  });
+};
+
+module.exports.resultFormattingV2 = function resultFormattingV2(test) {
+  test.expect(3);
+  var options = {
+    "strings": {
+      "truncate":
+        "#  Multiple spaces inside hashes on closed atx style header  #"
+    },
+    "files": [
+      "./test/atx_header_spacing.md",
+      "./test/first_header_bad_atx.md"
+    ],
+    "config": defaultConfig
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "truncate": [
+        { "lineNumber": 1,
+          "ruleNames": [ "MD021", "no-multiple-space-closed-atx" ],
+          "ruleDescription":
+            "Multiple spaces inside hashes on closed atx style header",
+          "errorDetail": null,
+          "errorContext": "#  Multiple spa...style header  #",
+          "errorRange": [ 1, 4 ] }
+      ],
+      "./test/atx_header_spacing.md": [
+        { "lineNumber": 3,
+          "ruleNames": [ "MD002", "first-header-h1" ],
+          "ruleDescription": "First header should be a top level header",
+          "errorDetail": "Expected: h1; Actual: h2",
+          "errorContext": null,
+          "errorRange": null },
+        { "lineNumber": 1,
+          "ruleNames": [ "MD018", "no-missing-space-atx" ],
+          "ruleDescription": "No space after hash on atx style header",
+          "errorDetail": null,
+          "errorContext": "#Header 1 {MD018}",
+          "errorRange": [ 1, 2 ] },
+        { "lineNumber": 3,
+          "ruleNames": [ "MD019", "no-multiple-space-atx" ],
+          "ruleDescription": "Multiple spaces after hash on atx style header",
+          "errorDetail": null,
+          "errorContext": "##  Header 2 {MD019}",
+          "errorRange": [ 1, 5 ] },
+        { "lineNumber": 5,
+          "ruleNames": [ "MD019", "no-multiple-space-atx" ],
+          "ruleDescription": "Multiple spaces after hash on atx style header",
+          "errorDetail": null,
+          "errorContext": "##   Header 3 {MD019}",
+          "errorRange": [ 1, 6 ] }
+      ],
+      "./test/first_header_bad_atx.md": [
+        { "lineNumber": 1,
+          "ruleNames": [ "MD002", "first-header-h1" ],
+          "ruleDescription": "First header should be a top level header",
+          "errorDetail": "Expected: h1; Actual: h2",
+          "errorContext": null,
+          "errorRange": null }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    var actualMessage = actualResult.toString();
+    var expectedMessage =
+      "truncate: 1: MD021/no-multiple-space-closed-atx" +
+      " Multiple spaces inside hashes on closed atx style header" +
+      " [Context: \"#  Multiple spa...style header  #\"]\n" +
+      "./test/atx_header_spacing.md: 3: MD002/first-header-h1" +
+      " First header should be a top level header" +
+      " [Expected: h1; Actual: h2]\n" +
+      "./test/atx_header_spacing.md: 1: MD018/no-missing-space-atx" +
+      " No space after hash on atx style header" +
+      " [Context: \"#Header 1 {MD018}\"]\n" +
+      "./test/atx_header_spacing.md: 3: MD019/no-multiple-space-atx" +
+      " Multiple spaces after hash on atx style header" +
+      " [Context: \"##  Header 2 {MD019}\"]\n" +
+      "./test/atx_header_spacing.md: 5: MD019/no-multiple-space-atx" +
+      " Multiple spaces after hash on atx style header" +
+      " [Context: \"##   Header 3 {MD019}\"]\n" +
+      "./test/first_header_bad_atx.md: 1: MD002/first-header-h1" +
+      " First header should be a top level header" +
+      " [Expected: h1; Actual: h2]";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
+module.exports.resultFormattingV2BadRegExp =
+function resultFormattingV2BadRegExp(test) {
+  test.expect(3);
+  var md010 = rules[8];
+  test.equal(md010.names[0], "MD010", "Wrong rule.");
+  var md010RegExp = md010.regexp;
+  md010.regexp = /X/;
+  var options = {
+    "strings": {
+      "tab": "\t."
+    },
+    "config": defaultConfig
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "tab": [
+        { "lineNumber": 1,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
           "ruleDescription": "Hard tabs",
           "errorDetail": "Column: 1",
           "errorContext": null,
@@ -969,23 +1088,24 @@ module.exports.missingStringValue = function missingStringValue(test) {
 module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
   test.expect(41);
   rules.forEach(function forRule(rule) {
-    test.equal(rule.name, rule.name.toUpperCase(), "Rule name not upper-case.");
+    var ruleName = rule.names[0];
+    test.equal(ruleName, ruleName.toUpperCase(), "Rule name not upper-case.");
   });
   test.done();
 };
 
-module.exports.uniqueAliases = function uniqueAliases(test) {
-  test.expect(82);
+module.exports.uniqueNames = function uniqueNames(test) {
+  test.expect(164);
   var tags = [];
   rules.forEach(function forRule(rule) {
     Array.prototype.push.apply(tags, rule.tags);
   });
-  var aliases = [];
+  var names = [];
   rules.forEach(function forRule(rule) {
-    rule.aliases.forEach(function forAlias(alias) {
-      test.ok(tags.indexOf(alias) === -1, "Alias not unique in tags.");
-      test.ok(aliases.indexOf(alias) === -1, "Alias not unique in aliases.");
-      aliases.push(alias);
+    rule.names.forEach(function forAlias(name) {
+      test.ok(tags.indexOf(name) === -1, "Name not unique in tags.");
+      test.ok(names.indexOf(name) === -1, "Name not unique in names.");
+      names.push(name);
     });
   });
   test.done();
@@ -997,7 +1117,7 @@ module.exports.readme = function readme(test) {
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
       var tagRules = tagToRules[tag] || [];
-      tagRules.push(rule.name);
+      tagRules.push(rule.names[0]);
       tagToRules[tag] = tagRules;
     });
   });
@@ -1030,9 +1150,11 @@ module.exports.readme = function readme(test) {
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             if (rule) {
-              var expected = "**[" + rule.name + "](doc/Rules.md#" +
-                rule.name.toLowerCase() + ")** *" +
-                rule.aliases.join(", ") + "* - " + rule.desc;
+              var ruleName = rule.names[0];
+              var ruleAliases = rule.names.slice(1);
+              var expected = "**[" + ruleName + "](doc/Rules.md#" +
+                ruleName.toLowerCase() + ")** *" +
+                ruleAliases.join(", ") + "* - " + rule.desc;
               test.equal(token.content, expected, "Rule mismatch.");
             }
           } else if (inTags) {
@@ -1046,7 +1168,8 @@ module.exports.readme = function readme(test) {
       });
       var ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
-        "Missing rule documentation for " + (ruleLeft || {}).name + ".");
+        "Missing rule documentation for " +
+          (ruleLeft || "[NO RULE]").toString() + ".");
       var tagLeft = Object.keys(tagToRules).shift();
       test.ok(!tagLeft, "Undocumented tag " + tagLeft + ".");
       test.done();
@@ -1065,13 +1188,14 @@ module.exports.doc = function doc(test) {
       var ruleHasAliases = true;
       var ruleUsesParams = null;
       var tagAliasParameterRe = /, |: | /;
-      function testTagsAliasesParams() {
+      function testTagsAliasesParams(r) {
+        r = r || "[NO RULE]";
         test.ok(ruleHasTags,
-          "Missing tags for rule " + (rule || {}).name + ".");
+          "Missing tags for rule " + r.toString() + ".");
         test.ok(ruleHasAliases,
-          "Missing aliases for rule " + (rule || {}).name + ".");
+          "Missing aliases for rule " + r.toString() + ".");
         test.ok(!ruleUsesParams,
-          "Missing parameters for rule " + (rule || {}).name + ".");
+          "Missing parameters for rule " + r.toString() + ".");
       }
       md.parse(contents, {}).forEach(function forToken(token) {
         if ((token.type === "heading_open") && (token.tag === "h2")) {
@@ -1080,13 +1204,13 @@ module.exports.doc = function doc(test) {
           inHeading = false;
         } else if (token.type === "inline") {
           if (inHeading) {
-            testTagsAliasesParams();
+            testTagsAliasesParams(rule);
             rule = rulesLeft.shift();
             ruleHasTags = ruleHasAliases = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             if (rule) {
-              test.equal(token.content, rule.name + " - " + rule.desc,
+              test.equal(token.content, rule.names[0] + " - " + rule.desc,
                 "Rule mismatch.");
               ruleUsesParams = rule.func.toString()
                 .match(/params\.options\.[_a-z]*/gi);
@@ -1098,11 +1222,12 @@ module.exports.doc = function doc(test) {
             }
           } else if (/^Tags: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
-              rule.tags, "Tag mismatch for rule " + rule.name + ".");
+              rule.tags, "Tag mismatch for rule " + rule.toString() + ".");
             ruleHasTags = true;
           } else if (/^Aliases: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
-              rule.aliases, "Alias mismatch for rule " + rule.name + ".");
+              rule.names.slice(1),
+              "Alias mismatch for rule " + rule.toString() + ".");
             ruleHasAliases = true;
           } else if (/^Parameters: /.test(token.content) && rule) {
             var inDetails = false;
@@ -1113,16 +1238,17 @@ module.exports.doc = function doc(test) {
                 return !inDetails;
               });
             test.deepEqual(parameters, ruleUsesParams,
-              "Missing parameter for rule " + rule.name);
+              "Missing parameter for rule " + rule.toString());
             ruleUsesParams = null;
           }
         }
       });
       var ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
-        "Missing rule documentation for " + (ruleLeft || {}).name + ".");
+        "Missing rule documentation for " +
+          (ruleLeft || "[NO RULE]").toString() + ".");
       if (rule) {
-        testTagsAliasesParams();
+        testTagsAliasesParams(rule);
       }
       test.done();
     });

@@ -28,16 +28,16 @@ var tags = {};
 rules.forEach(function forRule(rule) {
   rule.tags.forEach(function forTag(tag) {
     var tagRules = tags[tag] || [];
-    tagRules.push(rule.name);
+    tagRules.push(rule.names[0]);
     tags[tag] = tagRules;
   });
   var scheme = {
-    "description": rule.name + "/" + rule.aliases.join("/") + " - " + rule.desc,
+    "description": rule.names.join("/") + " - " + rule.desc,
     "type": "boolean",
     "default": true
   };
   var custom = true;
-  switch (rule.name) {
+  switch (rule.names[0]) {
     case "MD002":
     case "MD025":
       scheme.properties = {
@@ -266,9 +266,8 @@ rules.forEach(function forRule(rule) {
     scheme.type = [ "boolean", "object" ];
     scheme.additionalProperties = false;
   }
-  schema.properties[rule.name] = scheme;
-  rule.aliases.forEach(function forAlias(alias) {
-    schema.properties[alias] = scheme;
+  rule.names.forEach(function forName(name) {
+    schema.properties[name] = scheme;
   });
 });
 
