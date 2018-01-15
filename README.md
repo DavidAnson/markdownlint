@@ -621,6 +621,7 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 
 * [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
 * [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
+* [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
 * [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
 * [Sinon.JS](http://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
 * [sonarwhal](https://sonarwhal.com/) ([Search repository](https://github.com/sonarwhal/sonarwhal/search?q=markdownlint))
