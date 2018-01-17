@@ -293,39 +293,6 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
   });
 };
 
-module.exports.resultFormattingV1BadRegExp =
-function resultFormattingV1BadRegExp(test) {
-  test.expect(3);
-  var md010 = rules[8];
-  test.equal(md010.names[0], "MD010", "Wrong rule.");
-  var md010RegExp = md010.regexp;
-  md010.regexp = /X/;
-  var options = {
-    "strings": {
-      "tab": "\t."
-    },
-    "config": defaultConfig,
-    "resultVersion": 1
-  };
-  markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
-    var expectedResult = {
-      "tab": [
-        { "lineNumber": 1,
-          "ruleName": "MD010",
-          "ruleAlias": "no-hard-tabs",
-          "ruleDescription": "Hard tabs",
-          "errorDetail": "Column: 1",
-          "errorContext": null,
-          "errorRange": null }
-      ]
-    };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    md010.regexp = md010RegExp;
-    test.done();
-  });
-};
-
 module.exports.resultFormattingV2 = function resultFormattingV2(test) {
   test.expect(3);
   var options = {
@@ -408,37 +375,6 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
       " First header should be a top level header" +
       " [Expected: h1; Actual: h2]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.done();
-  });
-};
-
-module.exports.resultFormattingV2BadRegExp =
-function resultFormattingV2BadRegExp(test) {
-  test.expect(3);
-  var md010 = rules[8];
-  test.equal(md010.names[0], "MD010", "Wrong rule.");
-  var md010RegExp = md010.regexp;
-  md010.regexp = /X/;
-  var options = {
-    "strings": {
-      "tab": "\t."
-    },
-    "config": defaultConfig
-  };
-  markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
-    var expectedResult = {
-      "tab": [
-        { "lineNumber": 1,
-          "ruleNames": [ "MD010", "no-hard-tabs" ],
-          "ruleDescription": "Hard tabs",
-          "errorDetail": "Column: 1",
-          "errorContext": null,
-          "errorRange": null }
-      ]
-    };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    md010.regexp = md010RegExp;
     test.done();
   });
 };
