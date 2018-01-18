@@ -1149,7 +1149,7 @@ module.exports.doc = function doc(test) {
               test.equal(token.content, rule.names[0] + " - " + rule.desc,
                 "Rule mismatch.");
               ruleUsesParams = rule.func.toString()
-                .match(/params\.options\.[_a-z]*/gi);
+                .match(/params\.config\.[_a-z]*/gi);
               if (ruleUsesParams) {
                 ruleUsesParams = ruleUsesParams.map(function forUse(use) {
                   return use.split(".").pop();
