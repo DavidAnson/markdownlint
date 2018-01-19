@@ -32,7 +32,7 @@ rules.forEach(function forRule(rule) {
     tags[tag] = tagRules;
   });
   var scheme = {
-    "description": rule.names.join("/") + " - " + rule.desc,
+    "description": rule.names.join("/") + " - " + rule.description,
     "type": "boolean",
     "default": true
   };

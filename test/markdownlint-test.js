@@ -1090,7 +1090,7 @@ module.exports.readme = function readme(test) {
               var ruleAliases = rule.names.slice(1);
               var expected = "**[" + ruleName + "](doc/Rules.md#" +
                 ruleName.toLowerCase() + ")** *" +
-                ruleAliases.join(", ") + "* - " + rule.desc;
+                ruleAliases.join(", ") + "* - " + rule.description;
               test.equal(token.content, expected, "Rule mismatch.");
             }
           } else if (inTags) {
@@ -1146,9 +1146,10 @@ module.exports.doc = function doc(test) {
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             if (rule) {
-              test.equal(token.content, rule.names[0] + " - " + rule.desc,
+              test.equal(token.content,
+                rule.names[0] + " - " + rule.description,
                 "Rule mismatch.");
-              ruleUsesParams = rule.func.toString()
+              ruleUsesParams = rule.function.toString()
                 .match(/params\.config\.[_a-z]*/gi);
               if (ruleUsesParams) {
                 ruleUsesParams = ruleUsesParams.map(function forUse(use) {
