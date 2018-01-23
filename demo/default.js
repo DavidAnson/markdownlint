@@ -53,7 +53,9 @@
     violations.innerHTML = results.content.map(function mapResult(result) {
       var ruleName = result.ruleNames[0];
       var ruleRef = rulesMd + "#" + ruleName.toLowerCase() + "---" +
-        result.ruleDescription.toLowerCase().replace(/ /g, "-");
+        result.ruleDescription.toLowerCase()
+          .replace(/ /g, "-")
+          .replace(/[()]/g, "");
       return "<a href='#" + result.lineNumber + "'><em>" + result.lineNumber +
         "</em></a> - <a href='" + ruleRef + "'>" + ruleName + "</a> " +
         result.ruleDescription +
