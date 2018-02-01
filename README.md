@@ -3,7 +3,6 @@
 > A Node.js style checker and lint tool for Markdown/CommonMark files.
 
 [![npm version][npm-image]][npm-url]
-[![GitHub tag][github-tag-image]][github-tag-url]
 [![Build status][travis-image]][travis-url]
 [![Coverage][coveralls-image]][coveralls-url]
 [![License][license-image]][license-url]
@@ -659,8 +658,6 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
-[github-tag-image]: https://img.shields.io/github/tag/DavidAnson/markdownlint.svg
-[github-tag-url]: https://github.com/DavidAnson/markdownlint
 [travis-image]: https://img.shields.io/travis/DavidAnson/markdownlint/master.svg
 [travis-url]: https://travis-ci.org/DavidAnson/markdownlint
 [coveralls-image]: https://img.shields.io/coveralls/DavidAnson/markdownlint/master.svg
