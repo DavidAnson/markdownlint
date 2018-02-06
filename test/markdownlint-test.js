@@ -1071,15 +1071,12 @@ module.exports.readme = function readme(test) {
           if (!seenRelated) {
             seenRelated = true;
           } else if (seenRelated && !seenRules) {
-            seenRules = true;
-            inRules = true;
+            seenRules = inRules = true;
           } else if (seenRelated && seenRules && !seenTags) {
-            seenTags = true;
-            inTags = true;
+            seenTags = inTags = true;
           }
         } else if (token.type === "bullet_list_close") {
-          inRules = false;
-          inTags = false;
+          inRules = inTags = false;
         } else if (token.type === "inline") {
           if (inRules) {
             var rule = rulesLeft.shift();
@@ -1145,17 +1142,15 @@ module.exports.doc = function doc(test) {
             ruleHasTags = ruleHasAliases = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
-            if (rule) {
-              test.equal(token.content,
-                rule.names[0] + " - " + rule.description,
-                "Rule mismatch.");
-              ruleUsesParams = rule.function.toString()
-                .match(/params\.config\.[_a-z]*/gi);
-              if (ruleUsesParams) {
-                ruleUsesParams = ruleUsesParams.map(function forUse(use) {
-                  return use.split(".").pop();
-                });
-              }
+            test.equal(token.content,
+              rule.names[0] + " - " + rule.description,
+              "Rule mismatch.");
+            ruleUsesParams = rule.function.toString()
+              .match(/params\.config\.[_a-z]*/gi);
+            if (ruleUsesParams) {
+              ruleUsesParams = ruleUsesParams.map(function forUse(use) {
+                return use.split(".").pop();
+              });
             }
           } else if (/^Tags: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),

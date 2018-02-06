@@ -64,7 +64,7 @@
         "max-lines": "off",
         "max-nested-callbacks": "error",
         "max-params": ["error", 7],
-        "max-statements": ["error", 32],
+        "max-statements": ["error", 20],
         "max-statements-per-line": "error",
         "multiline-comment-style": ["error", "separate-lines"],
         "multiline-ternary": "off",
