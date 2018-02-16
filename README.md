@@ -184,6 +184,26 @@ Type: `Object`
 
 Configures the function.
 
+##### options.customRules
+
+Type: `Array` of `Object`
+
+List of custom rules to include with the default rule set for linting.
+
+Each array element should define a rule. Rules are typically exported by another
+package, but can be defined inline.
+
+Example:
+
+```js
+var extraRules = require("extraRules");
+var options = {
+  "customRules": [ extraRules.one, extraRules.two ]
+};
+```
+
+See [CustomRules.md](doc/CustomRules.md) for details about authoring custom rules.
+
 ##### options.files
 
 Type: `Array` of `String`
@@ -316,7 +336,8 @@ The default value:
 /^(---|\+\+\+)$[^]*?^\1$(\r\n|\r|\n)/m
 ```
 
-Ignores [YAML](https://en.wikipedia.org/wiki/YAML) and [TOML](https://en.wikipedia.org/wiki/TOML) such as:
+Ignores [YAML](https://en.wikipedia.org/wiki/YAML) and
+[TOML](https://en.wikipedia.org/wiki/TOML) such as:
 
 ```text
 ---

@@ -8,6 +8,7 @@ var tv4 = require("tv4");
 var markdownlint = require("../lib/markdownlint");
 var shared = require("../lib/shared");
 var rules = require("../lib/rules");
+var customRules = require("./rules");
 var defaultConfig = require("./markdownlint-test-default-config.json");
 var configSchema = require("../schema/markdownlint-config-schema.json");
 
@@ -890,6 +891,7 @@ module.exports.readmeHeaders = function readmeHeaders(test) {
           "## API",
           "### Linting",
           "#### options",
+          "##### options.customRules",
           "##### options.files",
           "##### options.strings",
           "##### options.config",
@@ -1545,4 +1547,279 @@ module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
     return true;
   }, "Did not get exception for bad child JSON.");
   test.done();
+};
+
+module.exports.customRulesV0 = function customRulesV0(test) {
+  test.expect(4);
+  var customRulesMd = "./test/custom-rules.md";
+  var options = {
+    "customRules": customRules.all,
+    "files": [ customRulesMd ],
+    "resultVersion": 0
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {};
+    expectedResult[customRulesMd] = {
+      "blockquote": [ 12 ],
+      "every-n-lines": [ 2, 4, 6, 10, 12 ],
+      "letters-E-X": [ 3, 7 ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    var actualMessage = actualResult.toString();
+    var expectedMessage =
+      "./test/custom-rules.md: 12: blockquote" +
+      " Rule that reports an error for blockquotes\n" +
+      "./test/custom-rules.md: 2: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 4: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 6: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 10: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 12: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 3: letters-E-X" +
+      " Rule that reports an error for lines with the letters 'EX'\n" +
+      "./test/custom-rules.md: 7: letters-E-X" +
+      " Rule that reports an error for lines with the letters 'EX'";
+    test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+    actualMessage = actualResult.toString(true);
+    expectedMessage =
+      "./test/custom-rules.md: 12: blockquote" +
+      " Rule that reports an error for blockquotes\n" +
+      "./test/custom-rules.md: 2: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 4: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 6: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 10: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 12: every-n-lines" +
+      " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 3: letter-E-letter-X" +
+      " Rule that reports an error for lines with the letters 'EX'\n" +
+      "./test/custom-rules.md: 7: letter-E-letter-X" +
+      " Rule that reports an error for lines with the letters 'EX'";
+    test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
+    test.done();
+  });
+};
+
+module.exports.customRulesV1 = function customRulesV1(test) {
+  test.expect(3);
+  var customRulesMd = "./test/custom-rules.md";
+  var options = {
+    "customRules": customRules.all,
+    "files": [ customRulesMd ],
+    "resultVersion": 1
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {};
+    expectedResult[customRulesMd] = [
+      { "lineNumber": 12,
+        "ruleName": "blockquote",
+        "ruleAlias": "blockquote",
+        "ruleDescription": "Rule that reports an error for blockquotes",
+        "errorDetail": "Blockquote spans 1 line(s).",
+        "errorContext": "> Block",
+        "errorRange": null },
+      { "lineNumber": 2,
+        "ruleName": "every-n-lines",
+        "ruleAlias": "every-n-lines",
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 2",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 4,
+        "ruleName": "every-n-lines",
+        "ruleAlias": "every-n-lines",
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 4",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 6,
+        "ruleName": "every-n-lines",
+        "ruleAlias": "every-n-lines",
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 6",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 10,
+        "ruleName": "every-n-lines",
+        "ruleAlias": "every-n-lines",
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 10",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 12,
+        "ruleName": "every-n-lines",
+        "ruleAlias": "every-n-lines",
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 12",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 3,
+        "ruleName": "letters-E-X",
+        "ruleAlias": "letter-E-letter-X",
+        "ruleDescription":
+          "Rule that reports an error for lines with the letters 'EX'",
+        "errorDetail": null,
+        "errorContext": "text",
+        "errorRange": null },
+      { "lineNumber": 7,
+        "ruleName": "letters-E-X",
+        "ruleAlias": "letter-E-letter-X",
+        "ruleDescription":
+          "Rule that reports an error for lines with the letters 'EX'",
+        "errorDetail": null,
+        "errorContext": "text",
+        "errorRange": null }
+    ];
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    var actualMessage = actualResult.toString();
+    var expectedMessage =
+      "./test/custom-rules.md: 12: blockquote/blockquote" +
+      " Rule that reports an error for blockquotes" +
+      " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
+      "./test/custom-rules.md: 2: every-n-lines/every-n-lines" +
+      " Rule that reports an error every N lines [Line number 2]\n" +
+      "./test/custom-rules.md: 4: every-n-lines/every-n-lines" +
+      " Rule that reports an error every N lines [Line number 4]\n" +
+      "./test/custom-rules.md: 6: every-n-lines/every-n-lines" +
+      " Rule that reports an error every N lines [Line number 6]\n" +
+      "./test/custom-rules.md: 10: every-n-lines/every-n-lines" +
+      " Rule that reports an error every N lines [Line number 10]\n" +
+      "./test/custom-rules.md: 12: every-n-lines/every-n-lines" +
+      " Rule that reports an error every N lines [Line number 12]\n" +
+      "./test/custom-rules.md: 3: letters-E-X/letter-E-letter-X" +
+      " Rule that reports an error for lines with the letters 'EX'" +
+      " [Context: \"text\"]\n" +
+      "./test/custom-rules.md: 7: letters-E-X/letter-E-letter-X" +
+      " Rule that reports an error for lines with the letters 'EX'" +
+      " [Context: \"text\"]";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
+module.exports.customRulesV2 = function customRulesV2(test) {
+  test.expect(3);
+  var customRulesMd = "./test/custom-rules.md";
+  var options = {
+    "customRules": customRules.all,
+    "files": [ customRulesMd ],
+    "resultVersion": 2
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {};
+    expectedResult[customRulesMd] = [
+      { "lineNumber": 12,
+        "ruleNames": [ "blockquote" ],
+        "ruleDescription": "Rule that reports an error for blockquotes",
+        "errorDetail": "Blockquote spans 1 line(s).",
+        "errorContext": "> Block",
+        "errorRange": null },
+      { "lineNumber": 2,
+        "ruleNames": [ "every-n-lines" ],
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 2",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 4,
+        "ruleNames": [ "every-n-lines" ],
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 4",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 6,
+        "ruleNames": [ "every-n-lines" ],
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 6",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 10,
+        "ruleNames": [ "every-n-lines" ],
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 10",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 12,
+        "ruleNames": [ "every-n-lines" ],
+        "ruleDescription": "Rule that reports an error every N lines",
+        "errorDetail": "Line number 12",
+        "errorContext": null,
+        "errorRange": null },
+      { "lineNumber": 3,
+        "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
+        "ruleDescription":
+          "Rule that reports an error for lines with the letters 'EX'",
+        "errorDetail": null,
+        "errorContext": "text",
+        "errorRange": null },
+      { "lineNumber": 7,
+        "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
+        "ruleDescription":
+          "Rule that reports an error for lines with the letters 'EX'",
+        "errorDetail": null,
+        "errorContext": "text",
+        "errorRange": null }
+    ];
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    var actualMessage = actualResult.toString();
+    var expectedMessage =
+      "./test/custom-rules.md: 12: blockquote" +
+      " Rule that reports an error for blockquotes" +
+      " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
+      "./test/custom-rules.md: 2: every-n-lines" +
+      " Rule that reports an error every N lines [Line number 2]\n" +
+      "./test/custom-rules.md: 4: every-n-lines" +
+      " Rule that reports an error every N lines [Line number 4]\n" +
+      "./test/custom-rules.md: 6: every-n-lines" +
+      " Rule that reports an error every N lines [Line number 6]\n" +
+      "./test/custom-rules.md: 10: every-n-lines" +
+      " Rule that reports an error every N lines [Line number 10]\n" +
+      "./test/custom-rules.md: 12: every-n-lines" +
+      " Rule that reports an error every N lines [Line number 12]\n" +
+      "./test/custom-rules.md: 3: letters-E-X/letter-E-letter-X/contains-ex" +
+      " Rule that reports an error for lines with the letters 'EX'" +
+      " [Context: \"text\"]\n" +
+      "./test/custom-rules.md: 7: letters-E-X/letter-E-letter-X/contains-ex" +
+      " Rule that reports an error for lines with the letters 'EX'" +
+      " [Context: \"text\"]";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
+module.exports.customRulesConfig = function customRulesConfig(test) {
+  test.expect(2);
+  var customRulesMd = "./test/custom-rules.md";
+  var options = {
+    "customRules": customRules.all,
+    "files": [ customRulesMd ],
+    "config": {
+      "blockquote": true,
+      "every-n-lines": {
+        "n": 3
+      },
+      "letters-e-x": false
+    },
+    "resultVersion": 0
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {};
+    expectedResult[customRulesMd] = {
+      "blockquote": [ 12 ],
+      "every-n-lines": [ 3, 6, 12 ],
+      "letters-E-X": [ 7 ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
 };

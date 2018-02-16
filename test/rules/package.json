@@ -1,0 +1,13 @@
+{
+  "name": "markdownlint-rules-test",
+  "version": "0.0.1",
+  "description": "Package of markdownlint custom rules used for testing",
+  "main": "rules.js",
+  "author": "David Anson (https://dlaa.me/)",
+  "homepage": "https://github.com/DavidAnson/markdownlint",
+  "license": "MIT",
+  "keywords": [
+    "markdownlint-rules"
+  ],
+  "private": true
+}
