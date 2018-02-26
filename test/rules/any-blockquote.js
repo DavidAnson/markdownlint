@@ -3,8 +3,8 @@
 "use strict";
 
 module.exports = {
-  "names": [ "blockquote" ],
-  "description": "Rule that reports an error for blockquotes",
+  "names": [ "any-blockquote" ],
+  "description": "Rule that reports an error for any blockquote",
   "tags": [ "test" ],
   "function": function rule(params, onError) {
     params.tokens.filter(function filterToken(token) {

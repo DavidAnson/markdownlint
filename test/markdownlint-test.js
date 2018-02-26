@@ -1023,32 +1023,6 @@ module.exports.missingStringValue = function missingStringValue(test) {
   });
 };
 
-module.exports.ruleNamesUpperCase = function ruleNamesUpperCase(test) {
-  test.expect(41);
-  rules.forEach(function forRule(rule) {
-    var ruleName = rule.names[0];
-    test.equal(ruleName, ruleName.toUpperCase(), "Rule name not upper-case.");
-  });
-  test.done();
-};
-
-module.exports.uniqueNames = function uniqueNames(test) {
-  test.expect(164);
-  var tags = [];
-  rules.forEach(function forRule(rule) {
-    Array.prototype.push.apply(tags, rule.tags);
-  });
-  var names = [];
-  rules.forEach(function forRule(rule) {
-    rule.names.forEach(function forAlias(name) {
-      test.ok(tags.indexOf(name) === -1, "Name not unique in tags.");
-      test.ok(names.indexOf(name) === -1, "Name not unique in names.");
-      names.push(name);
-    });
-  });
-  test.done();
-};
-
 module.exports.readme = function readme(test) {
   test.expect(108);
   var tagToRules = {};
@@ -1561,15 +1535,16 @@ module.exports.customRulesV0 = function customRulesV0(test) {
     test.ifError(err);
     var expectedResult = {};
     expectedResult[customRulesMd] = {
-      "blockquote": [ 12 ],
+      "any-blockquote": [ 12 ],
       "every-n-lines": [ 2, 4, 6, 10, 12 ],
+      "first-line": [ 1 ],
       "letters-E-X": [ 3, 7 ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     var actualMessage = actualResult.toString();
     var expectedMessage =
-      "./test/custom-rules.md: 12: blockquote" +
-      " Rule that reports an error for blockquotes\n" +
+      "./test/custom-rules.md: 12: any-blockquote" +
+      " Rule that reports an error for any blockquote\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
       " Rule that reports an error every N lines\n" +
       "./test/custom-rules.md: 4: every-n-lines" +
@@ -1580,6 +1555,8 @@ module.exports.customRulesV0 = function customRulesV0(test) {
       " Rule that reports an error every N lines\n" +
       "./test/custom-rules.md: 12: every-n-lines" +
       " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 1: first-line" +
+      " Rule that reports an error for the first line\n" +
       "./test/custom-rules.md: 3: letters-E-X" +
       " Rule that reports an error for lines with the letters 'EX'\n" +
       "./test/custom-rules.md: 7: letters-E-X" +
@@ -1587,8 +1564,8 @@ module.exports.customRulesV0 = function customRulesV0(test) {
     test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
     actualMessage = actualResult.toString(true);
     expectedMessage =
-      "./test/custom-rules.md: 12: blockquote" +
-      " Rule that reports an error for blockquotes\n" +
+      "./test/custom-rules.md: 12: any-blockquote" +
+      " Rule that reports an error for any blockquote\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
       " Rule that reports an error every N lines\n" +
       "./test/custom-rules.md: 4: every-n-lines" +
@@ -1599,6 +1576,8 @@ module.exports.customRulesV0 = function customRulesV0(test) {
       " Rule that reports an error every N lines\n" +
       "./test/custom-rules.md: 12: every-n-lines" +
       " Rule that reports an error every N lines\n" +
+      "./test/custom-rules.md: 1: first-line" +
+      " Rule that reports an error for the first line\n" +
       "./test/custom-rules.md: 3: letter-E-letter-X" +
       " Rule that reports an error for lines with the letters 'EX'\n" +
       "./test/custom-rules.md: 7: letter-E-letter-X" +
@@ -1621,9 +1600,9 @@ module.exports.customRulesV1 = function customRulesV1(test) {
     var expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
-        "ruleName": "blockquote",
-        "ruleAlias": "blockquote",
-        "ruleDescription": "Rule that reports an error for blockquotes",
+        "ruleName": "any-blockquote",
+        "ruleAlias": "any-blockquote",
+        "ruleDescription": "Rule that reports an error for any blockquote",
         "errorDetail": "Blockquote spans 1 line(s).",
         "errorContext": "> Block",
         "errorRange": null },
@@ -1662,6 +1641,13 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "errorDetail": "Line number 12",
         "errorContext": null,
         "errorRange": null },
+      { "lineNumber": 1,
+        "ruleName": "first-line",
+        "ruleAlias": "first-line",
+        "ruleDescription": "Rule that reports an error for the first line",
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null },
       { "lineNumber": 3,
         "ruleName": "letters-E-X",
         "ruleAlias": "letter-E-letter-X",
@@ -1682,8 +1668,8 @@ module.exports.customRulesV1 = function customRulesV1(test) {
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     var actualMessage = actualResult.toString();
     var expectedMessage =
-      "./test/custom-rules.md: 12: blockquote/blockquote" +
-      " Rule that reports an error for blockquotes" +
+      "./test/custom-rules.md: 12: any-blockquote/any-blockquote" +
+      " Rule that reports an error for any blockquote" +
       " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
       "./test/custom-rules.md: 2: every-n-lines/every-n-lines" +
       " Rule that reports an error every N lines [Line number 2]\n" +
@@ -1695,6 +1681,8 @@ module.exports.customRulesV1 = function customRulesV1(test) {
       " Rule that reports an error every N lines [Line number 10]\n" +
       "./test/custom-rules.md: 12: every-n-lines/every-n-lines" +
       " Rule that reports an error every N lines [Line number 12]\n" +
+      "./test/custom-rules.md: 1: first-line/first-line" +
+      " Rule that reports an error for the first line\n" +
       "./test/custom-rules.md: 3: letters-E-X/letter-E-letter-X" +
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]\n" +
@@ -1719,8 +1707,8 @@ module.exports.customRulesV2 = function customRulesV2(test) {
     var expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
-        "ruleNames": [ "blockquote" ],
-        "ruleDescription": "Rule that reports an error for blockquotes",
+        "ruleNames": [ "any-blockquote" ],
+        "ruleDescription": "Rule that reports an error for any blockquote",
         "errorDetail": "Blockquote spans 1 line(s).",
         "errorContext": "> Block",
         "errorRange": null },
@@ -1754,6 +1742,12 @@ module.exports.customRulesV2 = function customRulesV2(test) {
         "errorDetail": "Line number 12",
         "errorContext": null,
         "errorRange": null },
+      { "lineNumber": 1,
+        "ruleNames": [ "first-line" ],
+        "ruleDescription": "Rule that reports an error for the first line",
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null },
       { "lineNumber": 3,
         "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
         "ruleDescription":
@@ -1772,8 +1766,8 @@ module.exports.customRulesV2 = function customRulesV2(test) {
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     var actualMessage = actualResult.toString();
     var expectedMessage =
-      "./test/custom-rules.md: 12: blockquote" +
-      " Rule that reports an error for blockquotes" +
+      "./test/custom-rules.md: 12: any-blockquote" +
+      " Rule that reports an error for any blockquote" +
       " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
       " Rule that reports an error every N lines [Line number 2]\n" +
@@ -1785,6 +1779,8 @@ module.exports.customRulesV2 = function customRulesV2(test) {
       " Rule that reports an error every N lines [Line number 10]\n" +
       "./test/custom-rules.md: 12: every-n-lines" +
       " Rule that reports an error every N lines [Line number 12]\n" +
+      "./test/custom-rules.md: 1: first-line" +
+      " Rule that reports an error for the first line\n" +
       "./test/custom-rules.md: 3: letters-E-X/letter-E-letter-X/contains-ex" +
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]\n" +
@@ -1815,11 +1811,200 @@ module.exports.customRulesConfig = function customRulesConfig(test) {
     test.ifError(err);
     var expectedResult = {};
     expectedResult[customRulesMd] = {
-      "blockquote": [ 12 ],
+      "any-blockquote": [ 12 ],
       "every-n-lines": [ 3, 6, 12 ],
+      "first-line": [ 1 ],
       "letters-E-X": [ 7 ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
+  test.expect(76);
+  [
+    [ "names", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
+    [ "description", [ null, 10, "", [] ] ],
+    [ "tags", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
+    [ "function", [ null, "string", [] ] ]
+  ].forEach(function forProperty(property) {
+    var propertyName = property[0];
+    property[1].forEach(function forPropertyValue(propertyValue) {
+      var badRule = shared.clone(customRules.anyBlockquote);
+      badRule[propertyName] = propertyValue;
+      var options = {
+        "customRules": [ badRule ]
+      };
+      test.throws(function badRuleCall() {
+        markdownlint.sync(options);
+      }, function testError(err) {
+        test.ok(err, "Did not get an error for missing property.");
+        test.ok(err instanceof Error, "Error not instance of Error.");
+        test.equal(err.message,
+          "Property '" + propertyName +
+            "' of custom rule at index 0 is incorrect.",
+          "Incorrect message for missing property.");
+        return true;
+      }, "Did not get exception for missing property.");
+    });
+  });
+  test.done();
+};
+
+module.exports.customRulesUsedNameName =
+function customRulesUsedNameName(test) {
+  test.expect(4);
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name", "NO-missing-SPACE-atx" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function noop() {}
+      }
+    ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for duplicate name.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message,
+      "Name 'NO-missing-SPACE-atx' of custom rule at index 0 is " +
+        "already used as a name or tag.",
+      "Incorrect message for duplicate name.");
+    test.ok(!result, "Got result for duplicate name.");
+    test.done();
+  });
+};
+
+module.exports.customRulesUsedNameTag =
+function customRulesUsedNameTag(test) {
+  test.expect(4);
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name", "HtMl" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function noop() {}
+      }
+    ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for duplicate name.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message,
+      "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
+      "Incorrect message for duplicate name.");
+    test.ok(!result, "Got result for duplicate name.");
+    test.done();
+  });
+};
+
+module.exports.customRulesUsedTagName =
+function customRulesUsedTagName(test) {
+  test.expect(4);
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "filler" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function noop() {}
+      },
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag", "NO-missing-SPACE-atx" ],
+        "function": function noop() {}
+      }
+    ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for duplicate tag.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message,
+      "Tag 'NO-missing-SPACE-atx' of custom rule at index 1 is " +
+        "already used as a name.",
+      "Incorrect message for duplicate name.");
+    test.ok(!result, "Got result for duplicate tag.");
+    test.done();
+  });
+};
+
+module.exports.customRulesThrowForFile =
+function customRulesThrowForFile(test) {
+  test.expect(4);
+  var exceptionMessage = "Test exception message";
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
+        }
+      }
+    ],
+    "files": [ "./test/custom-rules.md" ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for function thrown.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, exceptionMessage,
+      "Incorrect message for function thrown.");
+    test.ok(!result, "Got result for function thrown.");
+    test.done();
+  });
+};
+
+module.exports.customRulesThrowForFileSync =
+function customRulesThrowForFileSync(test) {
+  test.expect(4);
+  var exceptionMessage = "Test exception message";
+  test.throws(function customRuleThrowsCall() {
+    markdownlint.sync({
+      "customRules": [
+        {
+          "names": [ "name" ],
+          "description": "description",
+          "tags": [ "tag" ],
+          "function": function throws() {
+            throw new Error(exceptionMessage);
+          }
+        }
+      ],
+      "files": [ "./test/custom-rules.md" ]
+    });
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for function thrown.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, exceptionMessage,
+      "Incorrect message for function thrown.");
+    return true;
+  }, "Did not get exception for function thrown.");
+  test.done();
+};
+
+module.exports.customRulesThrowForString =
+function customRulesThrowForString(test) {
+  test.expect(4);
+  var exceptionMessage = "Test exception message";
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
+        }
+      }
+    ],
+    "strings": [ "String" ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for function thrown.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, exceptionMessage,
+      "Incorrect message for function thrown.");
+    test.ok(!result, "Got result for function thrown.");
     test.done();
   });
 };
