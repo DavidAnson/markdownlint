@@ -13,9 +13,7 @@ module.exports = {
       if ((lineNumber % n) === 0) {
         onError({
           "lineNumber": lineNumber,
-          "detail": "Line number " + lineNumber,
-          "context": null,
-          "range": null
+          "detail": "Line number " + lineNumber
         });
       }
     });

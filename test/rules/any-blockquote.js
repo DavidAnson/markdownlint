@@ -14,8 +14,7 @@ module.exports = {
       onError({
         "lineNumber": blockquote.lineNumber,
         "detail": "Blockquote spans " + lines + " line(s).",
-        "context": blockquote.line.substr(0, 7),
-        "range": null
+        "context": blockquote.line.substr(0, 7)
       });
     });
   }

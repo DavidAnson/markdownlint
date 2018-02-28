@@ -2008,3 +2008,73 @@ function customRulesThrowForString(test) {
     test.done();
   });
 };
+
+module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
+  test.expect(4);
+  var options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function onErrorNull(params, onError) {
+          onError(null);
+        }
+      }
+    ],
+    "strings": [ "String" ]
+  };
+  test.throws(function badErrorCall() {
+    markdownlint.sync(options);
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for null object.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message,
+      "Property 'lineNumber' of onError parameter is incorrect.",
+      "Incorrect message for bad object.");
+    return true;
+  }, "Did not get exception for null object.");
+  test.done();
+};
+
+module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
+  test.expect(52);
+  [
+    [ "lineNumber", [ null, "string" ] ],
+    [ "detail", [ 10, "", [] ] ],
+    [ "context", [ 10, "", [] ] ],
+    [ "range", [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ]
+  ].forEach(function forProperty(property) {
+    var propertyName = property[0];
+    property[1].forEach(function forPropertyValue(propertyValue) {
+      var badObject = {
+        "lineNumber": 1
+      };
+      badObject[propertyName] = propertyValue;
+      var options = {
+        "customRules": [
+          {
+            "names": [ "name" ],
+            "description": "description",
+            "tags": [ "tag" ],
+            "function": function onErrorBad(params, onError) {
+              onError(badObject);
+            }
+          }
+        ],
+        "strings": [ "String" ]
+      };
+      test.throws(function badErrorCall() {
+        markdownlint.sync(options);
+      }, function testError(err) {
+        test.ok(err, "Did not get an error for bad object.");
+        test.ok(err instanceof Error, "Error not instance of Error.");
+        test.equal(err.message,
+          "Property '" + propertyName + "' of onError parameter is incorrect.",
+          "Incorrect message for bad object.");
+        return true;
+      }, "Did not get exception for bad object.");
+    });
+  });
+  test.done();
+};

@@ -9,10 +9,7 @@ module.exports = {
   "function": function rule(params, onError) {
     // Unconditionally report an error for line 1
     onError({
-      "lineNumber": 1,
-      "detail": null,
-      "context": null,
-      "range": null
+      "lineNumber": 1
     });
   }
 };

@@ -17,9 +17,7 @@ module.exports = {
         if (index !== -1) {
           onError({
             "lineNumber": text.lineNumber,
-            "detail": null,
-            "context": text.content.substr(index - 1, 4),
-            "range": null
+            "context": text.content.substr(index - 1, 4)
           });
         }
       });
