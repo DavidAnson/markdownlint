@@ -8,7 +8,7 @@ This line however, while very long, doesn't have whitespace after the 80th colum
 
     [This long line is comprised entirely of a link](http://example.com "But is inside a code block") {MD013}
 
-```md
+```markdown
 [This long line is comprised entirely of a link](http://example.com "But is inside a code block") {MD013}
 ```
 

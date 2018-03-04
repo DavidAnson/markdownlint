@@ -63,7 +63,7 @@ A rule is implemented as an `Object` with four required properties:
 
 Linting the Markdown document:
 
-```md
+```markdown
 # Title
 
 Text *text* text.

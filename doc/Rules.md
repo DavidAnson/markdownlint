@@ -1258,13 +1258,13 @@ people who may not be able to see it.
 
 Alternate text is commonly specified inline as:
 
-```md
+```markdown
 ![Alternate text](image.jpg)
 ```
 
 Or with reference syntax as:
 
-```md
+```markdown
 ![Alternate text][ref]
 
 ...

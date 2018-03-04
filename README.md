@@ -136,7 +136,7 @@ comments don't appear in the final markup):
 
 For example:
 
-```md
+```markdown
 <!-- markdownlint-disable MD037 -->
 deliberate space * in * emphasis
 <!-- markdownlint-enable MD037 -->
@@ -145,7 +145,7 @@ deliberate space * in * emphasis
 Changes take effect starting with the line a comment is on, so the following
 has no effect:
 
-```md
+```markdown
 space * in * emphasis <!-- markdownlint-disable --> <!-- markdownlint-enable -->
 ```
 
