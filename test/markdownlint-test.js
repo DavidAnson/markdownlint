@@ -2078,3 +2078,18 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
   });
   test.done();
 };
+
+module.exports.customRulesDoc = function customRulesDoc(test) {
+  test.expect(2);
+  markdownlint({
+    "files": "doc/CustomRules.md",
+    "config": {
+      "MD013": { "line_length": 200 }
+    }
+  }, function callback(err, actual) {
+    test.ifError(err);
+    var expected = { "doc/CustomRules.md": [] };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.done();
+  });
+};
