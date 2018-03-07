@@ -22,6 +22,9 @@
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
+  "engines": {
+    "node": ">=0.10"
+  },
   "dependencies": {
     "markdown-it": "8.4.0"
   },
