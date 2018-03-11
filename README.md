@@ -676,6 +676,8 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
   * 0.6.4 - Improve MD029/MD042, update dependencies.
 * 0.7.0 - `resultVersion` defaults to 2 (breaking change), add MD045, improve MD029,
           remove trimLeft/trimRight, split rules, refactor, update dependencies.
+* 0.8.0 - Add support for using and authoring custom rules, improve MD004/MD007/MD013,
+          add `engines` to `package.json`, refactor, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
