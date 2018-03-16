@@ -36,6 +36,7 @@ test cases came directly from that project.
 * [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
 * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
 * [Sublime Text markdownlint for Sublime Text](https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint)
+* [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
 * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
 
 ## Demonstration
