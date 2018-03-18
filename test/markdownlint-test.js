@@ -1998,7 +1998,9 @@ function customRulesThrowForString(test) {
         }
       }
     ],
-    "strings": [ "String" ]
+    "strings": {
+      "string": "String"
+    }
   }, function callback(err, result) {
     test.ok(err, "Did not get an error for function thrown.");
     test.ok(err instanceof Error, "Error not instance of Error.");
@@ -2022,7 +2024,9 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
         }
       }
     ],
-    "strings": [ "String" ]
+    "strings": {
+      "string": "String"
+    }
   };
   test.throws(function badErrorCall() {
     markdownlint.sync(options);
@@ -2038,11 +2042,11 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
 };
 
 module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
-  test.expect(52);
+  test.expect(44);
   [
     [ "lineNumber", [ null, "string" ] ],
-    [ "detail", [ 10, "", [] ] ],
-    [ "context", [ 10, "", [] ] ],
+    [ "detail", [ 10, [] ] ],
+    [ "context", [ 10, [] ] ],
     [ "range", [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ]
   ].forEach(function forProperty(property) {
     var propertyName = property[0];
@@ -2062,7 +2066,9 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
             }
           }
         ],
-        "strings": [ "String" ]
+        "strings": {
+          "string": "String"
+        }
       };
       test.throws(function badErrorCall() {
         markdownlint.sync(options);
@@ -2077,6 +2083,47 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
     });
   });
   test.done();
+};
+
+module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
+  test.expect(2);
+  var options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function onErrorNull(params, onError) {
+          onError({
+            "lineNumber": 1,
+            "detail": "",
+            "context": "",
+            "range": [ 0, 0 ]
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    var expectedResult = {
+      "string": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "name" ],
+          "ruleDescription": "description",
+          "errorDetail": null,
+          "errorContext": null,
+          "errorRange": [ 0, 0 ]
+        }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
 };
 
 module.exports.customRulesDoc = function customRulesDoc(test) {
