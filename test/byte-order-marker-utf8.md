@@ -1,3 +1,3 @@
-﻿# Header
+﻿# Heading
 
 Text

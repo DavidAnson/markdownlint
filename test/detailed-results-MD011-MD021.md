@@ -1,4 +1,4 @@
-# Top level header
+# Top level heading
 
 <!-- markdownlint-disable MD003 -->
 

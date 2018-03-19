@@ -6,62 +6,62 @@ versions of the examples.
 
 <a name="md001"></a>
 
-## MD001 - Header levels should only increment by one level at a time
+## MD001 - Heading levels should only increment by one level at a time
 
-Tags: headers
+Tags: headings, headers
 
-Aliases: header-increment
+Aliases: heading-increment, header-increment
 
-This rule is triggered when you skip header levels in a markdown document, for
+This rule is triggered when you skip heading levels in a markdown document, for
 example:
 
 ```markdown
-# Header 1
+# Heading 1
 
-### Header 3
+### Heading 3
 
-We skipped out a 2nd level header in this document
+We skipped out a 2nd level heading in this document
 ```
 
-When using multiple header levels, nested headers should increase by only one
+When using multiple heading levels, nested headings should increase by only one
 level at a time:
 
 ```markdown
-# Header 1
+# Heading 1
 
-## Header 2
+## Heading 2
 
-### Header 3
+### Heading 3
 
-#### Header 4
+#### Heading 4
 
-## Another Header 2
+## Another Heading 2
 
-### Another Header 3
+### Another Heading 3
 ```
 
 <a name="md002"></a>
 
-## MD002 - First header should be a top level header
+## MD002 - First heading should be a top level heading
 
-Tags: headers
+Tags: headings, headers
 
-Aliases: first-header-h1
+Aliases: first-heading-h1, first-header-h1
 
 Parameters: level (number; default 1)
 
-This rule is triggered when the first header in the document isn't a h1 header:
+This rule is triggered when the first heading in the document isn't a h1 heading:
 
 ```markdown
-## This isn't a H1 header
+## This isn't a H1 heading
 
-### Another header
+### Another heading
 ```
 
-The first header in the document should be a h1 header:
+The first heading in the document should be a h1 heading:
 
 ```markdown
-# Start with a H1 header
+# Start with a H1 heading
 
 ## Then use a H2 for subsections
 ```
@@ -71,16 +71,16 @@ cases where an h1 is added externally.
 
 <a name="md003"></a>
 
-## MD003 - Header style
+## MD003 - Heading style
 
-Tags: headers
+Tags: headings, headers
 
-Aliases: header-style
+Aliases: heading-style, header-style
 
 Parameters: style ("consistent", "atx", "atx_closed", "setext",
 "setext_with_atx", "setext_with_atx_closed"; default "consistent")
 
-This rule is triggered when different header styles (atx, setext, and 'closed'
+This rule is triggered when different heading styles (atx, setext, and 'closed'
 atx) are used in the same document:
 
 ```markdown
@@ -92,7 +92,7 @@ Setext style H1
 ===============
 ```
 
-Be consistent with the style of header used in a document:
+Be consistent with the style of heading used in a document:
 
 ```markdown
 # ATX style H1
@@ -101,7 +101,7 @@ Be consistent with the style of header used in a document:
 ```
 
 The setext_with_atx and setext_with_atx_closed doc styles allow atx-style
-headers of level 3 or more in documents with setext style headers:
+headings of level 3 or more in documents with setext style headings:
 
 ```markdown
 Setext style H1
@@ -113,7 +113,7 @@ Setext style H2
 ### ATX style H3
 ```
 
-Note: the configured header style can be a specific style to use (atx,
+Note: the configured heading style can be a specific style to use (atx,
 atx_closed, setext, setext_with_atx, setext_with_atx_closed), or simply require
 that the usage be consistent within the document.
 
@@ -308,7 +308,7 @@ to allow this:
 
 ```markdown
 - list item text
-  
+
   list item text
 ```
 
@@ -416,7 +416,9 @@ Tags: line_length
 
 Aliases: line-length
 
-Parameters: line_length, code_blocks, tables, headers (number; default 80, boolean; default true)
+Parameters: line_length, code_blocks, tables, headings, headers (number; default 80, boolean; default true)
+
+> If a `headings` parameter is not provided, `headers` will be checked instead for backward compatibility.
 
 This rule is triggered when there are lines that are longer than the
 configured line length (default: 80 characters). To fix this, split the line
@@ -426,8 +428,8 @@ This rule has an exception where there is no whitespace beyond the configured
 line length. This allows you to still include items such as long URLs without
 being forced to break them in the middle.
 
-You have the option to exclude this rule for code blocks, tables, or headers.
-To do so, set the `code_blocks`, `tables`, or `headers` parameter(s) to false.
+You have the option to exclude this rule for code blocks, tables, or headings.
+To do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.
 
 Code blocks are included in this rule by default since it is often a
 requirement for document readability, and tentatively compatible with code
@@ -478,185 +480,185 @@ for more information.
 
 <a name="md018"></a>
 
-## MD018 - No space after hash on atx style header
+## MD018 - No space after hash on atx style heading
 
-Tags: headers, atx, spaces
+Tags: headings, headers, atx, spaces
 
 Aliases: no-missing-space-atx
 
 This rule is triggered when spaces are missing after the hash characters
-in an atx style header:
+in an atx style heading:
 
 ```markdown
-#Header 1
+#Heading 1
 
-##Header 2
+##Heading 2
 ```
 
-To fix this, separate the header text from the hash character by a single
+To fix this, separate the heading text from the hash character by a single
 space:
 
 ```markdown
-# Header 1
+# Heading 1
 
-## Header 2
+## Heading 2
 ```
 
 <a name="md019"></a>
 
-## MD019 - Multiple spaces after hash on atx style header
+## MD019 - Multiple spaces after hash on atx style heading
 
-Tags: headers, atx, spaces
+Tags: headings, headers, atx, spaces
 
 Aliases: no-multiple-space-atx
 
 This rule is triggered when more than one space is used to separate the
-header text from the hash characters in an atx style header:
+heading text from the hash characters in an atx style heading:
 
 ```markdown
-#  Header 1
+#  Heading 1
 
-##  Header 2
+##  Heading 2
 ```
 
-To fix this, separate the header text from the hash character by a single
+To fix this, separate the heading text from the hash character by a single
 space:
 
 ```markdown
-# Header 1
+# Heading 1
 
-## Header 2
+## Heading 2
 ```
 
 <a name="md020"></a>
 
-## MD020 - No space inside hashes on closed atx style header
+## MD020 - No space inside hashes on closed atx style heading
 
-Tags: headers, atx_closed, spaces
+Tags: headings, headers, atx_closed, spaces
 
 Aliases: no-missing-space-closed-atx
 
 This rule is triggered when spaces are missing inside the hash characters
-in a closed atx style header:
+in a closed atx style heading:
 
 ```markdown
-#Header 1#
+#Heading 1#
 
-##Header 2##
+##Heading 2##
 ```
 
-To fix this, separate the header text from the hash character by a single
+To fix this, separate the heading text from the hash character by a single
 space:
 
 ```markdown
-# Header 1 #
+# Heading 1 #
 
-## Header 2 ##
+## Heading 2 ##
 ```
 
-Note: this rule will fire if either side of the header is missing spaces.
+Note: this rule will fire if either side of the heading is missing spaces.
 
 <a name="md021"></a>
 
-## MD021 - Multiple spaces inside hashes on closed atx style header
+## MD021 - Multiple spaces inside hashes on closed atx style heading
 
-Tags: headers, atx_closed, spaces
+Tags: headings, headers, atx_closed, spaces
 
 Aliases: no-multiple-space-closed-atx
 
 This rule is triggered when more than one space is used to separate the
-header text from the hash characters in a closed atx style header:
+heading text from the hash characters in a closed atx style heading:
 
 ```markdown
-#  Header 1  #
+#  Heading 1  #
 
-##  Header 2  ##
+##  Heading 2  ##
 ```
 
-To fix this, separate the header text from the hash character by a single
+To fix this, separate the heading text from the hash character by a single
 space:
 
 ```markdown
-# Header 1 #
+# Heading 1 #
 
-## Header 2 ##
+## Heading 2 ##
 ```
 
-Note: this rule will fire if either side of the header contains multiple
+Note: this rule will fire if either side of the heading contains multiple
 spaces.
 
 <a name="md022"></a>
 
-## MD022 - Headers should be surrounded by blank lines
+## MD022 - Headings should be surrounded by blank lines
 
-Tags: headers, blank_lines
+Tags: headings, headers, blank_lines
 
-Aliases: blanks-around-headers
+Aliases: blanks-around-headings, blanks-around-headers
 
-This rule is triggered when headers (any style) are either not preceded or not
+This rule is triggered when headings (any style) are either not preceded or not
 followed by a blank line:
 
 ```markdown
-# Header 1
+# Heading 1
 Some text
 
 Some more text
-## Header 2
+## Heading 2
 ```
 
-To fix this, ensure that all headers have a blank line both before and after
-(except where the header is at the beginning or end of the document):
+To fix this, ensure that all headings have a blank line both before and after
+(except where the heading is at the beginning or end of the document):
 
 ```markdown
-# Header 1
+# Heading 1
 
 Some text
 
 Some more text
 
-## Header 2
+## Heading 2
 ```
 
 Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
-not parse headers that don't have a blank line before, and will parse them as
+not parse headings that don't have a blank line before, and will parse them as
 regular text.
 
 <a name="md023"></a>
 
-## MD023 - Headers must start at the beginning of the line
+## MD023 - Headings must start at the beginning of the line
 
-Tags: headers, spaces
+Tags: headings, headers, spaces
 
-Aliases: header-start-left
+Aliases: heading-start-left, header-start-left
 
-This rule is triggered when a header is indented by one or more spaces:
-
-```markdown
-Some text
-
-  # Indented header
-```
-
-To fix this, ensure that all headers start at the beginning of the line:
+This rule is triggered when a heading is indented by one or more spaces:
 
 ```markdown
 Some text
 
-# Header
+  # Indented heading
 ```
 
-Rationale: Headers that don't start at the beginning of the line will not be
-parsed as headers, and will instead appear as regular text.
+To fix this, ensure that all headings start at the beginning of the line:
+
+```markdown
+Some text
+
+# Heading
+```
+
+Rationale: Headings that don't start at the beginning of the line will not be
+parsed as headings, and will instead appear as regular text.
 
 <a name="md024"></a>
 
-## MD024 - Multiple headers with the same content
+## MD024 - Multiple headings with the same content
 
-Tags: headers
+Tags: headings, headers
 
-Aliases: no-duplicate-header
+Aliases: no-duplicate-heading, no-duplicate-header
 
-This rule is triggered if there are multiple headers in the document that have
+This rule is triggered if there are multiple headings in the document that have
 the same text:
 
 ```markdown
@@ -665,7 +667,7 @@ the same text:
 ## Some text
 ```
 
-To fix this, ensure that the content of each header is different:
+To fix this, ensure that the content of each heading is different:
 
 ```markdown
 # Some text
@@ -673,76 +675,76 @@ To fix this, ensure that the content of each header is different:
 ## Some more text
 ```
 
-Rationale: Some markdown parses generate anchors for headers based on the
-header name, and having headers with the same content can cause problems with
+Rationale: Some markdown parses generate anchors for headings based on the
+heading name, and having headings with the same content can cause problems with
 this.
 
 <a name="md025"></a>
 
-## MD025 - Multiple top level headers in the same document
+## MD025 - Multiple top level headings in the same document
 
-Tags: headers
+Tags: headings, headers
 
 Aliases: single-h1
 
 Parameters: level (number; default 1)
 
-This rule is triggered when a top level header is in use (the first line of
-the file is a h1 header), and more than one h1 header is in use in the
+This rule is triggered when a top level heading is in use (the first line of
+the file is a h1 heading), and more than one h1 heading is in use in the
 document:
 
 ```markdown
-# Top level header
+# Top level heading
 
-# Another top level header
+# Another top level heading
 ```
 
-To fix, structure your document so that there is a single h1 header that is
-the title for the document, and all later headers are h2 or lower level
-headers:
+To fix, structure your document so that there is a single h1 heading that is
+the title for the document, and all later headings are h2 or lower level
+headings:
 
 ```markdown
 # Title
 
-## Header
+## Heading
 
-## Another header
+## Another heading
 ```
 
-Rationale: A top level header is a h1 on the first line of the file, and
+Rationale: A top level heading is a h1 on the first line of the file, and
 serves as the title for the document. If this convention is in use, then there
 can not be more than one title for the document, and the entire document
-should be contained within this header.
+should be contained within this heading.
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
 cases where an h1 is added externally.
 
 <a name="md026"></a>
 
-## MD026 - Trailing punctuation in header
+## MD026 - Trailing punctuation in heading
 
-Tags: headers
+Tags: headings, headers
 
 Aliases: no-trailing-punctuation
 
 Parameters: punctuation (string; default ".,;:!?")
 
-This rule is triggered on any header that has a punctuation character as the
+This rule is triggered on any heading that has a punctuation character as the
 last character in the line:
 
 ```markdown
-# This is a header.
+# This is a heading.
 ```
 
 To fix this, remove any trailing punctuation:
 
 ```markdown
-# This is a header
+# This is a heading
 ```
 
 Note: The punctuation parameter can be used to specify what characters class
-as punctuation at the end of the header. For example, you can set it to
-`".,;:!"` to allow headers with question marks in them, such as might be used
+as punctuation at the end of the heading. For example, you can set it to
+`".,;:!"` to allow headings with question marks in them, such as might be used
 in an FAQ.
 
 <a name="md027"></a>
@@ -1027,13 +1029,13 @@ Parameters: allowed_elements (array of string; default empty)
 This rule is triggered whenever raw HTML is used in a markdown document:
 
 ```markdown
-<h1>Inline HTML header</h1>
+<h1>Inline HTML heading</h1>
 ```
 
 To fix this, use 'pure' markdown instead of including raw HTML:
 
 ```markdown
-# Markdown header
+# Markdown heading
 ```
 
 Rationale: Raw HTML is allowed in markdown, but this rule is included for
@@ -1118,16 +1120,16 @@ is allowed.
 
 <a name="md036"></a>
 
-## MD036 - Emphasis used instead of a header
+## MD036 - Emphasis used instead of a heading
 
-Tags: headers, emphasis
+Tags: headings, headers, emphasis
 
-Aliases: no-emphasis-as-header
+Aliases: no-emphasis-as-heading, no-emphasis-as-header
 
 Parameters: punctuation (string; default ".,;:!?")
 
 This check looks for instances where emphasized (i.e. bold or italic) text is
-used to separate sections, where a header should be used instead:
+used to separate sections, where a heading should be used instead:
 
 ```markdown
 **My document**
@@ -1139,7 +1141,7 @@ _Another section_
 Consectetur adipiscing elit, sed do eiusmod.
 ```
 
-To fix this, use markdown headers instead of emphasized text to denote
+To fix this, use markdown headings instead of emphasized text to denote
 sections:
 
 ```markdown
@@ -1277,27 +1279,27 @@ echo Hello world
 
 <a name="md041"></a>
 
-## MD041 - First line in file should be a top level header
+## MD041 - First line in file should be a top level heading
 
-Tags: headers
+Tags: headings, headers
 
 Aliases: first-line-h1
 
 Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
 
 This rule is triggered when the first line in the file isn't a top level (h1)
-header:
+heading:
 
 ```markdown
-This is a file without a header
+This is a file without a heading
 ```
 
-To fix this, add a header to the top of your file:
+To fix this, add a heading to the top of your file:
 
 ```markdown
-# File with header
+# File with heading
 
-This is a file with a top level header
+This is a file with a top level heading
 ```
 
 The `level` parameter can be used to change the top level (ex: to h2) in cases
@@ -1343,16 +1345,18 @@ But non-empty fragments will not:
 
 <a name="md043"></a>
 
-## MD043 - Required header structure
+## MD043 - Required heading structure
 
-Tags: headers
+Tags: headings, headers
 
-Aliases: required-headers
+Aliases: required-headings, required-headers
 
-Parameters: headers (array of string; default `null` for disabled)
+Parameters: headings, headers (array of string; default `null` for disabled)
 
-This rule is triggered when the headers in a file do not match the array of
-headers passed to the rule. It can be used to enforce a standard header
+> If a `headings` parameter is not provided, `headers` will be checked instead for backward compatibility.
+
+This rule is triggered when the headings in a file do not match the array of
+headings passed to the rule. It can be used to enforce a standard heading
 structure for a set of files.
 
 To require exactly the following structure:
@@ -1363,7 +1367,7 @@ To require exactly the following structure:
 ### Detail
 ```
 
-Set the `headers` parameter to:
+Set the `headings` parameter to:
 
 ```json
 [
@@ -1373,7 +1377,7 @@ Set the `headers` parameter to:
 ]
 ```
 
-To allow optional headers as with the following structure:
+To allow optional headings as with the following structure:
 
 ```markdown
 # Head
@@ -1383,8 +1387,8 @@ To allow optional headers as with the following structure:
 ### Notes (optional)
 ```
 
-Use the special value `"*"` meaning "one or more unspecified headers" and set
-the `headers` parameter to:
+Use the special value `"*"` meaning "one or more unspecified headings" and set
+the `headings` parameter to:
 
 ```json
 [
@@ -1397,10 +1401,10 @@ the `headers` parameter to:
 ```
 
 When an error is detected, this rule outputs the line number of the first
-problematic header (otherwise, it outputs the last line number of the file).
+problematic heading (otherwise, it outputs the last line number of the file).
 
-Note that while the `headers` parameter uses the "## Text" ATX header style for
-simplicity, a file may use any supported header style.
+Note that while the `headings` parameter uses the "## Text" ATX heading style for
+simplicity, a file may use any supported heading style.
 
 <a name="md044"></a>
 

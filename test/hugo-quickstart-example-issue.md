@@ -5,4 +5,4 @@ title = "Good to Great Book Review"
 
 +++
 
-# Header 1 {MD041}
+# Heading 1 {MD041}

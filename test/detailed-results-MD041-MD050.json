@@ -2,8 +2,8 @@
   "default": true,
   "MD041": true,
   "MD043": {
-    "headers": [
-      "# Header"
+    "headings": [
+      "# Heading"
     ]
   },
   "MD044": {
