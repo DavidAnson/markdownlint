@@ -10,7 +10,7 @@
     {
         "lineNumber": 4,
         "ruleNames": [ "MD041", "first-line-h1" ],
-        "ruleDescription": "First line in file should be a top level header",
+        "ruleDescription": "First line in file should be a top level heading",
         "errorDetail": null,
         "errorContext": "Text",
         "errorRange": null

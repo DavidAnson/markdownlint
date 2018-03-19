@@ -3,7 +3,7 @@ layout: post
 title: Title with ---
 tags: front matter
 ---
-## Header {MD002}
+## Heading {MD002}
 
 ---
 

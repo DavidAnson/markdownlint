@@ -1,24 +1,24 @@
 [
     {
         "lineNumber": 3,
-        "ruleNames": [ "MD001", "header-increment" ],
-        "ruleDescription": "Header levels should only increment by one level at a time",
+        "ruleNames": [ "MD001", "heading-increment", "header-increment" ],
+        "ruleDescription": "Heading levels should only increment by one level at a time",
         "errorDetail": "Expected: h3; Actual: h4",
         "errorContext": null,
         "errorRange": null
     },
     {
         "lineNumber": 1,
-        "ruleNames": [ "MD002", "first-header-h1" ],
-        "ruleDescription": "First header should be a top level header",
+        "ruleNames": [ "MD002", "first-heading-h1", "first-header-h1" ],
+        "ruleDescription": "First heading should be a top level heading",
         "errorDetail": "Expected: h1; Actual: h2",
         "errorContext": null,
         "errorRange": null
     },
     {
         "lineNumber": 5,
-        "ruleNames": [ "MD003", "header-style" ],
-        "ruleDescription": "Header style",
+        "ruleNames": [ "MD003", "heading-style", "header-style" ],
+        "ruleDescription": "Heading style",
         "errorDetail": "Expected: atx; Actual: atx_closed",
         "errorContext": null,
         "errorRange": null

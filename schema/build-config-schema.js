@@ -42,7 +42,7 @@ rules.forEach(function forRule(rule) {
     case "MD025":
       scheme.properties = {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         }
@@ -51,7 +51,7 @@ rules.forEach(function forRule(rule) {
     case "MD003":
       scheme.properties = {
         "style": {
-          "description": "Header style",
+          "description": "Heading style",
           "type": "string",
           "enum": [
             "consistent",
@@ -139,8 +139,13 @@ rules.forEach(function forRule(rule) {
           "type": "boolean",
           "default": true
         },
+        "headings": {
+          "description": "Include headings",
+          "type": "boolean",
+          "default": true
+        },
         "headers": {
-          "description": "Include headers",
+          "description": "Include headings",
           "type": "boolean",
           "default": true
         }
@@ -218,7 +223,7 @@ rules.forEach(function forRule(rule) {
     case "MD041":
       scheme.properties = {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         },
@@ -231,8 +236,16 @@ rules.forEach(function forRule(rule) {
       break;
     case "MD043":
       scheme.properties = {
+        "headings": {
+          "description": "List of headings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
         "headers": {
-          "description": "List of headers",
+          "description": "List of headings",
           "type": "array",
           "items": {
             "type": "string"

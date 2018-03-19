@@ -1,4 +1,4 @@
-# Header
+# Heading
 
 Text with Markdown Extra footnote[^1]
 
