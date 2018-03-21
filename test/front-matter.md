@@ -1,6 +1,6 @@
 ---
 front: matter
 ---
-# Header 1
+# Heading 1
 
-## Header 2
+## Heading 2

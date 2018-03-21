@@ -1,4 +1,4 @@
-# Header
+# Heading
 
 ```js
 
@@ -10,5 +10,5 @@
 ```
 
 ```spaces
-  
+
 ```

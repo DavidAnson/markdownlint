@@ -11,18 +11,18 @@ Here is a very very very very very very very very very very very very very very 
 
 This is a short line.
 
-| First Header  | Second Header | Third Header  | Fourth Header | Fifth Header  | Sixth  Header | {MD013}
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | {MD013}
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | {MD013}
-| ============= | ============= | ============= | ============= | ============= | ============= | {MD013}
-| Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | {MD013}
+| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading | {MD013}
+| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | {MD013}
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | {MD013}
+| ============== | ============== | ============== | ============== | ============== | ============== | {MD013}
+| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | {MD013}
 
 This is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}
 
 Another line.
 
-| First Header  | Second Header | Third Header  | Fourth Header | Fifth Header  | Sixth  Header | {MD013}
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- | {MD013}
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | {MD013}
-| ============= | ============= | ============= | ============= | ============= | ============= | {MD013}
-| Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | {MD013}
+| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading | {MD013}
+| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | {MD013}
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | {MD013}
+| ============== | ============== | ============== | ============== | ============== | ============== | {MD013}
+| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | {MD013}

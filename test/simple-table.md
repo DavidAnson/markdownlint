@@ -1,4 +1,4 @@
-# Header
+# Heading
 
 | Head |
 | ---- |

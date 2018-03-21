@@ -13,17 +13,22 @@
       "default": null
     },
     "MD001": {
-      "description": "MD001/header-increment - Header levels should only increment by one level at a time",
+      "description": "MD001/heading-increment/header-increment - Heading levels should only increment by one level at a time",
+      "type": "boolean",
+      "default": true
+    },
+    "heading-increment": {
+      "description": "MD001/heading-increment/header-increment - Heading levels should only increment by one level at a time",
       "type": "boolean",
       "default": true
     },
     "header-increment": {
-      "description": "MD001/header-increment - Header levels should only increment by one level at a time",
+      "description": "MD001/heading-increment/header-increment - Heading levels should only increment by one level at a time",
       "type": "boolean",
       "default": true
     },
     "MD002": {
-      "description": "MD002/first-header-h1 - First header should be a top level header",
+      "description": "MD002/first-heading-h1/first-header-h1 - First heading should be a top level heading",
       "type": [
         "boolean",
         "object"
@@ -31,7 +36,23 @@
       "default": true,
       "properties": {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
+          "type": "integer",
+          "default": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "first-heading-h1": {
+      "description": "MD002/first-heading-h1/first-header-h1 - First heading should be a top level heading",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "level": {
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         }
@@ -39,7 +60,7 @@
       "additionalProperties": false
     },
     "first-header-h1": {
-      "description": "MD002/first-header-h1 - First header should be a top level header",
+      "description": "MD002/first-heading-h1/first-header-h1 - First heading should be a top level heading",
       "type": [
         "boolean",
         "object"
@@ -47,7 +68,7 @@
       "default": true,
       "properties": {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         }
@@ -55,7 +76,7 @@
       "additionalProperties": false
     },
     "MD003": {
-      "description": "MD003/header-style - Header style",
+      "description": "MD003/heading-style/header-style - Heading style",
       "type": [
         "boolean",
         "object"
@@ -63,7 +84,31 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Header style",
+          "description": "Heading style",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "atx",
+            "atx_closed",
+            "setext",
+            "setext_with_atx",
+            "setext_with_atx_closed"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "heading-style": {
+      "description": "MD003/heading-style/header-style - Heading style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Heading style",
           "type": "string",
           "enum": [
             "consistent",
@@ -79,7 +124,7 @@
       "additionalProperties": false
     },
     "header-style": {
-      "description": "MD003/header-style - Header style",
+      "description": "MD003/heading-style/header-style - Heading style",
       "type": [
         "boolean",
         "object"
@@ -87,7 +132,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Header style",
+          "description": "Heading style",
           "type": "string",
           "enum": [
             "consistent",
@@ -339,8 +384,13 @@
           "type": "boolean",
           "default": true
         },
+        "headings": {
+          "description": "Include headings",
+          "type": "boolean",
+          "default": true
+        },
         "headers": {
-          "description": "Include headers",
+          "description": "Include headings",
           "type": "boolean",
           "default": true
         }
@@ -370,8 +420,13 @@
           "type": "boolean",
           "default": true
         },
+        "headings": {
+          "description": "Include headings",
+          "type": "boolean",
+          "default": true
+        },
         "headers": {
-          "description": "Include headers",
+          "description": "Include headings",
           "type": "boolean",
           "default": true
         }
@@ -389,77 +444,92 @@
       "default": true
     },
     "MD018": {
-      "description": "MD018/no-missing-space-atx - No space after hash on atx style header",
+      "description": "MD018/no-missing-space-atx - No space after hash on atx style heading",
       "type": "boolean",
       "default": true
     },
     "no-missing-space-atx": {
-      "description": "MD018/no-missing-space-atx - No space after hash on atx style header",
+      "description": "MD018/no-missing-space-atx - No space after hash on atx style heading",
       "type": "boolean",
       "default": true
     },
     "MD019": {
-      "description": "MD019/no-multiple-space-atx - Multiple spaces after hash on atx style header",
+      "description": "MD019/no-multiple-space-atx - Multiple spaces after hash on atx style heading",
       "type": "boolean",
       "default": true
     },
     "no-multiple-space-atx": {
-      "description": "MD019/no-multiple-space-atx - Multiple spaces after hash on atx style header",
+      "description": "MD019/no-multiple-space-atx - Multiple spaces after hash on atx style heading",
       "type": "boolean",
       "default": true
     },
     "MD020": {
-      "description": "MD020/no-missing-space-closed-atx - No space inside hashes on closed atx style header",
+      "description": "MD020/no-missing-space-closed-atx - No space inside hashes on closed atx style heading",
       "type": "boolean",
       "default": true
     },
     "no-missing-space-closed-atx": {
-      "description": "MD020/no-missing-space-closed-atx - No space inside hashes on closed atx style header",
+      "description": "MD020/no-missing-space-closed-atx - No space inside hashes on closed atx style heading",
       "type": "boolean",
       "default": true
     },
     "MD021": {
-      "description": "MD021/no-multiple-space-closed-atx - Multiple spaces inside hashes on closed atx style header",
+      "description": "MD021/no-multiple-space-closed-atx - Multiple spaces inside hashes on closed atx style heading",
       "type": "boolean",
       "default": true
     },
     "no-multiple-space-closed-atx": {
-      "description": "MD021/no-multiple-space-closed-atx - Multiple spaces inside hashes on closed atx style header",
+      "description": "MD021/no-multiple-space-closed-atx - Multiple spaces inside hashes on closed atx style heading",
       "type": "boolean",
       "default": true
     },
     "MD022": {
-      "description": "MD022/blanks-around-headers - Headers should be surrounded by blank lines",
+      "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
+      "type": "boolean",
+      "default": true
+    },
+    "blanks-around-headings": {
+      "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
       "type": "boolean",
       "default": true
     },
     "blanks-around-headers": {
-      "description": "MD022/blanks-around-headers - Headers should be surrounded by blank lines",
+      "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
       "type": "boolean",
       "default": true
     },
     "MD023": {
-      "description": "MD023/header-start-left - Headers must start at the beginning of the line",
+      "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",
+      "type": "boolean",
+      "default": true
+    },
+    "heading-start-left": {
+      "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",
       "type": "boolean",
       "default": true
     },
     "header-start-left": {
-      "description": "MD023/header-start-left - Headers must start at the beginning of the line",
+      "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",
       "type": "boolean",
       "default": true
     },
     "MD024": {
-      "description": "MD024/no-duplicate-header - Multiple headers with the same content",
+      "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
+      "type": "boolean",
+      "default": true
+    },
+    "no-duplicate-heading": {
+      "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
       "type": "boolean",
       "default": true
     },
     "no-duplicate-header": {
-      "description": "MD024/no-duplicate-header - Multiple headers with the same content",
+      "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
       "type": "boolean",
       "default": true
     },
     "MD025": {
-      "description": "MD025/single-h1 - Multiple top level headers in the same document",
+      "description": "MD025/single-h1 - Multiple top level headings in the same document",
       "type": [
         "boolean",
         "object"
@@ -467,7 +537,7 @@
       "default": true,
       "properties": {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         }
@@ -475,7 +545,7 @@
       "additionalProperties": false
     },
     "single-h1": {
-      "description": "MD025/single-h1 - Multiple top level headers in the same document",
+      "description": "MD025/single-h1 - Multiple top level headings in the same document",
       "type": [
         "boolean",
         "object"
@@ -483,7 +553,7 @@
       "default": true,
       "properties": {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         }
@@ -491,7 +561,7 @@
       "additionalProperties": false
     },
     "MD026": {
-      "description": "MD026/no-trailing-punctuation - Trailing punctuation in header",
+      "description": "MD026/no-trailing-punctuation - Trailing punctuation in heading",
       "type": [
         "boolean",
         "object"
@@ -507,7 +577,7 @@
       "additionalProperties": false
     },
     "no-trailing-punctuation": {
-      "description": "MD026/no-trailing-punctuation - Trailing punctuation in header",
+      "description": "MD026/no-trailing-punctuation - Trailing punctuation in heading",
       "type": [
         "boolean",
         "object"
@@ -747,7 +817,23 @@
       "additionalProperties": false
     },
     "MD036": {
-      "description": "MD036/no-emphasis-as-header - Emphasis used instead of a header",
+      "description": "MD036/no-emphasis-as-heading/no-emphasis-as-header - Emphasis used instead of a heading",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "punctuation": {
+          "description": "Punctuation characters",
+          "type": "string",
+          "default": ".,;:!?"
+        }
+      },
+      "additionalProperties": false
+    },
+    "no-emphasis-as-heading": {
+      "description": "MD036/no-emphasis-as-heading/no-emphasis-as-header - Emphasis used instead of a heading",
       "type": [
         "boolean",
         "object"
@@ -763,7 +849,7 @@
       "additionalProperties": false
     },
     "no-emphasis-as-header": {
-      "description": "MD036/no-emphasis-as-header - Emphasis used instead of a header",
+      "description": "MD036/no-emphasis-as-heading/no-emphasis-as-header - Emphasis used instead of a heading",
       "type": [
         "boolean",
         "object"
@@ -819,7 +905,7 @@
       "default": true
     },
     "MD041": {
-      "description": "MD041/first-line-h1 - First line in file should be a top level header",
+      "description": "MD041/first-line-h1 - First line in file should be a top level heading",
       "type": [
         "boolean",
         "object"
@@ -827,7 +913,7 @@
       "default": true,
       "properties": {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         },
@@ -840,7 +926,7 @@
       "additionalProperties": false
     },
     "first-line-h1": {
-      "description": "MD041/first-line-h1 - First line in file should be a top level header",
+      "description": "MD041/first-line-h1 - First line in file should be a top level heading",
       "type": [
         "boolean",
         "object"
@@ -848,7 +934,7 @@
       "default": true,
       "properties": {
         "level": {
-          "description": "Header level",
+          "description": "Heading level",
           "type": "integer",
           "default": 1
         },
@@ -871,15 +957,50 @@
       "default": true
     },
     "MD043": {
-      "description": "MD043/required-headers - Required header structure",
+      "description": "MD043/required-headings/required-headers - Required heading structure",
       "type": [
         "boolean",
         "object"
       ],
       "default": true,
       "properties": {
+        "headings": {
+          "description": "List of headings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
         "headers": {
-          "description": "List of headers",
+          "description": "List of headings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        }
+      },
+      "additionalProperties": false
+    },
+    "required-headings": {
+      "description": "MD043/required-headings/required-headers - Required heading structure",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "headings": {
+          "description": "List of headings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
+        "headers": {
+          "description": "List of headings",
           "type": "array",
           "items": {
             "type": "string"
@@ -890,15 +1011,23 @@
       "additionalProperties": false
     },
     "required-headers": {
-      "description": "MD043/required-headers - Required header structure",
+      "description": "MD043/required-headings/required-headers - Required heading structure",
       "type": [
         "boolean",
         "object"
       ],
       "default": true,
       "properties": {
+        "headings": {
+          "description": "List of headings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": null
+        },
         "headers": {
-          "description": "List of headers",
+          "description": "List of headings",
           "type": "array",
           "items": {
             "type": "string"
@@ -963,6 +1092,11 @@
     },
     "no-alt-text": {
       "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
+      "type": "boolean",
+      "default": true
+    },
+    "headings": {
+      "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
       "default": true
     },

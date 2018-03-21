@@ -1,4 +1,4 @@
-# Header
+# Heading
 
 hard	tab {MD010} / space * in * emphasis {MD037} / space ` in ` code {MD038}
 
