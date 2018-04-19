@@ -1065,7 +1065,7 @@ module.exports.readme = function readme(test) {
               var ruleAliases = rule.names.slice(1);
               var expected = "**[" + ruleName + "](doc/Rules.md#" +
                 ruleName.toLowerCase() + ")** *" +
-                ruleAliases.join(", ") + "* - " + rule.description;
+                ruleAliases.join("/") + "* - " + rule.description;
               test.equal(token.content, expected, "Rule mismatch.");
             }
           } else if (inTags) {

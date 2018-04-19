@@ -418,7 +418,7 @@ Aliases: line-length
 
 Parameters: line_length, code_blocks, tables, headings, headers (number; default 80, boolean; default true)
 
-> If a `headings` parameter is not provided, `headers` will be checked instead for backward compatibility.
+> If `headings` is not provided, `headers` (deprecated) will be used.
 
 This rule is triggered when there are lines that are longer than the
 configured line length (default: 80 characters). To fix this, split the line
@@ -1353,7 +1353,7 @@ Aliases: required-headings, required-headers
 
 Parameters: headings, headers (array of string; default `null` for disabled)
 
-> If a `headings` parameter is not provided, `headers` will be checked instead for backward compatibility.
+> If `headings` is not provided, `headers` (deprecated) will be used.
 
 This rule is triggered when the headings in a file do not match the array of
 headings passed to the rule. It can be used to enforce a standard heading

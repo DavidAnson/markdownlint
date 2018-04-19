@@ -46,9 +46,9 @@ playground for learning and exploring.
 
 ## Rules / Aliases
 
-* **[MD001](doc/Rules.md#md001)** *heading-increment, header-increment* - Heading levels should only increment by one level at a time
-* **[MD002](doc/Rules.md#md002)** *first-heading-h1, first-header-h1* - First heading should be a top level heading
-* **[MD003](doc/Rules.md#md003)** *heading-style, header-style* - Heading style
+* **[MD001](doc/Rules.md#md001)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
+* **[MD002](doc/Rules.md#md002)** *first-heading-h1/first-header-h1* - First heading should be a top level heading
+* **[MD003](doc/Rules.md#md003)** *heading-style/header-style* - Heading style
 * **[MD004](doc/Rules.md#md004)** *ul-style* - Unordered list style
 * **[MD005](doc/Rules.md#md005)** *list-indent* - Inconsistent indentation for list items at the same level
 * **[MD006](doc/Rules.md#md006)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line
@@ -63,9 +63,9 @@ playground for learning and exploring.
 * **[MD019](doc/Rules.md#md019)** *no-multiple-space-atx* - Multiple spaces after hash on atx style heading
 * **[MD020](doc/Rules.md#md020)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style heading
 * **[MD021](doc/Rules.md#md021)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style heading
-* **[MD022](doc/Rules.md#md022)** *blanks-around-headings, blanks-around-headers* - Headings should be surrounded by blank lines
-* **[MD023](doc/Rules.md#md023)** *heading-start-left, header-start-left* - Headings must start at the beginning of the line
-* **[MD024](doc/Rules.md#md024)** *no-duplicate-heading, no-duplicate-header* - Multiple headings with the same content
+* **[MD022](doc/Rules.md#md022)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
+* **[MD023](doc/Rules.md#md023)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
+* **[MD024](doc/Rules.md#md024)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
 * **[MD025](doc/Rules.md#md025)** *single-h1* - Multiple top level headings in the same document
 * **[MD026](doc/Rules.md#md026)** *no-trailing-punctuation* - Trailing punctuation in heading
 * **[MD027](doc/Rules.md#md027)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
@@ -77,22 +77,22 @@ playground for learning and exploring.
 * **[MD033](doc/Rules.md#md033)** *no-inline-html* - Inline HTML
 * **[MD034](doc/Rules.md#md034)** *no-bare-urls* - Bare URL used
 * **[MD035](doc/Rules.md#md035)** *hr-style* - Horizontal rule style
-* **[MD036](doc/Rules.md#md036)** *no-emphasis-as-heading, no-emphasis-as-header* - Emphasis used instead of a heading
+* **[MD036](doc/Rules.md#md036)** *no-emphasis-as-heading/no-emphasis-as-header* - Emphasis used instead of a heading
 * **[MD037](doc/Rules.md#md037)** *no-space-in-emphasis* - Spaces inside emphasis markers
 * **[MD038](doc/Rules.md#md038)** *no-space-in-code* - Spaces inside code span elements
 * **[MD039](doc/Rules.md#md039)** *no-space-in-links* - Spaces inside link text
 * **[MD040](doc/Rules.md#md040)** *fenced-code-language* - Fenced code blocks should have a language specified
 * **[MD041](doc/Rules.md#md041)** *first-line-h1* - First line in file should be a top level heading
 * **[MD042](doc/Rules.md#md042)** *no-empty-links* - No empty links
-* **[MD043](doc/Rules.md#md043)** *required-headings, required-headers* - Required heading structure
+* **[MD043](doc/Rules.md#md043)** *required-headings/required-headers* - Required heading structure
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
 * **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have alternate text (alt text)
 
 See [Rules.md](doc/Rules.md) for more details.
 
 > All rules with `heading` as part of their name are also available as `header`
-> aliases, e.g. `heading-increment` is also available as `header-increment`.
-> This is provided for backward compatibility, though its usage is discouraged.
+> aliases (e.g. `heading-increment` is also available as `header-increment`).
+> The use of `header` is deprecated and provided for backward-compatibility.
 
 ## Tags
 
@@ -105,9 +105,9 @@ See [Rules.md](doc/Rules.md) for more details.
 * **code** - MD014, MD031, MD038, MD040
 * **emphasis** - MD036, MD037
 * **hard_tab** - MD010
-* **headings** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
-  MD024, MD025, MD026, MD036, MD041, MD043
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
+  MD024, MD025, MD026, MD036, MD041, MD043
+* **headings** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
   MD024, MD025, MD026, MD036, MD041, MD043
 * **hr** - MD035
 * **html** - MD033
