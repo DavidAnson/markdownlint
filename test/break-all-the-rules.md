@@ -1,8 +1,8 @@
-## Header 1 {MD002} {MD041}
+## Heading 1 {MD002} {MD041}
 
-#### Header 2 {MD001}
+#### Heading 2 {MD001}
 
-# Header 3 {MD003} {MD043} #
+# Heading 3 {MD003} {MD043} #
 
 * list
  +  list {MD004} {MD006} {MD007} {MD030}
@@ -22,22 +22,22 @@ long line long line long line long line long line long line long line long line 
 
     $ dollar {MD014}
 
-#Header 4 {MD018}
+#Heading 4 {MD018}
 
-#  Header 5 {MD019}
+#  Heading 5 {MD019}
 
-#Header 6 {MD020} #
- #  Header 7 {MD021} {MD022} {MD023} {MD003}  #
+#Heading 6 {MD020} #
+ #  Heading 7 {MD021} {MD022} {MD023} {MD003}  #
 
-# Header 8
+# Heading 8
 
-# Header 8
+# Heading 8
 
 {MD024:34}
 
 Note: Can not break MD025 and MD002 in the same file
 
-# Header 9 {MD026}.
+# Heading 9 {MD026}.
 
 >  {MD027}
 
@@ -62,7 +62,7 @@ http://example.com/page {MD034}
 
 {MD035:61}
 
-_Section {MD036} Header_
+_Section {MD036} Heading_
 
 Emphasis *with * space {MD037}
 

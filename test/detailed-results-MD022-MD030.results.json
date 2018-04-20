@@ -1,24 +1,24 @@
 [
     {
         "lineNumber": 1,
-        "ruleNames": [ "MD022", "blanks-around-headers" ],
-        "ruleDescription": "Headers should be surrounded by blank lines",
+        "ruleNames": [ "MD022", "blanks-around-headings", "blanks-around-headers" ],
+        "ruleDescription": "Headings should be surrounded by blank lines",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
     },
     {
         "lineNumber": 1,
-        "ruleNames": [ "MD023", "header-start-left" ],
-        "ruleDescription": "Headers must start at the beginning of the line",
+        "ruleNames": [ "MD023", "heading-start-left", "header-start-left" ],
+        "ruleDescription": "Headings must start at the beginning of the line",
         "errorDetail": null,
         "errorContext": " # Heading",
         "errorRange": [1, 2]
     },
     {
         "lineNumber": 4,
-        "ruleNames": [ "MD024", "no-duplicate-header" ],
-        "ruleDescription": "Multiple headers with the same content",
+        "ruleNames": [ "MD024", "no-duplicate-heading", "no-duplicate-header" ],
+        "ruleDescription": "Multiple headings with the same content",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
@@ -26,7 +26,7 @@
     {
         "lineNumber": 4,
         "ruleNames": [ "MD025", "single-h1" ],
-        "ruleDescription": "Multiple top level headers in the same document",
+        "ruleDescription": "Multiple top level headings in the same document",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
@@ -34,7 +34,7 @@
     {
         "lineNumber": 6,
         "ruleNames": [ "MD026", "no-trailing-punctuation" ],
-        "ruleDescription": "Trailing punctuation in header",
+        "ruleDescription": "Trailing punctuation in heading",
         "errorDetail": "Punctuation: '.'",
         "errorContext": null,
         "errorRange": [19, 1]

@@ -1,4 +1,4 @@
-# header
+# heading
 
 ```fence
 $ code

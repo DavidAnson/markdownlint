@@ -1,4 +1,4 @@
-# header
+# heading
 
 text
 ```fence {MD031}

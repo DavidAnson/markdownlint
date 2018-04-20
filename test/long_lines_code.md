@@ -18,28 +18,28 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 
 This is a short line.
 
-| First Header  | Second Header | Third Header  | Fourth Header | Fifth Header  | Sixth  Header |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| ============= | ============= | ============= | ============= | ============= | ============= |
-| Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   |
+| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading |
+| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| ============== | ============== | ============== | ============== | ============== | ============== |
+| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |
 {: rules="groups"}
 
 This is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}
 
 Another line.
 
-| First Header  | Second Header | Third Header  | Fourth Header | Fifth Header  | Sixth  Header |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| ------------- | ------------- | ------------- | ------------- | ------------- | ------------- |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  | Content Cell  |
-| ============= | ============= | ============= | ============= | ============= | ============= |
-| Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   | Footer Cell   |
+| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading |
+| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
+| ============== | ============== | ============== | ============== | ============== | ============== |
+| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |
 {: rules="groups"}

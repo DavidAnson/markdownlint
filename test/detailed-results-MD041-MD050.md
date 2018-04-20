@@ -1,4 +1,4 @@
-Not a header
+Not a heading
 
 An [empty]() link
 

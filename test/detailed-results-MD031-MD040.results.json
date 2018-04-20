@@ -41,8 +41,8 @@
     },
     {
         "lineNumber": 13,
-        "ruleNames": [ "MD036", "no-emphasis-as-header" ],
-        "ruleDescription": "Emphasis used instead of a header",
+        "ruleNames": [ "MD036", "no-emphasis-as-heading", "no-emphasis-as-header" ],
+        "ruleDescription": "Emphasis used instead of a heading",
         "errorDetail": null,
         "errorContext": "Emphasis",
         "errorRange": null
