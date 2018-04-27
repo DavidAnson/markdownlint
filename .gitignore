@@ -2,6 +2,7 @@ coverage
 demo/markdown-it.min.js
 demo/markdownlint-browser.js
 demo/markdownlint-browser.min.js
+lib-es3
 node_modules
 npm-debug.log
 .vscode

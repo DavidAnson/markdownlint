@@ -18,7 +18,7 @@
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0\" demo && eslint --rule \"no-console: 0, no-shadow: 0, object-property-newline: 0\" example",
     "build-config-schema": "node schema/build-config-schema.js",
-    "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && browserify ../lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
+    "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --outDir ../lib-es3 ../lib/markdownlint.js && browserify ../lib-es3/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
@@ -39,6 +39,7 @@
     "q": "~1.5.1",
     "rimraf": "~2.6.2",
     "tv4": "~1.3.0",
+    "typescript": "~2.8.3",
     "uglify-js": "~3.3.16"
   },
   "keywords": [
