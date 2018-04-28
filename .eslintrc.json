@@ -1,5 +1,8 @@
 {
     "parser": "espree",
+    "parserOptions": {
+        "ecmaVersion": 6
+    },
     "env": {
         "node": true
     },
@@ -203,7 +206,7 @@
         "no-useless-escape": "error",
         "no-useless-rename": "error",
         "no-useless-return": "error",
-        "no-var": "off",
+        "no-var": "error",
         "no-void": "error",
         "no-warning-comments": "error",
         "no-whitespace-before-property": "error",
@@ -220,7 +223,7 @@
         "padded-blocks": "off",
         "padding-line-between-statements": "off",
         "prefer-arrow-callback": "off",
-        "prefer-const": "off",
+        "prefer-const": "error",
         "prefer-destructuring": "off",
         "prefer-numeric-literals": "error",
         "prefer-promise-reject-errors": "error",

@@ -1,11 +1,11 @@
 "use strict";
 
-var fs = require("fs");
-var path = require("path");
-var rules = require("../lib/rules");
+const fs = require("fs");
+const path = require("path");
+const rules = require("../lib/rules");
 
 // Schema scaffolding
-var schema = {
+const schema = {
   "title": "Markdownlint configuration schema",
   "type": "object",
   "properties": {
@@ -22,21 +22,21 @@ var schema = {
   },
   "additionalProperties": false
 };
-var tags = {};
+const tags = {};
 
 // Add rules
 rules.forEach(function forRule(rule) {
   rule.tags.forEach(function forTag(tag) {
-    var tagRules = tags[tag] || [];
+    const tagRules = tags[tag] || [];
     tagRules.push(rule.names[0]);
     tags[tag] = tagRules;
   });
-  var scheme = {
+  const scheme = {
     "description": rule.names.join("/") + " - " + rule.description,
     "type": "boolean",
     "default": true
   };
-  var custom = true;
+  let custom = true;
   switch (rule.names[0]) {
     case "MD002":
     case "MD025":
@@ -286,7 +286,7 @@ rules.forEach(function forRule(rule) {
 
 // Add tags
 Object.keys(tags).forEach(function forTag(tag) {
-  var scheme = {
+  const scheme = {
     "description": tag + " - " + tags[tag].join(", "),
     "type": "boolean",
     "default": true
@@ -295,5 +295,5 @@ Object.keys(tags).forEach(function forTag(tag) {
 });
 
 // Write schema
-var schemaFile = path.join(__dirname, "markdownlint-config-schema.json");
+const schemaFile = path.join(__dirname, "markdownlint-config-schema.json");
 fs.writeFileSync(schemaFile, JSON.stringify(schema, null, "  "));

@@ -1,24 +1,24 @@
 "use strict";
 
-var fs = require("fs");
-var path = require("path");
-var md = require("markdown-it")();
-var Q = require("q");
-var tv4 = require("tv4");
-var markdownlint = require("../lib/markdownlint");
-var shared = require("../lib/shared");
-var rules = require("../lib/rules");
-var customRules = require("./rules");
-var defaultConfig = require("./markdownlint-test-default-config.json");
-var configSchema = require("../schema/markdownlint-config-schema.json");
+const fs = require("fs");
+const path = require("path");
+const md = require("markdown-it")();
+const Q = require("q");
+const tv4 = require("tv4");
+const markdownlint = require("../lib/markdownlint");
+const shared = require("../lib/shared");
+const rules = require("../lib/rules");
+const customRules = require("./rules");
+const defaultConfig = require("./markdownlint-test-default-config.json");
+const configSchema = require("../schema/markdownlint-config-schema.json");
 
 function createTestForFile(file) {
   return function testForFile(test) {
     test.expect(1);
-    var detailedResults = /[/\\]detailed-results-/.test(file);
-    var resultsFile = file.replace(/\.md$/, ".results.json");
-    var configFile = file.replace(/\.md$/, ".json");
-    var actualPromise = Q.nfcall(fs.stat, configFile)
+    const detailedResults = /[/\\]detailed-results-/.test(file);
+    const resultsFile = file.replace(/\.md$/, ".results.json");
+    const configFile = file.replace(/\.md$/, ".json");
+    const actualPromise = Q.nfcall(fs.stat, configFile)
       .then(
         function configFileExists() {
           return Q.nfcall(fs.readFile, configFile, shared.utf8Encoding)
@@ -29,32 +29,33 @@ function createTestForFile(file) {
         })
       .then(
         function lintWithConfig(config) {
-          var mergedConfig = shared.assign(shared.clone(defaultConfig), config);
+          const mergedConfig =
+            shared.assign(shared.clone(defaultConfig), config);
           return Q.nfcall(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
             "resultVersion": detailedResults ? 2 : 0
           });
         });
-    var expectedPromise = detailedResults ?
+    const expectedPromise = detailedResults ?
       Q.nfcall(fs.readFile, resultsFile, shared.utf8Encoding)
         .then(JSON.parse) :
       Q.nfcall(fs.readFile, file, shared.utf8Encoding)
         .then(
           function fileContents(contents) {
-            var lines = contents.split(shared.newLineRe);
-            var results = {};
+            const lines = contents.split(shared.newLineRe);
+            const results = {};
             lines.forEach(function forLine(line, lineNum) {
-              var regex = /\{(MD\d+)(?::(\d+))?\}/g;
-              var match = null;
+              const regex = /\{(MD\d+)(?::(\d+))?\}/g;
+              let match = null;
               while ((match = regex.exec(line))) {
-                var rule = match[1];
-                var errors = results[rule] || [];
+                const rule = match[1];
+                const errors = results[rule] || [];
                 errors.push(match[2] ? parseInt(match[2], 10) : lineNum + 1);
                 results[rule] = errors;
               }
             });
-            var sortedResults = {};
+            const sortedResults = {};
             Object.keys(results).sort().forEach(function forKey(key) {
               sortedResults[key] = results[key];
             });
@@ -63,9 +64,9 @@ function createTestForFile(file) {
     Q.all([ actualPromise, expectedPromise ])
       .then(
         function compareResults(fulfillments) {
-          var actual = fulfillments[0];
-          var results = fulfillments[1];
-          var expected = {};
+          const actual = fulfillments[0];
+          const results = fulfillments[1];
+          const expected = {};
           expected[file] = results;
           test.deepEqual(actual, expected, "Line numbers are not correct.");
         })
@@ -81,7 +82,7 @@ fs.readdirSync("./test").forEach(function forFile(file) {
 
 module.exports.projectFiles = function projectFiles(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [ "README.md" ],
     "noInlineConfig": true,
     "config": {
@@ -91,7 +92,7 @@ module.exports.projectFiles = function projectFiles(test) {
   };
   markdownlint(options, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "README.md": [] };
+    const expected = { "README.md": [] };
     test.deepEqual(actual, expected, "Issue(s) with project files.");
     test.done();
   });
@@ -99,7 +100,7 @@ module.exports.projectFiles = function projectFiles(test) {
 
 module.exports.resultFormattingV0 = function resultFormattingV0(test) {
   test.expect(4);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -109,7 +110,7 @@ module.exports.resultFormattingV0 = function resultFormattingV0(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD002": [ 3 ],
         "MD018": [ 1 ],
@@ -120,8 +121,8 @@ module.exports.resultFormattingV0 = function resultFormattingV0(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    var actualMessage = actualResult.toString();
-    var expectedMessage =
+    let actualMessage = actualResult.toString();
+    let expectedMessage =
       "./test/atx_heading_spacing.md: 3: MD002" +
       " First heading should be a top level heading\n" +
       "./test/atx_heading_spacing.md: 1: MD018" +
@@ -152,7 +153,7 @@ module.exports.resultFormattingV0 = function resultFormattingV0(test) {
 
 module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
   test.expect(3);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -160,8 +161,8 @@ module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
     "config": defaultConfig,
     "resultVersion": 0
   };
-  var actualResult = markdownlint.sync(options);
-  var expectedResult = {
+  const actualResult = markdownlint.sync(options);
+  const expectedResult = {
     "./test/atx_heading_spacing.md": {
       "MD002": [ 3 ],
       "MD018": [ 1 ],
@@ -172,8 +173,8 @@ module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
     }
   };
   test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-  var actualMessage = actualResult.toString();
-  var expectedMessage =
+  let actualMessage = actualResult.toString();
+  let expectedMessage =
     "./test/atx_heading_spacing.md: 3: MD002" +
     " First heading should be a top level heading\n" +
     "./test/atx_heading_spacing.md: 1: MD018" +
@@ -203,7 +204,7 @@ module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
 
 module.exports.resultFormattingV1 = function resultFormattingV1(test) {
   test.expect(3);
-  var options = {
+  const options = {
     "strings": {
       "truncate":
         "#  Multiple spaces inside hashes on closed atx style heading  #"
@@ -217,7 +218,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "truncate": [
         { "lineNumber": 1,
           "ruleName": "MD021",
@@ -269,8 +270,8 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
       ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    var actualMessage = actualResult.toString();
-    var expectedMessage =
+    const actualMessage = actualResult.toString();
+    const expectedMessage =
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
       " Multiple spaces inside hashes on closed atx style heading" +
       " [Context: \"#  Multiple spa...tyle heading  #\"]\n" +
@@ -296,7 +297,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
 
 module.exports.resultFormattingV2 = function resultFormattingV2(test) {
   test.expect(3);
-  var options = {
+  const options = {
     "strings": {
       "truncate":
         "#  Multiple spaces inside hashes on closed atx style heading  #"
@@ -309,7 +310,7 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "truncate": [
         { "lineNumber": 1,
           "ruleNames": [ "MD021", "no-multiple-space-closed-atx" ],
@@ -355,8 +356,8 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
       ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    var actualMessage = actualResult.toString();
-    var expectedMessage =
+    const actualMessage = actualResult.toString();
+    const expectedMessage =
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
       " Multiple spaces inside hashes on closed atx style heading" +
       " [Context: \"#  Multiple spa...tyle heading  #\"]\n" +
@@ -384,7 +385,7 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
 
 module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "strings": {
       "cr": "One\rTwo\r#Three",
       "lf": "One\nTwo\n#Three",
@@ -396,7 +397,7 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "cr": { "MD018": [ 3 ] },
       "lf": { "MD018": [ 3 ] },
       "crlf": { "MD018": [ 3 ] },
@@ -409,7 +410,7 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
 
 module.exports.inputOnlyNewline = function inputOnlyNewline(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "strings": {
       "cr": "\r",
       "lf": "\n",
@@ -421,7 +422,7 @@ module.exports.inputOnlyNewline = function inputOnlyNewline(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "cr": [],
       "lf": [],
       "crlf": []
@@ -433,7 +434,7 @@ module.exports.inputOnlyNewline = function inputOnlyNewline(test) {
 
 module.exports.defaultTrue = function defaultTrue(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -445,7 +446,7 @@ module.exports.defaultTrue = function defaultTrue(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD002": [ 3 ],
         "MD018": [ 1 ],
@@ -464,7 +465,7 @@ module.exports.defaultTrue = function defaultTrue(test) {
 
 module.exports.defaultFalse = function defaultFalse(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -476,7 +477,7 @@ module.exports.defaultFalse = function defaultFalse(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {},
       "./test/first_heading_bad_atx.md": {}
     };
@@ -487,7 +488,7 @@ module.exports.defaultFalse = function defaultFalse(test) {
 
 module.exports.defaultUndefined = function defaultUndefined(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -497,7 +498,7 @@ module.exports.defaultUndefined = function defaultUndefined(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD002": [ 3 ],
         "MD018": [ 1 ],
@@ -516,7 +517,7 @@ module.exports.defaultUndefined = function defaultUndefined(test) {
 
 module.exports.disableRules = function disableRules(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -531,7 +532,7 @@ module.exports.disableRules = function disableRules(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD018": [ 1 ]
       },
@@ -544,7 +545,7 @@ module.exports.disableRules = function disableRules(test) {
 
 module.exports.enableRules = function enableRules(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -558,7 +559,7 @@ module.exports.enableRules = function enableRules(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD002": [ 3 ],
         "MD019": [ 3, 5 ]
@@ -574,7 +575,7 @@ module.exports.enableRules = function enableRules(test) {
 
 module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -588,7 +589,7 @@ module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD002": [ 3 ],
         "MD019": [ 3, 5 ]
@@ -604,7 +605,7 @@ module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
 
 module.exports.disableTag = function disableTag(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -617,7 +618,7 @@ module.exports.disableTag = function disableTag(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD002": [ 3 ],
         "MD041": [ 1 ]
@@ -634,7 +635,7 @@ module.exports.disableTag = function disableTag(test) {
 
 module.exports.enableTag = function enableTag(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -648,7 +649,7 @@ module.exports.enableTag = function enableTag(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD018": [ 1 ],
         "MD019": [ 3, 5 ]
@@ -662,7 +663,7 @@ module.exports.enableTag = function enableTag(test) {
 
 module.exports.enableTagMixedCase = function enableTagMixedCase(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
@@ -676,7 +677,7 @@ module.exports.enableTagMixedCase = function enableTagMixedCase(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/atx_heading_spacing.md": {
         "MD018": [ 1 ],
         "MD019": [ 3, 5 ]
@@ -701,14 +702,14 @@ module.exports.styleFiles = function styleFiles(test) {
 
 module.exports.styleAll = function styleAll(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/all.json"),
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
         "MD002": [ 1 ],
@@ -757,14 +758,14 @@ module.exports.styleAll = function styleAll(test) {
 
 module.exports.styleRelaxed = function styleRelaxed(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/relaxed.json"),
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
         "MD002": [ 1 ],
@@ -809,7 +810,7 @@ module.exports.nullFrontMatter = function nullFrontMatter(test) {
     "resultVersion": 0
   }, function callback(err, result) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "content": { "MD010": [ 2 ] }
     };
     test.deepEqual(result, expectedResult, "Undetected issues.");
@@ -830,7 +831,7 @@ module.exports.customFrontMatter = function customFrontMatter(test) {
     }
   }, function callback(err, result) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "content": []
     };
     test.deepEqual(result, expectedResult, "Did not get empty results.");
@@ -860,7 +861,7 @@ module.exports.noInlineConfig = function noInlineConfig(test) {
     "resultVersion": 0
   }, function callback(err, result) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "content": {
         "MD010": [ 3, 7, 11 ]
       }
@@ -915,7 +916,7 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
     }
   }, function callback(err, result) {
     test.ifError(err);
-    var expected = { "README.md": [] };
+    const expected = { "README.md": [] };
     test.deepEqual(result, expected, "Unexpected issues.");
     test.done();
   });
@@ -923,11 +924,11 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
 
 module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
   test.expect(2);
-  var files = [
+  const files = [
     "./test/atx_heading_spacing.md",
     "./test/first_heading_bad_atx.md"
   ];
-  var expectedFiles = files.slice();
+  const expectedFiles = files.slice();
   markdownlint({ "files": files }, function callback(err) {
     test.ifError(err);
     test.deepEqual(files, expectedFiles, "Files modified.");
@@ -946,7 +947,7 @@ module.exports.filesArrayAsString = function filesArrayAsString(test) {
     }
   }, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "README.md": [] };
+    const expected = { "README.md": [] };
     test.deepEqual(actual, expected, "Unexpected issues.");
     test.done();
   });
@@ -1015,7 +1016,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
     "config": defaultConfig
   }, function callback(err, result) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "undefined": [],
       "null": [],
       "empty": []
@@ -1027,10 +1028,10 @@ module.exports.missingStringValue = function missingStringValue(test) {
 
 module.exports.readme = function readme(test) {
   test.expect(109);
-  var tagToRules = {};
+  const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
-      var tagRules = tagToRules[tag] || [];
+      const tagRules = tagToRules[tag] || [];
       tagRules.push(rule.names[0]);
       tagToRules[tag] = tagRules;
     });
@@ -1038,12 +1039,12 @@ module.exports.readme = function readme(test) {
   fs.readFile("README.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
-      var rulesLeft = rules.slice();
-      var seenRelated = false;
-      var seenRules = false;
-      var inRules = false;
-      var seenTags = false;
-      var inTags = false;
+      const rulesLeft = rules.slice();
+      let seenRelated = false;
+      let seenRules = false;
+      let inRules = false;
+      let seenTags = false;
+      let inTags = false;
       md.parse(contents, {}).forEach(function forToken(token) {
         if (token.type === "bullet_list_open") {
           if (!seenRelated) {
@@ -1057,31 +1058,32 @@ module.exports.readme = function readme(test) {
           inRules = inTags = false;
         } else if (token.type === "inline") {
           if (inRules) {
-            var rule = rulesLeft.shift();
+            const rule = rulesLeft.shift();
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             if (rule) {
-              var ruleName = rule.names[0];
-              var ruleAliases = rule.names.slice(1);
-              var expected = "**[" + ruleName + "](doc/Rules.md#" +
+              const ruleName = rule.names[0];
+              const ruleAliases = rule.names.slice(1);
+              const expected = "**[" + ruleName + "](doc/Rules.md#" +
                 ruleName.toLowerCase() + ")** *" +
                 ruleAliases.join("/") + "* - " + rule.description;
               test.equal(token.content, expected, "Rule mismatch.");
             }
           } else if (inTags) {
-            var parts = token.content.replace(/\*\*/g, "").split(/ - |, |,\n/);
-            var tag = parts.shift();
+            const parts =
+              token.content.replace(/\*\*/g, "").split(/ - |, |,\n/);
+            const tag = parts.shift();
             test.deepEqual(parts, tagToRules[tag] || [],
               "Rule mismatch for tag " + tag + ".");
             delete tagToRules[tag];
           }
         }
       });
-      var ruleLeft = rulesLeft.shift();
+      const ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
         "Missing rule documentation for " +
           (ruleLeft || "[NO RULE]").toString() + ".");
-      var tagLeft = Object.keys(tagToRules).shift();
+      const tagLeft = Object.keys(tagToRules).shift();
       test.ok(!tagLeft, "Undocumented tag " + tagLeft + ".");
       test.done();
     });
@@ -1092,13 +1094,13 @@ module.exports.doc = function doc(test) {
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
-      var rulesLeft = rules.slice();
-      var inHeading = false;
-      var rule = null;
-      var ruleHasTags = true;
-      var ruleHasAliases = true;
-      var ruleUsesParams = null;
-      var tagAliasParameterRe = /, |: | /;
+      const rulesLeft = rules.slice();
+      let inHeading = false;
+      let rule = null;
+      let ruleHasTags = true;
+      let ruleHasAliases = true;
+      let ruleUsesParams = null;
+      const tagAliasParameterRe = /, |: | /;
       function testTagsAliasesParams(r) {
         r = r || "[NO RULE]";
         test.ok(ruleHasTags,
@@ -1140,8 +1142,8 @@ module.exports.doc = function doc(test) {
               "Alias mismatch for rule " + rule.toString() + ".");
             ruleHasAliases = true;
           } else if (/^Parameters: /.test(token.content) && rule) {
-            var inDetails = false;
-            var parameters = token.content.split(tagAliasParameterRe)
+            let inDetails = false;
+            const parameters = token.content.split(tagAliasParameterRe)
               .slice(1)
               .filter(function forPart(part) {
                 inDetails = inDetails || (part[0] === "(");
@@ -1153,7 +1155,7 @@ module.exports.doc = function doc(test) {
           }
         }
       });
-      var ruleLeft = rulesLeft.shift();
+      const ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
         "Missing rule documentation for " +
           (ruleLeft || "[NO RULE]").toString() + ".");
@@ -1165,14 +1167,14 @@ module.exports.doc = function doc(test) {
 };
 
 module.exports.validateConfigSchema = function validateConfigSchema(test) {
-  var jsonFileRe = /\.json$/i;
-  var resultsFileRe = /\.results\.json$/i;
-  var testDirectory = __dirname;
-  var testFiles = fs.readdirSync(testDirectory);
+  const jsonFileRe = /\.json$/i;
+  const resultsFileRe = /\.results\.json$/i;
+  const testDirectory = __dirname;
+  const testFiles = fs.readdirSync(testDirectory);
   testFiles.filter(function filterFile(file) {
     return jsonFileRe.test(file) && !resultsFileRe.test(file);
   }).forEach(function forFile(file) {
-    var data = fs.readFileSync(path.join(testDirectory, file));
+    const data = fs.readFileSync(path.join(testDirectory, file));
     test.ok(
       tv4.validate(JSON.parse(data), configSchema),
       file + "\n" + JSON.stringify(tv4.error, null, 2));
@@ -1183,7 +1185,7 @@ module.exports.validateConfigSchema = function validateConfigSchema(test) {
 module.exports.clearHtmlCommentTextValid =
 function clearHtmlCommentTextValid(test) {
   test.expect(1);
-  var validComments = [
+  const validComments = [
     "<!-- text -->",
     "<!--text-->",
     "<!-- -->",
@@ -1219,7 +1221,7 @@ function clearHtmlCommentTextValid(test) {
     "<!--",
     "text"
   ];
-  var validResult = [
+  const validResult = [
     "<!--      -->",
     "<!--    -->",
     "<!-- -->",
@@ -1255,8 +1257,8 @@ function clearHtmlCommentTextValid(test) {
     "<!--",
     "    \\"
   ];
-  var actual = shared.clearHtmlCommentText(validComments.join("\n"));
-  var expected = validResult.join("\n");
+  const actual = shared.clearHtmlCommentText(validComments.join("\n"));
+  const expected = validResult.join("\n");
   test.equal(actual, expected);
   test.done();
 };
@@ -1264,7 +1266,7 @@ function clearHtmlCommentTextValid(test) {
 module.exports.clearHtmlCommentTextInvalid =
 function clearHtmlCommentTextInvalid(test) {
   test.expect(1);
-  var invalidComments = [
+  const invalidComments = [
     "<!>",
     "<!->",
     "<!-->",
@@ -1282,8 +1284,8 @@ function clearHtmlCommentTextInvalid(test) {
     "<!--text--->",
     "<!--te--xt-->"
   ];
-  var actual = shared.clearHtmlCommentText(invalidComments.join("\n"));
-  var expected = invalidComments.join("\n");
+  const actual = shared.clearHtmlCommentText(invalidComments.join("\n"));
+  const expected = invalidComments.join("\n");
   test.equal(actual, expected);
   test.done();
 };
@@ -1291,20 +1293,20 @@ function clearHtmlCommentTextInvalid(test) {
 module.exports.clearHtmlCommentTextNonGreedy =
 function clearHtmlCommentTextNonGreedy(test) {
   test.expect(1);
-  var nonGreedyComments = [
+  const nonGreedyComments = [
     "<!-- text --> -->",
     "<!---text --> -->",
     "<!--t--> -->",
     "<!----> -->"
   ];
-  var nonGreedyResult = [
+  const nonGreedyResult = [
     "<!--      --> -->",
     "<!--      --> -->",
     "<!-- --> -->",
     "<!----> -->"
   ];
-  var actual = shared.clearHtmlCommentText(nonGreedyComments.join("\n"));
-  var expected = nonGreedyResult.join("\n");
+  const actual = shared.clearHtmlCommentText(nonGreedyComments.join("\n"));
+  const expected = nonGreedyResult.join("\n");
   test.equal(actual, expected);
   test.done();
 };
@@ -1312,28 +1314,28 @@ function clearHtmlCommentTextNonGreedy(test) {
 module.exports.clearHtmlCommentTextEmbedded =
 function clearHtmlCommentTextEmbedded(test) {
   test.expect(1);
-  var embeddedComments = [
+  const embeddedComments = [
     "text<!--text-->text",
     "<!-- markdownlint-disable MD010 -->",
     "text<!--text-->text",
     "text<!-- markdownlint-disable MD010 -->text",
     "text<!--text-->text"
   ];
-  var embeddedResult = [
+  const embeddedResult = [
     "text<!--    -->text",
     "<!-- markdownlint-disable MD010 -->",
     "text<!--    -->text",
     "text<!-- markdownlint-disable MD010 -->text",
     "text<!--    -->text"
   ];
-  var actual = shared.clearHtmlCommentText(embeddedComments.join("\n"));
-  var expected = embeddedResult.join("\n");
+  const actual = shared.clearHtmlCommentText(embeddedComments.join("\n"));
+  const expected = embeddedResult.join("\n");
   test.equal(actual, expected);
   test.done();
 };
 
 module.exports.trimLeftRight = function trimLeftRight(test) {
-  var inputs = [
+  const inputs = [
     "text text",
     " text text ",
     "   text text   ",
@@ -1365,7 +1367,7 @@ module.exports.configSingle = function configSingle(test) {
   markdownlint.readConfig("./test/config-child.json",
     function callback(err, actual) {
       test.ifError(err);
-      var expected = require("./config-child.json");
+      const expected = require("./config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
     });
@@ -1376,7 +1378,7 @@ module.exports.configAbsolute = function configAbsolute(test) {
   markdownlint.readConfig(path.join(__dirname, "config-child.json"),
     function callback(err, actual) {
       test.ifError(err);
-      var expected = require("./config-child.json");
+      const expected = require("./config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
     });
@@ -1387,7 +1389,7 @@ module.exports.configMultiple = function configMultiple(test) {
   markdownlint.readConfig("./test/config-grandparent.json",
     function callback(err, actual) {
       test.ifError(err);
-      var expected = shared.assign(
+      const expected = shared.assign(
         shared.assign(
           shared.assign({}, require("./config-child.json")),
           require("./config-parent.json")),
@@ -1447,25 +1449,25 @@ module.exports.configBadChildJson = function configBadChildJson(test) {
 
 module.exports.configSingleSync = function configSingleSync(test) {
   test.expect(1);
-  var actual = markdownlint.readConfigSync("./test/config-child.json");
-  var expected = require("./config-child.json");
+  const actual = markdownlint.readConfigSync("./test/config-child.json");
+  const expected = require("./config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
 };
 
 module.exports.configAbsoluteSync = function configAbsoluteSync(test) {
   test.expect(1);
-  var actual = markdownlint.readConfigSync(
+  const actual = markdownlint.readConfigSync(
     path.join(__dirname, "config-child.json"));
-  var expected = require("./config-child.json");
+  const expected = require("./config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
 };
 
 module.exports.configMultipleSync = function configMultipleSync(test) {
   test.expect(1);
-  var actual = markdownlint.readConfigSync("./test/config-grandparent.json");
-  var expected = shared.assign(
+  const actual = markdownlint.readConfigSync("./test/config-grandparent.json");
+  const expected = shared.assign(
     shared.assign(
       shared.assign({}, require("./config-child.json")),
       require("./config-parent.json")),
@@ -1527,15 +1529,15 @@ module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
 
 module.exports.customRulesV0 = function customRulesV0(test) {
   test.expect(4);
-  var customRulesMd = "./test/custom-rules.md";
-  var options = {
+  const customRulesMd = "./test/custom-rules.md";
+  const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {};
+    const expectedResult = {};
     expectedResult[customRulesMd] = {
       "any-blockquote": [ 12 ],
       "every-n-lines": [ 2, 4, 6, 10, 12 ],
@@ -1543,8 +1545,8 @@ module.exports.customRulesV0 = function customRulesV0(test) {
       "letters-E-X": [ 3, 7 ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    var actualMessage = actualResult.toString();
-    var expectedMessage =
+    let actualMessage = actualResult.toString();
+    let expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
       " Rule that reports an error for any blockquote\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
@@ -1591,15 +1593,15 @@ module.exports.customRulesV0 = function customRulesV0(test) {
 
 module.exports.customRulesV1 = function customRulesV1(test) {
   test.expect(3);
-  var customRulesMd = "./test/custom-rules.md";
-  var options = {
+  const customRulesMd = "./test/custom-rules.md";
+  const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "resultVersion": 1
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {};
+    const expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
         "ruleName": "any-blockquote",
@@ -1668,8 +1670,8 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "errorRange": null }
     ];
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    var actualMessage = actualResult.toString();
-    var expectedMessage =
+    const actualMessage = actualResult.toString();
+    const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote/any-blockquote" +
       " Rule that reports an error for any blockquote" +
       " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
@@ -1698,15 +1700,15 @@ module.exports.customRulesV1 = function customRulesV1(test) {
 
 module.exports.customRulesV2 = function customRulesV2(test) {
   test.expect(3);
-  var customRulesMd = "./test/custom-rules.md";
-  var options = {
+  const customRulesMd = "./test/custom-rules.md";
+  const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "resultVersion": 2
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {};
+    const expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
         "ruleNames": [ "any-blockquote" ],
@@ -1766,8 +1768,8 @@ module.exports.customRulesV2 = function customRulesV2(test) {
         "errorRange": null }
     ];
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    var actualMessage = actualResult.toString();
-    var expectedMessage =
+    const actualMessage = actualResult.toString();
+    const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
       " Rule that reports an error for any blockquote" +
       " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
@@ -1796,8 +1798,8 @@ module.exports.customRulesV2 = function customRulesV2(test) {
 
 module.exports.customRulesConfig = function customRulesConfig(test) {
   test.expect(2);
-  var customRulesMd = "./test/custom-rules.md";
-  var options = {
+  const customRulesMd = "./test/custom-rules.md";
+  const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "config": {
@@ -1811,7 +1813,7 @@ module.exports.customRulesConfig = function customRulesConfig(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {};
+    const expectedResult = {};
     expectedResult[customRulesMd] = {
       "any-blockquote": [ 12 ],
       "every-n-lines": [ 3, 6, 12 ],
@@ -1831,11 +1833,11 @@ module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
     [ "tags", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
     [ "function", [ null, "string", [] ] ]
   ].forEach(function forProperty(property) {
-    var propertyName = property[0];
+    const propertyName = property[0];
     property[1].forEach(function forPropertyValue(propertyValue) {
-      var badRule = shared.clone(customRules.anyBlockquote);
+      const badRule = shared.clone(customRules.anyBlockquote);
       badRule[propertyName] = propertyValue;
-      var options = {
+      const options = {
         "customRules": [ badRule ]
       };
       test.throws(function badRuleCall() {
@@ -1934,7 +1936,7 @@ function customRulesUsedTagName(test) {
 module.exports.customRulesThrowForFile =
 function customRulesThrowForFile(test) {
   test.expect(4);
-  var exceptionMessage = "Test exception message";
+  const exceptionMessage = "Test exception message";
   markdownlint({
     "customRules": [
       {
@@ -1960,7 +1962,7 @@ function customRulesThrowForFile(test) {
 module.exports.customRulesThrowForFileSync =
 function customRulesThrowForFileSync(test) {
   test.expect(4);
-  var exceptionMessage = "Test exception message";
+  const exceptionMessage = "Test exception message";
   test.throws(function customRuleThrowsCall() {
     markdownlint.sync({
       "customRules": [
@@ -1988,7 +1990,7 @@ function customRulesThrowForFileSync(test) {
 module.exports.customRulesThrowForString =
 function customRulesThrowForString(test) {
   test.expect(4);
-  var exceptionMessage = "Test exception message";
+  const exceptionMessage = "Test exception message";
   markdownlint({
     "customRules": [
       {
@@ -2015,7 +2017,7 @@ function customRulesThrowForString(test) {
 
 module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
   test.expect(4);
-  var options = {
+  const options = {
     "customRules": [
       {
         "names": [ "name" ],
@@ -2051,13 +2053,13 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
     [ "context", [ 10, [] ] ],
     [ "range", [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ]
   ].forEach(function forProperty(property) {
-    var propertyName = property[0];
+    const propertyName = property[0];
     property[1].forEach(function forPropertyValue(propertyValue) {
-      var badObject = {
+      const badObject = {
         "lineNumber": 1
       };
       badObject[propertyName] = propertyValue;
-      var options = {
+      const options = {
         "customRules": [
           {
             "names": [ "name" ],
@@ -2089,7 +2091,7 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
 
 module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
   test.expect(2);
-  var options = {
+  const options = {
     "customRules": [
       {
         "names": [ "name" ],
@@ -2111,7 +2113,7 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
-    var expectedResult = {
+    const expectedResult = {
       "string": [
         {
           "lineNumber": 1,
@@ -2137,7 +2139,7 @@ module.exports.customRulesDoc = function customRulesDoc(test) {
     }
   }, function callback(err, actual) {
     test.ifError(err);
-    var expected = { "doc/CustomRules.md": [] };
+    const expected = { "doc/CustomRules.md": [] };
     test.deepEqual(actual, expected, "Unexpected issues.");
     test.done();
   });

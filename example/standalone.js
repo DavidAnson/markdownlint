@@ -1,8 +1,8 @@
 "use strict";
 
-var markdownlint = require("../lib/markdownlint");
+const markdownlint = require("../lib/markdownlint");
 
-var options = {
+const options = {
   "files": [ "good.md", "bad.md" ],
   "strings": {
     "good.string": "# good.string\n\nThis string passes all rules.",
@@ -11,7 +11,7 @@ var options = {
 };
 
 // Makes a synchronous call, using result.toString for pretty formatting
-var result = markdownlint.sync(options);
+const result = markdownlint.sync(options);
 console.log(result.toString());
 
 // Makes an asynchronous call

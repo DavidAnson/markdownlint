@@ -13,7 +13,7 @@ module.exports = {
       inline.children.filter(function filterChild(child) {
         return child.type === "text";
       }).forEach(function forChild(text) {
-        var index = text.content.toLowerCase().indexOf("ex");
+        const index = text.content.toLowerCase().indexOf("ex");
         if (index !== -1) {
           onError({
             "lineNumber": text.lineNumber,

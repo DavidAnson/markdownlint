@@ -10,7 +10,7 @@ module.exports = {
     params.tokens.filter(function filterToken(token) {
       return token.type === "blockquote_open";
     }).forEach(function forToken(blockquote) {
-      var lines = blockquote.map[1] - blockquote.map[0];
+      const lines = blockquote.map[1] - blockquote.map[0];
       onError({
         "lineNumber": blockquote.lineNumber,
         "detail": "Blockquote spans " + lines + " line(s).",

@@ -1,21 +1,21 @@
 "use strict";
 
-var fs = require("fs");
-var path = require("path");
-var glob = require("glob");
-var markdownlint = require("../lib/markdownlint");
-var shared = require("../lib/shared");
+const fs = require("fs");
+const path = require("path");
+const glob = require("glob");
+const markdownlint = require("../lib/markdownlint");
+const shared = require("../lib/shared");
 
 module.exports.typeTestFiles = function typeTestFiles(test) {
   // Simulates typing each test file to validate handling of partial input
   function validate(file, content) {
-    var results = markdownlint.sync({
+    const results = markdownlint.sync({
       "strings": {
         "content": content
       },
       "resultVersion": 0
     });
-    var contentLineCount = content.split(shared.newLineRe).length;
+    const contentLineCount = content.split(shared.newLineRe).length;
     Object.keys(results.content).forEach(function forKey(ruleName) {
       results.content[ruleName].forEach(function forLine(line) {
         test.ok((line >= 1) && (line <= contentLineCount),
@@ -24,10 +24,10 @@ module.exports.typeTestFiles = function typeTestFiles(test) {
       });
     });
   }
-  var files = fs.readdirSync("./test");
+  const files = fs.readdirSync("./test");
   files.forEach(function forFile(file) {
     if (/\.md$/.test(file)) {
-      var content = fs.readFileSync(
+      let content = fs.readFileSync(
         path.join("./test", file), shared.utf8Encoding);
       while (content) {
         validate(file, content);
@@ -40,13 +40,13 @@ module.exports.typeTestFiles = function typeTestFiles(test) {
 
 module.exports.parseAllFiles = function parseAllFiles(test) {
   // Parses all Markdown files in all dependencies
-  var globOptions = {
+  const globOptions = {
     // "cwd": "/",
     "realpath": true
   };
   glob("**/*.{md,markdown}", globOptions, function globCallback(err, matches) {
     test.ifError(err);
-    var markdownlintOptions = {
+    const markdownlintOptions = {
       "files": matches
     };
     markdownlint(markdownlintOptions, function markdownlintCallback(errr) {

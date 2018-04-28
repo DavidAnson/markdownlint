@@ -1,8 +1,8 @@
 "use strict";
 
-var gulp = require("gulp");
-var through2 = require("through2");
-var markdownlint = require("../lib/markdownlint");
+const gulp = require("gulp");
+const through2 = require("through2");
+const markdownlint = require("../lib/markdownlint");
 
 // Simple task wrapper
 gulp.task("markdownlint", function task() {
@@ -11,7 +11,7 @@ gulp.task("markdownlint", function task() {
       markdownlint(
         { "files": [ file.relative ] },
         function callback(err, result) {
-          var resultString = (result || "").toString();
+          const resultString = (result || "").toString();
           if (resultString) {
             console.log(resultString);
           }

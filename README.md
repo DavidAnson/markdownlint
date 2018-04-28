@@ -203,8 +203,8 @@ package, but can be defined inline.
 Example:
 
 ```js
-var extraRules = require("extraRules");
-var options = {
+const extraRules = require("extraRules");
+const options = {
   "customRules": [ extraRules.one, extraRules.two ]
 };
 ```
@@ -276,7 +276,7 @@ Sets of rules (known as a "style") can be stored separately and loaded as
 Example:
 
 ```js
-var options = {
+const options = {
   "files": [ "..." ],
   "config": require("style/relaxed.json")
 };
@@ -310,7 +310,7 @@ And a `custom.json` configuration file:
 Then code like the following:
 
 ```js
-var options = {
+const options = {
   "config": markdownlint.readConfigSync("./custom.json")
 };
 ```
@@ -318,7 +318,7 @@ var options = {
 Merges `custom.json` and `base.json` and is equivalent to:
 
 ```js
-var options = {
+const options = {
   "config": {
     "default": true,
     "line-length": false
@@ -458,9 +458,9 @@ Configuration object.
 Invoke `markdownlint` and use the `result` object's `toString` method:
 
 ```js
-var markdownlint = require("markdownlint");
+const markdownlint = require("markdownlint");
 
-var options = {
+const options = {
   "files": [ "good.md", "bad.md" ],
   "strings": {
     "good.string": "# good.string\n\nThis string passes all rules.",
@@ -491,7 +491,7 @@ bad.md: 1: MD041/first-line-h1 First line in file should be a top level heading 
 Or invoke `markdownlint.sync` for a synchronous call:
 
 ```js
-var result = markdownlint.sync(options);
+const result = markdownlint.sync(options);
 console.log(result.toString());
 ```
 
@@ -542,9 +542,9 @@ Output:
 Integration with the [gulp](http://gulpjs.com/) build system is straightforward:
 
 ```js
-var gulp = require("gulp");
-var through2 = require("through2");
-var markdownlint = require("markdownlint");
+const gulp = require("gulp");
+const through2 = require("through2");
+const markdownlint = require("markdownlint");
 
 gulp.task("markdownlint", function task() {
   return gulp.src("*.md", { "read": false })
@@ -552,7 +552,7 @@ gulp.task("markdownlint", function task() {
       markdownlint(
         { "files": [ file.relative ] },
         function callback(err, result) {
-          var resultString = (result || "").toString();
+          const resultString = (result || "").toString();
           if (resultString) {
             console.log(resultString);
           }
@@ -576,7 +576,7 @@ bad.md: 1: MD041/first-line-h1 First line in file should be a top level heading 
 Integration with the [Grunt](http://gruntjs.com/) build system is similar:
 
 ```js
-var markdownlint = require("markdownlint");
+const markdownlint = require("markdownlint");
 
 module.exports = function wrapper(grunt) {
   grunt.initConfig({
@@ -588,11 +588,11 @@ module.exports = function wrapper(grunt) {
   });
 
   grunt.registerMultiTask("markdownlint", function task() {
-    var done = this.async();
+    const done = this.async();
     markdownlint(
       { "files": this.filesSrc },
       function callback(err, result) {
-        var resultString = err || ((result || "").toString());
+        const resultString = err || ((result || "").toString());
         if (resultString) {
           grunt.fail.warn("\n" + resultString + "\n");
         }
@@ -634,12 +634,12 @@ Then reference `markdown-it` and `markdownlint`:
 And call it like so:
 
 ```js
-var options = {
+const options = {
   "strings": {
     "content": "Some Markdown to lint."
   }
 };
-var results = window.markdownlint.sync(options).toString();
+const results = window.markdownlint.sync(options).toString();
 ```
 
 ## Examples
