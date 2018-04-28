@@ -3,7 +3,6 @@
 const fs = require("fs");
 const path = require("path");
 const md = require("markdown-it")();
-const Q = require("q");
 const tv4 = require("tv4");
 const markdownlint = require("../lib/markdownlint");
 const shared = require("../lib/shared");
@@ -12,16 +11,27 @@ const customRules = require("./rules");
 const defaultConfig = require("./markdownlint-test-default-config.json");
 const configSchema = require("../schema/markdownlint-config-schema.json");
 
+function promisify(func, ...args) {
+  return new Promise((resolve, reject) => {
+    func(...args, (error, result) => {
+      if (error) {
+        return reject(error);
+      }
+      resolve(result);
+    });
+  });
+}
+
 function createTestForFile(file) {
   return function testForFile(test) {
     test.expect(1);
     const detailedResults = /[/\\]detailed-results-/.test(file);
     const resultsFile = file.replace(/\.md$/, ".results.json");
     const configFile = file.replace(/\.md$/, ".json");
-    const actualPromise = Q.nfcall(fs.stat, configFile)
+    const actualPromise = promisify(fs.stat, configFile)
       .then(
         function configFileExists() {
-          return Q.nfcall(fs.readFile, configFile, shared.utf8Encoding)
+          return promisify(fs.readFile, configFile, shared.utf8Encoding)
             .then(JSON.parse);
         },
         function noConfigFile() {
@@ -31,16 +41,16 @@ function createTestForFile(file) {
         function lintWithConfig(config) {
           const mergedConfig =
             shared.assign(shared.clone(defaultConfig), config);
-          return Q.nfcall(markdownlint, {
+          return promisify(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
             "resultVersion": detailedResults ? 2 : 0
           });
         });
     const expectedPromise = detailedResults ?
-      Q.nfcall(fs.readFile, resultsFile, shared.utf8Encoding)
+      promisify(fs.readFile, resultsFile, shared.utf8Encoding)
         .then(JSON.parse) :
-      Q.nfcall(fs.readFile, file, shared.utf8Encoding)
+      promisify(fs.readFile, file, shared.utf8Encoding)
         .then(
           function fileContents(contents) {
             const lines = contents.split(shared.newLineRe);
@@ -61,7 +71,7 @@ function createTestForFile(file) {
             });
             return sortedResults;
           });
-    Q.all([ actualPromise, expectedPromise ])
+    Promise.all([ actualPromise, expectedPromise ])
       .then(
         function compareResults(fulfillments) {
           const actual = fulfillments[0];
@@ -70,7 +80,8 @@ function createTestForFile(file) {
           expected[file] = results;
           test.deepEqual(actual, expected, "Line numbers are not correct.");
         })
-      .done(test.done, test.done);
+      .catch()
+      .then(test.done);
   };
 }
 
