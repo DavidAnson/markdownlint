@@ -1,0 +1,9 @@
+{
+  "default": true,
+  "MD002": {
+    "level": 2
+  },
+  "MD041": {
+    "level": 2
+  }
+}
