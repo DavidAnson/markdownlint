@@ -95,7 +95,7 @@ rules.forEach(function forRule(rule) {
         "br_spaces": {
           "description": "Spaces for line break",
           "type": "integer",
-          "default": 0
+          "default": 2
         },
         "list_item_empty_lines": {
           "description": "Allow spaces for empty lines in list items",

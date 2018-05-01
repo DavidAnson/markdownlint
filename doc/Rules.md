@@ -288,19 +288,17 @@ Tags: whitespace
 
 Aliases: no-trailing-spaces
 
-Parameters: br_spaces, list_item_empty_lines (number; default 0, boolean; default false)
+Parameters: br_spaces, list_item_empty_lines (number; default 2, boolean; default false)
 
-This rule is triggered on any lines that end with whitespace. To fix this,
-find the line that is triggered and remove any trailing spaces from the end.
+This rule is triggered on any lines that end with unexpected whitespace. To fix this,
+remove the trailing space from the end of the line.
 
-The `br_spaces` parameter allows an exception to this rule for a specific amount
-of trailing spaces used to insert an explicit line break/br element. For
-example, set `br_spaces` to 2 to allow exactly 2 spaces at the end of a line.
+The `br_spaces` parameter allows an exception to this rule for a specific number
+of trailing spaces, typically used to insert an explicit line break. The default
+value allows 2 spaces to indicate a hard break (\<br> element).
 
-Note: you have to set `br_spaces` to 2 or higher for this exception to take
-effect - you can't insert a br element with just a single trailing space, so
-if you set `br_spaces` to 1, the exception will be disabled, just as if it was
-set to the default of 0.
+Note: You must set `br_spaces` to a value >= 2 for this parameter to take effect.
+Setting `br_spaces` to 1 behaves the same as 0, disallowing any trailing spaces.
 
 Using spaces to indent blank lines inside a list item is usually not necessary,
 but some parsers require it. Set the `list_item_empty_lines` parameter to `true`
@@ -308,7 +306,7 @@ to allow this:
 
 ```markdown
 - list item text
-
+  [2 spaces]
   list item text
 ```
 
