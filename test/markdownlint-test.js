@@ -401,7 +401,11 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
       "cr": "One\rTwo\r#Three",
       "lf": "One\nTwo\n#Three",
       "crlf": "One\r\nTwo\r\n#Three",
-      "mixed": "One\rTwo\n#Three"
+      "mixed": "One\rTwo\n#Three",
+      "crnel": "One\r\u0085Two\r\u0085#Three",
+      "snl": "One\u2424Two\u2424#Three",
+      "lsep": "One\u2028Two\u2028#Three",
+      "nel": "One\u0085Two\u0085#Three"
     },
     "config": defaultConfig,
     "resultVersion": 0
@@ -412,7 +416,11 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
       "cr": { "MD018": [ 3 ] },
       "lf": { "MD018": [ 3 ] },
       "crlf": { "MD018": [ 3 ] },
-      "mixed": { "MD018": [ 3 ] }
+      "mixed": { "MD018": [ 3 ] },
+      "crnel": { "MD018": [ 3 ] },
+      "snl": { "MD018": [ 3 ] },
+      "lsep": { "MD018": [ 3 ] },
+      "nel": { "MD018": [ 3 ] }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.done();
