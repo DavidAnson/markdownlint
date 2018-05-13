@@ -686,6 +686,9 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * 0.8.0 - Add support for using and authoring custom rules, improve MD004/MD007/MD013,
           add `engines` to `package.json`, refactor, update dependencies.
   * 0.8.1 - Update item loop to be iterative, improve MD014, update dependencies.
+* 0.9.0 - Remove support for end-of-life Node versions 0.10/0.12/4, change "header" to
+          "heading" per spec (non-breaking), improve MD003/MD009/MD041, handle uncommon
+          line-break characters, refactor for ES6, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
