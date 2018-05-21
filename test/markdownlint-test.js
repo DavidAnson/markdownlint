@@ -1530,7 +1530,7 @@ module.exports.configBadJsonSync = function configBadJsonSync(test) {
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad JSON.");
     test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, "Unexpected token b in JSON at position 5",
+    test.ok(err.message.match(/Unexpected token b in JSON at position \d+/),
       "Error message unexpected.");
     return true;
   }, "Did not get exception for bad JSON.");
@@ -1544,7 +1544,7 @@ module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad child JSON.");
     test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, "Unexpected token b in JSON at position 5",
+    test.ok(err.message.match(/Unexpected token b in JSON at position \d+/),
       "Error message unexpected.");
     return true;
   }, "Did not get exception for bad child JSON.");
