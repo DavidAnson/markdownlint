@@ -1383,10 +1383,10 @@ module.exports.trimLeftRight = function trimLeftRight(test) {
 
 module.exports.configSingle = function configSingle(test) {
   test.expect(2);
-  markdownlint.readConfig("./test/config-child.json",
+  markdownlint.readConfig("./test/config/config-child.json",
     function callback(err, actual) {
       test.ifError(err);
-      const expected = require("./config-child.json");
+      const expected = require("./config/config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
     });
@@ -1394,10 +1394,10 @@ module.exports.configSingle = function configSingle(test) {
 
 module.exports.configAbsolute = function configAbsolute(test) {
   test.expect(2);
-  markdownlint.readConfig(path.join(__dirname, "config-child.json"),
+  markdownlint.readConfig(path.join(__dirname, "config", "config-child.json"),
     function callback(err, actual) {
       test.ifError(err);
-      const expected = require("./config-child.json");
+      const expected = require("./config/config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
     });
@@ -1405,14 +1405,14 @@ module.exports.configAbsolute = function configAbsolute(test) {
 
 module.exports.configMultiple = function configMultiple(test) {
   test.expect(2);
-  markdownlint.readConfig("./test/config-grandparent.json",
+  markdownlint.readConfig("./test/config/config-grandparent.json",
     function callback(err, actual) {
       test.ifError(err);
       const expected = shared.assign(
         shared.assign(
-          shared.assign({}, require("./config-child.json")),
-          require("./config-parent.json")),
-        require("./config-grandparent.json"));
+          shared.assign({}, require("./config/config-child.json")),
+          require("./config/config-parent.json")),
+        require("./config/config-grandparent.json"));
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
@@ -1468,8 +1468,8 @@ module.exports.configBadChildJson = function configBadChildJson(test) {
 
 module.exports.configSingleSync = function configSingleSync(test) {
   test.expect(1);
-  const actual = markdownlint.readConfigSync("./test/config-child.json");
-  const expected = require("./config-child.json");
+  const actual = markdownlint.readConfigSync("./test/config/config-child.json");
+  const expected = require("./config/config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
 };
@@ -1477,20 +1477,21 @@ module.exports.configSingleSync = function configSingleSync(test) {
 module.exports.configAbsoluteSync = function configAbsoluteSync(test) {
   test.expect(1);
   const actual = markdownlint.readConfigSync(
-    path.join(__dirname, "config-child.json"));
-  const expected = require("./config-child.json");
+    path.join(__dirname, "config", "config-child.json"));
+  const expected = require("./config/config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
 };
 
 module.exports.configMultipleSync = function configMultipleSync(test) {
   test.expect(1);
-  const actual = markdownlint.readConfigSync("./test/config-grandparent.json");
+  const actual =
+    markdownlint.readConfigSync("./test/config/config-grandparent.json");
   const expected = shared.assign(
     shared.assign(
-      shared.assign({}, require("./config-child.json")),
-      require("./config-parent.json")),
-    require("./config-grandparent.json"));
+      shared.assign({}, require("./config/config-child.json")),
+      require("./config/config-parent.json")),
+    require("./config/config-grandparent.json"));
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
@@ -1499,7 +1500,7 @@ module.exports.configMultipleSync = function configMultipleSync(test) {
 module.exports.configBadFileSync = function configBadFileSync(test) {
   test.expect(4);
   test.throws(function badFileCall() {
-    markdownlint.readConfigSync("./test/config-badfile.json");
+    markdownlint.readConfigSync("./test/config/config-badfile.json");
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad file.");
     test.ok(err instanceof Error, "Error not instance of Error.");
@@ -1512,7 +1513,7 @@ module.exports.configBadFileSync = function configBadFileSync(test) {
 module.exports.configBadChildFileSync = function configBadChildFileSync(test) {
   test.expect(4);
   test.throws(function badChildFileCall() {
-    markdownlint.readConfigSync("./test/config-badfile.json");
+    markdownlint.readConfigSync("./test/config/config-badchildfile.json");
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad child file.");
     test.ok(err instanceof Error, "Error not instance of Error.");
@@ -1523,24 +1524,28 @@ module.exports.configBadChildFileSync = function configBadChildFileSync(test) {
 };
 
 module.exports.configBadJsonSync = function configBadJsonSync(test) {
-  test.expect(3);
+  test.expect(4);
   test.throws(function badJsonCall() {
-    markdownlint.readConfigSync("./test/config-badjson.json");
+    markdownlint.readConfigSync("./test/config/config-badjson.json");
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad JSON.");
     test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, "Unexpected token b in JSON at position 5",
+      "Error message unexpected.");
     return true;
   }, "Did not get exception for bad JSON.");
   test.done();
 };
 
 module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
-  test.expect(3);
+  test.expect(4);
   test.throws(function badChildJsonCall() {
-    markdownlint.readConfigSync("./test/config-badchildjson.json");
+    markdownlint.readConfigSync("./test/config/config-badchildjson.json");
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad child JSON.");
     test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, "Unexpected token b in JSON at position 5",
+      "Error message unexpected.");
     return true;
   }, "Did not get exception for bad child JSON.");
   test.done();
