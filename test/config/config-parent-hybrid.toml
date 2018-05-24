@@ -1,0 +1,9 @@
+extends = "config-child.json"
+MD003 = false
+no-hard-tabs = true
+
+[MD007]
+indent = 4
+
+[line-length]
+line_length = 200

@@ -1,0 +1,6 @@
+extends: config-parent-hybrid.toml
+MD003:
+  style: atx_closed
+MD007:
+  indent: 2
+no-hard-tabs: false

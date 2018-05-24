@@ -1,0 +1,7 @@
+extends: config-child.yaml
+MD003: false
+MD007:
+  indent: 4
+no-hard-tabs: true
+line-length:
+  line_length: 200

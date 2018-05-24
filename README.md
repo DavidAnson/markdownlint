@@ -400,9 +400,13 @@ uses rule aliases (ex: `no-hard-tabs`) instead of names (ex: `MD010`).
 
 ### Config
 
-The `options.config` configuration object is simple and can be loaded as JSON
-in many cases. To take advantage of shared configuration where one file `extends`
-another, the following functions are useful.
+The `options.config` configuration object is simple and can be stored in a file
+for readability and easy reuse. The `readConfig` and `readConfigSync` functions
+load configuration settings and support the `extends` keyword for referencing
+other files (see above).
+
+By default, configuration files are parsed as JSON (and named `.markdownlint.json`).
+Custom parsers can be provided to handle other formats like JSONC, YAML, and TOML.
 
 Asynchronous interface:
 
@@ -411,10 +415,11 @@ Asynchronous interface:
  * Read specified configuration file.
  *
  * @param {String} file Configuration file name/path.
+ * @param {Array} [parsers] Optional parsing function(s).
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
  */
-function readConfig(file, callback) { ... }
+function readConfig(file, parsers, callback) { ... }
 ```
 
 Synchronous interface:
@@ -424,22 +429,39 @@ Synchronous interface:
  * Read specified configuration file synchronously.
  *
  * @param {String} file Configuration file name/path.
+ * @param {Array} [parsers] Optional parsing function(s).
  * @returns {Object} Configuration object.
  */
-function readConfigSync(file) { ... }
+function readConfigSync(file, parsers) { ... }
 ```
 
 #### file
 
 Type: `String`
 
-Location of JSON configuration file to read.
+Location of configuration file to read.
 
 The `file` is resolved relative to the current working directory. If an `extends`
 key is present once read, its value will be resolved as a path relative to `file`
 and loaded recursively. Settings from a file referenced by `extends` are applied
 first, then those of `file` are applied on top (overriding any of the same keys
 appearing in the referenced file).
+
+#### parsers
+
+Type: *Optional* `Array` of `Function` taking (`String`) and returning `Object`
+
+Array of functions to parse configuration files.
+
+The contents of a configuration file are passed to each parser function until one
+of them returns a value (vs. throwing an exception). Consequently, strict parsers
+should come before flexible parsers.
+
+For example:
+
+```js
+[ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]
+```
 
 #### callback
 

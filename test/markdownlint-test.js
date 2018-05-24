@@ -924,6 +924,7 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
           "#### result",
           "### Config",
           "#### file",
+          "#### parsers",
           "#### callback",
           "#### result",
           "## Usage",
@@ -1466,6 +1467,72 @@ module.exports.configBadChildJson = function configBadChildJson(test) {
     });
 };
 
+module.exports.configSingleYaml = function configSingleYaml(test) {
+  test.expect(2);
+  markdownlint.readConfig(
+    "./test/config/config-child.yaml",
+    [ require("js-yaml").safeLoad ],
+    function callback(err, actual) {
+      test.ifError(err);
+      const expected = require("./config/config-child.json");
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.done();
+    });
+};
+
+module.exports.configMultipleYaml = function configMultipleYaml(test) {
+  test.expect(2);
+  markdownlint.readConfig(
+    "./test/config/config-grandparent.yaml",
+    [ require("js-yaml").safeLoad ],
+    function callback(err, actual) {
+      test.ifError(err);
+      const expected = shared.assign(
+        shared.assign(
+          shared.assign({}, require("./config/config-child.json")),
+          require("./config/config-parent.json")),
+        require("./config/config-grandparent.json"));
+      delete expected.extends;
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.done();
+    });
+};
+
+module.exports.configMultipleHybrid = function configMultipleHybrid(test) {
+  test.expect(2);
+  markdownlint.readConfig(
+    "./test/config/config-grandparent-hybrid.yaml",
+    [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
+    function callback(err, actual) {
+      test.ifError(err);
+      const expected = shared.assign(
+        shared.assign(
+          shared.assign({}, require("./config/config-child.json")),
+          require("./config/config-parent.json")),
+        require("./config/config-grandparent.json"));
+      delete expected.extends;
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.done();
+    });
+};
+
+module.exports.configBadHybrid = function configBadHybrid(test) {
+  test.expect(4);
+  markdownlint.readConfig(
+    "./test/config/config-badcontent.txt",
+    [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
+    function callback(err, result) {
+      test.ok(err, "Did not get an error for bad child JSON.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.ok(err.message.match(
+        // eslint-disable-next-line max-len
+        /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*$/
+      ), "Error message unexpected.");
+      test.ok(!result, "Got result for bad child JSON.");
+      test.done();
+    });
+};
+
 module.exports.configSingleSync = function configSingleSync(test) {
   test.expect(1);
   const actual = markdownlint.readConfigSync("./test/config/config-child.json");
@@ -1530,8 +1597,10 @@ module.exports.configBadJsonSync = function configBadJsonSync(test) {
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad JSON.");
     test.ok(err instanceof Error, "Error not instance of Error.");
-    test.ok(err.message.match(/Unexpected token b in JSON at position \d+/),
-      "Error message unexpected.");
+    test.ok(err.message.match(
+      // eslint-disable-next-line max-len
+      /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+$/
+    ), "Error message unexpected.");
     return true;
   }, "Did not get exception for bad JSON.");
   test.done();
@@ -1544,10 +1613,69 @@ module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
   }, function testError(err) {
     test.ok(err, "Did not get an error for bad child JSON.");
     test.ok(err instanceof Error, "Error not instance of Error.");
-    test.ok(err.message.match(/Unexpected token b in JSON at position \d+/),
-      "Error message unexpected.");
+    test.ok(err.message.match(
+      // eslint-disable-next-line max-len
+      /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+$/
+    ), "Error message unexpected.");
     return true;
   }, "Did not get exception for bad child JSON.");
+  test.done();
+};
+
+module.exports.configSingleYamlSync = function configSingleYamlSync(test) {
+  test.expect(1);
+  const actual = markdownlint.readConfigSync(
+    "./test/config/config-child.yaml", [ require("js-yaml").safeLoad ]);
+  const expected = require("./config/config-child.json");
+  test.deepEqual(actual, expected, "Config object not correct.");
+  test.done();
+};
+
+module.exports.configMultipleYamlSync = function configMultipleYamlSync(test) {
+  test.expect(1);
+  const actual = markdownlint.readConfigSync(
+    "./test/config/config-grandparent.yaml", [ require("js-yaml").safeLoad ]);
+  const expected = shared.assign(
+    shared.assign(
+      shared.assign({}, require("./config/config-child.json")),
+      require("./config/config-parent.json")),
+    require("./config/config-grandparent.json"));
+  delete expected.extends;
+  test.deepEqual(actual, expected, "Config object not correct.");
+  test.done();
+};
+
+module.exports.configMultipleHybridSync =
+function configMultipleHybridSync(test) {
+  test.expect(1);
+  const actual = markdownlint.readConfigSync(
+    "./test/config/config-grandparent-hybrid.yaml",
+    [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
+  const expected = shared.assign(
+    shared.assign(
+      shared.assign({}, require("./config/config-child.json")),
+      require("./config/config-parent.json")),
+    require("./config/config-grandparent.json"));
+  delete expected.extends;
+  test.deepEqual(actual, expected, "Config object not correct.");
+  test.done();
+};
+
+module.exports.configBadHybridSync = function configBadHybridSync(test) {
+  test.expect(4);
+  test.throws(function badHybridCall() {
+    markdownlint.readConfigSync(
+      "./test/config/config-badcontent.txt",
+      [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
+  }, function testError(err) {
+    test.ok(err, "Did not get an error for bad content.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.ok(err.message.match(
+      // eslint-disable-next-line max-len
+      /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*$/
+    ), "Error message unexpected.");
+    return true;
+  }, "Did not get exception for bad content.");
   test.done();
 };
 
