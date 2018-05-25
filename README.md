@@ -96,6 +96,8 @@ See [Rules.md](doc/Rules.md) for more details.
 
 ## Tags
 
+Tags group related rules and can be used to enable/disable multiple rules at once.
+
 * **accessibility** - MD045
 * **atx** - MD018, MD019
 * **atx_closed** - MD020, MD021
