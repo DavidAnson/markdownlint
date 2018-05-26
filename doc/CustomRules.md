@@ -38,6 +38,7 @@ A rule is implemented as an `Object` with four required properties:
 - `tags` is an `Array` of `String` values that groups related rules for easier customization.
 - `function` is a synchronous `Function` that implements the rule and is passed two parameters:
   - `params` is an `Object` with properties that describe the content being analyzed:
+    - `name` is a `String` that identifies the input file/string.
     - `tokens` is an `Array` of [`markdown-it` `Token` objects](https://markdown-it.github.io/markdown-it/#Token) with added `line` and `lineNumber` properties.
     - `lines` is an `Array` of `String` values corresponding to the lines of the input file/string.
     - `frontMatterLines` is an `Array` of `String` values corresponding to any front matter (not present in `lines`).
@@ -73,6 +74,7 @@ Would create a `params` object like:
 
 ```json
 {
+  "name": "doc/example.md",
   "tokens": [
     {
       "type": "heading_open",

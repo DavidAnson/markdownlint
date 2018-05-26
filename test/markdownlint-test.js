@@ -2282,6 +2282,50 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
   });
 };
 
+module.exports.customRulesFileName = function customRulesFileName(test) {
+  test.expect(2);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function stringName(params) {
+          test.equal(params.name, "doc/CustomRules.md", "Incorrect file name");
+        }
+      }
+    ],
+    "files": "doc/CustomRules.md"
+  };
+  markdownlint(options, function callback(err) {
+    test.ifError(err);
+    test.done();
+  });
+};
+
+module.exports.customRulesStringName = function customRulesStringName(test) {
+  test.expect(2);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function stringName(params) {
+          test.equal(params.name, "string", "Incorrect string name");
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  markdownlint(options, function callback(err) {
+    test.ifError(err);
+    test.done();
+  });
+};
+
 module.exports.customRulesDoc = function customRulesDoc(test) {
   test.expect(2);
   markdownlint({
