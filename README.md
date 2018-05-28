@@ -713,6 +713,8 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * 0.9.0 - Remove support for end-of-life Node versions 0.10/0.12/4, change "header" to
           "heading" per spec (non-breaking), improve MD003/MD009/MD041, handle uncommon
           line-break characters, refactor for ES6, update dependencies.
+* 0.10.0 - Add support for non-JSON configuration files, pass file/string name to custom
+           rules, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
