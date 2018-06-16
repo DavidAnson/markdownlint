@@ -190,6 +190,31 @@ for the list to fix it:
   * Nested Item 3
 ```
 
+Sequentially-ordered list markers are usually left-aligned such that all items
+have the same starting column:
+
+```markdown
+...
+8. Item
+9. Item
+10. Item
+11. Item
+...
+```
+
+This rule also supports right-alignment of list markers such that all items have
+the same ending column:
+
+```markdown
+...
+ 8. Item
+ 9. Item
+10. Item
+11. Item
+...
+```
+
+
 <a name="md006"></a>
 
 ## MD006 - Consider starting bulleted lists at the beginning of the line
@@ -848,6 +873,17 @@ Example invalid list for all styles:
 ```markdown
 1. Do this.
 3. Done.
+```
+
+This rule supports 0-prefixing ordered list items for uniform indentation:
+
+```markdown
+...
+08. Item
+09. Item
+10. Item
+11. Item
+...
 ```
 
 <a name="md030"></a>
