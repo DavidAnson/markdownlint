@@ -1461,3 +1461,18 @@ Or with reference syntax as:
 Guidance for writing alternate text is available from the [W3C](https://www.w3.org/WAI/alt/),
 [Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
 [other locations](https://www.phase2technology.com/blog/no-more-excuses-definitive-guide-alt-text-field).
+
+<a name="md046"></a>
+
+## MD046 - Sentences Per Line
+
+Tags: line_length, spacing
+
+A lot of markdown commits are small corrections such as spelling or grammar fixes.
+Having multiple sentences in a line increases the git commit diff size for these
+smaller fixes.
+It's good to follow all sentence-ending periods with an endline to reduce the chance
+of conflicts.
+
+For documentation that tends towards long sentences, this can be a good alternative
+to strict line lengths.

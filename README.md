@@ -16,19 +16,20 @@ npm install markdownlint --save-dev
 ## Overview
 
 The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language is
-designed to be easy to read, write, and understand. It succeeds - and its
-flexibility is both a benefit and a drawback. Many styles are possible, so
-formatting can be inconsistent. Some constructs don't work well in all
-parsers and should be avoided. The [CommonMark](http://commonmark.org/)
-specification standardizes parsers - but not authors.
+designed to be easy to read, write, and understand.
+It succeeds - and its flexibility is both a benefit and a drawback.
+Many styles are possible, so formatting can be inconsistent.
+Some constructs don't work well in all parsers and should be avoided.
+The [CommonMark](http://commonmark.org/) specification standardizes parsers
+- but not authors.
 
 `markdownlint` is a [static analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
 tool for [Node.js](https://nodejs.org/) and [io.js](https://iojs.org/) with a
-library of rules to enforce standards and consistency for Markdown files. It
-was inspired by - and heavily influenced by - Mark Harrison's
+library of rules to enforce standards and consistency for Markdown files.
+It was inspired by - and heavily influenced by - Mark Harrison's
 [markdownlint](https://github.com/markdownlint/markdownlint) for
-[Ruby](https://www.ruby-lang.org/). The initial rules, rule documentation, and
-test cases came directly from that project.
+[Ruby](https://www.ruby-lang.org/).
+The initial rules, rule documentation, and test cases came directly from that project.
 
 ### Related
 
@@ -87,6 +88,7 @@ playground for learning and exploring.
 * **[MD043](doc/Rules.md#md043)** *required-headings/required-headers* - Required heading structure
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
 * **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have alternate text (alt text)
+* **[MD046](doc/Rules.md#md046)** *sentences-per-line* - Each sentence should be on its own line
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -116,10 +118,10 @@ Tags group related rules and can be used to enable/disable multiple rules at onc
 * **images** - MD045
 * **indentation** - MD005, MD006, MD007, MD027
 * **language** - MD040
-* **line_length** - MD013
+* **line_length** - MD013, MD046
 * **links** - MD011, MD034, MD039, MD042
 * **ol** - MD029, MD030, MD032
-* **spaces** - MD018, MD019, MD020, MD021, MD023
+* **spaces** - MD018, MD019, MD020, MD021, MD023, MD046
 * **spelling** - MD044
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
@@ -134,9 +136,9 @@ Two kinds of text are ignored:
 * [Front matter](https://jekyllrb.com/docs/frontmatter/) (see `options.frontMatter` below)
 
 Rules can be enabled, disabled, and configured via `options.config` (described
-below) to define the expected behavior for a set of inputs. To enable or disable
-rules within a file, add one of these markers to the appropriate place (HTML
-comments don't appear in the final markup):
+below) to define the expected behavior for a set of inputs.
+To enable or disable rules within a file, add one of these markers to the
+appropriate place (HTML comments don't appear in the final markup):
 
 * Disable all rules: `<!-- markdownlint-disable -->`
 * Enable all rules: `<!-- markdownlint-enable -->`
@@ -199,8 +201,8 @@ Type: `Array` of `Object`
 
 List of custom rules to include with the default rule set for linting.
 
-Each array element should define a rule. Rules are typically exported by another
-package, but can be defined inline.
+Each array element should define a rule.
+Rules are typically exported by another package, but can be defined inline.
 
 Example:
 
@@ -252,13 +254,15 @@ Configures the rules to use.
 
 Object keys are rule names or aliases and values are the rule's configuration.
 The value `false` disables a rule, `true` enables its default configuration,
-and passing an object customizes its settings. Setting the special `default`
-rule to `true` or `false` includes/excludes all rules by default. Enabling or
-disabling a tag name (ex: `whitespace`) affects all rules having that tag.
+and passing an object customizes its settings.
+Setting the special `default` rule to `true` or `false` includes/excludes all
+rules by default.
+Enabling or disabling a tag name (ex: `whitespace`) affects all rules having
+that tag.
 
 The `default` rule is applied first, then keys are processed in order from top
-to bottom with later values overriding earlier ones. Keys (including rule names,
-aliases, tags, and `default`) are not case-sensitive.
+to bottom with later values overriding earlier ones.
+Keys (including rule names, aliases, tags, and `default`) are not case-sensitive.
 
 Example:
 
@@ -289,8 +293,8 @@ See the [style](style) directory for more samples.
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
 for the [JSON Schema](http://json-schema.org/) of the `options.config` object.
 
-For more advanced scenarios, styles can reference and extend other styles. The
-`readConfig` and `readConfigSync` functions can be used to read such styles.
+For more advanced scenarios, styles can reference and extend other styles.
+The `readConfig` and `readConfigSync` functions can be used to read such styles.
 
 For example, assuming a `base.json` configuration file:
 
@@ -336,8 +340,9 @@ Matches any [front matter](https://jekyllrb.com/docs/frontmatter/) found at the
 beginning of a file.
 
 Some Markdown content begins with metadata; the default `RegExp` for this option
-ignores common forms of "front matter". To match differently, specify a custom
-`RegExp` or use the value `null` to disable the feature.
+ignores common forms of "front matter".
+To match differently, specify a custom `RegExp` or use the value `null` to
+disable the feature.
 
 The default value:
 
@@ -365,8 +370,8 @@ Disables the use of HTML comments like `<!-- markdownlint-disable -->` to toggle
 rules within the body of Markdown content.
 
 By default, properly-formatted inline comments can be used to create exceptions
-for parts of a document. Setting `noInlineConfig` to `true` ignores all such
-comments.
+for parts of a document.
+Setting `noInlineConfig` to `true` ignores all such comments.
 
 ##### options.resultVersion
 
@@ -376,15 +381,18 @@ Specifies which version of the `result` object to return (see the "Usage" sectio
 below for examples).
 
 Passing a `resultVersion` of `0` corresponds to the original, simple format where
-each error is identified by rule name and line number. This is deprecated.
+each error is identified by rule name and line number.
+This is deprecated.
 
 Passing a `resultVersion` of `1` corresponds to a detailed format where each error
 includes information about the line number, rule name, alias, description, as well
-as any additional detail or context that is available. This is deprecated.
+as any additional detail or context that is available.
+This is deprecated.
 
 Passing a `resultVersion` of `2` corresponds to a detailed format where each error
 includes information about the line number, rule names, description, as well as any
-additional detail or context that is available. This is the default.
+additional detail or context that is available.
+This is the default.
 
 #### callback
 
@@ -397,15 +405,16 @@ Standard completion callback.
 Type: `Object`
 
 Call `result.toString()` for convenience or see below for an example of the
-structure of the `result` object. Passing the value `true` to `toString()`
-uses rule aliases (ex: `no-hard-tabs`) instead of names (ex: `MD010`).
+structure of the `result` object.
+Passing the value `true` to `toString()` uses rule aliases (ex: `no-hard-tabs`)
+instead of names (ex: `MD010`).
 
 ### Config
 
 The `options.config` configuration object is simple and can be stored in a file
-for readability and easy reuse. The `readConfig` and `readConfigSync` functions
-load configuration settings and support the `extends` keyword for referencing
-other files (see above).
+for readability and easy reuse.
+The `readConfig` and `readConfigSync` functions load configuration settings and
+support the `extends` keyword for referencing other files (see above).
 
 By default, configuration files are parsed as JSON (and named `.markdownlint.json`).
 Custom parsers can be provided to handle other formats like JSONC, YAML, and TOML.
@@ -443,11 +452,12 @@ Type: `String`
 
 Location of configuration file to read.
 
-The `file` is resolved relative to the current working directory. If an `extends`
-key is present once read, its value will be resolved as a path relative to `file`
-and loaded recursively. Settings from a file referenced by `extends` are applied
-first, then those of `file` are applied on top (overriding any of the same keys
-appearing in the referenced file).
+The `file` is resolved relative to the current working directory.
+If an `extends` key is present once read, its value will be resolved as a
+path relative to `file` and loaded recursively.
+Settings from a file referenced by `extends` are applied first, then those of
+`file` are applied on top (overriding any of the same keys appearing in the
+referenced file).
 
 #### parsers
 
@@ -456,8 +466,8 @@ Type: *Optional* `Array` of `Function` taking (`String`) and returning `Object`
 Array of functions to parse configuration files.
 
 The contents of a configuration file are passed to each parser function until one
-of them returns a value (vs. throwing an exception). Consequently, strict parsers
-should come before flexible parsers.
+of them returns a value (vs. throwing an exception).
+Consequently, strict parsers should come before flexible parsers.
 
 For example:
 

@@ -1095,6 +1095,16 @@
       "type": "boolean",
       "default": true
     },
+    "MD046": {
+      "description": "MD046/sentences-per-line - Images should have alternate text (alt text)",
+      "type": "boolean",
+      "default": true
+    },
+    "sentences-per-line": {
+      "description": "MD046/sentences-per-line - Images should have alternate text (alt text)",
+      "type": "boolean",
+      "default": true
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
