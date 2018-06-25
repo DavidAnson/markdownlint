@@ -679,6 +679,10 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
 * [webpack](https://webpack.js.org/) ([Search repository](https://github.com/webpack/webpack.js.org/search?q=markdownlint))
 
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
+
 ## History
 
 * 0.0.1 - Initial release, includes tests MD001-MD032.

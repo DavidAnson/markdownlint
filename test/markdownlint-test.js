@@ -94,7 +94,10 @@ fs.readdirSync("./test").forEach(function forFile(file) {
 module.exports.projectFiles = function projectFiles(test) {
   test.expect(2);
   const options = {
-    "files": [ "README.md" ],
+    "files": [
+      "README.md",
+      "CONTRIBUTING.md"
+    ],
     "noInlineConfig": true,
     "config": {
       "MD013": { "line_length": 150 },
@@ -103,7 +106,10 @@ module.exports.projectFiles = function projectFiles(test) {
   };
   markdownlint(options, function callback(err, actual) {
     test.ifError(err);
-    const expected = { "README.md": [] };
+    const expected = {
+      "README.md": [],
+      "CONTRIBUTING.md": []
+    };
     test.deepEqual(actual, expected, "Issue(s) with project files.");
     test.done();
   });
@@ -930,6 +936,7 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
           "## Usage",
           "## Browser",
           "## Examples",
+          "## Contributing",
           "## History"
         ]
       }
