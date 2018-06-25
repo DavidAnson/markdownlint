@@ -2,7 +2,7 @@
 
 Interested in contributing? Great! Here are some suggestions to make it a good experience:
 
-Start by [opening an issue](/DavidAnson/markdownlint/issues), whether to identify a problem or outline a change.
+Start by [opening an issue](https://github.com/DavidAnson/markdownlint/issues), whether to identify a problem or outline a change.
 That issue should be used to discuss the situation and agree on a plan of action before writing code or sending a pull request.
 Maybe the problem isn't really a problem, or maybe there are more things to consider.
 If so, it's best to realize that before spending time and effort writing code that may not get used.
@@ -15,7 +15,7 @@ The excellent Markdown parser [markdown-it](https://www.npmjs.com/package/markdo
 
 If developing a new rule, start by creating a [custom rule](doc/CustomRules.md) in its own project.
 Once written, published, and tested in real world scenarios, open an issue to consider adding it to this project.
-For rule ideas, see [issues tagged with the `new rule` label](/DavidAnson/markdownlint/labels/new%20rule).
+For rule ideas, see [issues tagged with the `new rule` label](https://github.com/DavidAnson/markdownlint/labels/new%20rule).
 
 Add tests for all new/changed functionality.
 Test positive and negative scenarios.
