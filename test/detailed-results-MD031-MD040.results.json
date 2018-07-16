@@ -152,6 +152,22 @@
         "errorRange": [ 1, 24 ]
     },
     {
+        "lineNumber": 38,
+        "ruleNames": [ "MD038", "no-space-in-code" ],
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "` code\nspan`",
+        "errorRange": [ 6, 6 ]
+    },
+    {
+        "lineNumber": 44,
+        "ruleNames": [ "MD038", "no-space-in-code" ],
+        "ruleDescription": "Spaces inside code span elements",
+        "errorDetail": null,
+        "errorContext": "`code\nspan  `",
+        "errorRange": [ 1, 7 ]
+    },
+    {
         "lineNumber": 19,
         "ruleNames": [ "MD039", "no-space-in-links" ],
         "ruleDescription": "Spaces inside link text",

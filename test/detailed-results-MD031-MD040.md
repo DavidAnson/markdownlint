@@ -33,3 +33,13 @@ some *space* in *some * emphasis
 some *space* in **some ** emphasis
 some _space_ in _ some_ emphasis
 some __space__ in __ some __ emphasis
+
+Text
+text ` code
+span` text
+text.
+
+Text
+text `code
+span  ` text
+text.
