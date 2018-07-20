@@ -1,3 +1,4 @@
+
 # Rules
 
 This document contains a description of all rules, what they are checking for,
@@ -681,6 +682,8 @@ Tags: headings, headers
 
 Aliases: no-duplicate-heading, no-duplicate-header
 
+Parameters: siblings_only, allow_different_nesting (boolean; default `false`)
+
 This rule is triggered if there are multiple headings in the document that have
 the same text:
 
@@ -701,6 +704,22 @@ To fix this, ensure that the content of each heading is different:
 Rationale: Some markdown parses generate anchors for headings based on the
 heading name, and having headings with the same content can cause problems with
 this.
+
+If the parameter `siblings_only` (alternatively `allow_different_nesting`) is
+set to `true`, heading duplication is allowed for non-sibling headings (common
+in change logs):
+
+```markdown
+# Change log
+
+## 1.0.0
+
+### Features
+
+## 2.0.0
+
+### Features
+```
 
 <a name="md025"></a>
 

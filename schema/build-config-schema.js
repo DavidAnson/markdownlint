@@ -25,6 +25,7 @@ const schema = {
 const tags = {};
 
 // Add rules
+// eslint-disable-next-line complexity
 rules.forEach(function forRule(rule) {
   rule.tags.forEach(function forTag(tag) {
     const tagRules = tags[tag] || [];
@@ -148,6 +149,20 @@ rules.forEach(function forRule(rule) {
           "description": "Include headings",
           "type": "boolean",
           "default": true
+        }
+      };
+      break;
+    case "MD024":
+      scheme.properties = {
+        "allow_different_nesting": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        },
+        "siblings_only": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
         }
       };
       break;

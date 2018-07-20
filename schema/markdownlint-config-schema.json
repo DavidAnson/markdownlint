@@ -515,18 +515,66 @@
     },
     "MD024": {
       "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "allow_different_nesting": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        },
+        "siblings_only": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     },
     "no-duplicate-heading": {
       "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "allow_different_nesting": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        },
+        "siblings_only": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     },
     "no-duplicate-header": {
       "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "allow_different_nesting": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        },
+        "siblings_only": {
+          "description": "Only check sibling headings",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     },
     "MD025": {
       "description": "MD025/single-h1 - Multiple top level headings in the same document",

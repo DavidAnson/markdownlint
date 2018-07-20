@@ -1117,7 +1117,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(310);
+  test.expect(311);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -1131,11 +1131,11 @@ module.exports.doc = function doc(test) {
       function testTagsAliasesParams(r) {
         r = r || "[NO RULE]";
         test.ok(ruleHasTags,
-          "Missing tags for rule " + r.toString() + ".");
+          "Missing tags for rule " + r.names + ".");
         test.ok(ruleHasAliases,
-          "Missing aliases for rule " + r.toString() + ".");
+          "Missing aliases for rule " + r.names + ".");
         test.ok(!ruleUsesParams,
-          "Missing parameters for rule " + r.toString() + ".");
+          "Missing parameters for rule " + r.names + ".");
       }
       md.parse(contents, {}).forEach(function forToken(token) {
         if ((token.type === "heading_open") && (token.tag === "h2")) {
@@ -1161,12 +1161,12 @@ module.exports.doc = function doc(test) {
             }
           } else if (/^Tags: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
-              rule.tags, "Tag mismatch for rule " + rule.toString() + ".");
+              rule.tags, "Tag mismatch for rule " + rule.names + ".");
             ruleHasTags = true;
           } else if (/^Aliases: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
               rule.names.slice(1),
-              "Alias mismatch for rule " + rule.toString() + ".");
+              "Alias mismatch for rule " + rule.names + ".");
             ruleHasAliases = true;
           } else if (/^Parameters: /.test(token.content) && rule) {
             let inDetails = false;
@@ -1177,7 +1177,7 @@ module.exports.doc = function doc(test) {
                 return !inDetails;
               });
             test.deepEqual(parameters, ruleUsesParams,
-              "Missing parameter for rule " + rule.toString());
+              "Missing parameter for rule " + rule.names);
             ruleUsesParams = null;
           }
         }
@@ -1185,7 +1185,7 @@ module.exports.doc = function doc(test) {
       const ruleLeft = rulesLeft.shift();
       test.ok(!ruleLeft,
         "Missing rule documentation for " +
-          (ruleLeft || "[NO RULE]").toString() + ".");
+          (ruleLeft || { "names": "[NO RULE]" }).names + ".");
       if (rule) {
         testTagsAliasesParams(rule);
       }
