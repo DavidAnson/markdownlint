@@ -7,7 +7,7 @@ const tv4 = require("tv4");
 const markdownlint = require("../lib/markdownlint");
 const shared = require("../lib/shared");
 const rules = require("../lib/rules");
-const customRules = require("./rules");
+const customRules = require("./rules/rules.js");
 const defaultConfig = require("./markdownlint-test-default-config.json");
 const configSchema = require("../schema/markdownlint-config-schema.json");
 
@@ -1978,6 +1978,26 @@ module.exports.customRulesConfig = function customRulesConfig(test) {
       "every-n-lines": [ 3, 6, 12 ],
       "first-line": [ 1 ],
       "letters-E-X": [ 7 ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.done();
+  });
+};
+
+module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
+  test.expect(2);
+  const options = {
+    "customRules": [ require("./rules/npm") ],
+    "strings": {
+      "string": "# Text\n\n---\n\nText"
+    },
+    "resultVersion": 0
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {};
+    expectedResult.string = {
+      "sample-rule": [ 3 ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.done();

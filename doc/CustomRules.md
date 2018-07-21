@@ -1,7 +1,7 @@
 # Custom Rules
 
 In addition to its built-in rules, `markdownlint` lets you enhance the linting experience by passing a list of custom rules using the [`options.customRules` property](../README.md#optionscustomrules).
-Custom rules can do everything the built-in rules can and are defined inline or imported from another package ([keyword `markdownlint-rules` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rules)).
+Custom rules can do everything the built-in rules can and are defined inline or imported from another package ([keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule)).
 Custom rules can be disabled, enabled, and customized using the same syntax as built-in rules.
 
 ## Authoring
@@ -52,8 +52,9 @@ A rule is implemented as an `Object` with four required properties:
 ## Examples
 
 - [Simple rules used by the project's test cases](../test/rules)
-  - Includes [sample package configuration for npm](../test/rules/package.json)
 - [Code for all `markdownlint` built-in rules](../lib)
+- [Package configuration for publishing to npm](../test/rules/npm)
+  - Each package should export a single rule object
 
 ## References
 
@@ -62,7 +63,7 @@ A rule is implemented as an `Object` with four required properties:
 
 ## Params
 
-Linting the Markdown document:
+The Markdown document:
 
 ```markdown
 # Title
@@ -70,7 +71,7 @@ Linting the Markdown document:
 Text *text* text.
 ```
 
-Would create a `params` object like:
+Yields the `params` object:
 
 ```json
 {
