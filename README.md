@@ -719,6 +719,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
           line-break characters, refactor for ES6, update dependencies.
 * 0.10.0 - Add support for non-JSON configuration files, pass file/string name to custom
            rules, update dependencies.
+* 0.11.0 - Improve MD005/MD024/MD029/MD038, improve custom rule example, add CONTRIBUTING.md,
+           update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
