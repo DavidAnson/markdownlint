@@ -674,8 +674,9 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
 * [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
 * [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
-* [Sinon.JS](http://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
+* [Sinon.JS](https://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
 * [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
+* [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html) ([Search repository](https://github.com/Microsoft/TypeScript-Handbook/search?q=markdownlint))
 * [webhint](https://webhint.io/) ([Search repository](https://github.com/webhintio/hint/search?q=markdownlint))
 * [webpack](https://webpack.js.org/) ([Search repository](https://github.com/webpack/webpack.js.org/search?q=markdownlint))
 
