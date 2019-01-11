@@ -58,8 +58,8 @@ text
 
 text
 
-* list {MD032}
-``` {MD031}
+* list {MD032} {MD031:62}
+```
 code
 ```
 
@@ -67,8 +67,8 @@ text
 
 ```
 code
-``` {MD031}
-* list {MD032}
+```
+* list {MD032} {MD031:70}
 
 text
 

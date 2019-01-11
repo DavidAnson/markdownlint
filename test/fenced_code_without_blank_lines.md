@@ -9,18 +9,18 @@ code
 ```
 
 text
-``` {MD031}
+```
 code
-``` {MD031}
-text
+```
+text {MD031:12} {MD031:14}
 
 ```
 code
-``` {MD031}
-text
+```
+text {MD031:19}
 
-text
-``` {MD031}
+text {MD031:23}
+```
 code
 ```
 
