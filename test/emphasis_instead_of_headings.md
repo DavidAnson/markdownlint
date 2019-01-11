@@ -38,3 +38,5 @@ not trigger the rule.
 detected as a heading because it's on multiple lines**
 
 **This also shouldn't be detected as a heading as it ends in punctuation.**
+
+**[This as well since it is a link](https://example.com)**
