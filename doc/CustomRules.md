@@ -6,15 +6,18 @@ Custom rules can be disabled, enabled, and customized using the same syntax as b
 
 ## Authoring
 
-Rules are defined by a name (or multiple names), a description, one or more tags, and a function that implements the rule's behavior.
+Rules are defined by a name (or multiple names), a description, an optional link to more information, one or more tags, and a function that implements the rule's behavior.
 That function is called once for each file/string input and is passed the parsed input and a function to log any violations.
 
 A simple rule implementation looks like:
 
 ```js
+const { URL } = require("url");
+
 module.exports = {
   "names": [ "any-blockquote" ],
   "description": "Rule that reports an error for any blockquote",
+  "information": new URL("https://example.com/rules/any-blockquote"),
   "tags": [ "test" ],
   "function": function rule(params, onError) {
     params.tokens.filter(function filterToken(token) {
@@ -35,6 +38,7 @@ A rule is implemented as an `Object` with four required properties:
 
 - `names` is an `Array` of `String` values that identify the rule in output messages and config.
 - `description` is a `String` value that describes the rule in output messages.
+- `information` is an optional (absolute) `URL` of a link to more information about the rule.
 - `tags` is an `Array` of `String` values that groups related rules for easier customization.
 - `function` is a synchronous `Function` that implements the rule and is passed two parameters:
   - `params` is an `Object` with properties that describe the content being analyzed:

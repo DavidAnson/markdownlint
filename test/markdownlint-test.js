@@ -2,14 +2,18 @@
 
 const fs = require("fs");
 const path = require("path");
+const { URL } = require("url");
 const md = require("markdown-it")();
 const tv4 = require("tv4");
+const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const shared = require("../lib/shared");
 const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const defaultConfig = require("./markdownlint-test-default-config.json");
 const configSchema = require("../schema/markdownlint-config-schema.json");
+const homepage = packageJson.homepage;
+const version = packageJson.version;
 
 function promisify(func, ...args) {
   return new Promise((resolve, reject) => {
@@ -49,7 +53,17 @@ function createTestForFile(file) {
         });
     const expectedPromise = detailedResults ?
       promisify(fs.readFile, resultsFile, shared.utf8Encoding)
-        .then(JSON.parse) :
+        .then(
+          function fileContents(contents) {
+            const errorObjects = JSON.parse(contents);
+            errorObjects.forEach(function forObject(errorObject) {
+              if (errorObject.ruleInformation) {
+                errorObject.ruleInformation =
+                  errorObject.ruleInformation.replace("v0.0.0", `v${version}`);
+              }
+            });
+            return errorObjects;
+          }) :
       promisify(fs.readFile, file, shared.utf8Encoding)
         .then(
           function fileContents(contents) {
@@ -242,6 +256,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleAlias": "no-multiple-space-closed-atx",
           "ruleDescription":
             "Multiple spaces inside hashes on closed atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md021`,
           "errorDetail": null,
           "errorContext": "#  Multiple spa...tyle heading  #",
           "errorRange": [ 1, 4 ] }
@@ -251,6 +266,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleName": "MD002",
           "ruleAlias": "first-heading-h1",
           "ruleDescription": "First heading should be a top level heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
           "errorRange": null },
@@ -258,6 +274,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleName": "MD018",
           "ruleAlias": "no-missing-space-atx",
           "ruleDescription": "No space after hash on atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md018`,
           "errorDetail": null,
           "errorContext": "#Heading 1 {MD018}",
           "errorRange": [ 1, 2 ] },
@@ -265,6 +282,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleName": "MD019",
           "ruleAlias": "no-multiple-space-atx",
           "ruleDescription": "Multiple spaces after hash on atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md019`,
           "errorDetail": null,
           "errorContext": "##  Heading 2 {MD019}",
           "errorRange": [ 1, 5 ] },
@@ -272,6 +290,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleName": "MD019",
           "ruleAlias": "no-multiple-space-atx",
           "ruleDescription": "Multiple spaces after hash on atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md019`,
           "errorDetail": null,
           "errorContext": "##   Heading 3 {MD019}",
           "errorRange": [ 1, 6 ] }
@@ -281,6 +300,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
           "ruleName": "MD002",
           "ruleAlias": "first-heading-h1",
           "ruleDescription": "First heading should be a top level heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
           "errorRange": null }
@@ -333,6 +353,7 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
           "ruleNames": [ "MD021", "no-multiple-space-closed-atx" ],
           "ruleDescription":
             "Multiple spaces inside hashes on closed atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md021`,
           "errorDetail": null,
           "errorContext": "#  Multiple spa...tyle heading  #",
           "errorRange": [ 1, 4 ] }
@@ -341,24 +362,28 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
         { "lineNumber": 3,
           "ruleNames": [ "MD002", "first-heading-h1", "first-header-h1" ],
           "ruleDescription": "First heading should be a top level heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
           "errorRange": null },
         { "lineNumber": 1,
           "ruleNames": [ "MD018", "no-missing-space-atx" ],
           "ruleDescription": "No space after hash on atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md018`,
           "errorDetail": null,
           "errorContext": "#Heading 1 {MD018}",
           "errorRange": [ 1, 2 ] },
         { "lineNumber": 3,
           "ruleNames": [ "MD019", "no-multiple-space-atx" ],
           "ruleDescription": "Multiple spaces after hash on atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md019`,
           "errorDetail": null,
           "errorContext": "##  Heading 2 {MD019}",
           "errorRange": [ 1, 5 ] },
         { "lineNumber": 5,
           "ruleNames": [ "MD019", "no-multiple-space-atx" ],
           "ruleDescription": "Multiple spaces after hash on atx style heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md019`,
           "errorDetail": null,
           "errorContext": "##   Heading 3 {MD019}",
           "errorRange": [ 1, 6 ] }
@@ -367,6 +392,7 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
         { "lineNumber": 1,
           "ruleNames": [ "MD002", "first-heading-h1", "first-header-h1" ],
           "ruleDescription": "First heading should be a top level heading",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
           "errorRange": null }
@@ -1686,6 +1712,42 @@ module.exports.configBadHybridSync = function configBadHybridSync(test) {
   test.done();
 };
 
+module.exports.allBuiltInRulesHaveValidUrl =
+  function allBuiltInRulesHaveValidUrl(test) {
+    test.expect(123);
+    rules.forEach(function forRule(rule) {
+      test.ok(rule.information);
+      test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);
+      const name = rule.names[0].toLowerCase();
+      test.equal(
+        rule.information.href,
+        `${homepage}/blob/v${version}/doc/Rules.md#${name}`
+      );
+    });
+    test.done();
+  };
+
+module.exports.someCustomRulesHaveValidUrl =
+  function someCustomRulesHaveValidUrl(test) {
+    test.expect(6);
+    customRules.all.forEach(function forRule(rule) {
+      test.ok(!rule.information ||
+        (Object.getPrototypeOf(rule.information) === URL.prototype));
+      if (rule === customRules.anyBlockquote) {
+        test.equal(
+          rule.information,
+          `${homepage}/blob/master/test/rules/any-blockquote.js`
+        );
+      } else if (rule === customRules.lettersEX) {
+        test.equal(
+          rule.information,
+          `${homepage}/blob/master/test/rules/letters-E-X.js`
+        );
+      }
+    });
+    test.done();
+  };
+
 module.exports.customRulesV0 = function customRulesV0(test) {
   test.expect(4);
   const customRulesMd = "./test/custom-rules.md";
@@ -1766,6 +1828,8 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "any-blockquote",
         "ruleAlias": "any-blockquote",
         "ruleDescription": "Rule that reports an error for any blockquote",
+        "ruleInformation":
+          `${homepage}/blob/master/test/rules/any-blockquote.js`,
         "errorDetail": "Blockquote spans 1 line(s).",
         "errorContext": "> Block",
         "errorRange": null },
@@ -1773,6 +1837,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "every-n-lines",
         "ruleAlias": "every-n-lines",
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 2",
         "errorContext": null,
         "errorRange": null },
@@ -1780,6 +1845,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "every-n-lines",
         "ruleAlias": "every-n-lines",
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 4",
         "errorContext": null,
         "errorRange": null },
@@ -1787,6 +1853,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "every-n-lines",
         "ruleAlias": "every-n-lines",
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 6",
         "errorContext": null,
         "errorRange": null },
@@ -1794,6 +1861,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "every-n-lines",
         "ruleAlias": "every-n-lines",
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 10",
         "errorContext": null,
         "errorRange": null },
@@ -1801,6 +1869,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "every-n-lines",
         "ruleAlias": "every-n-lines",
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 12",
         "errorContext": null,
         "errorRange": null },
@@ -1808,6 +1877,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleName": "first-line",
         "ruleAlias": "first-line",
         "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
         "errorDetail": null,
         "errorContext": null,
         "errorRange": null },
@@ -1816,6 +1886,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleAlias": "letter-E-letter-X",
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
+        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null },
@@ -1824,6 +1895,7 @@ module.exports.customRulesV1 = function customRulesV1(test) {
         "ruleAlias": "letter-E-letter-X",
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
+        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null }
@@ -1872,42 +1944,50 @@ module.exports.customRulesV2 = function customRulesV2(test) {
       { "lineNumber": 12,
         "ruleNames": [ "any-blockquote" ],
         "ruleDescription": "Rule that reports an error for any blockquote",
+        "ruleInformation":
+          `${homepage}/blob/master/test/rules/any-blockquote.js`,
         "errorDetail": "Blockquote spans 1 line(s).",
         "errorContext": "> Block",
         "errorRange": null },
       { "lineNumber": 2,
         "ruleNames": [ "every-n-lines" ],
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 2",
         "errorContext": null,
         "errorRange": null },
       { "lineNumber": 4,
         "ruleNames": [ "every-n-lines" ],
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 4",
         "errorContext": null,
         "errorRange": null },
       { "lineNumber": 6,
         "ruleNames": [ "every-n-lines" ],
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 6",
         "errorContext": null,
         "errorRange": null },
       { "lineNumber": 10,
         "ruleNames": [ "every-n-lines" ],
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 10",
         "errorContext": null,
         "errorRange": null },
       { "lineNumber": 12,
         "ruleNames": [ "every-n-lines" ],
         "ruleDescription": "Rule that reports an error every N lines",
+        "ruleInformation": null,
         "errorDetail": "Line number 12",
         "errorContext": null,
         "errorRange": null },
       { "lineNumber": 1,
         "ruleNames": [ "first-line" ],
         "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
         "errorDetail": null,
         "errorContext": null,
         "errorRange": null },
@@ -1915,6 +1995,7 @@ module.exports.customRulesV2 = function customRulesV2(test) {
         "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
+        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null },
@@ -1922,6 +2003,7 @@ module.exports.customRulesV2 = function customRulesV2(test) {
         "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
+        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null }
@@ -2005,10 +2087,11 @@ module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
 };
 
 module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
-  test.expect(76);
+  test.expect(92);
   [
     [ "names", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
     [ "description", [ null, 10, "", [] ] ],
+    [ "information", [ 10, [], "string", "https://example.com" ] ],
     [ "tags", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
     [ "function", [ null, "string", [] ] ]
   ].forEach(function forProperty(property) {
@@ -2298,6 +2381,7 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
           "lineNumber": 1,
           "ruleNames": [ "name" ],
           "ruleDescription": "description",
+          "ruleInformation": null,
           "errorDetail": null,
           "errorContext": null,
           "errorRange": [ 0, 0 ]

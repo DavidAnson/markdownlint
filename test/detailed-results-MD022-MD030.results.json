@@ -3,6 +3,7 @@
         "lineNumber": 1,
         "ruleNames": [ "MD022", "blanks-around-headings", "blanks-around-headers" ],
         "ruleDescription": "Headings should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md022",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
@@ -11,6 +12,7 @@
         "lineNumber": 1,
         "ruleNames": [ "MD023", "heading-start-left", "header-start-left" ],
         "ruleDescription": "Headings must start at the beginning of the line",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md023",
         "errorDetail": null,
         "errorContext": " # Heading",
         "errorRange": [1, 2]
@@ -19,6 +21,7 @@
         "lineNumber": 4,
         "ruleNames": [ "MD024", "no-duplicate-heading", "no-duplicate-header" ],
         "ruleDescription": "Multiple headings with the same content",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md024",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
@@ -27,6 +30,7 @@
         "lineNumber": 4,
         "ruleNames": [ "MD025", "single-h1" ],
         "ruleDescription": "Multiple top level headings in the same document",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md025",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
@@ -35,6 +39,7 @@
         "lineNumber": 6,
         "ruleNames": [ "MD026", "no-trailing-punctuation" ],
         "ruleDescription": "Trailing punctuation in heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md026",
         "errorDetail": "Punctuation: '.'",
         "errorContext": null,
         "errorRange": [19, 1]
@@ -43,6 +48,7 @@
         "lineNumber": 8,
         "ruleNames": [ "MD027", "no-multiple-space-blockquote" ],
         "ruleDescription": "Multiple spaces after blockquote symbol",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md027",
         "errorDetail": null,
         "errorContext": ">  Multiple spaces",
         "errorRange": [1, 4]
@@ -51,6 +57,7 @@
         "lineNumber": 15,
         "ruleNames": [ "MD027", "no-multiple-space-blockquote" ],
         "ruleDescription": "Multiple spaces after blockquote symbol",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md027",
         "errorDetail": null,
         "errorContext": "> >  Multiple spaces, multiple...",
         "errorRange": [ 1, 6 ]
@@ -59,6 +66,7 @@
         "lineNumber": 17,
         "ruleNames": [ "MD027", "no-multiple-space-blockquote" ],
         "ruleDescription": "Multiple spaces after blockquote symbol",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md027",
         "errorDetail": null,
         "errorContext": "> > >  Multiple spaces, multip...",
         "errorRange": [ 1, 8 ]
@@ -67,6 +75,7 @@
         "lineNumber": 19,
         "ruleNames": [ "MD027", "no-multiple-space-blockquote" ],
         "ruleDescription": "Multiple spaces after blockquote symbol",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md027",
         "errorDetail": null,
         "errorContext": ">  > > Multiple spaces, multip...",
         "errorRange": [ 1, 8 ]
@@ -75,6 +84,7 @@
         "lineNumber": 9,
         "ruleNames": [ "MD028", "no-blanks-blockquote" ],
         "ruleDescription": "Blank line inside blockquote",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md028",
         "errorDetail": null,
         "errorContext": null,
         "errorRange": null
@@ -83,6 +93,7 @@
         "lineNumber": 13,
         "ruleNames": [ "MD029", "ol-prefix" ],
         "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
         "errorDetail": "Expected: 2; Actual: 3; Style: 1/2/3",
         "errorContext": null,
         "errorRange": [1, 4]
@@ -91,6 +102,7 @@
         "lineNumber": 13,
         "ruleNames": [ "MD030", "list-marker-space" ],
         "ruleDescription": "Spaces after list markers",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 2",
         "errorContext": null,
         "errorRange": [1, 4]

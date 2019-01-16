@@ -2,9 +2,15 @@
 
 "use strict";
 
+const { URL } = require("url");
+
 module.exports = {
   "names": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
   "description": "Rule that reports an error for lines with the letters 'EX'",
+  "information": new URL(
+    "https://github.com/DavidAnson/markdownlint" +
+    "/blob/master/test/rules/letters-E-X.js"
+  ),
   "tags": [ "test" ],
   "function": function rule(params, onError) {
     params.tokens.filter(function filterToken(token) {

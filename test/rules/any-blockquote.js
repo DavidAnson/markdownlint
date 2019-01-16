@@ -2,9 +2,15 @@
 
 "use strict";
 
+const { URL } = require("url");
+
 module.exports = {
   "names": [ "any-blockquote" ],
   "description": "Rule that reports an error for any blockquote",
+  "information": new URL(
+    "https://github.com/DavidAnson/markdownlint" +
+    "/blob/master/test/rules/any-blockquote.js"
+  ),
   "tags": [ "test" ],
   "function": function rule(params, onError) {
     params.tokens.filter(function filterToken(token) {

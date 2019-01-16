@@ -3,6 +3,7 @@
         "lineNumber": 5,
         "ruleNames": [ "MD011", "no-reversed-links" ],
         "ruleDescription": "Reversed link syntax",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md011",
         "errorDetail": "(reversed)[link]",
         "errorContext": null,
         "errorRange": [3, 16]
@@ -11,6 +12,7 @@
         "lineNumber": 7,
         "ruleNames": [ "MD012", "no-multiple-blanks" ],
         "ruleDescription": "Multiple consecutive blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md012",
         "errorDetail": "Expected: 1; Actual: 2",
         "errorContext": null,
         "errorRange": null
@@ -19,6 +21,7 @@
         "lineNumber": 8,
         "ruleNames": [ "MD013", "line-length" ],
         "ruleDescription": "Line length",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md013",
         "errorDetail": "Expected: 80; Actual: 99",
         "errorContext": null,
         "errorRange": [81, 19]
@@ -27,6 +30,7 @@
         "lineNumber": 10,
         "ruleNames": [ "MD014", "commands-show-output" ],
         "ruleDescription": "Dollar signs used before commands without showing output",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md014",
         "errorDetail": null,
         "errorContext": "$ command with no output",
         "errorRange": [5, 2]
@@ -35,6 +39,7 @@
         "lineNumber": 12,
         "ruleNames": [ "MD018", "no-missing-space-atx" ],
         "ruleDescription": "No space after hash on atx style heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md018",
         "errorDetail": null,
         "errorContext": "##No space A",
         "errorRange": [1, 3]
@@ -43,6 +48,7 @@
         "lineNumber": 14,
         "ruleNames": [ "MD019", "no-multiple-space-atx" ],
         "ruleDescription": "Multiple spaces after hash on atx style heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md019",
         "errorDetail": null,
         "errorContext": "##  Multiple spaces B",
         "errorRange": [1, 5]
@@ -51,6 +57,7 @@
         "lineNumber": 16,
         "ruleNames": [ "MD020", "no-missing-space-closed-atx" ],
         "ruleDescription": "No space inside hashes on closed atx style heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md020",
         "errorDetail": null,
         "errorContext": "##No space C ##",
         "errorRange": [1, 3]
@@ -59,6 +66,7 @@
         "lineNumber": 18,
         "ruleNames": [ "MD020", "no-missing-space-closed-atx" ],
         "ruleDescription": "No space inside hashes on closed atx style heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md020",
         "errorDetail": null,
         "errorContext": "## No space D##",
         "errorRange": [13, 3]
@@ -67,6 +75,7 @@
         "lineNumber": 20,
         "ruleNames": [ "MD021", "no-multiple-space-closed-atx" ],
         "ruleDescription": "Multiple spaces inside hashes on closed atx style heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md021",
         "errorDetail": null,
         "errorContext": "##  Multiple spaces E ##",
         "errorRange": [1, 5]
@@ -75,6 +84,7 @@
         "lineNumber": 22,
         "ruleNames": [ "MD021", "no-multiple-space-closed-atx" ],
         "ruleDescription": "Multiple spaces inside hashes on closed atx style heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md021",
         "errorDetail": null,
         "errorContext": "## Multiple spaces F  ##",
         "errorRange": [20, 5]

@@ -3,6 +3,7 @@
         "lineNumber": 1,
         "ruleNames": [ "MD041", "first-line-h1" ],
         "ruleDescription": "First line in file should be a top level heading",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md041",
         "errorDetail": null,
         "errorContext": "Not a heading",
         "errorRange": null
@@ -11,6 +12,7 @@
         "lineNumber": 3,
         "ruleNames": [ "MD042", "no-empty-links" ],
         "ruleDescription": "No empty links",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
         "errorDetail": null,
         "errorContext": "[empty]()",
         "errorRange": [4, 9]
@@ -19,6 +21,7 @@
         "lineNumber": 5,
         "ruleNames": [ "MD042", "no-empty-links" ],
         "ruleDescription": "No empty links",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
         "errorDetail": null,
         "errorContext": "[empty]()",
         "errorRange": [4, 10]
@@ -27,6 +30,7 @@
         "lineNumber": 7,
         "ruleNames": [ "MD042", "no-empty-links" ],
         "ruleDescription": "No empty links",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
         "errorDetail": null,
         "errorContext": "[empty]()",
         "errorRange": [4, 11]
@@ -35,6 +39,7 @@
         "lineNumber": 17,
         "ruleNames": [ "MD042", "no-empty-links" ],
         "ruleDescription": "No empty links",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
         "errorDetail": null,
         "errorContext": "[empty one]()",
         "errorRange": [25, 13]
@@ -43,6 +48,7 @@
         "lineNumber": 20,
         "ruleNames": [ "MD043", "required-headings", "required-headers" ],
         "ruleDescription": "Required heading structure",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md043",
         "errorDetail": null,
         "errorContext": "# Heading",
         "errorRange": null
@@ -51,6 +57,7 @@
         "lineNumber": 9,
         "ruleNames": [ "MD044", "proper-names" ],
         "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
         "errorDetail": "Expected: markdownlint; Actual: MARKDOWNLINT",
         "errorContext": null,
         "errorRange": [29, 12]
@@ -59,6 +66,7 @@
         "lineNumber": 12,
         "ruleNames": [ "MD044", "proper-names" ],
         "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
         "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
         "errorContext": null,
         "errorRange": [7, 12]
@@ -67,6 +75,7 @@
         "lineNumber": 15,
         "ruleNames": [ "MD044", "proper-names" ],
         "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
         "errorDetail": "Expected: markdownlint; Actual: MarkDownLint",
         "errorContext": null,
         "errorRange": [1, 12]
@@ -75,6 +84,7 @@
         "lineNumber": 19,
         "ruleNames": [ "MD045", "no-alt-text" ],
         "ruleDescription": "Images should have alternate text (alt text)",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md045",
         "errorDetail": null,
         "errorContext": null,
         "errorRange": null

@@ -3,6 +3,7 @@
         "lineNumber": 3,
         "ruleNames": [ "MD030", "list-marker-space" ],
         "ruleDescription": "Spaces after list markers",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 0",
         "errorContext": null,
         "errorRange": null
@@ -11,6 +12,7 @@
         "lineNumber": 5,
         "ruleNames": [ "MD030", "list-marker-space" ],
         "ruleDescription": "Spaces after list markers",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 0",
         "errorContext": null,
         "errorRange": null
@@ -19,6 +21,7 @@
         "lineNumber": 11,
         "ruleNames": [ "MD030", "list-marker-space" ],
         "ruleDescription": "Spaces after list markers",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 2",
         "errorContext": null,
         "errorRange": [1, 3]
@@ -27,6 +30,7 @@
         "lineNumber": 13,
         "ruleNames": [ "MD030", "list-marker-space" ],
         "ruleDescription": "Spaces after list markers",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 2",
         "errorContext": null,
         "errorRange": [1, 4]
