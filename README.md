@@ -386,6 +386,20 @@ Passing a `resultVersion` of `2` corresponds to a detailed format where each err
 includes information about the line number, rule names, description, as well as any
 additional detail or context that is available. This is the default.
 
+##### options.markdownItPlugins
+
+Type: `Array` of `Array` of `Function` and plugin parameters
+
+Specifies additional [markdown-it plugins](https://www.npmjs.com/search?q=keywords:markdown-it-plugin)
+to use when parsing input. Plugins can be used to support additional syntax and
+features for advanced scenarios.
+
+Each item in the top-level `Array` should be of the form:
+
+```js
+[ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
+```
+
 #### callback
 
 Type: `Function` taking (`Error`, `Object`)

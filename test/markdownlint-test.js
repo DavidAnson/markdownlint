@@ -4,6 +4,10 @@ const fs = require("fs");
 const path = require("path");
 const { URL } = require("url");
 const md = require("markdown-it")();
+const pluginInline = require("markdown-it-for-inline");
+const pluginMathjax = require("markdown-it-mathjax");
+const pluginSub = require("markdown-it-sub");
+const pluginSup = require("markdown-it-sup");
 const tv4 = require("tv4");
 const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
@@ -952,6 +956,7 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
           "##### options.frontMatter",
           "##### options.noInlineConfig",
           "##### options.resultVersion",
+          "##### options.markdownItPlugins",
           "#### callback",
           "#### result",
           "### Config",
@@ -2451,3 +2456,79 @@ module.exports.customRulesDoc = function customRulesDoc(test) {
     test.done();
   });
 };
+
+module.exports.markdownItPluginsSingle =
+  function markdownItPluginsSingle(test) {
+    test.expect(2);
+    markdownlint({
+      "strings": {
+        "string": "# Heading\n\nText [ link ](https://example.com)"
+      },
+      "markdownItPlugins": [
+        [
+          pluginInline,
+          "trim_text_plugin",
+          "text",
+          function iterator(tokens, index) {
+            tokens[index].content = tokens[index].content.trim();
+          }
+        ]
+      ]
+    }, function callback(err, actual) {
+      test.ifError(err);
+      const expected = { "string": [] };
+      test.deepEqual(actual, expected, "Unexpected issues.");
+      test.done();
+    });
+  };
+
+module.exports.markdownItPluginsMultiple =
+  function markdownItPluginsMultiple(test) {
+    test.expect(4);
+    markdownlint({
+      "strings": {
+        "string": "# Heading\n\nText H~2~0 text 29^th^ text"
+      },
+      "markdownItPlugins": [
+        [ pluginSub ],
+        [ pluginSup ],
+        [ pluginInline, "check_sub_plugin", "sub_open", test.ok ],
+        [ pluginInline, "check_sup_plugin", "sup_open", test.ok ]
+      ]
+    }, function callback(err, actual) {
+      test.ifError(err);
+      const expected = { "string": [] };
+      test.deepEqual(actual, expected, "Unexpected issues.");
+      test.done();
+    });
+  };
+
+module.exports.markdownItPluginsMathjax =
+  function markdownItPluginsMathjax(test) {
+    test.expect(2);
+    markdownlint({
+      "strings": {
+        "string":
+          "# Heading\n" +
+          "\n" +
+          "$1 *2* 3$\n" +
+          "\n" +
+          "$$1 *2* 3$$\n" +
+          "\n" +
+          "$$1\n" +
+          "+ 2\n" +
+          "+ 3$$\n"
+      },
+      "markdownItPlugins": [ [ pluginMathjax ] ],
+      "resultVersion": 0
+    }, function callback(err, actual) {
+      test.ifError(err);
+      const expected = {
+        "string": {
+          "MD032": [ 8 ]
+        }
+      };
+      test.deepEqual(actual, expected, "Unexpected issues.");
+      test.done();
+    });
+  };
