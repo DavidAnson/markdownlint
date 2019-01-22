@@ -34,6 +34,27 @@ Text
 
 Text
 
+> Text
+>
+> + Item
+> + Item
+>
+> Text
+
+Text
+
+> Text
+> + Item {MD032}
+> + Item
+
+Text
+
+> + Item
+> + Item {MD032}
+> ---
+
+Text
+
    > 1. Item
    >    1. Item
    >    1.  Item {MD030}
@@ -49,10 +70,22 @@ Text
 Text
 
   > Text
+  >
   > > - Item {MD004}
   >  > - Item {MD004} {MD027}
    > > - Item {MD004}
+   > >
   > > > - Item {MD004}
+  > >  > - Item {MD004} {MD027}
+  >  > > - Item {MD004} {MD027}
+
+Text
+
+  > Text
+  > > - Item {MD004} {MD032}
+  >  > - Item {MD004} {MD027}
+   > > - Item {MD004} {MD032}
+  > > > - Item {MD004} {MD032}
   > >  > - Item {MD004} {MD027}
   >  > > - Item {MD004} {MD027}
 
@@ -60,7 +93,15 @@ Text
 
 >+ Item
 > + Item
+>>
 >>+ Item
+>> + Item
+
+Text
+
+>+ Item
+> + Item {MD032}
+>>+ Item {MD032}
 >> + Item
 
 Text

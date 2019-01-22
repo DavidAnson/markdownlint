@@ -14,15 +14,15 @@
 
 ## Insufficient nesting
 
-- one
- 1. two
- 1. three
-- four
+- one {MD032}
+ 1. two {MD032}
+ 1. three {MD032}
+- four {MD032}
 
-1. one
-  - two {MD006}
-  - three
-1. four
+1. one {MD032}
+  - two {MD006} {MD032}
+  - three {MD032}
+1. four {MD032}
 
 ## Correct nesting, same type
 

@@ -5,7 +5,7 @@ const path = require("path");
 const { URL } = require("url");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
-const pluginMathjax = require("markdown-it-mathjax");
+const pluginKatex = require("markdown-it-katex");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const tv4 = require("tv4");
@@ -792,7 +792,7 @@ module.exports.styleAll = function styleAll(test) {
         "MD029": [ 47 ],
         "MD030": [ 8 ],
         "MD031": [ 50 ],
-        "MD032": [ 51 ],
+        "MD032": [ 7, 8, 51 ],
         "MD033": [ 55 ],
         "MD034": [ 57 ],
         "MD035": [ 61 ],
@@ -839,7 +839,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD026": [ 40 ],
         "MD029": [ 47 ],
         "MD031": [ 50 ],
-        "MD032": [ 51 ],
+        "MD032": [ 7, 8, 51 ],
         "MD035": [ 61 ],
         "MD036": [ 65 ],
         "MD042": [ 77 ],
@@ -2519,15 +2519,10 @@ module.exports.markdownItPluginsMathjax =
           "+ 2\n" +
           "+ 3$$\n"
       },
-      "markdownItPlugins": [ [ pluginMathjax ] ],
-      "resultVersion": 0
+      "markdownItPlugins": [ [ pluginKatex ] ]
     }, function callback(err, actual) {
       test.ifError(err);
-      const expected = {
-        "string": {
-          "MD032": [ 8 ]
-        }
-      };
+      const expected = { "string": [] };
       test.deepEqual(actual, expected, "Unexpected issues.");
       test.done();
     });

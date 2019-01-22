@@ -4,19 +4,19 @@ text
 
 * list
 
-text
+---
 * list {MD032}
-text
+---
 + list {MD032}
-text
+---
 - list {MD032}
-text
+---
 1. list {MD032}
-text
+---
 
 * list
 * list {MD032}
-text
+---
 
 text
 1. list {MD032}

@@ -21,7 +21,7 @@ This non-paragraph has a dash
 
 This non-paragraph has a dash
 - in its list. It also has a plus {MD032}
-+ in its list. {MD004}
++ in its list. {MD004} {MD032}
 
 This non-paragraph has spaces and a dash
 -   This is a list. {MD030} {MD032}

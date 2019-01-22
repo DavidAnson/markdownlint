@@ -18,6 +18,15 @@
         "errorRange": null
     },
     {
+        "lineNumber": 47,
+        "ruleNames": [ "MD032", "blanks-around-lists" ],
+        "ruleDescription": "Lists should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.11.0/doc/Rules.md#md032",
+        "errorDetail": null,
+        "errorContext": "* List",
+        "errorRange": null
+    },
+    {
         "lineNumber": 6,
         "ruleNames": [ "MD033", "no-inline-html" ],
         "ruleDescription": "Inline HTML",
