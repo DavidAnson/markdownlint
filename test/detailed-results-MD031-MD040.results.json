@@ -185,7 +185,7 @@
         "ruleDescription": "Spaces inside code span elements",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
         "errorDetail": null,
-        "errorContext": "` code\nspan`",
+        "errorContext": "` code",
         "errorRange": [ 6, 6 ]
     },
     {
@@ -194,8 +194,26 @@
         "ruleDescription": "Spaces inside code span elements",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
         "errorDetail": null,
-        "errorContext": "`code\nspan  `",
+        "errorContext": "span  `",
         "errorRange": [ 1, 7 ]
+    },
+    {
+        "lineNumber": 53,
+        "ruleNames": [ "MD038", "no-space-in-code" ],
+        "ruleDescription": "Spaces inside code span elements",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+        "errorDetail": null,
+        "errorContext": "span code ```",
+        "errorRange": [ 1, 13 ]
+    },
+    {
+        "lineNumber": 55,
+        "ruleNames": [ "MD038", "no-space-in-code" ],
+        "ruleDescription": "Spaces inside code span elements",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+        "errorDetail": null,
+        "errorContext": "```` code",
+        "errorRange": [ 11, 9 ]
     },
     {
         "lineNumber": 19,

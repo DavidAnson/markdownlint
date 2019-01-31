@@ -1420,6 +1420,107 @@ module.exports.trimLeftRight = function trimLeftRight(test) {
   test.done();
 };
 
+module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
+  test.expect(94);
+  const testCases =
+    [
+      [
+        "`code`",
+        [ [ "code", 0, 1, 1 ] ]
+      ],
+      [
+        "text `code` text",
+        [ [ "code", 0, 6, 1 ] ]
+      ],
+      [
+        "text `code` text `edoc`",
+        [
+          [ "code", 0, 6, 1 ],
+          [ "edoc", 0, 18, 1 ]
+        ]
+      ],
+      [
+        "text `code` text `edoc` text",
+        [
+          [ "code", 0, 6, 1 ],
+          [ "edoc", 0, 18, 1 ]
+        ]
+      ],
+      [
+        "text ``code`code`` text",
+        [ [ "code`code", 0, 7, 2 ] ]
+      ],
+      [
+        "`code `` code`",
+        [ [ "code `` code", 0, 1, 1 ] ]
+      ],
+      [
+        "`code\\`text`",
+        [ [ "code\\", 0, 1, 1 ] ]
+      ],
+      [
+        "``\ncode\n``",
+        [ [ "\ncode\n", 0, 2, 2 ] ]
+      ],
+      [
+        "text\n`code`\ntext",
+        [ [ "code", 1, 1, 1 ] ]
+      ],
+      [
+        "text\ntext\n`code`\ntext\n`edoc`\ntext",
+        [
+          [ "code", 2, 1, 1 ],
+          [ "edoc", 4, 1, 1 ]
+        ]
+      ],
+      [
+        "text `code\nedoc` text",
+        [ [ "code\nedoc", 0, 6, 1 ] ]
+      ],
+      [
+        "> text `code` text",
+        [ [ "code", 0, 8, 1 ] ]
+      ],
+      [
+        "> text\n> `code`\n> text",
+        [ [ "code", 1, 3, 1 ] ]
+      ],
+      [
+        "> text\n> `code\n> edoc`\n> text",
+        [ [ "code\n> edoc", 1, 3, 1 ] ]
+      ],
+      [
+        "```text``",
+        []
+      ],
+      [
+        "text `text text",
+        []
+      ],
+      [
+        "`text``code``",
+        [ [ "code", 0, 7, 2 ] ]
+      ],
+      [
+        "text \\` text `code`",
+        [ [ "code", 0, 14, 1 ] ]
+      ]
+    ];
+  testCases.forEach((testCase) => {
+    const [ input, expecteds ] = testCase;
+    shared.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
+      const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
+        expecteds.shift();
+      test.equal(code, expectedCode, input);
+      test.equal(line, expectedLine, input);
+      test.equal(column, expectedColumn, input);
+      test.equal(ticks, expectedTicks, input);
+    });
+    test.equal(expecteds.length, 0, "length");
+  });
+  test.done();
+};
+
 module.exports.configSingle = function configSingle(test) {
   test.expect(2);
   markdownlint.readConfig("./test/config/config-child.json",

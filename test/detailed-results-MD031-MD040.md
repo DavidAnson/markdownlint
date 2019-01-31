@@ -46,3 +46,13 @@ text.
 
 * List
 ---
+
+Text
+text ```code
+span code
+span code ``` text
+text
+text text ```` code
+span code
+span```` text
+text.
