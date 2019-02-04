@@ -740,6 +740,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            rules, update dependencies.
 * 0.11.0 - Improve MD005/MD024/MD029/MD038, improve custom rule example, add CONTRIBUTING.md,
            update dependencies.
+* 0.12.0 - Add `information` link for custom rules, `markdownItPlugins` for extensibility,
+           improve MD023/MD032/MD038, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
