@@ -294,7 +294,7 @@ when a single space is used after the list marker.
 
 Rationale (4 space indent): Same indent as code blocks, simpler for editors to
 implement. See
-<http://www.cirosantilli.com/markdown-styleguide/#indented-lists> for more
+<https://www.cirosantilli.com/markdown-style-guide/#indentation-of-content-inside-lists> for more
 information.
 
 In addition, this is a compatibility issue with multi-markdown parsers, which
@@ -383,13 +383,13 @@ where the syntax appears to have been reversed (the `[]` and `()` are
 reversed):
 
 ```markdown
-(Incorrect link syntax)[http://www.example.com/]
+(Incorrect link syntax)[https://www.example.com/]
 ```
 
 To fix this, swap the `[]` and `()` around:
 
 ```markdown
-[Correct link syntax](http://www.example.com/)
+[Correct link syntax](https://www.example.com/)
 ```
 
 Note: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style footnotes do not trigger this rule:
@@ -499,7 +499,7 @@ baz
 
 Rationale: it is easier to copy and paste and less noisy if the dollar signs
 are omitted when they are not needed. See
-<http://www.cirosantilli.com/markdown-styleguide/#dollar-signs-in-shell-code>
+<https://www.cirosantilli.com/markdown-style-guide/#dollar-signs-in-shell-code>
 for more information.
 
 <a name="md018"></a>
@@ -941,7 +941,7 @@ of every item in the list consists of a single paragraph, or multiple
 paragraphs (including sub-lists and code blocks).
 
 For example, the style guide at
-<http://www.cirosantilli.com/markdown-styleguide/#spaces-after-marker>
+<https://www.cirosantilli.com/markdown-style-guide/#spaces-after-list-marker>
 specifies that 1 space after the list marker should be used if every item in
 the list fits within a single paragraph, but to use 2 or 3 spaces (for ordered
 and unordered lists respectively) if there are multiple paragraphs of content
@@ -1109,13 +1109,13 @@ This rule is triggered whenever a URL is given that isn't surrounded by angle
 brackets:
 
 ```markdown
-For more information, see http://www.example.com/.
+For more information, see https://www.example.com/.
 ```
 
 To fix this, add angle brackets around the URL:
 
 ```markdown
-For more information, see <http://www.example.com/>.
+For more information, see <https://www.example.com/>.
 ```
 
 Rationale: Without angle brackets, the URL isn't converted into a link in many
@@ -1126,7 +1126,7 @@ enclose it in a code block, otherwise in some markdown parsers it _will_ be
 converted:
 
 ```markdown
-`http://www.example.com`
+`https://www.example.com`
 ```
 
 <a name="md035"></a>
@@ -1294,13 +1294,13 @@ Aliases: no-space-in-links
 This rule is triggered on links that have spaces surrounding the link text:
 
 ```markdown
-[ a link ](http://www.example.com/)
+[ a link ](https://www.example.com/)
 ```
 
 To fix this, remove the spaces surrounding the link text:
 
 ```markdown
-[a link](http://www.example.com/)
+[a link](https://www.example.com/)
 ```
 
 <a name="md040"></a>

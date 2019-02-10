@@ -41,8 +41,8 @@
         "ruleDescription": "Bare URL used",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
         "errorDetail": null,
-        "errorContext": "http://example.com",
-        "errorRange": [6, 18]
+        "errorContext": "https://example.com",
+        "errorRange": [6, 19]
     },
     {
         "lineNumber": 11,

@@ -54,7 +54,7 @@ Note: Can not break MD025 and MD002 in the same file
 
 <br/> {MD033}
 
-http://example.com/page {MD034}
+https://example.com/page {MD034}
 
 ---
 

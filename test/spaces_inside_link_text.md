@@ -1,26 +1,26 @@
-[foo](http://bar/)
+[foo](https://bar/)
 
-["foo"](http:/bar/)
+["foo"](https://bar/)
 
-[`foo`](http://bar/)
+[`foo`](https://bar/)
 
-[*foo*](http://bar/)
+[*foo*](https://bar/)
 
-[**foo**](http://bar/)
+[**foo**](https://bar/)
 
-[foo "bar"](http:/baz/)
+[foo "bar"](https://baz/)
 
-[foo ](http://bar/) {MD039}
+[foo ](https://bar/) {MD039}
 
-[ foo](http://bar/) {MD039}
+[ foo](https://bar/) {MD039}
 
-[ foo ](http://bar/) {MD039}
+[ foo ](https://bar/) {MD039}
 
-[ "foo" ](http://bar/) {MD039}
+[ "foo" ](https://bar/) {MD039}
 
-[ `foo` ](http://bar/) {MD039}
+[ `foo` ](https://bar/) {MD039}
 
-[ *foo* ](http://bar/) {MD039}
+[ *foo* ](https://bar/) {MD039}
 
 The following shouldn't break anything:
 [![Screenshot.png](/images/Screenshot.png)](/images/Screenshot.png)

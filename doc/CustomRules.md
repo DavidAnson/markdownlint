@@ -62,7 +62,7 @@ A rule is implemented as an `Object` with four required properties:
 
 ## References
 
-- [CommonMark documentation and specification](http://commonmark.org/)
+- [CommonMark documentation and specification](https://commonmark.org/)
 - [`markdown-it` Markdown parser project page](https://github.com/markdown-it/markdown-it)
 
 ## Params

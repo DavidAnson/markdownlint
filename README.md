@@ -19,7 +19,7 @@ The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language is
 designed to be easy to read, write, and understand. It succeeds - and its
 flexibility is both a benefit and a drawback. Many styles are possible, so
 formatting can be inconsistent. Some constructs don't work well in all
-parsers and should be avoided. The [CommonMark](http://commonmark.org/)
+parsers and should be avoided. The [CommonMark](https://commonmark.org/)
 specification standardizes parsers - but not authors.
 
 `markdownlint` is a [static analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
@@ -287,7 +287,7 @@ const options = {
 See the [style](style) directory for more samples.
 
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
-for the [JSON Schema](http://json-schema.org/) of the `options.config` object.
+for the [JSON Schema](https://json-schema.org/) of the `options.config` object.
 
 For more advanced scenarios, styles can reference and extend other styles. The
 `readConfig` and `readConfigSync` functions can be used to read such styles.
@@ -581,7 +581,7 @@ Output:
 }
 ```
 
-Integration with the [gulp](http://gulpjs.com/) build system is straightforward:
+Integration with the [gulp](https://gulpjs.com/) build system is straightforward:
 
 ```js
 const gulp = require("gulp");
@@ -615,7 +615,7 @@ bad.md: 1: MD041/first-line-h1 First line in file should be a top level heading 
 [00:00:00] Finished 'markdownlint' after 10 ms
 ```
 
-Integration with the [Grunt](http://gruntjs.com/) build system is similar:
+Integration with the [Grunt](https://gruntjs.com/) build system is similar:
 
 ```js
 const markdownlint = require("markdownlint");

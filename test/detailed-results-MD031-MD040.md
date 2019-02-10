@@ -5,7 +5,7 @@ debugger;
 
 Inline<hr/>HTML
 
-Bare http://example.com link
+Bare https://example.com link
 
 ---
 ***
