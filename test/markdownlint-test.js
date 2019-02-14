@@ -2628,3 +2628,32 @@ module.exports.markdownItPluginsMathjax =
       test.done();
     });
   };
+
+module.exports.markdownItPluginsMathjaxIssue166 =
+  function markdownItPluginsMathjaxIssue166(test) {
+    test.expect(2);
+    markdownlint({
+      "strings": {
+        "string":
+`## Heading
+
+$$
+1
+$$$$
+2
+$$`
+      },
+      "markdownItPlugins": [ [ pluginKatex ] ],
+      "resultVersion": 0
+    }, function callback(err, actual) {
+      test.ifError(err);
+      const expected = {
+        "string": {
+          "MD002": [ 1 ],
+          "MD041": [ 1 ]
+        }
+      };
+      test.deepEqual(actual, expected, "Unexpected issues.");
+      test.done();
+    });
+  };
