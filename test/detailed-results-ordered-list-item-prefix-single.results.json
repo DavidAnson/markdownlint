@@ -1,0 +1,11 @@
+[
+    {
+        "lineNumber": 3,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 1; Actual: 9; Style: 1/1/1",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    }
+]

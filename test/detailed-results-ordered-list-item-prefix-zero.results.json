@@ -1,0 +1,56 @@
+[
+    {
+        "lineNumber": 11,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 0; Actual: 1; Style: 0/0/0",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
+        "lineNumber": 12,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 0; Actual: 1; Style: 0/0/0",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
+        "lineNumber": 13,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 0; Actual: 1; Style: 0/0/0",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
+        "lineNumber": 17,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 0; Actual: 1; Style: 0/0/0",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
+        "lineNumber": 18,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 0; Actual: 2; Style: 0/0/0",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
+        "lineNumber": 19,
+        "ruleNames": [ "MD029", "ol-prefix" ],
+        "ruleDescription": "Ordered list item prefix",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md029",
+        "errorDetail": "Expected: 0; Actual: 3; Style: 0/0/0",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    }
+]

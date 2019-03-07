@@ -184,7 +184,8 @@ rules.forEach(function forRule(rule) {
           "enum": [
             "one",
             "ordered",
-            "one_or_ordered"
+            "one_or_ordered",
+            "zero"
           ],
           "default": "one_or_ordered"
         }
