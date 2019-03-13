@@ -1,1 +1,1 @@
-## Second level heading {MD041} {MD002}
+## Second level heading {MD041}

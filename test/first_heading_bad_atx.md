@@ -1,1 +1,1 @@
-## Heading {MD002}
+## Heading

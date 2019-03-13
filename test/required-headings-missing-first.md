@@ -1,5 +1,5 @@
 text
 
-## Two {MD002} {MD043}
+## Two {MD043}
 
 ### Three

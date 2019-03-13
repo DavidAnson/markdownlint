@@ -140,7 +140,10 @@ module.exports.resultFormattingV0 = function resultFormattingV0(test) {
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
     ],
-    "config": defaultConfig,
+    "config": {
+      "MD002": true,
+      "MD041": false
+    },
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -193,7 +196,10 @@ module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
     ],
-    "config": defaultConfig,
+    "config": {
+      "MD002": true,
+      "MD041": false
+    },
     "resultVersion": 0
   };
   const actualResult = markdownlint.sync(options);
@@ -248,7 +254,10 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
     ],
-    "config": defaultConfig,
+    "config": {
+      "MD002": true,
+      "MD041": false
+    },
     "resultVersion": 1
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -347,7 +356,10 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
       "./test/atx_heading_spacing.md",
       "./test/first_heading_bad_atx.md"
     ],
-    "config": defaultConfig
+    "config": {
+      "MD002": true,
+      "MD041": false
+    }
   };
   markdownlint(options, function callback(err, actualResult) {
     test.ifError(err);
@@ -503,13 +515,11 @@ module.exports.defaultTrue = function defaultTrue(test) {
     test.ifError(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
-        "MD002": [ 3 ],
         "MD018": [ 1 ],
         "MD019": [ 3, 5 ],
         "MD041": [ 1 ]
       },
       "./test/first_heading_bad_atx.md": {
-        "MD002": [ 1 ],
         "MD041": [ 1 ]
       }
     };
@@ -555,13 +565,11 @@ module.exports.defaultUndefined = function defaultUndefined(test) {
     test.ifError(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
-        "MD002": [ 3 ],
         "MD018": [ 1 ],
         "MD019": [ 3, 5 ],
         "MD041": [ 1 ]
       },
       "./test/first_heading_bad_atx.md": {
-        "MD002": [ 1 ],
         "MD041": [ 1 ]
       }
     };
@@ -675,11 +683,9 @@ module.exports.disableTag = function disableTag(test) {
     test.ifError(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
-        "MD002": [ 3 ],
         "MD041": [ 1 ]
       },
       "./test/first_heading_bad_atx.md": {
-        "MD002": [ 1 ],
         "MD041": [ 1 ]
       }
     };
@@ -767,7 +773,6 @@ module.exports.styleAll = function styleAll(test) {
     const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
-        "MD002": [ 1 ],
         "MD003": [ 5, 30 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
@@ -823,7 +828,6 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
     const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
-        "MD002": [ 1 ],
         "MD003": [ 5, 30 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
@@ -2649,7 +2653,6 @@ $$`
       test.ifError(err);
       const expected = {
         "string": {
-          "MD002": [ 1 ],
           "MD041": [ 1 ]
         }
       };

@@ -51,6 +51,9 @@ Aliases: first-heading-h1, first-header-h1
 
 Parameters: level (number; default 1)
 
+> Note: *MD002 has been deprecated and is disabled by default.*
+> [MD041](#md041) offers an improved implementation of the rule.
+
 This rule is intended to ensure document headings start at the top level and
 is triggered when the first heading in the document isn't an h1 heading:
 
@@ -70,8 +73,6 @@ The first heading in the document should be an h1 heading:
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
 cases where an h1 is added externally.
-
-See also: [MD041](#md041) for an improved version of this rule.
 
 <a name="md003"></a>
 
