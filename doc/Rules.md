@@ -1348,7 +1348,7 @@ echo Hello world
 
 Tags: headings, headers
 
-Aliases: first-line-h1
+Aliases: first-line-heading, first-line-h1
 
 Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
 

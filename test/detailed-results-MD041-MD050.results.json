@@ -1,7 +1,7 @@
 [
     {
         "lineNumber": 1,
-        "ruleNames": [ "MD041", "first-line-h1" ],
+        "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
         "ruleDescription": "First line in file should be a top level heading",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md041",
         "errorDetail": null,

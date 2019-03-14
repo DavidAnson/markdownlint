@@ -82,7 +82,7 @@ playground for learning and exploring.
 * **[MD038](doc/Rules.md#md038)** *no-space-in-code* - Spaces inside code span elements
 * **[MD039](doc/Rules.md#md039)** *no-space-in-links* - Spaces inside link text
 * **[MD040](doc/Rules.md#md040)** *fenced-code-language* - Fenced code blocks should have a language specified
-* **[MD041](doc/Rules.md#md041)** *first-line-h1* - First line in file should be a top level heading
+* **[MD041](doc/Rules.md#md041)** *first-line-heading/first-line-h1* - First line in file should be a top level heading
 * **[MD042](doc/Rules.md#md042)** *no-empty-links* - No empty links
 * **[MD043](doc/Rules.md#md043)** *required-headings/required-headers* - Required heading structure
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
