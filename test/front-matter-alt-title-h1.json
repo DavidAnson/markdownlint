@@ -1,0 +1,7 @@
+{
+  "default": true,
+  "MD013": false,
+  "MD025": {
+    "front_matter_title": "^\\s*alternate="
+  }
+}

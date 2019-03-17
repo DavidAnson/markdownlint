@@ -40,7 +40,6 @@ rules.forEach(function forRule(rule) {
   let custom = true;
   switch (rule.names[0]) {
     case "MD002":
-    case "MD025":
       scheme.properties = {
         "level": {
           "description": "Heading level",
@@ -236,6 +235,7 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD025":
     case "MD041":
       scheme.properties = {
         "level": {

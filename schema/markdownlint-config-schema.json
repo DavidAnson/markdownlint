@@ -577,7 +577,7 @@
       "additionalProperties": false
     },
     "MD025": {
-      "description": "MD025/single-h1 - Multiple top level headings in the same document",
+      "description": "MD025/single-title/single-h1 - Multiple top level headings in the same document",
       "type": [
         "boolean",
         "object"
@@ -588,12 +588,38 @@
           "description": "Heading level",
           "type": "integer",
           "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        }
+      },
+      "additionalProperties": false
+    },
+    "single-title": {
+      "description": "MD025/single-title/single-h1 - Multiple top level headings in the same document",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "level": {
+          "description": "Heading level",
+          "type": "integer",
+          "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
     },
     "single-h1": {
-      "description": "MD025/single-h1 - Multiple top level headings in the same document",
+      "description": "MD025/single-title/single-h1 - Multiple top level headings in the same document",
       "type": [
         "boolean",
         "object"
@@ -604,6 +630,11 @@
           "description": "Heading level",
           "type": "integer",
           "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
@@ -955,7 +986,28 @@
       "default": true
     },
     "MD041": {
-      "description": "MD041/first-line-h1 - First line in file should be a top level heading",
+      "description": "MD041/first-line-heading/first-line-h1 - First line in file should be a top level heading",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "level": {
+          "description": "Heading level",
+          "type": "integer",
+          "default": 1
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        }
+      },
+      "additionalProperties": false
+    },
+    "first-line-heading": {
+      "description": "MD041/first-line-heading/first-line-h1 - First line in file should be a top level heading",
       "type": [
         "boolean",
         "object"
@@ -976,7 +1028,7 @@
       "additionalProperties": false
     },
     "first-line-h1": {
-      "description": "MD041/first-line-h1 - First line in file should be a top level heading",
+      "description": "MD041/first-line-heading/first-line-h1 - First line in file should be a top level heading",
       "type": [
         "boolean",
         "object"

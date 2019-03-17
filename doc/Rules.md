@@ -730,9 +730,9 @@ in change logs):
 
 Tags: headings, headers
 
-Aliases: single-h1
+Aliases: single-title, single-h1
 
-Parameters: level (number; default 1)
+Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
 
 This rule is triggered when a top level heading is in use (the first line of
 the file is an h1 heading), and more than one h1 heading is in use in the
@@ -763,6 +763,13 @@ should be contained within this heading.
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
 cases where an h1 is added externally.
+
+If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains
+a `title` property (commonly used with blog posts), this rule treats that as a top
+level heading and will report a violation for any subsequent top level headings.
+To use a different property name in front matter, specify the text of a regular
+expression via the `front_matter_title` parameter. To disable the use of front
+matter by this rule, specify `""` for `front_matter_title`.
 
 <a name="md026"></a>
 
