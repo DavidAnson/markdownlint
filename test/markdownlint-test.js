@@ -1396,6 +1396,42 @@ function clearHtmlCommentTextEmbedded(test) {
   test.done();
 };
 
+module.exports.isBlankLine = function isBlankLine(test) {
+  test.expect(25);
+  const blankLines = [
+    null,
+    "",
+    " ",
+    "  ",
+    "\t\t\t",
+    "\r",
+    "\n",
+    "\t\r\n",
+    " <!-- text --> ",
+    "<!--text-->",
+    "<!---->",
+    "<!-- text -->\t<!-- text -->",
+    ">",
+    "> ",
+    "> > > \t",
+    "> <!--text-->",
+    ">><!--text-->"
+  ];
+  blankLines.forEach((line) => test.ok(shared.isBlankLine(line), line));
+  const nonBlankLines = [
+    "text",
+    " text ",
+    ".",
+    "> .",
+    "<!--text--> text",
+    "<!--->",
+    "<!--",
+    "-->"
+  ];
+  nonBlankLines.forEach((line) => test.ok(!shared.isBlankLine(line), line));
+  test.done();
+};
+
 module.exports.trimLeftRight = function trimLeftRight(test) {
   const inputs = [
     "text text",
