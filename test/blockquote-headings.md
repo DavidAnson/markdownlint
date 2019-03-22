@@ -20,17 +20,17 @@ Text
 
 - Item
   item
-  > # Quoted heading in list {MD025}
+  > # Quoted heading in list {MD022} {MD025}
 - Item
   item
-  > > # Double-quoted heading in list {MD025}
+  > > # Double-quoted heading in list {MD022} {MD025}
 - Item
   item
-  > ## Quoted sub-heading in list
+  > ## Quoted sub-heading in list {MD022}
 - Item
 - Item
   item
-  >  ## Quoted indented sub-heading in list {MD023}
+  >  ## Quoted indented sub-heading in list {MD022} {MD023}
 - Item
 
 Text

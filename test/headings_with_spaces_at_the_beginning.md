@@ -16,5 +16,5 @@ Some text
   ```
 
 * This is another case where MD023 shouldn't be triggered
-  # Test {MD023} Valid heading for CommonMark (see section 5.2)
-    # Test {MD023} Also valid heading for CommonMark
+  # Test {MD022} {MD023} Valid heading for CommonMark (see section 5.2)
+    # Test {MD022} {MD023} Also valid heading for CommonMark

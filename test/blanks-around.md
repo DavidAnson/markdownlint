@@ -5,11 +5,11 @@
 ## MD022/blanks-around-headings
 
 >
-### Alpha {MD022}
+### Alpha
 > >
 
 <!-- comment -->
-### Beta {MD022}
+### Beta
 <!-- comments --><!-- comments -->
 
 > Text
