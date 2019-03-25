@@ -52,7 +52,7 @@ Aliases: first-heading-h1, first-header-h1
 Parameters: level (number; default 1)
 
 > Note: *MD002 has been deprecated and is disabled by default.*
-> [MD041](#md041) offers an improved implementation of the rule.
+> [MD041/first-line-heading](#md041) offers an improved implementation.
 
 This rule is intended to ensure document headings start at the top level and
 is triggered when the first heading in the document isn't an h1 heading:
@@ -622,8 +622,10 @@ Tags: headings, headers, blank_lines
 
 Aliases: blanks-around-headings, blanks-around-headers
 
+Parameters: lines_above, lines_below (number; default 1)
+
 This rule is triggered when headings (any style) are either not preceded or not
-followed by a blank line:
+followed by at least one blank line:
 
 ```markdown
 # Heading 1
@@ -649,6 +651,12 @@ Some more text
 Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
 not parse headings that don't have a blank line before, and will parse them as
 regular text.
+
+The `lines_above` and `lines_below` parameters can be used to specify a different
+number of blank lines (including 0) above or below each heading.
+
+Note: If `lines_above` or `lines_below` are configured to require more than one
+blank line, [MD012/no-multiple-blanks](#md012) should also be customized.
 
 <a name="md023"></a>
 

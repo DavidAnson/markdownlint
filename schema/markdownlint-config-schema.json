@@ -485,18 +485,66 @@
     },
     "MD022": {
       "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "lines_above": {
+          "description": "Blank lines above heading",
+          "type": "integer",
+          "default": 1
+        },
+        "lines_below": {
+          "description": "Blank lines below heading",
+          "type": "integer",
+          "default": 1
+        }
+      },
+      "additionalProperties": false
     },
     "blanks-around-headings": {
       "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "lines_above": {
+          "description": "Blank lines above heading",
+          "type": "integer",
+          "default": 1
+        },
+        "lines_below": {
+          "description": "Blank lines below heading",
+          "type": "integer",
+          "default": 1
+        }
+      },
+      "additionalProperties": false
     },
     "blanks-around-headers": {
       "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "lines_above": {
+          "description": "Blank lines above heading",
+          "type": "integer",
+          "default": 1
+        },
+        "lines_below": {
+          "description": "Blank lines below heading",
+          "type": "integer",
+          "default": 1
+        }
+      },
+      "additionalProperties": false
     },
     "MD023": {
       "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",

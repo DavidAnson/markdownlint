@@ -151,6 +151,20 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD022":
+      scheme.properties = {
+        "lines_above": {
+          "description": "Blank lines above heading",
+          "type": "integer",
+          "default": 1
+        },
+        "lines_below": {
+          "description": "Blank lines below heading",
+          "type": "integer",
+          "default": 1
+        }
+      };
+      break;
     case "MD024":
       scheme.properties = {
         "allow_different_nesting": {
