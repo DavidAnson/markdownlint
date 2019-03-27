@@ -1,0 +1,7 @@
+{
+  "default": true,
+  "MD003": false,
+  "MD013": {
+    "heading_line_length": 30
+  }
+}

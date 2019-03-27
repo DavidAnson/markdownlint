@@ -443,13 +443,14 @@ Tags: line_length
 
 Aliases: line-length
 
-Parameters: line_length, code_blocks, tables, headings, headers (number; default 80, boolean; default true)
+Parameters: line_length, heading_line_length, code_blocks, tables, headings, headers (number; default 80, boolean; default true)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
 This rule is triggered when there are lines that are longer than the
-configured line length (default: 80 characters). To fix this, split the line
-up into multiple lines.
+configured `line_length` (default: 80 characters). To fix this, split the line
+up into multiple lines. To set a different maximum length for headings, use
+`heading_line_length`.
 
 This rule has an exception where there is no whitespace beyond the configured
 line length. This allows you to still include items such as long URLs without

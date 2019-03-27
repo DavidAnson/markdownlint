@@ -129,6 +129,11 @@ rules.forEach(function forRule(rule) {
           "type": "integer",
           "default": 80
         },
+        "heading_line_length": {
+          "description": "Number of characters for headings",
+          "type": "integer",
+          "default": 80
+        },
         "code_blocks": {
           "description": "Include code blocks",
           "type": "boolean",

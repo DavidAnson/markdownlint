@@ -1,0 +1,6 @@
+{
+  "default": true,
+  "MD013": {
+    "heading_line_length": 40
+  }
+}
