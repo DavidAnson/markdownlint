@@ -1432,6 +1432,25 @@ module.exports.isBlankLine = function isBlankLine(test) {
   test.done();
 };
 
+module.exports.includesSorted = function includesSorted(test) {
+  test.expect(154);
+  const inputs = [
+    [ ],
+    [ 8 ],
+    [ 7, 11 ],
+    [ 0, 1, 2, 3, 5, 8, 13 ],
+    [ 2, 3, 5, 7, 11, 13, 17, 19 ],
+    [ 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 ],
+    [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
+  ];
+  inputs.forEach((input) => {
+    for (let i = 0; i <= 21; i++) {
+      test.equal(shared.includesSorted(input, i), input.includes(i));
+    }
+  });
+  test.done();
+};
+
 module.exports.trimLeftRight = function trimLeftRight(test) {
   const inputs = [
     "text text",
