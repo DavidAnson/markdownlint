@@ -25,7 +25,7 @@ function promisify(func, ...args) {
       if (error) {
         return reject(error);
       }
-      resolve(result);
+      return resolve(result);
     });
   });
 }
@@ -1112,12 +1112,15 @@ module.exports.readme = function readme(test) {
           if (!seenRelated) {
             seenRelated = true;
           } else if (seenRelated && !seenRules) {
-            seenRules = inRules = true;
+            seenRules = true;
+            inRules = true;
           } else if (seenRelated && seenRules && !seenTags) {
-            seenTags = inTags = true;
+            seenTags = true;
+            inTags = true;
           }
         } else if (token.type === "bullet_list_close") {
-          inRules = inTags = false;
+          inRules = false;
+          inTags = false;
         } else if (token.type === "inline") {
           if (inRules) {
             const rule = rulesLeft.shift();
@@ -1181,7 +1184,8 @@ module.exports.doc = function doc(test) {
           if (inHeading) {
             testTagsAliasesParams(rule);
             rule = rulesLeft.shift();
-            ruleHasTags = ruleHasAliases = false;
+            ruleHasTags = false;
+            ruleHasAliases = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
             test.equal(token.content,
