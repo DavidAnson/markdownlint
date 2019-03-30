@@ -742,6 +742,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            update dependencies.
 * 0.12.0 - Add `information` link for custom rules, `markdownItPlugins` for extensibility,
            improve MD023/MD032/MD038, update dependencies.
+* 0.13.0 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041/, deprecate MD002,
+           improve pandoc YAML support, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
