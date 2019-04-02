@@ -143,7 +143,7 @@
   markdown.value = [
     "## Introduction",
     "",
-    "`markdownlint` is a [Node.js](https://nodejs.org/)/[io.js](https://iojs.org/) style checker and lint tool for [Markdown](https://en.wikipedia.org/wiki/Markdown)/[CommonMark](https://commonmark.org/) files to automatically validate content, prevent rendering problems, and promote consistency.",
+    "`markdownlint` is a [Node.js](https://nodejs.org/) style checker and lint tool for [Markdown](https://en.wikipedia.org/wiki/Markdown)/[CommonMark](https://commonmark.org/) files to automatically validate content, prevent rendering problems, and promote consistency.",
     "This page offers an easy way to try it out interactively!",
     "",
     "####  Instructions",
@@ -152,7 +152,7 @@
     "Content gets parsed and displayed in the upper-right box; rule violations (if any) show up in the lower-right box.",
     "Click a violation for information about it or click its line number to highlighted it in the lower-left box.",
     "",
-    "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md) are enabled except for [MD013 Line length](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md#md013---line-length). ",
+    "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md) are enabled except [MD013/line-length](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md#md013) and [MD002/first-heading-h1](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md#md002) (deprecated). ",
     "",
     "",
     "#### Resources",
@@ -166,5 +166,19 @@
     "[`markdownlint/Ruby`](https://github.com/markdownlint/markdownlint) for the inspiration and [`markdown-it`](https://github.com/markdown-it/markdown-it) for the parser and interactive demo idea!"
   ].join("\n");
   /* eslint-enable max-len */
+
+  // Detect legacy browsers
+  try {
+    /* eslint-disable-next-line no-new */
+    new URL(rulesMd);
+  } catch (ex) {
+    markdown.value = [
+      "# Sorry",
+      "",
+      "This browser is not supported."
+    ].join("\n");
+  }
+
+  // Initialize
   onMarkdownInput();
 }());
