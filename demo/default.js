@@ -8,12 +8,17 @@
   var violations = document.getElementById("violations");
   var form = document.getElementsByTagName("form")[0];
   var openFile = document.getElementById("openFile");
+  var copyLink = document.getElementById("copyLink");
 
   // Variables
   var markdownit = window.markdownit({ "html": true });
   var newLineRe = /\r\n|\r|\n/;
+  var hashPrefix = "%m";
   var rulesMd = "https://github.com/DavidAnson/markdownlint" +
     "/blob/master/doc/Rules.md";
+
+  // Do-nothing function
+  function noop() {}
 
   // Sanitize string for HTML display
   function sanitize(str) {
@@ -132,12 +137,22 @@
     }
   }
 
+  // Updates the URL hash and copies the URL to the clipboard
+  function onCopyLinkClick(e) {
+    window.location.hash = encodeURIComponent(hashPrefix + markdown.value);
+    /* eslint-disable-next-line no-unused-expressions */
+    navigator.clipboard && navigator.clipboard.writeText &&
+      navigator.clipboard.writeText(window.location).then(noop, noop);
+    e.preventDefault();
+  }
+
   // Add event listeners
   document.body.addEventListener("dragover", onDragOver);
   document.body.addEventListener("drop", onDrop);
   openFile.addEventListener("change", onOpenFileChange);
   markdown.addEventListener("input", onMarkdownInput);
   violations.addEventListener("click", onLineNumberClick, true);
+  copyLink.addEventListener("click", onCopyLinkClick);
 
   /* eslint-disable max-len */
   markdown.value = [
@@ -166,6 +181,18 @@
     "[`markdownlint/Ruby`](https://github.com/markdownlint/markdownlint) for the inspiration and [`markdown-it`](https://github.com/markdown-it/markdown-it) for the parser and interactive demo idea!"
   ].join("\n");
   /* eslint-enable max-len */
+
+  // Update Markdown from hash (if present)
+  if (window.location.hash) {
+    try {
+      const decodedHash = decodeURIComponent(window.location.hash.substring(1));
+      if (hashPrefix === decodedHash.substring(0, hashPrefix.length)) {
+        markdown.value = decodedHash.substring(hashPrefix.length);
+      }
+    } catch (ex) {
+      // Invalid
+    }
+  }
 
   // Detect legacy browsers
   try {
