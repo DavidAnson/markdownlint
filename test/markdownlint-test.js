@@ -2730,9 +2730,9 @@ module.exports.newLineAtTheEndOfFile =
       const expected = { "./test/new_line_EOF.md":
       [
         { "lineNumber": 3,
-          "ruleNames": [ "MD046", "new-line-eof" ],
+          "ruleNames": [ "MD047", "new-line-eof" ],
           "ruleDescription": "New lines at the end of file",
-          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md046`,
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
           "errorDetail": "file does not end with new line",
           "errorContext": null,
           "errorRange": null }

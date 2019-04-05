@@ -39,4 +39,4 @@ text
 
 ```
 code at end of file without newline
-``` {MD046}
+``` {MD047}

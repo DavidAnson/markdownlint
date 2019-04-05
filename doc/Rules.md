@@ -1547,7 +1547,7 @@ Guidance for writing alternate text is available from the [W3C](https://www.w3.o
 
 <a name="md045"></a>
 
-## MD046 - New lines at the end of file
+## MD047 - New lines at the end of file
 
 Tags: blank_lines
 

@@ -1255,13 +1255,13 @@
       "type": "boolean",
       "default": true
     },
-    "MD046": {
-      "description": "MD046/new-line-eof - New lines at the end of file",
+    "MD047": {
+      "description": "MD047/new-line-eof - New lines at the end of file",
       "type": "boolean",
       "default": true
     },
     "new-line-eof": {
-      "description": "MD046/new-line-eof - New lines at the end of file",
+      "description": "MD047/new-line-eof - New lines at the end of file",
       "type": "boolean",
       "default": true
     },
