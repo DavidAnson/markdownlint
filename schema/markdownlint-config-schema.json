@@ -1297,6 +1297,16 @@
       },
       "additionalProperties": false
     },
+    "MD047": {
+      "description": "MD047/single-trailing-newline - Files should end with a single newline character",
+      "type": "boolean",
+      "default": true
+    },
+    "single-trailing-newline": {
+      "description": "MD047/single-trailing-newline - Files should end with a single newline character",
+      "type": "boolean",
+      "default": true
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1338,7 +1348,7 @@
       "default": true
     },
     "blank_lines": {
-      "description": "blank_lines - MD012, MD022, MD031, MD032",
+      "description": "blank_lines - MD012, MD022, MD031, MD032, MD047",
       "type": "boolean",
       "default": true
     },

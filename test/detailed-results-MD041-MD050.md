@@ -23,3 +23,5 @@ Fenced code
 ```
 
     Indented code
+
+Missing newline character

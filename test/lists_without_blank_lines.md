@@ -72,4 +72,4 @@ code
 
 text
 
-* list (on last line without newline)
+* list (on last line without newline) {MD047}

@@ -45,7 +45,7 @@
         "errorRange": [25, 13]
     },
     {
-        "lineNumber": 26,
+        "lineNumber": 27,
         "ruleNames": [ "MD043", "required-headings", "required-headers" ],
         "ruleDescription": "Required heading structure",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md043",
@@ -95,6 +95,15 @@
         "ruleDescription": "Code block style",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md046",
         "errorDetail": "Expected: fenced; Actual: indented",
+        "errorContext": null,
+        "errorRange": null
+    },
+    {
+        "lineNumber": 27,
+        "ruleNames": [ "MD047", "single-trailing-newline" ],
+        "ruleDescription": "Files should end with a single newline character",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md047",
+        "errorDetail": null,
         "errorContext": null,
         "errorRange": null
     }

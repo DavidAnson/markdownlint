@@ -250,7 +250,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
   const options = {
     "strings": {
       "truncate":
-        "#  Multiple spaces inside hashes on closed atx style heading  #"
+        "#  Multiple spaces inside hashes on closed atx style heading  #\n"
     },
     "files": [
       "./test/atx_heading_spacing.md",
@@ -352,7 +352,7 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
   const options = {
     "strings": {
       "truncate":
-        "#  Multiple spaces inside hashes on closed atx style heading  #"
+        "#  Multiple spaces inside hashes on closed atx style heading  #\n"
     },
     "files": [
       "./test/atx_heading_spacing.md",
@@ -448,14 +448,14 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
   const options = {
     "strings": {
-      "cr": "One\rTwo\r#Three",
-      "lf": "One\nTwo\n#Three",
-      "crlf": "One\r\nTwo\r\n#Three",
-      "mixed": "One\rTwo\n#Three",
-      "crnel": "One\r\u0085Two\r\u0085#Three",
-      "snl": "One\u2424Two\u2424#Three",
-      "lsep": "One\u2028Two\u2028#Three",
-      "nel": "One\u0085Two\u0085#Three"
+      "cr": "One\rTwo\r#Three\n",
+      "lf": "One\nTwo\n#Three\n",
+      "crlf": "One\r\nTwo\r\n#Three\n",
+      "mixed": "One\rTwo\n#Three\n",
+      "crnel": "One\r\u0085Two\r\u0085#Three\n",
+      "snl": "One\u2424Two\u2424#Three\n",
+      "lsep": "One\u2028Two\u2028#Three\n",
+      "nel": "One\u0085Two\u0085#Three\n"
     },
     "config": defaultConfig,
     "resultVersion": 0
@@ -811,7 +811,8 @@ module.exports.styleAll = function styleAll(test) {
         "MD041": [ 1 ],
         "MD042": [ 77 ],
         "MD045": [ 81 ],
-        "MD046": [ 49, 73 ]
+        "MD046": [ 49, 73 ],
+        "MD047": [ 81 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -851,7 +852,8 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD036": [ 65 ],
         "MD042": [ 77 ],
         "MD045": [ 81 ],
-        "MD046": [ 49, 73 ]
+        "MD046": [ 49, 73 ],
+        "MD047": [ 81 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -917,7 +919,7 @@ module.exports.noInlineConfig = function noInlineConfig(test) {
         "",
         "<!-- markdownlint-enable-->",
         "",
-        "\tTab"
+        "\tTab\n"
       ].join("\n")
     },
     "noInlineConfig": true,
@@ -1093,7 +1095,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(111);
+  test.expect(113);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -1159,7 +1161,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(320);
+  test.expect(327);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -1859,7 +1861,7 @@ module.exports.configBadHybridSync = function configBadHybridSync(test) {
 
 module.exports.allBuiltInRulesHaveValidUrl =
   function allBuiltInRulesHaveValidUrl(test) {
-    test.expect(126);
+    test.expect(129);
     rules.forEach(function forRule(rule) {
       test.ok(rule.information);
       test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);
@@ -2216,7 +2218,7 @@ module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
   const options = {
     "customRules": [ require("./rules/npm") ],
     "strings": {
-      "string": "# Text\n\n---\n\nText"
+      "string": "# Text\n\n---\n\nText\n"
     },
     "resultVersion": 0
   };
@@ -2515,7 +2517,7 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
       }
     ],
     "strings": {
-      "string": "# Heading"
+      "string": "# Heading\n"
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -2602,7 +2604,7 @@ module.exports.markdownItPluginsSingle =
     test.expect(2);
     markdownlint({
       "strings": {
-        "string": "# Heading\n\nText [ link ](https://example.com)"
+        "string": "# Heading\n\nText [ link ](https://example.com)\n"
       },
       "markdownItPlugins": [
         [
@@ -2627,7 +2629,7 @@ module.exports.markdownItPluginsMultiple =
     test.expect(4);
     markdownlint({
       "strings": {
-        "string": "# Heading\n\nText H~2~0 text 29^th^ text"
+        "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
       },
       "markdownItPlugins": [
         [ pluginSub ],
@@ -2680,7 +2682,7 @@ $$
 1
 $$$$
 2
-$$`
+$$\n`
       },
       "markdownItPlugins": [ [ pluginKatex ] ],
       "resultVersion": 0

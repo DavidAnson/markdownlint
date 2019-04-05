@@ -1576,3 +1576,30 @@ To fix violations of this rule, use a consistent style (either indenting or code
 
 The specified style can be specific (`fenced`, `indented`) or simply require that usage
 be consistent within the document (`consistent`).
+
+<a name="md047"></a>
+
+## MD047 - Files should end with a single newline character
+
+Tags: blank_lines
+
+Aliases: single-trailing-newline
+
+This rule is triggered when there is not a single newline character at the end of a file.
+
+Example that triggers the rule:
+
+```markdown
+# Heading
+
+This file ends without a newline.[EOF]
+```
+
+To fix the violation, add a newline character to the end of the file:
+
+```markdown
+# Heading
+
+This file ends with a newline.
+[EOF]
+```

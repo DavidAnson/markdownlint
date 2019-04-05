@@ -88,6 +88,7 @@ playground for learning and exploring.
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
 * **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have alternate text (alt text)
 * **[MD046](doc/Rules.md#md046)** *code-block-style* - Code block style
+* **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -102,7 +103,7 @@ Tags group related rules and can be used to enable/disable multiple rules at onc
 * **accessibility** - MD045
 * **atx** - MD018, MD019
 * **atx_closed** - MD020, MD021
-* **blank_lines** - MD012, MD022, MD031, MD032
+* **blank_lines** - MD012, MD022, MD031, MD032, MD047
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
 * **code** - MD014, MD031, MD038, MD040, MD046
