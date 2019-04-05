@@ -1544,3 +1544,30 @@ Or with reference syntax as:
 Guidance for writing alternate text is available from the [W3C](https://www.w3.org/WAI/alt/),
 [Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
 [other locations](https://www.phase2technology.com/blog/no-more-excuses-definitive-guide-alt-text-field).
+
+<a name="md045"></a>
+
+## MD046 - New lines at the end of file
+
+Tags: blank_lines
+
+Aliases: new-line-eof
+
+This rule is triggered when there is no new line at the end of the file.
+
+Example that triggers the rule:
+
+```markdown
+# File ending without new line
+
+This file ends without new line.
+```
+
+To fix the violation, add new line at the end of the file:
+
+```markdown
+# File ending with new line
+
+This file ends with new line.
+
+```

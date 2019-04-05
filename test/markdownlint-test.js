@@ -248,7 +248,7 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
   const options = {
     "strings": {
       "truncate":
-        "#  Multiple spaces inside hashes on closed atx style heading  #"
+        "#  Multiple spaces inside hashes on closed atx style heading  #\n"
     },
     "files": [
       "./test/atx_heading_spacing.md",
@@ -350,7 +350,7 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
   const options = {
     "strings": {
       "truncate":
-        "#  Multiple spaces inside hashes on closed atx style heading  #"
+        "#  Multiple spaces inside hashes on closed atx style heading  #\n"
     },
     "files": [
       "./test/atx_heading_spacing.md",
@@ -446,14 +446,14 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
   const options = {
     "strings": {
-      "cr": "One\rTwo\r#Three",
-      "lf": "One\nTwo\n#Three",
-      "crlf": "One\r\nTwo\r\n#Three",
-      "mixed": "One\rTwo\n#Three",
-      "crnel": "One\r\u0085Two\r\u0085#Three",
-      "snl": "One\u2424Two\u2424#Three",
-      "lsep": "One\u2028Two\u2028#Three",
-      "nel": "One\u0085Two\u0085#Three"
+      "cr": "One\rTwo\r#Three\n",
+      "lf": "One\nTwo\n#Three\n",
+      "crlf": "One\r\nTwo\r\n#Three\n",
+      "mixed": "One\rTwo\n#Three\n",
+      "crnel": "One\r\u0085Two\r\u0085#Three\n",
+      "snl": "One\u2424Two\u2424#Three\n",
+      "lsep": "One\u2028Two\u2028#Three\n",
+      "nel": "One\u0085Two\u0085#Three\n"
     },
     "config": defaultConfig,
     "resultVersion": 0
@@ -913,7 +913,7 @@ module.exports.noInlineConfig = function noInlineConfig(test) {
         "",
         "<!-- markdownlint-enable-->",
         "",
-        "\tTab"
+        "\tTab\n"
       ].join("\n")
     },
     "noInlineConfig": true,
@@ -1089,7 +1089,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(109);
+  test.expect(111);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -1155,7 +1155,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(312);
+  test.expect(319);
   fs.readFile("doc/Rules.md", shared.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -1883,7 +1883,7 @@ module.exports.configBadHybridSync = function configBadHybridSync(test) {
 
 module.exports.allBuiltInRulesHaveValidUrl =
   function allBuiltInRulesHaveValidUrl(test) {
-    test.expect(123);
+    test.expect(126);
     rules.forEach(function forRule(rule) {
       test.ok(rule.information);
       test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);
@@ -2240,7 +2240,7 @@ module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
   const options = {
     "customRules": [ require("./rules/npm") ],
     "strings": {
-      "string": "# Text\n\n---\n\nText"
+      "string": "# Text\n\n---\n\nText\n"
     },
     "resultVersion": 0
   };
@@ -2539,7 +2539,7 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
       }
     ],
     "strings": {
-      "string": "# Heading"
+      "string": "# Heading\n"
     }
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -2626,7 +2626,7 @@ module.exports.markdownItPluginsSingle =
     test.expect(2);
     markdownlint({
       "strings": {
-        "string": "# Heading\n\nText [ link ](https://example.com)"
+        "string": "# Heading\n\nText [ link ](https://example.com)\n"
       },
       "markdownItPlugins": [
         [
@@ -2651,7 +2651,7 @@ module.exports.markdownItPluginsMultiple =
     test.expect(4);
     markdownlint({
       "strings": {
-        "string": "# Heading\n\nText H~2~0 text 29^th^ text"
+        "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
       },
       "markdownItPlugins": [
         [ pluginSub ],
@@ -2704,7 +2704,7 @@ $$
 1
 $$$$
 2
-$$`
+$$\n`
       },
       "markdownItPlugins": [ [ pluginKatex ] ],
       "resultVersion": 0
@@ -2715,6 +2715,28 @@ $$`
           "MD041": [ 1 ]
         }
       };
+      test.deepEqual(actual, expected, "Unexpected issues.");
+      test.done();
+    });
+  };
+
+module.exports.newLineAtTheEndOfFile =
+  function newLineAtTheEndOfFile(test) {
+    test.expect(2);
+    markdownlint({
+      "files": "./test/new_line_EOF.md"
+    }, function callback(err, actual) {
+      test.ifError(err);
+      const expected = { "./test/new_line_EOF.md":
+      [
+        { "lineNumber": 3,
+          "ruleNames": [ "MD046", "new-line-eof" ],
+          "ruleDescription": "New lines at the end of file",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md046`,
+          "errorDetail": "file does not end with new line",
+          "errorContext": null,
+          "errorRange": null }
+      ] };
       test.deepEqual(actual, expected, "Unexpected issues.");
       test.done();
     });
