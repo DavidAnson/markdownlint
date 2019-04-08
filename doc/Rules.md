@@ -1545,15 +1545,15 @@ Guidance for writing alternate text is available from the [W3C](https://www.w3.o
 [Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
 [other locations](https://www.phase2technology.com/blog/no-more-excuses-definitive-guide-alt-text-field).
 
-<a name="md045"></a>
+<a name="md047"></a>
 
-## MD047 - New lines at the end of file
+## MD047 - Files should end with a single newline character
 
 Tags: blank_lines
 
-Aliases: new-line-eof
+Aliases: single-trailing-newline
 
-This rule is triggered when there is no new line at the end of the file.
+This rule is triggered when there is no single newline character at the end of the file.
 
 Example that triggers the rule:
 
@@ -1568,6 +1568,5 @@ To fix the violation, add new line at the end of the file:
 ```markdown
 # File ending with new line
 
-This file ends with new line.
-
+This file ends with new line.\n
 ```

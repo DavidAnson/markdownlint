@@ -78,4 +78,4 @@ code fence without language {MD040:73}
 
 markdownLint {MD044}
 
-![](image.jpg) {MD045}
+![](image.jpg) {MD045} {MD047}

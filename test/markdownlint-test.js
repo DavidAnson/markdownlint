@@ -808,7 +808,8 @@ module.exports.styleAll = function styleAll(test) {
         "MD040": [ 73 ],
         "MD041": [ 1 ],
         "MD042": [ 77 ],
-        "MD045": [ 81 ]
+        "MD045": [ 81 ],
+        "MD047": [ 81 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -847,7 +848,8 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD035": [ 61 ],
         "MD036": [ 65 ],
         "MD042": [ 77 ],
-        "MD045": [ 81 ]
+        "MD045": [ 81 ],
+        "MD047": [ 81 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -2715,28 +2717,6 @@ $$\n`
           "MD041": [ 1 ]
         }
       };
-      test.deepEqual(actual, expected, "Unexpected issues.");
-      test.done();
-    });
-  };
-
-module.exports.newLineAtTheEndOfFile =
-  function newLineAtTheEndOfFile(test) {
-    test.expect(2);
-    markdownlint({
-      "files": "./test/new_line_EOF.md"
-    }, function callback(err, actual) {
-      test.ifError(err);
-      const expected = { "./test/new_line_EOF.md":
-      [
-        { "lineNumber": 3,
-          "ruleNames": [ "MD047", "new-line-eof" ],
-          "ruleDescription": "New lines at the end of file",
-          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
-          "errorDetail": "file does not end with new line",
-          "errorContext": null,
-          "errorRange": null }
-      ] };
       test.deepEqual(actual, expected, "Unexpected issues.");
       test.done();
     });

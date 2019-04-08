@@ -87,7 +87,7 @@ playground for learning and exploring.
 * **[MD043](doc/Rules.md#md043)** *required-headings/required-headers* - Required heading structure
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
 * **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have alternate text (alt text)
-* **[MD047](doc/Rules.md#md047)** *new-line-eof* - New lines at the end of file
+* **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 
 See [Rules.md](doc/Rules.md) for more details.
 
