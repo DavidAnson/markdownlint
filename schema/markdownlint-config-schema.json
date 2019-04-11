@@ -1256,12 +1256,12 @@
       "default": true
     },
     "MD047": {
-      "description": "MD047/new-line-eof - New lines at the end of file",
+      "description": "MD047/single-trailing-newline - Files should end with a single newline character",
       "type": "boolean",
       "default": true
     },
-    "new-line-eof": {
-      "description": "MD047/new-line-eof - New lines at the end of file",
+    "single-trailing-newline": {
+      "description": "MD047/single-trailing-newline - Files should end with a single newline character",
       "type": "boolean",
       "default": true
     },
@@ -1306,7 +1306,7 @@
       "default": true
     },
     "blank_lines": {
-      "description": "blank_lines - MD012, MD022, MD031, MD032",
+      "description": "blank_lines - MD012, MD022, MD031, MD032, MD047",
       "type": "boolean",
       "default": true
     },
