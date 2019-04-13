@@ -4,7 +4,7 @@ const fs = require("fs");
 const path = require("path");
 const glob = require("glob");
 const markdownlint = require("../lib/markdownlint");
-const shared = require("../lib/shared");
+const { newLineRe, utf8Encoding } = require("../helpers");
 
 module.exports.typeTestFiles = function typeTestFiles(test) {
   // Simulates typing each test file to validate handling of partial input
@@ -15,7 +15,7 @@ module.exports.typeTestFiles = function typeTestFiles(test) {
       },
       "resultVersion": 0
     });
-    const contentLineCount = content.split(shared.newLineRe).length;
+    const contentLineCount = content.split(newLineRe).length;
     Object.keys(results.content).forEach(function forKey(ruleName) {
       results.content[ruleName].forEach(function forLine(line) {
         test.ok((line >= 1) && (line <= contentLineCount),
@@ -28,7 +28,7 @@ module.exports.typeTestFiles = function typeTestFiles(test) {
   files.forEach(function forFile(file) {
     if (/\.md$/.test(file)) {
       let content = fs.readFileSync(
-        path.join("./test", file), shared.utf8Encoding);
+        path.join("./test", file), utf8Encoding);
       while (content) {
         validate(file, content);
         content = content.slice(0, -1);

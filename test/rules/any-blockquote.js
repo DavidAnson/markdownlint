@@ -3,6 +3,7 @@
 "use strict";
 
 const { URL } = require("url");
+const { filterTokens } = require("../../helpers");
 
 module.exports = {
   "names": [ "any-blockquote" ],
@@ -12,10 +13,8 @@ module.exports = {
     "/blob/master/test/rules/any-blockquote.js"
   ),
   "tags": [ "test" ],
-  "function": function rule(params, onError) {
-    params.tokens.filter(function filterToken(token) {
-      return token.type === "blockquote_open";
-    }).forEach(function forToken(blockquote) {
+  "function": (params, onError) => {
+    filterTokens(params, "blockquote_open", (blockquote) => {
       const lines = blockquote.map[1] - blockquote.map[0];
       onError({
         "lineNumber": blockquote.lineNumber,

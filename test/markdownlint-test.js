@@ -11,7 +11,7 @@ const pluginSup = require("markdown-it-sup");
 const tv4 = require("tv4");
 const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
-const shared = require("../lib/shared");
+const helpers = require("../helpers");
 const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const defaultConfig = require("./markdownlint-test-default-config.json");
@@ -39,7 +39,7 @@ function createTestForFile(file) {
     const actualPromise = promisify(fs.stat, configFile)
       .then(
         function configFileExists() {
-          return promisify(fs.readFile, configFile, shared.utf8Encoding)
+          return promisify(fs.readFile, configFile, helpers.utf8Encoding)
             .then(JSON.parse);
         },
         function noConfigFile() {
@@ -48,7 +48,7 @@ function createTestForFile(file) {
       .then(
         function lintWithConfig(config) {
           const mergedConfig =
-            shared.assign(shared.clone(defaultConfig), config);
+            helpers.assign(helpers.clone(defaultConfig), config);
           return promisify(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
@@ -56,7 +56,7 @@ function createTestForFile(file) {
           });
         });
     const expectedPromise = detailedResults ?
-      promisify(fs.readFile, resultsFile, shared.utf8Encoding)
+      promisify(fs.readFile, resultsFile, helpers.utf8Encoding)
         .then(
           function fileContents(contents) {
             const errorObjects = JSON.parse(contents);
@@ -68,10 +68,10 @@ function createTestForFile(file) {
             });
             return errorObjects;
           }) :
-      promisify(fs.readFile, file, shared.utf8Encoding)
+      promisify(fs.readFile, file, helpers.utf8Encoding)
         .then(
           function fileContents(contents) {
-            const lines = contents.split(shared.newLineRe);
+            const lines = contents.split(helpers.newLineRe);
             const results = {};
             lines.forEach(function forLine(line, lineNum) {
               const regex = /\{(MD\d+)(?::(\d+))?\}/g;
@@ -114,7 +114,8 @@ module.exports.projectFiles = function projectFiles(test) {
   const options = {
     "files": [
       "README.md",
-      "CONTRIBUTING.md"
+      "CONTRIBUTING.md",
+      "helpers/README.md"
     ],
     "noInlineConfig": true,
     "config": {
@@ -126,7 +127,8 @@ module.exports.projectFiles = function projectFiles(test) {
     test.ifError(err);
     const expected = {
       "README.md": [],
-      "CONTRIBUTING.md": []
+      "CONTRIBUTING.md": [],
+      "helpers/README.md": []
     };
     test.deepEqual(actual, expected, "Issue(s) with project files.");
     test.done();
@@ -1098,7 +1100,7 @@ module.exports.readme = function readme(test) {
       tagToRules[tag] = tagRules;
     });
   });
-  fs.readFile("README.md", shared.utf8Encoding,
+  fs.readFile("README.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
       const rulesLeft = rules.slice();
@@ -1156,7 +1158,7 @@ module.exports.readme = function readme(test) {
 
 module.exports.doc = function doc(test) {
   test.expect(312);
-  fs.readFile("doc/Rules.md", shared.utf8Encoding,
+  fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
       const rulesLeft = rules.slice();
@@ -1323,7 +1325,7 @@ function clearHtmlCommentTextValid(test) {
     "<!--",
     "    \\"
   ];
-  const actual = shared.clearHtmlCommentText(validComments.join("\n"));
+  const actual = helpers.clearHtmlCommentText(validComments.join("\n"));
   const expected = validResult.join("\n");
   test.equal(actual, expected);
   test.done();
@@ -1350,7 +1352,7 @@ function clearHtmlCommentTextInvalid(test) {
     "<!--text--->",
     "<!--te--xt-->"
   ];
-  const actual = shared.clearHtmlCommentText(invalidComments.join("\n"));
+  const actual = helpers.clearHtmlCommentText(invalidComments.join("\n"));
   const expected = invalidComments.join("\n");
   test.equal(actual, expected);
   test.done();
@@ -1371,7 +1373,7 @@ function clearHtmlCommentTextNonGreedy(test) {
     "<!-- --> -->",
     "<!----> -->"
   ];
-  const actual = shared.clearHtmlCommentText(nonGreedyComments.join("\n"));
+  const actual = helpers.clearHtmlCommentText(nonGreedyComments.join("\n"));
   const expected = nonGreedyResult.join("\n");
   test.equal(actual, expected);
   test.done();
@@ -1394,7 +1396,7 @@ function clearHtmlCommentTextEmbedded(test) {
     "text<!-- markdownlint-disable MD010 -->text",
     "text<!--    -->text"
   ];
-  const actual = shared.clearHtmlCommentText(embeddedComments.join("\n"));
+  const actual = helpers.clearHtmlCommentText(embeddedComments.join("\n"));
   const expected = embeddedResult.join("\n");
   test.equal(actual, expected);
   test.done();
@@ -1421,7 +1423,7 @@ module.exports.isBlankLine = function isBlankLine(test) {
     "> <!--text-->",
     ">><!--text-->"
   ];
-  blankLines.forEach((line) => test.ok(shared.isBlankLine(line), line));
+  blankLines.forEach((line) => test.ok(helpers.isBlankLine(line), line));
   const nonBlankLines = [
     "text",
     " text ",
@@ -1432,7 +1434,7 @@ module.exports.isBlankLine = function isBlankLine(test) {
     "<!--",
     "-->"
   ];
-  nonBlankLines.forEach((line) => test.ok(!shared.isBlankLine(line), line));
+  nonBlankLines.forEach((line) => test.ok(!helpers.isBlankLine(line), line));
   test.done();
 };
 
@@ -1449,7 +1451,7 @@ module.exports.includesSorted = function includesSorted(test) {
   ];
   inputs.forEach((input) => {
     for (let i = 0; i <= 21; i++) {
-      test.equal(shared.includesSorted(input, i), input.includes(i));
+      test.equal(helpers.includesSorted(input, i), input.includes(i));
     }
   });
   test.done();
@@ -1475,9 +1477,9 @@ module.exports.trimLeftRight = function trimLeftRight(test) {
   ];
   test.expect(inputs.length * 2);
   inputs.forEach(function forInput(input) {
-    test.equal(shared.trimLeft(input), input.trimLeft(),
+    test.equal(helpers.trimLeft(input), input.trimLeft(),
       "trimLeft incorrect for '" + input + "'");
-    test.equal(shared.trimRight(input), input.trimRight(),
+    test.equal(helpers.trimRight(input), input.trimRight(),
       "trimRight incorrect for '" + input + "'");
   });
   test.done();
@@ -1571,7 +1573,7 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
     ];
   testCases.forEach((testCase) => {
     const [ input, expecteds ] = testCase;
-    shared.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
+    helpers.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
       const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
         expecteds.shift();
       test.equal(code, expectedCode, input);
@@ -1611,9 +1613,9 @@ module.exports.configMultiple = function configMultiple(test) {
   markdownlint.readConfig("./test/config/config-grandparent.json",
     function callback(err, actual) {
       test.ifError(err);
-      const expected = shared.assign(
-        shared.assign(
-          shared.assign({}, require("./config/config-child.json")),
+      const expected = helpers.assign(
+        helpers.assign(
+          helpers.assign({}, require("./config/config-child.json")),
           require("./config/config-parent.json")),
         require("./config/config-grandparent.json"));
       delete expected.extends;
@@ -1689,9 +1691,9 @@ module.exports.configMultipleYaml = function configMultipleYaml(test) {
     [ require("js-yaml").safeLoad ],
     function callback(err, actual) {
       test.ifError(err);
-      const expected = shared.assign(
-        shared.assign(
-          shared.assign({}, require("./config/config-child.json")),
+      const expected = helpers.assign(
+        helpers.assign(
+          helpers.assign({}, require("./config/config-child.json")),
           require("./config/config-parent.json")),
         require("./config/config-grandparent.json"));
       delete expected.extends;
@@ -1707,9 +1709,9 @@ module.exports.configMultipleHybrid = function configMultipleHybrid(test) {
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
     function callback(err, actual) {
       test.ifError(err);
-      const expected = shared.assign(
-        shared.assign(
-          shared.assign({}, require("./config/config-child.json")),
+      const expected = helpers.assign(
+        helpers.assign(
+          helpers.assign({}, require("./config/config-child.json")),
           require("./config/config-parent.json")),
         require("./config/config-grandparent.json"));
       delete expected.extends;
@@ -1756,9 +1758,9 @@ module.exports.configMultipleSync = function configMultipleSync(test) {
   test.expect(1);
   const actual =
     markdownlint.readConfigSync("./test/config/config-grandparent.json");
-  const expected = shared.assign(
-    shared.assign(
-      shared.assign({}, require("./config/config-child.json")),
+  const expected = helpers.assign(
+    helpers.assign(
+      helpers.assign({}, require("./config/config-child.json")),
       require("./config/config-parent.json")),
     require("./config/config-grandparent.json"));
   delete expected.extends;
@@ -1837,9 +1839,9 @@ module.exports.configMultipleYamlSync = function configMultipleYamlSync(test) {
   test.expect(1);
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent.yaml", [ require("js-yaml").safeLoad ]);
-  const expected = shared.assign(
-    shared.assign(
-      shared.assign({}, require("./config/config-child.json")),
+  const expected = helpers.assign(
+    helpers.assign(
+      helpers.assign({}, require("./config/config-child.json")),
       require("./config/config-parent.json")),
     require("./config/config-grandparent.json"));
   delete expected.extends;
@@ -1853,9 +1855,9 @@ function configMultipleHybridSync(test) {
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent-hybrid.yaml",
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
-  const expected = shared.assign(
-    shared.assign(
-      shared.assign({}, require("./config/config-child.json")),
+  const expected = helpers.assign(
+    helpers.assign(
+      helpers.assign({}, require("./config/config-child.json")),
       require("./config/config-parent.json")),
     require("./config/config-grandparent.json"));
   delete expected.extends;
@@ -2266,7 +2268,7 @@ module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
   ].forEach(function forProperty(property) {
     const propertyName = property[0];
     property[1].forEach(function forPropertyValue(propertyValue) {
-      const badRule = shared.clone(customRules.anyBlockquote);
+      const badRule = helpers.clone(customRules.anyBlockquote);
       badRule[propertyName] = propertyValue;
       const options = {
         "customRules": [ badRule ]

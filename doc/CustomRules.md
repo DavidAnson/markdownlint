@@ -53,6 +53,8 @@ A rule is implemented as an `Object` with four required properties:
     - `context` is an optional `String` with relevant text surrounding the error location.
     - `range` is an optional `Array` with two `Number` values identifying the 1-based column and length of the error.
 
+The collection of helper functions shared by the built-in rules is available for use by custom rules in the [markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
+
 ## Examples
 
 - [Simple rules used by the project's test cases](../test/rules)
