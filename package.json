@@ -40,6 +40,7 @@
     "markdown-it-katex": "~2.0.3",
     "markdown-it-sub": "~1.0.0",
     "markdown-it-sup": "~1.0.0",
+    "markdownlint-rule-helpers": "~0.1.0",
     "nodeunit": "~0.11.3",
     "rimraf": "~2.6.3",
     "toml": "~3.0.0",
