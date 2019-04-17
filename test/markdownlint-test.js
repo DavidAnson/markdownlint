@@ -1459,34 +1459,6 @@ module.exports.includesSorted = function includesSorted(test) {
   test.done();
 };
 
-module.exports.trimLeftRight = function trimLeftRight(test) {
-  const inputs = [
-    "text text",
-    " text text ",
-    "   text text   ",
-    // ECMAScript Whitespace
-    "\u0009 text text \u0009",
-    "\u000b text text \u000b",
-    "\u000c text text \u000c",
-    "\u0020 text text \u0020",
-    "\u00a0 text text \u00a0",
-    "\ufeff text text \ufeff",
-    // ECMAScript LineTerminator
-    "\u000a text text \u000a",
-    "\u000d text text \u000d",
-    "\u2028 text text \u2028",
-    "\u2029 text text \u2029"
-  ];
-  test.expect(inputs.length * 2);
-  inputs.forEach(function forInput(input) {
-    test.equal(helpers.trimLeft(input), input.trimLeft(),
-      "trimLeft incorrect for '" + input + "'");
-    test.equal(helpers.trimRight(input), input.trimRight(),
-      "trimRight incorrect for '" + input + "'");
-  });
-  test.done();
-};
-
 module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
   test.expect(94);
   const testCases =

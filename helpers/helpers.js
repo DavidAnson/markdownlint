@@ -24,17 +24,6 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 
-// Trims whitespace from the left (start) of a string
-function trimLeft(str) {
-  return str.replace(/^\s*/, "");
-}
-module.exports.trimLeft = trimLeft;
-
-// Trims whitespace from the right (end) of a string
-module.exports.trimRight = function trimRight(str) {
-  return str.replace(/\s*$/, "");
-};
-
 // Applies key/value pairs from src to dst, returning dst
 function assign(dst, src) {
   Object.keys(src).forEach(function forKey(key) {
@@ -129,7 +118,7 @@ module.exports.escapeForRegExp = function escapeForRegExp(str) {
 // Returns the indent for a token
 function indentFor(token) {
   const line = token.line.replace(/^[\s>]*(> |>)/, "");
-  return line.length - trimLeft(line).length;
+  return line.length - line.trimLeft().length;
 }
 module.exports.indentFor = indentFor;
 
