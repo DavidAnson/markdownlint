@@ -18,7 +18,7 @@ if (true) {
 }
 ```
 
-    if (true) {
+    if (true) {                   // {MD046}
         console.log("true");
         if (false) {
             console.log("false");

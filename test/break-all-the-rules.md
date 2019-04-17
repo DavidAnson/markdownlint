@@ -48,7 +48,7 @@ Note: Can not break MD025 and MD002 in the same file
 
 ```js
 ```
-* list {MD032}
+* list {MD032} {MD046:49}
 
 {MD031:50}
 
@@ -71,7 +71,7 @@ Code `with ` space {MD038}
 [link with space ](link) {MD039}
 
 ```
-code fence without language {MD040:73}
+code fence without language {MD040:73} {MD046:73}
 ```
 
 [empty link]() {MD042}

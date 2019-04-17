@@ -810,7 +810,8 @@ module.exports.styleAll = function styleAll(test) {
         "MD040": [ 73 ],
         "MD041": [ 1 ],
         "MD042": [ 77 ],
-        "MD045": [ 81 ]
+        "MD045": [ 81 ],
+        "MD046": [ 49, 73 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -849,7 +850,8 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD035": [ 61 ],
         "MD036": [ 65 ],
         "MD042": [ 77 ],
-        "MD045": [ 81 ]
+        "MD045": [ 81 ],
+        "MD046": [ 49, 73 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -1091,7 +1093,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(109);
+  test.expect(111);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -1157,7 +1159,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(312);
+  test.expect(320);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -1885,7 +1887,7 @@ module.exports.configBadHybridSync = function configBadHybridSync(test) {
 
 module.exports.allBuiltInRulesHaveValidUrl =
   function allBuiltInRulesHaveValidUrl(test) {
-    test.expect(123);
+    test.expect(126);
     rules.forEach(function forRule(rule) {
       test.ok(rule.information);
       test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);

@@ -45,7 +45,7 @@
         "errorRange": [25, 13]
     },
     {
-        "lineNumber": 20,
+        "lineNumber": 26,
         "ruleNames": [ "MD043", "required-headings", "required-headers" ],
         "ruleDescription": "Required heading structure",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md043",
@@ -86,6 +86,15 @@
         "ruleDescription": "Images should have alternate text (alt text)",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md045",
         "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null
+    },
+    {
+        "lineNumber": 25,
+        "ruleNames": [ "MD046", "code-block-style" ],
+        "ruleDescription": "Code block style",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md046",
+        "errorDetail": "Expected: fenced; Actual: indented",
         "errorContext": null,
         "errorRange": null
     }

@@ -9,7 +9,7 @@ This line however, while very long, doesn't have whitespace after the 80th colum
     [This long line is comprised entirely of a link](https://example.com "But is inside a code block") {MD013}
 
 ```markdown
-[This long line is comprised entirely of a link](https://example.com "But is inside a code block") {MD013}
+[This long line is comprised entirely of a link](https://example.com "But is inside a code block") {MD013} {MD046:11}
 ```
 
 This [long line is comprised mostly of a link](https://example.com "This is the long link's title") {MD013}

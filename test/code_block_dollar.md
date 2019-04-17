@@ -27,7 +27,7 @@ The following code block doesn't have any dollar signs, and shouldn't fire:
     cat bar
 
 The following (fenced) code block doesn't have any content at all, and
-shouldn't fire:
+shouldn't fire: {MD046:32}
 
 ```bash
 ```

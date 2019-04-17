@@ -1544,3 +1544,35 @@ Or with reference syntax as:
 Guidance for writing alternate text is available from the [W3C](https://www.w3.org/WAI/alt/),
 [Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
 [other locations](https://www.phase2technology.com/blog/no-more-excuses-definitive-guide-alt-text-field).
+
+<a name="md046"></a>
+
+## MD046 - Code block style
+
+Tags: code
+
+Aliases: code-block-style
+
+Parameters: style ("consistent", "fenced", "indented"; default "consistent")
+
+This rule is triggered when unwanted or different code block styles are used in
+the same document.
+
+In the default configuration this rule reports a violation for the following document:
+
+    Some text.
+
+        # Indented code
+
+    More text.
+
+    ```ruby
+    # Fenced code
+    ```
+
+    More text.
+
+To fix violations of this rule, use a consistent style (either indenting or code fences).
+
+The specified style can be specific (`fenced`, `indented`) or simply require that usage
+be consistent within the document (`consistent`).

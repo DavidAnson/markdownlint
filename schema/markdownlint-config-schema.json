@@ -1255,6 +1255,48 @@
       "type": "boolean",
       "default": true
     },
+    "MD046": {
+      "description": "MD046/code-block-style - Code block style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Block style",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "fenced",
+            "indented"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "code-block-style": {
+      "description": "MD046/code-block-style - Code block style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Block style",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "fenced",
+            "indented"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1306,7 +1348,7 @@
       "default": true
     },
     "code": {
-      "description": "code - MD014, MD031, MD038, MD040",
+      "description": "code - MD014, MD031, MD038, MD040, MD046",
       "type": "boolean",
       "default": true
     },

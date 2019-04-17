@@ -306,6 +306,20 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD046":
+      scheme.properties = {
+        "style": {
+          "description": "Block style",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "fenced",
+            "indented"
+          ],
+          "default": "consistent"
+        }
+      };
+      break;
     default:
       custom = false;
       break;

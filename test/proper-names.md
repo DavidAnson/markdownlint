@@ -52,7 +52,7 @@ HTML <u>javascript</u> {MD033} {MD044}
     node.js is runtime {MD044}
 
 ```js
-javascript is code {MD044}
+javascript is code {MD044} {MD046:54}
 node.js is runtime {MD044}
 ```
 
