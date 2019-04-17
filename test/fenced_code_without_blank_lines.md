@@ -38,5 +38,5 @@ code
 text
 
 ```
-code at end of file without newline
-``` {MD047:42}
+code at end of file without newline {MD047:42}
+```
