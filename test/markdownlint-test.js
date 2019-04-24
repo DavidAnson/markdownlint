@@ -2503,14 +2503,14 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
       "string": "String"
     }
   };
-  test.throws(function badErrorCall() {
+  test.throws(function nullErrorCall() {
     markdownlint.sync(options);
   }, function testError(err) {
     test.ok(err, "Did not get an error for null object.");
     test.ok(err instanceof Error, "Error not instance of Error.");
     test.equal(err.message,
       "Property 'lineNumber' of onError parameter is incorrect.",
-      "Incorrect message for bad object.");
+      "Incorrect message for null object.");
     return true;
   }, "Did not get exception for null object.");
   test.done();
@@ -2560,6 +2560,84 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
   test.done();
 };
 
+module.exports.customRulesOnErrorInvalid =
+  function customRulesOnErrorInvalid(test) {
+    test.expect(36);
+    [
+      [ "lineNumber", [ -1, 0, 3, 4 ] ],
+      [ "range", [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ] ]
+    ].forEach(function forProperty(property) {
+      const propertyName = property[0];
+      property[1].forEach(function forPropertyValue(propertyValue) {
+        const badObject = {
+          "lineNumber": 1
+        };
+        badObject[propertyName] = propertyValue;
+        const options = {
+          "customRules": [
+            {
+              "names": [ "name" ],
+              "description": "description",
+              "tags": [ "tag" ],
+              "function": function onErrorInvalid(params, onError) {
+                onError(badObject);
+              }
+            }
+          ],
+          "strings": {
+            "string": "Text\ntext"
+          }
+        };
+        test.throws(function invalidErrorCall() {
+          markdownlint.sync(options);
+        }, function testError(err) {
+          test.ok(err, "Did not get an error for invalid object.");
+          test.ok(err instanceof Error, "Error not instance of Error.");
+          test.equal(err.message,
+            `Property '${propertyName}' of onError parameter is incorrect.`,
+            "Incorrect message for invalid object.");
+          return true;
+        }, "Did not get exception for invalid object.");
+      });
+    });
+    test.done();
+  };
+
+module.exports.customRulesOnErrorValid =
+  function customRulesOnErrorValid(test) {
+    test.expect(7);
+    [
+      [ "lineNumber", [ 1, 2 ] ],
+      [ "range", [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ] ]
+    ].forEach(function forProperty(property) {
+      const propertyName = property[0];
+      property[1].forEach(function forPropertyValue(propertyValue) {
+        const goodObject = {
+          "lineNumber": 1
+        };
+        goodObject[propertyName] = propertyValue;
+        const options = {
+          "customRules": [
+            {
+              "names": [ "name" ],
+              "description": "description",
+              "tags": [ "tag" ],
+              "function": function onErrorValid(params, onError) {
+                onError(goodObject);
+              }
+            }
+          ],
+          "strings": {
+            "string": "Text\ntext"
+          }
+        };
+        markdownlint.sync(options);
+        test.ok(true);
+      });
+    });
+    test.done();
+  };
+
 module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
   test.expect(2);
   const options = {
@@ -2573,7 +2651,7 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
             "lineNumber": 1,
             "detail": "",
             "context": "",
-            "range": [ 0, 0 ]
+            "range": [ 1, 1 ]
           });
         }
       }
@@ -2593,7 +2671,7 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
           "ruleInformation": null,
           "errorDetail": null,
           "errorContext": null,
-          "errorRange": [ 0, 0 ]
+          "errorRange": [ 1, 1 ]
         }
       ]
     };
