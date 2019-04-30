@@ -1,0 +1,9 @@
+{
+  "default": true,
+  "MD033": {
+    "allowed_elements": [
+      "strong"
+    ]
+  },
+  "MD046": false
+}
