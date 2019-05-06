@@ -47,8 +47,10 @@ function createTestForFile(file) {
         })
       .then(
         function lintWithConfig(config) {
-          const mergedConfig =
-            helpers.assign(helpers.clone(defaultConfig), config);
+          const mergedConfig = {
+            ...defaultConfig,
+            ...config
+          };
           return promisify(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
@@ -1651,11 +1653,11 @@ module.exports.configMultiple = function configMultiple(test) {
   markdownlint.readConfig("./test/config/config-grandparent.json",
     function callback(err, actual) {
       test.ifError(err);
-      const expected = helpers.assign(
-        helpers.assign(
-          helpers.assign({}, require("./config/config-child.json")),
-          require("./config/config-parent.json")),
-        require("./config/config-grandparent.json"));
+      const expected = {
+        ...require("./config/config-child.json"),
+        ...require("./config/config-parent.json"),
+        ...require("./config/config-grandparent.json")
+      };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
@@ -1729,11 +1731,11 @@ module.exports.configMultipleYaml = function configMultipleYaml(test) {
     [ require("js-yaml").safeLoad ],
     function callback(err, actual) {
       test.ifError(err);
-      const expected = helpers.assign(
-        helpers.assign(
-          helpers.assign({}, require("./config/config-child.json")),
-          require("./config/config-parent.json")),
-        require("./config/config-grandparent.json"));
+      const expected = {
+        ...require("./config/config-child.json"),
+        ...require("./config/config-parent.json"),
+        ...require("./config/config-grandparent.json")
+      };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
@@ -1747,11 +1749,11 @@ module.exports.configMultipleHybrid = function configMultipleHybrid(test) {
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
     function callback(err, actual) {
       test.ifError(err);
-      const expected = helpers.assign(
-        helpers.assign(
-          helpers.assign({}, require("./config/config-child.json")),
-          require("./config/config-parent.json")),
-        require("./config/config-grandparent.json"));
+      const expected = {
+        ...require("./config/config-child.json"),
+        ...require("./config/config-parent.json"),
+        ...require("./config/config-grandparent.json")
+      };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
       test.done();
@@ -1796,11 +1798,11 @@ module.exports.configMultipleSync = function configMultipleSync(test) {
   test.expect(1);
   const actual =
     markdownlint.readConfigSync("./test/config/config-grandparent.json");
-  const expected = helpers.assign(
-    helpers.assign(
-      helpers.assign({}, require("./config/config-child.json")),
-      require("./config/config-parent.json")),
-    require("./config/config-grandparent.json"));
+  const expected = {
+    ...require("./config/config-child.json"),
+    ...require("./config/config-parent.json"),
+    ...require("./config/config-grandparent.json")
+  };
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
@@ -1877,11 +1879,11 @@ module.exports.configMultipleYamlSync = function configMultipleYamlSync(test) {
   test.expect(1);
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent.yaml", [ require("js-yaml").safeLoad ]);
-  const expected = helpers.assign(
-    helpers.assign(
-      helpers.assign({}, require("./config/config-child.json")),
-      require("./config/config-parent.json")),
-    require("./config/config-grandparent.json"));
+  const expected = {
+    ...require("./config/config-child.json"),
+    ...require("./config/config-parent.json"),
+    ...require("./config/config-grandparent.json")
+  };
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
@@ -1893,11 +1895,11 @@ function configMultipleHybridSync(test) {
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent-hybrid.yaml",
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
-  const expected = helpers.assign(
-    helpers.assign(
-      helpers.assign({}, require("./config/config-child.json")),
-      require("./config/config-parent.json")),
-    require("./config/config-grandparent.json"));
+  const expected = {
+    ...require("./config/config-child.json"),
+    ...require("./config/config-parent.json"),
+    ...require("./config/config-grandparent.json")
+  };
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
   test.done();
@@ -2306,7 +2308,7 @@ module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
   ].forEach(function forProperty(property) {
     const propertyName = property[0];
     property[1].forEach(function forPropertyValue(propertyValue) {
-      const badRule = helpers.clone(customRules.anyBlockquote);
+      const badRule = { ...customRules.anyBlockquote };
       badRule[propertyName] = propertyValue;
       const options = {
         "customRules": [ badRule ]

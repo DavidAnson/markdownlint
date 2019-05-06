@@ -24,20 +24,6 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 
-// Applies key/value pairs from src to dst, returning dst
-function assign(dst, src) {
-  Object.keys(src).forEach(function forKey(key) {
-    dst[key] = src[key];
-  });
-  return dst;
-}
-module.exports.assign = assign;
-
-// Clones the key/value pairs of obj, returning the clone
-module.exports.clone = function clone(obj) {
-  return assign({}, obj);
-};
-
 // Returns true iff the input is a number
 module.exports.isNumber = function isNumber(obj) {
   return typeof obj === "number";

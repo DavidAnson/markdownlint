@@ -5,4 +5,5 @@ demo/markdownlint-browser.min.js
 lib-es3
 node_modules
 npm-debug.log
+.nyc_output
 .vscode
