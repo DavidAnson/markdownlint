@@ -9,4 +9,4 @@ os:
   - osx
 cache: npm
 script: "npm run-script test-cover"
-after_script: "npm install coveralls && cat ./coverage/lcov.info | coveralls"
+after_script: "npm install coveralls && nyc report --reporter=text-lcov | coveralls"
