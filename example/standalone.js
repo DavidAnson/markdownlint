@@ -5,8 +5,8 @@ const markdownlint = require("../lib/markdownlint");
 const options = {
   "files": [ "good.md", "bad.md" ],
   "strings": {
-    "good.string": "# good.string\n\nThis string passes all rules.",
-    "bad.string": "#bad.string\n\n#This string fails\tsome rules."
+    "good.string": "# good.string\n\nThis string passes all rules.\n",
+    "bad.string": "#bad.string\n\n#This string fails\tsome rules.\n"
   }
 };
 
