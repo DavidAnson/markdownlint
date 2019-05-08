@@ -748,6 +748,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            improve MD023/MD032/MD038, update dependencies.
 * 0.13.0 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041/, deprecate MD002,
            improve pandoc YAML support, update dependencies.
+* 0.14.0 - Remove support for end-of-life Node version 6, introduce `markdownlint-rule-helpers`,
+           add MD046/MD047, improve MD033/MD034/MD039, improve custom rule validation and
+           in-browser demo, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
