@@ -751,6 +751,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 * 0.14.0 - Remove support for end-of-life Node version 6, introduce `markdownlint-rule-helpers`,
            add MD046/MD047, improve MD033/MD034/MD039, improve custom rule validation and
            in-browser demo, update dependencies.
+  * 0.14.1 - Improve MD033.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
