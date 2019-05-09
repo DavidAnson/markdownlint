@@ -79,3 +79,13 @@ Text <a href="#anchor">inline</a> text
 text <img src="src.png"/> text
 
 Text
+
+<name@example.com> is an email autolink.
+
+Text
+
+Another email autolink: <first+last@ex.exa-mple.com>.
+
+Text
+
+But <foo.bar.baz> is not an email autolink.

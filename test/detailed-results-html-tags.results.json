@@ -151,5 +151,14 @@
         "errorDetail": "Element: img",
         "errorContext": null,
         "errorRange": [ 6, 20 ]
+    },
+    {
+        "lineNumber": 91,
+        "ruleNames": [ "MD033", "no-inline-html" ],
+        "ruleDescription": "Inline HTML",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
+        "errorDetail": "Element: foo.bar.baz",
+        "errorContext": null,
+        "errorRange": [ 5, 13 ]
     }
 ]
