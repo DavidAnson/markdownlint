@@ -135,7 +135,16 @@
         "errorRange": [ 8, 4 ]
     },
     {
-        "lineNumber": 78,
+        "lineNumber": 84,
+        "ruleNames": [ "MD033", "no-inline-html" ],
+        "ruleDescription": "Inline HTML",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
+        "errorDetail": "Element: em",
+        "errorContext": null,
+        "errorRange": [ 18, 4 ]
+    },
+    {
+        "lineNumber": 90,
         "ruleNames": [ "MD033", "no-inline-html" ],
         "ruleDescription": "Inline HTML",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
@@ -144,7 +153,7 @@
         "errorRange": [ 6, 18 ]
     },
     {
-        "lineNumber": 79,
+        "lineNumber": 91,
         "ruleNames": [ "MD033", "no-inline-html" ],
         "ruleDescription": "Inline HTML",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
@@ -153,12 +162,12 @@
         "errorRange": [ 6, 20 ]
     },
     {
-        "lineNumber": 91,
+        "lineNumber": 101,
         "ruleNames": [ "MD033", "no-inline-html" ],
         "ruleDescription": "Inline HTML",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
-        "errorDetail": "Element: foo.bar.baz",
+        "errorDetail": "Element: foo-bar-baz",
         "errorContext": null,
-        "errorRange": [ 5, 13 ]
+        "errorRange": [ 1, 13 ]
     }
 ]

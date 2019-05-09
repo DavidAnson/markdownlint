@@ -75,6 +75,18 @@ text <strong>inline inline</strong> text
 
 Text
 
+`<em>`
+
+Text ``<em>`` text
+
+Text `<em>` text ``<em>`` text ```<em>``` text
+
+Text `<em>` text <em>inline</em> text
+
+Text ``text <em> text`` text
+
+Text
+
 Text <a href="#anchor">inline</a> text
 text <img src="src.png"/> text
 
@@ -82,10 +94,12 @@ Text
 
 <name@example.com> is an email autolink.
 
-Text
-
 Another email autolink: <first+last@ex.exa-mple.com>.
 
 Text
 
-But <foo.bar.baz> is not an email autolink.
+<foo-bar-baz> is an HTML element.
+
+But <foo.bar.baz> is not an autolink or HTML element.
+
+Text

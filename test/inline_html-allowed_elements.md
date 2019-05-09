@@ -14,7 +14,19 @@
 
 <br> {MD033}
 
+<br > {MD033}
+
 <br/> {MD033}
+
+<br /> {MD033}
+
+<br attribute/> {MD033}
+
+<br attribute /> {MD033}
+
+<br attribute="value"/> {MD033}
+
+<br attribute="value" /> {MD033}
 
 <p>
 This is allowed.
