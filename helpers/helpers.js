@@ -76,7 +76,7 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
     let j = text.indexOf(htmlCommentEnd, i);
     if (j === -1) {
       j = text.length;
-      text += "\\";
+      text += "\\\n";
     }
     const comment = text.slice(i + htmlCommentBegin.length, j);
     if ((comment.length > 0) &&

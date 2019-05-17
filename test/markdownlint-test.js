@@ -1329,7 +1329,8 @@ function clearHtmlCommentTextValid(test) {
     "<!--    --><!--    -->",
     "text<!--    -->text<!--    -->text",
     "<!--",
-    "    \\"
+    "    \\",
+    ""
   ];
   const actual = helpers.clearHtmlCommentText(validComments.join("\n"));
   const expected = validResult.join("\n");
