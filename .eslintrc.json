@@ -21,7 +21,7 @@
     "linebreak-style": "off",
     "max-lines": "off",
     "max-lines-per-function": "off",
-    "max-params": ["error", 9],
+    "max-params": ["error", 10],
     "max-statements": ["error", 33],
     "multiline-comment-style": ["error", "separate-lines"],
     "multiline-ternary": "off",

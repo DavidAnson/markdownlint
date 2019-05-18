@@ -966,6 +966,7 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
           "##### options.strings",
           "##### options.config",
           "##### options.frontMatter",
+          "##### options.handleRuleFailures",
           "##### options.noInlineConfig",
           "##### options.resultVersion",
           "##### options.markdownItPlugins",
@@ -2408,37 +2409,10 @@ function customRulesUsedTagName(test) {
 };
 
 module.exports.customRulesThrowForFile =
-function customRulesThrowForFile(test) {
-  test.expect(4);
-  const exceptionMessage = "Test exception message";
-  markdownlint({
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "tags": [ "tag" ],
-        "function": function throws() {
-          throw new Error(exceptionMessage);
-        }
-      }
-    ],
-    "files": [ "./test/custom-rules.md" ]
-  }, function callback(err, result) {
-    test.ok(err, "Did not get an error for function thrown.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, exceptionMessage,
-      "Incorrect message for function thrown.");
-    test.ok(!result, "Got result for function thrown.");
-    test.done();
-  });
-};
-
-module.exports.customRulesThrowForFileSync =
-function customRulesThrowForFileSync(test) {
-  test.expect(4);
-  const exceptionMessage = "Test exception message";
-  test.throws(function customRuleThrowsCall() {
-    markdownlint.sync({
+  function customRulesThrowForFile(test) {
+    test.expect(4);
+    const exceptionMessage = "Test exception message";
+    markdownlint({
       "customRules": [
         {
           "names": [ "name" ],
@@ -2450,44 +2424,71 @@ function customRulesThrowForFileSync(test) {
         }
       ],
       "files": [ "./test/custom-rules.md" ]
+    }, function callback(err, result) {
+      test.ok(err, "Did not get an error for function thrown.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.equal(err.message, exceptionMessage,
+        "Incorrect message for function thrown.");
+      test.ok(!result, "Got result for function thrown.");
+      test.done();
     });
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for function thrown.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, exceptionMessage,
-      "Incorrect message for function thrown.");
-    return true;
-  }, "Did not get exception for function thrown.");
-  test.done();
-};
+  };
+
+module.exports.customRulesThrowForFileSync =
+  function customRulesThrowForFileSync(test) {
+    test.expect(4);
+    const exceptionMessage = "Test exception message";
+    test.throws(function customRuleThrowsCall() {
+      markdownlint.sync({
+        "customRules": [
+          {
+            "names": [ "name" ],
+            "description": "description",
+            "tags": [ "tag" ],
+            "function": function throws() {
+              throw new Error(exceptionMessage);
+            }
+          }
+        ],
+        "files": [ "./test/custom-rules.md" ]
+      });
+    }, function testError(err) {
+      test.ok(err, "Did not get an error for function thrown.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.equal(err.message, exceptionMessage,
+        "Incorrect message for function thrown.");
+      return true;
+    }, "Did not get exception for function thrown.");
+    test.done();
+  };
 
 module.exports.customRulesThrowForString =
-function customRulesThrowForString(test) {
-  test.expect(4);
-  const exceptionMessage = "Test exception message";
-  markdownlint({
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "tags": [ "tag" ],
-        "function": function throws() {
-          throw new Error(exceptionMessage);
+  function customRulesThrowForString(test) {
+    test.expect(4);
+    const exceptionMessage = "Test exception message";
+    markdownlint({
+      "customRules": [
+        {
+          "names": [ "name" ],
+          "description": "description",
+          "tags": [ "tag" ],
+          "function": function throws() {
+            throw new Error(exceptionMessage);
+          }
         }
+      ],
+      "strings": {
+        "string": "String"
       }
-    ],
-    "strings": {
-      "string": "String"
-    }
-  }, function callback(err, result) {
-    test.ok(err, "Did not get an error for function thrown.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, exceptionMessage,
-      "Incorrect message for function thrown.");
-    test.ok(!result, "Got result for function thrown.");
-    test.done();
-  });
-};
+    }, function callback(err, result) {
+      test.ok(err, "Did not get an error for function thrown.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      test.equal(err.message, exceptionMessage,
+        "Incorrect message for function thrown.");
+      test.ok(!result, "Got result for function thrown.");
+      test.done();
+    });
+  };
 
 module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
   test.expect(4);
@@ -2682,6 +2683,139 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
     test.done();
   });
 };
+
+module.exports.customRulesThrowForFileHandled =
+  function customRulesThrowForFileHandled(test) {
+    test.expect(2);
+    const exceptionMessage = "Test exception message";
+    markdownlint({
+      "customRules": [
+        {
+          "names": [ "name" ],
+          "description": "description",
+          "tags": [ "tag" ],
+          "function": function throws() {
+            throw new Error(exceptionMessage);
+          }
+        }
+      ],
+      "files": [ "./test/custom-rules.md" ],
+      "handleRuleFailures": true
+    }, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "./test/custom-rules.md": [
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "name" ],
+            "ruleDescription": "description",
+            "ruleInformation": null,
+            "errorDetail":
+              `This rule threw an exception: ${exceptionMessage}`,
+            "errorContext": null,
+            "errorRange": null
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.customRulesThrowForStringHandled =
+  function customRulesThrowForStringHandled(test) {
+    test.expect(2);
+    const exceptionMessage = "Test exception message";
+    const informationUrl = "https://example.com/rule";
+    markdownlint({
+      "customRules": [
+        {
+          "names": [ "name" ],
+          "description": "description",
+          "information": new URL(informationUrl),
+          "tags": [ "tag" ],
+          "function": function throws() {
+            throw new Error(exceptionMessage);
+          }
+        }
+      ],
+      "strings": {
+        "string": "String\n"
+      },
+      "handleRuleFailures": true
+    }, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "string": [
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
+            "ruleDescription":
+              "First line in file should be a top level heading",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md041`,
+            "errorDetail": null,
+            "errorContext": "String",
+            "errorRange": null
+          },
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "name" ],
+            "ruleDescription": "description",
+            "ruleInformation": informationUrl,
+            "errorDetail":
+              `This rule threw an exception: ${exceptionMessage}`,
+            "errorContext": null,
+            "errorRange": null
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.customRulesOnErrorInvalidHandled =
+  function customRulesOnErrorInvalidHandled(test) {
+    test.expect(2);
+    markdownlint({
+      "customRules": [
+        {
+          "names": [ "name" ],
+          "description": "description",
+          "tags": [ "tag" ],
+          "function": function onErrorInvalid(params, onError) {
+            onError({
+              "lineNumber": 13,
+              "detail": "N/A"
+            });
+          }
+        }
+      ],
+      "strings": {
+        "string": "# Heading\n"
+      },
+      "handleRuleFailures": true
+    }, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "string": [
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "name" ],
+            "ruleDescription": "description",
+            "ruleInformation": null,
+            "errorDetail": "This rule threw an exception: " +
+              "Property 'lineNumber' of onError parameter is incorrect.",
+            "errorContext": null,
+            "errorRange": null
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
 
 module.exports.customRulesFileName = function customRulesFileName(test) {
   test.expect(2);

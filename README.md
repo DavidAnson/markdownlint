@@ -360,6 +360,21 @@ title: Title
 
 Note: Matches must occur at the start of the file.
 
+##### options.handleRuleFailures
+
+Type: `Boolean`
+
+Catches exceptions thrown during rule processing and reports the problem as a
+rule violation.
+
+By default, exceptions thrown by rules (or the library itself) are unhandled
+and bubble up the stack to the caller in the conventional manner. By setting
+`handleRuleFailures` to `true`, exceptions thrown by failing rules will be
+handled by the library and the exception message logged as a rule violation.
+This setting can be useful in the presence of (custom) rules that encounter
+unexpected syntax and fail. By enabling this option, the linting process is
+allowed to continue and report any violations that were found.
+
 ##### options.noInlineConfig
 
 Type: `Boolean`
