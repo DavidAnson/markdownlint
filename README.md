@@ -740,7 +740,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
   * 0.3.1 - Fix regressions in MD032/MD038, update dependencies.
 * 0.4.0 - Add MD044, enhance MD013/MD032/MD041/MD042/MD043, fix for MD038, dependencies.
   * 0.4.1 - Fixes for MD038/front matter, improvements to MD044, update dependencies.
-* 0.5.0 - Add shareable configuration, noInlineConfig option, README links, fix MD030,
+* 0.5.0 - Add shareable configuration, `noInlineConfig` option, README links, fix MD030,
           improve MD009/MD041, update dependencies.
 * 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments, TOML
           front matter, fixes for MD044, update dependencies.
@@ -768,6 +768,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            add MD046/MD047, improve MD033/MD034/MD039, improve custom rule validation and
            in-browser demo, update dependencies.
   * 0.14.1 - Improve MD033.
+  * 0.14.2 - Improve MD047, add `handleRuleFailures` option.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
