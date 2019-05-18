@@ -52,7 +52,8 @@
       },
       "config": {
         "MD013": false
-      }
+      },
+      "handleRuleFailures": true
     };
     var results = window.markdownlint.sync(options);
     violations.innerHTML = results.content.map(function mapResult(result) {
