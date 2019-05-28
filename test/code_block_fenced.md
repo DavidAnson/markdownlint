@@ -12,7 +12,7 @@ This is a code block that won't trigger.
 ```text
 This is code
  
-with an empty line.
+with a line with trailing spaces. {MD009:14}
 ```
 
 But we'll do another:
@@ -21,4 +21,3 @@ But we'll do another:
     will.
 
 Final text is here
-{MD009:14}
