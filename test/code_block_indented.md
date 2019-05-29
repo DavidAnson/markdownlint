@@ -14,4 +14,8 @@ But we'll do another:
     And this
     will.
 
-Final text is here
+One last one:
+
+    This is code
+    
+    with an empty indented line.
