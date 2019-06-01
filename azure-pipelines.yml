@@ -41,6 +41,7 @@ steps:
   displayName: 'Install Node.js'
 
 - script: |
-    npm install
+    npm install --no-package-lock
     npm test
+    npm run lint
   displayName: 'npm install and test'
