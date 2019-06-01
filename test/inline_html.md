@@ -2,7 +2,7 @@
 
 <h1>Inline HTML Heading {MD033}</h1>
 
-<p>More inline HTML
+<p>More inline HTML {MD033}
 but this time on multiple lines
 </p>
 
