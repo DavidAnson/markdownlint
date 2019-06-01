@@ -41,7 +41,5 @@ steps:
   displayName: 'Install Node.js'
 
 
-- script: |
-    npm install --no-package-lock
-    npm run ci
+- script: 'npm install --no-package-lock && npm run ci'
   displayName: 'npm install and run ci'
