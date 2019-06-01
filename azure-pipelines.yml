@@ -42,6 +42,5 @@ steps:
 
 - script: |
     npm install --no-package-lock
-    npm test
-    npm run lint
-  displayName: 'npm install and test'
+    npm run ci
+  displayName: 'npm install and run ci'
