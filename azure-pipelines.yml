@@ -40,6 +40,7 @@ steps:
     versionSpec: $(node_version)
   displayName: 'Install Node.js'
 
+
 - script: |
     npm install --no-package-lock
     npm run ci
