@@ -1,35 +1,17 @@
 # Azure DevOps Pipeline for Node.js
 # https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
 
+parameters:
+  osList: [ 'ubuntu', 'macos', 'windows' ]
+  nodeList: [ '8', '10', '12' ]
+
 strategy:
   matrix:
-    linux_node_8:
-      imageName: 'ubuntu-latest'
-      node_version: 8.x
-    linux_node_10:
-      imageName: 'ubuntu-latest'
-      node_version: 10.x
-    linux_node_12:
-      imageName: 'ubuntu-latest'
-      node_version: 12.x
-    macos_node_8:
-      imageName: 'macos-latest'
-      node_version: 8.x
-    macos_node_10:
-      imageName: 'macos-latest'
-      node_version: 10.x
-    macos_node_12:
-      imageName: 'macos-latest'
-      node_version: 12.x
-    windows_node_8:
-      imageName: 'windows-latest'
-      node_version: 8.x
-    windows_node_10:
-      imageName: 'windows-latest'
-      node_version: 10.x
-    windows_node_12:
-      imageName: 'windows-latest'
-      node_version: 12.x
+    ${{ each os in parameters.osList }}:
+      ${{ each nv in parameters.nodeList }}:
+        ${{ format('{0}_node_{1}', os, nv) }}:
+          imageName: ${{ format('{0}-latest', os) }}
+          node_version: ${{ format('{0}.x', nv) }}
 
 pool:
   vmImage: $(imageName)
