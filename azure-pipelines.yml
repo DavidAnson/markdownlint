@@ -40,5 +40,8 @@ steps:
     versionSpec: $(node_version)
   displayName: 'Install Node.js'
 
-- script: 'npm install --no-package-lock && npm run ci'
-  displayName: 'npm install and run ci'
+- script: 'npm install --no-package-lock'
+  displayName: 'Install Dependencies'
+
+- script: 'npm run ci'
+  displayName: 'Run Tests'
