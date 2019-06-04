@@ -1,5 +1,14 @@
+.eslintignore
+.eslintrc.json
+example
+.markdownlint.json
+.nycrc.json
+.nyc_output
+.travis.yml
+.vscode
+azure-pipelines.yml
 coverage
 demo
+lib-es3
 npm-debug.log
 test
-.vscode
