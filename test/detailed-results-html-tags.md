@@ -101,5 +101,7 @@ Text
 <foo-bar-baz> is an HTML element.
 
 But <foo.bar.baz> is not an autolink or HTML element.
+And neither is <foo_bar>.
+Nor <123abc>.
 
 Text
