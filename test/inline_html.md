@@ -11,3 +11,13 @@ but this time on multiple lines
 ```text
 <p>Neither should this as it's also in a code block {MD046:11}</p>
 ```
+
+## Elements in code spans
+
+Text `<code>` text \` text
+Text \` text `<code>` text
+Text \` text \` text `<code>` text
+Text \` text `<code>` text `<code>` text
+Text \` text `<code>` text \` text `<code>` text
+Text \`\` text `<code>` text
+Text `<code>` text \` text `<code>` text
