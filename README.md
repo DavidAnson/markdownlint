@@ -708,6 +708,7 @@ const results = window.markdownlint.sync(options).toString();
 For ideas how to integrate `markdownlint` into your workflow, refer to the following projects:
 
 * [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
+* [Boostnote](https://boostnote.io/) ([Search repository](https://github.com/BoostIO/Boostnote/search?q=markdownlint))
 * [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
 * [Garden React Components](https://garden.zendesk.com/react-components/)  ([Search repository](https://github.com/zendeskgarden/react-components/search?q=markdownlint))
 * [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
