@@ -39,4 +39,6 @@ detected as a heading because it's on multiple lines**
 
 **This also shouldn't be detected as a heading as it ends in punctuation.**
 
+**This shouldn't be detected as a heading as it ends in full-width punctuation。**
+
 **[This as well since it is a link](https://example.com)**

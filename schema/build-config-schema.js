@@ -190,7 +190,7 @@ rules.forEach(function forRule(rule) {
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
-          "default": ".,;:!?"
+          "default": ".,;:!?。，；：！？"
         }
       };
       break;

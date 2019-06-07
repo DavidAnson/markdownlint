@@ -788,10 +788,10 @@ Tags: headings, headers
 
 Aliases: no-trailing-punctuation
 
-Parameters: punctuation (string; default ".,;:!?")
+Parameters: punctuation (string; default ".,;:!?。，；：！？")
 
-This rule is triggered on any heading that has a punctuation character as the
-last character in the line:
+This rule is triggered on any heading that has a normal or full-width punctuation
+character as the last character in the line:
 
 ```markdown
 # This is a heading.
@@ -1207,7 +1207,7 @@ Tags: headings, headers, emphasis
 
 Aliases: no-emphasis-as-heading, no-emphasis-as-header
 
-Parameters: punctuation (string; default ".,;:!?")
+Parameters: punctuation (string; default ".,;:!?。，；：！？")
 
 This check looks for instances where emphasized (i.e. bold or italic) text is
 used to separate sections, where a heading should be used instead:
@@ -1235,11 +1235,11 @@ Lorem ipsum dolor sit amet...
 Consectetur adipiscing elit, sed do eiusmod.
 ```
 
-Note: this rule looks for single line paragraphs that consist entirely of
-emphasized text.  It won't fire on emphasis used within regular text,
-multi-line emphasized paragraphs, and paragraphs ending in punctuation.
-Similarly to rule MD026, you can configure what characters are recognized as
-punctuation.
+Note: This rule looks for single line paragraphs that consist entirely
+of emphasized text. It won't fire on emphasis used within regular text,
+multi-line emphasized paragraphs, or paragraphs ending in punctuation
+(normal or full-width). Similarly to rule MD026, you can configure what
+characters are recognized as punctuation.
 
 <a name="md037"></a>
 

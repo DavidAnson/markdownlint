@@ -708,7 +708,7 @@
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
-          "default": ".,;:!?"
+          "default": ".,;:!?。，；：！？"
         }
       },
       "additionalProperties": false
@@ -724,7 +724,7 @@
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
-          "default": ".,;:!?"
+          "default": ".,;:!?。，；：！？"
         }
       },
       "additionalProperties": false
@@ -966,7 +966,7 @@
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
-          "default": ".,;:!?"
+          "default": ".,;:!?。，；：！？"
         }
       },
       "additionalProperties": false
@@ -982,7 +982,7 @@
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
-          "default": ".,;:!?"
+          "default": ".,;:!?。，；：！？"
         }
       },
       "additionalProperties": false
@@ -998,7 +998,7 @@
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
-          "default": ".,;:!?"
+          "default": ".,;:!?。，；：！？"
         }
       },
       "additionalProperties": false

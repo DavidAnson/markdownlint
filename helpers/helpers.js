@@ -24,6 +24,9 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 
+// All punctuation characters (normal and full-width)
+module.exports.allPunctuation = ".,;:!?。，；：！？";
+
 // Returns true iff the input is a number
 module.exports.isNumber = function isNumber(obj) {
   return typeof obj === "number";
