@@ -790,6 +790,8 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            in-browser demo, update dependencies.
   * 0.14.1 - Improve MD033.
   * 0.14.2 - Improve MD047, add `handleRuleFailures` option.
+* 0.15.0 - Add `markdownlint-capture`/`markdownlint-restore` inline comments, improve
+           MD009/MD013/MD026/MD033/MD036, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
