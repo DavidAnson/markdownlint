@@ -142,17 +142,38 @@ below) to define the expected behavior for a set of inputs. To enable or disable
 rules within a file, add one of these markers to the appropriate place (HTML
 comments don't appear in the final markup):
 
-* Disable all rules: `<!-- markdownlint-disable -->`
-* Enable all rules: `<!-- markdownlint-enable -->`
-* Disable one or more rules: `<!-- markdownlint-disable MD001 MD002 -->`
-* Enable one or more rules: `<!-- markdownlint-enable MD001 MD002 -->`
+* Disable all rules unconditionally: `<!-- markdownlint-disable -->`
+* Enable all rules unconditionally: `<!-- markdownlint-enable -->`
+* Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
+* Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
+* Capture the current rule configuration: `<!-- markdownlint-capture -->`
+* Restore the captured rule configuration: `<!-- markdownlint-restore -->`
 
 For example:
 
 ```markdown
-<!-- markdownlint-disable MD037 -->
+<!-- markdownlint-disable no-space-in-emphasis -->
 deliberate space * in * emphasis
-<!-- markdownlint-enable MD037 -->
+<!-- markdownlint-enable no-space-in-emphasis -->
+```
+
+To temporarily disable rule(s), then restore the former configuration:
+
+```markdown
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable -->
+any violations you want
+<!-- markdownlint-restore -->
+```
+
+The initial configuration is captured by default (as if every document began
+with `<!-- markdownlint-capture -->`), so the pattern above can be expressed
+more simply:
+
+```markdown
+<!-- markdownlint-disable -->
+any violations you want
+<!-- markdownlint-restore -->
 ```
 
 Changes take effect starting with the line a comment is on, so the following
