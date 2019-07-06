@@ -3,7 +3,8 @@
 
 This document contains a description of all rules, what they are checking for,
 as well as an examples of documents that break the rule and corrected
-versions of the examples.
+versions of the examples. Any rule whose heading is ~~struck through~~ is
+deprecated, but still provided for backward-compatibility.
 
 <a name="md001"></a>
 
@@ -43,7 +44,7 @@ level at a time:
 
 <a name="md002"></a>
 
-## MD002 - First heading should be a top level heading
+## ~~MD002 - First heading should be a top level heading~~
 
 Tags: headings, headers
 
