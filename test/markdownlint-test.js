@@ -19,6 +19,8 @@ const configSchema = require("../schema/markdownlint-config-schema.json");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
+const deprecatedRuleNames = [ "MD002" ];
+
 function promisify(func, ...args) {
   return new Promise((resolve, reject) => {
     func(...args, (error, result) => {
@@ -1138,9 +1140,12 @@ module.exports.readme = function readme(test) {
             if (rule) {
               const ruleName = rule.names[0];
               const ruleAliases = rule.names.slice(1);
-              const expected = "**[" + ruleName + "](doc/Rules.md#" +
+              let expected = "**[" + ruleName + "](doc/Rules.md#" +
                 ruleName.toLowerCase() + ")** *" +
                 ruleAliases.join("/") + "* - " + rule.description;
+              if (deprecatedRuleNames.includes(ruleName)) {
+                expected = "~~" + expected + "~~";
+              }
               test.equal(token.content, expected, "Rule mismatch.");
             }
           } else if (inTags) {
@@ -1197,8 +1202,13 @@ module.exports.doc = function doc(test) {
             ruleHasAliases = false;
             test.ok(rule,
               "Missing rule implementation for " + token.content + ".");
+            const ruleName = rule.names[0];
+            let headingContent = ruleName + " - " + rule.description;
+            if (deprecatedRuleNames.includes(ruleName)) {
+              headingContent = "~~" + headingContent + "~~";
+            }
             test.equal(token.content,
-              rule.names[0] + " - " + rule.description,
+              headingContent,
               "Rule mismatch.");
             ruleUsesParams = rule.function.toString()
               .match(/params\.config\.[_a-z]*/gi);

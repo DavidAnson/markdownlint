@@ -47,7 +47,7 @@ playground for learning and exploring.
 ## Rules / Aliases
 
 * **[MD001](doc/Rules.md#md001)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
-* **[MD002](doc/Rules.md#md002)** *first-heading-h1/first-header-h1* - First heading should be a top level heading
+* ~~**[MD002](doc/Rules.md#md002)** *first-heading-h1/first-header-h1* - First heading should be a top level heading~~
 * **[MD003](doc/Rules.md#md003)** *heading-style/header-style* - Heading style
 * **[MD004](doc/Rules.md#md004)** *ul-style* - Unordered list style
 * **[MD005](doc/Rules.md#md005)** *list-indent* - Inconsistent indentation for list items at the same level
@@ -91,6 +91,8 @@ playground for learning and exploring.
 * **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 
 See [Rules.md](doc/Rules.md) for more details.
+
+~~Struck through~~ rules are deprecated, and provided for backward-compatibility.
 
 > All rules with `heading` as part of their name are also available as `header`
 > aliases (e.g. `heading-increment` is also available as `header-increment`).
