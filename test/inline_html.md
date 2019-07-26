@@ -21,3 +21,7 @@ Text \` text `<code>` text `<code>` text
 Text \` text `<code>` text \` text `<code>` text
 Text \`\` text `<code>` text
 Text `<code>` text \` text `<code>` text
+
+## Slash in element name
+
+Text **\<base directory>\another\directory\\<slash/directory>** text
