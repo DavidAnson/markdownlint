@@ -10,5 +10,7 @@
 
 ## Heading 6?
 
+## Heading 7 {MD026}]
+
 The rule has been customized to allow question marks while disallowing
 everything else.

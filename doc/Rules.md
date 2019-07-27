@@ -792,23 +792,24 @@ Aliases: no-trailing-punctuation
 
 Parameters: punctuation (string; default ".,;:!?。，；：！？")
 
-This rule is triggered on any heading that has a normal or full-width punctuation
-character as the last character in the line:
+This rule is triggered on any heading that has one of the specified normal or
+full-width punctuation characters as the last character in the line:
 
 ```markdown
 # This is a heading.
 ```
 
-To fix this, remove any trailing punctuation:
+To fix this, remove the trailing punctuation:
 
 ```markdown
 # This is a heading
 ```
 
-Note: The punctuation parameter can be used to specify what characters class
-as punctuation at the end of the heading. For example, you can set it to
-`".,;:!"` to allow headings with question marks in them, such as might be used
-in an FAQ.
+Note: The `punctuation` parameter can be used to specify what characters count
+as punctuation at the end of a heading. For example, you can change it to
+`".,;:!"` to allow headings that end with a question mark, such as in an FAQ.
+Setting the `punctuation` parameter to `""` allows all characters - and is
+equivalent to disabling the rule.
 
 <a name="md027"></a>
 
