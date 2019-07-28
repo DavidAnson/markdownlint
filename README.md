@@ -367,7 +367,7 @@ ignores common forms of "front matter". To match differently, specify a custom
 The default value:
 
 ```js
-/((^---$[^]*?^---$)|(^\+\+\+$[^]*?^(\+\+\+|\.\.\.)$))(\r\n|\r|\n|$)/m
+/((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$))(\r\n|\r|\n|$)/m
 ```
 
 Ignores [YAML](https://en.wikipedia.org/wiki/YAML) and

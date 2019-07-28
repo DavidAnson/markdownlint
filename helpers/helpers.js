@@ -8,7 +8,8 @@ module.exports.newLineRe = /\r[\n\u0085]?|[\n\u2424\u2028\u0085]/;
 
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
-  /((^---$[^]*?^---$)|(^\+\+\+$[^]*?^(\+\+\+|\.\.\.)$))(\r\n|\r|\n|$)/m;
+  // eslint-disable-next-line max-len
+  /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching inline disable/enable comments
 const inlineCommentRe =
