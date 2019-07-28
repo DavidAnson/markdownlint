@@ -259,10 +259,25 @@ module.exports.forEachInlineCodeSpan =
       let startColumn = -1;
       let tickCount = 0;
       let currentTicks = 0;
+      let state = "normal";
       // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
       for (; index <= input.length; index++) {
         const char = input[index];
-        if (char === "`") {
+        // Ignore backticks in link destination
+        if ((char === "[") && (state === "normal")) {
+          state = "linkTextOpen";
+        } else if ((char === "]") && (state === "linkTextOpen")) {
+          state = "linkTextClosed";
+        } else if ((char === "(") && (state === "linkTextClosed")) {
+          state = "linkDestinationOpen";
+        } else if (
+          ((char === "(") && (state === "linkDestinationOpen")) ||
+          ((char === ")") && (state === "linkDestinationOpen")) ||
+          (state === "linkTextClosed")) {
+          state = "normal";
+        }
+        // Parse backtick open/close
+        if ((char === "`") && (state !== "linkDestinationOpen")) {
           // Count backticks at start or end of code span
           currentTicks++;
           if ((startIndex === -1) || (startColumn === -1)) {

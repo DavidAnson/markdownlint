@@ -67,3 +67,31 @@ text and ``\`code with ignored escaped \` backticks``
 ``multiple trailing spaces not allowed `  `` text `code` {MD038}
 
 `` ` leading and trailing space allowed for backtick ` `` text `code`
+
+Text [link](https://example.com/link`link) text `code`.
+
+Text [link](https://example.com/link```link) text ```code```.
+
+Text [link](https://example.com/link`link`link`link) text `code`.
+
+Text [link](https://example.com/link "title`title") text `code`.
+
+Text [link](#link`link) text `code`.
+
+Text [link] (#link`link) text `code`. {MD038}
+
+Text [link[link](#link`link) text `code`.
+
+Text [link(link](#link`link) text `code`.
+
+Text [link)link](#link`link) text `code`.
+
+Text [link](#link[link`link) text `code`.
+
+Text [link](#link]link`link) text `code`.
+
+Text [link](#link(link`link) text `code`. {MD038}
+
+Text [`link`](xref:custom.link`1) text `code`.
+
+Text ``code [link](#link`link) code`` text `code`.
