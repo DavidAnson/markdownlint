@@ -1952,7 +1952,7 @@ module.exports.allBuiltInRulesHaveValidUrl =
 
 module.exports.someCustomRulesHaveValidUrl =
   function someCustomRulesHaveValidUrl(test) {
-    test.expect(6);
+    test.expect(7);
     customRules.all.forEach(function forRule(rule) {
       test.ok(!rule.information ||
         (Object.getPrototypeOf(rule.information) === URL.prototype));
@@ -2885,6 +2885,42 @@ module.exports.customRulesDoc = function customRulesDoc(test) {
     test.done();
   });
 };
+
+module.exports.customRulesLintJavaScript =
+  function customRulesLintJavaScript(test) {
+    test.expect(2);
+    const options = {
+      "customRules": customRules.lintJavaScript,
+      "files": "test/lint-javascript.md"
+    };
+    markdownlint(options, (err, actual) => {
+      test.ifError(err);
+      const expected = {
+        "test/lint-javascript.md": [
+          {
+            "lineNumber": 10,
+            "ruleNames": [ "lint-javascript" ],
+            "ruleDescription": "Rule that lints JavaScript code",
+            "ruleInformation": null,
+            "errorDetail": "Unexpected var, use let or const instead.",
+            "errorContext": "var x = 0;",
+            "errorRange": null
+          },
+          {
+            "lineNumber": 12,
+            "ruleNames": [ "lint-javascript" ],
+            "ruleDescription": "Rule that lints JavaScript code",
+            "ruleInformation": null,
+            "errorDetail": "Unexpected console statement.",
+            "errorContext": "console.log(x);",
+            "errorRange": null
+          }
+        ]
+      };
+      test.deepEqual(actual, expected, "Unexpected issues.");
+      test.done();
+    });
+  };
 
 module.exports.markdownItPluginsSingle =
   function markdownItPluginsSingle(test) {

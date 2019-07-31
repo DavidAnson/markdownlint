@@ -14,9 +14,13 @@ module.exports.firstLine = firstLine;
 const lettersEX = require("./letters-E-X");
 module.exports.lettersEX = lettersEX;
 
+const lintJavaScript = require("./lint-javascript");
+module.exports.lintJavaScript = lintJavaScript;
+
 module.exports.all = [
   anyBlockquote,
   everyNLines,
   firstLine,
-  lettersEX
+  lettersEX,
+  lintJavaScript
 ];
