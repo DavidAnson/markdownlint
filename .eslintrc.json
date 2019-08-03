@@ -1,5 +1,4 @@
 {
-  "parser": "espree",
   "parserOptions": {
     "ecmaVersion": 2018
   },
