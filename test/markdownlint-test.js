@@ -1169,7 +1169,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(327);
+  test.expect(328);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);

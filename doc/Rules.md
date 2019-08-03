@@ -1015,6 +1015,8 @@ Tags: code, blank_lines
 
 Aliases: blanks-around-fences
 
+Parameters: list_items (boolean; default true)
+
 This rule is triggered when fenced code blocks are either not preceded or not
 followed by a blank line:
 
@@ -1049,6 +1051,10 @@ Some more text
 
 Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
 not parse fenced code blocks that don't have blank lines before and after them.
+
+Set the `list_items` parameter to `false` to disable this rule for list items.
+Disabling this behavior for lists can be useful if it is necessary to create a
+[tight](https://spec.commonmark.org/0.29/#tight) list containing a code fence.
 
 <a name="md032"></a>
 

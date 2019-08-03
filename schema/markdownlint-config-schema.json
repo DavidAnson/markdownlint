@@ -867,13 +867,35 @@
     },
     "MD031": {
       "description": "MD031/blanks-around-fences - Fenced code blocks should be surrounded by blank lines",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "list_items": {
+          "description": "Include list items",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
     },
     "blanks-around-fences": {
       "description": "MD031/blanks-around-fences - Fenced code blocks should be surrounded by blank lines",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "list_items": {
+          "description": "Include list items",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
     },
     "MD032": {
       "description": "MD032/blanks-around-lists - Lists should be surrounded by blank lines",

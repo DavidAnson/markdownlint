@@ -238,6 +238,15 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD031":
+      scheme.properties = {
+        "list_items": {
+          "description": "Include list items",
+          "type": "boolean",
+          "default": true
+        }
+      };
+      break;
     case "MD033":
       scheme.properties = {
         "allowed_elements": {

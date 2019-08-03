@@ -150,7 +150,7 @@ module.exports.filterTokens = filterTokens;
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
   const lineMetadata = params.lines.map(function mapLine(line, index) {
-    return [ line, index, false, 0, false ];
+    return [ line, index, false, 0, false, false ];
   });
   filterTokens(params, "fence", function forToken(token) {
     lineMetadata[token.map[0]][3] = 1;
@@ -167,6 +167,11 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   filterTokens(params, "table_open", function forToken(token) {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][4] = true;
+    }
+  });
+  filterTokens(params, "list_item_open", function forToken(token) {
+    for (let i = token.map[0]; i < token.map[1]; i++) {
+      lineMetadata[i][5] = true;
     }
   });
   return lineMetadata;
