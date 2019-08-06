@@ -1095,17 +1095,6 @@ Some text
 Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
 not parse lists that don't have blank lines before and after them.
 
-Note: List items without hanging indents are a violation of this rule; list
-items with hanging indents are okay:
-
-```markdown
-* This is
-not okay
-
-* This is
-  okay
-```
-
 <a name="md033"></a>
 
 ## MD033 - Inline HTML
