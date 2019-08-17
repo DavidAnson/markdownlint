@@ -4,7 +4,8 @@
 
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
-module.exports.newLineRe = /\r[\n\u0085]?|[\n\u2424\u2028\u0085]/;
+const newLineRe = /\r[\n\u0085]?|[\n\u2424\u2028\u0085]/;
+module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
@@ -331,12 +332,13 @@ module.exports.forEachInlineCodeSpan =
   };
 
 // Adds a generic error object via the onError callback
-function addError(onError, lineNumber, detail, context, range) {
+function addError(onError, lineNumber, detail, context, range, fixInfo) {
   onError({
-    "lineNumber": lineNumber,
-    "detail": detail,
-    "context": context,
-    "range": range
+    lineNumber,
+    detail,
+    context,
+    range,
+    fixInfo
   });
 }
 module.exports.addError = addError;
@@ -396,3 +398,22 @@ module.exports.frontMatterHasTitle =
     return !ignoreFrontMatter &&
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
+
+// Applies as many fixes as possible to the input
+module.exports.fixErrors = function fixErrors(input, errors) {
+  const lines = input.split(newLineRe);
+  errors.filter((error) => !!error.fixInfo).forEach((error) => {
+    const { lineNumber, fixInfo } = error;
+    const editColumn = fixInfo.editColumn || 1;
+    const deleteCount = fixInfo.deleteCount || 0;
+    const insertText = fixInfo.insertText || "";
+    const lineIndex = lineNumber - 1;
+    const editIndex = editColumn - 1;
+    const line = lines[lineIndex];
+    lines[lineIndex] =
+      line.slice(0, editIndex) +
+      insertText +
+      line.slice(editIndex + deleteCount);
+  });
+  return lines.join("\n");
+};

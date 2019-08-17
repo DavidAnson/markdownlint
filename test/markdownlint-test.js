@@ -34,10 +34,11 @@ function promisify(func, ...args) {
 
 function createTestForFile(file) {
   return function testForFile(test) {
-    test.expect(1);
+    test.expect(2);
     const detailedResults = /[/\\]detailed-results-/.test(file);
     const resultsFile = file.replace(/\.md$/, ".results.json");
     const configFile = file.replace(/\.md$/, ".json");
+    let mergedConfig = null;
     const actualPromise = promisify(fs.stat, configFile)
       .then(
         function configFileExists() {
@@ -49,16 +50,29 @@ function createTestForFile(file) {
         })
       .then(
         function lintWithConfig(config) {
-          const mergedConfig = {
+          mergedConfig = {
             ...defaultConfig,
             ...config
           };
           return promisify(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
-            "resultVersion": detailedResults ? 2 : 0
+            "resultVersion": detailedResults ? 2 : 3
           });
-        });
+        })
+      .then(
+        function convertResultVersion2To0(resultVersion2) {
+          const result0 = {};
+          const result2or3 = resultVersion2[file];
+          result2or3.forEach(function forResult(result) {
+            const ruleName = result.ruleNames[0];
+            const lineNumbers = result0[ruleName] || [];
+            lineNumbers.push(result.lineNumber);
+            result0[ruleName] = lineNumbers;
+          });
+          return [ result0, result2or3 ];
+        }
+      );
     const expectedPromise = detailedResults ?
       promisify(fs.readFile, resultsFile, helpers.utf8Encoding)
         .then(
@@ -96,11 +110,35 @@ function createTestForFile(file) {
     Promise.all([ actualPromise, expectedPromise ])
       .then(
         function compareResults(fulfillments) {
-          const actual = fulfillments[0];
-          const results = fulfillments[1];
-          const expected = {};
-          expected[file] = results;
+          const [ [ actual0, actual2or3 ], expected ] = fulfillments;
+          const actual = detailedResults ? actual2or3 : actual0;
           test.deepEqual(actual, expected, "Line numbers are not correct.");
+          return actual2or3;
+        })
+      .then(
+        function verifyFixErrors(errors) {
+          if (detailedResults) {
+            return test.ok(true);
+          }
+          return promisify(fs.readFile, file, helpers.utf8Encoding)
+            .then(
+              function applyFixErrors(content) {
+                const corrections = helpers.fixErrors(content, errors);
+                return promisify(markdownlint, {
+                  "strings": {
+                    "input": corrections
+                  },
+                  "config": mergedConfig,
+                  "resultVersion": 3
+                });
+              })
+            .then(
+              function checkFixErrors(newErrors) {
+                const unfixed = newErrors.input
+                  .filter((error) => !!error.fixInfo);
+                test.deepEqual(unfixed, [], "Fixable error was not fixed.");
+              }
+            );
         })
       .catch()
       .then(test.done);
@@ -443,6 +481,43 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
       " MD002/first-heading-h1/first-header-h1" +
       " First heading should be a top level heading" +
       " [Expected: h1; Actual: h2]";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
+module.exports.resultFormattingV3 = function resultFormattingV3(test) {
+  test.expect(3);
+  const options = {
+    "strings": {
+      "input": "# Heading"
+    },
+    "resultVersion": 3
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "MD047", "single-trailing-newline" ],
+          "ruleDescription": "Files should end with a single newline character",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
+          "errorDetail": null,
+          "errorContext": null,
+          "errorRange": null,
+          "fixInfo": {
+            "insertText": "\n",
+            "editColumn": 10
+          }
+        }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    const actualMessage = actualResult.toString();
+    const expectedMessage =
+      "input: 1: MD047/single-trailing-newline" +
+      " Files should end with a single newline character";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
     test.done();
   });
@@ -1634,6 +1709,117 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
       test.equal(ticks, expectedTicks, input);
     });
     test.equal(expecteds.length, 0, "length");
+  });
+  test.done();
+};
+
+module.exports.fixErrors = function fixErrors(test) {
+  test.expect(8);
+  const testCases = [
+    [
+      "Hello world.",
+      [],
+      "Hello world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {}
+        }
+      ],
+      "Hello world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "insertText": "Very "
+          }
+        }
+      ],
+      "Very Hello world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 7,
+            "insertText": "big "
+          }
+        }
+      ],
+      "Hello big world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "deleteCount": 6
+          }
+        }
+      ],
+      "world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 7,
+            "deleteCount": 5,
+            "insertText": "there"
+          }
+        }
+      ],
+      "Hello there."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 12,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 6,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Helloworld"
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 13,
+            "insertText": " Hi."
+          }
+        }
+      ],
+      "Hello world. Hi."
+    ]
+  ];
+  testCases.forEach((testCase) => {
+    const [ input, errors, expected ] = testCase;
+    const actual = helpers.fixErrors(input, errors);
+    test.equal(actual, expected, "Incorrect fix applied.");
   });
   test.done();
 };

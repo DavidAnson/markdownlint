@@ -52,6 +52,10 @@ A rule is implemented as an `Object` with four required properties:
     - `details` is an optional `String` with information about what caused the error.
     - `context` is an optional `String` with relevant text surrounding the error location.
     - `range` is an optional `Array` with two `Number` values identifying the 1-based column and length of the error.
+    - `fixInfo` is an optional `Object` with information about how to fix the error:
+      - `editColumn` is an optional `Number` specifying the 1-based column number of the edit.
+      - `deleteCount` is an optional `Number` specifying the count of characters to delete with the edit.
+      - `insertText` is an optional `String` specifying text to insert as part of the edit.
 
 The collection of helper functions shared by the built-in rules is available for use by custom rules in the [markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
 

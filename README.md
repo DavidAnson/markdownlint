@@ -416,15 +416,19 @@ Specifies which version of the `result` object to return (see the "Usage" sectio
 below for examples).
 
 Passing a `resultVersion` of `0` corresponds to the original, simple format where
-each error is identified by rule name and line number. This is deprecated.
+each error is identified by rule name and line number. *This is deprecated.*
 
 Passing a `resultVersion` of `1` corresponds to a detailed format where each error
 includes information about the line number, rule name, alias, description, as well
-as any additional detail or context that is available. This is deprecated.
+as any additional detail or context that is available. *This is deprecated.*
 
 Passing a `resultVersion` of `2` corresponds to a detailed format where each error
 includes information about the line number, rule names, description, as well as any
-additional detail or context that is available. This is the default.
+additional detail or context that is available. *This is the default.*
+
+Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
+with additional information about fixes for certain errors. All errors for each
+line are included (other versions collapse multiple errors for the same rule).
 
 ##### options.markdownItPlugins
 
