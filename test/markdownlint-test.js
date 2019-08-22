@@ -67,7 +67,9 @@ function createTestForFile(file) {
           result2or3.forEach(function forResult(result) {
             const ruleName = result.ruleNames[0];
             const lineNumbers = result0[ruleName] || [];
-            lineNumbers.push(result.lineNumber);
+            if (!lineNumbers.includes(result.lineNumber)) {
+              lineNumbers.push(result.lineNumber);
+            }
             result0[ruleName] = lineNumbers;
           });
           return [ result0, result2or3 ];
@@ -522,6 +524,122 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
     test.done();
   });
 };
+
+module.exports.onePerLineResultVersion0 =
+  function onePerLineResultVersion0(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 0
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": {
+          "MD010": [ 1 ]
+        }
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.onePerLineResultVersion1 =
+  function onePerLineResultVersion1(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 1
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          { "lineNumber": 1,
+            "ruleName": "MD010",
+            "ruleAlias": "no-hard-tabs",
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 10",
+            "errorContext": null,
+            "errorRange": [ 10, 1 ] }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.onePerLineResultVersion2 =
+  function onePerLineResultVersion2(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 2
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          { "lineNumber": 1,
+            "ruleNames": [ "MD010", "no-hard-tabs" ],
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 10",
+            "errorContext": null,
+            "errorRange": [ 10, 1 ] }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.manyPerLineResultVersion3 =
+  function manyPerLineResultVersion3(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 3
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          { "lineNumber": 1,
+            "ruleNames": [ "MD010", "no-hard-tabs" ],
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 10",
+            "errorContext": null,
+            "errorRange": [ 10, 1 ],
+            "fixInfo": null },
+          { "lineNumber": 1,
+            "ruleNames": [ "MD010", "no-hard-tabs" ],
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 18",
+            "errorContext": null,
+            "errorRange": [ 18, 2 ],
+            "fixInfo": null }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
 
 module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
