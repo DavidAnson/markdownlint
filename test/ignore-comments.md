@@ -2,6 +2,8 @@
 
 Hard	tab {MD010}
 
+Hard	tabs		hard			tabs {MD010}
+
 <!-- Hard	tab -->
 
 <!--Hard	tab-->

@@ -492,7 +492,10 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
   test.expect(3);
   const options = {
     "strings": {
-      "input": "# Heading"
+      "input":
+        "# Heading   \n" +
+        "\n" +
+        "Text\ttext\t\ttext"
     },
     "resultVersion": 3
   };
@@ -502,6 +505,47 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
       "input": [
         {
           "lineNumber": 1,
+          "ruleNames": [ "MD009", "no-trailing-spaces" ],
+          "ruleDescription": "Trailing spaces",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md009`,
+          "errorDetail": "Expected: 0 or 2; Actual: 3",
+          "errorContext": null,
+          "errorRange": [ 10, 3 ],
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 3
+          }
+        },
+        {
+          "lineNumber": 3,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 5",
+          "errorContext": null,
+          "errorRange": [ 5, 1 ],
+          "fixInfo": {
+            "editColumn": 5,
+            "deleteCount": 1,
+            "insertText": " "
+          }
+        },
+        {
+          "lineNumber": 3,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 10",
+          "errorContext": null,
+          "errorRange": [ 10, 2 ],
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 2,
+            "insertText": "  "
+          }
+        },
+        {
+          "lineNumber": 3,
           "ruleNames": [ "MD047", "single-trailing-newline" ],
           "ruleDescription": "Files should end with a single newline character",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
@@ -510,7 +554,7 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
           "errorRange": null,
           "fixInfo": {
             "insertText": "\n",
-            "editColumn": 10
+            "editColumn": 16
           }
         }
       ]
@@ -518,7 +562,13 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
-      "input: 1: MD047/single-trailing-newline" +
+      "input: 1: MD009/no-trailing-spaces" +
+      " Trailing spaces [Expected: 0 or 2; Actual: 3]\n" +
+      "input: 3: MD010/no-hard-tabs" +
+      " Hard tabs [Column: 5]\n" +
+      "input: 3: MD010/no-hard-tabs" +
+      " Hard tabs [Column: 10]\n" +
+      "input: 3: MD047/single-trailing-newline" +
       " Files should end with a single newline character";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
     test.done();
@@ -559,7 +609,8 @@ module.exports.onePerLineResultVersion1 =
       test.ifError(err);
       const expectedResult = {
         "input": [
-          { "lineNumber": 1,
+          {
+            "lineNumber": 1,
             "ruleName": "MD010",
             "ruleAlias": "no-hard-tabs",
             "ruleDescription": "Hard tabs",
@@ -567,7 +618,8 @@ module.exports.onePerLineResultVersion1 =
               `${homepage}/blob/v${version}/doc/Rules.md#md010`,
             "errorDetail": "Column: 10",
             "errorContext": null,
-            "errorRange": [ 10, 1 ] }
+            "errorRange": [ 10, 1 ]
+          }
         ]
       };
       test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -588,14 +640,16 @@ module.exports.onePerLineResultVersion2 =
       test.ifError(err);
       const expectedResult = {
         "input": [
-          { "lineNumber": 1,
+          {
+            "lineNumber": 1,
             "ruleNames": [ "MD010", "no-hard-tabs" ],
             "ruleDescription": "Hard tabs",
             "ruleInformation":
               `${homepage}/blob/v${version}/doc/Rules.md#md010`,
             "errorDetail": "Column: 10",
             "errorContext": null,
-            "errorRange": [ 10, 1 ] }
+            "errorRange": [ 10, 1 ]
+          }
         ]
       };
       test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -616,7 +670,8 @@ module.exports.manyPerLineResultVersion3 =
       test.ifError(err);
       const expectedResult = {
         "input": [
-          { "lineNumber": 1,
+          {
+            "lineNumber": 1,
             "ruleNames": [ "MD010", "no-hard-tabs" ],
             "ruleDescription": "Hard tabs",
             "ruleInformation":
@@ -624,8 +679,14 @@ module.exports.manyPerLineResultVersion3 =
             "errorDetail": "Column: 10",
             "errorContext": null,
             "errorRange": [ 10, 1 ],
-            "fixInfo": null },
-          { "lineNumber": 1,
+            "fixInfo": {
+              "editColumn": 10,
+              "deleteCount": 1,
+              "insertText": " "
+            }
+          },
+          {
+            "lineNumber": 1,
             "ruleNames": [ "MD010", "no-hard-tabs" ],
             "ruleDescription": "Hard tabs",
             "ruleInformation":
@@ -633,7 +694,12 @@ module.exports.manyPerLineResultVersion3 =
             "errorDetail": "Column: 18",
             "errorContext": null,
             "errorRange": [ 18, 2 ],
-            "fixInfo": null }
+            "fixInfo": {
+              "editColumn": 18,
+              "deleteCount": 2,
+              "insertText": "  "
+            }
+          }
         ]
       };
       test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -1832,7 +1898,7 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
 };
 
 module.exports.fixErrors = function fixErrors(test) {
-  test.expect(8);
+  test.expect(10);
   const testCases = [
     [
       "Hello world.",
@@ -1932,6 +1998,30 @@ module.exports.fixErrors = function fixErrors(test) {
         }
       ],
       "Hello world. Hi."
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "deleteCount": -1
+          }
+        }
+      ],
+      "world"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 2,
+          "fixInfo": {
+            "deleteCount": -1
+          }
+        }
+      ],
+      "Hello"
     ]
   ];
   testCases.forEach((testCase) => {

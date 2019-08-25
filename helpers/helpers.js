@@ -345,7 +345,7 @@ module.exports.addError = addError;
 
 // Adds an error object with details conditionally via the onError callback
 module.exports.addErrorDetailIf = function addErrorDetailIf(
-  onError, lineNumber, expected, actual, detail, context, range) {
+  onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
       onError,
@@ -353,7 +353,8 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
       "Expected: " + expected + "; Actual: " + actual +
         (detail ? "; " + detail : ""),
       context,
-      range);
+      range,
+      fixInfo);
   }
 };
 
@@ -411,9 +412,11 @@ module.exports.fixErrors = function fixErrors(input, errors) {
     const editIndex = editColumn - 1;
     const line = lines[lineIndex];
     lines[lineIndex] =
-      line.slice(0, editIndex) +
-      insertText +
-      line.slice(editIndex + deleteCount);
+      (deleteCount === -1) ?
+        null :
+        line.slice(0, editIndex) +
+        insertText +
+        line.slice(editIndex + deleteCount);
   });
-  return lines.join("\n");
+  return lines.filter((line) => line !== null).join("\n");
 };
