@@ -359,19 +359,19 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
 };
 
 // Adds an error object with context via the onError callback
-module.exports.addErrorContext =
-  function addErrorContext(onError, lineNumber, context, left, right, range) {
-    if (context.length <= 30) {
-      // Nothing to do
-    } else if (left && right) {
-      context = context.substr(0, 15) + "..." + context.substr(-15);
-    } else if (right) {
-      context = "..." + context.substr(-30);
-    } else {
-      context = context.substr(0, 30) + "...";
-    }
-    addError(onError, lineNumber, null, context, range);
-  };
+module.exports.addErrorContext = function addErrorContext(
+  onError, lineNumber, context, left, right, range, fixInfo) {
+  if (context.length <= 30) {
+    // Nothing to do
+  } else if (left && right) {
+    context = context.substr(0, 15) + "..." + context.substr(-15);
+  } else if (right) {
+    context = "..." + context.substr(-30);
+  } else {
+    context = context.substr(0, 30) + "...";
+  }
+  addError(onError, lineNumber, null, context, range, fixInfo);
+};
 
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
@@ -403,20 +403,46 @@ module.exports.frontMatterHasTitle =
 // Applies as many fixes as possible to the input
 module.exports.fixErrors = function fixErrors(input, errors) {
   const lines = input.split(newLineRe);
-  errors.filter((error) => !!error.fixInfo).forEach((error) => {
-    const { lineNumber, fixInfo } = error;
-    const editColumn = fixInfo.editColumn || 1;
-    const deleteCount = fixInfo.deleteCount || 0;
-    const insertText = fixInfo.insertText || "";
+  // Normalize fixInfo objects
+  const fixInfos = errors.filter((error) => !!error.fixInfo).map((error) => {
+    const { fixInfo } = error;
+    return {
+      "lineNumber": fixInfo.lineNumber || error.lineNumber,
+      "editColumn": fixInfo.editColumn || 1,
+      "deleteCount": fixInfo.deleteCount || 0,
+      "insertText": fixInfo.insertText || ""
+    };
+  });
+  // Sort bottom-to-top, deletes last, right-to-left, long-to-short
+  fixInfos.sort((a, b) => (
+    (b.lineNumber - a.lineNumber) ||
+    ((a.deleteCount === -1) ? 1 : ((b.deleteCount === -1) ? -1 : 0)) ||
+    (b.editColumn - a.editColumn) ||
+    (b.insertText.length - a.insertText.length)
+  ));
+  // Apply all fixes
+  let lastLineIndex = -1;
+  let lastEditIndex = -1;
+  fixInfos.forEach((fixInfo) => {
+    const { lineNumber, editColumn, deleteCount, insertText } = fixInfo;
     const lineIndex = lineNumber - 1;
     const editIndex = editColumn - 1;
-    const line = lines[lineIndex];
-    lines[lineIndex] =
-      (deleteCount === -1) ?
-        null :
-        line.slice(0, editIndex) +
-        insertText +
-        line.slice(editIndex + deleteCount);
+    if (
+      (lineIndex !== lastLineIndex) ||
+      ((editIndex + deleteCount) < lastEditIndex) ||
+      (deleteCount === -1)
+    ) {
+      const line = lines[lineIndex];
+      lines[lineIndex] =
+        (deleteCount === -1) ?
+          null :
+          line.slice(0, editIndex) +
+          insertText +
+          line.slice(editIndex + deleteCount);
+    }
+    lastLineIndex = lineIndex;
+    lastEditIndex = editIndex;
   });
+  // Return corrected input
   return lines.filter((line) => line !== null).join("\n");
 };

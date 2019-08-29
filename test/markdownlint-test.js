@@ -1898,7 +1898,7 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
 };
 
 module.exports.fixErrors = function fixErrors(test) {
-  test.expect(10);
+  test.expect(23);
   const testCases = [
     [
       "Hello world.",
@@ -2022,6 +2022,244 @@ module.exports.fixErrors = function fixErrors(test) {
         }
       ],
       "Hello"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 2,
+          "fixInfo": {
+            "lineNumber": 1,
+            "deleteCount": -1
+          }
+        }
+      ],
+      "world"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "lineNumber": 2,
+            "deleteCount": -1
+          }
+        }
+      ],
+      "Hello"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 4,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Helo word"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 4,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Helo word"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "deleteCount": -1
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "Big "
+          }
+        }
+      ],
+      "world"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "deleteCount": -1
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 2,
+            "deleteCount": -1
+          }
+        }
+      ],
+      ""
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "aa"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "b"
+          }
+        }
+      ],
+      "aaHello world"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "a"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "bb"
+          }
+        }
+      ],
+      "bbHello world"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 6,
+            "insertText": " big"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Hello big orld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 8,
+            "deleteCount": 2
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 2
+          }
+        }
+      ],
+      "Hello wld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 2
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 8,
+            "deleteCount": 2
+          }
+        }
+      ],
+      "Hello wld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "insertText": "z"
+          }
+        }
+      ],
+      "Hello zworld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "insertText": "z"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Hello zworld"
     ]
   ];
   testCases.forEach((testCase) => {
