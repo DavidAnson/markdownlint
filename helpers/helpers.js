@@ -404,7 +404,7 @@ module.exports.frontMatterHasTitle =
 module.exports.fixErrors = function fixErrors(input, errors) {
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
-  const fixInfos = errors.filter((error) => !!error.fixInfo).map((error) => {
+  let fixInfos = errors.filter((error) => !!error.fixInfo).map((error) => {
     const { fixInfo } = error;
     return {
       "lineNumber": fixInfo.lineNumber || error.lineNumber,
@@ -413,14 +413,46 @@ module.exports.fixErrors = function fixErrors(input, errors) {
       "insertText": fixInfo.insertText || ""
     };
   });
-  // Sort bottom-to-top, deletes last, right-to-left, long-to-short
-  fixInfos.sort((a, b) => (
-    (b.lineNumber - a.lineNumber) ||
-    ((a.deleteCount === -1) ? 1 : ((b.deleteCount === -1) ? -1 : 0)) ||
-    (b.editColumn - a.editColumn) ||
-    (b.insertText.length - a.insertText.length)
-  ));
-  // Apply all fixes
+  // Sort bottom-to-top, line-deletes last, right-to-left, long-to-short
+  fixInfos.sort((a, b) => {
+    const aDeletingLine = (a.deleteCount === -1);
+    const bDeletingLine = (b.deleteCount === -1);
+    return (
+      (b.lineNumber - a.lineNumber) ||
+      (aDeletingLine ? 1 : (bDeletingLine ? -1 : 0)) ||
+      (b.editColumn - a.editColumn) ||
+      (b.insertText.length - a.insertText.length)
+    );
+  });
+  // Remove duplicate entries (needed for following collapse step)
+  let lastFixInfo = {};
+  fixInfos = fixInfos.filter((fixInfo) => {
+    const unique = (
+      (fixInfo.lineNumber !== lastFixInfo.lineNumber) ||
+      (fixInfo.editColumn !== lastFixInfo.editColumn) ||
+      (fixInfo.deleteCount !== lastFixInfo.deleteCount) ||
+      (fixInfo.insertText !== lastFixInfo.insertText)
+    );
+    lastFixInfo = fixInfo;
+    return unique;
+  });
+  // Collapse insert/no-delete and no-insert/delete for same line/column
+  lastFixInfo = {};
+  fixInfos.forEach((fixInfo) => {
+    if (
+      (fixInfo.lineNumber === lastFixInfo.lineNumber) &&
+      (fixInfo.editColumn === lastFixInfo.editColumn) &&
+      !fixInfo.insertText &&
+      (fixInfo.deleteCount > 0) &&
+      lastFixInfo.insertText &&
+      !lastFixInfo.deleteCount) {
+      fixInfo.insertText = lastFixInfo.insertText;
+      lastFixInfo.lineNumber = 0;
+    }
+    lastFixInfo = fixInfo;
+  });
+  fixInfos = fixInfos.filter((fixInfo) => fixInfo.lineNumber);
+  // Apply all (remaining/updated) fixes
   let lastLineIndex = -1;
   let lastEditIndex = -1;
   fixInfos.forEach((fixInfo) => {

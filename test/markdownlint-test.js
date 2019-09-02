@@ -1898,7 +1898,7 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
 };
 
 module.exports.fixErrors = function fixErrors(test) {
-  test.expect(23);
+  test.expect(24);
   const testCases = [
     [
       "Hello world.",
@@ -2228,6 +2228,20 @@ module.exports.fixErrors = function fixErrors(test) {
           "fixInfo": {
             "lineNumber": 1,
             "editColumn": 7,
+            "deleteCount": 1,
+            "insertText": "z"
+          }
+        }
+      ],
+      "Hello zorld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
             "deleteCount": 1
           }
         },
@@ -2239,7 +2253,7 @@ module.exports.fixErrors = function fixErrors(test) {
           }
         }
       ],
-      "Hello zworld"
+      "Hello zorld"
     ],
     [
       "Hello world",
@@ -2259,7 +2273,7 @@ module.exports.fixErrors = function fixErrors(test) {
           }
         }
       ],
-      "Hello zworld"
+      "Hello zorld"
     ]
   ];
   testCases.forEach((testCase) => {

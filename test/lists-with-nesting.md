@@ -16,13 +16,11 @@
 
 - one {MD032}
  1. two {MD032}
- 1. three {MD032}
-- four {MD032}
+- three {MD032}
 
 1. one {MD032}
   - two {MD006} {MD032}
-  - three {MD032}
-1. four {MD032}
+1. three {MD032}
 
 ## Correct nesting, same type
 
