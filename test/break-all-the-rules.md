@@ -27,17 +27,17 @@ long line long line long line long line long line long line long line long line 
 #  Heading 5 {MD019}
 
 #Heading 6 {MD020} #
- #  Heading 7 {MD021} {MD022} {MD023} {MD003}  #
+
+#  Heading 7 {MD021} {MD003}  #
 
 # Heading 8
 
 # Heading 8
 
-{MD024:34}
-
+{MD024:35}
 Note: Can not break MD025 and MD002 in the same file
 
-# Heading 9 {MD026}.
+ # Heading 9 {MD023} {MD026}.
 
 >  {MD027}
 
@@ -78,4 +78,7 @@ code fence without language {MD040:73} {MD046:73}
 
 markdownLint {MD044}
 
-![](image.jpg) {MD045} {MD047}
+![](image.jpg) {MD045}
+## Heading 10 {MD022}
+
+EOF {MD047}

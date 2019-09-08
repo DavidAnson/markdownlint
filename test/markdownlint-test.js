@@ -1038,7 +1038,7 @@ module.exports.styleAll = function styleAll(test) {
     const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
-        "MD003": [ 5, 30 ],
+        "MD003": [ 5, 31 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
         "MD006": [ 8 ],
@@ -1052,10 +1052,10 @@ module.exports.styleAll = function styleAll(test) {
         "MD018": [ 25 ],
         "MD019": [ 27 ],
         "MD020": [ 29 ],
-        "MD021": [ 30 ],
-        "MD022": [ 30 ],
-        "MD023": [ 30 ],
-        "MD024": [ 34 ],
+        "MD021": [ 31 ],
+        "MD022": [ 82 ],
+        "MD023": [ 40 ],
+        "MD024": [ 35 ],
         "MD026": [ 40 ],
         "MD027": [ 42 ],
         "MD028": [ 43 ],
@@ -1075,7 +1075,7 @@ module.exports.styleAll = function styleAll(test) {
         "MD042": [ 77 ],
         "MD045": [ 81 ],
         "MD046": [ 49, 73 ],
-        "MD047": [ 81 ]
+        "MD047": [ 84 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -1095,7 +1095,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
     const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
-        "MD003": [ 5, 30 ],
+        "MD003": [ 5, 31 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
         "MD011": [ 16 ],
@@ -1103,10 +1103,10 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD018": [ 25 ],
         "MD019": [ 27 ],
         "MD020": [ 29 ],
-        "MD021": [ 30 ],
-        "MD022": [ 30 ],
-        "MD023": [ 30 ],
-        "MD024": [ 34 ],
+        "MD021": [ 31 ],
+        "MD022": [ 82 ],
+        "MD023": [ 40 ],
+        "MD024": [ 35 ],
         "MD026": [ 40 ],
         "MD029": [ 47 ],
         "MD031": [ 50 ],
@@ -1116,7 +1116,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD042": [ 77 ],
         "MD045": [ 81 ],
         "MD046": [ 49, 73 ],
-        "MD047": [ 81 ]
+        "MD047": [ 84 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");

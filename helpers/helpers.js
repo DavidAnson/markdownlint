@@ -19,7 +19,6 @@ const inlineCommentRe =
 module.exports.inlineCommentRe = inlineCommentRe;
 
 // Regular expressions for range matching
-module.exports.atxHeadingSpaceRe = /^#+\s*\S/;
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s]*/i;
 module.exports.listItemMarkerRe = /^[\s>]*(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
