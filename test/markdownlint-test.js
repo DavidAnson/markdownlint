@@ -118,14 +118,14 @@ function createTestForFile(file) {
           return actual2or3;
         })
       .then(
-        function verifyFixErrors(errors) {
+        function verifyFixes(errors) {
           if (detailedResults) {
             return test.ok(true);
           }
           return promisify(fs.readFile, file, helpers.utf8Encoding)
             .then(
-              function applyFixErrors(content) {
-                const corrections = helpers.fixErrors(content, errors);
+              function applyFixes(content) {
+                const corrections = helpers.applyFixes(content, errors);
                 return promisify(markdownlint, {
                   "strings": {
                     "input": corrections
@@ -135,7 +135,7 @@ function createTestForFile(file) {
                 });
               })
             .then(
-              function checkFixErrors(newErrors) {
+              function checkFixes(newErrors) {
                 const unfixed = newErrors.input
                   .filter((error) => !!error.fixInfo);
                 test.deepEqual(unfixed, [], "Fixable error was not fixed.");
@@ -1897,7 +1897,7 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
   test.done();
 };
 
-module.exports.fixErrors = function fixErrors(test) {
+module.exports.applyFixes = function applyFixes(test) {
   test.expect(24);
   const testCases = [
     [
@@ -2278,7 +2278,7 @@ module.exports.fixErrors = function fixErrors(test) {
   ];
   testCases.forEach((testCase) => {
     const [ input, errors, expected ] = testCase;
-    const actual = helpers.fixErrors(input, errors);
+    const actual = helpers.applyFixes(input, errors);
     test.equal(actual, expected, "Incorrect fix applied.");
   });
   test.done();

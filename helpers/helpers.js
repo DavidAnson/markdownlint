@@ -399,19 +399,35 @@ module.exports.frontMatterHasTitle =
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
 
-// Applies as many fixes as possible to the input
-module.exports.fixErrors = function fixErrors(input, errors) {
+// Normalizes the fields of a fixInfo object
+function normalizeFixInfo(fixInfo, lineNumber) {
+  return {
+    "lineNumber": fixInfo.lineNumber || lineNumber,
+    "editColumn": fixInfo.editColumn || 1,
+    "deleteCount": fixInfo.deleteCount || 0,
+    "insertText": fixInfo.insertText || ""
+  };
+}
+
+// Fixes the specifide error on a line
+function applyFix(line, fixInfo) {
+  const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
+  const editIndex = editColumn - 1;
+  return (deleteCount === -1) ?
+    null :
+    line.slice(0, editIndex) +
+    insertText +
+    line.slice(editIndex + deleteCount);
+}
+module.exports.applyFix = applyFix;
+
+// Applies as many fixes as possible to the input lines
+module.exports.applyFixes = function applyFixes(input, errors) {
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
-  let fixInfos = errors.filter((error) => !!error.fixInfo).map((error) => {
-    const { fixInfo } = error;
-    return {
-      "lineNumber": fixInfo.lineNumber || error.lineNumber,
-      "editColumn": fixInfo.editColumn || 1,
-      "deleteCount": fixInfo.deleteCount || 0,
-      "insertText": fixInfo.insertText || ""
-    };
-  });
+  let fixInfos = errors
+    .filter((error) => error.fixInfo)
+    .map((error) => normalizeFixInfo(error.fixInfo, error.lineNumber));
   // Sort bottom-to-top, line-deletes last, right-to-left, long-to-short
   fixInfos.sort((a, b) => {
     const aDeletingLine = (a.deleteCount === -1);
@@ -455,7 +471,7 @@ module.exports.fixErrors = function fixErrors(input, errors) {
   let lastLineIndex = -1;
   let lastEditIndex = -1;
   fixInfos.forEach((fixInfo) => {
-    const { lineNumber, editColumn, deleteCount, insertText } = fixInfo;
+    const { lineNumber, editColumn, deleteCount } = fixInfo;
     const lineIndex = lineNumber - 1;
     const editIndex = editColumn - 1;
     if (
@@ -463,13 +479,7 @@ module.exports.fixErrors = function fixErrors(input, errors) {
       ((editIndex + deleteCount) < lastEditIndex) ||
       (deleteCount === -1)
     ) {
-      const line = lines[lineIndex];
-      lines[lineIndex] =
-        (deleteCount === -1) ?
-          null :
-          line.slice(0, editIndex) +
-          insertText +
-          line.slice(editIndex + deleteCount);
+      lines[lineIndex] = applyFix(lines[lineIndex], fixInfo);
     }
     lastLineIndex = lineIndex;
     lastEditIndex = editIndex;
