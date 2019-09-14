@@ -4,7 +4,7 @@
 
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
-const newLineRe = /\r[\n\u0085]?|[\n\u2424\u2028\u0085]/;
+const newLineRe = /\r\n?|\n/;
 module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
