@@ -3177,19 +3177,32 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
 };
 
 module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
-  test.expect(44);
+  test.expect(84);
   [
-    [ "lineNumber", [ null, "string" ] ],
-    [ "detail", [ 10, [] ] ],
-    [ "context", [ 10, [] ] ],
-    [ "range", [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ]
+    [ "lineNumber", null, [ null, "string" ] ],
+    [ "detail", null, [ 10, [] ] ],
+    [ "context", null, [ 10, [] ] ],
+    [ "range", null, [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ],
+    [ "fixInfo", null, [ 10, "string" ] ],
+    [ "fixInfo", "lineNumber", [ null, "string" ] ],
+    [ "fixInfo", "editColumn", [ null, "string" ] ],
+    [ "fixInfo", "deleteCount", [ null, "string" ] ],
+    [ "fixInfo", "insertText", [ 10, [] ] ]
   ].forEach(function forProperty(property) {
-    const propertyName = property[0];
-    property[1].forEach(function forPropertyValue(propertyValue) {
+    const [ propertyName, subPropertyName, propertyValues ] = property;
+    propertyValues.forEach(function forPropertyValue(propertyValue) {
       const badObject = {
         "lineNumber": 1
       };
-      badObject[propertyName] = propertyValue;
+      let propertyNames = null;
+      if (subPropertyName) {
+        badObject[propertyName] = {};
+        badObject[propertyName][subPropertyName] = propertyValue;
+        propertyNames = `${propertyName}.${subPropertyName}`;
+      } else {
+        badObject[propertyName] = propertyValue;
+        propertyNames = propertyName;
+      }
       const options = {
         "customRules": [
           {
@@ -3211,7 +3224,7 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
         test.ok(err, "Did not get an error for bad object.");
         test.ok(err instanceof Error, "Error not instance of Error.");
         test.equal(err.message,
-          "Property '" + propertyName + "' of onError parameter is incorrect.",
+          "Property '" + propertyNames + "' of onError parameter is incorrect.",
           "Incorrect message for bad object.");
         return true;
       }, "Did not get exception for bad object.");
@@ -3222,17 +3235,28 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
 
 module.exports.customRulesOnErrorInvalid =
   function customRulesOnErrorInvalid(test) {
-    test.expect(36);
+    test.expect(68);
     [
-      [ "lineNumber", [ -1, 0, 3, 4 ] ],
-      [ "range", [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ] ]
+      [ "lineNumber", null, [ -1, 0, 3, 4 ] ],
+      [ "range", null, [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ] ],
+      [ "fixInfo", "lineNumber", [ -1, 0, 3, 4 ] ],
+      [ "fixInfo", "editColumn", [ 0, 6 ] ],
+      [ "fixInfo", "deleteCount", [ -2, 5 ] ]
     ].forEach(function forProperty(property) {
-      const propertyName = property[0];
-      property[1].forEach(function forPropertyValue(propertyValue) {
+      const [ propertyName, subPropertyName, propertyValues ] = property;
+      propertyValues.forEach(function forPropertyValue(propertyValue) {
         const badObject = {
           "lineNumber": 1
         };
-        badObject[propertyName] = propertyValue;
+        let propertyNames = null;
+        if (subPropertyName) {
+          badObject[propertyName] = {};
+          badObject[propertyName][subPropertyName] = propertyValue;
+          propertyNames = `${propertyName}.${subPropertyName}`;
+        } else {
+          badObject[propertyName] = propertyValue;
+          propertyNames = propertyName;
+        }
         const options = {
           "customRules": [
             {
@@ -3254,7 +3278,7 @@ module.exports.customRulesOnErrorInvalid =
           test.ok(err, "Did not get an error for invalid object.");
           test.ok(err instanceof Error, "Error not instance of Error.");
           test.equal(err.message,
-            `Property '${propertyName}' of onError parameter is incorrect.`,
+            `Property '${propertyNames}' of onError parameter is incorrect.`,
             "Incorrect message for invalid object.");
           return true;
         }, "Did not get exception for invalid object.");
@@ -3265,17 +3289,30 @@ module.exports.customRulesOnErrorInvalid =
 
 module.exports.customRulesOnErrorValid =
   function customRulesOnErrorValid(test) {
-    test.expect(7);
+    test.expect(24);
     [
-      [ "lineNumber", [ 1, 2 ] ],
-      [ "range", [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ] ]
+      [ "lineNumber", null, [ 1, 2 ] ],
+      [ "range", null, [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ] ],
+      [ "fixInfo", "lineNumber", [ 1, 2 ] ],
+      [ "fixInfo", "editColumn", [ 1, 2, 4, 5 ] ],
+      [ "fixInfo", "deleteCount", [ -1, 0, 1, 4 ] ],
+      [
+        "fixInfo",
+        "insertText",
+        [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
+      ]
     ].forEach(function forProperty(property) {
-      const propertyName = property[0];
-      property[1].forEach(function forPropertyValue(propertyValue) {
+      const [ propertyName, subPropertyName, propertyValues ] = property;
+      propertyValues.forEach(function forPropertyValue(propertyValue) {
         const goodObject = {
           "lineNumber": 1
         };
-        goodObject[propertyName] = propertyValue;
+        if (subPropertyName) {
+          goodObject[propertyName] = {};
+          goodObject[propertyName][subPropertyName] = propertyValue;
+        } else {
+          goodObject[propertyName] = propertyValue;
+        }
         const options = {
           "customRules": [
             {

@@ -44,6 +44,11 @@ module.exports.isEmptyString = function isEmptyString(str) {
   return str.length === 0;
 };
 
+// Returns true iff the input is an object
+module.exports.isObject = function isObject(obj) {
+  return (obj !== null) && (typeof obj === "object") && !Array.isArray(obj);
+};
+
 // Returns true iff the input line is blank (no content)
 // Example: Contains nothing, whitespace, or comments
 const blankLineRe = />|(?:<!--.*?-->)/g;
