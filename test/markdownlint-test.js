@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 const { URL } = require("url");
 const md = require("markdown-it")();
@@ -1889,8 +1890,37 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
   test.done();
 };
 
+module.exports.getPreferredLineEnding = function getPreferredLineEnding(test) {
+  test.expect(17);
+  const testCases = [
+    [ "", os.EOL ],
+    [ "\r", "\r" ],
+    [ "\n", "\n" ],
+    [ "\r\n", "\r\n" ],
+    [ "t\rt\nt", "\n" ],
+    [ "t\nt\rt", "\n" ],
+    [ "t\r\nt\nt", "\n" ],
+    [ "t\nt\r\nt", "\n" ],
+    [ "t\r\nt\rt", "\r\n" ],
+    [ "t\rt\r\nt", "\r\n" ],
+    [ "t\r\nt\rt\nt", "\n" ],
+    [ "t\r\nt\r\nt\r\nt", "\r\n" ],
+    [ "t\nt\nt\nt", "\n" ],
+    [ "t\rt\rt\rt", "\r" ],
+    [ "t\r\nt\nt\r\nt", "\r\n" ],
+    [ "t\nt\r\nt\nt", "\n" ],
+    [ "t\rt\t\rt", "\r" ]
+  ];
+  testCases.forEach((testCase) => {
+    const [ input, expected ] = testCase;
+    const actual = helpers.getPreferredLineEnding(input);
+    test.equal(actual, expected, "Incorrect line ending returned.");
+  });
+  test.done();
+};
+
 module.exports.applyFixes = function applyFixes(test) {
-  test.expect(24);
+  test.expect(27);
   const testCases = [
     [
       "Hello world.",
@@ -2266,6 +2296,45 @@ module.exports.applyFixes = function applyFixes(test) {
         }
       ],
       "Hello zorld"
+    ],
+    [
+      "Hello\nworld\nhello\rworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 4,
+            "editColumn": 6,
+            "insertText": "\n"
+          }
+        }
+      ],
+      "Hello\nworld\nhello\nworld\n"
+    ],
+    [
+      "Hello\r\nworld\r\nhello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 4,
+            "editColumn": 6,
+            "insertText": "\n"
+          }
+        }
+      ],
+      "Hello\r\nworld\r\nhello\r\nworld\r\n"
+    ],
+    [
+      "Hello\rworld\rhello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 4,
+            "editColumn": 6,
+            "insertText": "\n"
+          }
+        }
+      ],
+      "Hello\rworld\rhello\rworld\r"
     ]
   ];
   testCases.forEach((testCase) => {

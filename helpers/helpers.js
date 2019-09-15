@@ -2,9 +2,11 @@
 
 "use strict";
 
+const os = require("os");
+
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
-const newLineRe = /\r\n?|\n/;
+const newLineRe = /\r\n?|\n/g;
 module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
@@ -404,6 +406,40 @@ module.exports.frontMatterHasTitle =
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
 
+// Gets the most common line ending, falling back to platform default
+function getPreferredLineEnding(input) {
+  let cr = 0;
+  let lf = 0;
+  let crlf = 0;
+  const endings = input.match(newLineRe) || [];
+  endings.forEach((ending) => {
+    // eslint-disable-next-line default-case
+    switch (ending) {
+      case "\r":
+        cr++;
+        break;
+      case "\n":
+        lf++;
+        break;
+      case "\r\n":
+        crlf++;
+        break;
+    }
+  });
+  let preferredLineEnding = null;
+  if (!cr && !lf && !crlf) {
+    preferredLineEnding = os.EOL;
+  } else if ((lf >= crlf) && (lf >= cr)) {
+    preferredLineEnding = "\n";
+  } else if (crlf >= cr) {
+    preferredLineEnding = "\r\n";
+  } else {
+    preferredLineEnding = "\r";
+  }
+  return preferredLineEnding;
+}
+module.exports.getPreferredLineEnding = getPreferredLineEnding;
+
 // Normalizes the fields of a fixInfo object
 function normalizeFixInfo(fixInfo, lineNumber) {
   return {
@@ -415,19 +451,20 @@ function normalizeFixInfo(fixInfo, lineNumber) {
 }
 
 // Fixes the specifide error on a line
-function applyFix(line, fixInfo) {
+function applyFix(line, fixInfo, lineEnding) {
   const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
   const editIndex = editColumn - 1;
   return (deleteCount === -1) ?
     null :
     line.slice(0, editIndex) +
-    insertText +
+    insertText.replace("\n", lineEnding) +
     line.slice(editIndex + deleteCount);
 }
 module.exports.applyFix = applyFix;
 
 // Applies as many fixes as possible to the input lines
 module.exports.applyFixes = function applyFixes(input, errors) {
+  const lineEnding = getPreferredLineEnding(input);
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
   let fixInfos = errors
@@ -484,11 +521,11 @@ module.exports.applyFixes = function applyFixes(input, errors) {
       ((editIndex + deleteCount) < lastEditIndex) ||
       (deleteCount === -1)
     ) {
-      lines[lineIndex] = applyFix(lines[lineIndex], fixInfo);
+      lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
     }
     lastLineIndex = lineIndex;
     lastEditIndex = editIndex;
   });
   // Return corrected input
-  return lines.filter((line) => line !== null).join("\n");
+  return lines.filter((line) => line !== null).join(lineEnding);
 };
