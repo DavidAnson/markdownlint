@@ -35,9 +35,10 @@ function promisify(func, ...args) {
 
 function createTestForFile(file) {
   return function testForFile(test) {
-    test.expect(2);
     const detailedResults = /[/\\]detailed-results-/.test(file);
+    test.expect(detailedResults ? 3 : 2);
     const resultsFile = file.replace(/\.md$/, ".results.json");
+    const fixedFile = file.replace(/\.md$/, ".md.fixed");
     const configFile = file.replace(/\.md$/, ".json");
     let mergedConfig = null;
     const actualPromise = promisify(fs.stat, configFile)
@@ -62,9 +63,34 @@ function createTestForFile(file) {
           });
         })
       .then(
-        function convertResultVersion2To0(resultVersion2) {
+        function diffFixedFiles(resultVersion2or3) {
+          return detailedResults ?
+            Promise.all([
+              promisify(markdownlint, {
+                "files": [ file ],
+                "config": mergedConfig,
+                "resultVersion": 3
+              }),
+              promisify(fs.readFile, file, helpers.utf8Encoding),
+              promisify(fs.readFile, fixedFile, helpers.utf8Encoding)
+            ])
+              .then(function validateApplyFixes(fulfillments) {
+                const [ resultVersion3, content, expected ] = fulfillments;
+                const errors = resultVersion3[file];
+                const actual = helpers.applyFixes(content, errors);
+                // Uncomment the following line to update *.md.fixed files
+                // fs.writeFileSync(fixedFile, actual, helpers.utf8Encoding);
+                test.equal(actual, expected,
+                  "Unexpected output from applyFixes.");
+                return resultVersion2or3;
+              }) :
+            resultVersion2or3;
+        }
+      )
+      .then(
+        function convertResultVersion2To0(resultVersion2or3) {
           const result0 = {};
-          const result2or3 = resultVersion2[file];
+          const result2or3 = resultVersion2or3[file];
           result2or3.forEach(function forResult(result) {
             const ruleName = result.ruleNames[0];
             const lineNumbers = result0[ruleName] || [];

@@ -1,0 +1,27 @@
+Not a heading
+
+An [empty]() link
+
+An [empty](#) link with fragment
+
+An [empty](<>) link with angle brackets
+
+This is a test file for the markdownlint package.
+
+This is a paragraph
+about markdownlint
+that capitalizes the
+name wrong twice:
+markdownlint.
+
+A [normal](link) and an [empty one]() and a [fragment](#one).
+
+An image without alternate text ![](image.jpg)
+
+```text
+Fenced code
+```
+
+    Indented code
+
+Missing newline character
