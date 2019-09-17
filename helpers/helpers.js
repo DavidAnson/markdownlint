@@ -457,7 +457,7 @@ function applyFix(line, fixInfo, lineEnding) {
   return (deleteCount === -1) ?
     null :
     line.slice(0, editIndex) +
-    insertText.replace("\n", lineEnding) +
+    insertText.replace(/\n/g, lineEnding) +
     line.slice(editIndex + deleteCount);
 }
 module.exports.applyFix = applyFix;

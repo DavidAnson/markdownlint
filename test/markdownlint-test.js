@@ -1946,7 +1946,7 @@ module.exports.getPreferredLineEnding = function getPreferredLineEnding(test) {
 };
 
 module.exports.applyFixes = function applyFixes(test) {
-  test.expect(27);
+  test.expect(28);
   const testCases = [
     [
       "Hello world.",
@@ -2361,6 +2361,19 @@ module.exports.applyFixes = function applyFixes(test) {
         }
       ],
       "Hello\rworld\rhello\rworld\r"
+    ],
+    [
+      "Hello\r\nworld",
+      [
+        {
+          "lineNumber": 2,
+          "fixInfo": {
+            "editColumn": 6,
+            "insertText": "\n\n"
+          }
+        }
+      ],
+      "Hello\r\nworld\r\n\r\n"
     ]
   ];
   testCases.forEach((testCase) => {
