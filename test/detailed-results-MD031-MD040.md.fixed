@@ -15,19 +15,19 @@ Bare <https://example.com> link
 
 Space *inside* emphasis
 
-Space `insidecode span
+Space `inside` code span
 
 Space [inside](link) text
 
 ```
 ```
 
-space ``insideode
-space `inside` of `codeelements
-`space` inside `of` code `elements
-space ``inside`` of ``codelements
-``` embedded backtick
-embedded backtick```
+space ``inside`` code
+space `inside` of `code` elements
+`space` inside `of` code `elements`
+space ``inside`` of ``code`` elements
+`` ` embedded backtick``
+``embedded backtick` ``
 
 some *space* in *some* emphasis
 some *space* in *some* emphasis
@@ -37,13 +37,11 @@ some __space__ in __some__ emphasis
 
 Text
 text `code
-span
 span` text
 text.
 
 Text
 text `code
-code
 span` text
 text.
 
@@ -54,13 +52,9 @@ text.
 Text
 text ```code
 span code
-code
-span code
 span code``` text
 text
 text text ````code
-span code
-span
 span code
 span```` text
 text.
