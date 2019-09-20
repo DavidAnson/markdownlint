@@ -427,8 +427,9 @@ includes information about the line number, rule names, description, as well as 
 additional detail or context that is available. *This is the default.*
 
 Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
-with additional information about fixes for certain errors. All errors for each
-line are included (other versions collapse multiple errors for the same rule).
+with additional information about how to fix automatically-fixable errors. In this
+mode, all errors that occur on each line are reported (other versions report only
+the first error for each rule).
 
 ##### options.markdownItPlugins
 
