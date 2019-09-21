@@ -578,7 +578,7 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
           "errorDetail": null,
           "errorContext": null,
-          "errorRange": null,
+          "errorRange": [ 15, 1 ],
           "fixInfo": {
             "insertText": "\n",
             "editColumn": 16
@@ -1941,6 +1941,54 @@ module.exports.getPreferredLineEnding = function getPreferredLineEnding(test) {
     const [ input, expected ] = testCase;
     const actual = helpers.getPreferredLineEnding(input);
     test.equal(actual, expected, "Incorrect line ending returned.");
+  });
+  test.done();
+};
+
+module.exports.applyFix = function applyFix(test) {
+  test.expect(4);
+  const testCases = [
+    [
+      "Hello world.",
+      {
+        "editColumn": 12,
+        "deleteCount": 1
+      },
+      undefined,
+      "Hello world"
+    ],
+    [
+      "Hello world.",
+      {
+        "editColumn": 13,
+        "insertText": "\n"
+      },
+      undefined,
+      "Hello world.\n"
+    ],
+    [
+      "Hello world.",
+      {
+        "editColumn": 13,
+        "insertText": "\n"
+      },
+      "\n",
+      "Hello world.\n"
+    ],
+    [
+      "Hello world.",
+      {
+        "editColumn": 13,
+        "insertText": "\n"
+      },
+      "\r\n",
+      "Hello world.\r\n"
+    ]
+  ];
+  testCases.forEach((testCase) => {
+    const [ line, fixInfo, lineEnding, expected ] = testCase;
+    const actual = helpers.applyFix(line, fixInfo, lineEnding);
+    test.equal(actual, expected, "Incorrect fix applied.");
   });
   test.done();
 };
