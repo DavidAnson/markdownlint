@@ -56,3 +56,5 @@ text text ```` code
 span code
 span```` text
 text.
+
+Text [ space](link) text [space ](link) text [ space ](link) text.
