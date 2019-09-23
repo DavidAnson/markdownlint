@@ -522,7 +522,8 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
       "input":
         "# Heading   \n" +
         "\n" +
-        "Text\ttext\t\ttext"
+        "Text\ttext\t\ttext\n" +
+        "Text * emphasis * text"
     },
     "resultVersion": 3
   };
@@ -572,16 +573,30 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
           }
         },
         {
-          "lineNumber": 3,
+          "lineNumber": 4,
+          "ruleNames": [ "MD037", "no-space-in-emphasis" ],
+          "ruleDescription": "Spaces inside emphasis markers",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md037`,
+          "errorDetail": null,
+          "errorContext": "* emphasis *",
+          "errorRange": [ 6, 12 ],
+          "fixInfo": {
+            "editColumn": 6,
+            "deleteCount": 12,
+            "insertText": "*emphasis*"
+          }
+        },
+        {
+          "lineNumber": 4,
           "ruleNames": [ "MD047", "single-trailing-newline" ],
           "ruleDescription": "Files should end with a single newline character",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
           "errorDetail": null,
           "errorContext": null,
-          "errorRange": [ 15, 1 ],
+          "errorRange": [ 22, 1 ],
           "fixInfo": {
             "insertText": "\n",
-            "editColumn": 16
+            "editColumn": 23
           }
         }
       ]
@@ -595,7 +610,9 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
       " Hard tabs [Column: 5]\n" +
       "input: 3: MD010/no-hard-tabs" +
       " Hard tabs [Column: 10]\n" +
-      "input: 3: MD047/single-trailing-newline" +
+      "input: 4: MD037/no-space-in-emphasis" +
+      " Spaces inside emphasis markers [Context: \"* emphasis *\"]\n" +
+      "input: 4: MD047/single-trailing-newline" +
       " Files should end with a single newline character";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
     test.done();
