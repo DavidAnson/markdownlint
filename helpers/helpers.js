@@ -319,7 +319,8 @@ module.exports.forEachInlineCodeSpan =
           currentLine++;
           currentColumn = 0;
         } else if ((char === "\\") &&
-          ((startIndex === -1) || (startColumn === -1))) {
+          ((startIndex === -1) || (startColumn === -1)) &&
+          (input[index + 1] !== "\n")) {
           // Escape character outside code, skip next
           index++;
           currentColumn += 2;

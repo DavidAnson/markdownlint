@@ -1833,7 +1833,7 @@ module.exports.includesSorted = function includesSorted(test) {
 };
 
 module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
-  test.expect(94);
+  test.expect(99);
   const testCases =
     [
       [
@@ -1916,6 +1916,10 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
       [
         "text \\` text `code`",
         [ [ "code", 0, 14, 1 ] ]
+      ],
+      [
+        "text\\\n`code`",
+        [ [ "code", 1, 1, 1 ] ]
       ]
     ];
   testCases.forEach((testCase) => {
