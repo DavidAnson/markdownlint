@@ -22,3 +22,5 @@ A (reversed)[link] example.
 ##  Multiple spaces E ##
 
 ## Multiple spaces F  ##
+
+*Another* (reversed)[link] example.
