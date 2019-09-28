@@ -22,3 +22,13 @@ code code
 code` text
 text
 text (reversed)[link] text {MD011}
+
+## Escaped JavaScript Content
+
+var IDENT_RE = '([a-zA-Z]|\\.[a-zA-Z.])[a-zA-Z0-9._]*'; {MD011}
+
+begin: /\B(([\/.])[\w\-.\/=]+)+/, {MD011}
+
+{begin: '%r\\(', end: '\\)[a-z]*'} {MD011}
+
+return /(?:(?:(^|\/)[!.])|[*?+()|\[\]{}]|[+@]\()/.test(str); {MD011}
