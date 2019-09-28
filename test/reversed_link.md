@@ -11,3 +11,14 @@ the (same text)[https://www.example.com/two]. {MD011} {MD034}
 
 <!-- markdownlint-disable line-length -->
 Two (issues)[https://www.example.com/three] on the (same line)[https://www.example.com/four]. {MD011} {MD034}
+
+`code code
+code`
+(reversed)[link] {MD011}
+
+text
+text `code
+code code
+code` text
+text
+text (reversed)[link] text {MD011}
