@@ -41,3 +41,7 @@ function MoreCodeButNotCode(input) {
   input = input.replace(/[- ]([a-z])/g, "three"); // {MD039}
   return input;
 }
+
+[Links](ending)  
+[with](spaces)  
+[error ]({MD039})
