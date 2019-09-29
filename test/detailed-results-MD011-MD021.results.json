@@ -9,6 +9,15 @@
         "errorRange": [3, 16]
     },
     {
+        "lineNumber": 26,
+        "ruleNames": [ "MD011", "no-reversed-links" ],
+        "ruleDescription": "Reversed link syntax",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md011",
+        "errorDetail": "(reversed)[link]",
+        "errorContext": null,
+        "errorRange": [11, 16]
+    },
+    {
         "lineNumber": 7,
         "ruleNames": [ "MD012", "no-multiple-blanks" ],
         "ruleDescription": "Multiple consecutive blank lines",

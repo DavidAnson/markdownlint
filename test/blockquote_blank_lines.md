@@ -26,6 +26,6 @@ Some text
 
 Expected errors:
 
-{MD028:5} {MD028:8} {MD028:10} {MD028:17}
+{MD028:5} {MD028:7} {MD028:8} {MD028:10} {MD028:17}
 {MD009:10} (trailing space is intentional)
 {MD012:8} (multiple blank lines are intentional)

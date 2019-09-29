@@ -34,7 +34,7 @@ List with multiple paragraphs and incorrect spacing
 
 *  Foo {MD030}
 
-   Here is the second paragraph
+    Here is the second paragraph
 
 *    Bar {MD030}
 

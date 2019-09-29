@@ -43,7 +43,8 @@ A rule is implemented as an `Object` with four required properties:
 - `function` is a synchronous `Function` that implements the rule and is passed two parameters:
   - `params` is an `Object` with properties that describe the content being analyzed:
     - `name` is a `String` that identifies the input file/string.
-    - `tokens` is an `Array` of [`markdown-it` `Token` objects](https://markdown-it.github.io/markdown-it/#Token) with added `line` and `lineNumber` properties.
+    - `tokens` is an `Array` of [`markdown-it` `Token` objects](https://markdown-it.github.io/markdown-it/#Token)
+       with added `line` and `lineNumber` properties.
     - `lines` is an `Array` of `String` values corresponding to the lines of the input file/string.
     - `frontMatterLines` is an `Array` of `String` values corresponding to any front matter (not present in `lines`).
     - `config` is an `Object` corresponding to the rule's entry in `options.config` (if present).
@@ -52,6 +53,14 @@ A rule is implemented as an `Object` with four required properties:
     - `details` is an optional `String` with information about what caused the error.
     - `context` is an optional `String` with relevant text surrounding the error location.
     - `range` is an optional `Array` with two `Number` values identifying the 1-based column and length of the error.
+    - `fixInfo` is an optional `Object` with information about how to fix the error (all properties are optional, but
+      at least one of `deleteCount` and `insertText` should be present; when applying a fix, the delete should be
+      performed before the insert):
+      - `lineNumber` is an optional `Number` specifying the 1-based line number of the edit.
+      - `editColumn` is an optional `Number` specifying the 1-based column number of the edit.
+      - `deleteCount` is an optional `Number` specifying the count of characters to delete.
+      - `insertText` is an optional `String` specifying the text to insert. `\n` is the platform-independent way to add
+        a line break; line breaks should be added at the beginning of a line instead of at the end).
 
 The collection of helper functions shared by the built-in rules is available for use by custom rules in the [markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
 

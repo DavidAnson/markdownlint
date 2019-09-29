@@ -6,7 +6,7 @@
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 0",
         "errorContext": null,
-        "errorRange": null
+        "errorRange": [1, 1]
     },
     {
         "lineNumber": 5,
@@ -15,7 +15,7 @@
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
         "errorDetail": "Expected: 1; Actual: 0",
         "errorContext": null,
-        "errorRange": null
+        "errorRange": [1, 2]
     },
     {
         "lineNumber": 11,

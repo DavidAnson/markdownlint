@@ -1,6 +1,7 @@
 "use strict";
 
 const fs = require("fs");
+const os = require("os");
 const path = require("path");
 const { URL } = require("url");
 const md = require("markdown-it")();
@@ -34,10 +35,12 @@ function promisify(func, ...args) {
 
 function createTestForFile(file) {
   return function testForFile(test) {
-    test.expect(1);
     const detailedResults = /[/\\]detailed-results-/.test(file);
+    test.expect(detailedResults ? 3 : 2);
     const resultsFile = file.replace(/\.md$/, ".results.json");
+    const fixedFile = file.replace(/\.md$/, ".md.fixed");
     const configFile = file.replace(/\.md$/, ".json");
+    let mergedConfig = null;
     const actualPromise = promisify(fs.stat, configFile)
       .then(
         function configFileExists() {
@@ -49,16 +52,56 @@ function createTestForFile(file) {
         })
       .then(
         function lintWithConfig(config) {
-          const mergedConfig = {
+          mergedConfig = {
             ...defaultConfig,
             ...config
           };
           return promisify(markdownlint, {
             "files": [ file ],
             "config": mergedConfig,
-            "resultVersion": detailedResults ? 2 : 0
+            "resultVersion": detailedResults ? 2 : 3
           });
-        });
+        })
+      .then(
+        function diffFixedFiles(resultVersion2or3) {
+          return detailedResults ?
+            Promise.all([
+              promisify(markdownlint, {
+                "files": [ file ],
+                "config": mergedConfig,
+                "resultVersion": 3
+              }),
+              promisify(fs.readFile, file, helpers.utf8Encoding),
+              promisify(fs.readFile, fixedFile, helpers.utf8Encoding)
+            ])
+              .then(function validateApplyFixes(fulfillments) {
+                const [ resultVersion3, content, expected ] = fulfillments;
+                const errors = resultVersion3[file];
+                const actual = helpers.applyFixes(content, errors);
+                // Uncomment the following line to update *.md.fixed files
+                // fs.writeFileSync(fixedFile, actual, helpers.utf8Encoding);
+                test.equal(actual, expected,
+                  "Unexpected output from applyFixes.");
+                return resultVersion2or3;
+              }) :
+            resultVersion2or3;
+        }
+      )
+      .then(
+        function convertResultVersion2To0(resultVersion2or3) {
+          const result0 = {};
+          const result2or3 = resultVersion2or3[file];
+          result2or3.forEach(function forResult(result) {
+            const ruleName = result.ruleNames[0];
+            const lineNumbers = result0[ruleName] || [];
+            if (!lineNumbers.includes(result.lineNumber)) {
+              lineNumbers.push(result.lineNumber);
+            }
+            result0[ruleName] = lineNumbers;
+          });
+          return [ result0, result2or3 ];
+        }
+      );
     const expectedPromise = detailedResults ?
       promisify(fs.readFile, resultsFile, helpers.utf8Encoding)
         .then(
@@ -96,11 +139,35 @@ function createTestForFile(file) {
     Promise.all([ actualPromise, expectedPromise ])
       .then(
         function compareResults(fulfillments) {
-          const actual = fulfillments[0];
-          const results = fulfillments[1];
-          const expected = {};
-          expected[file] = results;
+          const [ [ actual0, actual2or3 ], expected ] = fulfillments;
+          const actual = detailedResults ? actual2or3 : actual0;
           test.deepEqual(actual, expected, "Line numbers are not correct.");
+          return actual2or3;
+        })
+      .then(
+        function verifyFixes(errors) {
+          if (detailedResults) {
+            return test.ok(true);
+          }
+          return promisify(fs.readFile, file, helpers.utf8Encoding)
+            .then(
+              function applyFixes(content) {
+                const corrections = helpers.applyFixes(content, errors);
+                return promisify(markdownlint, {
+                  "strings": {
+                    "input": corrections
+                  },
+                  "config": mergedConfig,
+                  "resultVersion": 3
+                });
+              })
+            .then(
+              function checkFixes(newErrors) {
+                const unfixed = newErrors.input
+                  .filter((error) => !!error.fixInfo);
+                test.deepEqual(unfixed, [], "Fixable error was not fixed.");
+              }
+            );
         })
       .catch()
       .then(test.done);
@@ -448,6 +515,242 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
   });
 };
 
+module.exports.resultFormattingV3 = function resultFormattingV3(test) {
+  test.expect(3);
+  const options = {
+    "strings": {
+      "input":
+        "# Heading   \n" +
+        "\n" +
+        "Text\ttext\t\ttext\n" +
+        "Text * emphasis * text"
+    },
+    "resultVersion": 3
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "MD009", "no-trailing-spaces" ],
+          "ruleDescription": "Trailing spaces",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md009`,
+          "errorDetail": "Expected: 0 or 2; Actual: 3",
+          "errorContext": null,
+          "errorRange": [ 10, 3 ],
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 3
+          }
+        },
+        {
+          "lineNumber": 3,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 5",
+          "errorContext": null,
+          "errorRange": [ 5, 1 ],
+          "fixInfo": {
+            "editColumn": 5,
+            "deleteCount": 1,
+            "insertText": " "
+          }
+        },
+        {
+          "lineNumber": 3,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 10",
+          "errorContext": null,
+          "errorRange": [ 10, 2 ],
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 2,
+            "insertText": "  "
+          }
+        },
+        {
+          "lineNumber": 4,
+          "ruleNames": [ "MD037", "no-space-in-emphasis" ],
+          "ruleDescription": "Spaces inside emphasis markers",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md037`,
+          "errorDetail": null,
+          "errorContext": "* emphasis *",
+          "errorRange": [ 6, 12 ],
+          "fixInfo": {
+            "editColumn": 6,
+            "deleteCount": 12,
+            "insertText": "*emphasis*"
+          }
+        },
+        {
+          "lineNumber": 4,
+          "ruleNames": [ "MD047", "single-trailing-newline" ],
+          "ruleDescription": "Files should end with a single newline character",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
+          "errorDetail": null,
+          "errorContext": null,
+          "errorRange": [ 22, 1 ],
+          "fixInfo": {
+            "insertText": "\n",
+            "editColumn": 23
+          }
+        }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    const actualMessage = actualResult.toString();
+    const expectedMessage =
+      "input: 1: MD009/no-trailing-spaces" +
+      " Trailing spaces [Expected: 0 or 2; Actual: 3]\n" +
+      "input: 3: MD010/no-hard-tabs" +
+      " Hard tabs [Column: 5]\n" +
+      "input: 3: MD010/no-hard-tabs" +
+      " Hard tabs [Column: 10]\n" +
+      "input: 4: MD037/no-space-in-emphasis" +
+      " Spaces inside emphasis markers [Context: \"* emphasis *\"]\n" +
+      "input: 4: MD047/single-trailing-newline" +
+      " Files should end with a single newline character";
+    test.equal(actualMessage, expectedMessage, "Incorrect message.");
+    test.done();
+  });
+};
+
+module.exports.onePerLineResultVersion0 =
+  function onePerLineResultVersion0(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 0
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": {
+          "MD010": [ 1 ]
+        }
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.onePerLineResultVersion1 =
+  function onePerLineResultVersion1(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 1
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          {
+            "lineNumber": 1,
+            "ruleName": "MD010",
+            "ruleAlias": "no-hard-tabs",
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 10",
+            "errorContext": null,
+            "errorRange": [ 10, 1 ]
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.onePerLineResultVersion2 =
+  function onePerLineResultVersion2(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 2
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "MD010", "no-hard-tabs" ],
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 10",
+            "errorContext": null,
+            "errorRange": [ 10, 1 ]
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
+module.exports.manyPerLineResultVersion3 =
+  function manyPerLineResultVersion3(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "# Heading\theading\t\theading\n"
+      },
+      "resultVersion": 3
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "MD010", "no-hard-tabs" ],
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 10",
+            "errorContext": null,
+            "errorRange": [ 10, 1 ],
+            "fixInfo": {
+              "editColumn": 10,
+              "deleteCount": 1,
+              "insertText": " "
+            }
+          },
+          {
+            "lineNumber": 1,
+            "ruleNames": [ "MD010", "no-hard-tabs" ],
+            "ruleDescription": "Hard tabs",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+            "errorDetail": "Column: 18",
+            "errorContext": null,
+            "errorRange": [ 18, 2 ],
+            "fixInfo": {
+              "editColumn": 18,
+              "deleteCount": 2,
+              "insertText": "  "
+            }
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
 module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
   const options = {
@@ -455,11 +758,7 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
       "cr": "One\rTwo\r#Three\n",
       "lf": "One\nTwo\n#Three\n",
       "crlf": "One\r\nTwo\r\n#Three\n",
-      "mixed": "One\rTwo\n#Three\n",
-      "crnel": "One\r\u0085Two\r\u0085#Three\n",
-      "snl": "One\u2424Two\u2424#Three\n",
-      "lsep": "One\u2028Two\u2028#Three\n",
-      "nel": "One\u0085Two\u0085#Three\n"
+      "mixed": "One\rTwo\n#Three\n"
     },
     "config": defaultConfig,
     "resultVersion": 0
@@ -470,11 +769,7 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
       "cr": { "MD018": [ 3 ] },
       "lf": { "MD018": [ 3 ] },
       "crlf": { "MD018": [ 3 ] },
-      "mixed": { "MD018": [ 3 ] },
-      "crnel": { "MD018": [ 3 ] },
-      "snl": { "MD018": [ 3 ] },
-      "lsep": { "MD018": [ 3 ] },
-      "nel": { "MD018": [ 3 ] }
+      "mixed": { "MD018": [ 3 ] }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.done();
@@ -779,7 +1074,7 @@ module.exports.styleAll = function styleAll(test) {
     const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
-        "MD003": [ 5, 30 ],
+        "MD003": [ 5, 31 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
         "MD006": [ 8 ],
@@ -793,10 +1088,10 @@ module.exports.styleAll = function styleAll(test) {
         "MD018": [ 25 ],
         "MD019": [ 27 ],
         "MD020": [ 29 ],
-        "MD021": [ 30 ],
-        "MD022": [ 30 ],
-        "MD023": [ 30 ],
-        "MD024": [ 34 ],
+        "MD021": [ 31 ],
+        "MD022": [ 82 ],
+        "MD023": [ 40 ],
+        "MD024": [ 35 ],
         "MD026": [ 40 ],
         "MD027": [ 42 ],
         "MD028": [ 43 ],
@@ -816,7 +1111,7 @@ module.exports.styleAll = function styleAll(test) {
         "MD042": [ 77 ],
         "MD045": [ 81 ],
         "MD046": [ 49, 73 ],
-        "MD047": [ 81 ]
+        "MD047": [ 84 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -836,7 +1131,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
     const expectedResult = {
       "./test/break-all-the-rules.md": {
         "MD001": [ 3 ],
-        "MD003": [ 5, 30 ],
+        "MD003": [ 5, 31 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
         "MD011": [ 16 ],
@@ -844,10 +1139,10 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD018": [ 25 ],
         "MD019": [ 27 ],
         "MD020": [ 29 ],
-        "MD021": [ 30 ],
-        "MD022": [ 30 ],
-        "MD023": [ 30 ],
-        "MD024": [ 34 ],
+        "MD021": [ 31 ],
+        "MD022": [ 82 ],
+        "MD023": [ 40 ],
+        "MD024": [ 35 ],
         "MD026": [ 40 ],
         "MD029": [ 47 ],
         "MD031": [ 50 ],
@@ -857,7 +1152,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD042": [ 77 ],
         "MD045": [ 81 ],
         "MD046": [ 49, 73 ],
-        "MD047": [ 81 ]
+        "MD047": [ 84 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -1538,7 +1833,7 @@ module.exports.includesSorted = function includesSorted(test) {
 };
 
 module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
-  test.expect(94);
+  test.expect(99);
   const testCases =
     [
       [
@@ -1621,6 +1916,10 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
       [
         "text \\` text `code`",
         [ [ "code", 0, 14, 1 ] ]
+      ],
+      [
+        "text\\\n`code`",
+        [ [ "code", 1, 1, 1 ] ]
       ]
     ];
   testCases.forEach((testCase) => {
@@ -1634,6 +1933,522 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
       test.equal(ticks, expectedTicks, input);
     });
     test.equal(expecteds.length, 0, "length");
+  });
+  test.done();
+};
+
+module.exports.getPreferredLineEnding = function getPreferredLineEnding(test) {
+  test.expect(17);
+  const testCases = [
+    [ "", os.EOL ],
+    [ "\r", "\r" ],
+    [ "\n", "\n" ],
+    [ "\r\n", "\r\n" ],
+    [ "t\rt\nt", "\n" ],
+    [ "t\nt\rt", "\n" ],
+    [ "t\r\nt\nt", "\n" ],
+    [ "t\nt\r\nt", "\n" ],
+    [ "t\r\nt\rt", "\r\n" ],
+    [ "t\rt\r\nt", "\r\n" ],
+    [ "t\r\nt\rt\nt", "\n" ],
+    [ "t\r\nt\r\nt\r\nt", "\r\n" ],
+    [ "t\nt\nt\nt", "\n" ],
+    [ "t\rt\rt\rt", "\r" ],
+    [ "t\r\nt\nt\r\nt", "\r\n" ],
+    [ "t\nt\r\nt\nt", "\n" ],
+    [ "t\rt\t\rt", "\r" ]
+  ];
+  testCases.forEach((testCase) => {
+    const [ input, expected ] = testCase;
+    const actual = helpers.getPreferredLineEnding(input);
+    test.equal(actual, expected, "Incorrect line ending returned.");
+  });
+  test.done();
+};
+
+module.exports.applyFix = function applyFix(test) {
+  test.expect(4);
+  const testCases = [
+    [
+      "Hello world.",
+      {
+        "editColumn": 12,
+        "deleteCount": 1
+      },
+      undefined,
+      "Hello world"
+    ],
+    [
+      "Hello world.",
+      {
+        "editColumn": 13,
+        "insertText": "\n"
+      },
+      undefined,
+      "Hello world.\n"
+    ],
+    [
+      "Hello world.",
+      {
+        "editColumn": 13,
+        "insertText": "\n"
+      },
+      "\n",
+      "Hello world.\n"
+    ],
+    [
+      "Hello world.",
+      {
+        "editColumn": 13,
+        "insertText": "\n"
+      },
+      "\r\n",
+      "Hello world.\r\n"
+    ]
+  ];
+  testCases.forEach((testCase) => {
+    const [ line, fixInfo, lineEnding, expected ] = testCase;
+    const actual = helpers.applyFix(line, fixInfo, lineEnding);
+    test.equal(actual, expected, "Incorrect fix applied.");
+  });
+  test.done();
+};
+
+module.exports.applyFixes = function applyFixes(test) {
+  test.expect(28);
+  const testCases = [
+    [
+      "Hello world.",
+      [],
+      "Hello world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {}
+        }
+      ],
+      "Hello world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "insertText": "Very "
+          }
+        }
+      ],
+      "Very Hello world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 7,
+            "insertText": "big "
+          }
+        }
+      ],
+      "Hello big world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "deleteCount": 6
+          }
+        }
+      ],
+      "world."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 7,
+            "deleteCount": 5,
+            "insertText": "there"
+          }
+        }
+      ],
+      "Hello there."
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 12,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 6,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Helloworld"
+    ],
+    [
+      "Hello world.",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 13,
+            "insertText": " Hi."
+          }
+        }
+      ],
+      "Hello world. Hi."
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "deleteCount": -1
+          }
+        }
+      ],
+      "world"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 2,
+          "fixInfo": {
+            "deleteCount": -1
+          }
+        }
+      ],
+      "Hello"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 2,
+          "fixInfo": {
+            "lineNumber": 1,
+            "deleteCount": -1
+          }
+        }
+      ],
+      "world"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "lineNumber": 2,
+            "deleteCount": -1
+          }
+        }
+      ],
+      "Hello"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 4,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Helo word"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 4,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Helo word"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "deleteCount": -1
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "Big "
+          }
+        }
+      ],
+      "world"
+    ],
+    [
+      "Hello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "deleteCount": -1
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 2,
+            "deleteCount": -1
+          }
+        }
+      ],
+      ""
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "aa"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "b"
+          }
+        }
+      ],
+      "aaHello world"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "a"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "insertText": "bb"
+          }
+        }
+      ],
+      "bbHello world"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 6,
+            "insertText": " big"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Hello big orld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 8,
+            "deleteCount": 2
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 2
+          }
+        }
+      ],
+      "Hello wld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 2
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 8,
+            "deleteCount": 2
+          }
+        }
+      ],
+      "Hello wld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1,
+            "insertText": "z"
+          }
+        }
+      ],
+      "Hello zorld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "insertText": "z"
+          }
+        }
+      ],
+      "Hello zorld"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "insertText": "z"
+          }
+        },
+        {
+          "fixInfo": {
+            "lineNumber": 1,
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        }
+      ],
+      "Hello zorld"
+    ],
+    [
+      "Hello\nworld\nhello\rworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 4,
+            "editColumn": 6,
+            "insertText": "\n"
+          }
+        }
+      ],
+      "Hello\nworld\nhello\nworld\n"
+    ],
+    [
+      "Hello\r\nworld\r\nhello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 4,
+            "editColumn": 6,
+            "insertText": "\n"
+          }
+        }
+      ],
+      "Hello\r\nworld\r\nhello\r\nworld\r\n"
+    ],
+    [
+      "Hello\rworld\rhello\nworld",
+      [
+        {
+          "fixInfo": {
+            "lineNumber": 4,
+            "editColumn": 6,
+            "insertText": "\n"
+          }
+        }
+      ],
+      "Hello\rworld\rhello\rworld\r"
+    ],
+    [
+      "Hello\r\nworld",
+      [
+        {
+          "lineNumber": 2,
+          "fixInfo": {
+            "editColumn": 6,
+            "insertText": "\n\n"
+          }
+        }
+      ],
+      "Hello\r\nworld\r\n\r\n"
+    ]
+  ];
+  testCases.forEach((testCase) => {
+    const [ input, errors, expected ] = testCase;
+    const actual = helpers.applyFixes(input, errors);
+    test.equal(actual, expected, "Incorrect fix applied.");
   });
   test.done();
 };
@@ -2531,19 +3346,32 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
 };
 
 module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
-  test.expect(44);
+  test.expect(84);
   [
-    [ "lineNumber", [ null, "string" ] ],
-    [ "detail", [ 10, [] ] ],
-    [ "context", [ 10, [] ] ],
-    [ "range", [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ]
+    [ "lineNumber", null, [ null, "string" ] ],
+    [ "detail", null, [ 10, [] ] ],
+    [ "context", null, [ 10, [] ] ],
+    [ "range", null, [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ],
+    [ "fixInfo", null, [ 10, "string" ] ],
+    [ "fixInfo", "lineNumber", [ null, "string" ] ],
+    [ "fixInfo", "editColumn", [ null, "string" ] ],
+    [ "fixInfo", "deleteCount", [ null, "string" ] ],
+    [ "fixInfo", "insertText", [ 10, [] ] ]
   ].forEach(function forProperty(property) {
-    const propertyName = property[0];
-    property[1].forEach(function forPropertyValue(propertyValue) {
+    const [ propertyName, subPropertyName, propertyValues ] = property;
+    propertyValues.forEach(function forPropertyValue(propertyValue) {
       const badObject = {
         "lineNumber": 1
       };
-      badObject[propertyName] = propertyValue;
+      let propertyNames = null;
+      if (subPropertyName) {
+        badObject[propertyName] = {};
+        badObject[propertyName][subPropertyName] = propertyValue;
+        propertyNames = `${propertyName}.${subPropertyName}`;
+      } else {
+        badObject[propertyName] = propertyValue;
+        propertyNames = propertyName;
+      }
       const options = {
         "customRules": [
           {
@@ -2565,7 +3393,7 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
         test.ok(err, "Did not get an error for bad object.");
         test.ok(err instanceof Error, "Error not instance of Error.");
         test.equal(err.message,
-          "Property '" + propertyName + "' of onError parameter is incorrect.",
+          "Property '" + propertyNames + "' of onError parameter is incorrect.",
           "Incorrect message for bad object.");
         return true;
       }, "Did not get exception for bad object.");
@@ -2576,17 +3404,28 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
 
 module.exports.customRulesOnErrorInvalid =
   function customRulesOnErrorInvalid(test) {
-    test.expect(36);
+    test.expect(68);
     [
-      [ "lineNumber", [ -1, 0, 3, 4 ] ],
-      [ "range", [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ] ]
+      [ "lineNumber", null, [ -1, 0, 3, 4 ] ],
+      [ "range", null, [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ] ],
+      [ "fixInfo", "lineNumber", [ -1, 0, 3, 4 ] ],
+      [ "fixInfo", "editColumn", [ 0, 6 ] ],
+      [ "fixInfo", "deleteCount", [ -2, 5 ] ]
     ].forEach(function forProperty(property) {
-      const propertyName = property[0];
-      property[1].forEach(function forPropertyValue(propertyValue) {
+      const [ propertyName, subPropertyName, propertyValues ] = property;
+      propertyValues.forEach(function forPropertyValue(propertyValue) {
         const badObject = {
           "lineNumber": 1
         };
-        badObject[propertyName] = propertyValue;
+        let propertyNames = null;
+        if (subPropertyName) {
+          badObject[propertyName] = {};
+          badObject[propertyName][subPropertyName] = propertyValue;
+          propertyNames = `${propertyName}.${subPropertyName}`;
+        } else {
+          badObject[propertyName] = propertyValue;
+          propertyNames = propertyName;
+        }
         const options = {
           "customRules": [
             {
@@ -2608,7 +3447,7 @@ module.exports.customRulesOnErrorInvalid =
           test.ok(err, "Did not get an error for invalid object.");
           test.ok(err instanceof Error, "Error not instance of Error.");
           test.equal(err.message,
-            `Property '${propertyName}' of onError parameter is incorrect.`,
+            `Property '${propertyNames}' of onError parameter is incorrect.`,
             "Incorrect message for invalid object.");
           return true;
         }, "Did not get exception for invalid object.");
@@ -2619,17 +3458,30 @@ module.exports.customRulesOnErrorInvalid =
 
 module.exports.customRulesOnErrorValid =
   function customRulesOnErrorValid(test) {
-    test.expect(7);
+    test.expect(24);
     [
-      [ "lineNumber", [ 1, 2 ] ],
-      [ "range", [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ] ]
+      [ "lineNumber", null, [ 1, 2 ] ],
+      [ "range", null, [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ] ],
+      [ "fixInfo", "lineNumber", [ 1, 2 ] ],
+      [ "fixInfo", "editColumn", [ 1, 2, 4, 5 ] ],
+      [ "fixInfo", "deleteCount", [ -1, 0, 1, 4 ] ],
+      [
+        "fixInfo",
+        "insertText",
+        [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
+      ]
     ].forEach(function forProperty(property) {
-      const propertyName = property[0];
-      property[1].forEach(function forPropertyValue(propertyValue) {
+      const [ propertyName, subPropertyName, propertyValues ] = property;
+      propertyValues.forEach(function forPropertyValue(propertyValue) {
         const goodObject = {
           "lineNumber": 1
         };
-        goodObject[propertyName] = propertyValue;
+        if (subPropertyName) {
+          goodObject[propertyName] = {};
+          goodObject[propertyName][subPropertyName] = propertyValue;
+        } else {
+          goodObject[propertyName] = propertyValue;
+        }
         const options = {
           "customRules": [
             {

@@ -1,6 +1,0 @@
-# Heading
-
-```text
-hello 
-world 
-```

@@ -105,6 +105,6 @@
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md047",
         "errorDetail": null,
         "errorContext": null,
-        "errorRange": null
+        "errorRange": [ 25, 1 ]
     }
 ]

@@ -88,5 +88,14 @@
         "errorDetail": null,
         "errorContext": "https://example.com/same",
         "errorRange": null
+    },
+    {
+        "lineNumber": 28,
+        "ruleNames": [ "MD034", "no-bare-urls" ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com/first",
+        "errorRange": [ 6, 25 ]
     }
 ]

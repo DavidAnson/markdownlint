@@ -2,8 +2,7 @@
 
 <!-- markdownlint-disable MD003 -->
 
-A (reversed)[link] example.
-
+A [reversed](link) example.
 
 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789
 
@@ -11,16 +10,16 @@ A (reversed)[link] example.
 
     $ command with no output
 
-##No space A
+## No space A
 
-##  Multiple spaces B
+## Multiple spaces B
 
-##No space C ##
+## No space C ##
 
-## No space D##
+## No space D ##
 
-##  Multiple spaces E ##
+## Multiple spaces E ##
 
-## Multiple spaces F  ##
+## Multiple spaces F ##
 
-*Another* (reversed)[link] example.
+*Another* [reversed](link) example.

@@ -66,3 +66,8 @@ text ` code {MD038}
 span code
 span` text
 text.
+
+"<!--"
+-->
+Text `code
+code code `text` {MD038}

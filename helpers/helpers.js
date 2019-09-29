@@ -2,9 +2,12 @@
 
 "use strict";
 
+const os = require("os");
+
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
-module.exports.newLineRe = /\r[\n\u0085]?|[\n\u2424\u2028\u0085]/;
+const newLineRe = /\r\n?|\n/g;
+module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
@@ -18,8 +21,7 @@ const inlineCommentRe =
 module.exports.inlineCommentRe = inlineCommentRe;
 
 // Regular expressions for range matching
-module.exports.atxHeadingSpaceRe = /^#+\s*\S/;
-module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s]*/i;
+module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s]*/ig;
 module.exports.listItemMarkerRe = /^[\s>]*(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 
@@ -42,6 +44,11 @@ module.exports.isString = function isString(obj) {
 // Returns true iff the input string is empty
 module.exports.isEmptyString = function isEmptyString(str) {
   return str.length === 0;
+};
+
+// Returns true iff the input is an object
+module.exports.isObject = function isObject(obj) {
+  return (obj !== null) && (typeof obj === "object") && !Array.isArray(obj);
 };
 
 // Returns true iff the input line is blank (no content)
@@ -312,7 +319,8 @@ module.exports.forEachInlineCodeSpan =
           currentLine++;
           currentColumn = 0;
         } else if ((char === "\\") &&
-          ((startIndex === -1) || (startColumn === -1))) {
+          ((startIndex === -1) || (startColumn === -1)) &&
+          (input[index + 1] !== "\n")) {
           // Escape character outside code, skip next
           index++;
           currentColumn += 2;
@@ -331,19 +339,20 @@ module.exports.forEachInlineCodeSpan =
   };
 
 // Adds a generic error object via the onError callback
-function addError(onError, lineNumber, detail, context, range) {
+function addError(onError, lineNumber, detail, context, range, fixInfo) {
   onError({
-    "lineNumber": lineNumber,
-    "detail": detail,
-    "context": context,
-    "range": range
+    lineNumber,
+    detail,
+    context,
+    range,
+    fixInfo
   });
 }
 module.exports.addError = addError;
 
 // Adds an error object with details conditionally via the onError callback
 module.exports.addErrorDetailIf = function addErrorDetailIf(
-  onError, lineNumber, expected, actual, detail, context, range) {
+  onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
       onError,
@@ -351,24 +360,25 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
       "Expected: " + expected + "; Actual: " + actual +
         (detail ? "; " + detail : ""),
       context,
-      range);
+      range,
+      fixInfo);
   }
 };
 
 // Adds an error object with context via the onError callback
-module.exports.addErrorContext =
-  function addErrorContext(onError, lineNumber, context, left, right, range) {
-    if (context.length <= 30) {
-      // Nothing to do
-    } else if (left && right) {
-      context = context.substr(0, 15) + "..." + context.substr(-15);
-    } else if (right) {
-      context = "..." + context.substr(-30);
-    } else {
-      context = context.substr(0, 30) + "...";
-    }
-    addError(onError, lineNumber, null, context, range);
-  };
+module.exports.addErrorContext = function addErrorContext(
+  onError, lineNumber, context, left, right, range, fixInfo) {
+  if (context.length <= 30) {
+    // Nothing to do
+  } else if (left && right) {
+    context = context.substr(0, 15) + "..." + context.substr(-15);
+  } else if (right) {
+    context = "..." + context.substr(-30);
+  } else {
+    context = context.substr(0, 30) + "...";
+  }
+  addError(onError, lineNumber, null, context, range, fixInfo);
+};
 
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
@@ -396,3 +406,127 @@ module.exports.frontMatterHasTitle =
     return !ignoreFrontMatter &&
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
+
+// Gets the most common line ending, falling back to platform default
+function getPreferredLineEnding(input) {
+  let cr = 0;
+  let lf = 0;
+  let crlf = 0;
+  const endings = input.match(newLineRe) || [];
+  endings.forEach((ending) => {
+    // eslint-disable-next-line default-case
+    switch (ending) {
+      case "\r":
+        cr++;
+        break;
+      case "\n":
+        lf++;
+        break;
+      case "\r\n":
+        crlf++;
+        break;
+    }
+  });
+  let preferredLineEnding = null;
+  if (!cr && !lf && !crlf) {
+    preferredLineEnding = os.EOL;
+  } else if ((lf >= crlf) && (lf >= cr)) {
+    preferredLineEnding = "\n";
+  } else if (crlf >= cr) {
+    preferredLineEnding = "\r\n";
+  } else {
+    preferredLineEnding = "\r";
+  }
+  return preferredLineEnding;
+}
+module.exports.getPreferredLineEnding = getPreferredLineEnding;
+
+// Normalizes the fields of a fixInfo object
+function normalizeFixInfo(fixInfo, lineNumber) {
+  return {
+    "lineNumber": fixInfo.lineNumber || lineNumber,
+    "editColumn": fixInfo.editColumn || 1,
+    "deleteCount": fixInfo.deleteCount || 0,
+    "insertText": fixInfo.insertText || ""
+  };
+}
+
+// Fixes the specifide error on a line
+function applyFix(line, fixInfo, lineEnding) {
+  const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
+  const editIndex = editColumn - 1;
+  return (deleteCount === -1) ?
+    null :
+    line.slice(0, editIndex) +
+    insertText.replace(/\n/g, lineEnding || "\n") +
+    line.slice(editIndex + deleteCount);
+}
+module.exports.applyFix = applyFix;
+
+// Applies as many fixes as possible to the input lines
+module.exports.applyFixes = function applyFixes(input, errors) {
+  const lineEnding = getPreferredLineEnding(input);
+  const lines = input.split(newLineRe);
+  // Normalize fixInfo objects
+  let fixInfos = errors
+    .filter((error) => error.fixInfo)
+    .map((error) => normalizeFixInfo(error.fixInfo, error.lineNumber));
+  // Sort bottom-to-top, line-deletes last, right-to-left, long-to-short
+  fixInfos.sort((a, b) => {
+    const aDeletingLine = (a.deleteCount === -1);
+    const bDeletingLine = (b.deleteCount === -1);
+    return (
+      (b.lineNumber - a.lineNumber) ||
+      (aDeletingLine ? 1 : (bDeletingLine ? -1 : 0)) ||
+      (b.editColumn - a.editColumn) ||
+      (b.insertText.length - a.insertText.length)
+    );
+  });
+  // Remove duplicate entries (needed for following collapse step)
+  let lastFixInfo = {};
+  fixInfos = fixInfos.filter((fixInfo) => {
+    const unique = (
+      (fixInfo.lineNumber !== lastFixInfo.lineNumber) ||
+      (fixInfo.editColumn !== lastFixInfo.editColumn) ||
+      (fixInfo.deleteCount !== lastFixInfo.deleteCount) ||
+      (fixInfo.insertText !== lastFixInfo.insertText)
+    );
+    lastFixInfo = fixInfo;
+    return unique;
+  });
+  // Collapse insert/no-delete and no-insert/delete for same line/column
+  lastFixInfo = {};
+  fixInfos.forEach((fixInfo) => {
+    if (
+      (fixInfo.lineNumber === lastFixInfo.lineNumber) &&
+      (fixInfo.editColumn === lastFixInfo.editColumn) &&
+      !fixInfo.insertText &&
+      (fixInfo.deleteCount > 0) &&
+      lastFixInfo.insertText &&
+      !lastFixInfo.deleteCount) {
+      fixInfo.insertText = lastFixInfo.insertText;
+      lastFixInfo.lineNumber = 0;
+    }
+    lastFixInfo = fixInfo;
+  });
+  fixInfos = fixInfos.filter((fixInfo) => fixInfo.lineNumber);
+  // Apply all (remaining/updated) fixes
+  let lastLineIndex = -1;
+  let lastEditIndex = -1;
+  fixInfos.forEach((fixInfo) => {
+    const { lineNumber, editColumn, deleteCount } = fixInfo;
+    const lineIndex = lineNumber - 1;
+    const editIndex = editColumn - 1;
+    if (
+      (lineIndex !== lastLineIndex) ||
+      ((editIndex + deleteCount) < lastEditIndex) ||
+      (deleteCount === -1)
+    ) {
+      lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
+    }
+    lastLineIndex = lineIndex;
+    lastEditIndex = editIndex;
+  });
+  // Return corrected input
+  return lines.filter((line) => line !== null).join(lineEnding);
+};
