@@ -1,36 +1,43 @@
 # heading
 
 ```fence
-$ code
+$ code {MD014}
+```
+
+text
+
+```fence
+$ code {MD014}
+```
+
+text
+
+```fence
+$ code {MD014}
+$ code {MD014}
+```
+
+text
+
+```fence
+$ code {MD014}
+$ code {MD014}
 ```
 
 text
 
 ```fence
 $ code
-```
-
-text
-
-```fence
+code
 $ code
-$ code
-```
-
-text
-
-```fence
-$ code
-$ code
+code
 ```
 
 text
 
 ```sh
 
-$ npm install --save multimatch
+$ npm install --save multimatch {MD014}
 ```
 
 text
-
-{MD014:3} {MD014:9} {MD014:15} {MD014:22} {MD014:29}

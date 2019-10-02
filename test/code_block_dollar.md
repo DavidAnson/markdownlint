@@ -1,9 +1,9 @@
 The following code block shouldn't have $ before the commands:
 
     $ ls {MD014}
-    $ less foo
+    $ less foo {MD014}
 
-    $ cat bar
+    $ cat bar {MD014}
 
 However the following code block shows output, and $ can be used to
 distinguish between command and output:
@@ -31,3 +31,19 @@ shouldn't fire: {MD046:32}
 
 ```bash
 ```
+
+Mixed content:
+
+    $ ls
+    file.md other.md
+    $ git branch {MD014}
+    $ cat stuff {MD014}
+
+    output
+    $ ls {MD014}
+    $ git branch {MD014}
+    $ cat stuff
+    stuff here
+    more stuff
+    $ tail cat
+    meow
