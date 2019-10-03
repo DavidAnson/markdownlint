@@ -24,4 +24,4 @@ None of the above should trigger any heading related rules.
 Code block without a language specifier
 ```
 
-{MD040:23}
+{MD040:23} {MD048:13}

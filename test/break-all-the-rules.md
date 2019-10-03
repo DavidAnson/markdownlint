@@ -74,6 +74,10 @@ Code `with ` space {MD038}
 code fence without language {MD040:73} {MD046:73}
 ```
 
+~~~js
+code fence with different style {MD048:77} {MD046:77}
+~~~
+
 [empty link]() {MD042}
 
 markdownLint {MD044}

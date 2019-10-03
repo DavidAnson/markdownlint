@@ -1089,7 +1089,7 @@ module.exports.styleAll = function styleAll(test) {
         "MD019": [ 27 ],
         "MD020": [ 29 ],
         "MD021": [ 31 ],
-        "MD022": [ 82 ],
+        "MD022": [ 86 ],
         "MD023": [ 40 ],
         "MD024": [ 35 ],
         "MD026": [ 40 ],
@@ -1108,10 +1108,11 @@ module.exports.styleAll = function styleAll(test) {
         "MD039": [ 71 ],
         "MD040": [ 73 ],
         "MD041": [ 1 ],
-        "MD042": [ 77 ],
-        "MD045": [ 81 ],
-        "MD046": [ 49, 73 ],
-        "MD047": [ 84 ]
+        "MD042": [ 81 ],
+        "MD045": [ 85 ],
+        "MD046": [ 49, 73, 77 ],
+        "MD047": [ 88 ],
+        "MD048": [ 77 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -1140,7 +1141,7 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD019": [ 27 ],
         "MD020": [ 29 ],
         "MD021": [ 31 ],
-        "MD022": [ 82 ],
+        "MD022": [ 86 ],
         "MD023": [ 40 ],
         "MD024": [ 35 ],
         "MD026": [ 40 ],
@@ -1149,10 +1150,11 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
         "MD032": [ 7, 8, 51 ],
         "MD035": [ 61 ],
         "MD036": [ 65 ],
-        "MD042": [ 77 ],
-        "MD045": [ 81 ],
-        "MD046": [ 49, 73 ],
-        "MD047": [ 84 ]
+        "MD042": [ 81 ],
+        "MD045": [ 85 ],
+        "MD046": [ 49, 73, 77 ],
+        "MD047": [ 88 ],
+        "MD048": [ 77 ]
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -1395,7 +1397,7 @@ module.exports.missingStringValue = function missingStringValue(test) {
 };
 
 module.exports.readme = function readme(test) {
-  test.expect(113);
+  test.expect(115);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -1464,7 +1466,7 @@ module.exports.readme = function readme(test) {
 };
 
 module.exports.doc = function doc(test) {
-  test.expect(328);
+  test.expect(336);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -2752,7 +2754,7 @@ module.exports.configBadHybridSync = function configBadHybridSync(test) {
 
 module.exports.allBuiltInRulesHaveValidUrl =
   function allBuiltInRulesHaveValidUrl(test) {
-    test.expect(129);
+    test.expect(132);
     rules.forEach(function forRule(rule) {
       test.ok(rule.information);
       test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);

@@ -1339,6 +1339,48 @@
       "type": "boolean",
       "default": true
     },
+    "MD048": {
+      "description": "MD048/code-fence-style - Code fence style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Code fence syle",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "backtick",
+            "tilde"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "code-fence-style": {
+      "description": "MD048/code-fence-style - Code fence style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Code fence syle",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "backtick",
+            "tilde"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1390,7 +1432,7 @@
       "default": true
     },
     "code": {
-      "description": "code - MD014, MD031, MD038, MD040, MD046",
+      "description": "code - MD014, MD031, MD038, MD040, MD046, MD048",
       "type": "boolean",
       "default": true
     },

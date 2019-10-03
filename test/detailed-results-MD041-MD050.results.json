@@ -45,7 +45,7 @@
         "errorRange": [25, 13]
     },
     {
-        "lineNumber": 27,
+        "lineNumber": 31,
         "ruleNames": [ "MD043", "required-headings", "required-headers" ],
         "ruleDescription": "Required heading structure",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md043",
@@ -99,12 +99,21 @@
         "errorRange": null
     },
     {
-        "lineNumber": 27,
+        "lineNumber": 31,
         "ruleNames": [ "MD047", "single-trailing-newline" ],
         "ruleDescription": "Files should end with a single newline character",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md047",
         "errorDetail": null,
         "errorContext": null,
         "errorRange": [ 25, 1 ]
+    },
+    {
+        "lineNumber": 27,
+        "ruleNames": [ "MD048", "code-fence-style" ],
+        "ruleDescription": "Code fence style",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md048",
+        "errorDetail": "Expected: backtick; Actual: tilde",
+        "errorContext": null,
+        "errorRange": null
     }
 ]
