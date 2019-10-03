@@ -8,7 +8,8 @@ example
 .vscode
 azure-pipelines.yml
 coverage
-demo
+demo/*
+!demo/markdownlint-browser.js
 lib-es3
 npm-debug.log
 test
