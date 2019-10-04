@@ -14,6 +14,7 @@
     "complexity": "off",
     "dot-location": ["error", "property"],
     "func-style": ["error", "declaration"],
+    "function-call-argument-newline": "off",
     "function-paren-newline": "off",
     "global-require": "off",
     "id-length": "off",

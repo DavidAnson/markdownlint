@@ -1180,7 +1180,7 @@ function readConfig(file, parsers, callback) {
                 if (errr) {
                     return callback(errr);
                 }
-                return callback(null, __assign({}, extendsConfig, config));
+                return callback(null, __assign(__assign({}, extendsConfig), config));
             });
         }
         return callback(null, config);
@@ -1205,7 +1205,7 @@ function readConfigSync(file, parsers) {
     var configExtends = config["extends"];
     if (configExtends) {
         delete config["extends"];
-        return __assign({}, readConfigSync(path.resolve(path.dirname(file), configExtends), parsers), config);
+        return __assign(__assign({}, readConfigSync(path.resolve(path.dirname(file), configExtends), parsers)), config);
     }
     return config;
 }
@@ -2813,26 +2813,26 @@ module.exports={
         "node": ">=8"
     },
     "dependencies": {
-        "markdown-it": "9.0.1"
+        "markdown-it": "10.0.0"
     },
     "devDependencies": {
-        "@types/node": "~12.6.9",
-        "browserify": "~16.3.0",
+        "@types/node": "~12.7.11",
+        "browserify": "~16.5.0",
         "cpy-cli": "~2.0.0",
-        "eslint": "~6.1.0",
+        "eslint": "~6.5.1",
         "glob": "~7.1.4",
         "js-yaml": "~3.13.1",
         "markdown-it-for-inline": "~0.1.1",
         "markdown-it-katex": "~2.0.3",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
-        "markdownlint-rule-helpers": "~0.3.0",
+        "markdownlint-rule-helpers": "~0.4.0",
         "nodeunit": "~0.11.3",
         "nyc": "~14.1.1",
-        "rimraf": "~2.6.3",
+        "rimraf": "~3.0.0",
         "toml": "~3.0.0",
         "tv4": "~1.3.0",
-        "typescript": "~3.5.3",
+        "typescript": "~3.6.3",
         "uglify-js": "~3.6.0"
     },
     "keywords": [
