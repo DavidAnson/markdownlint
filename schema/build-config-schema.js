@@ -334,6 +334,20 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD048":
+      scheme.properties = {
+        "style": {
+          "description": "Code fence syle",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "backtick",
+            "tilde"
+          ],
+          "default": "consistent"
+        }
+      };
+      break;
     default:
       custom = false;
       break;

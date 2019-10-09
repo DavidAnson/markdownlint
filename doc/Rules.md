@@ -1601,3 +1601,41 @@ To fix the violation, add a newline character to the end of the file:
 This file ends with a newline.
 [EOF]
 ```
+
+<a name="md048"></a>
+
+## MD048 - Code fence style
+
+Tags: code
+
+Aliases: code-fence-style
+
+Parameters: style ("consistent", "tilde", "backtick"; default "consistent")
+
+This rule is triggered when the symbols used in the document for fenced code blocks do not match the configured code fence style:
+
+````markdown
+```ruby
+# Fenced code
+```
+
+~~~ruby
+# Fenced code
+~~~
+````
+
+To fix this issue, use the configured code fence style throughout the
+document:
+
+````markdown
+```ruby
+# Fenced code
+```
+
+```ruby
+# Fenced code
+```
+````
+
+The configured list style can be a specific symbol to use (backtick, tilde), or
+can require that usage be consistent within the document.

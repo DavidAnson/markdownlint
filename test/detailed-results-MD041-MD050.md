@@ -24,4 +24,8 @@ Fenced code
 
     Indented code
 
+~~~text
+Fenced code
+~~~
+
 Missing newline character

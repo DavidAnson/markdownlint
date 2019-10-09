@@ -90,6 +90,7 @@ playground for learning and exploring.
 * **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have alternate text (alt text)
 * **[MD046](doc/Rules.md#md046)** *code-block-style* - Code block style
 * **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
+* **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
 
 See [Rules.md](doc/Rules.md) for more details.
 
@@ -109,7 +110,7 @@ Tags group related rules and can be used to enable/disable multiple rules at onc
 * **blank_lines** - MD012, MD022, MD031, MD032, MD047
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
-* **code** - MD014, MD031, MD038, MD040, MD046
+* **code** - MD014, MD031, MD038, MD040, MD046, MD048
 * **emphasis** - MD036, MD037
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
