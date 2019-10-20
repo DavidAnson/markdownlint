@@ -751,6 +751,41 @@ module.exports.manyPerLineResultVersion3 =
     });
   };
 
+module.exports.frontMatterResultVersion3 =
+  function frontMatterResultVersion3(test) {
+    test.expect(2);
+    const options = {
+      "strings": {
+        "input": "---\n---\n# Heading\nText\n"
+      },
+      "resultVersion": 3
+    };
+    markdownlint(options, function callback(err, actualResult) {
+      test.ifError(err);
+      const expectedResult = {
+        "input": [
+          {
+            "lineNumber": 3,
+            "ruleNames":
+              [ "MD022", "blanks-around-headings", "blanks-around-headers" ],
+            "ruleDescription": "Headings should be surrounded by blank lines",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/Rules.md#md022`,
+            "errorDetail": "Expected: 1; Actual: 0; Below",
+            "errorContext": "# Heading",
+            "errorRange": null,
+            "fixInfo": {
+              "lineNumber": 4,
+              "insertText": "\n"
+            }
+          }
+        ]
+      };
+      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+      test.done();
+    });
+  };
+
 module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
   test.expect(2);
   const options = {
