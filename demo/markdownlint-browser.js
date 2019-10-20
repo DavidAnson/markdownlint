@@ -911,34 +911,44 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 throwError("range");
             }
             var fixInfo = errorInfo.fixInfo;
+            var cleanFixInfo = {};
             if (fixInfo) {
                 if (!helpers.isObject(fixInfo)) {
                     throwError("fixInfo");
                 }
-                if ((fixInfo.lineNumber !== undefined) &&
-                    (!helpers.isNumber(fixInfo.lineNumber) ||
+                if (fixInfo.lineNumber !== undefined) {
+                    if ((!helpers.isNumber(fixInfo.lineNumber) ||
                         (fixInfo.lineNumber < 1) ||
                         (fixInfo.lineNumber > lines.length))) {
-                    throwError("fixInfo.lineNumber");
+                        throwError("fixInfo.lineNumber");
+                    }
+                    cleanFixInfo.lineNumber =
+                        fixInfo.lineNumber + frontMatterLines.length;
                 }
                 var effectiveLineNumber = fixInfo.lineNumber || errorInfo.lineNumber;
-                if ((fixInfo.editColumn !== undefined) &&
-                    (!helpers.isNumber(fixInfo.editColumn) ||
+                if (fixInfo.editColumn !== undefined) {
+                    if ((!helpers.isNumber(fixInfo.editColumn) ||
                         (fixInfo.editColumn < 1) ||
                         (fixInfo.editColumn >
                             lines[effectiveLineNumber - 1].length + 1))) {
-                    throwError("fixInfo.editColumn");
+                        throwError("fixInfo.editColumn");
+                    }
+                    cleanFixInfo.editColumn = fixInfo.editColumn;
                 }
-                if ((fixInfo.deleteCount !== undefined) &&
-                    (!helpers.isNumber(fixInfo.deleteCount) ||
+                if (fixInfo.deleteCount !== undefined) {
+                    if ((!helpers.isNumber(fixInfo.deleteCount) ||
                         (fixInfo.deleteCount < -1) ||
                         (fixInfo.deleteCount >
                             lines[effectiveLineNumber - 1].length))) {
-                    throwError("fixInfo.deleteCount");
+                        throwError("fixInfo.deleteCount");
+                    }
+                    cleanFixInfo.deleteCount = fixInfo.deleteCount;
                 }
-                if ((fixInfo.insertText !== undefined) &&
-                    !helpers.isString(fixInfo.insertText)) {
-                    throwError("fixInfo.insertText");
+                if (fixInfo.insertText !== undefined) {
+                    if (!helpers.isString(fixInfo.insertText)) {
+                        throwError("fixInfo.insertText");
+                    }
+                    cleanFixInfo.insertText = fixInfo.insertText;
                 }
             }
             errors.push({
@@ -946,7 +956,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 "detail": errorInfo.detail || null,
                 "context": errorInfo.context || null,
                 "range": errorInfo.range || null,
-                "fixInfo": errorInfo.fixInfo || null
+                "fixInfo": fixInfo ? cleanFixInfo : null
             });
         }
         // Call (possibly external) rule function
@@ -2786,7 +2796,7 @@ module.exports = rules;
 },{"../package.json":49,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"url":58}],49:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.16.0",
+    "version": "0.17.1",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "author": "David Anson (https://dlaa.me/)",
