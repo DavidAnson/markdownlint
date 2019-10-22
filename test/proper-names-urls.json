@@ -1,0 +1,14 @@
+{
+  "default": true,
+  "proper-names": {
+    "names": [
+      "HTTPS",
+      "EXAMPLE",
+      "COM",
+      "DIRECTORY",
+      "FILE"
+    ]
+  },
+  "no-bare-urls": false,
+  "code-block-style": false
+}
