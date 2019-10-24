@@ -25,3 +25,17 @@ Text `<code>` text \` text `<code>` text
 ## Slash in element name
 
 Text **\<base directory>\another\directory\\<slash/directory>** text
+
+## Self-closing elements
+
+<hr> {MD033}
+
+<hr/> {MD033}
+
+## Links
+
+<a href="https://example.com">Google</a> {MD033}
+
+<a href="https://example.com" target="_blank">Google</a> {MD033}
+
+<a href="https://example.com:9999" target="_blank">Google</a> {MD033}
