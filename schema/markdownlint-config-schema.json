@@ -12,6 +12,11 @@
       "type": "string",
       "default": null
     },
+    "$schema": {
+      "description": "JSON Schema URI (used by some editors)",
+      "type": "string",
+      "default": "https://raw.githubusercontent.com/DavidAnson/markdownlint/master/schema/markdownlint-config-schema.json"
+    },
     "MD001": {
       "description": "MD001/heading-increment/header-increment - Heading levels should only increment by one level at a time",
       "type": "boolean",

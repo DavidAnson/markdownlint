@@ -18,6 +18,12 @@ const schema = {
       "description": "Path to configuration file to extend",
       "type": "string",
       "default": null
+    },
+    "$schema": {
+      "description": "JSON Schema URI (used by some editors)",
+      "type": "string",
+      "default": "https://raw.githubusercontent.com/DavidAnson/markdownlint" +
+        "/master/schema/markdownlint-config-schema.json"
     }
   },
   "additionalProperties": false
