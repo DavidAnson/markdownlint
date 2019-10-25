@@ -808,6 +808,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            add fix information for 24 rules, update newline handling to match latest
            CommonMark specification, improve MD014/MD037/MD039, update dependencies.
   * 0.17.1 - Fix handling of front matter by fix information.
+  * 0.17.2 - Improve MD020/MD033/MD044.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint

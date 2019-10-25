@@ -1740,7 +1740,7 @@ module.exports = {
     "function": function MD020(params, onError) {
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode) {
-                var match = /^(#+)(\s*)([^#]+?[^#\\])(\s*)((?:\\#)?)(#+)(\s*)$/.exec(line);
+                var match = /^(#+)(\s*)([^#]*?[^#\\])(\s*)((?:\\#)?)(#+)(\s*)$/.exec(line);
                 if (match) {
                     var leftHash = match[1], leftSpaceLength = match[2]["length"], content = match[3], rightSpaceLength = match[4]["length"], rightEscape = match[5], rightHash = match[6], trailSpaceLength = match[7]["length"];
                     var leftHashLength = leftHash.length;
@@ -2192,7 +2192,7 @@ module.exports = {
 },{"../helpers":2,"./cache":3}],33:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, bareUrlRe = _a.bareUrlRe, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
+var _a = require("../helpers"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
 var lineMetadata = require("./cache").lineMetadata;
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
@@ -2211,10 +2211,10 @@ module.exports = {
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             var match = null;
             // eslint-disable-next-line no-unmodified-loop-condition
-            while (!inCode && (match = htmlElementRe.exec(line))) {
+            while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
                 var tag = match[0], content = match[1], element = match[2];
                 if (!allowedElements.includes(element.toLowerCase()) &&
-                    !tag.endsWith("\\>") && !bareUrlRe.test(content) &&
+                    !tag.endsWith("\\>") &&
                     !emailAddressRe.test(content)) {
                     var prefix = line.substring(0, match.index);
                     if (!linkDestinationRe.test(prefix) && !inlineCodeRe.test(prefix)) {
@@ -2637,7 +2637,7 @@ module.exports = {
                     var match = null;
                     while ((match = anyNameRe.exec(line)) !== null) {
                         var fullMatch = match[0];
-                        if (!bareUrlRe.test(fullMatch)) {
+                        if (fullMatch.search(bareUrlRe) === -1) {
                             var wordMatch = fullMatch
                                 .replace(/^\W*/, "").replace(/\W*$/, "");
                             if (!names.includes(wordMatch)) {
@@ -2796,7 +2796,7 @@ module.exports = rules;
 },{"../package.json":49,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"url":58}],49:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.17.1",
+    "version": "0.17.2",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "author": "David Anson (https://dlaa.me/)",
