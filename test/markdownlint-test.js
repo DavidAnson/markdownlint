@@ -1,3 +1,5 @@
+// @ts-check
+
 "use strict";
 
 const fs = require("fs");
@@ -1378,6 +1380,7 @@ module.exports.missingFilesAndStrings = function missingFilesAndStrings(test) {
 
 module.exports.missingCallback = function missingCallback(test) {
   test.expect(0);
+  // @ts-ignore
   markdownlint();
   test.done();
 };
@@ -1389,6 +1392,7 @@ module.exports.badFile = function badFile(test) {
   }, function callback(err, result) {
     test.ok(err, "Did not get an error for bad file.");
     test.ok(err instanceof Error, "Error not instance of Error.");
+    // @ts-ignore
     test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
     test.ok(!result, "Got result for bad file.");
     test.done();
@@ -1586,12 +1590,18 @@ module.exports.doc = function doc(test) {
 module.exports.validateConfigSchema = function validateConfigSchema(test) {
   const jsonFileRe = /\.json$/i;
   const resultsFileRe = /\.results\.json$/i;
+  const jsConfigFileRe = /^jsconfig\.json$/i;
   const testDirectory = __dirname;
   const testFiles = fs.readdirSync(testDirectory);
   testFiles.filter(function filterFile(file) {
-    return jsonFileRe.test(file) && !resultsFileRe.test(file);
+    return jsonFileRe.test(file) &&
+      !resultsFileRe.test(file) &&
+      !jsConfigFileRe.test(file);
   }).forEach(function forFile(file) {
-    const data = fs.readFileSync(path.join(testDirectory, file));
+    const data = fs.readFileSync(
+      path.join(testDirectory, file),
+      helpers.utf8Encoding
+    );
     test.ok(
       tv4.validate(JSON.parse(data), configSchema),
       file + "\n" + JSON.stringify(tv4.error, null, 2));
@@ -1873,94 +1883,94 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
   test.expect(99);
   const testCases =
     [
-      [
-        "`code`",
-        [ [ "code", 0, 1, 1 ] ]
-      ],
-      [
-        "text `code` text",
-        [ [ "code", 0, 6, 1 ] ]
-      ],
-      [
-        "text `code` text `edoc`",
-        [
+      {
+        "input": "`code`",
+        "expecteds": [ [ "code", 0, 1, 1 ] ]
+      },
+      {
+        "input": "text `code` text",
+        "expecteds": [ [ "code", 0, 6, 1 ] ]
+      },
+      {
+        "input": "text `code` text `edoc`",
+        "expecteds": [
           [ "code", 0, 6, 1 ],
           [ "edoc", 0, 18, 1 ]
         ]
-      ],
-      [
-        "text `code` text `edoc` text",
-        [
+      },
+      {
+        "input": "text `code` text `edoc` text",
+        "expecteds": [
           [ "code", 0, 6, 1 ],
           [ "edoc", 0, 18, 1 ]
         ]
-      ],
-      [
-        "text ``code`code`` text",
-        [ [ "code`code", 0, 7, 2 ] ]
-      ],
-      [
-        "`code `` code`",
-        [ [ "code `` code", 0, 1, 1 ] ]
-      ],
-      [
-        "`code\\`text`",
-        [ [ "code\\", 0, 1, 1 ] ]
-      ],
-      [
-        "``\ncode\n``",
-        [ [ "\ncode\n", 0, 2, 2 ] ]
-      ],
-      [
-        "text\n`code`\ntext",
-        [ [ "code", 1, 1, 1 ] ]
-      ],
-      [
-        "text\ntext\n`code`\ntext\n`edoc`\ntext",
-        [
+      },
+      {
+        "input": "text ``code`code`` text",
+        "expecteds": [ [ "code`code", 0, 7, 2 ] ]
+      },
+      {
+        "input": "`code `` code`",
+        "expecteds": [ [ "code `` code", 0, 1, 1 ] ]
+      },
+      {
+        "input": "`code\\`text`",
+        "expecteds": [ [ "code\\", 0, 1, 1 ] ]
+      },
+      {
+        "input": "``\ncode\n``",
+        "expecteds": [ [ "\ncode\n", 0, 2, 2 ] ]
+      },
+      {
+        "input": "text\n`code`\ntext",
+        "expecteds": [ [ "code", 1, 1, 1 ] ]
+      },
+      {
+        "input": "text\ntext\n`code`\ntext\n`edoc`\ntext",
+        "expecteds": [
           [ "code", 2, 1, 1 ],
           [ "edoc", 4, 1, 1 ]
         ]
-      ],
-      [
-        "text `code\nedoc` text",
-        [ [ "code\nedoc", 0, 6, 1 ] ]
-      ],
-      [
-        "> text `code` text",
-        [ [ "code", 0, 8, 1 ] ]
-      ],
-      [
-        "> text\n> `code`\n> text",
-        [ [ "code", 1, 3, 1 ] ]
-      ],
-      [
-        "> text\n> `code\n> edoc`\n> text",
-        [ [ "code\n> edoc", 1, 3, 1 ] ]
-      ],
-      [
-        "```text``",
-        []
-      ],
-      [
-        "text `text text",
-        []
-      ],
-      [
-        "`text``code``",
-        [ [ "code", 0, 7, 2 ] ]
-      ],
-      [
-        "text \\` text `code`",
-        [ [ "code", 0, 14, 1 ] ]
-      ],
-      [
-        "text\\\n`code`",
-        [ [ "code", 1, 1, 1 ] ]
-      ]
+      },
+      {
+        "input": "text `code\nedoc` text",
+        "expecteds": [ [ "code\nedoc", 0, 6, 1 ] ]
+      },
+      {
+        "input": "> text `code` text",
+        "expecteds": [ [ "code", 0, 8, 1 ] ]
+      },
+      {
+        "input": "> text\n> `code`\n> text",
+        "expecteds": [ [ "code", 1, 3, 1 ] ]
+      },
+      {
+        "input": "> text\n> `code\n> edoc`\n> text",
+        "expecteds": [ [ "code\n> edoc", 1, 3, 1 ] ]
+      },
+      {
+        "input": "```text``",
+        "expecteds": []
+      },
+      {
+        "input": "text `text text",
+        "expecteds": []
+      },
+      {
+        "input": "`text``code``",
+        "expecteds": [ [ "code", 0, 7, 2 ] ]
+      },
+      {
+        "input": "text \\` text `code`",
+        "expecteds": [ [ "code", 0, 14, 1 ] ]
+      },
+      {
+        "input": "text\\\n`code`",
+        "expecteds": [ [ "code", 1, 1, 1 ] ]
+      }
     ];
   testCases.forEach((testCase) => {
-    const [ input, expecteds ] = testCase;
+    const { input, expecteds } = testCase;
     helpers.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
       const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
         expecteds.shift();
@@ -3164,14 +3174,31 @@ module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
 module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
   test.expect(92);
   [
-    [ "names", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
-    [ "description", [ null, 10, "", [] ] ],
-    [ "information", [ 10, [], "string", "https://example.com" ] ],
-    [ "tags", [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ] ],
-    [ "function", [ null, "string", [] ] ]
-  ].forEach(function forProperty(property) {
-    const propertyName = property[0];
-    property[1].forEach(function forPropertyValue(propertyValue) {
+    {
+      "propertyName": "names",
+      "propertyValues":
+        [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ]
+    },
+    {
+      "propertyName": "description",
+      "propertyValues": [ null, 10, "", [] ]
+    },
+    {
+      "propertyName": "information",
+      "propertyValues": [ 10, [], "string", "https://example.com" ]
+    },
+    {
+      "propertyName": "tags",
+      "propertyValues":
+        [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ]
+    },
+    {
+      "propertyName": "function",
+      "propertyValues": [ null, "string", [] ]
+    }
+  ].forEach(function forTestCase(testCase) {
+    const { propertyName, propertyValues } = testCase;
+    propertyValues.forEach(function forPropertyValue(propertyValue) {
       const badRule = { ...customRules.anyBlockquote };
       badRule[propertyName] = propertyValue;
       const options = {
@@ -3385,17 +3412,53 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
 module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
   test.expect(84);
   [
-    [ "lineNumber", null, [ null, "string" ] ],
-    [ "detail", null, [ 10, [] ] ],
-    [ "context", null, [ 10, [] ] ],
-    [ "range", null, [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ] ],
-    [ "fixInfo", null, [ 10, "string" ] ],
-    [ "fixInfo", "lineNumber", [ null, "string" ] ],
-    [ "fixInfo", "editColumn", [ null, "string" ] ],
-    [ "fixInfo", "deleteCount", [ null, "string" ] ],
-    [ "fixInfo", "insertText", [ 10, [] ] ]
-  ].forEach(function forProperty(property) {
-    const [ propertyName, subPropertyName, propertyValues ] = property;
+    {
+      "propertyName": "lineNumber",
+      "subPropertyName": null,
+      "propertyValues": [ null, "string" ]
+    },
+    {
+      "propertyName": "detail",
+      "subPropertyName": null,
+      "propertyValues": [ 10, [] ]
+    },
+    {
+      "propertyName": "context",
+      "subPropertyName": null,
+      "propertyValues": [ 10, [] ]
+    },
+    {
+      "propertyName": "range",
+      "subPropertyName": null,
+      "propertyValues": [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": null,
+      "propertyValues": [ 10, "string" ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "lineNumber",
+      "propertyValues": [ null, "string" ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "editColumn",
+      "propertyValues": [ null, "string" ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "deleteCount",
+      "propertyValues": [ null, "string" ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "insertText",
+      "propertyValues": [ 10, [] ]
+    }
+  ].forEach(function forTestCase(testCase) {
+    const { propertyName, subPropertyName, propertyValues } = testCase;
     propertyValues.forEach(function forPropertyValue(propertyValue) {
       const badObject = {
         "lineNumber": 1
@@ -3443,13 +3506,33 @@ module.exports.customRulesOnErrorInvalid =
   function customRulesOnErrorInvalid(test) {
     test.expect(68);
     [
-      [ "lineNumber", null, [ -1, 0, 3, 4 ] ],
-      [ "range", null, [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ] ],
-      [ "fixInfo", "lineNumber", [ -1, 0, 3, 4 ] ],
-      [ "fixInfo", "editColumn", [ 0, 6 ] ],
-      [ "fixInfo", "deleteCount", [ -2, 5 ] ]
-    ].forEach(function forProperty(property) {
-      const [ propertyName, subPropertyName, propertyValues ] = property;
+      {
+        "propertyName": "lineNumber",
+        "subPropertyName": null,
+        "propertyValues": [ -1, 0, 3, 4 ]
+      },
+      {
+        "propertyName": "range",
+        "subPropertyName": null,
+        "propertyValues": [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "lineNumber",
+        "propertyValues": [ -1, 0, 3, 4 ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "editColumn",
+        "propertyValues": [ 0, 6 ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "deleteCount",
+        "propertyValues": [ -2, 5 ]
+      }
+    ].forEach(function forTestCase(testCase) {
+      const { propertyName, subPropertyName, propertyValues } = testCase;
       propertyValues.forEach(function forPropertyValue(propertyValue) {
         const badObject = {
           "lineNumber": 1
@@ -3497,18 +3580,39 @@ module.exports.customRulesOnErrorValid =
   function customRulesOnErrorValid(test) {
     test.expect(24);
     [
-      [ "lineNumber", null, [ 1, 2 ] ],
-      [ "range", null, [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ] ],
-      [ "fixInfo", "lineNumber", [ 1, 2 ] ],
-      [ "fixInfo", "editColumn", [ 1, 2, 4, 5 ] ],
-      [ "fixInfo", "deleteCount", [ -1, 0, 1, 4 ] ],
-      [
-        "fixInfo",
-        "insertText",
-        [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
-      ]
-    ].forEach(function forProperty(property) {
-      const [ propertyName, subPropertyName, propertyValues ] = property;
+      {
+        "propertyName": "lineNumber",
+        "subPropertyName": null,
+        "propertyValues": [ 1, 2 ]
+      },
+      {
+        "propertyName": "range",
+        "subPropertyName": null,
+        "propertyValues": [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "lineNumber",
+        "propertyValues": [ 1, 2 ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "editColumn",
+        "propertyValues": [ 1, 2, 4, 5 ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "deleteCount",
+        "propertyValues": [ -1, 0, 1, 4 ]
+      },
+      {
+        "propertyName": "fixInfo",
+        "subPropertyName": "insertText",
+        "propertyValues":
+          [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
+      }
+    ].forEach(function forTestCase(testCase) {
+      const { propertyName, subPropertyName, propertyValues } = testCase;
       propertyValues.forEach(function forPropertyValue(propertyValue) {
         const goodObject = {
           "lineNumber": 1

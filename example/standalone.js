@@ -1,3 +1,5 @@
+// @ts-check
+
 "use strict";
 
 const markdownlint = require("../lib/markdownlint");

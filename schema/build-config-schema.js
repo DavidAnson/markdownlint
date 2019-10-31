@@ -1,3 +1,5 @@
+// @ts-check
+
 "use strict";
 
 const fs = require("fs");
@@ -359,6 +361,7 @@ rules.forEach(function forRule(rule) {
       break;
   }
   if (custom) {
+    // @ts-ignore
     scheme.type = [ "boolean", "object" ];
     scheme.additionalProperties = false;
   }
