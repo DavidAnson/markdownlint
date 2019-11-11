@@ -247,6 +247,7 @@ module.exports.resultFormattingV0 = function resultFormattingV0(test) {
       "./test/first_heading_bad_atx.md: 1: MD002" +
       " First heading should be a top level heading";
     test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+    // @ts-ignore
     actualMessage = actualResult.toString(true);
     expectedMessage =
       "./test/atx_heading_spacing.md: 3: first-heading-h1" +
@@ -2872,6 +2873,7 @@ module.exports.customRulesV0 = function customRulesV0(test) {
       "./test/custom-rules.md: 7: letters-E-X" +
       " Rule that reports an error for lines with the letters 'EX'";
     test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+    // @ts-ignore
     actualMessage = actualResult.toString(true);
     expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +

@@ -34,13 +34,13 @@ module.exports = {
 };
 ```
 
-A rule is implemented as an `Object` with four required properties:
+A rule is implemented as an `Object` with one optional and four required properties:
 
-- `names` is an `Array` of `String` values that identify the rule in output messages and config.
-- `description` is a `String` value that describes the rule in output messages.
+- `names` is a required `Array` of `String` values that identify the rule in output messages and config.
+- `description` is a required `String` value that describes the rule in output messages.
 - `information` is an optional (absolute) `URL` of a link to more information about the rule.
-- `tags` is an `Array` of `String` values that groups related rules for easier customization.
-- `function` is a synchronous `Function` that implements the rule and is passed two parameters:
+- `tags` is a required `Array` of `String` values that groups related rules for easier customization.
+- `function` is a required synchronous `Function` that implements the rule and is passed two parameters:
   - `params` is an `Object` with properties that describe the content being analyzed:
     - `name` is a `String` that identifies the input file/string.
     - `tokens` is an `Array` of [`markdown-it` `Token` objects](https://markdown-it.github.io/markdown-it/#Token)
@@ -48,7 +48,7 @@ A rule is implemented as an `Object` with four required properties:
     - `lines` is an `Array` of `String` values corresponding to the lines of the input file/string.
     - `frontMatterLines` is an `Array` of `String` values corresponding to any front matter (not present in `lines`).
     - `config` is an `Object` corresponding to the rule's entry in `options.config` (if present).
-  - `onError` is a function that takes a single `Object` parameter with one required and three optional properties:
+  - `onError` is a function that takes a single `Object` parameter with one required and four optional properties:
     - `lineNumber` is a required `Number` specifying the 1-based line number of the error.
     - `details` is an optional `String` with information about what caused the error.
     - `context` is an optional `String` with relevant text surrounding the error location.
