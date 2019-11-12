@@ -174,6 +174,14 @@ type MarkdownItToken = {
      * Token type.
      */
     type: string;
+    /**
+     * Line number (1-based).
+     */
+    lineNumber: number;
+    /**
+     * Line content.
+     */
+    line: string;
 };
 /**
  * Error-reporting callback.
