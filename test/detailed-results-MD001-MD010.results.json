@@ -72,6 +72,15 @@
         "errorRange": [1, 3]
     },
     {
+        "lineNumber": 13,
+        "ruleNames": [ "MD006", "ul-start-left" ],
+        "ruleDescription": "Consider starting bulleted lists at the beginning of the line",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md006",
+        "errorDetail": "Expected: 0; Actual: 1",
+        "errorContext": null,
+        "errorRange": [1, 3]
+    },
+    {
         "lineNumber": 12,
         "ruleNames": [ "MD007", "ul-indent" ],
         "ruleDescription": "Unordered list indentation",
