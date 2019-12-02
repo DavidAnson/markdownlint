@@ -22,7 +22,7 @@ module.exports.inlineCommentRe = inlineCommentRe;
 
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s]*/ig;
-module.exports.listItemMarkerRe = /^[\s>]*(?:[*+-]|\d+[.)])\s+/;
+module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 
 // readFile options for reading with the UTF-8 encoding

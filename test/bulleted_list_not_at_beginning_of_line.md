@@ -1,30 +1,59 @@
 # Bulleted List Not at Beginning of Line
 
-Some text
+Text
 
-  * Item {MD006}
+* Item
+  * Item
+  * Item
     * Item
-    * Item
-      * Item
-    * Item
-  * Item {MD006}
-  * Item {MD006}
+  * Item
+* Item
+* Item
 
-Some more text
+Text
 
-  * Item {MD006}
-    * Item
+  * Item {MD006} {MD007}
+    * Item {MD007}
+    * Item {MD007}
+      * Item {MD007}
+    * Item {MD007}
+  * Item {MD006} {MD007}
+  * Item {MD006} {MD007}
+
+Text
+
+* Item
+  * Item
+
+Text
+
+  * Item {MD006} {MD007}
+    * Item {MD007}
+
+Text
+
+* Item
+* Item
+* Item
 
 Text
 
  * Item {MD006} {MD007}
- * Item {MD006}
- * Item {MD006}
+ * Item {MD006} {MD007}
+ * Item {MD006} {MD007}
 
 Text
 
-  * Item {MD006}
+* Item
 
-  * Item {MD006}
+* Item
 
-  * Item {MD006}
+* Item
+
+Text
+
+  * Item {MD006} {MD007}
+
+  * Item {MD006} {MD007}
+
+  * Item {MD006} {MD007}

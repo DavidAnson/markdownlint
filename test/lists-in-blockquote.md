@@ -1,4 +1,4 @@
-# Lists in blockquote
+# Lists in Blockquote
 
 > 1. The simplest ordered list in blockquote
 
@@ -64,8 +64,19 @@ Text
    > * Item {MD004}
    >   * Item {MD004}
    >   *  Item {MD004} {MD030}
-   >    * Item {MD004} {MD005}
-   >  * Item {MD004} {MD005}
+   >    * Item {MD004} {MD005} {MD007}
+   >  * Item {MD004} {MD005} {MD007}
+   > * Item {MD004}
+   >   * Item {MD004}
+   >     * Item {MD004}
+   >      * Item {MD004} {MD005} {MD007}
+
+Text
+
+  > > * Item {MD004}
+  > >   * Item {MD004}
+  > >   *  Item {MD004} {MD030}
+  > >    * Item {MD004} {MD005} {MD007}
 
 Text
 
