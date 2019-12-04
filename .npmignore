@@ -1,15 +1,15 @@
 .eslintignore
 .eslintrc.json
-example
+.github
 .markdownlint.json
 .nycrc.json
 .nyc_output
 .travis.yml
 .vscode
-azure-pipelines.yml
 coverage
 demo/*
 !demo/markdownlint-browser.js
+example
 lib-es3
 npm-debug.log
 test

@@ -3,7 +3,7 @@
 > A Node.js style checker and lint tool for Markdown/CommonMark files.
 
 [![npm version][npm-image]][npm-url]
-[![CI Status][devops-image]][devops-url]
+[![CI Status][ci-image]][ci-url]
 [![License][license-image]][license-url]
 
 ## Install
@@ -813,7 +813,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
-[devops-image]: https://img.shields.io/azure-devops/build/DavidAnson/5b2bff85-0fe6-47b4-a561-fa87be89f032/1/master.svg?label=tests
-[devops-url]: https://dev.azure.com/DavidAnson/markdownlint-ci/_build/latest?definitionId=1&branchName=master
+[ci-image]: https://github.com/DavidAnson/markdownlint/workflows/CI/badge.svg?branch=master
+[ci-url]: https://github.com/DavidAnson/markdownlint/actions?query=branch%3Amaster
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: https://opensource.org/licenses/MIT
