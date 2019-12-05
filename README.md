@@ -141,11 +141,11 @@ Two kinds of text are ignored:
 
 Rules can be enabled, disabled, and configured via `options.config` (described
 below) to define the expected behavior for a set of inputs. To enable or disable
-rules within a file, add one of these markers to the appropriate place (HTML
-comments don't appear in the final markup):
+rules at a particular location within a file, add one of these markers to the
+appropriate place (HTML comments don't appear in the final markup):
 
-* Disable all rules unconditionally: `<!-- markdownlint-disable -->`
-* Enable all rules unconditionally: `<!-- markdownlint-enable -->`
+* Disable all rules: `<!-- markdownlint-disable -->`
+* Enable all rules: `<!-- markdownlint-enable -->`
 * Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
 * Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
 * Capture the current rule configuration: `<!-- markdownlint-capture -->`
@@ -184,6 +184,16 @@ has no effect:
 ```markdown
 space * in * emphasis <!-- markdownlint-disable --> <!-- markdownlint-enable -->
 ```
+
+To apply changes to an entire file regardless of where the comment is located,
+the following syntax is supported:
+
+* Disable all rules: `<!-- markdownlint-disable-file -->`
+* Enable all rules: `<!-- markdownlint-enable-file -->`
+* Disable one or more rules by name: `<!-- markdownlint-disable-file MD001 -->`
+* Enable one or more rules by name: `<!-- markdownlint-enable-file MD001 -->`
+
+This can be used to "hide" `markdownlint` comments at the bottom of a file.
 
 ## API
 
