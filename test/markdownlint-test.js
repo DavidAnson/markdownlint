@@ -1553,6 +1553,7 @@ module.exports.doc = function doc(test) {
               ruleUsesParams = ruleUsesParams.map(function forUse(use) {
                 return use.split(".").pop();
               });
+              ruleUsesParams.sort();
             }
           } else if (/^Tags: /.test(token.content) && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
@@ -1571,6 +1572,7 @@ module.exports.doc = function doc(test) {
                 inDetails = inDetails || (part[0] === "(");
                 return !inDetails;
               });
+            parameters.sort();
             test.deepEqual(parameters, ruleUsesParams,
               "Missing parameter for rule " + rule.names);
             ruleUsesParams = null;

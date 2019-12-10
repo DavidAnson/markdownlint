@@ -267,6 +267,11 @@
           "description": "Allow spaces for empty lines in list items",
           "type": "boolean",
           "default": false
+        },
+        "strict": {
+          "description": "Include unnecessary breaks",
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
@@ -286,6 +291,11 @@
         },
         "list_item_empty_lines": {
           "description": "Allow spaces for empty lines in list items",
+          "type": "boolean",
+          "default": false
+        },
+        "strict": {
+          "description": "Include unnecessary breaks",
           "type": "boolean",
           "default": false
         }

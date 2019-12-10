@@ -1,0 +1,7 @@
+{
+  "default": true,
+  "MD009": {
+    "list_item_empty_lines": true,
+    "strict": true
+  }
+}

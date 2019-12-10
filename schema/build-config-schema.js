@@ -109,6 +109,11 @@ rules.forEach(function forRule(rule) {
           "description": "Allow spaces for empty lines in list items",
           "type": "boolean",
           "default": false
+        },
+        "strict": {
+          "description": "Include unnecessary breaks",
+          "type": "boolean",
+          "default": false
         }
       };
       break;
