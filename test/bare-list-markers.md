@@ -1,10 +1,33 @@
-*
+# Bare List Markers
 
-+
-
--
+## Ordered 1/1/1
 
 1.
+1.
+1.
 
-{MD004:3}{MD004:5}
-{MD030:1}{MD030:3}{MD030:5}{MD030:7}
+## Ordered 1/2/3
+
+1.
+2.
+3.
+
+## Unordered *
+
+*
+*
+*
+
+## Unordered +
+
++
++
++
+
+## Unordered -
+
+-
+-
+-
+
+<!-- markdownlint-disable-file ul-style -->
