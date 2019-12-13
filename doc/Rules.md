@@ -453,7 +453,7 @@ Tags: line_length
 
 Aliases: line-length
 
-Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers (number; default 80, boolean; default true)
+Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers, strict (number; default 80, boolean; default true)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -465,7 +465,8 @@ up into multiple lines. To set a different maximum length for headings, use
 
 This rule has an exception where there is no whitespace beyond the configured
 line length. This allows you to still include items such as long URLs without
-being forced to break them in the middle.
+being forced to break them in the middle. To disable this exception, set the
+`strict` parameter to `true`.
 
 You have the option to exclude this rule for code blocks, tables, or headings.
 To do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.

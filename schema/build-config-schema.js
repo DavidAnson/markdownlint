@@ -171,6 +171,11 @@ rules.forEach(function forRule(rule) {
           "description": "Include headings",
           "type": "boolean",
           "default": true
+        },
+        "strict": {
+          "description": "Strict length checking",
+          "type": "boolean",
+          "default": false
         }
       };
       break;

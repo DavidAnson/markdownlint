@@ -385,12 +385,8 @@ module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
   let range = null;
   const match = line.match(regexp);
   if (match) {
-    let column = match.index + 1;
-    let length = match[0].length;
-    if (match[2]) {
-      column += match[1].length;
-      length -= match[1].length;
-    }
+    const column = match.index + 1;
+    const length = match[0].length;
     range = [ column, length ];
   }
   return range;
