@@ -15,7 +15,7 @@ if (!url.URL) {
   url.URL = URL;
 }
 
-},{"url":58}],2:[function(require,module,exports){
+},{"url":59}],2:[function(require,module,exports){
 // @ts-check
 "use strict";
 var os = require("os");
@@ -30,11 +30,11 @@ module.exports.frontMatterRe =
 // Regular expression for matching inline disable/enable comments
 var inlineCommentRe = 
 // eslint-disable-next-line max-len
-/<!--\s*markdownlint-(disable|enable|capture|restore)((?:\s+[a-z0-9_-]+)*)\s*-->/ig;
+/<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file)((?:\s+[a-z0-9_-]+)*)\s*-->/ig;
 module.exports.inlineCommentRe = inlineCommentRe;
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s]*/ig;
-module.exports.listItemMarkerRe = /^[\s>]*(?:[*+-]|\d+[.)])\s+/;
+module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
@@ -381,10 +381,6 @@ module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
     if (match) {
         var column = match.index + 1;
         var length_1 = match[0].length;
-        if (match[2]) {
-            column += match[1].length;
-            length_1 -= match[1].length;
-        }
         range = [column, length_1];
     }
     return range;
@@ -514,7 +510,7 @@ module.exports.applyFixes = function applyFixes(input, errors) {
     return lines.filter(function (line) { return line !== null; }).join(lineEnding);
 };
 
-},{"os":51}],3:[function(require,module,exports){
+},{"os":52}],3:[function(require,module,exports){
 // @ts-check
 "use strict";
 var lineMetadata = null;
@@ -794,45 +790,57 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
 function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, effectiveConfig, aliasToRuleNames) {
     var enabledRules = {};
     var allRuleNames = [];
-    ruleList.forEach(function forRule(rule) {
+    ruleList.forEach(function (rule) {
         var ruleName = rule.names[0].toUpperCase();
         allRuleNames.push(ruleName);
         enabledRules[ruleName] = !!effectiveConfig[ruleName];
     });
     var capturedRules = enabledRules;
-    function forMatch(match) {
+    function forMatch(match, byLine) {
         var action = match[1].toUpperCase();
         if (action === "CAPTURE") {
-            capturedRules = __assign({}, enabledRules);
+            if (byLine) {
+                capturedRules = __assign({}, enabledRules);
+            }
         }
         else if (action === "RESTORE") {
-            enabledRules = __assign({}, capturedRules);
+            if (byLine) {
+                enabledRules = __assign({}, capturedRules);
+            }
         }
         else {
-            var enabled_1 = (action === "ENABLE");
-            var items = match[2] ?
-                match[2].trim().toUpperCase().split(/\s+/) :
-                allRuleNames;
-            items.forEach(function forItem(nameUpper) {
-                (aliasToRuleNames[nameUpper] || []).forEach(function forRule(ruleName) {
-                    enabledRules[ruleName] = enabled_1;
+            // action in [ENABLE, DISABLE, ENABLE-FILE, DISABLE-FILE]
+            var isfile = action.endsWith("-FILE");
+            if ((byLine && !isfile) || (!byLine && isfile)) {
+                var enabled_1 = (action.startsWith("ENABLE"));
+                var items = match[2] ?
+                    match[2].trim().toUpperCase().split(/\s+/) :
+                    allRuleNames;
+                items.forEach(function (nameUpper) {
+                    (aliasToRuleNames[nameUpper] || []).forEach(function (ruleName) {
+                        enabledRules[ruleName] = enabled_1;
+                    });
                 });
-            });
+            }
         }
     }
     var enabledRulesPerLineNumber = new Array(1 + frontMatterLines.length);
-    lines.forEach(function forLine(line) {
-        if (!noInlineConfig) {
-            var match = helpers.inlineCommentRe.exec(line);
-            if (match) {
-                enabledRules = __assign({}, enabledRules);
-                while (match) {
-                    forMatch(match);
-                    match = helpers.inlineCommentRe.exec(line);
+    [false, true].forEach(function (byLine) {
+        lines.forEach(function (line) {
+            if (!noInlineConfig) {
+                var match = helpers.inlineCommentRe.exec(line);
+                if (match) {
+                    enabledRules = __assign({}, enabledRules);
+                    while (match) {
+                        forMatch(match, byLine);
+                        match = helpers.inlineCommentRe.exec(line);
+                    }
                 }
             }
-        }
-        enabledRulesPerLineNumber.push(enabledRules);
+            if (byLine) {
+                enabledRulesPerLineNumber.push(enabledRules);
+            }
+        });
     });
     return enabledRulesPerLineNumber;
 }
@@ -1109,8 +1117,8 @@ function lintInput(options, synchronous, callback) {
 /**
  * Lint specified Markdown files.
  *
- * @param {Object} options Configuration options.
- * @param {Function} callback Callback (err, result) function.
+ * @param {Options} options Configuration options.
+ * @param {LintCallback} callback Callback (err, result) function.
  * @returns {void}
  */
 function markdownlint(options, callback) {
@@ -1119,8 +1127,8 @@ function markdownlint(options, callback) {
 /**
  * Lint specified Markdown files synchronously.
  *
- * @param {Object} options Configuration options.
- * @returns {Object} Result object.
+ * @param {Options} options Configuration options.
+ * @returns {LintResults} Results object.
  */
 function markdownlintSync(options) {
     var results = null;
@@ -1160,9 +1168,9 @@ function parseConfiguration(name, content, parsers) {
 /**
  * Read specified configuration file.
  *
- * @param {String} file Configuration file name/path.
- * @param {Array} [parsers] Optional parsing function(s).
- * @param {Function} callback Callback (err, result) function.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[] | null} parsers Parsing function(s).
+ * @param {ReadConfigCallback} callback Callback (err, result) function.
  * @returns {void}
  */
 function readConfig(file, parsers, callback) {
@@ -1199,9 +1207,9 @@ function readConfig(file, parsers, callback) {
 /**
  * Read specified configuration file synchronously.
  *
- * @param {String} file Configuration file name/path.
- * @param {Array} [parsers] Optional parsing function(s).
- * @returns {Object} Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @returns {Configuration} Configuration object.
  */
 function readConfigSync(file, parsers) {
     // Read file
@@ -1225,7 +1233,7 @@ markdownlint.readConfig = readConfig;
 markdownlint.readConfigSync = readConfigSync;
 module.exports = markdownlint;
 
-},{"../helpers":2,"./cache":3,"./rules":48,"fs":50,"markdown-it":1,"path":52,"url":58}],5:[function(require,module,exports){
+},{"../helpers":2,"./cache":3,"./rules":49,"fs":51,"markdown-it":1,"path":53,"url":59}],5:[function(require,module,exports){
 // @ts-check
 "use strict";
 var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
@@ -1408,9 +1416,11 @@ module.exports = {
     "function": function MD006(params, onError) {
         flattenedLists().forEach(function (list) {
             if (list.unordered && !list.nesting && (list.indent !== 0)) {
-                var _a = list.open, lineNumber = _a.lineNumber, line = _a.line;
-                addErrorDetailIf(onError, lineNumber, 0, list.indent, null, null, rangeFromRegExp(line, listItemMarkerRe), {
-                    "deleteCount": line.length - line.trimLeft().length
+                list.items.forEach(function (item) {
+                    var lineNumber = item.lineNumber, line = item.line;
+                    addErrorDetailIf(onError, lineNumber, 0, list.indent, null, null, rangeFromRegExp(line, listItemMarkerRe), {
+                        "deleteCount": line.length - line.trimLeft().length
+                    });
                 });
             }
         });
@@ -1420,7 +1430,7 @@ module.exports = {
 },{"../helpers":2,"./cache":3}],11:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
 var flattenedLists = require("./cache").flattenedLists;
 module.exports = {
     "names": ["MD007", "ul-indent"],
@@ -1429,8 +1439,24 @@ module.exports = {
     "function": function MD007(params, onError) {
         var optionsIndent = params.config.indent || 2;
         flattenedLists().forEach(function (list) {
-            if (list.unordered && list.parentsUnordered && list.indent) {
-                addErrorDetailIf(onError, list.open.lineNumber, list.parentIndent + optionsIndent, list.indent, null, null, rangeFromRegExp(list.open.line, listItemMarkerRe));
+            if (list.unordered && list.parentsUnordered) {
+                list.items.forEach(function (item) {
+                    var lineNumber = item.lineNumber, line = item.line;
+                    var expectedIndent = list.nesting * optionsIndent;
+                    var actualIndent = indentFor(item);
+                    var range = null;
+                    var editColumn = 1;
+                    var match = line.match(listItemMarkerRe);
+                    if (match) {
+                        range = [1, match[0].length];
+                        editColumn += match[1].length - actualIndent;
+                    }
+                    addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, range, {
+                        editColumn: editColumn,
+                        "deleteCount": actualIndent,
+                        "insertText": "".padEnd(expectedIndent)
+                    });
+                });
             }
         });
     }
@@ -1439,8 +1465,11 @@ module.exports = {
 },{"../helpers":2,"./cache":3}],12:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, filterTokens = _a.filterTokens, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
+var _a = require("../helpers"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe;
 var lineMetadata = require("./cache").lineMetadata;
+function numericSortAscending(a, b) {
+    return a - b;
+}
 module.exports = {
     "names": ["MD009", "no-trailing-spaces"],
     "description": "Trailing spaces",
@@ -1450,16 +1479,38 @@ module.exports = {
         if (brSpaces === undefined) {
             brSpaces = 2;
         }
-        var listItemEmptyLines = params.config.list_item_empty_lines;
-        var allowListItemEmptyLines = (listItemEmptyLines === undefined) ? false : !!listItemEmptyLines;
+        var listItemEmptyLines = !!params.config.list_item_empty_lines;
+        var strict = !!params.config.strict;
         var listItemLineNumbers = [];
-        if (allowListItemEmptyLines) {
+        if (listItemEmptyLines) {
             filterTokens(params, "list_item_open", function (token) {
                 for (var i = token.map[0]; i < token.map[1]; i++) {
                     listItemLineNumbers.push(i + 1);
                 }
             });
-            listItemLineNumbers.sort(function (a, b) { return a - b; });
+            listItemLineNumbers.sort(numericSortAscending);
+        }
+        var paragraphLineNumbers = [];
+        var codeInlineLineNumbers = [];
+        if (strict) {
+            filterTokens(params, "paragraph_open", function (token) {
+                for (var i = token.map[0]; i < token.map[1] - 1; i++) {
+                    paragraphLineNumbers.push(i + 1);
+                }
+            });
+            paragraphLineNumbers.sort(numericSortAscending);
+            filterTokens(params, "inline", function (token) {
+                if (token.children.some(function (child) { return child.type === "code_inline"; })) {
+                    var tokenLines = params.lines.slice(token.map[0], token.map[1]);
+                    forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex) {
+                        var codeLineCount = code.split(newLineRe).length;
+                        for (var i = 0; i < codeLineCount; i++) {
+                            codeInlineLineNumbers.push(token.lineNumber + lineIndex + i);
+                        }
+                    });
+                }
+            });
+            codeInlineLineNumbers.sort(numericSortAscending);
         }
         var expected = (brSpaces < 2) ? 0 : brSpaces;
         var inFencedCode = 0;
@@ -1469,7 +1520,10 @@ module.exports = {
             var trailingSpaces = line.length - line.trimRight().length;
             if ((!inCode || inFencedCode) && trailingSpaces &&
                 !includesSorted(listItemLineNumbers, lineNumber)) {
-                if (expected !== trailingSpaces) {
+                if ((expected !== trailingSpaces) ||
+                    (strict &&
+                        (!includesSorted(paragraphLineNumbers, lineNumber) ||
+                            includesSorted(codeInlineLineNumbers, lineNumber)))) {
                     var column = line.length - trailingSpaces + 1;
                     addError(onError, lineNumber, "Expected: " + (expected === 0 ? "" : "0 or ") +
                         expected + "; Actual: " + trailingSpaces, null, [column, trailingSpaces], {
@@ -1566,10 +1620,11 @@ module.exports = {
 },{"../helpers":2,"./cache":3}],16:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, rangeFromRegExp = _a.rangeFromRegExp;
+var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
 var lineMetadata = require("./cache").lineMetadata;
-var longLineRePrefix = "^(.{";
-var longLineRePostfix = "})(.*\\s.*)$";
+var longLineRePrefix = "^.{";
+var longLineRePostfixRelaxed = "}.*\\s.*$";
+var longLineRePostfixStrict = "}.+$";
 var labelRe = /^\s*\[.*[^\\]]:/;
 var linkOnlyLineRe = /^[es]*lT?L[ES]*$/;
 var tokenTypeMap = {
@@ -1589,6 +1644,8 @@ module.exports = {
         var lineLength = params.config.line_length || 80;
         var headingLineLength = params.config.heading_line_length || lineLength;
         var codeLineLength = params.config.code_block_line_length || lineLength;
+        var strict = !!params.config.strict;
+        var longLineRePostfix = strict ? longLineRePostfixStrict : longLineRePostfixRelaxed;
         var longLineRe = new RegExp(longLineRePrefix + lineLength + longLineRePostfix);
         var longHeadingLineRe = new RegExp(longLineRePrefix + headingLineLength + longLineRePostfix);
         var longCodeLineRe = new RegExp(longLineRePrefix + codeLineLength + longLineRePostfix);
@@ -1629,10 +1686,11 @@ module.exports = {
             if ((includeCodeBlocks || !inCode) &&
                 (includeTables || !inTable) &&
                 (includeHeadings || !isHeading) &&
-                !includesSorted(linkOnlyLineNumbers, lineNumber) &&
-                lengthRe.test(line) &&
-                !labelRe.test(line)) {
-                addErrorDetailIf(onError, lineNumber, length, line.length, null, null, rangeFromRegExp(line, lengthRe));
+                (strict ||
+                    (!includesSorted(linkOnlyLineNumbers, lineNumber) &&
+                        !labelRe.test(line))) &&
+                lengthRe.test(line)) {
+                addErrorDetailIf(onError, lineNumber, length, line.length, null, null, [length + 1, line.length - length]);
             }
         });
     }
@@ -2113,15 +2171,17 @@ module.exports = {
                 var line = item.line, lineNumber = item.lineNumber;
                 var match = /^[\s>]*\S+(\s*)/.exec(line);
                 var matchLength = match[0]["length"], actualSpaces = match[1]["length"];
-                var fixInfo = null;
-                if ((expectedSpaces !== actualSpaces) && (line.length > matchLength)) {
-                    fixInfo = {
-                        "editColumn": matchLength - actualSpaces + 1,
-                        "deleteCount": actualSpaces,
-                        "insertText": "".padEnd(expectedSpaces)
-                    };
+                if (matchLength < line.length) {
+                    var fixInfo = null;
+                    if (expectedSpaces !== actualSpaces) {
+                        fixInfo = {
+                            "editColumn": matchLength - actualSpaces + 1,
+                            "deleteCount": actualSpaces,
+                            "insertText": "".padEnd(expectedSpaces)
+                        };
+                    }
+                    addErrorDetailIf(onError, lineNumber, expectedSpaces, actualSpaces, null, null, [1, matchLength], fixInfo);
                 }
-                addErrorDetailIf(onError, lineNumber, expectedSpaces, actualSpaces, null, null, [1, matchLength], fixInfo);
             });
         });
     }
@@ -2306,7 +2366,6 @@ module.exports = {
             if (token.type === "paragraph_open") {
                 return function inParagraph(t) {
                     // Always paragraph_open/inline/paragraph_close,
-                    // omit (t.type === "inline")
                     var children = t.children.filter(function notEmptyText(child) {
                         return (child.type !== "text") || (child.content !== "");
                     });
@@ -2737,6 +2796,37 @@ module.exports = {
 },{"../helpers":2}],48:[function(require,module,exports){
 // @ts-check
 "use strict";
+var addErrorDetailIf = require("../helpers").addErrorDetailIf;
+function fencedCodeBlockStyleFor(markup) {
+    switch (markup[0]) {
+        case "~":
+            return "tilde";
+        default:
+            return "backtick";
+    }
+}
+module.exports = {
+    "names": ["MD048", "code-fence-style"],
+    "description": "Code fence style",
+    "tags": ["code"],
+    "function": function MD048(params, onError) {
+        var style = params.config.style || "consistent";
+        var expectedStyle = style;
+        params.tokens
+            .filter(function (token) { return token.type === "fence"; })
+            .forEach(function (fenceToken) {
+            var lineNumber = fenceToken.lineNumber, markup = fenceToken.markup;
+            if (expectedStyle === "consistent") {
+                expectedStyle = fencedCodeBlockStyleFor(markup);
+            }
+            addErrorDetailIf(onError, lineNumber, expectedStyle, fencedCodeBlockStyleFor(markup));
+        });
+    }
+};
+
+},{"../helpers":2}],49:[function(require,module,exports){
+// @ts-check
+"use strict";
 var URL = require("url").URL;
 var packageJson = require("../package.json");
 var homepage = packageJson.homepage;
@@ -2784,7 +2874,8 @@ var rules = [
     require("./md044"),
     require("./md045"),
     require("./md046"),
-    require("./md047")
+    require("./md047"),
+    require("./md048")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
@@ -2793,12 +2884,13 @@ rules.forEach(function (rule) {
 });
 module.exports = rules;
 
-},{"../package.json":49,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"url":58}],49:[function(require,module,exports){
+},{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48,"url":59}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.17.2",
+    "version": "0.18.0",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
+    "types": "lib/markdownlint.d.ts",
     "author": "David Anson (https://dlaa.me/)",
     "license": "MIT",
     "homepage": "https://github.com/DavidAnson/markdownlint",
@@ -2810,11 +2902,13 @@ module.exports={
     "scripts": {
         "test": "nodeunit test/markdownlint-test.js",
         "test-cover": "nyc --check-coverage --skip-full node_modules/nodeunit/bin/nodeunit test/markdownlint-test.js",
+        "test-declaration": "cd example/typescript && tsc && node type-check.js",
         "test-extra": "nodeunit test/markdownlint-test-extra.js",
         "debug": "node debug node_modules/nodeunit/bin/nodeunit",
         "lint": "eslint lib helpers test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0, no-var: 0\" demo && eslint --rule \"no-console: 0, no-invalid-this: 0, no-shadow: 0, object-property-newline: 0\" example",
-        "ci": "npm run test && npm run lint && npm run test-cover",
+        "ci": "npm run test && npm run lint && npm run test-cover && npm run test-declaration",
         "build-config-schema": "node schema/build-config-schema.js",
+        "build-declaration": "tsc --allowJs --declaration --outDir declaration --resolveJsonModule lib/markdownlint.js && cpy declaration/lib/markdownlint.d.ts lib && rimraf declaration",
         "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
         "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
         "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
@@ -2826,24 +2920,24 @@ module.exports={
         "markdown-it": "10.0.0"
     },
     "devDependencies": {
-        "@types/node": "~12.7.11",
+        "@types/node": "~12.12.17",
         "browserify": "~16.5.0",
-        "cpy-cli": "~2.0.0",
-        "eslint": "~6.5.1",
-        "glob": "~7.1.4",
+        "cpy-cli": "~3.0.0",
+        "eslint": "~6.7.2",
+        "glob": "~7.1.6",
         "js-yaml": "~3.13.1",
         "markdown-it-for-inline": "~0.1.1",
         "markdown-it-katex": "~2.0.3",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
-        "markdownlint-rule-helpers": "~0.4.0",
+        "markdownlint-rule-helpers": "~0.5.0",
         "nodeunit": "~0.11.3",
         "nyc": "~14.1.1",
         "rimraf": "~3.0.0",
         "toml": "~3.0.0",
         "tv4": "~1.3.0",
-        "typescript": "~3.6.3",
-        "uglify-js": "~3.6.0"
+        "typescript": "~3.7.3",
+        "uglify-js": "~3.7.2"
     },
     "keywords": [
         "markdown",
@@ -2857,9 +2951,9 @@ module.exports={
     }
 }
 
-},{}],50:[function(require,module,exports){
-
 },{}],51:[function(require,module,exports){
+
+},{}],52:[function(require,module,exports){
 exports.endianness = function () { return 'LE' };
 
 exports.hostname = function () {
@@ -2910,7 +3004,7 @@ exports.homedir = function () {
 	return '/'
 };
 
-},{}],52:[function(require,module,exports){
+},{}],53:[function(require,module,exports){
 (function (process){
 // .dirname, .basename, and .extname methods are extracted from Node.js v8.11.1,
 // backported and transplited with Babel, with backwards-compat fixes
@@ -3216,7 +3310,7 @@ var substr = 'ab'.substr(-1) === 'b'
 ;
 
 }).call(this,require('_process'))
-},{"_process":53}],53:[function(require,module,exports){
+},{"_process":54}],54:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -3402,7 +3496,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],54:[function(require,module,exports){
+},{}],55:[function(require,module,exports){
 (function (global){
 /*! https://mths.be/punycode v1.4.1 by @mathias */
 ;(function(root) {
@@ -3939,7 +4033,7 @@ process.umask = function() { return 0; };
 }(this));
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],55:[function(require,module,exports){
+},{}],56:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4025,7 +4119,7 @@ var isArray = Array.isArray || function (xs) {
   return Object.prototype.toString.call(xs) === '[object Array]';
 };
 
-},{}],56:[function(require,module,exports){
+},{}],57:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4112,13 +4206,13 @@ var objectKeys = Object.keys || function (obj) {
   return res;
 };
 
-},{}],57:[function(require,module,exports){
+},{}],58:[function(require,module,exports){
 'use strict';
 
 exports.decode = exports.parse = require('./decode');
 exports.encode = exports.stringify = require('./encode');
 
-},{"./decode":55,"./encode":56}],58:[function(require,module,exports){
+},{"./decode":56,"./encode":57}],59:[function(require,module,exports){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4852,7 +4946,7 @@ Url.prototype.parseHost = function() {
   if (host) this.hostname = host;
 };
 
-},{"./util":59,"punycode":54,"querystring":57}],59:[function(require,module,exports){
+},{"./util":60,"punycode":55,"querystring":58}],60:[function(require,module,exports){
 'use strict';
 
 module.exports = {
