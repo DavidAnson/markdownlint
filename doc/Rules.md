@@ -273,7 +273,7 @@ Tags: bullet, ul, indentation
 
 Aliases: ul-indent
 
-Parameters: indent (number; default 2)
+Parameters: indent, start_indented (number; default 2, boolean; default false)
 
 This rule is triggered when list items are not indented by the configured
 number of spaces (default: 2).
@@ -309,6 +309,10 @@ for a description of the problem.
 Note: This rule applies to a sublist only if its parent lists are all also
 unordered (otherwise, extra indentation of ordered lists interferes with the
 rule).
+
+The `start_indented` parameter allows the first level of lists to be indented by
+the configured number of spaces rather than starting at zero (the inverse of
+MD006).
 
 <a name="md009"></a>
 

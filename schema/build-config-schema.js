@@ -95,6 +95,11 @@ rules.forEach(function forRule(rule) {
           "description": "Spaces for indent",
           "type": "integer",
           "default": 2
+        },
+        "start_indented": {
+          "description": "Whether to indent the first level of the list",
+          "type": "boolean",
+          "default": false
         }
       };
       break;
