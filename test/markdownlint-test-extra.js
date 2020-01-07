@@ -6,52 +6,39 @@ const fs = require("fs");
 const path = require("path");
 const glob = require("glob");
 const markdownlint = require("../lib/markdownlint");
-const { newLineRe, utf8Encoding } = require("../helpers");
+const { utf8Encoding } = require("../helpers");
 
-module.exports.typeTestFiles = function typeTestFiles(test) {
-  // Simulates typing each test file to validate handling of partial input
-  function validate(file, content) {
-    const results = markdownlint.sync({
-      "strings": {
-        "content": content
-      },
+// Simulates typing each test file to validate handling of partial input
+const files = fs.readdirSync("./test");
+files.filter((file) => /\.md$/.test(file)).forEach((file) => {
+  const strings = {};
+  let content = fs.readFileSync(path.join("./test", file), utf8Encoding);
+  while (content) {
+    strings[content.length.toString()] = content;
+    content = content.slice(0, -1);
+  }
+  module.exports[`type ${file}`] = (test) => {
+    markdownlint.sync({
+      // @ts-ignore
+      strings,
       "resultVersion": 0
     });
-    const contentLineCount = content.split(newLineRe).length;
-    Object.keys(results.content).forEach(function forKey(ruleName) {
-      results.content[ruleName].forEach(function forLine(line) {
-        test.ok((line >= 1) && (line <= contentLineCount),
-          "Line number out of range: " + line +
-            " (" + file + ", " + content.length + ", " + ruleName + ")");
-      });
-    });
-  }
-  const files = fs.readdirSync("./test");
-  files.forEach(function forFile(file) {
-    if (/\.md$/.test(file)) {
-      let content = fs.readFileSync(
-        path.join("./test", file), utf8Encoding);
-      while (content) {
-        validate(file, content);
-        content = content.slice(0, -1);
-      }
-    }
-  });
-  test.done();
-};
+    test.done();
+  };
+});
 
-module.exports.parseAllFiles = function parseAllFiles(test) {
-  // Parses all Markdown files in all dependencies
+// Parses all Markdown files in all package dependencies
+module.exports.parseAllFiles = (test) => {
   const globOptions = {
     // "cwd": "/",
     "realpath": true
   };
-  glob("**/*.{md,markdown}", globOptions, function globCallback(err, matches) {
+  glob("**/*.{md,markdown}", globOptions, (err, matches) => {
     test.ifError(err);
     const markdownlintOptions = {
       "files": matches
     };
-    markdownlint(markdownlintOptions, function markdownlintCallback(errr) {
+    markdownlint(markdownlintOptions, (errr) => {
       test.ifError(errr);
       test.done();
     });

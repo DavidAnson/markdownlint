@@ -2823,12 +2823,12 @@ module.exports.someCustomRulesHaveValidUrl =
         (Object.getPrototypeOf(rule.information) === URL.prototype));
       if (rule === customRules.anyBlockquote) {
         test.equal(
-          rule.information,
+          rule.information.href,
           `${homepage}/blob/master/test/rules/any-blockquote.js`
         );
       } else if (rule === customRules.lettersEX) {
         test.equal(
-          rule.information,
+          rule.information.href,
           `${homepage}/blob/master/test/rules/letters-E-X.js`
         );
       }

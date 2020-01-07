@@ -19,7 +19,7 @@
     "test-extra": "nodeunit test/markdownlint-test-extra.js",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint lib helpers test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0, no-var: 0\" demo && eslint --rule \"no-console: 0, no-invalid-this: 0, no-shadow: 0, object-property-newline: 0\" example",
-    "ci": "npm run test && npm run lint && npm run test-cover && npm run test-declaration",
+    "ci": "npm run test-cover && npm run lint && npm run test-declaration",
     "build-config-schema": "node schema/build-config-schema.js",
     "build-declaration": "tsc --allowJs --declaration --outDir declaration --resolveJsonModule lib/markdownlint.js && cpy declaration/lib/markdownlint.d.ts lib && rimraf declaration",
     "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
