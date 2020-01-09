@@ -11,6 +11,7 @@ const pluginInline = require("markdown-it-for-inline");
 const pluginKatex = require("markdown-it-katex");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
+const tape = require("tape");
 const tv4 = require("tv4");
 const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
@@ -38,7 +39,7 @@ function promisify(func, ...args) {
 function createTestForFile(file) {
   return function testForFile(test) {
     const detailedResults = /[/\\]detailed-results-/.test(file);
-    test.expect(detailedResults ? 3 : 2);
+    test.plan(detailedResults ? 3 : 2);
     const resultsFile = file.replace(/\.md$/, ".results.json");
     const fixedFile = file.replace(/\.md$/, ".md.fixed");
     const configFile = file.replace(/\.md$/, ".json");
@@ -176,14 +177,12 @@ function createTestForFile(file) {
   };
 }
 
-fs.readdirSync("./test").forEach(function forFile(file) {
-  if (file.match(/\.md$/)) {
-    module.exports[file] = createTestForFile(path.join("./test", file));
-  }
-});
+fs.readdirSync("./test")
+  .filter((file) => /\.md$/.test(file))
+  .forEach((file) => tape(file, createTestForFile(path.join("./test", file))));
 
-module.exports.projectFiles = function projectFiles(test) {
-  test.expect(2);
+tape("projectFiles", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "README.md",
@@ -204,12 +203,12 @@ module.exports.projectFiles = function projectFiles(test) {
       "helpers/README.md": []
     };
     test.deepEqual(actual, expected, "Issue(s) with project files.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.resultFormattingV0 = function resultFormattingV0(test) {
-  test.expect(4);
+tape("resultFormattingV0", (test) => {
+  test.plan(4);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -261,12 +260,12 @@ module.exports.resultFormattingV0 = function resultFormattingV0(test) {
       "./test/first_heading_bad_atx.md: 1: first-heading-h1" +
       " First heading should be a top level heading";
     test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
-  test.expect(3);
+tape("resultFormattingSyncV0", (test) => {
+  test.plan(3);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -316,11 +315,11 @@ module.exports.resultFormattingSyncV0 = function resultFormattingSyncV0(test) {
     "./test/first_heading_bad_atx.md: 1: first-heading-h1" +
     " First heading should be a top level heading";
   test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.resultFormattingV1 = function resultFormattingV1(test) {
-  test.expect(3);
+tape("resultFormattingV1", (test) => {
+  test.plan(3);
   const options = {
     "strings": {
       "truncate":
@@ -417,12 +416,12 @@ module.exports.resultFormattingV1 = function resultFormattingV1(test) {
       " First heading should be a top level heading" +
       " [Expected: h1; Actual: h2]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.resultFormattingV2 = function resultFormattingV2(test) {
-  test.expect(3);
+tape("resultFormattingV2", (test) => {
+  test.plan(3);
   const options = {
     "strings": {
       "truncate":
@@ -514,12 +513,12 @@ module.exports.resultFormattingV2 = function resultFormattingV2(test) {
       " First heading should be a top level heading" +
       " [Expected: h1; Actual: h2]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.resultFormattingV3 = function resultFormattingV3(test) {
-  test.expect(3);
+tape("resultFormattingV3", (test) => {
+  test.plan(3);
   const options = {
     "strings": {
       "input":
@@ -618,179 +617,174 @@ module.exports.resultFormattingV3 = function resultFormattingV3(test) {
       "input: 4: MD047/single-trailing-newline" +
       " Files should end with a single newline character";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.onePerLineResultVersion0 =
-  function onePerLineResultVersion0(test) {
-    test.expect(2);
-    const options = {
-      "strings": {
-        "input": "# Heading\theading\t\theading\n"
-      },
-      "resultVersion": 0
+tape("onePerLineResultVersion0", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "input": "# Heading\theading\t\theading\n"
+    },
+    "resultVersion": 0
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": {
+        "MD010": [ 1 ]
+      }
     };
-    markdownlint(options, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "input": {
-          "MD010": [ 1 ]
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
+
+tape("onePerLineResultVersion1", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "input": "# Heading\theading\t\theading\n"
+    },
+    "resultVersion": 1
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": [
+        {
+          "lineNumber": 1,
+          "ruleName": "MD010",
+          "ruleAlias": "no-hard-tabs",
+          "ruleDescription": "Hard tabs",
+          "ruleInformation":
+            `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 10",
+          "errorContext": null,
+          "errorRange": [ 10, 1 ]
         }
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
-
-module.exports.onePerLineResultVersion1 =
-  function onePerLineResultVersion1(test) {
-    test.expect(2);
-    const options = {
-      "strings": {
-        "input": "# Heading\theading\t\theading\n"
-      },
-      "resultVersion": 1
+      ]
     };
-    markdownlint(options, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "input": [
-          {
-            "lineNumber": 1,
-            "ruleName": "MD010",
-            "ruleAlias": "no-hard-tabs",
-            "ruleDescription": "Hard tabs",
-            "ruleInformation":
-              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
-            "errorDetail": "Column: 10",
-            "errorContext": null,
-            "errorRange": [ 10, 1 ]
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
 
-module.exports.onePerLineResultVersion2 =
-  function onePerLineResultVersion2(test) {
-    test.expect(2);
-    const options = {
-      "strings": {
-        "input": "# Heading\theading\t\theading\n"
-      },
-      "resultVersion": 2
+tape("onePerLineResultVersion2", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "input": "# Heading\theading\t\theading\n"
+    },
+    "resultVersion": 2
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation":
+            `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 10",
+          "errorContext": null,
+          "errorRange": [ 10, 1 ]
+        }
+      ]
     };
-    markdownlint(options, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "input": [
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "MD010", "no-hard-tabs" ],
-            "ruleDescription": "Hard tabs",
-            "ruleInformation":
-              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
-            "errorDetail": "Column: 10",
-            "errorContext": null,
-            "errorRange": [ 10, 1 ]
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
 
-module.exports.manyPerLineResultVersion3 =
-  function manyPerLineResultVersion3(test) {
-    test.expect(2);
-    const options = {
-      "strings": {
-        "input": "# Heading\theading\t\theading\n"
-      },
-      "resultVersion": 3
+tape("manyPerLineResultVersion3", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "input": "# Heading\theading\t\theading\n"
+    },
+    "resultVersion": 3
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation":
+            `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 10",
+          "errorContext": null,
+          "errorRange": [ 10, 1 ],
+          "fixInfo": {
+            "editColumn": 10,
+            "deleteCount": 1,
+            "insertText": " "
+          }
+        },
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation":
+            `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 18",
+          "errorContext": null,
+          "errorRange": [ 18, 2 ],
+          "fixInfo": {
+            "editColumn": 18,
+            "deleteCount": 2,
+            "insertText": "  "
+          }
+        }
+      ]
     };
-    markdownlint(options, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "input": [
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "MD010", "no-hard-tabs" ],
-            "ruleDescription": "Hard tabs",
-            "ruleInformation":
-              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
-            "errorDetail": "Column: 10",
-            "errorContext": null,
-            "errorRange": [ 10, 1 ],
-            "fixInfo": {
-              "editColumn": 10,
-              "deleteCount": 1,
-              "insertText": " "
-            }
-          },
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "MD010", "no-hard-tabs" ],
-            "ruleDescription": "Hard tabs",
-            "ruleInformation":
-              `${homepage}/blob/v${version}/doc/Rules.md#md010`,
-            "errorDetail": "Column: 18",
-            "errorContext": null,
-            "errorRange": [ 18, 2 ],
-            "fixInfo": {
-              "editColumn": 18,
-              "deleteCount": 2,
-              "insertText": "  "
-            }
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
 
-module.exports.frontMatterResultVersion3 =
-  function frontMatterResultVersion3(test) {
-    test.expect(2);
-    const options = {
-      "strings": {
-        "input": "---\n---\n# Heading\nText\n"
-      },
-      "resultVersion": 3
+tape("frontMatterResultVersion3", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "input": "---\n---\n# Heading\nText\n"
+    },
+    "resultVersion": 3
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "input": [
+        {
+          "lineNumber": 3,
+          "ruleNames":
+            [ "MD022", "blanks-around-headings", "blanks-around-headers" ],
+          "ruleDescription": "Headings should be surrounded by blank lines",
+          "ruleInformation":
+            `${homepage}/blob/v${version}/doc/Rules.md#md022`,
+          "errorDetail": "Expected: 1; Actual: 0; Below",
+          "errorContext": "# Heading",
+          "errorRange": null,
+          "fixInfo": {
+            "lineNumber": 4,
+            "insertText": "\n"
+          }
+        }
+      ]
     };
-    markdownlint(options, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "input": [
-          {
-            "lineNumber": 3,
-            "ruleNames":
-              [ "MD022", "blanks-around-headings", "blanks-around-headers" ],
-            "ruleDescription": "Headings should be surrounded by blank lines",
-            "ruleInformation":
-              `${homepage}/blob/v${version}/doc/Rules.md#md022`,
-            "errorDetail": "Expected: 1; Actual: 0; Below",
-            "errorContext": "# Heading",
-            "errorRange": null,
-            "fixInfo": {
-              "lineNumber": 4,
-              "insertText": "\n"
-            }
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
 
-module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
-  test.expect(2);
+tape("stringInputLineEndings", (test) => {
+  test.plan(2);
   const options = {
     "strings": {
       "cr": "One\rTwo\r#Three\n",
@@ -810,12 +804,12 @@ module.exports.stringInputLineEndings = function stringInputLineEndings(test) {
       "mixed": { "MD018": [ 3 ] }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.inputOnlyNewline = function inputOnlyNewline(test) {
-  test.expect(2);
+tape("inputOnlyNewline", (test) => {
+  test.plan(2);
   const options = {
     "strings": {
       "cr": "\r",
@@ -834,12 +828,12 @@ module.exports.inputOnlyNewline = function inputOnlyNewline(test) {
       "crlf": []
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.defaultTrue = function defaultTrue(test) {
-  test.expect(2);
+tape("defaultTrue", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -863,12 +857,12 @@ module.exports.defaultTrue = function defaultTrue(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.defaultFalse = function defaultFalse(test) {
-  test.expect(2);
+tape("defaultFalse", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -886,12 +880,12 @@ module.exports.defaultFalse = function defaultFalse(test) {
       "./test/first_heading_bad_atx.md": {}
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.defaultUndefined = function defaultUndefined(test) {
-  test.expect(2);
+tape("defaultUndefined", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -913,12 +907,12 @@ module.exports.defaultUndefined = function defaultUndefined(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.disableRules = function disableRules(test) {
-  test.expect(2);
+tape("disableRules", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -941,12 +935,12 @@ module.exports.disableRules = function disableRules(test) {
       "./test/first_heading_bad_atx.md": {}
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.enableRules = function enableRules(test) {
-  test.expect(2);
+tape("enableRules", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -971,12 +965,12 @@ module.exports.enableRules = function enableRules(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
-  test.expect(2);
+tape("enableRulesMixedCase", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -1001,12 +995,12 @@ module.exports.enableRulesMixedCase = function enableRulesMixedCase(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.disableTag = function disableTag(test) {
-  test.expect(2);
+tape("disableTag", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -1029,12 +1023,12 @@ module.exports.disableTag = function disableTag(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.enableTag = function enableTag(test) {
-  test.expect(2);
+tape("enableTag", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -1057,12 +1051,12 @@ module.exports.enableTag = function enableTag(test) {
       "./test/first_heading_bad_atx.md": {}
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.enableTagMixedCase = function enableTagMixedCase(test) {
-  test.expect(2);
+tape("enableTagMixedCase", (test) => {
+  test.plan(2);
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
@@ -1085,23 +1079,23 @@ module.exports.enableTagMixedCase = function enableTagMixedCase(test) {
       "./test/first_heading_bad_atx.md": {}
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.styleFiles = function styleFiles(test) {
-  test.expect(4);
+tape("styleFiles", (test) => {
+  test.plan(4);
   fs.readdir("./style", function readdir(err, files) {
     test.ifError(err);
     files.forEach(function forFile(file) {
       test.ok(require(path.join("../style", file)), "Unable to load/parse.");
     });
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.styleAll = function styleAll(test) {
-  test.expect(2);
+tape("styleAll", (test) => {
+  test.plan(2);
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/all.json"),
@@ -1154,12 +1148,12 @@ module.exports.styleAll = function styleAll(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.styleRelaxed = function styleRelaxed(test) {
-  test.expect(2);
+tape("styleRelaxed", (test) => {
+  test.plan(2);
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/relaxed.json"),
@@ -1196,12 +1190,12 @@ module.exports.styleRelaxed = function styleRelaxed(test) {
       }
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.nullFrontMatter = function nullFrontMatter(test) {
-  test.expect(2);
+tape("nullFrontMatter", (test) => {
+  test.plan(2);
   markdownlint({
     "strings": {
       "content": "---\n\t\n---\n# Heading\n"
@@ -1218,12 +1212,12 @@ module.exports.nullFrontMatter = function nullFrontMatter(test) {
       "content": { "MD010": [ 2 ] }
     };
     test.deepEqual(result, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customFrontMatter = function customFrontMatter(test) {
-  test.expect(2);
+tape("customFrontMatter", (test) => {
+  test.plan(2);
   markdownlint({
     "strings": {
       "content": "<head>\n\t\n</head>\n# Heading\n"
@@ -1239,12 +1233,12 @@ module.exports.customFrontMatter = function customFrontMatter(test) {
       "content": []
     };
     test.deepEqual(result, expectedResult, "Did not get empty results.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.noInlineConfig = function noInlineConfig(test) {
-  test.expect(2);
+tape("noInlineConfig", (test) => {
+  test.plan(2);
   markdownlint({
     "strings": {
       "content": [
@@ -1271,12 +1265,12 @@ module.exports.noInlineConfig = function noInlineConfig(test) {
       }
     };
     test.deepEqual(result, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.readmeHeadings = function readmeHeadings(test) {
-  test.expect(2);
+tape("readmeHeadings", (test) => {
+  test.plan(2);
   markdownlint({
     "files": "README.md",
     "noInlineConfig": true,
@@ -1326,12 +1320,12 @@ module.exports.readmeHeadings = function readmeHeadings(test) {
     test.ifError(err);
     const expected = { "README.md": [] };
     test.deepEqual(result, expected, "Unexpected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
-  test.expect(2);
+tape("filesArrayNotModified", (test) => {
+  test.plan(2);
   const files = [
     "./test/atx_heading_spacing.md",
     "./test/first_heading_bad_atx.md"
@@ -1340,12 +1334,12 @@ module.exports.filesArrayNotModified = function filesArrayNotModified(test) {
   markdownlint({ "files": files }, function callback(err) {
     test.ifError(err);
     test.deepEqual(files, expectedFiles, "Files modified.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.filesArrayAsString = function filesArrayAsString(test) {
-  test.expect(2);
+tape("filesArrayAsString", (test) => {
+  test.plan(2);
   markdownlint({
     "files": "README.md",
     "noInlineConfig": true,
@@ -1357,37 +1351,37 @@ module.exports.filesArrayAsString = function filesArrayAsString(test) {
     test.ifError(err);
     const expected = { "README.md": [] };
     test.deepEqual(actual, expected, "Unexpected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.missingOptions = function missingOptions(test) {
-  test.expect(2);
+tape("missingOptions", (test) => {
+  test.plan(2);
   markdownlint(null, function callback(err, result) {
     test.ifError(err);
     test.deepEqual(result, {}, "Did not get empty result for missing options.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.missingFilesAndStrings = function missingFilesAndStrings(test) {
-  test.expect(2);
+tape("missingFilesAndStrings", (test) => {
+  test.plan(2);
   markdownlint({}, function callback(err, result) {
     test.ifError(err);
     test.ok(result, "Did not get result for missing files/strings.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.missingCallback = function missingCallback(test) {
-  test.expect(0);
+tape("missingCallback", (test) => {
+  test.plan(0);
   // @ts-ignore
   markdownlint();
-  test.done();
-};
+  test.end();
+});
 
-module.exports.badFile = function badFile(test) {
-  test.expect(4);
+tape("badFile", (test) => {
+  test.plan(4);
   markdownlint({
     "files": [ "./badFile" ]
   }, function callback(err, result) {
@@ -1396,27 +1390,26 @@ module.exports.badFile = function badFile(test) {
     // @ts-ignore
     test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
     test.ok(!result, "Got result for bad file.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.badFileSync = function badFileSync(test) {
-  test.expect(4);
-  test.throws(function badFileCall() {
-    markdownlint.sync({
-      "files": [ "./badFile" ]
-    });
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for bad file.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
-    return true;
-  }, "Did not get exception for bad file.");
-  test.done();
-};
+tape("badFileSync", (test) => {
+  test.plan(1);
+  test.throws(
+    function badFileCall() {
+      markdownlint.sync({
+        "files": [ "./badFile" ]
+      });
+    },
+    /ENOENT/,
+    "Did not get correct exception for bad file."
+  );
+  test.end();
+});
 
-module.exports.missingStringValue = function missingStringValue(test) {
-  test.expect(2);
+tape("missingStringValue", (test) => {
+  test.plan(2);
   markdownlint({
     "strings": {
       "undefined": undefined,
@@ -1432,12 +1425,12 @@ module.exports.missingStringValue = function missingStringValue(test) {
       "empty": []
     };
     test.deepEqual(result, expectedResult, "Did not get empty results.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.readme = function readme(test) {
-  test.expect(115);
+tape("readme", (test) => {
+  test.plan(115);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -1501,12 +1494,12 @@ module.exports.readme = function readme(test) {
           (ruleLeft || "[NO RULE]").toString() + ".");
       const tagLeft = Object.keys(tagToRules).shift();
       test.ok(!tagLeft, "Undocumented tag " + tagLeft + ".");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.doc = function doc(test) {
-  test.expect(336);
+tape("doc", (test) => {
+  test.plan(336);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     function readFile(err, contents) {
       test.ifError(err);
@@ -1586,11 +1579,11 @@ module.exports.doc = function doc(test) {
       if (rule) {
         testTagsAliasesParams(rule);
       }
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.validateConfigSchema = function validateConfigSchema(test) {
+tape("validateConfigSchema", (test) => {
   const jsonFileRe = /\.json$/i;
   const resultsFileRe = /\.results\.json$/i;
   const jsConfigFileRe = /^jsconfig\.json$/i;
@@ -1609,12 +1602,11 @@ module.exports.validateConfigSchema = function validateConfigSchema(test) {
       tv4.validate(JSON.parse(data), configSchema),
       file + "\n" + JSON.stringify(tv4.error, null, 2));
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.clearHtmlCommentTextValid =
-function clearHtmlCommentTextValid(test) {
-  test.expect(1);
+tape("clearHtmlCommentTextValid", (test) => {
+  test.plan(1);
   const validComments = [
     "<!-- text -->",
     "<!--text-->",
@@ -1691,12 +1683,11 @@ function clearHtmlCommentTextValid(test) {
   const actual = helpers.clearHtmlCommentText(validComments.join("\n"));
   const expected = validResult.join("\n");
   test.equal(actual, expected);
-  test.done();
-};
+  test.end();
+});
 
-module.exports.clearHtmlCommentTextInvalid =
-function clearHtmlCommentTextInvalid(test) {
-  test.expect(1);
+tape("clearHtmlCommentTextInvalid", (test) => {
+  test.plan(1);
   const invalidComments = [
     "<!>",
     "<!->",
@@ -1718,12 +1709,11 @@ function clearHtmlCommentTextInvalid(test) {
   const actual = helpers.clearHtmlCommentText(invalidComments.join("\n"));
   const expected = invalidComments.join("\n");
   test.equal(actual, expected);
-  test.done();
-};
+  test.end();
+});
 
-module.exports.clearHtmlCommentTextNonGreedy =
-function clearHtmlCommentTextNonGreedy(test) {
-  test.expect(1);
+tape("clearHtmlCommentTextNonGreedy", (test) => {
+  test.plan(1);
   const nonGreedyComments = [
     "<!-- text --> -->",
     "<!---text --> -->",
@@ -1739,12 +1729,11 @@ function clearHtmlCommentTextNonGreedy(test) {
   const actual = helpers.clearHtmlCommentText(nonGreedyComments.join("\n"));
   const expected = nonGreedyResult.join("\n");
   test.equal(actual, expected);
-  test.done();
-};
+  test.end();
+});
 
-module.exports.clearHtmlCommentTextEmbedded =
-function clearHtmlCommentTextEmbedded(test) {
-  test.expect(1);
+tape("clearHtmlCommentTextEmbedded", (test) => {
+  test.plan(1);
   const embeddedComments = [
     "text<!--text-->text",
     "<!-- markdownlint-disable MD010 -->",
@@ -1762,11 +1751,11 @@ function clearHtmlCommentTextEmbedded(test) {
   const actual = helpers.clearHtmlCommentText(embeddedComments.join("\n"));
   const expected = embeddedResult.join("\n");
   test.equal(actual, expected);
-  test.done();
-};
+  test.end();
+});
 
-module.exports.unescapeMarkdown = function unescapeMarkdown(test) {
-  test.expect(7);
+tape("unescapeMarkdown", (test) => {
+  test.plan(7);
   // Test cases from https://spec.commonmark.org/0.29/#backslash-escapes
   const testCases = [
     [
@@ -1824,11 +1813,11 @@ bar`
     const actual = helpers.unescapeMarkdown(markdown, replacement);
     test.equal(actual, expected);
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.isBlankLine = function isBlankLine(test) {
-  test.expect(25);
+tape("isBlankLine", (test) => {
+  test.plan(25);
   const blankLines = [
     null,
     "",
@@ -1860,11 +1849,11 @@ module.exports.isBlankLine = function isBlankLine(test) {
     "-->"
   ];
   nonBlankLines.forEach((line) => test.ok(!helpers.isBlankLine(line), line));
-  test.done();
-};
+  test.end();
+});
 
-module.exports.includesSorted = function includesSorted(test) {
-  test.expect(154);
+tape("includesSorted", (test) => {
+  test.plan(154);
   const inputs = [
     [ ],
     [ 8 ],
@@ -1879,11 +1868,11 @@ module.exports.includesSorted = function includesSorted(test) {
       test.equal(helpers.includesSorted(input, i), input.includes(i));
     }
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
-  test.expect(99);
+tape("forEachInlineCodeSpan", (test) => {
+  test.plan(99);
   const testCases =
     [
       {
@@ -1984,11 +1973,11 @@ module.exports.forEachInlineCodeSpan = function forEachInlineCodeSpan(test) {
     });
     test.equal(expecteds.length, 0, "length");
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.getPreferredLineEnding = function getPreferredLineEnding(test) {
-  test.expect(17);
+tape("getPreferredLineEnding", (test) => {
+  test.plan(17);
   const testCases = [
     [ "", os.EOL ],
     [ "\r", "\r" ],
@@ -2013,11 +2002,11 @@ module.exports.getPreferredLineEnding = function getPreferredLineEnding(test) {
     const actual = helpers.getPreferredLineEnding(input);
     test.equal(actual, expected, "Incorrect line ending returned.");
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.applyFix = function applyFix(test) {
-  test.expect(4);
+tape("applyFix", (test) => {
+  test.plan(4);
   const testCases = [
     [
       "Hello world.",
@@ -2061,11 +2050,11 @@ module.exports.applyFix = function applyFix(test) {
     const actual = helpers.applyFix(line, fixInfo, lineEnding);
     test.equal(actual, expected, "Incorrect fix applied.");
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.applyFixes = function applyFixes(test) {
-  test.expect(28);
+tape("applyFixes", (test) => {
+  test.plan(28);
   const testCases = [
     [
       "Hello world.",
@@ -2500,33 +2489,33 @@ module.exports.applyFixes = function applyFixes(test) {
     const actual = helpers.applyFixes(input, errors);
     test.equal(actual, expected, "Incorrect fix applied.");
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configSingle = function configSingle(test) {
-  test.expect(2);
+tape("configSingle", (test) => {
+  test.plan(2);
   markdownlint.readConfig("./test/config/config-child.json",
     function callback(err, actual) {
       test.ifError(err);
       const expected = require("./config/config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configAbsolute = function configAbsolute(test) {
-  test.expect(2);
+tape("configAbsolute", (test) => {
+  test.plan(2);
   markdownlint.readConfig(path.join(__dirname, "config", "config-child.json"),
     function callback(err, actual) {
       test.ifError(err);
       const expected = require("./config/config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configMultiple = function configMultiple(test) {
-  test.expect(2);
+tape("configMultiple", (test) => {
+  test.plan(2);
   markdownlint.readConfig("./test/config/config-grandparent.json",
     function callback(err, actual) {
       test.ifError(err);
@@ -2537,24 +2526,24 @@ module.exports.configMultiple = function configMultiple(test) {
       };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configBadFile = function configBadFile(test) {
-  test.expect(4);
+tape("configBadFile", (test) => {
+  test.plan(4);
   markdownlint.readConfig("./test/config/config-badfile.json",
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad file.");
       test.ok(err instanceof Error, "Error not instance of Error.");
       test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
       test.ok(!result, "Got result for bad file.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configBadChildFile = function configBadChildFile(test) {
-  test.expect(4);
+tape("configBadChildFile", (test) => {
+  test.plan(4);
   markdownlint.readConfig("./test/config/config-badchildfile.json",
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad child file.");
@@ -2562,34 +2551,34 @@ module.exports.configBadChildFile = function configBadChildFile(test) {
       test.equal(err.code, "ENOENT",
         "Error code for bad child file not ENOENT.");
       test.ok(!result, "Got result for bad child file.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configBadJson = function configBadJson(test) {
-  test.expect(3);
+tape("configBadJson", (test) => {
+  test.plan(3);
   markdownlint.readConfig("./test/config/config-badjson.json",
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad JSON.");
       test.ok(err instanceof Error, "Error not instance of Error.");
       test.ok(!result, "Got result for bad JSON.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configBadChildJson = function configBadChildJson(test) {
-  test.expect(3);
+tape("configBadChildJson", (test) => {
+  test.plan(3);
   markdownlint.readConfig("./test/config/config-badchildjson.json",
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad child JSON.");
       test.ok(err instanceof Error, "Error not instance of Error.");
       test.ok(!result, "Got result for bad child JSON.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configSingleYaml = function configSingleYaml(test) {
-  test.expect(2);
+tape("configSingleYaml", (test) => {
+  test.plan(2);
   markdownlint.readConfig(
     "./test/config/config-child.yaml",
     [ require("js-yaml").safeLoad ],
@@ -2597,12 +2586,12 @@ module.exports.configSingleYaml = function configSingleYaml(test) {
       test.ifError(err);
       const expected = require("./config/config-child.json");
       test.deepEqual(actual, expected, "Config object not correct.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configMultipleYaml = function configMultipleYaml(test) {
-  test.expect(2);
+tape("configMultipleYaml", (test) => {
+  test.plan(2);
   markdownlint.readConfig(
     "./test/config/config-grandparent.yaml",
     [ require("js-yaml").safeLoad ],
@@ -2615,12 +2604,12 @@ module.exports.configMultipleYaml = function configMultipleYaml(test) {
       };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configMultipleHybrid = function configMultipleHybrid(test) {
-  test.expect(2);
+tape("configMultipleHybrid", (test) => {
+  test.plan(2);
   markdownlint.readConfig(
     "./test/config/config-grandparent-hybrid.yaml",
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
@@ -2633,12 +2622,12 @@ module.exports.configMultipleHybrid = function configMultipleHybrid(test) {
       };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configBadHybrid = function configBadHybrid(test) {
-  test.expect(4);
+tape("configBadHybrid", (test) => {
+  test.plan(4);
   markdownlint.readConfig(
     "./test/config/config-badcontent.txt",
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
@@ -2650,29 +2639,29 @@ module.exports.configBadHybrid = function configBadHybrid(test) {
         /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*$/
       ), "Error message unexpected.");
       test.ok(!result, "Got result for bad child JSON.");
-      test.done();
+      test.end();
     });
-};
+});
 
-module.exports.configSingleSync = function configSingleSync(test) {
-  test.expect(1);
+tape("configSingleSync", (test) => {
+  test.plan(1);
   const actual = markdownlint.readConfigSync("./test/config/config-child.json");
   const expected = require("./config/config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configAbsoluteSync = function configAbsoluteSync(test) {
-  test.expect(1);
+tape("configAbsoluteSync", (test) => {
+  test.plan(1);
   const actual = markdownlint.readConfigSync(
     path.join(__dirname, "config", "config-child.json"));
   const expected = require("./config/config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configMultipleSync = function configMultipleSync(test) {
-  test.expect(1);
+tape("configMultipleSync", (test) => {
+  test.plan(1);
   const actual =
     markdownlint.readConfigSync("./test/config/config-grandparent.json");
   const expected = {
@@ -2682,78 +2671,68 @@ module.exports.configMultipleSync = function configMultipleSync(test) {
   };
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configBadFileSync = function configBadFileSync(test) {
-  test.expect(4);
-  test.throws(function badFileCall() {
-    markdownlint.readConfigSync("./test/config/config-badfile.json");
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for bad file.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
-    return true;
-  }, "Did not get exception for bad file.");
-  test.done();
-};
+tape("configBadFileSync", (test) => {
+  test.plan(1);
+  test.throws(
+    function badFileCall() {
+      markdownlint.readConfigSync("./test/config/config-badfile.json");
+    },
+    /ENOENT/,
+    "Did not get correct exception for bad file."
+  );
+  test.end();
+});
 
-module.exports.configBadChildFileSync = function configBadChildFileSync(test) {
-  test.expect(4);
-  test.throws(function badChildFileCall() {
-    markdownlint.readConfigSync("./test/config/config-badchildfile.json");
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for bad child file.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.code, "ENOENT", "Error code for bad child file not ENOENT.");
-    return true;
-  }, "Did not get exception for bad child file.");
-  test.done();
-};
+tape("configBadChildFileSync", (test) => {
+  test.plan(1);
+  test.throws(
+    function badChildFileCall() {
+      markdownlint.readConfigSync("./test/config/config-badchildfile.json");
+    },
+    /ENOENT/,
+    "Did not get correct exception for bad child file."
+  );
+  test.end();
+});
 
-module.exports.configBadJsonSync = function configBadJsonSync(test) {
-  test.expect(4);
-  test.throws(function badJsonCall() {
-    markdownlint.readConfigSync("./test/config/config-badjson.json");
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for bad JSON.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.ok(err.message.match(
-      // eslint-disable-next-line max-len
-      /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+$/
-    ), "Error message unexpected.");
-    return true;
-  }, "Did not get exception for bad JSON.");
-  test.done();
-};
+tape("configBadJsonSync", (test) => {
+  test.plan(1);
+  test.throws(
+    function badJsonCall() {
+      markdownlint.readConfigSync("./test/config/config-badjson.json");
+    },
+    /Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+/,
+    "Did not get correct exception for bad JSON."
+  );
+  test.end();
+});
 
-module.exports.configBadChildJsonSync = function configBadChildJsonSync(test) {
-  test.expect(4);
-  test.throws(function badChildJsonCall() {
-    markdownlint.readConfigSync("./test/config/config-badchildjson.json");
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for bad child JSON.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.ok(err.message.match(
-      // eslint-disable-next-line max-len
-      /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+$/
-    ), "Error message unexpected.");
-    return true;
-  }, "Did not get exception for bad child JSON.");
-  test.done();
-};
+tape("configBadChildJsonSync", (test) => {
+  test.plan(1);
+  test.throws(
+    function badChildJsonCall() {
+      markdownlint.readConfigSync("./test/config/config-badchildjson.json");
+    },
+    /Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+/,
+    "Did not get correct exception for bad child JSON."
+  );
+  test.end();
+});
 
-module.exports.configSingleYamlSync = function configSingleYamlSync(test) {
-  test.expect(1);
+tape("configSingleYamlSync", (test) => {
+  test.plan(1);
   const actual = markdownlint.readConfigSync(
     "./test/config/config-child.yaml", [ require("js-yaml").safeLoad ]);
   const expected = require("./config/config-child.json");
   test.deepEqual(actual, expected, "Config object not correct.");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configMultipleYamlSync = function configMultipleYamlSync(test) {
-  test.expect(1);
+tape("configMultipleYamlSync", (test) => {
+  test.plan(1);
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent.yaml", [ require("js-yaml").safeLoad ]);
   const expected = {
@@ -2763,12 +2742,11 @@ module.exports.configMultipleYamlSync = function configMultipleYamlSync(test) {
   };
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configMultipleHybridSync =
-function configMultipleHybridSync(test) {
-  test.expect(1);
+tape("configMultipleHybridSync", (test) => {
+  test.plan(1);
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent-hybrid.yaml",
     [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
@@ -2779,65 +2757,60 @@ function configMultipleHybridSync(test) {
   };
   delete expected.extends;
   test.deepEqual(actual, expected, "Config object not correct.");
-  test.done();
-};
+  test.end();
+});
 
-module.exports.configBadHybridSync = function configBadHybridSync(test) {
-  test.expect(4);
-  test.throws(function badHybridCall() {
-    markdownlint.readConfigSync(
-      "./test/config/config-badcontent.txt",
-      [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for bad content.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.ok(err.message.match(
-      // eslint-disable-next-line max-len
-      /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*$/
-    ), "Error message unexpected.");
-    return true;
-  }, "Did not get exception for bad content.");
-  test.done();
-};
+tape("configBadHybridSync", (test) => {
+  test.plan(1);
+  test.throws(
+    function badHybridCall() {
+      markdownlint.readConfigSync(
+        "./test/config/config-badcontent.txt",
+        [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
+    },
+    // eslint-disable-next-line max-len
+    /Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*/,
+    "Did not get correct exception for bad content."
+  );
+  test.end();
+});
 
-module.exports.allBuiltInRulesHaveValidUrl =
-  function allBuiltInRulesHaveValidUrl(test) {
-    test.expect(132);
-    rules.forEach(function forRule(rule) {
-      test.ok(rule.information);
-      test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);
-      const name = rule.names[0].toLowerCase();
+tape("allBuiltInRulesHaveValidUrl", (test) => {
+  test.plan(132);
+  rules.forEach(function forRule(rule) {
+    test.ok(rule.information);
+    test.ok(Object.getPrototypeOf(rule.information) === URL.prototype);
+    const name = rule.names[0].toLowerCase();
+    test.equal(
+      rule.information.href,
+      `${homepage}/blob/v${version}/doc/Rules.md#${name}`
+    );
+  });
+  test.end();
+});
+
+tape("someCustomRulesHaveValidUrl", (test) => {
+  test.plan(7);
+  customRules.all.forEach(function forRule(rule) {
+    test.ok(!rule.information ||
+      (Object.getPrototypeOf(rule.information) === URL.prototype));
+    if (rule === customRules.anyBlockquote) {
       test.equal(
         rule.information.href,
-        `${homepage}/blob/v${version}/doc/Rules.md#${name}`
+        `${homepage}/blob/master/test/rules/any-blockquote.js`
       );
-    });
-    test.done();
-  };
+    } else if (rule === customRules.lettersEX) {
+      test.equal(
+        rule.information.href,
+        `${homepage}/blob/master/test/rules/letters-E-X.js`
+      );
+    }
+  });
+  test.end();
+});
 
-module.exports.someCustomRulesHaveValidUrl =
-  function someCustomRulesHaveValidUrl(test) {
-    test.expect(7);
-    customRules.all.forEach(function forRule(rule) {
-      test.ok(!rule.information ||
-        (Object.getPrototypeOf(rule.information) === URL.prototype));
-      if (rule === customRules.anyBlockquote) {
-        test.equal(
-          rule.information.href,
-          `${homepage}/blob/master/test/rules/any-blockquote.js`
-        );
-      } else if (rule === customRules.lettersEX) {
-        test.equal(
-          rule.information.href,
-          `${homepage}/blob/master/test/rules/letters-E-X.js`
-        );
-      }
-    });
-    test.done();
-  };
-
-module.exports.customRulesV0 = function customRulesV0(test) {
-  test.expect(4);
+tape("customRulesV0", (test) => {
+  test.plan(4);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -2897,12 +2870,12 @@ module.exports.customRulesV0 = function customRulesV0(test) {
       "./test/custom-rules.md: 7: letter-E-letter-X" +
       " Rule that reports an error for lines with the letters 'EX'";
     test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesV1 = function customRulesV1(test) {
-  test.expect(3);
+tape("customRulesV1", (test) => {
+  test.plan(3);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -3014,12 +2987,12 @@ module.exports.customRulesV1 = function customRulesV1(test) {
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesV2 = function customRulesV2(test) {
-  test.expect(3);
+tape("customRulesV2", (test) => {
+  test.plan(3);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -3122,12 +3095,12 @@ module.exports.customRulesV2 = function customRulesV2(test) {
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesConfig = function customRulesConfig(test) {
-  test.expect(2);
+tape("customRulesConfig", (test) => {
+  test.plan(2);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -3151,12 +3124,12 @@ module.exports.customRulesConfig = function customRulesConfig(test) {
       "letters-E-X": [ 7 ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
-  test.expect(2);
+tape("customRulesNpmPackage", (test) => {
+  test.plan(2);
   const options = {
     "customRules": [ require("./rules/npm") ],
     "strings": {
@@ -3171,12 +3144,12 @@ module.exports.customRulesNpmPackage = function customRulesNpmPackage(test) {
       "sample-rule": [ 3 ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
-  test.expect(92);
+tape("customRulesBadProperty", (test) => {
+  test.plan(23);
   [
     {
       "propertyName": "names",
@@ -3208,25 +3181,22 @@ module.exports.customRulesBadProperty = function customRulesBadProperty(test) {
       const options = {
         "customRules": [ badRule ]
       };
-      test.throws(function badRuleCall() {
-        markdownlint.sync(options);
-      }, function testError(err) {
-        test.ok(err, "Did not get an error for missing property.");
-        test.ok(err instanceof Error, "Error not instance of Error.");
-        test.equal(err.message,
-          "Property '" + propertyName +
-            "' of custom rule at index 0 is incorrect.",
-          "Incorrect message for missing property.");
-        return true;
-      }, "Did not get exception for missing property.");
+      test.throws(
+        function badRuleCall() {
+          markdownlint.sync(options);
+        },
+        new RegExp(
+          `Property '${propertyName}' of custom rule at index 0 is incorrect.`
+        ),
+        "Did not get correct exception for missing property."
+      );
     });
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.customRulesUsedNameName =
-function customRulesUsedNameName(test) {
-  test.expect(4);
+tape("customRulesUsedNameName", (test) => {
+  test.plan(4);
   markdownlint({
     "customRules": [
       {
@@ -3244,13 +3214,12 @@ function customRulesUsedNameName(test) {
         "already used as a name or tag.",
       "Incorrect message for duplicate name.");
     test.ok(!result, "Got result for duplicate name.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesUsedNameTag =
-function customRulesUsedNameTag(test) {
-  test.expect(4);
+tape("customRulesUsedNameTag", (test) => {
+  test.plan(4);
   markdownlint({
     "customRules": [
       {
@@ -3267,13 +3236,12 @@ function customRulesUsedNameTag(test) {
       "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
       "Incorrect message for duplicate name.");
     test.ok(!result, "Got result for duplicate name.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesUsedTagName =
-function customRulesUsedTagName(test) {
-  test.expect(4);
+tape("customRulesUsedTagName", (test) => {
+  test.plan(4);
   markdownlint({
     "customRules": [
       {
@@ -3297,41 +3265,40 @@ function customRulesUsedTagName(test) {
         "already used as a name.",
       "Incorrect message for duplicate name.");
     test.ok(!result, "Got result for duplicate tag.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesThrowForFile =
-  function customRulesThrowForFile(test) {
-    test.expect(4);
-    const exceptionMessage = "Test exception message";
-    markdownlint({
-      "customRules": [
-        {
-          "names": [ "name" ],
-          "description": "description",
-          "tags": [ "tag" ],
-          "function": function throws() {
-            throw new Error(exceptionMessage);
-          }
+tape("customRulesThrowForFile", (test) => {
+  test.plan(4);
+  const exceptionMessage = "Test exception message";
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
         }
-      ],
-      "files": [ "./test/custom-rules.md" ]
-    }, function callback(err, result) {
-      test.ok(err, "Did not get an error for function thrown.");
-      test.ok(err instanceof Error, "Error not instance of Error.");
-      test.equal(err.message, exceptionMessage,
-        "Incorrect message for function thrown.");
-      test.ok(!result, "Got result for function thrown.");
-      test.done();
-    });
-  };
+      }
+    ],
+    "files": [ "./test/custom-rules.md" ]
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for function thrown.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, exceptionMessage,
+      "Incorrect message for function thrown.");
+    test.ok(!result, "Got result for function thrown.");
+    test.end();
+  });
+});
 
-module.exports.customRulesThrowForFileSync =
-  function customRulesThrowForFileSync(test) {
-    test.expect(4);
-    const exceptionMessage = "Test exception message";
-    test.throws(function customRuleThrowsCall() {
+tape("customRulesThrowForFileSync", (test) => {
+  test.plan(1);
+  const exceptionMessage = "Test exception message";
+  test.throws(
+    function customRuleThrowsCall() {
       markdownlint.sync({
         "customRules": [
           {
@@ -3345,46 +3312,42 @@ module.exports.customRulesThrowForFileSync =
         ],
         "files": [ "./test/custom-rules.md" ]
       });
-    }, function testError(err) {
-      test.ok(err, "Did not get an error for function thrown.");
-      test.ok(err instanceof Error, "Error not instance of Error.");
-      test.equal(err.message, exceptionMessage,
-        "Incorrect message for function thrown.");
-      return true;
-    }, "Did not get exception for function thrown.");
-    test.done();
-  };
+    },
+    new RegExp(exceptionMessage),
+    "Did not get correct exception for function thrown."
+  );
+  test.end();
+});
 
-module.exports.customRulesThrowForString =
-  function customRulesThrowForString(test) {
-    test.expect(4);
-    const exceptionMessage = "Test exception message";
-    markdownlint({
-      "customRules": [
-        {
-          "names": [ "name" ],
-          "description": "description",
-          "tags": [ "tag" ],
-          "function": function throws() {
-            throw new Error(exceptionMessage);
-          }
+tape("customRulesThrowForString", (test) => {
+  test.plan(4);
+  const exceptionMessage = "Test exception message";
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
         }
-      ],
-      "strings": {
-        "string": "String"
       }
-    }, function callback(err, result) {
-      test.ok(err, "Did not get an error for function thrown.");
-      test.ok(err instanceof Error, "Error not instance of Error.");
-      test.equal(err.message, exceptionMessage,
-        "Incorrect message for function thrown.");
-      test.ok(!result, "Got result for function thrown.");
-      test.done();
-    });
-  };
+    ],
+    "strings": {
+      "string": "String"
+    }
+  }, function callback(err, result) {
+    test.ok(err, "Did not get an error for function thrown.");
+    test.ok(err instanceof Error, "Error not instance of Error.");
+    test.equal(err.message, exceptionMessage,
+      "Incorrect message for function thrown.");
+    test.ok(!result, "Got result for function thrown.");
+    test.end();
+  });
+});
 
-module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
-  test.expect(4);
+tape("customRulesOnErrorNull", (test) => {
+  test.plan(1);
   const options = {
     "customRules": [
       {
@@ -3400,21 +3363,18 @@ module.exports.customRulesOnErrorNull = function customRulesOnErrorNull(test) {
       "string": "String"
     }
   };
-  test.throws(function nullErrorCall() {
-    markdownlint.sync(options);
-  }, function testError(err) {
-    test.ok(err, "Did not get an error for null object.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message,
-      "Property 'lineNumber' of onError parameter is incorrect.",
-      "Incorrect message for null object.");
-    return true;
-  }, "Did not get exception for null object.");
-  test.done();
-};
+  test.throws(
+    function nullErrorCall() {
+      markdownlint.sync(options);
+    },
+    /Property 'lineNumber' of onError parameter is incorrect./,
+    "Did not get correct exception for null object."
+  );
+  test.end();
+});
 
-module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
-  test.expect(84);
+tape("customRulesOnErrorBad", (test) => {
+  test.plan(21);
   [
     {
       "propertyName": "lineNumber",
@@ -3491,166 +3451,162 @@ module.exports.customRulesOnErrorBad = function customRulesOnErrorBad(test) {
           "string": "String"
         }
       };
-      test.throws(function badErrorCall() {
-        markdownlint.sync(options);
-      }, function testError(err) {
-        test.ok(err, "Did not get an error for bad object.");
-        test.ok(err instanceof Error, "Error not instance of Error.");
-        test.equal(err.message,
-          "Property '" + propertyNames + "' of onError parameter is incorrect.",
-          "Incorrect message for bad object.");
-        return true;
-      }, "Did not get exception for bad object.");
+      test.throws(
+        function badErrorCall() {
+          markdownlint.sync(options);
+        },
+        new RegExp(
+          `Property '${propertyNames}' of onError parameter is incorrect.`
+        ),
+        "Did not get correct exception for bad object."
+      );
     });
   });
-  test.done();
-};
+  test.end();
+});
 
-module.exports.customRulesOnErrorInvalid =
-  function customRulesOnErrorInvalid(test) {
-    test.expect(68);
-    [
-      {
-        "propertyName": "lineNumber",
-        "subPropertyName": null,
-        "propertyValues": [ -1, 0, 3, 4 ]
-      },
-      {
-        "propertyName": "range",
-        "subPropertyName": null,
-        "propertyValues": [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "lineNumber",
-        "propertyValues": [ -1, 0, 3, 4 ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "editColumn",
-        "propertyValues": [ 0, 6 ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "deleteCount",
-        "propertyValues": [ -2, 5 ]
+tape("customRulesOnErrorInvalid", (test) => {
+  test.plan(17);
+  [
+    {
+      "propertyName": "lineNumber",
+      "subPropertyName": null,
+      "propertyValues": [ -1, 0, 3, 4 ]
+    },
+    {
+      "propertyName": "range",
+      "subPropertyName": null,
+      "propertyValues": [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "lineNumber",
+      "propertyValues": [ -1, 0, 3, 4 ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "editColumn",
+      "propertyValues": [ 0, 6 ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "deleteCount",
+      "propertyValues": [ -2, 5 ]
+    }
+  ].forEach(function forTestCase(testCase) {
+    const { propertyName, subPropertyName, propertyValues } = testCase;
+    propertyValues.forEach(function forPropertyValue(propertyValue) {
+      const badObject = {
+        "lineNumber": 1
+      };
+      let propertyNames = null;
+      if (subPropertyName) {
+        badObject[propertyName] = {};
+        badObject[propertyName][subPropertyName] = propertyValue;
+        propertyNames = `${propertyName}.${subPropertyName}`;
+      } else {
+        badObject[propertyName] = propertyValue;
+        propertyNames = propertyName;
       }
-    ].forEach(function forTestCase(testCase) {
-      const { propertyName, subPropertyName, propertyValues } = testCase;
-      propertyValues.forEach(function forPropertyValue(propertyValue) {
-        const badObject = {
-          "lineNumber": 1
-        };
-        let propertyNames = null;
-        if (subPropertyName) {
-          badObject[propertyName] = {};
-          badObject[propertyName][subPropertyName] = propertyValue;
-          propertyNames = `${propertyName}.${subPropertyName}`;
-        } else {
-          badObject[propertyName] = propertyValue;
-          propertyNames = propertyName;
-        }
-        const options = {
-          "customRules": [
-            {
-              "names": [ "name" ],
-              "description": "description",
-              "tags": [ "tag" ],
-              "function": function onErrorInvalid(params, onError) {
-                onError(badObject);
-              }
+      const options = {
+        "customRules": [
+          {
+            "names": [ "name" ],
+            "description": "description",
+            "tags": [ "tag" ],
+            "function": function onErrorInvalid(params, onError) {
+              onError(badObject);
             }
-          ],
-          "strings": {
-            "string": "Text\ntext"
           }
-        };
-        test.throws(function invalidErrorCall() {
+        ],
+        "strings": {
+          "string": "Text\ntext"
+        }
+      };
+      test.throws(
+        function invalidErrorCall() {
           markdownlint.sync(options);
-        }, function testError(err) {
-          test.ok(err, "Did not get an error for invalid object.");
-          test.ok(err instanceof Error, "Error not instance of Error.");
-          test.equal(err.message,
-            `Property '${propertyNames}' of onError parameter is incorrect.`,
-            "Incorrect message for invalid object.");
-          return true;
-        }, "Did not get exception for invalid object.");
-      });
+        },
+        new RegExp(
+          `Property '${propertyNames}' of onError parameter is incorrect.`
+        ),
+        "Did not get correct exception for invalid object."
+      );
     });
-    test.done();
-  };
+  });
+  test.end();
+});
 
-module.exports.customRulesOnErrorValid =
-  function customRulesOnErrorValid(test) {
-    test.expect(24);
-    [
-      {
-        "propertyName": "lineNumber",
-        "subPropertyName": null,
-        "propertyValues": [ 1, 2 ]
-      },
-      {
-        "propertyName": "range",
-        "subPropertyName": null,
-        "propertyValues": [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "lineNumber",
-        "propertyValues": [ 1, 2 ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "editColumn",
-        "propertyValues": [ 1, 2, 4, 5 ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "deleteCount",
-        "propertyValues": [ -1, 0, 1, 4 ]
-      },
-      {
-        "propertyName": "fixInfo",
-        "subPropertyName": "insertText",
-        "propertyValues":
-          [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
+tape("customRulesOnErrorValid", (test) => {
+  test.plan(24);
+  [
+    {
+      "propertyName": "lineNumber",
+      "subPropertyName": null,
+      "propertyValues": [ 1, 2 ]
+    },
+    {
+      "propertyName": "range",
+      "subPropertyName": null,
+      "propertyValues": [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "lineNumber",
+      "propertyValues": [ 1, 2 ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "editColumn",
+      "propertyValues": [ 1, 2, 4, 5 ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "deleteCount",
+      "propertyValues": [ -1, 0, 1, 4 ]
+    },
+    {
+      "propertyName": "fixInfo",
+      "subPropertyName": "insertText",
+      "propertyValues":
+        [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
+    }
+  ].forEach(function forTestCase(testCase) {
+    const { propertyName, subPropertyName, propertyValues } = testCase;
+    propertyValues.forEach(function forPropertyValue(propertyValue) {
+      const goodObject = {
+        "lineNumber": 1
+      };
+      if (subPropertyName) {
+        goodObject[propertyName] = {};
+        goodObject[propertyName][subPropertyName] = propertyValue;
+      } else {
+        goodObject[propertyName] = propertyValue;
       }
-    ].forEach(function forTestCase(testCase) {
-      const { propertyName, subPropertyName, propertyValues } = testCase;
-      propertyValues.forEach(function forPropertyValue(propertyValue) {
-        const goodObject = {
-          "lineNumber": 1
-        };
-        if (subPropertyName) {
-          goodObject[propertyName] = {};
-          goodObject[propertyName][subPropertyName] = propertyValue;
-        } else {
-          goodObject[propertyName] = propertyValue;
-        }
-        const options = {
-          "customRules": [
-            {
-              "names": [ "name" ],
-              "description": "description",
-              "tags": [ "tag" ],
-              "function": function onErrorValid(params, onError) {
-                onError(goodObject);
-              }
+      const options = {
+        "customRules": [
+          {
+            "names": [ "name" ],
+            "description": "description",
+            "tags": [ "tag" ],
+            "function": function onErrorValid(params, onError) {
+              onError(goodObject);
             }
-          ],
-          "strings": {
-            "string": "Text\ntext"
           }
-        };
-        markdownlint.sync(options);
-        test.ok(true);
-      });
+        ],
+        "strings": {
+          "string": "Text\ntext"
+        }
+      };
+      markdownlint.sync(options);
+      test.ok(true);
     });
-    test.done();
-  };
+  });
+  test.end();
+});
 
-module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
-  test.expect(2);
+tape("customRulesOnErrorLazy", (test) => {
+  test.plan(2);
   const options = {
     "customRules": [
       {
@@ -3687,145 +3643,142 @@ module.exports.customRulesOnErrorLazy = function customRulesOnErrorLazy(test) {
       ]
     };
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesThrowForFileHandled =
-  function customRulesThrowForFileHandled(test) {
-    test.expect(2);
-    const exceptionMessage = "Test exception message";
-    markdownlint({
-      "customRules": [
-        {
-          "names": [ "name" ],
-          "description": "description",
-          "tags": [ "tag" ],
-          "function": function throws() {
-            throw new Error(exceptionMessage);
-          }
+tape("customRulesThrowForFileHandled", (test) => {
+  test.plan(2);
+  const exceptionMessage = "Test exception message";
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
         }
-      ],
-      "files": [ "./test/custom-rules.md" ],
-      "handleRuleFailures": true
-    }, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "./test/custom-rules.md": [
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "name" ],
-            "ruleDescription": "description",
-            "ruleInformation": null,
-            "errorDetail":
-              `This rule threw an exception: ${exceptionMessage}`,
-            "errorContext": null,
-            "errorRange": null
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
-
-module.exports.customRulesThrowForStringHandled =
-  function customRulesThrowForStringHandled(test) {
-    test.expect(2);
-    const exceptionMessage = "Test exception message";
-    const informationUrl = "https://example.com/rule";
-    markdownlint({
-      "customRules": [
+      }
+    ],
+    "files": [ "./test/custom-rules.md" ],
+    "handleRuleFailures": true
+  }, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "./test/custom-rules.md": [
         {
-          "names": [ "name" ],
-          "description": "description",
-          "information": new URL(informationUrl),
-          "tags": [ "tag" ],
-          "function": function throws() {
-            throw new Error(exceptionMessage);
-          }
+          "lineNumber": 1,
+          "ruleNames": [ "name" ],
+          "ruleDescription": "description",
+          "ruleInformation": null,
+          "errorDetail":
+            `This rule threw an exception: ${exceptionMessage}`,
+          "errorContext": null,
+          "errorRange": null
         }
-      ],
-      "strings": {
-        "string": "String\n"
-      },
-      "handleRuleFailures": true
-    }, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "string": [
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
-            "ruleDescription":
-              "First line in file should be a top level heading",
-            "ruleInformation":
-              `${homepage}/blob/v${version}/doc/Rules.md#md041`,
-            "errorDetail": null,
-            "errorContext": "String",
-            "errorRange": null
-          },
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "name" ],
-            "ruleDescription": "description",
-            "ruleInformation": informationUrl,
-            "errorDetail":
-              `This rule threw an exception: ${exceptionMessage}`,
-            "errorContext": null,
-            "errorRange": null
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
 
-module.exports.customRulesOnErrorInvalidHandled =
-  function customRulesOnErrorInvalidHandled(test) {
-    test.expect(2);
-    markdownlint({
-      "customRules": [
+tape("customRulesThrowForStringHandled", (test) => {
+  test.plan(2);
+  const exceptionMessage = "Test exception message";
+  const informationUrl = "https://example.com/rule";
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "information": new URL(informationUrl),
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
+        }
+      }
+    ],
+    "strings": {
+      "string": "String\n"
+    },
+    "handleRuleFailures": true
+  }, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "string": [
         {
-          "names": [ "name" ],
-          "description": "description",
-          "tags": [ "tag" ],
-          "function": function onErrorInvalid(params, onError) {
-            onError({
-              "lineNumber": 13,
-              "detail": "N/A"
-            });
-          }
+          "lineNumber": 1,
+          "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
+          "ruleDescription":
+            "First line in file should be a top level heading",
+          "ruleInformation":
+            `${homepage}/blob/v${version}/doc/Rules.md#md041`,
+          "errorDetail": null,
+          "errorContext": "String",
+          "errorRange": null
+        },
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "name" ],
+          "ruleDescription": "description",
+          "ruleInformation": informationUrl,
+          "errorDetail":
+            `This rule threw an exception: ${exceptionMessage}`,
+          "errorContext": null,
+          "errorRange": null
         }
-      ],
-      "strings": {
-        "string": "# Heading\n"
-      },
-      "handleRuleFailures": true
-    }, function callback(err, actualResult) {
-      test.ifError(err);
-      const expectedResult = {
-        "string": [
-          {
-            "lineNumber": 1,
-            "ruleNames": [ "name" ],
-            "ruleDescription": "description",
-            "ruleInformation": null,
-            "errorDetail": "This rule threw an exception: " +
-              "Property 'lineNumber' of onError parameter is incorrect.",
-            "errorContext": null,
-            "errorRange": null
-          }
-        ]
-      };
-      test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-      test.done();
-    });
-  };
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
 
-module.exports.customRulesFileName = function customRulesFileName(test) {
-  test.expect(2);
+tape("customRulesOnErrorInvalidHandled", (test) => {
+  test.plan(2);
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function onErrorInvalid(params, onError) {
+          onError({
+            "lineNumber": 13,
+            "detail": "N/A"
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    },
+    "handleRuleFailures": true
+  }, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "string": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "name" ],
+          "ruleDescription": "description",
+          "ruleInformation": null,
+          "errorDetail": "This rule threw an exception: " +
+            "Property 'lineNumber' of onError parameter is incorrect.",
+          "errorContext": null,
+          "errorRange": null
+        }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
+
+tape("customRulesFileName", (test) => {
+  test.plan(2);
   const options = {
     "customRules": [
       {
@@ -3841,12 +3794,12 @@ module.exports.customRulesFileName = function customRulesFileName(test) {
   };
   markdownlint(options, function callback(err) {
     test.ifError(err);
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesStringName = function customRulesStringName(test) {
-  test.expect(2);
+tape("customRulesStringName", (test) => {
+  test.plan(2);
   const options = {
     "customRules": [
       {
@@ -3864,12 +3817,12 @@ module.exports.customRulesStringName = function customRulesStringName(test) {
   };
   markdownlint(options, function callback(err) {
     test.ifError(err);
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesDoc = function customRulesDoc(test) {
-  test.expect(2);
+tape("customRulesDoc", (test) => {
+  test.plan(2);
   markdownlint({
     "files": "doc/CustomRules.md",
     "config": {
@@ -3879,123 +3832,118 @@ module.exports.customRulesDoc = function customRulesDoc(test) {
     test.ifError(err);
     const expected = { "doc/CustomRules.md": [] };
     test.deepEqual(actual, expected, "Unexpected issues.");
-    test.done();
+    test.end();
   });
-};
+});
 
-module.exports.customRulesLintJavaScript =
-  function customRulesLintJavaScript(test) {
-    test.expect(2);
-    const options = {
-      "customRules": customRules.lintJavaScript,
-      "files": "test/lint-javascript.md"
+tape("customRulesLintJavaScript", (test) => {
+  test.plan(2);
+  const options = {
+    "customRules": customRules.lintJavaScript,
+    "files": "test/lint-javascript.md"
+  };
+  markdownlint(options, (err, actual) => {
+    test.ifError(err);
+    const expected = {
+      "test/lint-javascript.md": [
+        {
+          "lineNumber": 10,
+          "ruleNames": [ "lint-javascript" ],
+          "ruleDescription": "Rule that lints JavaScript code",
+          "ruleInformation": null,
+          "errorDetail": "Unexpected var, use let or const instead.",
+          "errorContext": "var x = 0;",
+          "errorRange": null
+        },
+        {
+          "lineNumber": 12,
+          "ruleNames": [ "lint-javascript" ],
+          "ruleDescription": "Rule that lints JavaScript code",
+          "ruleInformation": null,
+          "errorDetail": "Unexpected console statement.",
+          "errorContext": "console.log(x);",
+          "errorRange": null
+        }
+      ]
     };
-    markdownlint(options, (err, actual) => {
-      test.ifError(err);
-      const expected = {
-        "test/lint-javascript.md": [
-          {
-            "lineNumber": 10,
-            "ruleNames": [ "lint-javascript" ],
-            "ruleDescription": "Rule that lints JavaScript code",
-            "ruleInformation": null,
-            "errorDetail": "Unexpected var, use let or const instead.",
-            "errorContext": "var x = 0;",
-            "errorRange": null
-          },
-          {
-            "lineNumber": 12,
-            "ruleNames": [ "lint-javascript" ],
-            "ruleDescription": "Rule that lints JavaScript code",
-            "ruleInformation": null,
-            "errorDetail": "Unexpected console statement.",
-            "errorContext": "console.log(x);",
-            "errorRange": null
-          }
-        ]
-      };
-      test.deepEqual(actual, expected, "Unexpected issues.");
-      test.done();
-    });
-  };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.end();
+  });
+});
 
-module.exports.markdownItPluginsSingle =
-  function markdownItPluginsSingle(test) {
-    test.expect(2);
-    markdownlint({
-      "strings": {
-        "string": "# Heading\n\nText [ link ](https://example.com)\n"
-      },
-      "markdownItPlugins": [
-        [
-          pluginInline,
-          "trim_text_plugin",
-          "text",
-          function iterator(tokens, index) {
-            tokens[index].content = tokens[index].content.trim();
-          }
-        ]
+tape("markdownItPluginsSingle", (test) => {
+  test.plan(2);
+  markdownlint({
+    "strings": {
+      "string": "# Heading\n\nText [ link ](https://example.com)\n"
+    },
+    "markdownItPlugins": [
+      [
+        pluginInline,
+        "trim_text_plugin",
+        "text",
+        function iterator(tokens, index) {
+          tokens[index].content = tokens[index].content.trim();
+        }
       ]
-    }, function callback(err, actual) {
-      test.ifError(err);
-      const expected = { "string": [] };
-      test.deepEqual(actual, expected, "Unexpected issues.");
-      test.done();
-    });
-  };
+    ]
+  }, function callback(err, actual) {
+    test.ifError(err);
+    const expected = { "string": [] };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.end();
+  });
+});
 
-module.exports.markdownItPluginsMultiple =
-  function markdownItPluginsMultiple(test) {
-    test.expect(4);
-    markdownlint({
-      "strings": {
-        "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
-      },
-      "markdownItPlugins": [
-        [ pluginSub ],
-        [ pluginSup ],
-        [ pluginInline, "check_sub_plugin", "sub_open", test.ok ],
-        [ pluginInline, "check_sup_plugin", "sup_open", test.ok ]
-      ]
-    }, function callback(err, actual) {
-      test.ifError(err);
-      const expected = { "string": [] };
-      test.deepEqual(actual, expected, "Unexpected issues.");
-      test.done();
-    });
-  };
+tape("markdownItPluginsMultiple", (test) => {
+  test.plan(4);
+  markdownlint({
+    "strings": {
+      "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
+    },
+    "markdownItPlugins": [
+      [ pluginSub ],
+      [ pluginSup ],
+      [ pluginInline, "check_sub_plugin", "sub_open", test.ok ],
+      [ pluginInline, "check_sup_plugin", "sup_open", test.ok ]
+    ]
+  }, function callback(err, actual) {
+    test.ifError(err);
+    const expected = { "string": [] };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.end();
+  });
+});
 
-module.exports.markdownItPluginsMathjax =
-  function markdownItPluginsMathjax(test) {
-    test.expect(2);
-    markdownlint({
-      "strings": {
-        "string":
-          "# Heading\n" +
-          "\n" +
-          "$1 *2* 3$\n" +
-          "\n" +
-          "$$1 *2* 3$$\n" +
-          "\n" +
-          "$$1\n" +
-          "+ 2\n" +
-          "+ 3$$\n"
-      },
-      "markdownItPlugins": [ [ pluginKatex ] ]
-    }, function callback(err, actual) {
-      test.ifError(err);
-      const expected = { "string": [] };
-      test.deepEqual(actual, expected, "Unexpected issues.");
-      test.done();
-    });
-  };
+tape("markdownItPluginsMathjax", (test) => {
+  test.plan(2);
+  markdownlint({
+    "strings": {
+      "string":
+        "# Heading\n" +
+        "\n" +
+        "$1 *2* 3$\n" +
+        "\n" +
+        "$$1 *2* 3$$\n" +
+        "\n" +
+        "$$1\n" +
+        "+ 2\n" +
+        "+ 3$$\n"
+    },
+    "markdownItPlugins": [ [ pluginKatex ] ]
+  }, function callback(err, actual) {
+    test.ifError(err);
+    const expected = { "string": [] };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.end();
+  });
+});
 
-module.exports.markdownItPluginsMathjaxIssue166 =
-  function markdownItPluginsMathjaxIssue166(test) {
-    test.expect(2);
-    markdownlint({
-      "strings": {
-        "string":
+tape("markdownItPluginsMathjaxIssue166", (test) => {
+  test.plan(2);
+  markdownlint({
+    "strings": {
+      "string":
 `## Heading
 
 $$
@@ -4003,17 +3951,17 @@ $$
 $$$$
 2
 $$\n`
-      },
-      "markdownItPlugins": [ [ pluginKatex ] ],
-      "resultVersion": 0
-    }, function callback(err, actual) {
-      test.ifError(err);
-      const expected = {
-        "string": {
-          "MD041": [ 1 ]
-        }
-      };
-      test.deepEqual(actual, expected, "Unexpected issues.");
-      test.done();
-    });
-  };
+    },
+    "markdownItPlugins": [ [ pluginKatex ] ],
+    "resultVersion": 0
+  }, function callback(err, actual) {
+    test.ifError(err);
+    const expected = {
+      "string": {
+        "MD041": [ 1 ]
+      }
+    };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.end();
+  });
+});

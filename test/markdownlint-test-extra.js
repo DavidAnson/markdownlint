@@ -5,6 +5,7 @@
 const fs = require("fs");
 const path = require("path");
 const glob = require("glob");
+const tape = require("tape");
 const markdownlint = require("../lib/markdownlint");
 const { utf8Encoding } = require("../helpers");
 
@@ -17,18 +18,21 @@ files.filter((file) => /\.md$/.test(file)).forEach((file) => {
     strings[content.length.toString()] = content;
     content = content.slice(0, -1);
   }
-  module.exports[`type ${file}`] = (test) => {
+  tape(`type ${file}`, (test) => {
+    test.plan(1);
     markdownlint.sync({
       // @ts-ignore
       strings,
       "resultVersion": 0
     });
-    test.done();
-  };
+    test.pass();
+    test.end();
+  });
 });
 
 // Parses all Markdown files in all package dependencies
-module.exports.parseAllFiles = (test) => {
+tape("parseAllFiles", (test) => {
+  test.plan(2);
   const globOptions = {
     // "cwd": "/",
     "realpath": true
@@ -40,7 +44,7 @@ module.exports.parseAllFiles = (test) => {
     };
     markdownlint(markdownlintOptions, (errr) => {
       test.ifError(errr);
-      test.done();
+      test.end();
     });
   });
-};
+});
