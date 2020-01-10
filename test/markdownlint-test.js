@@ -6,6 +6,7 @@ const fs = require("fs");
 const os = require("os");
 const path = require("path");
 const { URL } = require("url");
+const { promisify } = require("util");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
 const pluginKatex = require("markdown-it-katex");
@@ -26,18 +27,8 @@ const version = packageJson.version;
 
 const deprecatedRuleNames = [ "MD002" ];
 
-function promisify(func, ...args) {
-  return new Promise((resolve, reject) => {
-    func(...args, (error, result) => {
-      if (error) {
-        return reject(error);
-      }
-      return resolve(result);
-    });
-  });
-}
-
 function createTestForFile(file) {
+  const markdownlintPromise = promisify(markdownlint);
   return function testForFile(test) {
     const detailedResults = /[/\\]detailed-results-/.test(file);
     test.plan(detailedResults ? 3 : 2);
@@ -45,10 +36,10 @@ function createTestForFile(file) {
     const fixedFile = file.replace(/\.md$/, ".md.fixed");
     const configFile = file.replace(/\.md$/, ".json");
     let mergedConfig = null;
-    const actualPromise = promisify(fs.stat, configFile)
+    const actualPromise = fs.promises.stat(configFile)
       .then(
         function configFileExists() {
-          return promisify(fs.readFile, configFile, helpers.utf8Encoding)
+          return fs.promises.readFile(configFile, helpers.utf8Encoding)
             .then(JSON.parse);
         },
         function noConfigFile() {
@@ -60,7 +51,7 @@ function createTestForFile(file) {
             ...defaultConfig,
             ...config
           };
-          return promisify(markdownlint, {
+          return markdownlintPromise({
             "files": [ file ],
             "config": mergedConfig,
             "resultVersion": detailedResults ? 2 : 3
@@ -70,13 +61,13 @@ function createTestForFile(file) {
         function diffFixedFiles(resultVersion2or3) {
           return detailedResults ?
             Promise.all([
-              promisify(markdownlint, {
+              markdownlintPromise({
                 "files": [ file ],
                 "config": mergedConfig,
                 "resultVersion": 3
               }),
-              promisify(fs.readFile, file, helpers.utf8Encoding),
-              promisify(fs.readFile, fixedFile, helpers.utf8Encoding)
+              fs.promises.readFile(file, helpers.utf8Encoding),
+              fs.promises.readFile(fixedFile, helpers.utf8Encoding)
             ])
               .then(function validateApplyFixes(fulfillments) {
                 const [ resultVersion3, content, expected ] = fulfillments;
@@ -107,7 +98,7 @@ function createTestForFile(file) {
         }
       );
     const expectedPromise = detailedResults ?
-      promisify(fs.readFile, resultsFile, helpers.utf8Encoding)
+      fs.promises.readFile(resultsFile, helpers.utf8Encoding)
         .then(
           function fileContents(contents) {
             const errorObjects = JSON.parse(contents);
@@ -119,7 +110,7 @@ function createTestForFile(file) {
             });
             return errorObjects;
           }) :
-      promisify(fs.readFile, file, helpers.utf8Encoding)
+      fs.promises.readFile(file, helpers.utf8Encoding)
         .then(
           function fileContents(contents) {
             const lines = contents.split(helpers.newLineRe);
@@ -153,11 +144,11 @@ function createTestForFile(file) {
           if (detailedResults) {
             return test.ok(true);
           }
-          return promisify(fs.readFile, file, helpers.utf8Encoding)
+          return fs.promises.readFile(file, helpers.utf8Encoding)
             .then(
               function applyFixes(content) {
                 const corrections = helpers.applyFixes(content, errors);
-                return promisify(markdownlint, {
+                return markdownlintPromise({
                   "strings": {
                     "input": corrections
                   },
