@@ -27,7 +27,7 @@
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=10"
   },
   "dependencies": {
     "markdown-it": "10.0.0"
