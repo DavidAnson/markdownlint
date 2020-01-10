@@ -12,6 +12,7 @@ const pluginKatex = require("markdown-it-katex");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const tape = require("tape");
+require("./tape-reporter");
 const tv4 = require("tv4");
 const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
