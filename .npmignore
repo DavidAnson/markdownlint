@@ -2,9 +2,6 @@
 .eslintrc.json
 .github
 .markdownlint.json
-.nycrc.json
-.nyc_output
-.travis.yml
 .vscode
 coverage
 demo/*

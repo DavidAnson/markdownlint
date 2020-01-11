@@ -14,7 +14,7 @@
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "scripts": {
     "test": "node test/markdownlint-test.js",
-    "test-cover": "nyc --check-coverage --skip-full node test/markdownlint-test.js",
+    "test-cover": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 node test/markdownlint-test.js",
     "test-declaration": "cd example/typescript && tsc && node type-check.js",
     "test-extra": "node test/markdownlint-test-extra.js",
     "debug": "node debug node_modules/nodeunit/bin/nodeunit",
@@ -35,6 +35,7 @@
   "devDependencies": {
     "@types/node": "~12.12.17",
     "browserify": "~16.5.0",
+    "c8": "~7.0.0",
     "cpy-cli": "~3.0.0",
     "eslint": "~6.7.2",
     "glob": "~7.1.6",
@@ -44,7 +45,6 @@
     "markdown-it-sub": "~1.0.0",
     "markdown-it-sup": "~1.0.0",
     "markdownlint-rule-helpers": "~0.5.0",
-    "nyc": "~14.1.1",
     "rimraf": "~3.0.0",
     "tape": "~4.12.1",
     "toml": "~3.0.0",
