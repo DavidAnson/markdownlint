@@ -74,11 +74,12 @@ declare function markdownlintSync(options: Options): {
  * Read specified configuration file.
  *
  * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | null} parsers Parsing function(s).
- * @param {ReadConfigCallback} callback Callback (err, result) function.
+ * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing
+ *        function(s).
+ * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-declare function readConfig(file: string, parsers: ConfigurationParser[], callback: ReadConfigCallback): void;
+declare function readConfig(file: string, parsers: ReadConfigCallback | ConfigurationParser[], callback?: ReadConfigCallback): void;
 /**
  * Read specified configuration file synchronously.
  *

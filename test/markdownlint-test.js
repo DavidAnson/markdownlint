@@ -101,6 +101,7 @@ function createTestForFile(file) {
       fs.promises.readFile(resultsFile, helpers.utf8Encoding)
         .then(
           function fileContents(contents) {
+            // @ts-ignore
             const errorObjects = JSON.parse(contents);
             errorObjects.forEach(function forObject(errorObject) {
               if (errorObject.ruleInformation) {
@@ -113,6 +114,7 @@ function createTestForFile(file) {
       fs.promises.readFile(file, helpers.utf8Encoding)
         .then(
           function fileContents(contents) {
+            // @ts-ignore
             const lines = contents.split(helpers.newLineRe);
             const results = {};
             lines.forEach(function forLine(line, lineNum) {
@@ -294,6 +296,7 @@ tape("resultFormattingSyncV0", (test) => {
     "./test/first_heading_bad_atx.md: 1: MD002" +
     " First heading should be a top level heading";
   test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+  // @ts-ignore
   actualMessage = actualResult.toString(true);
   expectedMessage =
     "./test/atx_heading_spacing.md: 3: first-heading-h1" +
@@ -2528,6 +2531,7 @@ tape("configBadFile", (test) => {
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad file.");
       test.ok(err instanceof Error, "Error not instance of Error.");
+      // @ts-ignore
       test.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
       test.ok(!result, "Got result for bad file.");
       test.end();
@@ -2540,6 +2544,7 @@ tape("configBadChildFile", (test) => {
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad child file.");
       test.ok(err instanceof Error, "Error not instance of Error.");
+      // @ts-ignore
       test.equal(err.code, "ENOENT",
         "Error code for bad child file not ENOENT.");
       test.ok(!result, "Got result for bad child file.");
@@ -3739,7 +3744,7 @@ tape("customRulesOnErrorInvalidHandled", (test) => {
         "function": function onErrorInvalid(params, onError) {
           onError({
             "lineNumber": 13,
-            "detail": "N/A"
+            "details": "N/A"
           });
         }
       }
