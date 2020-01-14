@@ -3609,7 +3609,7 @@ tape("customRulesOnErrorLazy", (test) => {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
-        "function": function onErrorNull(params, onError) {
+        "function": function onErrorLazy(params, onError) {
           onError({
             "lineNumber": 1,
             "detail": "",
@@ -3635,6 +3635,67 @@ tape("customRulesOnErrorLazy", (test) => {
           "errorDetail": null,
           "errorContext": null,
           "errorRange": [ 1, 1 ]
+        }
+      ]
+    };
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    test.end();
+  });
+});
+
+tape("customRulesOnErrorModified", (test) => {
+  test.plan(2);
+  const errorObject = {
+    "lineNumber": 1,
+    "detail": "detail",
+    "context": "context",
+    "range": [ 1, 2 ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 2,
+      "insertText": "text"
+    }
+  };
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function onErrorModified(params, onError) {
+          onError(errorObject);
+          errorObject.lineNumber = 2;
+          errorObject.detail = "changed";
+          errorObject.context = "changed";
+          errorObject.range[1] = 3;
+          errorObject.fixInfo.editColumn = 2;
+          errorObject.fixInfo.deleteCount = 3;
+          errorObject.fixInfo.insertText = "changed";
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    },
+    "resultVersion": 3
+  };
+  markdownlint(options, function callback(err, actualResult) {
+    test.ifError(err);
+    const expectedResult = {
+      "string": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "name" ],
+          "ruleDescription": "description",
+          "ruleInformation": null,
+          "errorDetail": "detail",
+          "errorContext": "context",
+          "errorRange": [ 1, 2 ],
+          "fixInfo": {
+            "editColumn": 1,
+            "deleteCount": 2,
+            "insertText": "text"
+          }
         }
       ]
     };
