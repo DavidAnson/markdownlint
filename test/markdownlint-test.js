@@ -25,7 +25,7 @@ const configSchema = require("../schema/markdownlint-config-schema.json");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
-const deprecatedRuleNames = [ "MD002" ];
+const deprecatedRuleNames = [ "MD002", "MD006" ];
 
 function createTestForFile(file) {
   const markdownlintPromise = promisify(markdownlint);
@@ -1104,7 +1104,6 @@ tape("styleAll", (test) => {
         "MD003": [ 5, 31 ],
         "MD004": [ 8 ],
         "MD005": [ 12 ],
-        "MD006": [ 8 ],
         "MD007": [ 8, 11 ],
         "MD009": [ 14 ],
         "MD010": [ 14 ],

@@ -52,7 +52,7 @@ playground for learning and exploring.
 * **[MD003](doc/Rules.md#md003)** *heading-style/header-style* - Heading style
 * **[MD004](doc/Rules.md#md004)** *ul-style* - Unordered list style
 * **[MD005](doc/Rules.md#md005)** *list-indent* - Inconsistent indentation for list items at the same level
-* **[MD006](doc/Rules.md#md006)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line
+* ~~**[MD006](doc/Rules.md#md006)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line~~
 * **[MD007](doc/Rules.md#md007)** *ul-indent* - Unordered list indentation
 * **[MD009](doc/Rules.md#md009)** *no-trailing-spaces* - Trailing spaces
 * **[MD010](doc/Rules.md#md010)** *no-hard-tabs* - Hard tabs

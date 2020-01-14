@@ -222,7 +222,7 @@ the same ending column:
 
 <a name="md006"></a>
 
-## MD006 - Consider starting bulleted lists at the beginning of the line
+## ~~MD006 - Consider starting bulleted lists at the beginning of the line~~
 
 Tags: bullet, ul, indentation
 
