@@ -94,3 +94,36 @@
  12. Twelve
 13. Thirteen {MD005}
  14. Fourteen
+
+## Leading Spaces Errors with Nesting
+
+  1. One
+ 2. Two {MD005}
+  3. Three
+     1. One
+     2. Two
+     3. Three
+     4. Four
+      5. Five {MD005}
+     6. Six
+     7. Seven
+      8. Eight {MD005}
+     9. Nine
+     10. Ten
+  4. Four
+ 5. Five {MD005}
+  6. Six
+      1. One
+      2. Two
+     3. Three {MD005}
+      4. Four
+      5. Five
+      6. Six
+       7. Seven {MD005}
+      8. Eight
+      9. Nine
+     10. Ten
+  7. Seven
+ 8. Eight {MD005}
+  9. Nine
+ 10. Ten
