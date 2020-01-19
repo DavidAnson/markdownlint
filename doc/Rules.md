@@ -298,8 +298,8 @@ when a single space is used after the list marker.
 
 Rationale (4 space indent): Same indent as code blocks, simpler for editors to
 implement. See
-<https://www.cirosantilli.com/markdown-style-guide/#indentation-of-content-inside-lists> for more
-information.
+<https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists>
+for more information.
 
 In addition, this is a compatibility issue with multi-markdown parsers, which
 require a 4 space indents. See
@@ -488,7 +488,7 @@ Tags: code
 Aliases: commands-show-output
 
 This rule is triggered when there are code blocks showing shell commands to be
-typed, and the shell commands are preceded by dollar signs ($):
+typed, and *all* of the shell commands are preceded by dollar signs ($):
 
 ```markdown
 $ ls
@@ -496,7 +496,7 @@ $ cat foo
 $ less bar
 ```
 
-The dollar signs are unnecessary in the above situation, and should not be
+The dollar signs are unnecessary in this situation, and should not be
 included:
 
 ```markdown
@@ -505,8 +505,7 @@ cat foo
 less bar
 ```
 
-However, an exception is made when there is a need to distinguish between
-typed commands and command output, as in the following example:
+Showing output for commands preceded by dollar signs does not trigger this rule:
 
 ```markdown
 $ ls
@@ -517,9 +516,18 @@ $ cat bar
 baz
 ```
 
-Rationale: it is easier to copy and paste and less noisy if the dollar signs
+Because some commands do not produce output, it is not a violation if *some*
+commands do not have output:
+
+```markdown
+$ mkdir test
+mkdir: created directory 'test'
+$ ls test
+```
+
+Rationale: it is easier to copy/paste and less noisy if the dollar signs
 are omitted when they are not needed. See
-<https://www.cirosantilli.com/markdown-style-guide/#dollar-signs-in-shell-code>
+<https://cirosantilli.com/markdown-style-guide#dollar-signs-in-shell-code>
 for more information.
 
 <a name="md018"></a>
@@ -986,7 +994,7 @@ of every item in the list consists of a single paragraph, or multiple
 paragraphs (including sub-lists and code blocks).
 
 For example, the style guide at
-<https://www.cirosantilli.com/markdown-style-guide/#spaces-after-list-marker>
+<https://cirosantilli.com/markdown-style-guide#spaces-after-list-marker>
 specifies that 1 space after the list marker should be used if every item in
 the list fits within a single paragraph, but to use 2 or 3 spaces (for ordered
 and unordered lists respectively) if there are multiple paragraphs of content

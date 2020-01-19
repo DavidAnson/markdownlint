@@ -1,3 +1,5 @@
+# Code Block Dollar
+
 The following code block shouldn't have $ before the commands:
 
     $ ls {MD014}
@@ -27,7 +29,7 @@ The following code block doesn't have any dollar signs, and shouldn't fire:
     cat bar
 
 The following (fenced) code block doesn't have any content at all, and
-shouldn't fire: {MD046:32}
+shouldn't fire: {MD046:34}
 
 ```bash
 ```
@@ -36,14 +38,39 @@ Mixed content:
 
     $ ls
     file.md other.md
-    $ git branch {MD014}
-    $ cat stuff {MD014}
+    $ git branch
+    $ cat stuff
 
     output
-    $ ls {MD014}
-    $ git branch {MD014}
+
+More mixed content:
+
+    $ ls
+    $ git branch
     $ cat stuff
     stuff here
     more stuff
     $ tail cat
     meow
+
+Command with blank lines in output:
+
+    $ dig example.com
+
+    ; ...
+    ;; ...
+
+    ;; ...
+
+Some commands with no output:
+
+    $ mkdir test
+    mkdir: created directory 'test'
+    $ cd test
+    $ ls test
+
+All commands with no output:
+
+    $ mkdir test {MD014}
+    $ cd test {MD014}
+    $ ls test {MD014}

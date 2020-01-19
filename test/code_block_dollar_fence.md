@@ -1,4 +1,4 @@
-# heading
+# Code Block Dollar Fence
 
 ```fence
 $ code {MD014}
