@@ -6,7 +6,20 @@
     "node": true,
     "es6": true
   },
-  "extends": "eslint:all",
+  "plugins": [
+    "jsdoc"
+  ],
+  "extends": [
+    "eslint:all",
+    "plugin:jsdoc/recommended"
+  ],
+  "settings": {
+    "jsdoc": {
+      "preferredTypes": {
+        "object": "Object"
+      }
+    }
+  },
   "rules": {
     "array-bracket-spacing": ["error", "always"],
     "array-element-newline": "off",
@@ -50,6 +63,12 @@
     "sort-keys": "off",
     "space-before-function-paren": ["error", "never"],
     "vars-on-top": "off",
-    "wrap-regex": "off"
+    "wrap-regex": "off",
+    "jsdoc/check-examples": "error",
+    "jsdoc/check-indentation": "error",
+    "jsdoc/check-syntax": "error",
+    "jsdoc/match-description": "error",
+    "jsdoc/require-description": "error",
+    "jsdoc/require-jsdoc": "off"
   }
 }

@@ -8,6 +8,17 @@ const cliEngine = new eslint.CLIEngine({});
 const linter = new eslint.Linter();
 const languageJavaScript = /js|javascript/i;
 
+// Helper function that removes this project's use of eslint-plugin-jsdoc
+function cleanJsdocRulesFromEslintConfig(config) {
+  const cleanedConfig = { ...config };
+  for (const rule in config.rules) {
+    if (/^jsdoc\//.test(rule)) {
+      delete cleanedConfig.rules[rule];
+    }
+  }
+  return cleanedConfig;
+}
+
 module.exports = {
   "names": [ "lint-javascript" ],
   "description": "Rule that lints JavaScript code",
@@ -15,7 +26,8 @@ module.exports = {
   "function": (params, onError) => {
     filterTokens(params, "fence", (fence) => {
       if (languageJavaScript.test(fence.info)) {
-        const config = cliEngine.getConfigForFile(params.name);
+        let config = cliEngine.getConfigForFile(params.name);
+        config = cleanJsdocRulesFromEslintConfig(config);
         const results = linter.verify(fence.content, config);
         results.forEach((result) => {
           const lineNumber = fence.lineNumber + result.line;
