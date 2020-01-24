@@ -8,7 +8,12 @@ const cliEngine = new eslint.CLIEngine({});
 const linter = new eslint.Linter();
 const languageJavaScript = /js|javascript/i;
 
-// Helper function that removes this project's use of eslint-plugin-jsdoc
+/**
+ * Remove references to rules from eslint-plugin-jsdoc.
+ *
+ * @param {Object} config ESLint configuration object.
+ * @returns {Object} ESLint configuration object.
+ */
 function cleanJsdocRulesFromEslintConfig(config) {
   const cleanedConfig = { ...config };
   for (const rule in config.rules) {

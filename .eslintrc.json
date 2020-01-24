@@ -68,7 +68,6 @@
     "jsdoc/check-indentation": "error",
     "jsdoc/check-syntax": "error",
     "jsdoc/match-description": "error",
-    "jsdoc/require-description": "error",
-    "jsdoc/require-jsdoc": "off"
+    "jsdoc/require-description": "error"
   }
 }

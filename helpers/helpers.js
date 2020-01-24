@@ -58,6 +58,17 @@ module.exports.isBlankLine = function isBlankLine(line) {
   return !line || !line.trim() || !line.replace(blankLineRe, "").trim();
 };
 
+/**
+ * Compare function for Array.prototype.sort for ascending order of numbers.
+ *
+ * @param {number} a First number.
+ * @param {number} b Second number.
+ * @returns {number} Positive value if a>b, negative value if b<a, 0 otherwise.
+ */
+module.exports.numericSortAscending = function numericSortAscending(a, b) {
+  return a - b;
+};
+
 // Returns true iff the sorted array contains the specified element
 module.exports.includesSorted = function includesSorted(array, element) {
   let left = 0;
@@ -126,7 +137,28 @@ module.exports.unescapeMarkdown =
     });
   };
 
-// Returns the indent for a token
+/**
+ * Return the string representation of a fence markup character.
+ *
+ * @param {string} markup Fence string.
+ * @returns {string} String representation.
+ */
+module.exports.fencedCodeBlockStyleFor =
+  function fencedCodeBlockStyleFor(markup) {
+    switch (markup[0]) {
+      case "~":
+        return "tilde";
+      default:
+        return "backtick";
+    }
+  };
+
+/**
+ * Return the number of characters of indent for a token.
+ *
+ * @param {Object} token MarkdownItToken instance.
+ * @returns {number} Characters of indent.
+ */
 function indentFor(token) {
   const line = token.line.replace(/^[\s>]*(> |>)/, "");
   return line.length - line.trimLeft().length;
@@ -144,7 +176,32 @@ module.exports.headingStyleFor = function headingStyleFor(token) {
   return "setext";
 };
 
-// Calls the provided function for each matching token
+/**
+ * Return the string representation of an unordered list marker.
+ *
+ * @param {Object} token MarkdownItToken instance.
+ * @returns {string} String representation.
+ */
+module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
+  switch (token.markup) {
+    case "-":
+      return "dash";
+    case "+":
+      return "plus";
+    // case "*":
+    default:
+      return "asterisk";
+  }
+};
+
+/**
+ * Calls the provided function for each matching token.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {string} type Token type identifier.
+ * @param {Function} handler Callback function.
+ * @returns {void}
+ */
 function filterTokens(params, type, handler) {
   params.tokens.forEach(function forToken(token) {
     if (token.type === type) {
@@ -338,7 +395,17 @@ module.exports.forEachInlineCodeSpan =
     }
   };
 
-// Adds a generic error object via the onError callback
+/**
+ * Adds a generic error object via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {string} [detail] Error details.
+ * @param {string} [context] Error context.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
 function addError(onError, lineNumber, detail, context, range, fixInfo) {
   onError({
     lineNumber,
@@ -403,7 +470,12 @@ module.exports.frontMatterHasTitle =
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
 
-// Gets the most common line ending, falling back to platform default
+/**
+ * Gets the most common line ending, falling back to the platform default.
+ *
+ * @param {string} input Markdown content to analyze.
+ * @returns {string} Preferred line ending.
+ */
 function getPreferredLineEnding(input) {
   let cr = 0;
   let lf = 0;
@@ -437,7 +509,13 @@ function getPreferredLineEnding(input) {
 }
 module.exports.getPreferredLineEnding = getPreferredLineEnding;
 
-// Normalizes the fields of a fixInfo object
+/**
+ * Normalizes the fields of a RuleOnErrorFixInfo instance.
+ *
+ * @param {Object} fixInfo RuleOnErrorFixInfo instance.
+ * @param {number} [lineNumber] Line number.
+ * @returns {Object} Normalized RuleOnErrorFixInfo instance.
+ */
 function normalizeFixInfo(fixInfo, lineNumber) {
   return {
     "lineNumber": fixInfo.lineNumber || lineNumber,
@@ -447,7 +525,14 @@ function normalizeFixInfo(fixInfo, lineNumber) {
   };
 }
 
-// Fixes the specifide error on a line
+/**
+ * Fixes the specified error on a line of Markdown content.
+ *
+ * @param {string} line Line of Markdown content.
+ * @param {Object} fixInfo RuleOnErrorFixInfo instance.
+ * @param {string} lineEnding Line ending to use.
+ * @returns {string} Fixed content.
+ */
 function applyFix(line, fixInfo, lineEnding) {
   const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
   const editIndex = editColumn - 1;

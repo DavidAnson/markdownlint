@@ -1,5 +1,7 @@
 "use strict";
 
+/* eslint-disable jsdoc/require-jsdoc */
+
 (function main() {
   // DOM elements
   var markdown = document.getElementById("markdown");

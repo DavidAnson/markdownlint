@@ -27,6 +27,12 @@ const version = packageJson.version;
 
 const deprecatedRuleNames = [ "MD002", "MD006" ];
 
+/**
+ * Create a test function for the specified test file.
+ *
+ * @param {string} file Test file relative path.
+ * @returns {Function} Test function.
+ */
 function createTestForFile(file) {
   const markdownlintPromise = promisify(markdownlint);
   return function testForFile(test) {
@@ -173,6 +179,7 @@ function createTestForFile(file) {
 
 fs.readdirSync("./test")
   .filter((file) => /\.md$/.test(file))
+  // @ts-ignore
   .forEach((file) => tape(file, createTestForFile(path.join("./test", file))));
 
 tape("projectFiles", (test) => {
@@ -1495,7 +1502,7 @@ tape("readme", (test) => {
 tape("doc", (test) => {
   test.plan(336);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
-    function readFile(err, contents) {
+    (err, contents) => {
       test.ifError(err);
       const rulesLeft = rules.slice();
       let inHeading = false;
@@ -1504,7 +1511,8 @@ tape("doc", (test) => {
       let ruleHasAliases = true;
       let ruleUsesParams = null;
       const tagAliasParameterRe = /, |: | /;
-      function testTagsAliasesParams(r) {
+      // eslint-disable-next-line func-style
+      const testTagsAliasesParams = (r) => {
         r = r || "[NO RULE]";
         test.ok(ruleHasTags,
           "Missing tags for rule " + r.names + ".");
@@ -1512,7 +1520,7 @@ tape("doc", (test) => {
           "Missing aliases for rule " + r.names + ".");
         test.ok(!ruleUsesParams,
           "Missing parameters for rule " + r.names + ".");
-      }
+      };
       md.parse(contents, {}).forEach(function forToken(token) {
         if ((token.type === "heading_open") && (token.tag === "h2")) {
           inHeading = true;
@@ -2041,6 +2049,7 @@ tape("applyFix", (test) => {
   ];
   testCases.forEach((testCase) => {
     const [ line, fixInfo, lineEnding, expected ] = testCase;
+    // @ts-ignore
     const actual = helpers.applyFix(line, fixInfo, lineEnding);
     test.equal(actual, expected, "Incorrect fix applied.");
   });
