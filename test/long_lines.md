@@ -1,3 +1,5 @@
+# Long Lines
+
 This is a very very very very very very very very very very very very very very long line {MD013}
 
 This line however, while very long, doesn't have whitespace after the 80th columnwhichallowsforURLsandotherlongthings.
@@ -9,7 +11,7 @@ This line however, while very long, doesn't have whitespace after the 80th colum
     [This long line is comprised entirely of a link](https://example.com "But is inside a code block") {MD013}
 
 ```markdown
-[This long line is comprised entirely of a link](https://example.com "But is inside a code block") {MD013} {MD046:11}
+[This long line is comprised entirely of a link](https://example.com "But is inside a code block") {MD013} {MD046:13}
 ```
 
 This [long line is comprised mostly of a link](https://example.com "This is the long link's title") {MD013}
@@ -43,3 +45,17 @@ _**[This long line is comprised of an emphasized and bolded link](https://exampl
 *[](https://example.com "This long line is comprised of an emphasized link with empty text and a non-empty title")*
 
 **[](https://example.com "This long line is comprised of a bolded link with empty text and a non-empty title")**
+
+![Alternate text for long line image example](https://example.com "Title text for long line image example")
+
+*![Alternate text for long line image example](https://example.com "Title text for long line image example")*
+
+**![Alternate text for long line image example](https://example.com "Title text for long line image example")**
+
+![Reference style for long line image which is itself an example of a long line with content][image]
+
+*![Reference style for long line image which is itself an example of a long line with content][image]*
+
+**![Reference style for long line image which is itself an example of a long line with content][image]**
+
+[image]: https://example.com "Title text for long line image example using reference style for image details"
