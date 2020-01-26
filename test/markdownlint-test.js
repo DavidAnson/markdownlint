@@ -1589,12 +1589,14 @@ tape("validateConfigSchema", (test) => {
   const jsonFileRe = /\.json$/i;
   const resultsFileRe = /\.results\.json$/i;
   const jsConfigFileRe = /^jsconfig\.json$/i;
+  const wrongTypesFileRe = /wrong-types-in-config-file.json$/i;
   const testDirectory = __dirname;
   const testFiles = fs.readdirSync(testDirectory);
   testFiles.filter(function filterFile(file) {
     return jsonFileRe.test(file) &&
       !resultsFileRe.test(file) &&
-      !jsConfigFileRe.test(file);
+      !jsConfigFileRe.test(file) &&
+      !wrongTypesFileRe.test(file);
   }).forEach(function forFile(file) {
     const data = fs.readFileSync(
       path.join(testDirectory, file),

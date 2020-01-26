@@ -465,7 +465,7 @@ module.exports.frontMatterHasTitle =
     const ignoreFrontMatter =
       (frontMatterTitlePattern !== undefined) && !frontMatterTitlePattern;
     const frontMatterTitleRe =
-      new RegExp(frontMatterTitlePattern || "^\\s*title\\s*[:=]", "i");
+      new RegExp(String(frontMatterTitlePattern || "^\\s*title\\s*[:=]"), "i");
     return !ignoreFrontMatter &&
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
