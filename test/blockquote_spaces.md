@@ -6,6 +6,8 @@ Some text
 
 This tests other things embedded in the blockquote:
 
+- foo
+
 > *Hello world*
 >  *foo* {MD027}
 >  **bar** {MD027}
@@ -15,6 +17,8 @@ This tests other things embedded in the blockquote:
 > **bar** more text
 > 'baz' more text
 > `qux` more text
+>
+> - foo
 
 Test the first line being indented too much:
 
