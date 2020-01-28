@@ -824,6 +824,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            `markdownlint-disable-file`/`markdownlint-enable-file` inline comments, add
            type declaration file (.d.ts) for TypeScript dependents, update schema, improve
            MD006/MD007/MD009/MD013/MD030, update dependencies.
+* 0.19.0 - Remove support for end-of-life Node version 8, add fix information for
+           MD005/list-indent, improve MD007/MD013/MD014, deprecate MD006/ul-start-left, add
+           rationale for every rule, update test runner and code coverage, add more JSDoc
+           comments, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
