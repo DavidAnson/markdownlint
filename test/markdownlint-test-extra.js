@@ -6,7 +6,7 @@ const fs = require("fs");
 const path = require("path");
 const glob = require("glob");
 const tape = require("tape");
-require("./tape-reporter");
+require("tape-player");
 const markdownlint = require("../lib/markdownlint");
 const { utf8Encoding } = require("../helpers");
 

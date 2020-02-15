@@ -48,6 +48,7 @@
     "markdownlint-rule-helpers": "~0.6.0",
     "rimraf": "~3.0.0",
     "tape": "~4.13.0",
+    "tape-player": "~0.1.0",
     "toml": "~3.0.0",
     "tv4": "~1.3.0",
     "typescript": "~3.7.5",
