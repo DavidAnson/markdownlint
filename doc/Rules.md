@@ -994,7 +994,7 @@ This rule supports 0-prefixing ordered list items for uniform indentation:
 
 Note: This rule will report violations for cases like the following where an improperly-indented code block (or similar) appears between two list items and "breaks" the list in two:
 
-```markdown
+~~~markdown
 1. First list
 
 ```text
@@ -1002,11 +1002,11 @@ Code block
 ```
 
 1. Second list
-```
+~~~
 
 The fix is to indent the code block so it becomes part of the preceding list item as intended:
 
-```markdown
+~~~markdown
 1. First list
 
    ```text
@@ -1014,7 +1014,7 @@ The fix is to indent the code block so it becomes part of the preceding list ite
    ```
 
 1. Still first list
-```
+~~~
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
