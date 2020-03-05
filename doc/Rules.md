@@ -1013,7 +1013,7 @@ The fix is to indent the code block so it becomes part of the preceding list ite
    Code block
    ```
 
-1. Still first list
+2. Still first list
 ~~~
 
 Rationale: Consistent formatting makes it easier to understand a document.
