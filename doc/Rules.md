@@ -991,18 +991,29 @@ This rule supports 0-prefixing ordered list items for uniform indentation:
 11. Item
 ...
 ```
-This rule is also be triggered for improper indentation of content. Use four space to indent content:
+
+Note: This rule will report violations for cases like the following where an improperly-indented code block (or similar) appears between two list items and "breaks" the list in two:
 
 ```markdown
-...
-1. item 1
-2. item 2
+1. First list
 
-    \`\`\`
-    Code block
-    \`\`\`
-3. item 3
-...
+```text
+Code block
+```
+
+1. Second list
+```
+
+The fix is to indent the code block so it becomes part of the preceding list item as intended:
+
+```markdown
+1. First list
+
+   ```text
+   Code block
+   ```
+
+1. Still first list
 ```
 
 Rationale: Consistent formatting makes it easier to understand a document.
