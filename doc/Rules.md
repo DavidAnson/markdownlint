@@ -991,6 +991,19 @@ This rule supports 0-prefixing ordered list items for uniform indentation:
 11. Item
 ...
 ```
+This rule is also be triggered for improper indentation of content. Use four space to indent content:
+
+```markdown
+...
+1. item 1
+2. item 2
+
+    \`\`\`
+    Code block
+    \`\`\`
+3. item 3
+...
+```
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
