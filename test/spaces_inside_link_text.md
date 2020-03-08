@@ -45,3 +45,8 @@ function MoreCodeButNotCode(input) {
 [Links](ending)  
 [with](spaces)  
 [error ]({MD039})
+
+Wrapped [ link with leading space
+  ](https://example.com) {MD039}
+
+Non-wrapped [ link with leading space](https://example.com) {MD039}
