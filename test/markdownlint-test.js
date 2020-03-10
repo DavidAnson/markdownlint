@@ -1644,6 +1644,7 @@ tape("clearHtmlCommentTextValid", (test) => {
     "-->text",
     "<!--text--><!--text-->",
     "text<!--text-->text<!--text-->text",
+    "text<!--text > text <!-->text",
     "<!--",
     "text"
   ];
@@ -1680,9 +1681,9 @@ tape("clearHtmlCommentTextValid", (test) => {
     "-->text",
     "<!--    --><!--    -->",
     "text<!--    -->text<!--    -->text",
+    "text<!--              -->text",
     "<!--",
-    "    \\",
-    ""
+    "text"
   ];
   const actual = helpers.clearHtmlCommentText(validComments.join("\n"));
   const expected = validResult.join("\n");

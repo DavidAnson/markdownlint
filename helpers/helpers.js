@@ -96,10 +96,10 @@ const htmlCommentEnd = "-->";
 module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
   let i = 0;
   while ((i = text.indexOf(htmlCommentBegin, i)) !== -1) {
-    let j = text.indexOf(htmlCommentEnd, i);
+    const j = text.indexOf(htmlCommentEnd, i);
     if (j === -1) {
-      j = text.length;
-      text += "\\\n";
+      // Un-terminated comments are treated as text
+      break;
     }
     const comment = text.slice(i + htmlCommentBegin.length, j);
     if ((comment.length > 0) &&
