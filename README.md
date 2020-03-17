@@ -39,6 +39,7 @@ and test cases came directly from that project.
 * [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
 * [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
 * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
+* [Cake.Markdownlint addin for Cake build automation system](https://github.com/cake-contrib/Cake.Markdownlint)
 
 ## Demonstration
 
