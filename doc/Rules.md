@@ -945,8 +945,8 @@ Parameters: style ("one", "ordered", "one_or_ordered", "zero"; default "one_or_o
 
 This rule is triggered for ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
-configured style). The less-common pattern of using '0.' for all prefixes is
-also supported.
+configured style). The less-common patterns of using '0.' as a first prefix or
+for all prefixes is also supported.
 
 Example valid list if the style is configured as 'one':
 
@@ -956,7 +956,7 @@ Example valid list if the style is configured as 'one':
 1. Done.
 ```
 
-Example valid list if the style is configured as 'ordered':
+Examples of valid lists if the style is configured as 'ordered':
 
 ```markdown
 1. Do this.
@@ -964,7 +964,13 @@ Example valid list if the style is configured as 'ordered':
 3. Done.
 ```
 
-Both examples are valid when the style is configured as 'one_or_ordered'.
+```markdown
+0. Do this.
+1. Do that.
+2. Done.
+```
+
+All three examples are valid when the style is configured as 'one_or_ordered'.
 
 Example valid list if the style is configured as 'zero':
 
