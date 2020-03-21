@@ -141,3 +141,48 @@ Text
 > > - of items {MD004}
 > >
 > > More quoted text
+
+Text
+
++ List
+  > blockquote in list
+  >
+  > + list in blockquote in list
+
+Text
+
++ List
+  Text
+
+  > + list in blockquote
+  > + list in blockquote
+
+  Text
+
+  > + list in blockquote
+
+  Text
++ List
+
+  Text
+
+  > + list in blockquote
+
+  Text
++ List
+
+  > + list in blockquote
+  >   + sublist in blockquote
+  > + list in blockquote
+  >   + sublist in blockquote
+
+Text
+
++ List
+  Text
+
+  > + list in blockquote
+  >  + list in blockquote {MD005} {MD007}
+  > + list in blockquote
+  >   + sublist in blockquote
+  >    + sublist in blockquote {MD005} {MD007}

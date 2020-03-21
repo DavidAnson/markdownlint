@@ -254,6 +254,8 @@ module.exports.flattenLists = function flattenLists(params) {
   const flattenedLists = [];
   const stack = [];
   let current = null;
+  let nesting = 0;
+  const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
   params.tokens.forEach(function forToken(token) {
     if ((token.type === "bullet_list_open") ||
@@ -268,10 +270,11 @@ module.exports.flattenLists = function flattenLists(params) {
         "indent": indentFor(token),
         "parentIndent": (current && current.indent) || 0,
         "items": [],
-        "nesting": stack.length - 1,
+        "nesting": nesting,
         "lastLineIndex": -1,
         "insert": flattenedLists.length
       };
+      nesting++;
     } else if ((token.type === "bullet_list_close") ||
                (token.type === "ordered_list_close")) {
       // Finalize current context and restore previous
@@ -279,9 +282,15 @@ module.exports.flattenLists = function flattenLists(params) {
       flattenedLists.splice(current.insert, 0, current);
       delete current.insert;
       current = stack.pop();
+      nesting--;
     } else if (token.type === "list_item_open") {
       // Add list item
       current.items.push(token);
+    } else if (token.type === "blockquote_open") {
+      nestingStack.push(nesting);
+      nesting = 0;
+    } else if (token.type === "blockquote_close") {
+      nesting = nestingStack.pop();
     } else if (token.map) {
       // Track last token with map
       lastWithMap = token;
