@@ -474,7 +474,7 @@ Tags: line_length
 
 Aliases: line-length
 
-Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers, strict (number; default 80, boolean; default true)
+Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers, strict, stern (number; default 80 for *_length, boolean; default true (except strict/stern which default false))
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -484,10 +484,24 @@ up into multiple lines. To set a different maximum length for headings, use
 `heading_line_length`. To set a different maximum length for code blocks, use
 `code_block_line_length`
 
-This rule has an exception where there is no whitespace beyond the configured
+This rule has an exception when there is no whitespace beyond the configured
 line length. This allows you to still include items such as long URLs without
 being forced to break them in the middle. To disable this exception, set the
-`strict` parameter to `true`.
+`strict` parameter to `true` to report an issue when any line is too long.
+To warn for lines that are too long and could be fixed but allow lines without
+spaces, set the `stern` parameter to `true`.
+
+For example (assuming normal behavior):
+
+```markdown
+IF THIS LINE IS THE MAXIMUM LENGTH
+This line is okay because there are-no-spaces-beyond-that-length
+And this line is a violation because there are
+This-line-is-also-okay-because-there-are-no-spaces
+```
+
+In `strict` or `stern` modes, the two middle lines above are a violation. The
+third line is a violation in `strict` mode, but allowed in `stern` mode.
 
 You have the option to exclude this rule for code blocks, tables, or headings.
 To do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.

@@ -433,6 +433,11 @@
           "description": "Strict length checking",
           "type": "boolean",
           "default": false
+        },
+        "stern": {
+          "description": "Stern length checking",
+          "type": "boolean",
+          "default": false
         }
       },
       "additionalProperties": false
@@ -482,6 +487,11 @@
         },
         "strict": {
           "description": "Strict length checking",
+          "type": "boolean",
+          "default": false
+        },
+        "stern": {
+          "description": "Stern length checking",
           "type": "boolean",
           "default": false
         }

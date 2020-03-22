@@ -181,6 +181,11 @@ rules.forEach(function forRule(rule) {
           "description": "Strict length checking",
           "type": "boolean",
           "default": false
+        },
+        "stern": {
+          "description": "Stern length checking",
+          "type": "boolean",
+          "default": false
         }
       };
       break;
