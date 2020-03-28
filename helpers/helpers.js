@@ -234,9 +234,14 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
     }
   });
   filterTokens(params, "list_item_open", function forToken(token) {
+    let count = 1;
     for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][5] = true;
+      lineMetadata[i][5] = count;
+      count++;
     }
+  });
+  filterTokens(params, "hr", function forToken(token) {
+    lineMetadata[token.map[0]][6] = true;
   });
   return lineMetadata;
 };
@@ -244,7 +249,7 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
 // Calls the provided function for each line (with context)
 module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
   lineMetadata.forEach(function forMetadata(metadata) {
-    // Parameters: line, lineIndex, inCode, onFence, inTable
+    // Parameters: line, lineIndex, inCode, onFence, inTable, inBreak
     handler(...metadata);
   });
 };

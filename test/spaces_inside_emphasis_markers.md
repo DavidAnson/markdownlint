@@ -44,9 +44,11 @@ One-sided *broken emphasis * {MD037}
 
 One-sided * broken emphasis* {MD037}
 
-Don't _flag on _words with underscores before them.
+Will _flag on _words with underscores before them. {MD037}
 
-The same goes for words* with asterisks* after them.
+The same goes for words* with asterisks* after them. {MD037}
+
+But not with escaped\* asterisks\* \_and \_underscores.
 
 * Emphasis* with left space is recognized as a list
 
@@ -95,3 +97,31 @@ ___Strong and emphasis ___ with right space {MD037}
 {MD037} Right space __strong __
 
 {MD037} Right space ___strong and emphasis ___
+
+**Multiple ** spaces **in ** emphasis **at ** once. {MD037}
+
+**Multiple ** spaces ** in** emphasis ** at ** once. {MD037}
+
+This is * an ambiguous * scenario {MD037}
+
+* List item *with emphasis* on the
+  first and *second lines*.
+* List * item* {MD037}
+* List *item * {MD037}
+* List * item * {MD037}
+* List item with
+  *hanging* emphasis
+  and * some* lines {MD037}
+  with *space * problems {MD037}
+  throughout * the * content {MD037}
+
+Uncommon scenarios from the CommonMark specification:
+***strong emph***
+***strong** in emph*
+***emph* in strong**
+**in strong *emph***
+*in emph **strong***
+
+```markdown
+Violations * are * allowed in code blocks where emphasis does not apply.
+```
