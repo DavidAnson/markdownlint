@@ -26,3 +26,5 @@ Text <https://example.com/same> more text <https://example.com/same> still more 
 Text <https://example.com/same> more \* text https://example.com/same more \[ text <https://example.com/same> done
 
 Text <https://example.com/first> more text <https://example.com/second> still more text <https://example.com/third> done
+
+[Incorrect link syntax](https://www.example.com/)

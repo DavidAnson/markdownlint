@@ -1248,12 +1248,18 @@ To fix this, add angle brackets around the URL:
 For more information, see <https://www.example.com/>.
 ```
 
-Note: if you do want a bare URL without it being converted into a link,
-enclose it in a code block, otherwise in some markdown parsers it _will_ be
-converted:
+Note: To use a bare URL without it being converted into a link, enclose it in
+a code block, otherwise in some markdown parsers it _will_ be converted:
 
 ```markdown
 `https://www.example.com`
+```
+
+Note: The following scenario does _not_ trigger this rule to avoid conflicts
+with `MD011`/`no-reversed-links`:
+
+```markdown
+[https://www.example.com]
 ```
 
 Rationale: Without angle brackets, the URL isn't converted into a link in many
