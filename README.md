@@ -196,6 +196,33 @@ the following syntax is supported:
 
 This can be used to "hide" `markdownlint` comments at the bottom of a file.
 
+In cases where it is desirable to change the configuration of one or more rules
+for a file, the following more advanced syntax is supported:
+
+* Confiure: `<!-- markdownlint-configure-file { options.config JSON } -->`
+
+For example:
+
+```markdown
+<!-- markdownlint-configure-file { "MD013": { "line_length": 70 } } -->
+```
+
+or
+
+```markdown
+<!-- markdownlint-configure-file
+{
+  "hr-style": {
+    "style": "---"
+  },
+  "no-trailing-spaces": false
+}
+-->
+```
+
+These changes apply to the entire file regardless of where the comment is
+located. Multiple such comments (if present) are applied top-to-bottom.
+
 ## API
 
 ### Linting
