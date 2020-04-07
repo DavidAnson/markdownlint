@@ -14,14 +14,14 @@ Bare https://example.com link
 
 Space * inside * emphasis
 
-Space ` inside ` code span
+Space ` inside` code span
 
 Space [ inside ](link) text
 
 ```
 ```
 
-space `` inside `` code
+space `` inside`` code
 space `inside` of ` code` elements
 `space` inside `of` code ` elements`
 space ``inside`` of `` code`` elements

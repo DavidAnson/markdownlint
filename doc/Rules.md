@@ -1401,21 +1401,26 @@ Tags: whitespace, code
 
 Aliases: no-space-in-code
 
-This rule is triggered on code span elements that have spaces right inside the
+This rule is triggered for code span elements that have spaces adjacent to the
 backticks:
 
 ```markdown
-` some text `
-
 `some text `
 
 ` some text`
 ```
 
-To fix this, remove the spaces inside the codespan markers:
+To fix this, remove any spaces adjacent to the backticks:
 
 ```markdown
 `some text`
+```
+
+Note: A single leading and trailing space is allowed by the specification and
+automatically trimmed (to allow for embedded backticks):
+
+```markdown
+`` `backticks` ``
 ```
 
 Note: A single leading or trailing space is allowed if used to separate codespan

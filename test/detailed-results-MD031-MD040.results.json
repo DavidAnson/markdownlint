@@ -122,8 +122,8 @@
         "ruleDescription": "Spaces inside code span elements",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
         "errorDetail": null,
-        "errorContext": "` inside `",
-        "errorRange": [ 7, 10 ]
+        "errorContext": "` inside`",
+        "errorRange": [ 7, 9 ]
     },
     {
         "lineNumber": 24,
@@ -131,8 +131,8 @@
         "ruleDescription": "Spaces inside code span elements",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
         "errorDetail": null,
-        "errorContext": "`` inside ``",
-        "errorRange": [ 7, 12 ]
+        "errorContext": "`` inside``",
+        "errorRange": [ 7, 11 ]
     },
     {
         "lineNumber": 25,

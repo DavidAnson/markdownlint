@@ -95,3 +95,19 @@ Text [link](#link(link`link) text `code`. {MD038}
 Text [`link`](xref:custom.link`1) text `code`.
 
 Text ``code [link](#link`link) code`` text `code`.
+
+No space, start or end: `code`
+
+Start space, no end space: ` code` {MD038}
+
+No start space, end space: `code ` {MD038}
+
+Single start and end space: ` code ` (explicitly allowed/trimmed by the specification)
+
+All spaces: `    ` {MD038}
+
+Double start and single end space: `  code ` {MD038}
+
+Single start and double end spaces: ` code  ` {MD038}
+
+Double start and end spaces: `  code  ` {MD038}
