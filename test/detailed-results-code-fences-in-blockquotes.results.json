@@ -1,0 +1,74 @@
+[
+    {
+        "lineNumber": 4,
+        "ruleNames": [
+            "MD031",
+            "blanks-around-fences"
+        ],
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+        "errorDetail": null,
+        "errorContext": "```markdown",
+        "errorRange": null
+    },
+    {
+        "lineNumber": 6,
+        "ruleNames": [
+            "MD031",
+            "blanks-around-fences"
+        ],
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+        "errorDetail": null,
+        "errorContext": "```",
+        "errorRange": null
+    },
+    {
+        "lineNumber": 10,
+        "ruleNames": [
+            "MD031",
+            "blanks-around-fences"
+        ],
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+        "errorDetail": null,
+        "errorContext": "> ```markdown",
+        "errorRange": null
+    },
+    {
+        "lineNumber": 12,
+        "ruleNames": [
+            "MD031",
+            "blanks-around-fences"
+        ],
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+        "errorDetail": null,
+        "errorContext": "> ```",
+        "errorRange": null
+    },
+    {
+        "lineNumber": 15,
+        "ruleNames": [
+            "MD031",
+            "blanks-around-fences"
+        ],
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+        "errorDetail": null,
+        "errorContext": "> > ```markdown",
+        "errorRange": null
+    },
+    {
+        "lineNumber": 17,
+        "ruleNames": [
+            "MD031",
+            "blanks-around-fences"
+        ],
+        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+        "errorDetail": null,
+        "errorContext": "> > ```",
+        "errorRange": null
+    }
+]
