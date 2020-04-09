@@ -1262,7 +1262,14 @@ with `MD011`/`no-reversed-links`:
 [https://www.example.com]
 ```
 
-Rationale: Without angle brackets, the URL isn't converted into a link in many
+The use of quotes around a bare link will _not_ trigger this rule, either:
+
+```markdown
+"https://www.example.com"
+'https://www.example.com'
+```
+
+Rationale: Without angle brackets, the URL isn't converted into a link by many
 markdown parsers.
 
 <a name="md035"></a>

@@ -16,3 +16,15 @@ The following are allowed to avoid conflicts with MD011/no-reversed-links:
 
 [https://example.com]
 [https://example.com/search?query=text]
+
+The following are allowed to avoid conflicts with HTML-like syntax:
+
+"https://example.com"
+"https://example.com/search?query=text"
+'https://example.com'
+'https://example.com/search?query=text'
+
+Other enclosures are not allowed:
+
+(https://example.com) {MD034}
+{https://example.com} {MD034}
