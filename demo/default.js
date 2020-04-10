@@ -143,9 +143,12 @@
   // Updates the URL hash and copies the URL to the clipboard
   function onCopyLinkClick(e) {
     window.location.hash = encodeURIComponent(hashPrefix + markdown.value);
-    /* eslint-disable-next-line no-unused-expressions */
-    navigator.clipboard && navigator.clipboard.writeText &&
+    if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(window.location).then(noop, noop);
+    } else {
+      /* eslint-disable-next-line no-alert */
+      alert("Document URL updated, select and copy it now.");
+    }
     e.preventDefault();
   }
 
