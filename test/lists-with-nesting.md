@@ -93,3 +93,7 @@
              - six
                1. seven
                   - eight
+
+ * 1. Item {MD004} {MD006} {MD007}
+ * 2. Item {MD004} {MD006} {MD007}
+ * 3. Item {MD004} {MD006} {MD007}
