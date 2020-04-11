@@ -18,16 +18,16 @@ Escaped underscores _ should \_ be ignored by MD037.
 
 ## Double-character markers, start
 
-All should be reported because they are valid single-character
-marker emphasis without spaces.
+All *could* be reported because they are valid single-character
+marker emphasis when no spaces are present.
 
-Escaped asterisks \** should ** be ignored by MD037. {MD037}
+Escaped asterisks \** should ** be ignored by MD037.
 
-Escaped asterisks *\* should ** be ignored by MD037. {MD037}
+Escaped asterisks *\* should ** be ignored by MD037.
 
-Escaped underscores \__ should __ be ignored by MD037. {MD037}
+Escaped underscores \__ should __ be ignored by MD037.
 
-Escaped underscores _\_ should __ be ignored by MD037. {MD037}
+Escaped underscores _\_ should __ be ignored by MD037.
 
 ## Double-character markers, end
 

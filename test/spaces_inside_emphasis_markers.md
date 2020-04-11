@@ -115,12 +115,41 @@ This is * an ambiguous * scenario {MD037}
   with *space * problems {MD037}
   throughout * the * content {MD037}
 
-Uncommon scenarios from the CommonMark specification:
+Uncommon scenarios from the CommonMark specification (and some variations):
 ***strong emph***
 ***strong** in emph*
 ***emph* in strong**
 **in strong *emph***
 *in emph **strong***
+
+*** strong emph*** {MD037}
+*** strong** in emph* {MD037}
+*** emph* in strong** {MD037}
+** in strong *emph*** {MD037}
+
+***strong emph *** {MD037}
+***strong** in emph * {MD037}
+***emph* in strong ** {MD037}
+**in strong *emph *** {MD037}
+*in emph **strong *** {MD037}
+
+** *strong emph*** {MD037}
+** *strong** in emph* {MD037}
+** *emph* in strong** {MD037}
+**in strong * emph*** (internal spaces are not detected)
+*in emph ** strong*** (internal spaces are not detected)
+
+***strong emph* ** {MD037}
+***strong ** in emph* (internal spaces are not detected)
+***emph * in strong** (internal spaces are not detected)
+**in strong *emph* ** {MD037}
+*in emph **strong* ** {MD037}
+
+Text *emph***strong** text
+Text * emph***strong** text {MD037}
+Text *emph ***strong** text (internal spaces are not detected)
+Text *emph*** strong** text (internal spaces are not detected)
+Text *emph***strong ** text {MD037}
 
 ```markdown
 Violations * are * allowed in code blocks where emphasis does not apply.
