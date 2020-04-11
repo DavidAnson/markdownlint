@@ -30,10 +30,10 @@ module.exports.frontMatterRe =
 // Regular expression for matching inline disable/enable comments
 var inlineCommentRe = 
 // eslint-disable-next-line max-len
-/<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file)((?:\s+[a-z0-9_-]+)*)\s*-->/ig;
+/<!--\s*markdownlint-(?:(?:(disable|enable|capture|restore|disable-file|enable-file)((?:\s+[a-z0-9_-]+)*))|(?:(configure-file)\s+([\s\S]*?)))\s*-->/ig;
 module.exports.inlineCommentRe = inlineCommentRe;
 // Regular expressions for range matching
-module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s]*/ig;
+module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // readFile options for reading with the UTF-8 encoding
@@ -102,8 +102,8 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
     while ((i = text.indexOf(htmlCommentBegin, i)) !== -1) {
         var j = text.indexOf(htmlCommentEnd, i);
         if (j === -1) {
-            j = text.length;
-            text += "\\\n";
+            // Un-terminated comments are treated as text
+            break;
         }
         var comment = text.slice(i + htmlCommentBegin.length, j);
         if ((comment.length > 0) &&
@@ -230,16 +230,21 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
         }
     });
     filterTokens(params, "list_item_open", function forToken(token) {
+        var count = 1;
         for (var i = token.map[0]; i < token.map[1]; i++) {
-            lineMetadata[i][5] = true;
+            lineMetadata[i][5] = count;
+            count++;
         }
+    });
+    filterTokens(params, "hr", function forToken(token) {
+        lineMetadata[token.map[0]][6] = true;
     });
     return lineMetadata;
 };
 // Calls the provided function for each line (with context)
 module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
     lineMetadata.forEach(function forMetadata(metadata) {
-        // Parameters: line, lineIndex, inCode, onFence, inTable
+        // Parameters: line, lineIndex, inCode, onFence, inTable, inBreak
         handler.apply(void 0, metadata);
     });
 };
@@ -248,6 +253,8 @@ module.exports.flattenLists = function flattenLists(params) {
     var flattenedLists = [];
     var stack = [];
     var current = null;
+    var nesting = 0;
+    var nestingStack = [];
     var lastWithMap = { "map": [0, 1] };
     params.tokens.forEach(function forToken(token) {
         if ((token.type === "bullet_list_open") ||
@@ -262,10 +269,11 @@ module.exports.flattenLists = function flattenLists(params) {
                 "indent": indentFor(token),
                 "parentIndent": (current && current.indent) || 0,
                 "items": [],
-                "nesting": stack.length - 1,
+                "nesting": nesting,
                 "lastLineIndex": -1,
                 "insert": flattenedLists.length
             };
+            nesting++;
         }
         else if ((token.type === "bullet_list_close") ||
             (token.type === "ordered_list_close")) {
@@ -274,10 +282,18 @@ module.exports.flattenLists = function flattenLists(params) {
             flattenedLists.splice(current.insert, 0, current);
             delete current.insert;
             current = stack.pop();
+            nesting--;
         }
         else if (token.type === "list_item_open") {
             // Add list item
             current.items.push(token);
+        }
+        else if (token.type === "blockquote_open") {
+            nestingStack.push(nesting);
+            nesting = 0;
+        }
+        else if (token.type === "blockquote_close") {
+            nesting = nestingStack.pop();
         }
         else if (token.map) {
             // Track last token with map
@@ -921,68 +937,98 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
  * @param {string[]} lines List of content lines.
  * @param {string[]} frontMatterLines List of front matter lines.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
- * @param {Configuration} effectiveConfig Effective configuration.
+ * @param {Configuration} config Configuration object.
  * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
  * names.
- * @returns {Object.<string, RuleConfiguration>[]} Enabled rules for each line.
+ * @returns {Object} Effective configuration and enabled rules per line number.
  */
-function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, effectiveConfig, aliasToRuleNames) {
+function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames) {
+    // Shared variables
     var enabledRules = {};
+    var capturedRules = {};
     var allRuleNames = [];
+    var enabledRulesPerLineNumber = new Array(1 + frontMatterLines.length);
+    // Helper functions
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function handleInlineConfig(perLine, forEachMatch, forEachLine) {
+        var input = perLine ? lines : [lines.join("\n")];
+        input.forEach(function (line) {
+            if (!noInlineConfig) {
+                var match = null;
+                while ((match = helpers.inlineCommentRe.exec(line))) {
+                    var action = (match[1] || match[3]).toUpperCase();
+                    var parameter = match[2] || match[4];
+                    forEachMatch(action, parameter);
+                }
+            }
+            if (forEachLine) {
+                forEachLine();
+            }
+        });
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function configureFile(action, parameter) {
+        if (action === "CONFIGURE-FILE") {
+            try {
+                var json = JSON.parse(parameter);
+                config = __assign(__assign({}, config), json);
+            }
+            catch (ex) {
+                // Ignore parse errors for inline configuration
+            }
+        }
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function applyEnableDisable(action, parameter) {
+        var enabled = (action.startsWith("ENABLE"));
+        var items = parameter ?
+            parameter.trim().toUpperCase().split(/\s+/) :
+            allRuleNames;
+        items.forEach(function (nameUpper) {
+            (aliasToRuleNames[nameUpper] || []).forEach(function (ruleName) {
+                enabledRules[ruleName] = enabled;
+            });
+        });
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function enableDisableFile(action, parameter) {
+        if ((action === "ENABLE-FILE") || (action === "DISABLE-FILE")) {
+            applyEnableDisable(action, parameter);
+        }
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function captureRestoreEnableDisable(action, parameter) {
+        if (action === "CAPTURE") {
+            capturedRules = __assign({}, enabledRules);
+        }
+        else if (action === "RESTORE") {
+            enabledRules = __assign({}, capturedRules);
+        }
+        else if ((action === "ENABLE") || (action === "DISABLE")) {
+            enabledRules = __assign({}, enabledRules);
+            applyEnableDisable(action, parameter);
+        }
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function updateLineState() {
+        enabledRulesPerLineNumber.push(enabledRules);
+    }
+    // Handle inline comments
+    handleInlineConfig(false, configureFile);
+    var effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
     ruleList.forEach(function (rule) {
         var ruleName = rule.names[0].toUpperCase();
         allRuleNames.push(ruleName);
         enabledRules[ruleName] = !!effectiveConfig[ruleName];
     });
-    var capturedRules = enabledRules;
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function forMatch(match, byLine) {
-        var action = match[1].toUpperCase();
-        if (action === "CAPTURE") {
-            if (byLine) {
-                capturedRules = __assign({}, enabledRules);
-            }
-        }
-        else if (action === "RESTORE") {
-            if (byLine) {
-                enabledRules = __assign({}, capturedRules);
-            }
-        }
-        else {
-            // action in [ENABLE, DISABLE, ENABLE-FILE, DISABLE-FILE]
-            var isfile = action.endsWith("-FILE");
-            if ((byLine && !isfile) || (!byLine && isfile)) {
-                var enabled_1 = (action.startsWith("ENABLE"));
-                var items = match[2] ?
-                    match[2].trim().toUpperCase().split(/\s+/) :
-                    allRuleNames;
-                items.forEach(function (nameUpper) {
-                    (aliasToRuleNames[nameUpper] || []).forEach(function (ruleName) {
-                        enabledRules[ruleName] = enabled_1;
-                    });
-                });
-            }
-        }
-    }
-    var enabledRulesPerLineNumber = new Array(1 + frontMatterLines.length);
-    [false, true].forEach(function (byLine) {
-        lines.forEach(function (line) {
-            if (!noInlineConfig) {
-                var match = helpers.inlineCommentRe.exec(line);
-                if (match) {
-                    enabledRules = __assign({}, enabledRules);
-                    while (match) {
-                        forMatch(match, byLine);
-                        match = helpers.inlineCommentRe.exec(line);
-                    }
-                }
-            }
-            if (byLine) {
-                enabledRulesPerLineNumber.push(enabledRules);
-            }
-        });
-    });
-    return enabledRulesPerLineNumber;
+    capturedRules = enabledRules;
+    handleInlineConfig(true, enableDisableFile);
+    handleInlineConfig(true, captureRestoreEnableDisable, updateLineState);
+    // Return results
+    return {
+        effectiveConfig: effectiveConfig,
+        enabledRulesPerLineNumber: enabledRulesPerLineNumber
+    };
 }
 /**
  * Compare function for Array.prototype.sort for ascending order of errors.
@@ -1041,8 +1087,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     var lines = content.split(helpers.newLineRe);
     annotateTokens(tokens, lines);
     var aliasToRuleNames = mapAliasToRuleNames(ruleList);
-    var effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
-    var enabledRulesPerLineNumber = getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, effectiveConfig, aliasToRuleNames);
+    var _a = getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames), effectiveConfig = _a.effectiveConfig, enabledRulesPerLineNumber = _a.enabledRulesPerLineNumber;
     // Create parameters for rules
     var params = {
         name: name,
@@ -1576,13 +1621,13 @@ module.exports = {
             list.items.forEach(function (item) {
                 var line = item.line, lineNumber = item.lineNumber;
                 var actualIndent = indentFor(item);
+                var match = null;
                 if (list.unordered) {
                     addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, rangeFromRegExp(line, listItemMarkerRe)
                     // No fixInfo; MD007 handles this scenario better
                     );
                 }
-                else {
-                    var match = orderedListItemMarkerRe.exec(line);
+                else if ((match = orderedListItemMarkerRe.exec(line))) {
                     actualEnd = match[0].length;
                     expectedEnd = expectedEnd || actualEnd;
                     var markerLength = match[1].length + 1;
@@ -1833,6 +1878,7 @@ var longLineRePostfixRelaxed = "}.*\\s.*$";
 var longLineRePostfixStrict = "}.+$";
 var labelRe = /^\s*\[.*[^\\]]:/;
 var linkOrImageOnlyLineRe = /^[es]*(lT?L|I)[ES]*$/;
+var sternModeRe = /^([#>\s]*\s)?\S*$/;
 var tokenTypeMap = {
     "em_open": "e",
     "em_close": "E",
@@ -1852,7 +1898,8 @@ module.exports = {
         var headingLineLength = Number(params.config.heading_line_length || lineLength);
         var codeLineLength = Number(params.config.code_block_line_length || lineLength);
         var strict = !!params.config.strict;
-        var longLineRePostfix = strict ? longLineRePostfixStrict : longLineRePostfixRelaxed;
+        var stern = !!params.config.stern;
+        var longLineRePostfix = (strict || stern) ? longLineRePostfixStrict : longLineRePostfixRelaxed;
         var longLineRe = new RegExp(longLineRePrefix + lineLength + longLineRePostfix);
         var longHeadingLineRe = new RegExp(longLineRePrefix + headingLineLength + longLineRePostfix);
         var longCodeLineRe = new RegExp(longLineRePrefix + codeLineLength + longLineRePostfix);
@@ -1894,7 +1941,8 @@ module.exports = {
                 (includeTables || !inTable) &&
                 (includeHeadings || !isHeading) &&
                 (strict ||
-                    (!includesSorted(linkOnlyLineNumbers, lineNumber) &&
+                    (!(stern && sternModeRe.test(line)) &&
+                        !includesSorted(linkOnlyLineNumbers, lineNumber) &&
                         !labelRe.test(line))) &&
                 lengthRe.test(line)) {
                 addErrorDetailIf(onError, lineNumber, length, line.length, null, null, [length + 1, line.length - length]);
@@ -1958,7 +2006,10 @@ module.exports = {
     "tags": ["headings", "headers", "atx", "spaces"],
     "function": function MD018(params, onError) {
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
-            if (!inCode && /^#+[^#\s]/.test(line) && !/#\s*$/.test(line)) {
+            if (!inCode &&
+                /^#+[^#\s]/.test(line) &&
+                !/#\s*$/.test(line) &&
+                !line.startsWith("#️⃣")) {
                 var hashCount = /^#+/.exec(line)[0].length;
                 addErrorContext(onError, lineIndex + 1, line.trim(), null, null, [1, hashCount + 1], {
                     "editColumn": hashCount + 1,
@@ -2329,23 +2380,47 @@ module.exports = {
     "tags": ["ol"],
     "function": function MD029(params, onError) {
         var style = String(params.config.style || "one_or_ordered");
-        flattenedLists().forEach(function (list) {
-            if (!list.unordered) {
-                var listStyle_1 = style;
-                if (listStyle_1 === "one_or_ordered") {
-                    var second = (list.items.length > 1) &&
-                        orderedListItemMarkerRe.exec(list.items[1].line);
-                    listStyle_1 = (second && (second[1] !== "1")) ? "ordered" : "one";
-                }
-                var number_1 = (listStyle_1 === "zero") ? 0 : 1;
-                list.items.forEach(function (item) {
-                    var match = orderedListItemMarkerRe.exec(item.line);
-                    addErrorDetailIf(onError, item.lineNumber, String(number_1), !match || match[1], "Style: " + listStyleExamples[listStyle_1], null, rangeFromRegExp(item.line, listItemMarkerRe));
-                    if (listStyle_1 === "ordered") {
-                        number_1++;
+        flattenedLists().filter(function (list) { return !list.unordered; }).forEach(function (list) {
+            var items = list.items;
+            var current = 1;
+            var incrementing = false;
+            // Check for incrementing number pattern 1/2/3 or 0/1/2
+            if (items.length >= 2) {
+                var first = orderedListItemMarkerRe.exec(items[0].line);
+                var second = orderedListItemMarkerRe.exec(items[1].line);
+                if (first && second) {
+                    var firstNumber = first[1];
+                    var secondNumber = second[1];
+                    if ((secondNumber !== "1") || (firstNumber === "0")) {
+                        incrementing = true;
+                        if (firstNumber === "0") {
+                            current = 0;
+                        }
                     }
-                });
+                }
             }
+            // Determine effective style
+            var listStyle = style;
+            if (listStyle === "one_or_ordered") {
+                listStyle = incrementing ? "ordered" : "one";
+            }
+            // Force expected value for 0/0/0 and 1/1/1 patterns
+            if (listStyle === "zero") {
+                current = 0;
+            }
+            else if (listStyle === "one") {
+                current = 1;
+            }
+            // Validate each list item marker
+            items.forEach(function (item) {
+                var match = orderedListItemMarkerRe.exec(item.line);
+                if (match) {
+                    addErrorDetailIf(onError, item.lineNumber, String(current), match[1], "Style: " + listStyleExamples[listStyle], null, rangeFromRegExp(item.line, listItemMarkerRe));
+                    if (listStyle === "ordered") {
+                        current++;
+                    }
+                }
+            });
         });
     }
 };
@@ -2395,6 +2470,7 @@ module.exports = {
 "use strict";
 var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
 var lineMetadata = require("./cache").lineMetadata;
+var codeFencePrefixRe = /^(.*?)\s*[`~]/;
 module.exports = {
     "names": ["MD031", "blanks-around-fences"],
     "description": "Fenced code blocks should be surrounded by blank lines",
@@ -2409,9 +2485,10 @@ module.exports = {
             if ((includeListItems || !inItem) &&
                 ((onTopFence && !isBlankLine(lines[i - 1])) ||
                     (onBottomFence && !isBlankLine(lines[i + 1])))) {
+                var _a = line.match(codeFencePrefixRe), prefix = _a[1];
                 addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, {
                     "lineNumber": i + (onTopFence ? 1 : 2),
-                    "insertText": "\n"
+                    "insertText": prefix + "\n"
                 });
             }
         });
@@ -2517,17 +2594,28 @@ module.exports = {
                 else if ((type === "text") && !inLink) {
                     while ((match = bareUrlRe.exec(content)) !== null) {
                         var bareUrl = match[0];
-                        var index = line.indexOf(content);
-                        var range = (index === -1) ? null : [
-                            line.indexOf(content) + match.index + 1,
-                            bareUrl.length
-                        ];
-                        var fixInfo = range ? {
-                            "editColumn": range[0],
-                            "deleteCount": range[1],
-                            "insertText": "<" + bareUrl + ">"
-                        } : null;
-                        addErrorContext(onError, lineNumber, bareUrl, null, null, range, fixInfo);
+                        var matchIndex = match.index;
+                        var bareUrlLength = bareUrl.length;
+                        // Allow "[https://example.com]" to avoid conflicts with
+                        // MD011/no-reversed-links; allow quoting as another way
+                        // of deliberately including a bare URL
+                        var leftChar = content[matchIndex - 1];
+                        var rightChar = content[matchIndex + bareUrlLength];
+                        if (!((leftChar === "[") && (rightChar === "]")) &&
+                            !((leftChar === "\"") && (rightChar === "\"")) &&
+                            !((leftChar === "'") && (rightChar === "'"))) {
+                            var index = line.indexOf(content);
+                            var range = (index === -1) ? null : [
+                                index + matchIndex + 1,
+                                bareUrlLength
+                            ];
+                            var fixInfo = range ? {
+                                "editColumn": range[0],
+                                "deleteCount": range[1],
+                                "insertText": "<" + bareUrl + ">"
+                            } : null;
+                            addErrorContext(onError, lineNumber, bareUrl, null, null, range, fixInfo);
+                        }
                     }
                 }
             });
@@ -2614,50 +2702,90 @@ module.exports = {
 },{"../helpers":2}],37:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachInlineChild = _a.forEachInlineChild;
-var leftSpaceRe = /(?:^|\s)(\*\*?\*?|__?_?)\s.*[^\\]\1/g;
-var rightSpaceRe = /(?:^|[^\\])(\*\*?\*?|__?_?).+\s\1(?:\s|$)/g;
+var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
+var lineMetadata = require("./cache").lineMetadata;
+var emphasisRe = /(^|[^\\])(?:(\*\*?\*?)|(__?_?))/g;
+var asteriskListItemMarkerRe = /^(\s*)\*(\s+)/;
+var leftSpaceRe = /^\s+/;
+var rightSpaceRe = /\s+$/;
 module.exports = {
     "names": ["MD037", "no-space-in-emphasis"],
     "description": "Spaces inside emphasis markers",
     "tags": ["whitespace", "emphasis"],
     "function": function MD037(params, onError) {
-        forEachInlineChild(params, "text", function (token) {
-            var content = token.content, lineNumber = token.lineNumber;
-            var columnsReported = [];
-            [leftSpaceRe, rightSpaceRe].forEach(function (spaceRe, index) {
-                var match = null;
-                while ((match = spaceRe.exec(content)) !== null) {
-                    var fullText = match[0], marker = match[1];
-                    var line = params.lines[lineNumber - 1];
-                    if (line.includes(fullText)) {
-                        var text = fullText.trim();
-                        var column = line.indexOf(text) + 1;
-                        if (!columnsReported.includes(column)) {
-                            var length_1 = text.length;
-                            var markerLength = marker.length;
-                            var emphasized = text.slice(markerLength, length_1 - markerLength);
-                            var fixedText = "" + marker + emphasized.trim() + marker;
-                            addErrorContext(onError, lineNumber, text, index === 0, index !== 0, [column, length_1], {
-                                "editColumn": column,
-                                "deleteCount": length_1,
-                                "insertText": fixedText
-                            });
-                            columnsReported.push(column);
-                        }
-                    }
+        forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, inBreak) {
+            if (inCode || inBreak) {
+                // Emphasis has no meaning here
+                return;
+            }
+            if (inItem === 1) {
+                // Trim overlapping '*' list item marker
+                line = line.replace(asteriskListItemMarkerRe, "$1 $2");
+            }
+            var match = null;
+            var emphasisIndex = -1;
+            var emphasisLength = 0;
+            var effectiveEmphasisLength = 0;
+            // Match all emphasis-looking runs in the line...
+            while ((match = emphasisRe.exec(line))) {
+                var matchIndex = match.index + match[1].length;
+                var matchLength = match[0].length - match[1].length;
+                if (emphasisIndex === -1) {
+                    // New run
+                    emphasisIndex = matchIndex + matchLength;
+                    emphasisLength = matchLength;
+                    effectiveEmphasisLength = matchLength;
                 }
-            });
+                else if (matchLength === effectiveEmphasisLength) {
+                    // Close current run
+                    var content = line.substring(emphasisIndex, matchIndex);
+                    var leftSpace = leftSpaceRe.test(content);
+                    var rightSpace = rightSpaceRe.test(content);
+                    if (leftSpace || rightSpace) {
+                        // Report the violation
+                        var contextStart = emphasisIndex - emphasisLength;
+                        var contextEnd = matchIndex + effectiveEmphasisLength;
+                        var context = line.substring(contextStart, contextEnd);
+                        var column = contextStart + 1;
+                        var length_1 = contextEnd - contextStart;
+                        var leftMarker = line.substring(contextStart, emphasisIndex);
+                        var rightMarker = match[2] || match[3];
+                        var fixedText = "" + leftMarker + content.trim() + rightMarker;
+                        addErrorContext(onError, lineIndex + 1, context, leftSpace, rightSpace, [column, length_1], {
+                            "editColumn": column,
+                            "deleteCount": length_1,
+                            "insertText": fixedText
+                        });
+                    }
+                    // Reset
+                    emphasisIndex = -1;
+                    emphasisLength = 0;
+                    effectiveEmphasisLength = 0;
+                }
+                else if (matchLength === 3) {
+                    // Swap internal run length (1->2 or 2->1)
+                    effectiveEmphasisLength = matchLength - effectiveEmphasisLength;
+                }
+                else if (effectiveEmphasisLength === 3) {
+                    // Downgrade internal run (3->1 or 3->2)
+                    effectiveEmphasisLength -= matchLength;
+                }
+                else {
+                    // Upgrade to internal run (1->3 or 2->3)
+                    effectiveEmphasisLength += matchLength;
+                }
+            }
         });
     }
 };
 
-},{"../helpers":2}],38:[function(require,module,exports){
+},{"../helpers":2,"./cache":3}],38:[function(require,module,exports){
 // @ts-check
 "use strict";
 var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe;
 var leftSpaceRe = /^\s([^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
+var singleLeftRightSpaceRe = /^\s\S+\s$/;
 module.exports = {
     "names": ["MD038", "no-space-in-code"],
     "description": "Spaces inside code span elements",
@@ -2680,7 +2808,8 @@ module.exports = {
                         rangeLineOffset = codeLines.length - 1;
                         fixIndex = 0;
                     }
-                    if (left || right) {
+                    var allowed = singleLeftRightSpaceRe.test(code);
+                    if ((left || right) && !allowed) {
                         var codeLinesRange = codeLines[rangeLineOffset];
                         if (codeLines.length > 1) {
                             rangeLength = codeLinesRange.length + tickCount;
@@ -2732,15 +2861,21 @@ module.exports = {
                     var right = linkText.trimRight().length !== linkText.length;
                     if (left || right) {
                         var line = params.lines[lineNumber - 1];
+                        var range = null;
+                        var fixInfo = null;
                         var match = line.slice(lineIndex).match(spaceInLinkRe);
-                        var column = match.index + lineIndex + 1;
-                        var length_1 = match[0].length;
-                        lineIndex = column + length_1 - 1;
-                        addErrorContext(onError, lineNumber, "[" + linkText + "]", left, right, [column, length_1], {
-                            "editColumn": column + 1,
-                            "deleteCount": length_1 - 2,
-                            "insertText": linkText.trim()
-                        });
+                        if (match) {
+                            var column = match.index + lineIndex + 1;
+                            var length_1 = match[0].length;
+                            range = [column, length_1];
+                            fixInfo = {
+                                "editColumn": column + 1,
+                                "deleteCount": length_1 - 2,
+                                "insertText": linkText.trim()
+                            };
+                            lineIndex = column + length_1 - 1;
+                        }
+                        addErrorContext(onError, lineNumber, "[" + linkText + "]", left, right, range, fixInfo);
                     }
                 }
                 else if ((type === "softbreak") || (type === "hardbreak")) {
@@ -3088,7 +3223,7 @@ module.exports = rules;
 },{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48,"url":59}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.19.0",
+    "version": "0.20.0",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "types": "lib/markdownlint.d.ts",
@@ -3121,25 +3256,26 @@ module.exports={
         "markdown-it": "10.0.0"
     },
     "devDependencies": {
-        "@types/node": "~13.5.0",
-        "browserify": "~16.5.0",
-        "c8": "~7.0.1",
-        "cpy-cli": "~3.0.0",
+        "@types/node": "~13.11.1",
+        "browserify": "~16.5.1",
+        "c8": "~7.1.0",
+        "cpy-cli": "~3.1.0",
         "eslint": "~6.8.0",
-        "eslint-plugin-jsdoc": "~21.0.0",
+        "eslint-plugin-jsdoc": "~22.1.0",
         "glob": "~7.1.6",
         "js-yaml": "~3.13.1",
         "markdown-it-for-inline": "~0.1.1",
         "markdown-it-katex": "~2.0.3",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
-        "markdownlint-rule-helpers": "~0.6.0",
-        "rimraf": "~3.0.0",
-        "tape": "~4.13.0",
+        "markdownlint-rule-helpers": "~0.7.0",
+        "rimraf": "~3.0.2",
+        "tape": "~4.13.2",
+        "tape-player": "~0.1.0",
         "toml": "~3.0.0",
         "tv4": "~1.3.0",
-        "typescript": "~3.7.5",
-        "uglify-js": "~3.7.6"
+        "typescript": "~3.8.3",
+        "uglify-js": "~3.8.1"
     },
     "keywords": [
         "markdown",
