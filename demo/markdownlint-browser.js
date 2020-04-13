@@ -2702,7 +2702,7 @@ module.exports = {
 },{"../helpers":2}],37:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
+var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
 var lineMetadata = require("./cache").lineMetadata;
 var emphasisRe = /(^|[^\\])(?:(\*\*?\*?)|(__?_?))/g;
 var asteriskListItemMarkerRe = /^(\s*)\*(\s+)/;
@@ -2713,19 +2713,70 @@ module.exports = {
     "description": "Spaces inside emphasis markers",
     "tags": ["whitespace", "emphasis"],
     "function": function MD037(params, onError) {
-        forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, inBreak) {
-            if (inCode || inBreak) {
+        // eslint-disable-next-line init-declarations
+        var effectiveEmphasisLength, emphasisIndex, emphasisLength, pendingError;
+        // eslint-disable-next-line jsdoc/require-jsdoc
+        function resetRunTracking() {
+            emphasisIndex = -1;
+            emphasisLength = 0;
+            effectiveEmphasisLength = 0;
+            pendingError = null;
+        }
+        // eslint-disable-next-line jsdoc/require-jsdoc
+        function handleRunEnd(line, lineIndex, contextLength, match, matchIndex) {
+            // Close current run
+            var content = line.substring(emphasisIndex, matchIndex);
+            if (!emphasisLength) {
+                content = content.trimStart();
+            }
+            if (!match) {
+                content = content.trimEnd();
+            }
+            var leftSpace = leftSpaceRe.test(content);
+            var rightSpace = rightSpaceRe.test(content);
+            if (leftSpace || rightSpace) {
+                // Report the violation
+                var contextStart = emphasisIndex - emphasisLength;
+                var contextEnd = matchIndex + contextLength;
+                var context = line.substring(contextStart, contextEnd);
+                var column = contextStart + 1;
+                var length_1 = contextEnd - contextStart;
+                var leftMarker = line.substring(contextStart, emphasisIndex);
+                var rightMarker = match ? (match[2] || match[3]) : "";
+                var fixedText = "" + leftMarker + content.trim() + rightMarker;
+                return [
+                    onError,
+                    lineIndex + 1,
+                    context,
+                    leftSpace,
+                    rightSpace,
+                    [column, length_1],
+                    {
+                        "editColumn": column,
+                        "deleteCount": length_1,
+                        "insertText": fixedText
+                    }
+                ];
+            }
+            return null;
+        }
+        // Initialize
+        resetRunTracking();
+        forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, onBreak) {
+            var onItemStart = (inItem === 1);
+            if (inCode || inTable || onBreak || onItemStart || isBlankLine(line)) {
+                // Emphasis resets when leaving a block
+                resetRunTracking();
+            }
+            if (inCode || onBreak) {
                 // Emphasis has no meaning here
                 return;
             }
-            if (inItem === 1) {
+            if (onItemStart) {
                 // Trim overlapping '*' list item marker
                 line = line.replace(asteriskListItemMarkerRe, "$1 $2");
             }
             var match = null;
-            var emphasisIndex = -1;
-            var emphasisLength = 0;
-            var effectiveEmphasisLength = 0;
             // Match all emphasis-looking runs in the line...
             while ((match = emphasisRe.exec(line))) {
                 var matchIndex = match.index + match[1].length;
@@ -2737,30 +2788,17 @@ module.exports = {
                     effectiveEmphasisLength = matchLength;
                 }
                 else if (matchLength === effectiveEmphasisLength) {
-                    // Close current run
-                    var content = line.substring(emphasisIndex, matchIndex);
-                    var leftSpace = leftSpaceRe.test(content);
-                    var rightSpace = rightSpaceRe.test(content);
-                    if (leftSpace || rightSpace) {
-                        // Report the violation
-                        var contextStart = emphasisIndex - emphasisLength;
-                        var contextEnd = matchIndex + effectiveEmphasisLength;
-                        var context = line.substring(contextStart, contextEnd);
-                        var column = contextStart + 1;
-                        var length_1 = contextEnd - contextStart;
-                        var leftMarker = line.substring(contextStart, emphasisIndex);
-                        var rightMarker = match[2] || match[3];
-                        var fixedText = "" + leftMarker + content.trim() + rightMarker;
-                        addErrorContext(onError, lineIndex + 1, context, leftSpace, rightSpace, [column, length_1], {
-                            "editColumn": column,
-                            "deleteCount": length_1,
-                            "insertText": fixedText
-                        });
+                    // Ending an existing run, report any pending error
+                    if (pendingError) {
+                        addErrorContext.apply(void 0, pendingError);
+                        pendingError = null;
+                    }
+                    var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex);
+                    if (error) {
+                        addErrorContext.apply(void 0, error);
                     }
                     // Reset
-                    emphasisIndex = -1;
-                    emphasisLength = 0;
-                    effectiveEmphasisLength = 0;
+                    resetRunTracking();
                 }
                 else if (matchLength === 3) {
                     // Swap internal run length (1->2 or 2->1)
@@ -2774,6 +2812,13 @@ module.exports = {
                     // Upgrade to internal run (1->3 or 2->3)
                     effectiveEmphasisLength += matchLength;
                 }
+            }
+            if (emphasisIndex !== -1) {
+                pendingError = pendingError ||
+                    handleRunEnd(line, lineIndex, 0, null, line.length);
+                // Adjust for pending run on new line
+                emphasisIndex = 0;
+                emphasisLength = 0;
             }
         });
     }
@@ -3223,7 +3268,7 @@ module.exports = rules;
 },{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48,"url":59}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.20.0",
+    "version": "0.20.1",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "types": "lib/markdownlint.d.ts",
