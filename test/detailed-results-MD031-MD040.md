@@ -58,3 +58,6 @@ span```` text
 text.
 
 Text [ space](link) text [space ](link) text [ space ](link) text.
+
+Space * inside
+multi-line * emphasis.
