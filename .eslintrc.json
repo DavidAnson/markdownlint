@@ -40,6 +40,7 @@
     "multiline-comment-style": ["error", "separate-lines"],
     "multiline-ternary": "off",
     "newline-per-chained-call": "off",
+    "no-continue": "off",
     "no-empty-function": "off",
     "no-extra-parens": "off",
     "no-implicit-coercion": "off",

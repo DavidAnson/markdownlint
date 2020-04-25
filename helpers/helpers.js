@@ -25,6 +25,9 @@ module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 
+// Regular expression for emphasis markers
+const emphasisMarkersRe = /[_*]+/g;
+
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 
@@ -330,84 +333,90 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
   });
 };
 
-// Calls the provided function for each inline code span's content
-module.exports.forEachInlineCodeSpan =
-  function forEachInlineCodeSpan(input, handler) {
-    let currentLine = 0;
-    let currentColumn = 0;
-    let index = 0;
-    while (index < input.length) {
-      let startIndex = -1;
-      let startLine = -1;
-      let startColumn = -1;
-      let tickCount = 0;
-      let currentTicks = 0;
-      let state = "normal";
-      // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
-      for (; index <= input.length; index++) {
-        const char = input[index];
-        // Ignore backticks in link destination
-        if ((char === "[") && (state === "normal")) {
-          state = "linkTextOpen";
-        } else if ((char === "]") && (state === "linkTextOpen")) {
-          state = "linkTextClosed";
-        } else if ((char === "(") && (state === "linkTextClosed")) {
-          state = "linkDestinationOpen";
-        } else if (
-          ((char === "(") && (state === "linkDestinationOpen")) ||
-          ((char === ")") && (state === "linkDestinationOpen")) ||
-          (state === "linkTextClosed")) {
-          state = "normal";
-        }
-        // Parse backtick open/close
-        if ((char === "`") && (state !== "linkDestinationOpen")) {
-          // Count backticks at start or end of code span
-          currentTicks++;
-          if ((startIndex === -1) || (startColumn === -1)) {
-            startIndex = index + 1;
-          }
-        } else {
-          if ((startIndex >= 0) &&
-            (startColumn >= 0) &&
-            (tickCount === currentTicks)) {
-            // Found end backticks; invoke callback for code span
-            handler(
-              input.substring(startIndex, index - currentTicks),
-              startLine, startColumn, tickCount);
-            startIndex = -1;
-            startColumn = -1;
-          } else if ((startIndex >= 0) && (startColumn === -1)) {
-            // Found start backticks
-            tickCount = currentTicks;
-            startLine = currentLine;
-            startColumn = currentColumn;
-          }
-          // Not in backticks
-          currentTicks = 0;
-        }
-        if (char === "\n") {
-          // On next line
-          currentLine++;
-          currentColumn = 0;
-        } else if ((char === "\\") &&
-          ((startIndex === -1) || (startColumn === -1)) &&
-          (input[index + 1] !== "\n")) {
-          // Escape character outside code, skip next
-          index++;
-          currentColumn += 2;
-        } else {
-          // On next column
-          currentColumn++;
-        }
+/**
+ * Calls the provided function for each inline code span's content.
+ *
+ * @param {string} input Markdown content.
+ * @param {Function} handler Callback function.
+ * @returns {void}
+ */
+function forEachInlineCodeSpan(input, handler) {
+  let currentLine = 0;
+  let currentColumn = 0;
+  let index = 0;
+  while (index < input.length) {
+    let startIndex = -1;
+    let startLine = -1;
+    let startColumn = -1;
+    let tickCount = 0;
+    let currentTicks = 0;
+    let state = "normal";
+    // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
+    for (; index <= input.length; index++) {
+      const char = input[index];
+      // Ignore backticks in link destination
+      if ((char === "[") && (state === "normal")) {
+        state = "linkTextOpen";
+      } else if ((char === "]") && (state === "linkTextOpen")) {
+        state = "linkTextClosed";
+      } else if ((char === "(") && (state === "linkTextClosed")) {
+        state = "linkDestinationOpen";
+      } else if (
+        ((char === "(") && (state === "linkDestinationOpen")) ||
+        ((char === ")") && (state === "linkDestinationOpen")) ||
+        (state === "linkTextClosed")) {
+        state = "normal";
       }
-      if (startIndex >= 0) {
-        // Restart loop after unmatched start backticks (ex: "`text``code``")
-        index = startIndex;
-        currentLine = startLine;
-        currentColumn = startColumn;
+      // Parse backtick open/close
+      if ((char === "`") && (state !== "linkDestinationOpen")) {
+        // Count backticks at start or end of code span
+        currentTicks++;
+        if ((startIndex === -1) || (startColumn === -1)) {
+          startIndex = index + 1;
+        }
+      } else {
+        if ((startIndex >= 0) &&
+          (startColumn >= 0) &&
+          (tickCount === currentTicks)) {
+          // Found end backticks; invoke callback for code span
+          handler(
+            input.substring(startIndex, index - currentTicks),
+            startLine, startColumn, tickCount);
+          startIndex = -1;
+          startColumn = -1;
+        } else if ((startIndex >= 0) && (startColumn === -1)) {
+          // Found start backticks
+          tickCount = currentTicks;
+          startLine = currentLine;
+          startColumn = currentColumn;
+        }
+        // Not in backticks
+        currentTicks = 0;
+      }
+      if (char === "\n") {
+        // On next line
+        currentLine++;
+        currentColumn = 0;
+      } else if ((char === "\\") &&
+        ((startIndex === -1) || (startColumn === -1)) &&
+        (input[index + 1] !== "\n")) {
+        // Escape character outside code, skip next
+        index++;
+        currentColumn += 2;
+      } else {
+        // On next column
+        currentColumn++;
       }
     }
-  };
+    if (startIndex >= 0) {
+      // Restart loop after unmatched start backticks (ex: "`text``code``")
+      index = startIndex;
+      currentLine = startLine;
+      currentColumn = startColumn;
+    }
+  }
+}
+module.exports.forEachInlineCodeSpan = forEachInlineCodeSpan;
 
 /**
  * Adds a generic error object via the onError callback.
@@ -483,6 +492,41 @@ module.exports.frontMatterHasTitle =
     return !ignoreFrontMatter &&
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
+
+/**
+ * Returns a list of emphasis markers in code spans.
+ *
+ * @param {Object} params RuleParams instance.
+ * @returns {number[][]} List of markers.
+ */
+function emphasisMarkersInCodeSpans(params) {
+  const { lines } = params;
+  const byLine = new Array(lines.length);
+  filterTokens(params, "inline", (token) => {
+    const { children, lineNumber, map } = token;
+    if (children.some((child) => child.type === "code_inline")) {
+      const tokenLines = lines.slice(map[0], map[1]);
+      forEachInlineCodeSpan(
+        tokenLines.join("\n"),
+        (code, lineIndex, column, tickCount) => {
+          const codeLines = code.split(newLineRe);
+          codeLines.forEach((codeLine, codeLineIndex) => {
+            let match = null;
+            while ((match = emphasisMarkersRe.exec(codeLine))) {
+              const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
+              const inLine = byLine[byLineIndex] || [];
+              const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
+              inLine.push(codeLineOffset + match.index);
+              byLine[byLineIndex] = inLine;
+            }
+          });
+        }
+      );
+    }
+  });
+  return byLine;
+}
+module.exports.emphasisMarkersInCodeSpans = emphasisMarkersInCodeSpans;
 
 /**
  * Gets the most common line ending, falling back to the platform default.

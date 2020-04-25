@@ -73,3 +73,50 @@ emphasis _ text {MD037}
 
 Text ** bold {MD037}
 bold ** text {MD037}
+
+Emphasis `inside
+of * code *
+blocks` is okay.
+
+Emphasis `* inside`
+code
+`blocks *` is okay.
+
+Emphasis `inside *`
+code
+`* blocks` is okay.
+
+Emphasis `inside
+_ code _
+blocks` is okay.
+
+Emphasis `_ inside`
+code
+`blocks _` is okay.
+
+Emphasis `inside _`
+code
+`_ blocks` is okay.
+
+Mixed `code_span`
+scenarios
+are _also_ okay.
+
+Mixed `code*span`
+scenarios
+are *also* okay.
+
+This paragraph
+contains *a* mix
+of `*` emphasis
+scenarios and *should*
+not trigger `*` any
+violations at *all*.
+
+This paragraph
+contains `a * slightly
+more complicated
+multi-line emphasis
+scenario * that
+should * not trigger
+violations * either`.

@@ -154,3 +154,23 @@ Text *emph***strong ** text {MD037}
 ```markdown
 Violations * are * allowed in code blocks where emphasis does not apply.
 ```
+
+Emphasis `inside * code * blocks` is okay.
+
+Emphasis `* inside` code `blocks *` is okay.
+
+Emphasis `inside *` code `* blocks` is okay.
+
+Emphasis `inside _ code _ blocks` is okay.
+
+Emphasis `_ inside` code `blocks _` is okay.
+
+Emphasis `inside _` code `_ blocks` is okay.
+
+Mixed `code_span` scenarios are _also_ okay.
+
+Mixed `code*span` scenarios are *also* okay.
+
+Mixed `code*span` scenarios are _also_ okay.
+
+Mixed `code_span` scenarios are *also* okay.
