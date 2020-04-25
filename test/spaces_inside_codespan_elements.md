@@ -4,7 +4,7 @@
 
 `codespan element with space inside right ` {MD038}
 
-` codespan element with spaces inside ` {MD038}
+` codespan element with spaces inside ` (allowed per spec)
 
 empty `` codespan element
 
@@ -111,3 +111,12 @@ Double start and single end space: `  code ` {MD038}
 Single start and double end spaces: ` code  ` {MD038}
 
 Double start and end spaces: `  code  ` {MD038}
+
+Spaces before and after: ` codecode `
+As above, with an internal space: ` code code `
+As above, practical example with a backtick: `` Ctrl + ` ``
+As above, no internal space: `` Ctrl+` ``
+Again, 3 characters: ` abc `
+Again, 2 characters: ` ab `
+Again, 1 character: ` a `
+Many internal spaces: ` code code  code   code    code     code `
