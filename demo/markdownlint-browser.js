@@ -36,6 +36,8 @@ module.exports.inlineCommentRe = inlineCommentRe;
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
+// Regular expression for emphasis markers
+var emphasisMarkersRe = /[_*]+/g;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 // All punctuation characters (normal and full-width)
@@ -328,88 +330,94 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
         }
     });
 };
-// Calls the provided function for each inline code span's content
-module.exports.forEachInlineCodeSpan =
-    function forEachInlineCodeSpan(input, handler) {
-        var currentLine = 0;
-        var currentColumn = 0;
-        var index = 0;
-        while (index < input.length) {
-            var startIndex = -1;
-            var startLine = -1;
-            var startColumn = -1;
-            var tickCount = 0;
-            var currentTicks = 0;
-            var state = "normal";
-            // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
-            for (; index <= input.length; index++) {
-                var char = input[index];
-                // Ignore backticks in link destination
-                if ((char === "[") && (state === "normal")) {
-                    state = "linkTextOpen";
-                }
-                else if ((char === "]") && (state === "linkTextOpen")) {
-                    state = "linkTextClosed";
-                }
-                else if ((char === "(") && (state === "linkTextClosed")) {
-                    state = "linkDestinationOpen";
-                }
-                else if (((char === "(") && (state === "linkDestinationOpen")) ||
-                    ((char === ")") && (state === "linkDestinationOpen")) ||
-                    (state === "linkTextClosed")) {
-                    state = "normal";
-                }
-                // Parse backtick open/close
-                if ((char === "`") && (state !== "linkDestinationOpen")) {
-                    // Count backticks at start or end of code span
-                    currentTicks++;
-                    if ((startIndex === -1) || (startColumn === -1)) {
-                        startIndex = index + 1;
-                    }
-                }
-                else {
-                    if ((startIndex >= 0) &&
-                        (startColumn >= 0) &&
-                        (tickCount === currentTicks)) {
-                        // Found end backticks; invoke callback for code span
-                        handler(input.substring(startIndex, index - currentTicks), startLine, startColumn, tickCount);
-                        startIndex = -1;
-                        startColumn = -1;
-                    }
-                    else if ((startIndex >= 0) && (startColumn === -1)) {
-                        // Found start backticks
-                        tickCount = currentTicks;
-                        startLine = currentLine;
-                        startColumn = currentColumn;
-                    }
-                    // Not in backticks
-                    currentTicks = 0;
-                }
-                if (char === "\n") {
-                    // On next line
-                    currentLine++;
-                    currentColumn = 0;
-                }
-                else if ((char === "\\") &&
-                    ((startIndex === -1) || (startColumn === -1)) &&
-                    (input[index + 1] !== "\n")) {
-                    // Escape character outside code, skip next
-                    index++;
-                    currentColumn += 2;
-                }
-                else {
-                    // On next column
-                    currentColumn++;
+/**
+ * Calls the provided function for each inline code span's content.
+ *
+ * @param {string} input Markdown content.
+ * @param {Function} handler Callback function.
+ * @returns {void}
+ */
+function forEachInlineCodeSpan(input, handler) {
+    var currentLine = 0;
+    var currentColumn = 0;
+    var index = 0;
+    while (index < input.length) {
+        var startIndex = -1;
+        var startLine = -1;
+        var startColumn = -1;
+        var tickCount = 0;
+        var currentTicks = 0;
+        var state = "normal";
+        // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
+        for (; index <= input.length; index++) {
+            var char = input[index];
+            // Ignore backticks in link destination
+            if ((char === "[") && (state === "normal")) {
+                state = "linkTextOpen";
+            }
+            else if ((char === "]") && (state === "linkTextOpen")) {
+                state = "linkTextClosed";
+            }
+            else if ((char === "(") && (state === "linkTextClosed")) {
+                state = "linkDestinationOpen";
+            }
+            else if (((char === "(") && (state === "linkDestinationOpen")) ||
+                ((char === ")") && (state === "linkDestinationOpen")) ||
+                (state === "linkTextClosed")) {
+                state = "normal";
+            }
+            // Parse backtick open/close
+            if ((char === "`") && (state !== "linkDestinationOpen")) {
+                // Count backticks at start or end of code span
+                currentTicks++;
+                if ((startIndex === -1) || (startColumn === -1)) {
+                    startIndex = index + 1;
                 }
             }
-            if (startIndex >= 0) {
-                // Restart loop after unmatched start backticks (ex: "`text``code``")
-                index = startIndex;
-                currentLine = startLine;
-                currentColumn = startColumn;
+            else {
+                if ((startIndex >= 0) &&
+                    (startColumn >= 0) &&
+                    (tickCount === currentTicks)) {
+                    // Found end backticks; invoke callback for code span
+                    handler(input.substring(startIndex, index - currentTicks), startLine, startColumn, tickCount);
+                    startIndex = -1;
+                    startColumn = -1;
+                }
+                else if ((startIndex >= 0) && (startColumn === -1)) {
+                    // Found start backticks
+                    tickCount = currentTicks;
+                    startLine = currentLine;
+                    startColumn = currentColumn;
+                }
+                // Not in backticks
+                currentTicks = 0;
+            }
+            if (char === "\n") {
+                // On next line
+                currentLine++;
+                currentColumn = 0;
+            }
+            else if ((char === "\\") &&
+                ((startIndex === -1) || (startColumn === -1)) &&
+                (input[index + 1] !== "\n")) {
+                // Escape character outside code, skip next
+                index++;
+                currentColumn += 2;
+            }
+            else {
+                // On next column
+                currentColumn++;
             }
         }
-    };
+        if (startIndex >= 0) {
+            // Restart loop after unmatched start backticks (ex: "`text``code``")
+            index = startIndex;
+            currentLine = startLine;
+            currentColumn = startColumn;
+        }
+    }
+}
+module.exports.forEachInlineCodeSpan = forEachInlineCodeSpan;
 /**
  * Adds a generic error object via the onError callback.
  *
@@ -473,6 +481,37 @@ module.exports.frontMatterHasTitle =
         return !ignoreFrontMatter &&
             frontMatterLines.some(function (line) { return frontMatterTitleRe.test(line); });
     };
+/**
+ * Returns a list of emphasis markers in code spans.
+ *
+ * @param {Object} params RuleParams instance.
+ * @returns {number[][]} List of markers.
+ */
+function emphasisMarkersInCodeSpans(params) {
+    var lines = params.lines;
+    var byLine = new Array(lines.length);
+    filterTokens(params, "inline", function (token) {
+        var children = token.children, lineNumber = token.lineNumber, map = token.map;
+        if (children.some(function (child) { return child.type === "code_inline"; })) {
+            var tokenLines = lines.slice(map[0], map[1]);
+            forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, column, tickCount) {
+                var codeLines = code.split(newLineRe);
+                codeLines.forEach(function (codeLine, codeLineIndex) {
+                    var match = null;
+                    while ((match = emphasisMarkersRe.exec(codeLine))) {
+                        var byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
+                        var inLine = byLine[byLineIndex] || [];
+                        var codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
+                        inLine.push(codeLineOffset + match.index);
+                        byLine[byLineIndex] = inLine;
+                    }
+                });
+            });
+        }
+    });
+    return byLine;
+}
+module.exports.emphasisMarkersInCodeSpans = emphasisMarkersInCodeSpans;
 /**
  * Gets the most common line ending, falling back to the platform default.
  *
@@ -2702,7 +2741,7 @@ module.exports = {
 },{"../helpers":2}],37:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
+var _a = require("../helpers"), addErrorContext = _a.addErrorContext, emphasisMarkersInCodeSpans = _a.emphasisMarkersInCodeSpans, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, isBlankLine = _a.isBlankLine;
 var lineMetadata = require("./cache").lineMetadata;
 var emphasisRe = /(^|[^\\])(?:(\*\*?\*?)|(__?_?))/g;
 var asteriskListItemMarkerRe = /^(\s*)\*(\s+)/;
@@ -2714,11 +2753,12 @@ module.exports = {
     "tags": ["whitespace", "emphasis"],
     "function": function MD037(params, onError) {
         // eslint-disable-next-line init-declarations
-        var effectiveEmphasisLength, emphasisIndex, emphasisLength, pendingError;
+        var effectiveEmphasisLength, emphasisIndex, emphasisKind, emphasisLength, pendingError = null;
         // eslint-disable-next-line jsdoc/require-jsdoc
         function resetRunTracking() {
             emphasisIndex = -1;
             emphasisLength = 0;
+            emphasisKind = "";
             effectiveEmphasisLength = 0;
             pendingError = null;
         }
@@ -2761,6 +2801,7 @@ module.exports = {
             return null;
         }
         // Initialize
+        var ignoreMarkersByLine = emphasisMarkersInCodeSpans(params);
         resetRunTracking();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, onBreak) {
             var onItemStart = (inItem === 1);
@@ -2779,15 +2820,23 @@ module.exports = {
             var match = null;
             // Match all emphasis-looking runs in the line...
             while ((match = emphasisRe.exec(line))) {
+                var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex] || [];
                 var matchIndex = match.index + match[1].length;
+                if (includesSorted(ignoreMarkersForLine, matchIndex)) {
+                    // Ignore emphasis markers inside code spans
+                    continue;
+                }
                 var matchLength = match[0].length - match[1].length;
+                var matchKind = (match[2] || match[3])[0];
                 if (emphasisIndex === -1) {
                     // New run
                     emphasisIndex = matchIndex + matchLength;
                     emphasisLength = matchLength;
+                    emphasisKind = matchKind;
                     effectiveEmphasisLength = matchLength;
                 }
-                else if (matchLength === effectiveEmphasisLength) {
+                else if ((matchLength === effectiveEmphasisLength) &&
+                    (matchKind === emphasisKind)) {
                     // Ending an existing run, report any pending error
                     if (pendingError) {
                         addErrorContext.apply(void 0, pendingError);
@@ -2830,7 +2879,7 @@ module.exports = {
 var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe;
 var leftSpaceRe = /^\s([^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
-var singleLeftRightSpaceRe = /^\s\S+\s$/;
+var singleLeftRightSpaceRe = /^\s(?:\S.*\S|\S)\s$/;
 module.exports = {
     "names": ["MD038", "no-space-in-code"],
     "description": "Spaces inside code span elements",
