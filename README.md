@@ -787,6 +787,7 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * [V8](https://v8.dev/) ([Search repository](https://github.com/v8/v8.dev/search?q=markdownlint))
 * [webhint](https://webhint.io/) ([Search repository](https://github.com/webhintio/hint/search?q=markdownlint))
 * [webpack](https://webpack.js.org/) ([Search repository](https://github.com/webpack/webpack.js.org/search?q=markdownlint))
+* [WordPress](https://wordpress.org/gutenberg/) ([Search repository](https://github.com/WordPress/gutenberg/search?q=markdownlint))
 
 ## Contributing
 
