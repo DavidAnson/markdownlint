@@ -1,0 +1,28 @@
+name: TestRepos
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [12.x]
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install Dependencies
+      run: npm install --no-package-lock
+    - name: Clone Test Repos
+      run: npm run clone-test-repos
+    - name: Lint Test Repos
+      run: npm run lint-test-repos
