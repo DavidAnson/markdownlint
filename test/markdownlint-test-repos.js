@@ -2,6 +2,7 @@
 
 "use strict";
 
+const { existsSync } = require("fs");
 const { join } = require("path");
 const { promisify } = require("util");
 const globby = require("globby");
@@ -91,3 +92,18 @@ tape("https://github.com/pi-hole/docs", (test) => {
   const configPath = join(rootDir, ".markdownlint.json");
   lintTestRepo(test, globPatterns, configPath);
 });
+
+// Optional repositories (very large)
+
+const dotnetDocsDir = "./test-repos/dotnet-docs";
+if (existsSync(dotnetDocsDir)) {
+  tape("https://github.com/dotnet/docs", (test) => {
+    const rootDir = dotnetDocsDir;
+    const globPatterns = [
+      join(rootDir, "**/*.md"),
+      "!" + join(rootDir, "samples/**/*.md")
+    ];
+    const configPath = join(rootDir, ".markdownlint.json");
+    lintTestRepo(test, globPatterns, configPath);
+  });
+}
