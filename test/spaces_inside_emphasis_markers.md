@@ -174,3 +174,17 @@ Mixed `code*span` scenarios are *also* okay.
 Mixed `code*span` scenarios are _also_ okay.
 
 Mixed `code_span` scenarios are *also* okay.
+
+[Link](under_score) followed by _underscore_
+
+[Link](un_der_score) followed by _underscore_
+
+[Link](un_der_sco_re) followed by _underscore_
+
+[Link](star*star) followed by *star*
+
+* [Link](star*star) followed by *star*
+
+Text [Link](under_score) text _underscore_ text [Link](st*ar) text *star* text
+
+[Link [link] link](under_score) followed by _underscore_

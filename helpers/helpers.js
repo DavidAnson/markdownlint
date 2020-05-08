@@ -28,6 +28,9 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for emphasis markers
 const emphasisMarkersRe = /[_*]+/g;
 
+// Regular expression for links
+const linkRe = /\[(?:[^\]]|\[[^\]]*\])*\]\(\S*\)/g;
+
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 
@@ -494,14 +497,15 @@ module.exports.frontMatterHasTitle =
   };
 
 /**
- * Returns a list of emphasis markers in code spans.
+ * Returns a list of emphasis markers in code spans and links.
  *
  * @param {Object} params RuleParams instance.
  * @returns {number[][]} List of markers.
  */
-function emphasisMarkersInCodeSpans(params) {
+function emphasisMarkersInContent(params) {
   const { lines } = params;
   const byLine = new Array(lines.length);
+  // Search code spans
   filterTokens(params, "inline", (token) => {
     const { children, lineNumber, map } = token;
     if (children.some((child) => child.type === "code_inline")) {
@@ -524,9 +528,21 @@ function emphasisMarkersInCodeSpans(params) {
       );
     }
   });
+  // Search links
+  lines.forEach((tokenLine, tokenLineIndex) => {
+    let linkMatch = null;
+    while ((linkMatch = linkRe.exec(tokenLine))) {
+      let markerMatch = null;
+      while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
+        const inLine = byLine[tokenLineIndex] || [];
+        inLine.push(linkMatch.index + markerMatch.index);
+        byLine[tokenLineIndex] = inLine;
+      }
+    }
+  });
   return byLine;
 }
-module.exports.emphasisMarkersInCodeSpans = emphasisMarkersInCodeSpans;
+module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 
 /**
  * Gets the most common line ending, falling back to the platform default.
