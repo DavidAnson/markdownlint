@@ -43,7 +43,6 @@
     "cpy-cli": "~3.1.0",
     "eslint": "~6.8.0",
     "eslint-plugin-jsdoc": "~22.1.0",
-    "glob": "~7.1.6",
     "globby": "~11.0.0",
     "js-yaml": "~3.13.1",
     "make-dir-cli": "~2.0.0",

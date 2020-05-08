@@ -4,7 +4,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const glob = require("glob");
+const globby = require("globby");
 const tape = require("tape");
 require("tape-player");
 const markdownlint = require("../lib/markdownlint");
@@ -33,19 +33,12 @@ files.filter((file) => /\.md$/.test(file)).forEach((file) => {
 
 // Parses all Markdown files in all package dependencies
 tape("parseAllFiles", (test) => {
-  test.plan(2);
-  const globOptions = {
-    // "cwd": "/",
-    "realpath": true
+  test.plan(1);
+  const options = {
+    "files": globby.sync("**/*.{md,markdown}")
   };
-  glob("**/*.{md,markdown}", globOptions, (err, matches) => {
+  markdownlint(options, (err) => {
     test.ifError(err);
-    const markdownlintOptions = {
-      "files": matches
-    };
-    markdownlint(markdownlintOptions, (errr) => {
-      test.ifError(errr);
-      test.end();
-    });
+    test.end();
   });
 });
