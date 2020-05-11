@@ -188,3 +188,69 @@ Mixed `code_span` scenarios are *also* okay.
 Text [Link](under_score) text _underscore_ text [Link](st*ar) text *star* text
 
 [Link [link] link](under_score) followed by _underscore_
+
+**under_score** text *under_score*
+
+*under_score* text **under_score**
+
+__star*star__ text _star*star_
+
+_star*star_ text __star*star__
+
+*_emphasis* text *emphasis*
+
+*emphasis_* text *emphasis*
+
+*emphasis* text *_emphasis*
+
+*emphasis* text *emphasis_*
+
+text \\*emphasis* text *emphasis* text
+
+text *emphasis\\* text *emphasis* text
+
+text *emphasis* text \\*emphasis* text
+
+text *emphasis* text *emphasis\\* text
+
+text *star*_underscore_ text **star**_underscore_ text
+
+text **star**_underscore_ text *star*_underscore_ text
+
+text **star**_underscore_ text **star**_underscore_ text
+
+text *star*_underscore_ text *star*__underscore__ text
+
+text *star*__underscore__ text *star*_underscore_ text
+
+text *star*__underscore__ text *star*__underscore__ text
+
+text _underscore_*star* text __underscore__*star* text
+
+text __underscore__*star* text _underscore_*star* text
+
+text __underscore__*star* text __underscore__*star* text
+
+text _underscore_*star* text _underscore_**star** text
+
+text _underscore_**star** text _underscore_*star* text
+
+text _underscore_**star** text _underscore_**star** text
+
+> * List with *emphasis* in blockquote
+>
+> > * List with *emphasis* in blockquote
+
+`* text *`
+
+`** text **`
+
+`*** text ***`
+
+`**** text ****`
+
+`***** text *****`
+
+`****** text ******`
+
+`******* text *******`

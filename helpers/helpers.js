@@ -25,8 +25,8 @@ module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 
-// Regular expression for emphasis markers
-const emphasisMarkersRe = /[_*]+/g;
+// Regular expression for all instances of emphasis markers
+const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for links
 const linkRe = /\[(?:[^\]]|\[[^\]]*\])*\]\(\S*\)/g;
@@ -255,7 +255,7 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
 // Calls the provided function for each line (with context)
 module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
   lineMetadata.forEach(function forMetadata(metadata) {
-    // Parameters: line, lineIndex, inCode, onFence, inTable, inBreak
+    // Parameters: line, lineIndex, inCode, onFence, inTable, inItem, inBreak
     handler(...metadata);
   });
 };
