@@ -28,8 +28,8 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 const emphasisMarkersRe = /[_*]/g;
 
-// Regular expression for links
-const linkRe = /\[(?:[^\]]|\[[^\]]*\])*\]\(\S*\)/g;
+// Regular expression for inline links and shortcut reference links
+const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };

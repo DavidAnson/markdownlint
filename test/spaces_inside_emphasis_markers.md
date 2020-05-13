@@ -254,3 +254,46 @@ text _underscore_**star** text _underscore_**star** text
 `****** text ******`
 
 `******* text *******`
+
+under_score
+_underscore_
+
+st*ar
+*star*
+
+under_score
+*star*
+
+st*ar
+_underscore_
+
+*star*
+_underscore_
+
+_underscore_
+*star*
+
+_underscore
+_*star*
+
+*star
+*_underscore_
+
+[reference_link]
+_first_ and _second_
+
+[reference_link]
+*first* and *second*
+
+[reference*link]
+_first_ and _second_
+
+[reference*link]
+*first* and *second*
+
+text [reference_link] under _ score text
+
+text [reference*link] star * star text
+
+[reference_link]: https://example.com
+[reference*link]: https://example.com
