@@ -69,3 +69,15 @@ Bare URL exempt https://github.com/DavidAnson/MARKDOWNLINT {MD034}
 A short paragraph
 about node.js and {MD044}
 javascript. {MD044}
+
+{MD044} `javascript`
+
+{MD044} `code
+javascript`
+
+{MD044} `code
+javascript
+code`
+
+{MD044} `javascript
+code`
