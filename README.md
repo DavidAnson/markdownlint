@@ -858,11 +858,12 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            MD005/list-indent, improve MD007/MD013/MD014, deprecate MD006/ul-start-left, add
            rationale for every rule, update test runner and code coverage, add more JSDoc
            comments, update dependencies.
-* 0.20.0 - Add `markdownlint-configure-file` inline comment,
-           improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD037/MD038/MD039, improve HTML
+* 0.20.0 - Add `markdownlint-configure-file` inline comment, reimplement MD037,
+           improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD038/MD039, improve HTML
            comment handling, update dependencies.
   * 0.20.1 - Fix regression in MD037.
   * 0.20.2 - Fix regression in MD037, improve MD038.
+  * 0.20.3 - Fix regression in MD037, improve MD044, add automatic regression testing.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint

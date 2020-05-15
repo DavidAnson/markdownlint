@@ -36,8 +36,10 @@ module.exports.inlineCommentRe = inlineCommentRe;
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-// Regular expression for emphasis markers
-var emphasisMarkersRe = /[_*]+/g;
+// Regular expression for all instances of emphasis markers
+var emphasisMarkersRe = /[_*]/g;
+// Regular expression for inline links and shortcut reference links
+var linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = { "encoding": "utf8" };
 // All punctuation characters (normal and full-width)
@@ -246,7 +248,7 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
 // Calls the provided function for each line (with context)
 module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
     lineMetadata.forEach(function forMetadata(metadata) {
-        // Parameters: line, lineIndex, inCode, onFence, inTable, inBreak
+        // Parameters: line, lineIndex, inCode, onFence, inTable, inItem, inBreak
         handler.apply(void 0, metadata);
     });
 };
@@ -482,14 +484,15 @@ module.exports.frontMatterHasTitle =
             frontMatterLines.some(function (line) { return frontMatterTitleRe.test(line); });
     };
 /**
- * Returns a list of emphasis markers in code spans.
+ * Returns a list of emphasis markers in code spans and links.
  *
  * @param {Object} params RuleParams instance.
  * @returns {number[][]} List of markers.
  */
-function emphasisMarkersInCodeSpans(params) {
+function emphasisMarkersInContent(params) {
     var lines = params.lines;
     var byLine = new Array(lines.length);
+    // Search code spans
     filterTokens(params, "inline", function (token) {
         var children = token.children, lineNumber = token.lineNumber, map = token.map;
         if (children.some(function (child) { return child.type === "code_inline"; })) {
@@ -509,9 +512,21 @@ function emphasisMarkersInCodeSpans(params) {
             });
         }
     });
+    // Search links
+    lines.forEach(function (tokenLine, tokenLineIndex) {
+        var linkMatch = null;
+        while ((linkMatch = linkRe.exec(tokenLine))) {
+            var markerMatch = null;
+            while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
+                var inLine = byLine[tokenLineIndex] || [];
+                inLine.push(linkMatch.index + markerMatch.index);
+                byLine[tokenLineIndex] = inLine;
+            }
+        }
+    });
     return byLine;
 }
-module.exports.emphasisMarkersInCodeSpans = emphasisMarkersInCodeSpans;
+module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 /**
  * Gets the most common line ending, falling back to the platform default.
  *
@@ -2741,10 +2756,10 @@ module.exports = {
 },{"../helpers":2}],37:[function(require,module,exports){
 // @ts-check
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, emphasisMarkersInCodeSpans = _a.emphasisMarkersInCodeSpans, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, isBlankLine = _a.isBlankLine;
+var _a = require("../helpers"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
 var lineMetadata = require("./cache").lineMetadata;
-var emphasisRe = /(^|[^\\])(?:(\*\*?\*?)|(__?_?))/g;
-var asteriskListItemMarkerRe = /^(\s*)\*(\s+)/;
+var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
+var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
 var rightSpaceRe = /\s+$/;
 module.exports = {
@@ -2801,7 +2816,7 @@ module.exports = {
             return null;
         }
         // Initialize
-        var ignoreMarkersByLine = emphasisMarkersInCodeSpans(params);
+        var ignoreMarkersByLine = emphasisMarkersInContent(params);
         resetRunTracking();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, onBreak) {
             var onItemStart = (inItem === 1);
@@ -2822,8 +2837,8 @@ module.exports = {
             while ((match = emphasisRe.exec(line))) {
                 var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex] || [];
                 var matchIndex = match.index + match[1].length;
-                if (includesSorted(ignoreMarkersForLine, matchIndex)) {
-                    // Ignore emphasis markers inside code spans
+                if (ignoreMarkersForLine.includes(matchIndex)) {
+                    // Ignore emphasis markers inside code spans and links
                     continue;
                 }
                 var matchLength = match[0].length - match[1].length;
@@ -2835,31 +2850,41 @@ module.exports = {
                     emphasisKind = matchKind;
                     effectiveEmphasisLength = matchLength;
                 }
-                else if ((matchLength === effectiveEmphasisLength) &&
-                    (matchKind === emphasisKind)) {
-                    // Ending an existing run, report any pending error
-                    if (pendingError) {
-                        addErrorContext.apply(void 0, pendingError);
-                        pendingError = null;
+                else if (matchKind === emphasisKind) {
+                    // Matching emphasis markers
+                    if (matchLength === effectiveEmphasisLength) {
+                        // Ending an existing run, report any pending error
+                        if (pendingError) {
+                            addErrorContext.apply(void 0, pendingError);
+                            pendingError = null;
+                        }
+                        var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex);
+                        if (error) {
+                            addErrorContext.apply(void 0, error);
+                        }
+                        // Reset
+                        resetRunTracking();
                     }
-                    var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex);
-                    if (error) {
-                        addErrorContext.apply(void 0, error);
+                    else if (matchLength === 3) {
+                        // Swap internal run length (1->2 or 2->1)
+                        effectiveEmphasisLength = matchLength - effectiveEmphasisLength;
                     }
-                    // Reset
-                    resetRunTracking();
+                    else if (effectiveEmphasisLength === 3) {
+                        // Downgrade internal run (3->1 or 3->2)
+                        effectiveEmphasisLength -= matchLength;
+                    }
+                    else {
+                        // Upgrade to internal run (1->3 or 2->3)
+                        effectiveEmphasisLength += matchLength;
+                    }
+                    // Back up one character so RegExp has a chance to match the
+                    // next marker (ex: "**star**_underscore_")
+                    emphasisRe.lastIndex--;
                 }
-                else if (matchLength === 3) {
-                    // Swap internal run length (1->2 or 2->1)
-                    effectiveEmphasisLength = matchLength - effectiveEmphasisLength;
-                }
-                else if (effectiveEmphasisLength === 3) {
-                    // Downgrade internal run (3->1 or 3->2)
-                    effectiveEmphasisLength -= matchLength;
-                }
-                else {
-                    // Upgrade to internal run (1->3 or 2->3)
-                    effectiveEmphasisLength += matchLength;
+                else if (emphasisRe.lastIndex > 1) {
+                    // Back up one character so RegExp has a chance to match the
+                    // mis-matched marker (ex: "*text_*")
+                    emphasisRe.lastIndex--;
                 }
             }
             if (emphasisIndex !== -1) {
@@ -3147,12 +3172,15 @@ module.exports = {
                                     // Attempt to fix bad offset due to inline content
                                     matchIndex = fullLine.indexOf(wordMatch);
                                 }
-                                var range = [matchIndex + 1, matchLength];
-                                addErrorDetailIf(onError, lineNumber, name, match[1], null, null, range, {
+                                var range = (matchIndex === -1) ?
+                                    null :
+                                    [matchIndex + 1, matchLength];
+                                var fixInfo = (matchIndex === -1) ? null : {
                                     "editColumn": matchIndex + 1,
                                     "deleteCount": matchLength,
                                     "insertText": name
-                                });
+                                };
+                                addErrorDetailIf(onError, lineNumber, name, match[1], null, null, range, fixInfo);
                             }
                         }
                     }
@@ -3317,7 +3345,7 @@ module.exports = rules;
 },{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48,"url":59}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.20.1",
+    "version": "0.20.3",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "types": "lib/markdownlint.d.ts",
@@ -3341,7 +3369,11 @@ module.exports={
         "build-declaration": "tsc --allowJs --declaration --outDir declaration --resolveJsonModule lib/markdownlint.js && cpy declaration/lib/markdownlint.d.ts lib && rimraf declaration",
         "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && uglifyjs markdownlint-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
         "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
-        "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint"
+        "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint",
+        "clone-test-repos": "make-dir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet",
+        "clone-test-repos-large": "npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
+        "lint-test-repos": "node test/markdownlint-test-repos.js",
+        "clean-test-repos": "rimraf test-repos"
     },
     "engines": {
         "node": ">=10"
@@ -3352,18 +3384,20 @@ module.exports={
     "devDependencies": {
         "@types/node": "~13.11.1",
         "browserify": "~16.5.1",
-        "c8": "~7.1.0",
+        "c8": "~7.1.2",
         "cpy-cli": "~3.1.0",
         "eslint": "~6.8.0",
         "eslint-plugin-jsdoc": "~22.1.0",
-        "glob": "~7.1.6",
+        "globby": "~11.0.0",
         "js-yaml": "~3.13.1",
+        "make-dir-cli": "~2.0.0",
         "markdown-it-for-inline": "~0.1.1",
         "markdown-it-katex": "~2.0.3",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
         "markdownlint-rule-helpers": "~0.7.0",
         "rimraf": "~3.0.2",
+        "strip-json-comments": "~3.1.0",
         "tape": "~4.13.2",
         "tape-player": "~0.1.0",
         "toml": "~3.0.0",
