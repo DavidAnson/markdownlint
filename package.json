@@ -39,7 +39,7 @@
   "devDependencies": {
     "@types/node": "~13.11.1",
     "browserify": "~16.5.1",
-    "c8": "7.1.1",
+    "c8": "~7.1.2",
     "cpy-cli": "~3.1.0",
     "eslint": "~6.8.0",
     "eslint-plugin-jsdoc": "~22.1.0",

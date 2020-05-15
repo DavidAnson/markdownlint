@@ -24,5 +24,9 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
       run: npm install --no-package-lock
-    - name: Run Tests
+    - name: Run All Validations
+      if: ${{ matrix.node-version != '10.x' }}
       run: npm run ci
+    - name: Run Tests Only
+      if: ${{ matrix.node-version == '10.x' }}
+      run: npm run test
