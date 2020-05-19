@@ -199,7 +199,7 @@ This can be used to "hide" `markdownlint` comments at the bottom of a file.
 In cases where it is desirable to change the configuration of one or more rules
 for a file, the following more advanced syntax is supported:
 
-* Confiure: `<!-- markdownlint-configure-file { options.config JSON } -->`
+* Configure: `<!-- markdownlint-configure-file { options.config JSON } -->`
 
 For example:
 
