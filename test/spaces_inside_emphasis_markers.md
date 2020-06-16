@@ -297,3 +297,19 @@ text [reference*link] star * star text
 
 [reference_link]: https://example.com
 [reference*link]: https://example.com
+
+***text
+*text*
+***
+
+*** text
+*text*
+***
+
+*** text
+\*text\*
+***
+
+*** text
+**text**
+***
