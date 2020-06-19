@@ -43,5 +43,5 @@ Open pull requests against the `next` branch.
 That's where the latest changes are staged for the next release.
 Include the text "(fixes #??)" at the end of the commit message so the pull request will be associated with the relevant issue.
 Once accepted, the tag `fixed in next` will be added to the issue.
-When the commit is merged to `master` branch during the release process, the issue will be closed automatically.
+When the commit is merged to the main branch during the release process, the issue will be closed automatically.
 (See [Closing issues using keywords](https://help.github.com/articles/closing-issues-using-keywords/) for details.)
