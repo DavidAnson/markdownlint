@@ -1,0 +1,242 @@
+[
+    {
+        "lineNumber": 3,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
+        "errorContext": null,
+        "errorRange": [
+            6,
+            12
+        ]
+    },
+    {
+        "lineNumber": 5,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: Node.js; Actual: node.JS",
+        "errorContext": null,
+        "errorRange": [
+            6,
+            7
+        ]
+    },
+    {
+        "lineNumber": 7,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            6,
+            4
+        ]
+    },
+    {
+        "lineNumber": 9,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            13,
+            4
+        ]
+    },
+    {
+        "lineNumber": 11,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
+        "errorContext": null,
+        "errorRange": [
+            7,
+            12
+        ]
+    },
+    {
+        "lineNumber": 13,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: Node.js; Actual: node.JS",
+        "errorContext": null,
+        "errorRange": [
+            7,
+            7
+        ]
+    },
+    {
+        "lineNumber": 15,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            7,
+            4
+        ]
+    },
+    {
+        "lineNumber": 17,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            14,
+            4
+        ]
+    },
+    {
+        "lineNumber": 19,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
+        "errorContext": null,
+        "errorRange": [
+            8,
+            12
+        ]
+    },
+    {
+        "lineNumber": 21,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: Node.js; Actual: node.JS",
+        "errorContext": null,
+        "errorRange": [
+            8,
+            7
+        ]
+    },
+    {
+        "lineNumber": 23,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            8,
+            4
+        ]
+    },
+    {
+        "lineNumber": 25,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            15,
+            4
+        ]
+    },
+    {
+        "lineNumber": 27,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
+        "errorContext": null,
+        "errorRange": [
+            1,
+            12
+        ]
+    },
+    {
+        "lineNumber": 29,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: Node.js; Actual: node.JS",
+        "errorContext": null,
+        "errorRange": [
+            1,
+            7
+        ]
+    },
+    {
+        "lineNumber": 31,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            1,
+            4
+        ]
+    },
+    {
+        "lineNumber": 33,
+        "ruleNames": [
+            "MD044",
+            "proper-names"
+        ],
+        "ruleDescription": "Proper names should have the correct capitalization",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+        "errorDetail": "Expected: .NET; Actual: .net",
+        "errorContext": null,
+        "errorRange": [
+            8,
+            4
+        ]
+    }
+]

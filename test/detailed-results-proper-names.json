@@ -1,0 +1,10 @@
+{
+  "default": true,
+  "MD044": {
+    "names": [
+      "markdownlint",
+      "Node.js",
+      ".NET"
+    ]
+  }
+}

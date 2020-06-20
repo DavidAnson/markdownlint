@@ -1,0 +1,10 @@
+{
+  "default": true,
+  "MD044": {
+    "names": [
+      ".NET",
+      "NET.",
+      ".NET."
+    ]
+  }
+}
