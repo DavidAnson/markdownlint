@@ -1,0 +1,92 @@
+[
+    {
+        "lineNumber": 3,
+        "ruleNames": [
+            "MD034",
+            "no-bare-urls"
+        ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com",
+        "errorRange": [
+            15,
+            19
+        ]
+    },
+    {
+        "lineNumber": 5,
+        "ruleNames": [
+            "MD034",
+            "no-bare-urls"
+        ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com/",
+        "errorRange": [
+            15,
+            20
+        ]
+    },
+    {
+        "lineNumber": 7,
+        "ruleNames": [
+            "MD034",
+            "no-bare-urls"
+        ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com/?query=str...",
+        "errorRange": [
+            15,
+            38
+        ]
+    },
+    {
+        "lineNumber": 9,
+        "ruleNames": [
+            "MD034",
+            "no-bare-urls"
+        ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com/info.htm",
+        "errorRange": [
+            15,
+            28
+        ]
+    },
+    {
+        "lineNumber": 11,
+        "ruleNames": [
+            "MD034",
+            "no-bare-urls"
+        ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com",
+        "errorRange": [
+            7,
+            19
+        ]
+    },
+    {
+        "lineNumber": 13,
+        "ruleNames": [
+            "MD034",
+            "no-bare-urls"
+        ],
+        "ruleDescription": "Bare URL used",
+        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+        "errorDetail": null,
+        "errorContext": "https://example.com",
+        "errorRange": [
+            11,
+            19
+        ]
+    }
+]
