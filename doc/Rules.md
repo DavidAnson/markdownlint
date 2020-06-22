@@ -186,6 +186,8 @@ Tags: bullet, ul, indentation
 
 Aliases: list-indent
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when list items are parsed as being at the same level,
 but don't have the same indentation:
 
@@ -240,6 +242,8 @@ Tags: bullet, ul, indentation
 
 Aliases: ul-start-left
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when top level lists don't start at the beginning of a
 line:
 
@@ -287,6 +291,8 @@ Aliases: ul-indent
 
 Parameters: indent, start_indented (number; default 2, boolean; default false)
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when list items are not indented by the configured
 number of spaces (default: 2).
 
@@ -330,6 +336,8 @@ Aliases: no-trailing-spaces
 
 Parameters: br_spaces, list_item_empty_lines, strict (number; default 2, boolean; default false, boolean; default false)
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered on any lines that end with unexpected whitespace. To fix this,
 remove the trailing space from the end of the line.
 
@@ -372,6 +380,8 @@ Aliases: no-hard-tabs
 
 Parameters: code_blocks (boolean; default true)
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered by any lines that contain hard tab characters instead
 of using spaces for indentation. To fix this, replace any hard tab characters
 with spaces instead.
@@ -407,6 +417,8 @@ Tags: links
 
 Aliases: no-reversed-links
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when text that appears to be a link is encountered, but
 where the syntax appears to have been reversed (the `[]` and `()` are
 reversed):
@@ -438,6 +450,8 @@ Tags: whitespace, blank_lines
 Aliases: no-multiple-blanks
 
 Parameters: maximum (number; default 1)
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when there are multiple consecutive blank lines in the
 document:
@@ -521,6 +535,8 @@ Tags: code
 
 Aliases: commands-show-output
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when there are code blocks showing shell commands to be
 typed, and *all* of the shell commands are preceded by dollar signs ($):
 
@@ -572,6 +588,8 @@ Tags: headings, headers, atx, spaces
 
 Aliases: no-missing-space-atx
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when spaces are missing after the hash characters
 in an atx style heading:
 
@@ -599,6 +617,8 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 Tags: headings, headers, atx, spaces
 
 Aliases: no-multiple-space-atx
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when more than one space is used to separate the
 heading text from the hash characters in an atx style heading:
@@ -629,6 +649,8 @@ Tags: headings, headers, atx_closed, spaces
 
 Aliases: no-missing-space-closed-atx
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when spaces are missing inside the hash characters
 in a closed atx style heading:
 
@@ -658,6 +680,8 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 Tags: headings, headers, atx_closed, spaces
 
 Aliases: no-multiple-space-closed-atx
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when more than one space is used to separate the
 heading text from the hash characters in a closed atx style heading:
@@ -692,6 +716,8 @@ Tags: headings, headers, blank_lines
 Aliases: blanks-around-headings, blanks-around-headers
 
 Parameters: lines_above, lines_below (number; default 1)
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when headings (any style) are either not preceded or not
 followed by at least one blank line:
@@ -734,6 +760,8 @@ regular text.
 Tags: headings, headers, spaces
 
 Aliases: heading-start-left, header-start-left
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when a heading is indented by one or more spaces:
 
@@ -857,6 +885,8 @@ Aliases: no-trailing-punctuation
 
 Parameters: punctuation (string; default ".,;:!?。，；：！？")
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered on any heading that has one of the specified normal or
 full-width punctuation characters as the last character in the line:
 
@@ -887,6 +917,8 @@ Tags: blockquote, whitespace, indentation
 
 Aliases: no-multiple-space-blockquote
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when blockquotes have more than one space after the
 blockquote (`>`) symbol:
 
@@ -911,6 +943,8 @@ Rationale: Consistent formatting makes it easier to understand a document.
 Tags: blockquote, whitespace
 
 Aliases: no-blanks-blockquote
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when two blockquote blocks are separated by nothing
 except for a blank line:
@@ -1048,6 +1082,8 @@ Aliases: list-marker-space
 
 Parameters: ul_single, ol_single, ul_multi, ol_multi (number; default 1)
 
+Fixable: Most violations can be fixed by tooling
+
 This rule checks for the number of spaces between a list marker (e.g. '`-`',
 '`*`', '`+`' or '`1.`') and the text of the list item.
 
@@ -1121,6 +1157,8 @@ Aliases: blanks-around-fences
 
 Parameters: list_items (boolean; default true)
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when fenced code blocks are either not preceded or not
 followed by a blank line:
 
@@ -1167,6 +1205,8 @@ not parse fenced code blocks that don't have blank lines before and after them.
 Tags: bullet, ul, ol, blank_lines
 
 Aliases: blanks-around-lists
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when lists (of any kind) are either not preceded or not
 followed by a blank line:
@@ -1234,6 +1274,8 @@ who are rendering markdown documents in something other than HTML.
 Tags: links, url
 
 Aliases: no-bare-urls
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered whenever a URL is given that isn't surrounded by angle
 brackets:
@@ -1370,6 +1412,8 @@ Tags: whitespace, emphasis
 
 Aliases: no-space-in-emphasis
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when emphasis markers (bold, italic) are used, but they
 have spaces between the markers and the text:
 
@@ -1407,6 +1451,8 @@ intended by the author.
 Tags: whitespace, code
 
 Aliases: no-space-in-code
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered for code span elements that have spaces adjacent to the
 backticks:
@@ -1446,6 +1492,8 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 Tags: whitespace, links
 
 Aliases: no-space-in-links
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered on links that have spaces surrounding the link text:
 
@@ -1639,6 +1687,8 @@ Aliases: proper-names
 
 Parameters: names, code_blocks (string array; default `null`, boolean; default `true`)
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when any of the strings in the `names` array do not have
 the specified capitalization. It can be used to enforce a standard letter case
 for the names of projects and products.
@@ -1731,6 +1781,8 @@ Rationale: Consistent formatting makes it easier to understand a document.
 Tags: blank_lines
 
 Aliases: single-trailing-newline
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when there is not a single newline character at the end of a file.
 
