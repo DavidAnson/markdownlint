@@ -32,16 +32,21 @@ and test cases came directly from that project.
 
 ### Related
 
-* [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
-* [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
-* [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
-* [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
-* [GitHub Super-Linter Action](https://github.com/github/super-linter)
-* [Sublime Text markdownlint for Sublime Text](https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint)
-* [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
-* [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
-* [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
-* [Cake.Markdownlint addin for Cake build automation system](https://github.com/cake-contrib/Cake.Markdownlint)
+* CLI
+  * [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
+* GitHub
+  * [GitHub Super-Linter Action](https://github.com/github/super-linter)
+  * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
+* Editor
+  * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
+  * [Sublime Text markdownlint for Sublime Text](https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint)
+  * [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
+  * [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
+* Tooling
+  * [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
+  * [Cake.Markdownlint addin for Cake build automation system](https://github.com/cake-contrib/Cake.Markdownlint)
+* Ruby
+  * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
 
 ## Demonstration
 

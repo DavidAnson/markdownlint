@@ -1450,7 +1450,10 @@ tape("readme", (test) => {
       let seenTags = false;
       let inTags = false;
       md.parse(contents, {}).forEach(function forToken(token) {
-        if (token.type === "bullet_list_open") {
+        if (
+          (token.type === "bullet_list_open") &&
+          (token.level === 0)
+        ) {
           if (!seenRelated) {
             seenRelated = true;
           } else if (seenRelated && !seenRules) {
@@ -1460,7 +1463,10 @@ tape("readme", (test) => {
             seenTags = true;
             inTags = true;
           }
-        } else if (token.type === "bullet_list_close") {
+        } else if (
+          (token.type === "bullet_list_close") &&
+          (token.level === 0)
+        ) {
           inRules = false;
           inTags = false;
         } else if (token.type === "inline") {
