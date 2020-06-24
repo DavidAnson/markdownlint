@@ -33,7 +33,7 @@ var inlineCommentRe =
 /<!--\s*markdownlint-(?:(?:(disable|enable|capture|restore|disable-file|enable-file)((?:\s+[a-z0-9_-]+)*))|(?:(configure-file)\s+([\s\S]*?)))\s*-->/ig;
 module.exports.inlineCommentRe = inlineCommentRe;
 // Regular expressions for range matching
-module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*/ig;
+module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
@@ -2879,7 +2879,9 @@ module.exports = {
                     }
                     // Back up one character so RegExp has a chance to match the
                     // next marker (ex: "**star**_underscore_")
-                    emphasisRe.lastIndex--;
+                    if (emphasisRe.lastIndex > 1) {
+                        emphasisRe.lastIndex--;
+                    }
                 }
                 else if (emphasisRe.lastIndex > 1) {
                     // Back up one character so RegExp has a chance to match the
@@ -3138,6 +3140,8 @@ module.exports = {
 // @ts-check
 "use strict";
 var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, newLineRe = _a.newLineRe;
+var startNonWordRe = /^\W/;
+var endNonWordRe = /\W$/;
 module.exports = {
     "names": ["MD044", "proper-names"],
     "description": "Proper names should have the correct capitalization",
@@ -3149,7 +3153,9 @@ module.exports = {
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
         names.forEach(function (name) {
             var escapedName = escapeForRegExp(name);
-            var namePattern = "\\S*\\b(" + escapedName + ")\\b\\S*";
+            var startNamePattern = startNonWordRe.test(name) ? "" : "\\S*\\b";
+            var endNamePattern = endNonWordRe.test(name) ? "" : "\\b\\S*";
+            var namePattern = "(" + startNamePattern + ")(" + escapedName + ")(" + endNamePattern + ")";
             var anyNameRe = new RegExp(namePattern, "gi");
             // eslint-disable-next-line jsdoc/require-jsdoc
             function forToken(token) {
@@ -3158,29 +3164,27 @@ module.exports = {
                     .forEach(function (line, index) {
                     var match = null;
                     while ((match = anyNameRe.exec(line)) !== null) {
-                        var fullMatch = match[0];
+                        var fullMatch = match[0], leftMatch = match[1], nameMatch = match[2], rightMatch = match[3];
                         if (fullMatch.search(bareUrlRe) === -1) {
                             var wordMatch = fullMatch
-                                .replace(/^\W*/, "").replace(/\W*$/, "");
+                                .replace(new RegExp("^\\W{0," + leftMatch.length + "}"), "")
+                                .replace(new RegExp("\\W{0," + rightMatch.length + "}$"), "");
                             if (!names.includes(wordMatch)) {
                                 var lineNumber = token.lineNumber + index + fenceOffset;
                                 var fullLine = params.lines[lineNumber - 1];
-                                var matchIndex = match.index;
                                 var matchLength = wordMatch.length;
-                                var fullLineWord = fullLine.slice(matchIndex, matchIndex + matchLength);
-                                if (fullLineWord !== wordMatch) {
-                                    // Attempt to fix bad offset due to inline content
-                                    matchIndex = fullLine.indexOf(wordMatch);
-                                }
+                                var matchIndex = fullLine.indexOf(wordMatch);
                                 var range = (matchIndex === -1) ?
                                     null :
                                     [matchIndex + 1, matchLength];
-                                var fixInfo = (matchIndex === -1) ? null : {
-                                    "editColumn": matchIndex + 1,
-                                    "deleteCount": matchLength,
-                                    "insertText": name
-                                };
-                                addErrorDetailIf(onError, lineNumber, name, match[1], null, null, range, fixInfo);
+                                var fixInfo = (matchIndex === -1) ?
+                                    null :
+                                    {
+                                        "editColumn": matchIndex + 1,
+                                        "deleteCount": matchLength,
+                                        "insertText": name
+                                    };
+                                addErrorDetailIf(onError, lineNumber, name, nameMatch, null, null, range, fixInfo);
                             }
                         }
                     }
@@ -3345,7 +3349,7 @@ module.exports = rules;
 },{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48,"url":59}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.20.3",
+    "version": "0.20.4",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "types": "lib/markdownlint.d.ts",
