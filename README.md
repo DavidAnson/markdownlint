@@ -785,7 +785,7 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * [Boostnote](https://boostnote.io/) ([Search repository](https://github.com/BoostIO/Boostnote/search?q=markdownlint))
 * [CodiMD](https://github.com/hackmdio/codimd) ([Search repository](https://github.com/hackmdio/codimd/search?q=markdownlint))
 * [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
-* [Garden React Components](https://garden.zendesk.com/react-components/)  ([Search repository](https://github.com/zendeskgarden/react-components/search?q=markdownlint))
+* [Garden React Components](https://zendeskgarden.github.io/react-components/) ([Search repository](https://github.com/zendeskgarden/react-components/search?q=markdownlint))
 * [MkDocs](https://www.mkdocs.org/) ([Search repository](https://github.com/mkdocs/mkdocs/search?q=markdownlint))
 * [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
 * [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))

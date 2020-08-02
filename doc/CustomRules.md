@@ -70,7 +70,7 @@ The collection of helper functions shared by the built-in rules is available for
 - [Code for all `markdownlint` built-in rules](../lib)
 - [Package configuration for publishing to npm](../test/rules/npm)
   - Packages should export a single rule object or an `Array` of rule objects
-- [Custom rules from the Microsoft/vscode-docs-authoring repository](https://github.com/Microsoft/vscode-docs-authoring/tree/master/docs-markdown/markdownlint-custom-rules)
+- [Custom rules from the Microsoft/vscode-docs-authoring repository](https://github.com/microsoft/vscode-docs-authoring/tree/master/docs-linting/markdownlint-custom-rules)
 - [Custom rules from the axibase/docs-util repository](https://github.com/axibase/docs-util/tree/master/linting-rules)
 - [Custom rules from the webhintio/hint repository](https://github.com/webhintio/hint/blob/master/scripts/lint-markdown.js)
 
