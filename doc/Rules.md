@@ -1581,6 +1581,8 @@ information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 ## MD042 - No empty links
 
+Availability: Node version only
+
 Tags: links
 
 Aliases: no-empty-links
@@ -1614,6 +1616,8 @@ Rationale: Empty links do not lead anywhere and therefore don't function as link
 <a name="md043"></a>
 
 ## MD043 - Required heading structure
+
+Availability: Node version only
 
 Tags: headings, headers
 
@@ -1681,6 +1685,8 @@ a set of similar content.
 
 ## MD044 - Proper names should have the correct capitalization
 
+Availability: Node version only
+
 Tags: spelling
 
 Aliases: proper-names
@@ -1710,6 +1716,8 @@ Rationale: Incorrect capitalization of proper names is usually a mistake.
 <a name="md045"></a>
 
 ## MD045 - Images should have alternate text (alt text)
+
+Availability: Node version only
 
 Tags: accessibility, images
 
@@ -1743,6 +1751,8 @@ content of an image for people who may not be able to see it.
 <a name="md046"></a>
 
 ## MD046 - Code block style
+
+Availability: Ruby version only
 
 Tags: code
 
