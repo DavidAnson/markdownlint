@@ -34,6 +34,7 @@ and test cases came directly from that project.
 
 * CLI
   * [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
+  * [markdownlint-cli2 command-line interface for Node.js](https://github.com/DavidAnson/markdownlint-cli2)
 * GitHub
   * [GitHub Super-Linter Action](https://github.com/github/super-linter)
   * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
