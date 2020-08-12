@@ -9,7 +9,7 @@ module.exports = {
   "description": "Rule that reports an error for lines with the letters 'EX'",
   "information": new URL(
     "https://github.com/DavidAnson/markdownlint" +
-    "/blob/master/test/rules/letters-E-X.js"
+    "/blob/main/test/rules/letters-E-X.js"
   ),
   "tags": [ "test" ],
   "function": function rule(params, onError) {

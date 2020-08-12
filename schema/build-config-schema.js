@@ -25,7 +25,7 @@ const schema = {
       "description": "JSON Schema URI (used by some editors)",
       "type": "string",
       "default": "https://raw.githubusercontent.com/DavidAnson/markdownlint" +
-        "/master/schema/markdownlint-config-schema.json"
+        "/main/schema/markdownlint-config-schema.json"
     }
   },
   "additionalProperties": false

@@ -10,7 +10,7 @@ module.exports = {
   "description": "Rule that reports an error for any blockquote",
   "information": new URL(
     "https://github.com/DavidAnson/markdownlint" +
-    "/blob/master/test/rules/any-blockquote.js"
+    "/blob/main/test/rules/any-blockquote.js"
   ),
   "tags": [ "test" ],
   "function": (params, onError) => {

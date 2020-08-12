@@ -876,7 +876,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
-[ci-image]: https://github.com/DavidAnson/markdownlint/workflows/CI/badge.svg?branch=master
-[ci-url]: https://github.com/DavidAnson/markdownlint/actions?query=branch%3Amaster
+[ci-image]: https://github.com/DavidAnson/markdownlint/workflows/CI/badge.svg?branch=main
+[ci-url]: https://github.com/DavidAnson/markdownlint/actions?query=branch%3Amain
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: https://opensource.org/licenses/MIT

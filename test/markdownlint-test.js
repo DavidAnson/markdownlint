@@ -2811,12 +2811,12 @@ tape("someCustomRulesHaveValidUrl", (test) => {
     if (rule === customRules.anyBlockquote) {
       test.equal(
         rule.information.href,
-        `${homepage}/blob/master/test/rules/any-blockquote.js`
+        `${homepage}/blob/main/test/rules/any-blockquote.js`
       );
     } else if (rule === customRules.lettersEX) {
       test.equal(
         rule.information.href,
-        `${homepage}/blob/master/test/rules/letters-E-X.js`
+        `${homepage}/blob/main/test/rules/letters-E-X.js`
       );
     }
   });
@@ -2905,7 +2905,7 @@ tape("customRulesV1", (test) => {
         "ruleAlias": "any-blockquote",
         "ruleDescription": "Rule that reports an error for any blockquote",
         "ruleInformation":
-          `${homepage}/blob/master/test/rules/any-blockquote.js`,
+          `${homepage}/blob/main/test/rules/any-blockquote.js`,
         "errorDetail": "Blockquote spans 1 line(s).",
         "errorContext": "> Block",
         "errorRange": null },
@@ -2962,7 +2962,7 @@ tape("customRulesV1", (test) => {
         "ruleAlias": "letter-E-letter-X",
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
-        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
+        "ruleInformation": `${homepage}/blob/main/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null },
@@ -2971,7 +2971,7 @@ tape("customRulesV1", (test) => {
         "ruleAlias": "letter-E-letter-X",
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
-        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
+        "ruleInformation": `${homepage}/blob/main/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null }
@@ -3021,7 +3021,7 @@ tape("customRulesV2", (test) => {
         "ruleNames": [ "any-blockquote" ],
         "ruleDescription": "Rule that reports an error for any blockquote",
         "ruleInformation":
-          `${homepage}/blob/master/test/rules/any-blockquote.js`,
+          `${homepage}/blob/main/test/rules/any-blockquote.js`,
         "errorDetail": "Blockquote spans 1 line(s).",
         "errorContext": "> Block",
         "errorRange": null },
@@ -3071,7 +3071,7 @@ tape("customRulesV2", (test) => {
         "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
-        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
+        "ruleInformation": `${homepage}/blob/main/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null },
@@ -3079,7 +3079,7 @@ tape("customRulesV2", (test) => {
         "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
         "ruleDescription":
           "Rule that reports an error for lines with the letters 'EX'",
-        "ruleInformation": `${homepage}/blob/master/test/rules/letters-E-X.js`,
+        "ruleInformation": `${homepage}/blob/main/test/rules/letters-E-X.js`,
         "errorDetail": null,
         "errorContext": "text",
         "errorRange": null }

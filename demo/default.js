@@ -17,7 +17,7 @@
   var newLineRe = /\r\n|\r|\n/;
   var hashPrefix = "%m";
   var rulesMd = "https://github.com/DavidAnson/markdownlint" +
-    "/blob/master/doc/Rules.md";
+    "/blob/main/doc/Rules.md";
 
   // Do-nothing function
   function noop() {}
@@ -173,7 +173,7 @@
     "Content gets parsed and displayed in the upper-right box; rule violations (if any) show up in the lower-right box.",
     "Click a violation for information about it or click its line number to highlighted it in the lower-left box.",
     "",
-    "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md) are enabled except [MD013/line-length](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md#md013) and [MD002/first-heading-h1](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md#md002) (deprecated). ",
+    "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md) are enabled except [MD013/line-length](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md013) and [MD002/first-heading-h1](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md#md002) (deprecated). ",
     "",
     "",
     "#### Resources",

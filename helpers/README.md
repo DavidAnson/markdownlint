@@ -6,8 +6,8 @@
 
 The [Markdown](https://en.wikipedia.org/wiki/Markdown) linter
 [`markdownlint`](https://github.com/DavidAnson/markdownlint) offers a variety of built-in validation
-[rules](https://github.com/DavidAnson/markdownlint/blob/master/doc/Rules.md) and supports the
-creation of [custom rules](https://github.com/DavidAnson/markdownlint/blob/master/doc/CustomRules.md).
+[rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md) and supports the
+creation of [custom rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/CustomRules.md).
 The internal rules share various helper functions; this package exposes those for reuse by custom rules.
 
 ## API
@@ -42,7 +42,7 @@ module.exports = {
 };
 ```
 
-See also: [`markdownlint` built-in rule implementations](https://github.com/DavidAnson/markdownlint/tree/master/lib).
+See also: [`markdownlint` built-in rule implementations](https://github.com/DavidAnson/markdownlint/tree/main/lib).
 
 ## Tests
 
