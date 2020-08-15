@@ -59,24 +59,24 @@ Parameters: level (number; default 1)
 > [MD041/first-line-heading](#md041) offers an improved implementation.
 
 This rule is intended to ensure document headings start at the top level and
-is triggered when the first heading in the document isn't an h1 heading:
+is triggered when the first heading in the document isn't a h1 heading:
 
 ```markdown
-## This isn't an H1 heading
+## This isn't a H1 heading
 
 ### Another heading
 ```
 
-The first heading in the document should be an h1 heading:
+The first heading in the document should be a h1 heading:
 
 ```markdown
-# Start with an H1 heading
+# Start with a H1 heading
 
 ## Then use an H2 for subsections
 ```
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
-cases where an h1 is added externally.
+cases where a h1 is added externally.
 
 Rationale: The top level heading often acts as the title of a document. More
 information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
@@ -839,7 +839,7 @@ Aliases: single-title, single-h1
 Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
 
 This rule is triggered when a top level heading is in use (the first line of
-the file is an h1 heading), and more than one h1 heading is in use in the
+the file is a h1 heading), and more than one h1 heading is in use in the
 document:
 
 ```markdown
@@ -861,7 +861,7 @@ headings:
 ```
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in
-cases where an h1 is added externally.
+cases where a h1 is added externally.
 
 If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains
 a `title` property (commonly used with blog posts), this rule treats that as a top
@@ -870,7 +870,7 @@ To use a different property name in front matter, specify the text of a regular
 expression via the `front_matter_title` parameter. To disable the use of front
 matter by this rule, specify `""` for `front_matter_title`.
 
-Rationale: A top level heading is an h1 on the first line of the file, and
+Rationale: A top level heading is a h1 on the first line of the file, and
 serves as the title for the document. If this convention is in use, then there
 can not be more than one title for the document, and the entire document
 should be contained within this heading.
@@ -1566,7 +1566,7 @@ This is a file with a top level heading
 ```
 
 Note: The `level` parameter can be used to change the top level (ex: to h2) in cases
-where an h1 is added externally.
+where a h1 is added externally.
 
 If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains a
 `title` property (commonly used with blog posts), this rule will not report a
