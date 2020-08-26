@@ -61,3 +61,20 @@
 [text]
 
 [text]: link
+
+## Inline of links with empty link (#308)
+
+[text](link-1)
+[text]() {MD042}
+[text](link-3)
+
+[text](link-1)
+[text]() {MD042}
+[text](link-3)
+[text]() {MD042}
+
+[text](link-1)
+[text]() {MD042}
+[text](link-3)
+[text]() {MD042}
+[text](link-5)
