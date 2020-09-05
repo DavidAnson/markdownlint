@@ -47,7 +47,7 @@
     "js-yaml": "~3.13.1",
     "make-dir-cli": "~2.0.0",
     "markdown-it-for-inline": "~0.1.1",
-    "markdown-it-katex": "~2.0.3",
+    "@iktakahiro/markdown-it-katex": "~4.0.0",
     "markdown-it-sub": "~1.0.0",
     "markdown-it-sup": "~1.0.0",
     "markdownlint-rule-helpers": "~0.7.0",
