@@ -182,18 +182,19 @@ fs.readdirSync("./test")
   // @ts-ignore
   .forEach((file) => tape(file, createTestForFile(path.join("./test", file))));
 
-tape("projectFiles", (test) => {
+tape("projectFilesNoInlineConfig", (test) => {
   test.plan(2);
   const options = {
     "files": [
       "README.md",
       "CONTRIBUTING.md",
+      "doc/CustomRules.md",
       "helpers/README.md"
     ],
     "noInlineConfig": true,
     "config": {
-      "MD013": { "line_length": 150 },
-      "MD024": false
+      "line-length": { "line_length": 150 },
+      "no-duplicate-heading": false
     }
   };
   markdownlint(options, function callback(err, actual) {
@@ -201,7 +202,27 @@ tape("projectFiles", (test) => {
     const expected = {
       "README.md": [],
       "CONTRIBUTING.md": [],
+      "doc/CustomRules.md": [],
       "helpers/README.md": []
+    };
+    test.deepLooseEqual(actual, expected, "Issue(s) with project files.");
+    test.end();
+  });
+});
+
+tape("projectFilesInlineConfig", (test) => {
+  test.plan(2);
+  const options = {
+    "files": [ "doc/Rules.md" ],
+    "config": {
+      "line-length": { "line_length": 150 },
+      "no-inline-html": false
+    }
+  };
+  markdownlint(options, function callback(err, actual) {
+    test.ifError(err);
+    const expected = {
+      "doc/Rules.md": []
     };
     test.deepLooseEqual(actual, expected, "Issue(s) with project files.");
     test.end();
@@ -1509,7 +1530,7 @@ tape("readme", (test) => {
     });
 });
 
-tape("doc", (test) => {
+tape("rules", (test) => {
   test.plan(336);
   fs.readFile("doc/Rules.md", helpers.utf8Encoding,
     (err, contents) => {

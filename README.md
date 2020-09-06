@@ -273,7 +273,8 @@ Type: `Array` of `Object`
 List of custom rules to include with the default rule set for linting.
 
 Each array element should define a rule. Rules are typically exported by another
-package, but can be defined inline.
+package, but can be defined locally. Custom rules are identified by the
+[keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule).
 
 Example:
 

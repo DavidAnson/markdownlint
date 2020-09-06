@@ -388,11 +388,15 @@ with spaces instead.
 
 Example:
 
+<!-- markdownlint-disable no-hard-tabs -->
+
 ```markdown
 Some text
 
 	* hard tab character used to indent the list item
 ```
+
+<!-- markdownlint-enable no-hard-tabs -->
 
 Corrected example:
 
@@ -488,7 +492,11 @@ Tags: line_length
 
 Aliases: line-length
 
+<!-- markdownlint-disable line-length -->
+
 Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers, strict, stern (number; default 80 for *_length, boolean; default true (except strict/stern which default false))
+
+<!-- markdownlint-enable line-length -->
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -540,11 +548,15 @@ Fixable: Most violations can be fixed by tooling
 This rule is triggered when there are code blocks showing shell commands to be
 typed, and *all* of the shell commands are preceded by dollar signs ($):
 
+<!-- markdownlint-disable commands-show-output -->
+
 ```markdown
 $ ls
 $ cat foo
 $ less bar
 ```
+
+<!-- markdownlint-enable commands-show-output -->
 
 The dollar signs are unnecessary in this situation, and should not be
 included:
@@ -1046,7 +1058,10 @@ This rule supports 0-prefixing ordered list items for uniform indentation:
 ...
 ```
 
-Note: This rule will report violations for cases like the following where an improperly-indented code block (or similar) appears between two list items and "breaks" the list in two:
+Note: This rule will report violations for cases like the following where an improperly-indented code block (or similar) appears between two list
+items and "breaks" the list in two:
+
+<!-- markdownlint-disable code-fence-style -->
 
 ~~~markdown
 1. First list
@@ -1069,6 +1084,8 @@ The fix is to indent the code block so it becomes part of the preceding list ite
 
 2. Still first list
 ~~~
+
+<!-- markdownlint-enable code-fence-style -->
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -1755,6 +1772,8 @@ the same document.
 
 In the default configuration this rule reports a violation for the following document:
 
+<!-- markdownlint-disable code-block-style -->
+
     Some text.
 
         # Indented code
@@ -1766,6 +1785,8 @@ In the default configuration this rule reports a violation for the following doc
     ```
 
     More text.
+
+<!-- markdownlint-enable code-block-style -->
 
 To fix violations of this rule, use a consistent style (either indenting or code fences).
 

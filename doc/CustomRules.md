@@ -1,12 +1,15 @@
 # Custom Rules
 
-In addition to its built-in rules, `markdownlint` lets you enhance the linting experience by passing a list of custom rules using the [`options.customRules` property](../README.md#optionscustomrules).
-Custom rules can do everything the built-in rules can and are defined inline or imported from another package ([keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule)).
+In addition to its built-in rules, `markdownlint` lets you enhance the linting experience by passing a list of custom rules using the
+[`options.customRules` property](../README.md#optionscustomrules).
+Custom rules can do everything the built-in rules can and are defined inline or imported from another package
+([keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule)).
 Custom rules can be disabled, enabled, and customized using the same syntax as built-in rules.
 
 ## Authoring
 
-Rules are defined by a name (or multiple names), a description, an optional link to more information, one or more tags, and a function that implements the rule's behavior.
+Rules are defined by a name (or multiple names), a description, an optional link to more information, one or more tags, and a function that implements
+the rule's behavior.
 That function is called once for each file/string input and is passed the parsed input and a function to log any violations.
 
 A simple rule implementation looks like:
@@ -58,11 +61,12 @@ A rule is implemented as an `Object` with one optional and four required propert
       performed before the insert):
       - `lineNumber` is an optional `Number` specifying the 1-based line number of the edit.
       - `editColumn` is an optional `Number` specifying the 1-based column number of the edit.
-      - `deleteCount` is an optional `Number` specifying the count of characters to delete.
+      - `deleteCount` is an optional `Number` specifying the number of characters to delete (the value `-1` is used to delete the line).
       - `insertText` is an optional `String` specifying the text to insert. `\n` is the platform-independent way to add
         a line break; line breaks should be added at the beginning of a line instead of at the end).
 
-The collection of helper functions shared by the built-in rules is available for use by custom rules in the [markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
+The collection of helper functions shared by the built-in rules is available for use by custom rules in the
+[markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
 
 ## Examples
 
