@@ -17,7 +17,6 @@
     "test-cover": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 node test/markdownlint-test.js",
     "test-declaration": "cd example/typescript && tsc && node type-check.js",
     "test-extra": "node test/markdownlint-test-extra.js",
-    "debug": "node debug node_modules/nodeunit/bin/nodeunit",
     "lint": "eslint --max-warnings 0 lib helpers test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0, no-var: 0\" demo && eslint --rule \"no-console: 0, no-invalid-this: 0, no-shadow: 0, object-property-newline: 0\" example",
     "ci": "npm run test-cover && npm run lint && npm run test-declaration",
     "build-config-schema": "node schema/build-config-schema.js",
