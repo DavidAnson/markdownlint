@@ -2,7 +2,6 @@
 
 "use strict";
 
-const { URL } = require("url");
 const { filterTokens } = require("markdownlint-rule-helpers");
 
 module.exports = {

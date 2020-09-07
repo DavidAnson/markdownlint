@@ -15,8 +15,6 @@ That function is called once for each file/string input and is passed the parsed
 A simple rule implementation looks like:
 
 ```js
-const { URL } = require("url");
-
 module.exports = {
   "names": [ "any-blockquote" ],
   "description": "Rule that reports an error for any blockquote",

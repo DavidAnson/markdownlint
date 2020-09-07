@@ -3,7 +3,6 @@
 import markdownlint from "../..";
 
 const assert = require("assert");
-const { URL } = require("url");
 const markdownlintJsonPath = "../../.markdownlint.json";
 
 function assertConfiguration(config: markdownlint.Configuration) {

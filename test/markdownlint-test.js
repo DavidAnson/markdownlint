@@ -5,7 +5,6 @@
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
-const { URL } = require("url");
 const { promisify } = require("util");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
@@ -3946,6 +3945,16 @@ tape("customRulesLintJavaScript", (test) => {
     test.ifError(err);
     const expected = {
       "test/lint-javascript.md": [
+        {
+          "lineNumber": 8,
+          "ruleNames": [ "lint-javascript" ],
+          "ruleDescription": "Rule that lints JavaScript code",
+          "ruleInformation": null,
+          "errorDetail":
+            "Definition for rule 'node/handle-callback-err' was not found.",
+          "errorContext": "\"use strict\";",
+          "errorRange": null
+        },
         {
           "lineNumber": 10,
           "ruleNames": [ "lint-javascript" ],

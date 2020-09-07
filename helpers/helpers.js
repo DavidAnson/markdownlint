@@ -32,7 +32,7 @@ const emphasisMarkersRe = /[_*]/g;
 const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 
 // readFile options for reading with the UTF-8 encoding
-module.exports.utf8Encoding = { "encoding": "utf8" };
+module.exports.utf8Encoding = "utf8";
 
 // All punctuation characters (normal and full-width)
 module.exports.allPunctuation = ".,;:!?。，；：！？";
