@@ -55,7 +55,7 @@ function lintTestRepo(test, globPatterns, configPath) {
     };
     return markdownlintPromise(options).then((results) => {
       const resultsString = results.toString();
-      if (resultsString.length) {
+      if (resultsString.length > 0) {
         // eslint-disable-next-line no-console
         console.log(resultsString);
       }

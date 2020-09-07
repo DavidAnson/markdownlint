@@ -24,7 +24,7 @@ const configSchema = require("../schema/markdownlint-config-schema.json");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
-const deprecatedRuleNames = [ "MD002", "MD006" ];
+const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
 
 /**
  * Create a test function for the specified test file.
@@ -128,7 +128,11 @@ function createTestForFile(file) {
               while ((match = regex.exec(line))) {
                 const rule = match[1];
                 const errors = results[rule] || [];
-                errors.push(match[2] ? parseInt(match[2], 10) : lineNum + 1);
+                errors.push(
+                  match[2] ?
+                    Number.parseInt(match[2], 10) :
+                    lineNum + 1
+                );
                 results[rule] = errors;
               }
             });
@@ -1504,7 +1508,7 @@ tape("readme", (test) => {
               let expected = "**[" + ruleName + "](doc/Rules.md#" +
                 ruleName.toLowerCase() + ")** *" +
                 ruleAliases.join("/") + "* - " + rule.description;
-              if (deprecatedRuleNames.includes(ruleName)) {
+              if (deprecatedRuleNames.has(ruleName)) {
                 expected = "~~" + expected + "~~";
               }
               test.equal(token.content, expected, "Rule mismatch.");
@@ -1566,7 +1570,7 @@ tape("rules", (test) => {
               "Missing rule implementation for " + token.content + ".");
             const ruleName = rule.names[0];
             let headingContent = ruleName + " - " + rule.description;
-            if (deprecatedRuleNames.includes(ruleName)) {
+            if (deprecatedRuleNames.has(ruleName)) {
               headingContent = "~~" + headingContent + "~~";
             }
             test.equal(token.content,
@@ -1580,16 +1584,16 @@ tape("rules", (test) => {
               });
               ruleUsesParams.sort();
             }
-          } else if (/^Tags: /.test(token.content) && rule) {
+          } else if (token.content.startsWith("Tags: ") && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
               rule.tags, "Tag mismatch for rule " + rule.names + ".");
             ruleHasTags = true;
-          } else if (/^Aliases: /.test(token.content) && rule) {
+          } else if (token.content.startsWith("Aliases: ") && rule) {
             test.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
               rule.names.slice(1),
               "Alias mismatch for rule " + rule.names + ".");
             ruleHasAliases = true;
-          } else if (/^Parameters: /.test(token.content) && rule) {
+          } else if (token.content.startsWith("Parameters: ") && rule) {
             let inDetails = false;
             const parameters = token.content.split(tagAliasParameterRe)
               .slice(1)

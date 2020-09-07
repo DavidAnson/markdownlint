@@ -196,7 +196,8 @@
       if (hashPrefix === decodedHash.substring(0, hashPrefix.length)) {
         markdown.value = decodedHash.substring(hashPrefix.length);
       }
-    } catch (ex) {
+      /* eslint-disable-next-line unicorn/prefer-optional-catch-binding */
+    } catch (error) {
       // Invalid
     }
   }
@@ -205,7 +206,8 @@
   try {
     /* eslint-disable-next-line no-new */
     new URL(rulesMd);
-  } catch (ex) {
+    /* eslint-disable-next-line unicorn/prefer-optional-catch-binding */
+  } catch (error) {
     markdown.value = [
       "# Sorry",
       "",

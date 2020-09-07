@@ -2782,10 +2782,10 @@ module.exports = {
             // Close current run
             var content = line.substring(emphasisIndex, matchIndex);
             if (!emphasisLength) {
-                content = content.trimStart();
+                content = content.trimLeft();
             }
             if (!match) {
-                content = content.trimEnd();
+                content = content.trimRight();
             }
             var leftSpace = leftSpaceRe.test(content);
             var rightSpace = rightSpaceRe.test(content);
