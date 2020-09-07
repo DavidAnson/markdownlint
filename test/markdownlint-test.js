@@ -3946,16 +3946,6 @@ tape("customRulesLintJavaScript", (test) => {
     const expected = {
       "test/lint-javascript.md": [
         {
-          "lineNumber": 8,
-          "ruleNames": [ "lint-javascript" ],
-          "ruleDescription": "Rule that lints JavaScript code",
-          "ruleInformation": null,
-          "errorDetail":
-            "Definition for rule 'node/handle-callback-err' was not found.",
-          "errorContext": "\"use strict\";",
-          "errorRange": null
-        },
-        {
           "lineNumber": 10,
           "ruleNames": [ "lint-javascript" ],
           "ruleDescription": "Rule that lints JavaScript code",

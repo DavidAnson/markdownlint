@@ -17,7 +17,7 @@ const languageJavaScript = /js|javascript/i;
 function cleanJsdocRulesFromEslintConfig(config) {
   const cleanedConfig = { ...config };
   for (const rule in config.rules) {
-    if (/^jsdoc\//.test(rule)) {
+    if (/^(jsdoc|node)\//.test(rule)) {
       delete cleanedConfig.rules[rule];
     }
   }
