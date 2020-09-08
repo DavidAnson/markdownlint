@@ -208,7 +208,7 @@ tape("projectFilesNoInlineConfig", (test) => {
       "doc/CustomRules.md": [],
       "helpers/README.md": []
     };
-    test.deepLooseEqual(actual, expected, "Issue(s) with project files.");
+    test.deepEqual(actual, expected, "Issue(s) with project files.");
     test.end();
   });
 });
@@ -227,7 +227,24 @@ tape("projectFilesInlineConfig", (test) => {
     const expected = {
       "doc/Rules.md": []
     };
-    test.deepLooseEqual(actual, expected, "Issue(s) with project files.");
+    test.deepEqual(actual, expected, "Issue(s) with project files.");
+    test.end();
+  });
+});
+
+tape("resultObjectToStringNotEnumerable", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  markdownlint(options, function callback(err, result) {
+    test.ifError(err);
+    // eslint-disable-next-line guard-for-in
+    for (const property in result) {
+      test.notEqual(property, "toString", "Function should not enumerate.");
+    }
     test.end();
   });
 });
@@ -257,7 +274,7 @@ tape("resultFormattingV0", (test) => {
         "MD002": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     let actualMessage = actualResult.toString();
     let expectedMessage =
       "./test/atx_heading_spacing.md: 3: MD002" +
@@ -313,7 +330,7 @@ tape("resultFormattingSyncV0", (test) => {
       "MD002": [ 1 ]
     }
   };
-  test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+  test.deepEqual(actualResult, expectedResult, "Undetected issues.");
   let actualMessage = actualResult.toString();
   let expectedMessage =
     "./test/atx_heading_spacing.md: 3: MD002" +
@@ -420,7 +437,7 @@ tape("resultFormattingV1", (test) => {
           "errorRange": null }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
@@ -515,7 +532,7 @@ tape("resultFormattingV2", (test) => {
           "errorRange": null }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
@@ -629,7 +646,7 @@ tape("resultFormattingV3", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "input: 1: MD009/no-trailing-spaces" +
@@ -662,7 +679,7 @@ tape("onePerLineResultVersion0", (test) => {
         "MD010": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -692,7 +709,7 @@ tape("onePerLineResultVersion1", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -721,7 +738,7 @@ tape("onePerLineResultVersion2", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -770,7 +787,7 @@ tape("manyPerLineResultVersion3", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -804,7 +821,7 @@ tape("frontMatterResultVersion3", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -829,7 +846,7 @@ tape("stringInputLineEndings", (test) => {
       "crlf": { "MD018": [ 3 ] },
       "mixed": { "MD018": [ 3 ] }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -853,7 +870,7 @@ tape("inputOnlyNewline", (test) => {
       "lf": [],
       "crlf": []
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -882,7 +899,7 @@ tape("defaultTrue", (test) => {
         "MD041": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -905,7 +922,7 @@ tape("defaultFalse", (test) => {
       "./test/atx_heading_spacing.md": {},
       "./test/first_heading_bad_atx.md": {}
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -932,7 +949,7 @@ tape("defaultUndefined", (test) => {
         "MD041": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -960,7 +977,7 @@ tape("disableRules", (test) => {
       },
       "./test/first_heading_bad_atx.md": {}
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -990,7 +1007,7 @@ tape("enableRules", (test) => {
         "MD002": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1020,7 +1037,7 @@ tape("enableRulesMixedCase", (test) => {
         "MD002": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1048,7 +1065,7 @@ tape("disableTag", (test) => {
         "MD041": [ 1 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1076,7 +1093,7 @@ tape("enableTag", (test) => {
       },
       "./test/first_heading_bad_atx.md": {}
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1104,7 +1121,7 @@ tape("enableTagMixedCase", (test) => {
       },
       "./test/first_heading_bad_atx.md": {}
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1172,7 +1189,7 @@ tape("styleAll", (test) => {
         "MD048": [ 77 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1214,7 +1231,7 @@ tape("styleRelaxed", (test) => {
         "MD048": [ 77 ]
       }
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1236,7 +1253,7 @@ tape("nullFrontMatter", (test) => {
     const expectedResult = {
       "content": { "MD010": [ 2 ] }
     };
-    test.deepLooseEqual(result, expectedResult, "Undetected issues.");
+    test.deepEqual(result, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1257,7 +1274,7 @@ tape("customFrontMatter", (test) => {
     const expectedResult = {
       "content": []
     };
-    test.deepLooseEqual(result, expectedResult, "Did not get empty results.");
+    test.deepEqual(result, expectedResult, "Did not get empty results.");
     test.end();
   });
 });
@@ -1289,7 +1306,7 @@ tape("noInlineConfig", (test) => {
         "MD010": [ 3, 7, 11 ]
       }
     };
-    test.deepLooseEqual(result, expectedResult, "Undetected issues.");
+    test.deepEqual(result, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -1344,7 +1361,7 @@ tape("readmeHeadings", (test) => {
   }, function callback(err, result) {
     test.ifError(err);
     const expected = { "README.md": [] };
-    test.deepLooseEqual(result, expected, "Unexpected issues.");
+    test.deepEqual(result, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -1375,7 +1392,7 @@ tape("filesArrayAsString", (test) => {
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "README.md": [] };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -1384,7 +1401,7 @@ tape("missingOptions", (test) => {
   test.plan(2);
   markdownlint(null, function callback(err, result) {
     test.ifError(err);
-    test.deepLooseEqual(
+    test.deepEqual(
       result,
       {},
       "Did not get empty result for missing options."
@@ -1453,7 +1470,7 @@ tape("missingStringValue", (test) => {
       "null": [],
       "empty": []
     };
-    test.deepLooseEqual(result, expectedResult, "Did not get empty results.");
+    test.deepEqual(result, expectedResult, "Did not get empty results.");
     test.end();
   });
 });
@@ -2868,7 +2885,7 @@ tape("customRulesV0", (test) => {
       "first-line": [ 1 ],
       "letters-E-X": [ 3, 7 ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     let actualMessage = actualResult.toString();
     let expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
@@ -3004,7 +3021,7 @@ tape("customRulesV1", (test) => {
         "errorContext": "text",
         "errorRange": null }
     ];
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote/any-blockquote" +
@@ -3112,7 +3129,7 @@ tape("customRulesV2", (test) => {
         "errorContext": "text",
         "errorRange": null }
     ];
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
@@ -3165,7 +3182,7 @@ tape("customRulesConfig", (test) => {
       "first-line": [ 1 ],
       "letters-E-X": [ 7 ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3185,7 +3202,7 @@ tape("customRulesNpmPackage", (test) => {
     expectedResult.string = {
       "sample-rule": [ 3 ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3684,7 +3701,7 @@ tape("customRulesOnErrorLazy", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3745,7 +3762,7 @@ tape("customRulesOnErrorModified", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3782,7 +3799,7 @@ tape("customRulesThrowForFileHandled", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3834,7 +3851,7 @@ tape("customRulesThrowForStringHandled", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3875,7 +3892,7 @@ tape("customRulesOnErrorInvalidHandled", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actualResult, expectedResult, "Undetected issues.");
+    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     test.end();
   });
 });
@@ -3934,7 +3951,7 @@ tape("customRulesDoc", (test) => {
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "doc/CustomRules.md": [] };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -3969,7 +3986,7 @@ tape("customRulesLintJavaScript", (test) => {
         }
       ]
     };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -3993,7 +4010,7 @@ tape("markdownItPluginsSingle", (test) => {
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "string": [] };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -4013,7 +4030,7 @@ tape("markdownItPluginsMultiple", (test) => {
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "string": [] };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -4037,7 +4054,7 @@ tape("markdownItPluginsMathjax", (test) => {
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "string": [] };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
@@ -4064,7 +4081,7 @@ $$\n`
         "MD041": [ 1 ]
       }
     };
-    test.deepLooseEqual(actual, expected, "Unexpected issues.");
+    test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
 });
