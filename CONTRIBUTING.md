@@ -23,7 +23,7 @@ Try to break the new code now, or else it will get broken later.
 
 Run tests before sending a pull request via `npm test` in the [usual manner](https://docs.npmjs.com/misc/scripts).
 Tests should all pass on all platforms.
-The test runner is [tape](https://www.npmjs.com/package/tape) and test cases are located in `test/markdownlint-test.js`.
+The test runner is [tape](https://www.npmjs.com/package/tape) and test cases are located in `test/markdownlint-test*.js`.
 When running tests, `test/*.md` files are enumerated, linted, and fail if any violations are missing a corresponding `{MD###}` marker in the test file.
 For example, the line `### Heading {MD001}` is expected to trigger the rule `MD001`.
 For cases where the marker text can not be present on the same line, the syntax `{MD###:#}` can be used to include a line number.
