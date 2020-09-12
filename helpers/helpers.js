@@ -80,7 +80,7 @@ module.exports.includesSorted = function includesSorted(array, element) {
   let left = 0;
   let right = array.length - 1;
   while (left <= right) {
-    /* eslint-disable no-bitwise */
+    // eslint-disable-next-line no-bitwise
     const mid = (left + right) >> 1;
     if (array[mid] < element) {
       left = mid + 1;

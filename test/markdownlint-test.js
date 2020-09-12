@@ -440,9 +440,6 @@ tape("resultFormattingV1", (test) => {
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
-      "truncate: 1: MD021/no-multiple-space-closed-atx" +
-      " Multiple spaces inside hashes on closed atx style heading" +
-      " [Context: \"#  Multiple spa...tyle heading  #\"]\n" +
       "./test/atx_heading_spacing.md: 3: MD002/first-heading-h1" +
       " First heading should be a top level heading" +
       " [Expected: h1; Actual: h2]\n" +
@@ -457,7 +454,10 @@ tape("resultFormattingV1", (test) => {
       " [Context: \"##   Heading 3 {MD019}\"]\n" +
       "./test/first_heading_bad_atx.md: 1: MD002/first-heading-h1" +
       " First heading should be a top level heading" +
-      " [Expected: h1; Actual: h2]";
+      " [Expected: h1; Actual: h2]\n" +
+      "truncate: 1: MD021/no-multiple-space-closed-atx" +
+      " Multiple spaces inside hashes on closed atx style heading" +
+      " [Context: \"#  Multiple spa...tyle heading  #\"]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
     test.end();
   });
@@ -535,9 +535,6 @@ tape("resultFormattingV2", (test) => {
     test.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
-      "truncate: 1: MD021/no-multiple-space-closed-atx" +
-      " Multiple spaces inside hashes on closed atx style heading" +
-      " [Context: \"#  Multiple spa...tyle heading  #\"]\n" +
       "./test/atx_heading_spacing.md: 3:" +
       " MD002/first-heading-h1/first-header-h1" +
       " First heading should be a top level heading" +
@@ -554,7 +551,10 @@ tape("resultFormattingV2", (test) => {
       "./test/first_heading_bad_atx.md: 1:" +
       " MD002/first-heading-h1/first-header-h1" +
       " First heading should be a top level heading" +
-      " [Expected: h1; Actual: h2]";
+      " [Expected: h1; Actual: h2]\n" +
+      "truncate: 1: MD021/no-multiple-space-closed-atx" +
+      " Multiple spaces inside hashes on closed atx style heading" +
+      " [Context: \"#  Multiple spa...tyle heading  #\"]";
     test.equal(actualMessage, expectedMessage, "Incorrect message.");
     test.end();
   });
