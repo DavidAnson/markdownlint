@@ -235,29 +235,42 @@ located. Multiple such comments (if present) are applied top-to-bottom.
 
 ### Linting
 
-Standard asynchronous interface:
+Standard asynchronous API:
 
 ```js
 /**
  * Lint specified Markdown files.
  *
- * @param {Object} options Configuration options.
- * @param {Function} callback Callback (err, result) function.
+ * @param {Options} options Configuration options.
+ * @param {LintCallback} callback Callback (err, result) function.
  * @returns {void}
  */
 function markdownlint(options, callback) { ... }
 ```
 
-Synchronous interface (for build scripts, etc.):
+Synchronous API (for build scripts, etc.):
 
 ```js
 /**
  * Lint specified Markdown files synchronously.
  *
- * @param {Object} options Configuration options.
- * @returns {Object} Result object.
+ * @param {Options} options Configuration options.
+ * @returns {LintResults} Results object.
  */
 function markdownlint.sync(options) { ... }
+```
+
+Promise API (in the `promises` namespace like Node.js's
+[`fs` Promises API](https://nodejs.org/api/fs.html#fs_fs_promises_api)):
+
+```js
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options} options Configuration options.
+ * @returns {Promise<LintResults>} Results object.
+ */
+function markdownlint(options) { ... }
 ```
 
 #### options
@@ -518,31 +531,45 @@ other files (see above).
 By default, configuration files are parsed as JSON (and named `.markdownlint.json`).
 Custom parsers can be provided to handle other formats like JSONC, YAML, and TOML.
 
-Asynchronous interface:
+Asynchronous API:
 
 ```js
 /**
  * Read specified configuration file.
  *
- * @param {String} file Configuration file name/path.
- * @param {Array} [parsers] Optional parsing function(s).
- * @param {Function} callback Callback (err, result) function.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing function(s).
+ * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
 function readConfig(file, parsers, callback) { ... }
 ```
 
-Synchronous interface:
+Synchronous API:
 
 ```js
 /**
  * Read specified configuration file synchronously.
  *
- * @param {String} file Configuration file name/path.
- * @param {Array} [parsers] Optional parsing function(s).
- * @returns {Object} Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @returns {Configuration} Configuration object.
  */
 function readConfigSync(file, parsers) { ... }
+```
+
+Promise API (in the `promises` namespace like Node.js's
+[`fs` Promises API](https://nodejs.org/api/fs.html#fs_fs_promises_api)):
+
+```js
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+function readConfig(file, parsers) { ... }
 ```
 
 #### file

@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback };
 }
 /**
  * Configuration options.
@@ -17,7 +17,7 @@ type Options = {
     /**
      * Files to lint.
      */
-    files?: string | string[];
+    files?: string[] | string;
     /**
      * Strings to lint.
      */
@@ -27,13 +27,11 @@ type Options = {
     /**
      * Configuration object.
      */
-    config?: {
-        [x: string]: any;
-    };
+    config?: Configuration;
     /**
      * Custom rules.
      */
-    customRules?: Rule | Rule[];
+    customRules?: Rule[] | Rule;
     /**
      * Front matter pattern.
      */
@@ -58,18 +56,14 @@ type Options = {
 /**
  * Called with the result of the lint operation.
  */
-type LintCallback = (err: Error, results?: {
-    [x: string]: LintError[];
-}) => void;
+type LintCallback = (err: Error | null, results?: LintResults) => void;
 /**
  * Lint specified Markdown files synchronously.
  *
  * @param {Options} options Configuration options.
  * @returns {LintResults} Results object.
  */
-declare function markdownlintSync(options: Options): {
-    [x: string]: LintError[];
-};
+declare function markdownlintSync(options: Options): LintResults;
 /**
  * Read specified configuration file.
  *
@@ -87,9 +81,11 @@ declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadC
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
  * @returns {Configuration} Configuration object.
  */
-declare function readConfigSync(file: string, parsers?: ConfigurationParser[]): {
-    [x: string]: any;
-};
+declare function readConfigSync(file: string, parsers?: ConfigurationParser[]): Configuration;
+declare namespace promises {
+    export { markdownlintPromise as markdownlint };
+    export { readConfigPromise as readConfig };
+}
 /**
  * Function to implement rule logic.
  */
@@ -117,7 +113,7 @@ type RuleParams = {
     /**
      * Rule configuration.
      */
-    config: any;
+    config: RuleConfiguration;
 };
 /**
  * Markdown-It token.
@@ -341,12 +337,23 @@ type RuleConfiguration = any;
 /**
  * Parses a configuration string and returns a configuration object.
  */
-type ConfigurationParser = (text: string) => {
-    [x: string]: any;
-};
+type ConfigurationParser = (text: string) => Configuration;
 /**
  * Called with the result of the readConfig operation.
  */
-type ReadConfigCallback = (err: Error, config?: {
-    [x: string]: any;
-}) => void;
+type ReadConfigCallback = (err: Error | null, config?: Configuration) => void;
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options} options Configuration options.
+ * @returns {Promise<LintResults>} Results object.
+ */
+declare function markdownlintPromise(options: Options): Promise<LintResults>;
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+declare function readConfigPromise(file: string, parsers?: ConfigurationParser[]): Promise<Configuration>;

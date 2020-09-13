@@ -64,10 +64,13 @@ function assertLintResultsCallback(err: Error | null, results?: markdownlint.Lin
 assertConfiguration(markdownlint.readConfigSync(markdownlintJsonPath));
 assertConfiguration(markdownlint.readConfigSync(markdownlintJsonPath, [ JSON.parse ]));
 
-// The following call is valid, but disallowed because TypeScript does not
-// currently propagate {ConfigurationParser[] | null} into the .d.ts file.
-// markdownlint.readConfig(markdownlintJsonPath, null, assertConfigCallback);
+markdownlint.readConfig(markdownlintJsonPath, assertConfigurationCallback);
 markdownlint.readConfig(markdownlintJsonPath, [ JSON.parse ], assertConfigurationCallback);
+
+(async () => {
+  assertConfigurationCallback(null, await markdownlint.promises.readConfig(markdownlintJsonPath));
+  assertConfigurationCallback(null, await markdownlint.promises.readConfig(markdownlintJsonPath, [ JSON.parse ]))
+})();
 
 let options: markdownlint.Options;
 options = {
@@ -91,10 +94,16 @@ options = {
 
 assertLintResults(markdownlint.sync(options));
 markdownlint(options, assertLintResultsCallback);
+(async () => {
+  assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
+})();
 
 options.files = "../bad.md";
 assertLintResults(markdownlint.sync(options));
 markdownlint(options, assertLintResultsCallback);
+(async () => {
+  assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
+})();
 
 const testRule = {
   "names": [ "test-rule" ],
@@ -139,3 +148,6 @@ const testRule = {
 options.customRules = [ testRule ];
 assertLintResults(markdownlint.sync(options));
 markdownlint(options, assertLintResultsCallback);
+(async () => {
+  assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
+})();

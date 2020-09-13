@@ -23,6 +23,51 @@ const version = packageJson.version;
 
 const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
 
+tape("simpleAsync", (test) => {
+  test.plan(2);
+  const options = {
+    "strings": {
+      "content": "# Heading"
+    }
+  };
+  const expected = "content: 1: MD047/single-trailing-newline " +
+    "Files should end with a single newline character";
+  markdownlint(options, (err, actual) => {
+    test.ifError(err);
+    test.equal(actual.toString(), expected, "Unexpected results.");
+    test.end();
+  });
+});
+
+tape("simpleSync", (test) => {
+  test.plan(1);
+  const options = {
+    "strings": {
+      "content": "# Heading"
+    }
+  };
+  const expected = "content: 1: MD047/single-trailing-newline " +
+    "Files should end with a single newline character";
+  const actual = markdownlint.sync(options).toString();
+  test.equal(actual, expected, "Unexpected results.");
+  test.end();
+});
+
+tape("simplePromise", (test) => {
+  test.plan(1);
+  const options = {
+    "strings": {
+      "content": "# Heading"
+    }
+  };
+  const expected = "content: 1: MD047/single-trailing-newline " +
+    "Files should end with a single newline character";
+  markdownlint.promises.markdownlint(options).then((actual) => {
+    test.equal(actual.toString(), expected, "Unexpected results.");
+    test.end();
+  });
+});
+
 tape("projectFilesNoInlineConfig", (test) => {
   test.plan(2);
   const options = {
@@ -698,6 +743,21 @@ tape("badFileSync", (test) => {
   test.end();
 });
 
+tape("badFilePromise", (test) => {
+  test.plan(3);
+  markdownlint.promises.markdownlint({
+    "files": [ "./badFile" ]
+  }).then(
+    null,
+    (error) => {
+      test.ok(error, "Did not get an error for bad file.");
+      test.ok(error instanceof Error, "Error not instance of Error.");
+      test.equal(error.code, "ENOENT", "Error code for bad file not ENOENT.");
+      test.end();
+    }
+  );
+});
+
 tape("missingStringValue", (test) => {
   test.plan(2);
   markdownlint({
@@ -1195,6 +1255,29 @@ tape("configBadHybridSync", (test) => {
     "Did not get correct exception for bad content."
   );
   test.end();
+});
+
+tape("configSinglePromise", (test) => {
+  test.plan(1);
+  markdownlint.promises.readConfig("./test/config/config-child.json")
+    .then((actual) => {
+      const expected = require("./config/config-child.json");
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.end();
+    });
+});
+
+tape("configBadFilePromise", (test) => {
+  test.plan(2);
+  markdownlint.promises.readConfig("./test/config/config-badfile.json")
+    .then(
+      null,
+      (error) => {
+        test.ok(error, "Did not get an error for bad JSON.");
+        test.ok(error instanceof Error, "Error not instance of Error.");
+        test.end();
+      }
+    );
 });
 
 tape("allBuiltInRulesHaveValidUrl", (test) => {
