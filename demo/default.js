@@ -16,8 +16,6 @@
   var markdownit = window.markdownit({ "html": true });
   var newLineRe = /\r\n|\r|\n/;
   var hashPrefix = "%m";
-  var rulesMd = "https://github.com/DavidAnson/markdownlint" +
-    "/blob/main/doc/Rules.md";
 
   // Do-nothing function
   function noop() {}
@@ -55,17 +53,15 @@
       "config": {
         "MD013": false
       },
-      "handleRuleFailures": true
+      "handleRuleFailures": true,
+      "resultVersion": 3
     };
     var results = window.markdownlint.sync(options);
     violations.innerHTML = results.content.map(function mapResult(result) {
-      var ruleName = result.ruleNames[0];
-      var ruleRef = rulesMd + "#" + ruleName.toLowerCase() + "---" +
-        result.ruleDescription.toLowerCase()
-          .replace(/ /g, "-")
-          .replace(/[()]/g, "");
-      return "<a href='#" + result.lineNumber + "'><em>" + result.lineNumber +
-        "</em></a> - <a href='" + ruleRef + "'>" + ruleName + "</a> " +
+      var ruleName = result.ruleNames.slice(0, 2).join(" / ");
+      return "<em><a href='#line' target='" + result.lineNumber + "'>" +
+        result.lineNumber + "</a></em> - <a href='" + result.ruleInformation +
+        "'>" + ruleName + "</a> " +
         result.ruleDescription +
         (result.errorDetail ?
           " [<span class='detail'>" +
@@ -76,13 +72,12 @@
           " [<span class='detail'>Context: \"" +
             sanitize(result.errorContext) +
             "\"</span>]" :
+          "") +
+        (result.fixInfo ?
+          " [<a href='#fix' target='" +
+            encodeURIComponent(JSON.stringify(result)) +
+            "' class='detail'>Fix</a>]" :
           "");
-      // + (result.errorRange ?
-      //     " <u style='white-space: pre-wrap'>" +
-      //       lines[result.lineNumber - 1].substr(
-      //         result.errorRange[0] - 1, result.errorRange[1]) +
-      //     "</u>" :
-      //     "");
     }).join("<br/>");
   }
 
@@ -127,16 +122,33 @@
   }
 
   // Handle violation navigation
-  function onLineNumberClick(e) {
-    var line = document.getElementById("l" + e.target.textContent);
-    if (line) {
-      var highlighted = document.getElementsByClassName("highlight");
-      Array.prototype.forEach.call(highlighted, function forElement(element) {
-        element.classList.remove("highlight");
-      });
-      line.classList.add("highlight");
-      line.scrollIntoView();
-      e.preventDefault();
+  function onViolationClick(e) {
+    switch (e.target.hash) {
+      case "#fix":
+        var error = JSON.parse(decodeURIComponent(e.target.target));
+        var errors = [ error ];
+        var fixed = window.helpers.applyFixes(markdown.value, errors);
+        markdown.value = fixed;
+        onMarkdownInput();
+        e.preventDefault();
+        break;
+      case "#line":
+        var line = document.getElementById("l" + e.target.target);
+        if (line) {
+          var highlighted = document.getElementsByClassName("highlight");
+          Array.prototype.forEach.call(
+            highlighted,
+            function forElement(element) {
+              element.classList.remove("highlight");
+            }
+          );
+          line.classList.add("highlight");
+          line.scrollIntoView();
+        }
+        e.preventDefault();
+        break;
+      default:
+        break;
     }
   }
 
@@ -157,7 +169,7 @@
   document.body.addEventListener("drop", onDrop);
   openFile.addEventListener("change", onOpenFileChange);
   markdown.addEventListener("input", onMarkdownInput);
-  violations.addEventListener("click", onLineNumberClick, true);
+  violations.addEventListener("click", onViolationClick, true);
   copyLink.addEventListener("click", onCopyLinkClick);
 
   /* eslint-disable max-len */
@@ -205,7 +217,7 @@
   // Detect legacy browsers
   try {
     /* eslint-disable-next-line no-new */
-    new URL(rulesMd);
+    new URL("https://example.com/");
     /* eslint-disable-next-line unicorn/prefer-optional-catch-binding */
   } catch (error) {
     markdown.value = [
