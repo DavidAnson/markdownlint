@@ -28,7 +28,12 @@ const schema = {
         "/main/schema/markdownlint-config-schema.json"
     }
   },
-  "additionalProperties": false
+  "additionalProperties": {
+    "type:": [
+      "boolean",
+      "object"
+    ]
+  }
 };
 const tags = {};
 

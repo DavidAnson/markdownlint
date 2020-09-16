@@ -22,6 +22,10 @@ const homepage = packageJson.homepage;
 const version = packageJson.version;
 
 const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
+const configSchemaStrict = {
+  ...configSchema,
+  "additionalProperties": false
+};
 
 tape("simpleAsync", (test) => {
   test.plan(2);
@@ -940,7 +944,7 @@ tape("rules", (test) => {
     });
 });
 
-tape("validateConfigSchema", (test) => {
+tape("validateJsonUsingConfigSchemaStrict", (test) => {
   const jsonFileRe = /\.json$/i;
   const resultsFileRe = /\.results\.json$/i;
   const jsConfigFileRe = /^jsconfig\.json$/i;
@@ -958,8 +962,34 @@ tape("validateConfigSchema", (test) => {
       "utf8"
     );
     test.ok(
-      tv4.validate(JSON.parse(data), configSchema),
+      // @ts-ignore
+      tv4.validate(JSON.parse(data), configSchemaStrict),
       file + "\n" + JSON.stringify(tv4.error, null, 2));
+  });
+  test.end();
+});
+
+tape("validateConfigSchemaAllowsUnknownProperties", (test) => {
+  test.plan(4);
+  const testCases = [
+    {
+      "property": true
+    },
+    {
+      "property": {
+        "object": 1
+      }
+    }
+  ];
+  testCases.forEach((testCase) => {
+    test.ok(
+      // @ts-ignore
+      tv4.validate(testCase, configSchema),
+      "Unknown property blocked by default: " + JSON.stringify(testCase));
+    test.notok(
+      // @ts-ignore
+      tv4.validate(testCase, configSchemaStrict),
+      "Unknown property allowed when strict: " + JSON.stringify(testCase));
   });
   test.end();
 });
