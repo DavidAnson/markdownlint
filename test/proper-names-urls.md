@@ -31,3 +31,21 @@ Text https://example.com/directory/file text
 
     Text https://example.com/directory/file text
     Text https://example.com/directory/file text
+
+Text https://example.com/directory/text.file text
+Text https://example.com/directory/text.file text
+
+Text https://example.com/directory/text%20text.file text
+Text https://example.com/directory/text%20text.file text
+
+Text <https://example.com/directory/text.file> text
+Text <https://example.com/directory/text.file> text
+
+Text <https://example.com/directory/text%20text.file> text
+Text <https://example.com/directory/text%20text.file> text
+
+Text [https://example.com/directory/text.file](https://example.com/directory/text.file) text
+Text [https://example.com/directory/text.file](https://example.com/directory/text.file) text
+
+Text [https://example.com/directory/text%20text.file](https://example.com/directory/text%20text.file) text
+Text [https://example.com/directory/text%20text.file](https://example.com/directory/text%20text.file) text

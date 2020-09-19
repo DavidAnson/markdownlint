@@ -9,6 +9,7 @@
       "FILE"
     ]
   },
+  "line-length": false,
   "no-bare-urls": false,
   "code-block-style": false
 }
