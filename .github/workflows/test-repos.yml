@@ -1,8 +1,9 @@
 name: TestRepos
 
 on:
-  push:
   pull_request:
+  push:
+  workflow_dispatch:
 
 jobs:
   build:
