@@ -3217,6 +3217,24 @@ module.exports = {
         names = Array.isArray(names) ? names : [];
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
+        // Text of automatic hyperlinks is implicitly a URL
+        var autolinkText = new Set();
+        filterTokens(params, "inline", function (token) {
+            var inAutoLink = false;
+            token.children.forEach(function (child) {
+                var info = child.info, type = child.type;
+                if ((type === "link_open") && (info === "auto")) {
+                    inAutoLink = true;
+                }
+                else if (type === "link_close") {
+                    inAutoLink = false;
+                }
+                else if ((type === "text") && inAutoLink) {
+                    autolinkText.add(child);
+                }
+            });
+        });
+        // For each proper name...
         names.forEach(function (name) {
             var escapedName = escapeForRegExp(name);
             var startNamePattern = startNonWordRe.test(name) ? "" : "\\S*\\b";
@@ -3225,36 +3243,37 @@ module.exports = {
             var anyNameRe = new RegExp(namePattern, "gi");
             // eslint-disable-next-line jsdoc/require-jsdoc
             function forToken(token) {
-                var fenceOffset = (token.type === "fence") ? 1 : 0;
-                token.content.split(newLineRe)
-                    .forEach(function (line, index) {
-                    var match = null;
-                    while ((match = anyNameRe.exec(line)) !== null) {
-                        var fullMatch = match[0], leftMatch = match[1], nameMatch = match[2], rightMatch = match[3];
-                        if (fullMatch.search(bareUrlRe) === -1) {
-                            var wordMatch = fullMatch
-                                .replace(new RegExp("^\\W{0," + leftMatch.length + "}"), "")
-                                .replace(new RegExp("\\W{0," + rightMatch.length + "}$"), "");
-                            if (!names.includes(wordMatch)) {
-                                var lineNumber = token.lineNumber + index + fenceOffset;
-                                var fullLine = params.lines[lineNumber - 1];
-                                var matchLength = wordMatch.length;
-                                var matchIndex = fullLine.indexOf(wordMatch);
-                                var range = (matchIndex === -1) ?
-                                    null :
-                                    [matchIndex + 1, matchLength];
-                                var fixInfo = (matchIndex === -1) ?
-                                    null :
-                                    {
-                                        "editColumn": matchIndex + 1,
-                                        "deleteCount": matchLength,
-                                        "insertText": name
-                                    };
-                                addErrorDetailIf(onError, lineNumber, name, nameMatch, null, null, range, fixInfo);
+                if (!autolinkText.has(token)) {
+                    var fenceOffset_1 = (token.type === "fence") ? 1 : 0;
+                    token.content.split(newLineRe).forEach(function (line, index) {
+                        var match = null;
+                        while ((match = anyNameRe.exec(line)) !== null) {
+                            var fullMatch = match[0], leftMatch = match[1], nameMatch = match[2], rightMatch = match[3];
+                            if (fullMatch.search(bareUrlRe) === -1) {
+                                var wordMatch = fullMatch
+                                    .replace(new RegExp("^\\W{0," + leftMatch.length + "}"), "")
+                                    .replace(new RegExp("\\W{0," + rightMatch.length + "}$"), "");
+                                if (!names.includes(wordMatch)) {
+                                    var lineNumber = token.lineNumber + index + fenceOffset_1;
+                                    var fullLine = params.lines[lineNumber - 1];
+                                    var matchLength = wordMatch.length;
+                                    var matchIndex = fullLine.indexOf(wordMatch);
+                                    var range = (matchIndex === -1) ?
+                                        null :
+                                        [matchIndex + 1, matchLength];
+                                    var fixInfo = (matchIndex === -1) ?
+                                        null :
+                                        {
+                                            "editColumn": matchIndex + 1,
+                                            "deleteCount": matchLength,
+                                            "insertText": name
+                                        };
+                                    addErrorDetailIf(onError, lineNumber, name, nameMatch, null, null, range, fixInfo);
+                                }
                             }
                         }
-                    }
-                });
+                    });
+                }
             }
             forEachInlineChild(params, "text", forToken);
             if (includeCodeBlocks) {
@@ -3414,7 +3433,7 @@ module.exports = rules;
 },{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.20.4",
+    "version": "0.21.0",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "types": "lib/markdownlint.d.ts",

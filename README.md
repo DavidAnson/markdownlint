@@ -901,6 +901,10 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
   * 0.20.2 - Fix regression in MD037, improve MD038.
   * 0.20.3 - Fix regression in MD037, improve MD044, add automatic regression testing.
   * 0.20.4 - Fix regression in MD037, improve MD034/MD044, improve documentation.
+* 0.21.0 - Lint concurrently for better performance (async only), add Promise-based APIs,
+           update TypeScript declaration file, hide `toString` on `LintResults`, add ability
+           to fix in browser demo, allow custom rules in `.markdownlint.json` schema, improve
+           MD042/MD044, improve documentation, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
