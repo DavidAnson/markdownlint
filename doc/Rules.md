@@ -1752,7 +1752,7 @@ Or with reference syntax as:
 
 Guidance for writing alternate text is available from the [W3C](https://www.w3.org/WAI/alt/),
 [Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
-[other locations](https://www.phase2technology.com/blog/no-more-excuses-definitive-guide-alt-text-field).
+[other locations](https://www.phase2technology.com/blog/no-more-excuses).
 
 Rationale: Alternate text is important for accessibility and describes the
 content of an image for people who may not be able to see it.
