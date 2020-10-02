@@ -809,10 +809,10 @@ tape("readme", (test) => {
         ) {
           if (!seenRelated) {
             seenRelated = true;
-          } else if (seenRelated && !seenRules) {
+          } else if (!seenRules) {
             seenRules = true;
             inRules = true;
-          } else if (seenRelated && seenRules && !seenTags) {
+          } else if (!seenTags) {
             seenTags = true;
             inTags = true;
           }

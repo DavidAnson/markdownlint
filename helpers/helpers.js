@@ -61,6 +61,8 @@ module.exports.isObject = function isObject(obj) {
 // Example: Contains nothing, whitespace, or comments
 const blankLineRe = />|(?:<!--.*?-->)/g;
 module.exports.isBlankLine = function isBlankLine(line) {
+  // Call to String.replace follows best practices and is not a security check
+  // False-positive for js/incomplete-multi-character-sanitization
   return !line || !line.trim() || !line.replace(blankLineRe, "").trim();
 };
 
@@ -355,6 +357,7 @@ function forEachInlineCodeSpan(input, handler) {
     let currentTicks = 0;
     let state = "normal";
     // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
+    // False-positive for js/index-out-of-bounds
     for (; index <= input.length; index++) {
       const char = input[index];
       // Ignore backticks in link destination
