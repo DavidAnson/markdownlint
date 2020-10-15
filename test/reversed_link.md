@@ -32,3 +32,13 @@ begin: /\B(([\/.])[\w\-.\/=]+)+/, {MD011}
 {begin: '%r\\(', end: '\\)[a-z]*'} {MD011}
 
 return /(?:(?:(^|\/)[!.])|[*?+()|\[\]{}]|[+@]\()/.test(str); {MD011}
+
+## Escaped Parens
+
+&lpar;reversed&rpar;[link] {MD011}
+
+a &rpar; a &lpar; a &rpar;[a]~ {MD011}
+
+<!-- markdownlint-disable no-inline-html-->
+
+a<pre>&rpar; a &lpar; a &rpar;[a]~</pre> {MD011}
