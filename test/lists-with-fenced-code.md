@@ -57,3 +57,10 @@ Text
       fence {MD031:56} {MD031:58}
       ```
 1. Item
+
+Text
+
+1. Text
+   ```shell
+   fence {MD031:64} {MD031:65} {MD032:65} {MD040:66}
+  ```
