@@ -6,9 +6,9 @@ const fs = require("fs");
 const path = require("path");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
-const pluginKatex = require("@iktakahiro/markdown-it-katex");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
+const pluginTexMath = require("markdown-it-texmath");
 const tape = require("tape");
 require("tape-player");
 const tv4 = require("tv4");
@@ -21,6 +21,11 @@ const configSchema = require("../schema/markdownlint-config-schema.json");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
+const pluginTexMathOptions = {
+  "engine": {
+    "renderToString": () => ""
+  }
+};
 const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
 const configSchemaStrict = {
   ...configSchema,
@@ -1403,7 +1408,7 @@ tape("markdownItPluginsMathjax", (test) => {
         "+ 2\n" +
         "+ 3$$\n"
     },
-    "markdownItPlugins": [ [ pluginKatex ] ]
+    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ]
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "string": [] };
@@ -1425,7 +1430,7 @@ $$$$
 2
 $$\n`
     },
-    "markdownItPlugins": [ [ pluginKatex ] ],
+    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ],
     "resultVersion": 0
   }, function callback(err, actual) {
     test.ifError(err);
