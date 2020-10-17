@@ -1443,3 +1443,11 @@ $$\n`
     test.end();
   });
 });
+
+tape("getVersion", (test) => {
+  test.plan(1);
+  const actual = markdownlint.getVersion();
+  const expected = packageJson.version;
+  test.equal(actual, expected, "Version string not correct.");
+  test.end();
+});

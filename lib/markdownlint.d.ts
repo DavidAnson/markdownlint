@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback };
 }
 /**
  * Configuration options.
@@ -82,6 +82,12 @@ declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadC
  * @returns {Configuration} Configuration object.
  */
 declare function readConfigSync(file: string, parsers?: ConfigurationParser[]): Configuration;
+/**
+ * Gets the (semantic) version of the library.
+ *
+ * @returns {string} SemVer string.
+ */
+declare function getVersion(): string;
 declare namespace promises {
     export { markdownlintPromise as markdownlint };
     export { readConfigPromise as readConfig };

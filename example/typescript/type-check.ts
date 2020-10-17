@@ -5,6 +5,9 @@ import markdownlint from "../..";
 const assert = require("assert");
 const markdownlintJsonPath = "../../.markdownlint.json";
 
+const version: string = markdownlint.getVersion();
+assert(/^\d+\.\d+\.\d+$/.test(version));
+
 function assertConfiguration(config: markdownlint.Configuration) {
   assert(!!config);
   assert.equal(config["line-length"], false);
