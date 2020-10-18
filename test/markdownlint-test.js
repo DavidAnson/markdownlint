@@ -1050,12 +1050,12 @@ tape("configMultipleWithRequireResolveBefore", (test) => {
 
 tape("configMultipleWithRequireResolve", (test) => {
   test.plan(2);
-  markdownlint.readConfig("./test/config/config-parent-of-package.json",
+  markdownlint.readConfig("./test/config/config-packageparent.json",
     function callback(err, actual) {
       test.ifError(err);
       const expected = {
-        ...require("./config/pseudo-package/copy-of-config-child.json"),
-        ...require("./config/config-parent-of-package.json")
+        ...require("./config/pseudo-package/config-frompackage.json"),
+        ...require("./config/config-packageparent.json")
       };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
