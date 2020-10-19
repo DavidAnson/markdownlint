@@ -5,6 +5,9 @@ import markdownlint from "../..";
 const assert = require("assert");
 const markdownlintJsonPath = "../../.markdownlint.json";
 
+const version: string = markdownlint.getVersion();
+assert(/^\d+\.\d+\.\d+$/.test(version));
+
 function assertConfiguration(config: markdownlint.Configuration) {
   assert(!!config);
   assert.equal(config["line-length"], false);
@@ -36,6 +39,8 @@ function assertLintResults(results: markdownlint.LintResults) {
   assert(!results["string"][0].fixInfo.deleteCount);
   assert.equal(results["string"][0].fixInfo.insertText, "\n");
   assert.equal(results["../bad.md"].length, 2);
+  // Deliberate assignment to unused variable validates types
+  // False-positive for js/useless-assignment-to-local
   results = {
     "key": [
       {

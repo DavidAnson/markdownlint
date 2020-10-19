@@ -6,9 +6,9 @@ const fs = require("fs");
 const path = require("path");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
-const pluginKatex = require("@iktakahiro/markdown-it-katex");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
+const pluginTexMath = require("markdown-it-texmath");
 const tape = require("tape");
 require("tape-player");
 const tv4 = require("tv4");
@@ -21,6 +21,11 @@ const configSchema = require("../schema/markdownlint-config-schema.json");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
+const pluginTexMathOptions = {
+  "engine": {
+    "renderToString": () => ""
+  }
+};
 const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
 const configSchemaStrict = {
   ...configSchema,
@@ -809,10 +814,10 @@ tape("readme", (test) => {
         ) {
           if (!seenRelated) {
             seenRelated = true;
-          } else if (seenRelated && !seenRules) {
+          } else if (!seenRules) {
             seenRules = true;
             inRules = true;
-          } else if (seenRelated && seenRules && !seenTags) {
+          } else if (!seenTags) {
             seenTags = true;
             inTags = true;
           }
@@ -1445,7 +1450,7 @@ tape("markdownItPluginsMathjax", (test) => {
         "+ 2\n" +
         "+ 3$$\n"
     },
-    "markdownItPlugins": [ [ pluginKatex ] ]
+    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ]
   }, function callback(err, actual) {
     test.ifError(err);
     const expected = { "string": [] };
@@ -1467,7 +1472,7 @@ $$$$
 2
 $$\n`
     },
-    "markdownItPlugins": [ [ pluginKatex ] ],
+    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ],
     "resultVersion": 0
   }, function callback(err, actual) {
     test.ifError(err);
@@ -1479,4 +1484,12 @@ $$\n`
     test.deepEqual(actual, expected, "Unexpected issues.");
     test.end();
   });
+});
+
+tape("getVersion", (test) => {
+  test.plan(1);
+  const actual = markdownlint.getVersion();
+  const expected = packageJson.version;
+  test.equal(actual, expected, "Version string not correct.");
+  test.end();
 });
