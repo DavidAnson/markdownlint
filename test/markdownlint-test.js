@@ -1034,18 +1034,18 @@ tape("configMultiple", (test) => {
 
 tape("configMultipleWithRequireResolve", (test) => {
   test.plan(2);
-
+  const fakeNodeModulesDir = path.resolve(__dirname, "./node_modules");
   try {
+    fs.mkdirSync(fakeNodeModulesDir);
     fs.symlinkSync(
       path.resolve(__dirname, "./config/pseudo-package"),
-      path.resolve(__dirname, "../node_modules/test"),
+      path.resolve(fakeNodeModulesDir, "test"),
       "dir"
     );
   // eslint-disable-next-line unicorn/prefer-optional-catch-binding
   } catch (error) {
     // Package symlink creation failed due to earlier failure
   }
-
   markdownlint.readConfig("./test/config/config-packageparent.json",
     function callback(err, actual) {
       test.ifError(err);
@@ -1055,9 +1055,7 @@ tape("configMultipleWithRequireResolve", (test) => {
       };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
-
-      fs.unlinkSync(path.resolve(__dirname, "../node_modules/test"));
-
+      fs.rmdirSync(fakeNodeModulesDir, { "recursive": true });
       test.end();
     });
 });
