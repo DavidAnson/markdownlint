@@ -1060,7 +1060,8 @@ tape("configMultipleWithRequireResolve", (test) => {
       };
       delete expected.extends;
       test.deepEqual(actual, expected, "Config object not correct.");
-      fs.rmdirSync(fakeNodeModulesDir, { "recursive": true });
+      fs.unlinkSync(path.resolve(fakeNodeModulesDir, "test"));
+      fs.rmdirSync(fakeNodeModulesDir);
       test.end();
     });
 });
