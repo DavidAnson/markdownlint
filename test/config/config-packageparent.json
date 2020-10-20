@@ -1,5 +1,5 @@
 {
-  "extends": "test",
+  "extends": "pseudo-package",
   "MD003": false,
   "MD007": { "indent": 4 },
   "no-hard-tabs": true,
