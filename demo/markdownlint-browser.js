@@ -66,6 +66,8 @@ module.exports.isObject = function isObject(obj) {
 // Example: Contains nothing, whitespace, or comments
 var blankLineRe = />|(?:<!--.*?-->)/g;
 module.exports.isBlankLine = function isBlankLine(line) {
+    // Call to String.replace follows best practices and is not a security check
+    // False-positive for js/incomplete-multi-character-sanitization
     return !line || !line.trim() || !line.replace(blankLineRe, "").trim();
 };
 /**
@@ -353,6 +355,7 @@ function forEachInlineCodeSpan(input, handler) {
         var currentTicks = 0;
         var state = "normal";
         // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
+        // False-positive for js/index-out-of-bounds
         for (; index <= input.length; index++) {
             var char = input[index];
             // Ignore backticks in link destination
@@ -1030,9 +1033,8 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
             try {
                 var json = JSON.parse(parameter);
                 config = __assign(__assign({}, config), json);
-                // eslint-disable-next-line unicorn/prefer-optional-catch-binding
             }
-            catch (error) {
+            catch (_a) {
                 // Ignore parse errors for inline configuration
             }
         }
@@ -1594,17 +1596,26 @@ function readConfigSync(file, parsers) {
     }
     return config;
 }
+/**
+ * Gets the (semantic) version of the library.
+ *
+ * @returns {string} SemVer string.
+ */
+function getVersion() {
+    return require("../package.json").version;
+}
 // Export a/synchronous/Promise APIs
 markdownlint.sync = markdownlintSync;
 markdownlint.readConfig = readConfig;
 markdownlint.readConfigSync = readConfigSync;
+markdownlint.getVersion = getVersion;
 markdownlint.promises = {
     "markdownlint": markdownlintPromise,
     "readConfig": readConfigPromise
 };
 module.exports = markdownlint;
 
-},{"../helpers":2,"./cache":3,"./rules":49,"fs":51,"markdown-it":1,"path":53,"util":57}],5:[function(require,module,exports){
+},{"../helpers":2,"../package.json":50,"./cache":3,"./rules":49,"fs":51,"markdown-it":1,"path":53,"util":57}],5:[function(require,module,exports){
 // @ts-check
 "use strict";
 var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
@@ -1954,11 +1965,15 @@ module.exports = {
                 var line = params.lines[lineNumber - 1];
                 var column = unescapeMarkdown(line).indexOf(reversedLink) + 1;
                 var length_1 = reversedLink.length;
-                addError(onError, lineNumber, reversedLink, null, [column, length_1], {
-                    "editColumn": column,
-                    "deleteCount": length_1,
-                    "insertText": "[" + linkText + "](" + linkDestination + ")"
-                });
+                var range = column ? [column, length_1] : null;
+                var fixInfo = column ?
+                    {
+                        "editColumn": column,
+                        "deleteCount": length_1,
+                        "insertText": "[" + linkText + "](" + linkDestination + ")"
+                    } :
+                    null;
+                addError(onError, lineNumber, reversedLink, null, range, fixInfo);
             }
         });
     }
@@ -2604,11 +2619,12 @@ module.exports = {
             if ((includeListItems || !inItem) &&
                 ((onTopFence && !isBlankLine(lines[i - 1])) ||
                     (onBottomFence && !isBlankLine(lines[i + 1])))) {
-                var _a = line.match(codeFencePrefixRe), prefix = _a[1];
-                addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, {
+                var _a = line.match(codeFencePrefixRe) || [], prefix = _a[1];
+                var fixInfo = (prefix === undefined) ? null : {
                     "lineNumber": i + (onTopFence ? 1 : 2),
                     "insertText": prefix + "\n"
-                });
+                };
+                addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, fixInfo);
             }
         });
     }
@@ -3433,7 +3449,7 @@ module.exports = rules;
 },{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48}],50:[function(require,module,exports){
 module.exports={
     "name": "markdownlint",
-    "version": "0.21.0",
+    "version": "0.21.1",
     "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
     "main": "lib/markdownlint.js",
     "types": "lib/markdownlint.d.ts",
@@ -3453,7 +3469,7 @@ module.exports={
         "lint": "eslint --max-warnings 0 lib helpers test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0, no-var: 0, unicorn/prefer-add-event-listener: 0, unicorn/prefer-query-selector: 0, unicorn/prefer-replace-all: 0\" demo && eslint --rule \"no-console: 0, no-invalid-this: 0, no-shadow: 0, object-property-newline: 0, node/no-missing-require: 0, node/no-extraneous-require: 0\" example",
         "ci": "npm run test-cover && npm run lint && npm run test-declaration",
         "build-config-schema": "node schema/build-config-schema.js",
-        "build-declaration": "tsc --allowJs --declaration --outDir declaration --resolveJsonModule lib/markdownlint.js && cpy declaration/lib/markdownlint.d.ts lib && rimraf declaration",
+        "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
         "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && browserify ../lib-es3/helpers/helpers.js --standalone helpers >> markdownlint-rule-helpers-browser.js && uglifyjs markdownlint-browser.js markdownlint-rule-helpers-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
         "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
         "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint",
@@ -3481,9 +3497,9 @@ module.exports={
         "js-yaml": "~3.14.0",
         "make-dir-cli": "~2.0.0",
         "markdown-it-for-inline": "~0.1.1",
-        "@iktakahiro/markdown-it-katex": "~4.0.0",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
+        "markdown-it-texmath": "~0.8.0",
         "markdownlint-rule-helpers": "~0.11.0",
         "rimraf": "~3.0.2",
         "strip-json-comments": "~3.1.1",
@@ -3560,7 +3576,7 @@ exports.homedir = function () {
 };
 
 },{}],53:[function(require,module,exports){
-(function (process){
+(function (process){(function (){
 // .dirname, .basename, and .extname methods are extracted from Node.js v8.11.1,
 // backported and transplited with Babel, with backwards-compat fixes
 
@@ -3864,7 +3880,7 @@ var substr = 'ab'.substr(-1) === 'b'
     }
 ;
 
-}).call(this,require('_process'))
+}).call(this)}).call(this,require('_process'))
 },{"_process":54}],54:[function(require,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
@@ -4084,7 +4100,7 @@ module.exports = function isBuffer(arg) {
     && typeof arg.readUInt8 === 'function';
 }
 },{}],57:[function(require,module,exports){
-(function (process,global){
+(function (process,global){(function (){
 // Copyright Joyent, Inc. and other Node contributors.
 //
 // Permission is hereby granted, free of charge, to any person obtaining a
@@ -4672,6 +4688,6 @@ function hasOwnProperty(obj, prop) {
   return Object.prototype.hasOwnProperty.call(obj, prop);
 }
 
-}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,require('_process'),typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./support/isBuffer":56,"_process":54,"inherits":55}]},{},[4])(4)
 });

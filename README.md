@@ -905,6 +905,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            update TypeScript declaration file, hide `toString` on `LintResults`, add ability
            to fix in browser demo, allow custom rules in `.markdownlint.json` schema, improve
            MD042/MD044, improve documentation, update dependencies.
+  * 0.21.1 - Improve MD011/MD031, export `getVersion` API.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
