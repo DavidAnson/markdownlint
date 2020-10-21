@@ -38,7 +38,6 @@ const schema = {
 const tags = {};
 
 // Add rules
-// eslint-disable-next-line complexity
 rules.forEach(function forRule(rule) {
   rule.tags.forEach(function forTag(tag) {
     const tagRules = tags[tag] || [];
