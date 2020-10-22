@@ -1037,6 +1037,21 @@ tape("configMultiple", (test) => {
     });
 });
 
+tape("configMultipleWithRequireResolve", (test) => {
+  test.plan(2);
+  markdownlint.readConfig("./test/config/config-packageparent.json",
+    function callback(err, actual) {
+      test.ifError(err);
+      const expected = {
+        ...require("./node_modules/pseudo-package/config-frompackage.json"),
+        ...require("./config/config-packageparent.json")
+      };
+      delete expected.extends;
+      test.deepEqual(actual, expected, "Config object not correct.");
+      test.end();
+    });
+});
+
 tape("configBadFile", (test) => {
   test.plan(4);
   markdownlint.readConfig("./test/config/config-badfile.json",
@@ -1053,6 +1068,20 @@ tape("configBadFile", (test) => {
 tape("configBadChildFile", (test) => {
   test.plan(4);
   markdownlint.readConfig("./test/config/config-badchildfile.json",
+    function callback(err, result) {
+      test.ok(err, "Did not get an error for bad child file.");
+      test.ok(err instanceof Error, "Error not instance of Error.");
+      // @ts-ignore
+      test.equal(err.code, "ENOENT",
+        "Error code for bad child file not ENOENT.");
+      test.ok(!result, "Got result for bad child file.");
+      test.end();
+    });
+});
+
+tape("configBadChildPackage", (test) => {
+  test.plan(4);
+  markdownlint.readConfig("./test/config/config-badchildpackage.json",
     function callback(err, result) {
       test.ok(err, "Did not get an error for bad child file.");
       test.ok(err instanceof Error, "Error not instance of Error.");

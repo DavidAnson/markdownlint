@@ -4,6 +4,7 @@ demo/markdownlint-browser.min.js
 demo/markdownlint-rule-helpers-browser.js
 lib-es3
 node_modules
+!test/node_modules
 npm-debug.log
 test-repos
 .vscode
