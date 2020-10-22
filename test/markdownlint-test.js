@@ -1083,12 +1083,12 @@ tape("configBadChildPackage", (test) => {
   test.plan(4);
   markdownlint.readConfig("./test/config/config-badchildpackage.json",
     function callback(err, result) {
-      test.ok(err, "Did not get an error for bad child file.");
+      test.ok(err, "Did not get an error for bad child package.");
       test.ok(err instanceof Error, "Error not instance of Error.");
       // @ts-ignore
       test.equal(err.code, "ENOENT",
-        "Error code for bad child file not ENOENT.");
-      test.ok(!result, "Got result for bad child file.");
+        "Error code for bad child package not ENOENT.");
+      test.ok(!result, "Got result for bad child package.");
       test.end();
     });
 });
