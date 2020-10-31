@@ -27,3 +27,5 @@ jobs:
       run: npm run clone-test-repos-large
     - name: Lint Test Repos
       run: npm run lint-test-repos
+    - name: Run Extra Tests
+      run: npm run test-extra
