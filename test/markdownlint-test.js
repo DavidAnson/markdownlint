@@ -1473,6 +1473,21 @@ $$\n`
   });
 });
 
+tape("texmath-content-in-lists with texmath plugin", (test) => {
+  test.plan(2);
+  markdownlint({
+    "files": [ "./test/texmath-content-in-lists.md" ],
+    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ]
+  }, function callback(err, actual) {
+    test.ifError(err);
+    const expected = {
+      "./test/texmath-content-in-lists.md": []
+    };
+    test.deepEqual(actual, expected, "Unexpected issues.");
+    test.end();
+  });
+});
+
 tape("getVersion", (test) => {
   test.plan(1);
   const actual = markdownlint.getVersion();

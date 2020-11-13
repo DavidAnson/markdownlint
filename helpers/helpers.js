@@ -271,6 +271,14 @@ module.exports.flattenLists = function flattenLists(params) {
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
   params.tokens.forEach(function forToken(token) {
+    if (
+      (token.type === "math_block") &&
+      (token.tag === "math") &&
+      token.map[1]
+    ) {
+      // markdown-it-texmath package does not account for math_block_end
+      token.map[1]++;
+    }
     if ((token.type === "bullet_list_open") ||
         (token.type === "ordered_list_open")) {
       // Save current context and start a new one
