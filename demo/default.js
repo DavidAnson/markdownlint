@@ -164,6 +164,10 @@
     e.preventDefault();
   }
 
+  // Show library version
+  document.getElementById("version").textContent =
+    "(v" + markdownlint.getVersion() + ")";
+
   // Add event listeners
   document.body.addEventListener("dragover", onDragOver);
   document.body.addEventListener("drop", onDrop);
