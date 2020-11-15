@@ -12,7 +12,7 @@ module.exports.newLineRe = newLineRe;
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
   // eslint-disable-next-line max-len
-  /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$))(\r\n|\r|\n|$)/m;
+  /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching inline disable/enable comments
 const inlineCommentRe =
@@ -502,7 +502,10 @@ module.exports.frontMatterHasTitle =
     const ignoreFrontMatter =
       (frontMatterTitlePattern !== undefined) && !frontMatterTitlePattern;
     const frontMatterTitleRe =
-      new RegExp(String(frontMatterTitlePattern || "^\\s*title\\s*[:=]"), "i");
+      new RegExp(
+        String(frontMatterTitlePattern || "^\\s*\"?title\"?\\s*[:=]"),
+        "i"
+      );
     return !ignoreFrontMatter &&
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };

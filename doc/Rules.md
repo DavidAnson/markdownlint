@@ -848,7 +848,7 @@ Tags: headings, headers
 
 Aliases: single-title, single-h1
 
-Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
+Parameters: level, front_matter_title (number; default 1, string; default "^\s*"?title"?\s*[:=]")
 
 This rule is triggered when a top level heading is in use (the first line of
 the file is a h1 heading), and more than one h1 heading is in use in the
@@ -1565,7 +1565,7 @@ Tags: headings, headers
 
 Aliases: first-line-heading, first-line-h1
 
-Parameters: level, front_matter_title (number; default 1, string; default "^\s*title:")
+Parameters: level, front_matter_title (number; default 1, string; default "^\s*"?title"?\s*[:=]")
 
 This rule is intended to ensure documents have a title and is triggered when
 the first line in the file isn't a top level (h1) heading:

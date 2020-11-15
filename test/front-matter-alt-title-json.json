@@ -1,0 +1,6 @@
+{
+  "default": true,
+  "MD041": {
+    "front_matter_title": "^\\s*\"alternate\"\\s*:"
+  }
+}
