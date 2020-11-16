@@ -1,3 +1,5 @@
+# emphasis_instead_of_headings
+
 **Section 1: the first section {MD036}**
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor

@@ -1,6 +1,6 @@
 {
-    "default": true,
-    "MD009": {
-      "strict": true
-    }
+  "default": true,
+  "MD009": {
+    "strict": true
   }
+}

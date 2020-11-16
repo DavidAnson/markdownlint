@@ -1,3 +1,5 @@
+# reversed_link
+
 Go to (this website)[https://www.example.com] {MD011}
 
 However, this shouldn't trigger inside code blocks:

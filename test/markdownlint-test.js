@@ -12,14 +12,11 @@ const pluginTexMath = require("markdown-it-texmath");
 const tape = require("tape");
 require("tape-player");
 const tv4 = require("tv4");
-const packageJson = require("../package.json");
+const { homepage, version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
-const defaultConfig = require("./markdownlint-test-default-config.json");
 const configSchema = require("../schema/markdownlint-config-schema.json");
-const homepage = packageJson.homepage;
-const version = packageJson.version;
 
 const pluginTexMathOptions = {
   "engine": {
@@ -133,7 +130,9 @@ tape("stringInputLineEndings", (test) => {
       "crlf": "One\r\nTwo\r\n#Three\n",
       "mixed": "One\rTwo\n#Three\n"
     },
-    "config": defaultConfig,
+    "config": {
+      "MD041": false
+    },
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -774,8 +773,7 @@ tape("missingStringValue", (test) => {
       "undefined": undefined,
       "null": null,
       "empty": ""
-    },
-    "config": defaultConfig
+    }
   }, function callback(err, result) {
     test.ifError(err);
     const expectedResult = {
@@ -1491,7 +1489,7 @@ tape("texmath-content-in-lists with texmath plugin", (test) => {
 tape("getVersion", (test) => {
   test.plan(1);
   const actual = markdownlint.getVersion();
-  const expected = packageJson.version;
+  const expected = version;
   test.equal(actual, expected, "Version string not correct.");
   test.end();
 });

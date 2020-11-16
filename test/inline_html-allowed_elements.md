@@ -1,3 +1,5 @@
+# inline_html-allowed_elements
+
 <h1>This is allowed.</h1>
 
 <h2>This is not allowed. {MD033}</h2>

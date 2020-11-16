@@ -2,7 +2,6 @@
   "default": true,
   "MD002": true,
   "MD006": true,
-  "MD041": true,
   "MD043": {
     "headings": [
       "## Heading 1 {MD002} {MD041}",

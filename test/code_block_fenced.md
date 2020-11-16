@@ -1,3 +1,5 @@
+# code_block_fenced
+
 This is text.
 
     This is a {MD046}
@@ -12,7 +14,7 @@ This is a code block that won't trigger.
 ```text
 This is code
  
-with a line with trailing spaces. {MD009:14}
+with a line with trailing spaces. {MD009:16}
 ```
 
 But we'll do another:

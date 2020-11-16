@@ -1,3 +1,5 @@
+# blockquote_blank_lines
+
 Some text
 
 > a quote
@@ -26,6 +28,6 @@ Some text
 
 Expected errors:
 
-{MD028:5} {MD028:7} {MD028:8} {MD028:10} {MD028:17}
-{MD009:10} (trailing space is intentional)
-{MD012:8} (multiple blank lines are intentional)
+{MD028:7} {MD028:9} {MD028:10} {MD028:12} {MD028:19}
+{MD009:12} (trailing space is intentional)
+{MD012:10} (multiple blank lines are intentional)

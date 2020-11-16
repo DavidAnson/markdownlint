@@ -1,3 +1,5 @@
+# lists_without_blank_lines
+
 * list (on first line)
 
 text
@@ -58,7 +60,7 @@ text
 
 text
 
-* list {MD032} {MD031:62}
+* list {MD032} {MD031:64}
 ```
 code
 ```
@@ -68,7 +70,7 @@ text
 ```
 code
 ```
-* list {MD032} {MD031:70}
+* list {MD032} {MD031:72}
 
 text
 

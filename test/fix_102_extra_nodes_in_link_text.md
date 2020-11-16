@@ -1,3 +1,5 @@
+# fix_102_extra_nodes_in_link_text
+
 [test _test_ test](www.test.com)
 [test `test` test](www.test.com)
 [test *test* test](www.test.com)

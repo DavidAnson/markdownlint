@@ -1,3 +1,5 @@
+# spaces_after_list_marker
+
 Normal list
 
 * Foo

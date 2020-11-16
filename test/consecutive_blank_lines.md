@@ -1,7 +1,9 @@
+# consecutive_blank_lines
+
 Some text
 
 
-Some text {MD012:3}
+Some text {MD012:5}
 
     This is a code block
 

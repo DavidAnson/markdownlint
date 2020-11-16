@@ -7,11 +7,9 @@ const path = require("path");
 const { promisify } = require("util");
 const tape = require("tape");
 require("tape-player");
-const packageJson = require("../package.json");
+const { version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const helpers = require("../helpers");
-const defaultConfig = require("./markdownlint-test-default-config.json");
-const version = packageJson.version;
 
 /**
  * Create a test function for the specified test file.
@@ -27,7 +25,7 @@ function createTestForFile(file) {
     const resultsFile = file.replace(/\.md$/, ".results.json");
     const fixedFile = file.replace(/\.md$/, ".md.fixed");
     const configFile = file.replace(/\.md$/, ".json");
-    let mergedConfig = null;
+    let config = null;
     const actualPromise = fs.promises.stat(configFile)
       .then(
         function configFileExists() {
@@ -38,14 +36,15 @@ function createTestForFile(file) {
           return {};
         })
       .then(
-        function lintWithConfig(config) {
-          mergedConfig = {
-            ...defaultConfig,
-            ...config
-          };
+        function captureConfig(configResult) {
+          config = configResult;
+        }
+      )
+      .then(
+        function lintWithConfig() {
           return markdownlintPromise({
             "files": [ file ],
-            "config": mergedConfig,
+            config,
             "resultVersion": detailedResults ? 2 : 3
           });
         })
@@ -55,7 +54,7 @@ function createTestForFile(file) {
             Promise.all([
               markdownlintPromise({
                 "files": [ file ],
-                "config": mergedConfig,
+                config,
                 "resultVersion": 3
               }),
               fs.promises.readFile(file, "utf8"),
@@ -150,7 +149,7 @@ function createTestForFile(file) {
                   "strings": {
                     "input": corrections
                   },
-                  "config": mergedConfig,
+                  config,
                   "resultVersion": 3
                 });
               })
