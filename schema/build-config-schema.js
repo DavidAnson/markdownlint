@@ -222,6 +222,14 @@ rules.forEach(function forRule(rule) {
       };
       break;
     case "MD026":
+      scheme.properties = {
+        "punctuation": {
+          "description": "Punctuation characters",
+          "type": "string",
+          "default": ".,;:!。，；：！"
+        }
+      };
+      break;
     case "MD036":
       scheme.properties = {
         "punctuation": {

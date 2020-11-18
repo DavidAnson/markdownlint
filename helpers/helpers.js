@@ -35,7 +35,11 @@ const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 module.exports.utf8Encoding = "utf8";
 
 // All punctuation characters (normal and full-width)
-module.exports.allPunctuation = ".,;:!?。，；：！？";
+const allPunctuation = ".,;:!?。，；：！？";
+module.exports.allPunctuation = allPunctuation;
+
+// All punctuation characters without question mark (normal and full-width)
+module.exports.allPunctuationNoQuestion = allPunctuation.replace(/[?？]/gu, "");
 
 // Returns true iff the input is a number
 module.exports.isNumber = function isNumber(obj) {

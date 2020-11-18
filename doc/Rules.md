@@ -895,7 +895,7 @@ Tags: headings, headers
 
 Aliases: no-trailing-punctuation
 
-Parameters: punctuation (string; default ".,;:!?。，；：！？")
+Parameters: punctuation (string; default ".,;:!。，；：！")
 
 Fixable: Most violations can be fixed by tooling
 
@@ -914,7 +914,8 @@ To fix this, remove the trailing punctuation:
 
 Note: The `punctuation` parameter can be used to specify what characters count
 as punctuation at the end of a heading. For example, you can change it to
-`".,;:!"` to allow headings that end with a question mark, such as in an FAQ.
+`".,;:"` to allow headings that end with an exclamation point. Question mark is
+allowed by default because of how common it is in headings of FAQ-style documents.
 Setting the `punctuation` parameter to `""` allows all characters - and is
 equivalent to disabling the rule.
 
