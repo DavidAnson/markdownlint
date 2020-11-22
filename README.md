@@ -155,12 +155,21 @@ appropriate place (HTML comments don't appear in the final markup):
 
 * Disable all rules: `<!-- markdownlint-disable -->`
 * Enable all rules: `<!-- markdownlint-enable -->`
+* Disable all rules for the next line only: `<!-- markdownlint-disable-next-line -->`
 * Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
 * Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
+* Disable one or more rules by name for the next line only: `<!-- markdownlint-disable-next-line MD001 MD005 -->`
 * Capture the current rule configuration: `<!-- markdownlint-capture -->`
 * Restore the captured rule configuration: `<!-- markdownlint-restore -->`
 
 For example:
+
+```markdown
+<!-- markdownlint-disable-next-line no-space-in-emphasis -->
+deliberate space * in * emphasis
+```
+
+Or:
 
 ```markdown
 <!-- markdownlint-disable no-space-in-emphasis -->

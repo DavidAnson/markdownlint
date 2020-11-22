@@ -17,7 +17,7 @@ module.exports.frontMatterRe =
 // Regular expression for matching inline disable/enable comments
 const inlineCommentRe =
   // eslint-disable-next-line max-len
-  /<!--\s*markdownlint-(?:(?:(disable|enable|capture|restore|disable-file|enable-file)((?:\s+[a-z0-9_-]+)*))|(?:(configure-file)\s+([\s\S]*?)))\s*-->/ig;
+  /<!--\s*markdownlint-(?:(?:(disable|enable|capture|restore|disable-file|enable-file|disable-next-line)((?:\s+[a-z0-9_-]+)*))|(?:(configure-file)\s+([\s\S]*?)))\s*-->/ig;
 module.exports.inlineCommentRe = inlineCommentRe;
 
 // Regular expressions for range matching
