@@ -341,6 +341,9 @@ Fixable: Most violations can be fixed by tooling
 This rule is triggered on any lines that end with unexpected whitespace. To fix this,
 remove the trailing space from the end of the line.
 
+Note: Trailing space is allowed in indented and fenced code blocks because some
+languages require it.
+
 The `br_spaces` parameter allows an exception to this rule for a specific number
 of trailing spaces, typically used to insert an explicit line break. The default
 value allows 2 spaces to indicate a hard break (\<br> element).

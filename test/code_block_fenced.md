@@ -11,12 +11,6 @@ And here is more text
 This is a code block that won't trigger.
 ```
 
-```text
-This is code
- 
-with a line with trailing spaces. {MD009:16}
-```
-
 But we'll do another:
 
     And this {MD046}
