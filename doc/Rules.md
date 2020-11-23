@@ -922,6 +922,10 @@ allowed by default because of how common it is in headings of FAQ-style document
 Setting the `punctuation` parameter to `""` allows all characters - and is
 equivalent to disabling the rule.
 
+Note: The trailing semicolon of
+[HTML entity references](https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references)
+like `&copy;`, `&#169;`, and `&#x000A9;` is ignored by this rule.
+
 Rationale: Headings are not meant to be full sentences. More information:
 <https://cirosantilli.com/markdown-style-guide#punctuation-at-the-end-of-headers>
 
