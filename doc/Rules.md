@@ -960,8 +960,6 @@ Tags: blockquote, whitespace
 
 Aliases: no-blanks-blockquote
 
-Fixable: Most violations can be fixed by tooling
-
 This rule is triggered when two blockquote blocks are separated by nothing
 except for a blank line:
 

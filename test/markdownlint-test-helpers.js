@@ -458,7 +458,7 @@ tape("applyFix", (test) => {
 });
 
 tape("applyFixes", (test) => {
-  test.plan(28);
+  test.plan(29);
   const testCases = [
     [
       "Hello world.",
@@ -886,6 +886,24 @@ tape("applyFixes", (test) => {
         }
       ],
       "Hello\r\nworld\r\n\r\n"
+    ],
+    [
+      "Hello world",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "insertText": "x"
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "deleteCount": -1
+          }
+        }
+      ],
+      ""
     ]
   ];
   testCases.forEach((testCase) => {
