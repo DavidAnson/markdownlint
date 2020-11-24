@@ -1678,8 +1678,9 @@ To allow optional headings as with the following structure:
 ### Notes (optional)
 ```
 
-Use the special value `"*"` meaning "one or more unspecified headings" and set
-the `headings` parameter to:
+Use the special value `"*"` meaning "zero or more unspecified headings" or the
+special value `"+"` meaning "one or more unspecified headings" and set the
+`headings` parameter to:
 
 ```json
 [
