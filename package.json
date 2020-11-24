@@ -33,7 +33,7 @@
     "node": ">=10"
   },
   "dependencies": {
-    "markdown-it": "11.0.0"
+    "markdown-it": "12.0.2"
   },
   "devDependencies": {
     "@types/node": "~14.6.4",
