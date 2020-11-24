@@ -101,7 +101,13 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [
       join(rootDir, "**/*.md"),
-      "!" + join(rootDir, "samples/**/*.md")
+      "!" + join(rootDir, "samples/**/*.md"),
+      // A table parsing change in markdown-it v12 causes a new issue here
+      "!" + join(
+        rootDir,
+        "docs/standard/base-types/" +
+        "regular-expression-example-scanning-for-hrefs.md"
+      )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
     lintTestRepo(test, globPatterns, configPath);
