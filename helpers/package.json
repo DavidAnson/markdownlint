@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-rule-helpers",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "A collection of markdownlint helper functions for custom rules",
   "main": "helpers.js",
   "author": "David Anson (https://dlaa.me/)",

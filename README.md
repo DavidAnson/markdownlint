@@ -916,6 +916,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            to fix in browser demo, allow custom rules in `.markdownlint.json` schema, improve
            MD042/MD044, improve documentation, update dependencies.
   * 0.21.1 - Improve MD011/MD031, export `getVersion` API.
+* 0.22.0 - Allow `extends` in config to reference installed packages by name, add
+           `markdownlint-disable-next-line` inline comment, support JSON front matter, improve
+           MD009/MD026/MD028/MD043, update dependencies (including `markdown-it` to v12).
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
