@@ -7,6 +7,7 @@ if (!module.exports) {
 }
 
 // Stub missing implementation of util.promisify (unused here)
+// eslint-disable-next-line unicorn/import-style
 var util = require("util");
 if (!util.promisify) {
   util.promisify = function promisify(fn) {

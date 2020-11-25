@@ -3,6 +3,7 @@
 "use strict";
 
 const { existsSync } = require("fs");
+// eslint-disable-next-line unicorn/import-style
 const { join } = require("path");
 const { promisify } = require("util");
 const globby = require("globby");
