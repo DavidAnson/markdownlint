@@ -51,7 +51,7 @@ type Options = {
     /**
      * Additional plugins.
      */
-    markdownItPlugins?: any[][];
+    markdownItPlugins?: Plugin[];
 };
 /**
  * Called with the result of the lint operation.
@@ -105,7 +105,7 @@ type RuleParams = {
      */
     name: string;
     /**
-     * markdown-it token objects.
+     * Token objects from markdown-it.
      */
     tokens: MarkdownItToken[];
     /**
@@ -262,7 +262,7 @@ type Rule = {
     function: RuleFunction;
 };
 /**
- * markdown-it plugin.
+ * A markdown-it plugin.
  */
 type Plugin = any[];
 /**
