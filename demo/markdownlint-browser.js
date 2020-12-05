@@ -3527,7 +3527,7 @@ module.exports={
         "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && browserify ../lib-es3/helpers/helpers.js --standalone helpers >> markdownlint-rule-helpers-browser.js && uglifyjs markdownlint-browser.js markdownlint-rule-helpers-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
         "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
         "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint",
-        "clone-test-repos": "make-dir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet",
+        "clone-test-repos": "mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet",
         "clone-test-repos-large": "npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
         "lint-test-repos": "node test/markdownlint-test-repos.js",
         "clean-test-repos": "rimraf test-repos"
@@ -3549,7 +3549,6 @@ module.exports={
         "eslint-plugin-unicorn": "~23.0.0",
         "globby": "~11.0.1",
         "js-yaml": "~3.14.0",
-        "make-dir-cli": "~2.0.0",
         "markdown-it-for-inline": "~0.1.1",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
