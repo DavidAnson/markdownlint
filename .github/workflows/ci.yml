@@ -28,7 +28,7 @@ jobs:
       run: npm install --no-package-lock
     - name: Run All Validations
       if: ${{ matrix.node-version == '14.x' }}
-      run: npm run ci
+      run: npm run test-ci
     - name: Run Tests Only
       if: ${{ matrix.node-version != '14.x' }}
       run: npm run test

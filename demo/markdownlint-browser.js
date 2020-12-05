@@ -3521,7 +3521,7 @@ module.exports={
         "test-declaration": "cd example/typescript && tsc && node type-check.js",
         "test-extra": "node test/markdownlint-test-extra.js",
         "lint": "eslint --max-warnings 0 lib helpers test schema && eslint --env browser --global markdownit --global markdownlint --rule \"no-unused-vars: 0, no-extend-native: 0, max-statements: 0, no-console: 0, no-var: 0, unicorn/prefer-add-event-listener: 0, unicorn/prefer-query-selector: 0, unicorn/prefer-replace-all: 0\" demo && eslint --rule \"no-console: 0, no-invalid-this: 0, no-shadow: 0, object-property-newline: 0, node/no-missing-require: 0, node/no-extraneous-require: 0\" example",
-        "ci": "npm run test-cover && npm run lint && npm run test-declaration",
+        "gh-ci": "npm run test-cover && npm run lint && npm run test-declaration",
         "build-config-schema": "node schema/build-config-schema.js",
         "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
         "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && browserify ../lib-es3/helpers/helpers.js --standalone helpers >> markdownlint-rule-helpers-browser.js && uglifyjs markdownlint-browser.js markdownlint-rule-helpers-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",

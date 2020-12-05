@@ -32,7 +32,7 @@ If `some-test.md` needs custom configuration, a `some-test.json` is used to prov
 Lint before sending a pull request by running `npm run lint`.
 There should be no issues.
 
-Run a full continuous integration pass before sending a pull request via `npm run ci`.
+Run a full continuous integration pass before sending a pull request via `npm run gh-ci`.
 Code coverage should remain at 100%.
 
 Pull requests should contain a single commit.
