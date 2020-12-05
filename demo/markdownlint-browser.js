@@ -3549,7 +3549,6 @@ module.exports={
         "eslint-plugin-unicorn": "~23.0.0",
         "globby": "~11.0.1",
         "js-yaml": "~3.14.0",
-        "make-dir-cli": "~2.0.0",
         "markdown-it-for-inline": "~0.1.1",
         "markdown-it-sub": "~1.0.0",
         "markdown-it-sup": "~1.0.0",
