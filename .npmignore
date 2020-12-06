@@ -2,6 +2,7 @@
 .eslintrc.json
 .github
 .markdownlint.json
+.npmrc
 .vscode
 coverage
 demo/*
