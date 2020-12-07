@@ -25,10 +25,34 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install --no-package-lock
-    - name: Run All Validations
+      run: npm install
+    - name: Run tests with coverage
       if: ${{ matrix.node-version == '14.x' }}
-      run: npm run test-ci
+      run: npm run test-cover
     - name: Run Tests Only
       if: ${{ matrix.node-version != '14.x' }}
       run: npm run test
+
+  lint:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+    - name: Install Dependencies
+      run: npm install
+    - name: Lint
+      run: npm run lint
+
+  declaration:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Dependencies
+      run: npm install
+    - name: Run Typescript Validations
+      run: npm run test-declaration
