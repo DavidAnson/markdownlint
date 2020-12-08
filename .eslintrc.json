@@ -180,5 +180,36 @@
     "unicorn/prevent-abbreviations": "off",
     "unicorn/string-content": "error",
     "unicorn/throw-new-error": "error"
-  }
+  },
+  "overrides": [
+    {
+      "files": [
+        "demo/*.js"
+      ],
+      "env": {
+        "browser": true
+      },
+      "rules": {
+        "jsdoc/require-jsdoc": "off",
+        "unicorn/prefer-query-selector": "off",
+        "unicorn/prefer-add-event-listener": "off",
+        "no-console": "off",
+        "no-shadow": "off",
+        "no-var": "off"
+      }
+    },
+    {
+      "files": [
+        "example/*.js"
+      ],
+      "rules": {
+        "node/no-missing-require": "off",
+        "node/no-extraneous-require": "off",
+        "no-console": "off",
+        "no-invalid-this": "off",
+        "no-shadow": "off",
+        "object-property-newline": "off"
+      }
+    }
+  ]
 }

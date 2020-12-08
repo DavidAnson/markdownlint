@@ -1,7 +1,5 @@
 "use strict";
 
-/* eslint-disable jsdoc/require-jsdoc */
-
 (function main() {
   // DOM elements
   var markdown = document.getElementById("markdown");
@@ -166,7 +164,7 @@
 
   // Show library version
   document.getElementById("version").textContent =
-    "(v" + markdownlint.getVersion() + ")";
+    "(v" + window.markdownlint.getVersion() + ")";
 
   // Add event listeners
   document.body.addEventListener("dragover", onDragOver);
@@ -208,7 +206,7 @@
   // Update Markdown from hash (if present)
   if (window.location.hash) {
     try {
-      const decodedHash = decodeURIComponent(window.location.hash.substring(1));
+      var decodedHash = decodeURIComponent(window.location.hash.substring(1));
       if (hashPrefix === decodedHash.substring(0, hashPrefix.length)) {
         markdown.value = decodedHash.substring(hashPrefix.length);
       }
