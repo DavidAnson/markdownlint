@@ -29,7 +29,7 @@
     {
         "lineNumber": 4,
         "ruleNames": [ "MD025", "single-title", "single-h1" ],
-        "ruleDescription": "Multiple top level headings in the same document",
+        "ruleDescription": "Multiple top-level headings in the same document",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md025",
         "errorDetail": null,
         "errorContext": "# Heading",

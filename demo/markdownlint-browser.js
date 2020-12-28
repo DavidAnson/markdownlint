@@ -2420,7 +2420,7 @@ module.exports = {
 var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, frontMatterHasTitle = _a.frontMatterHasTitle;
 module.exports = {
     "names": ["MD025", "single-title", "single-h1"],
-    "description": "Multiple top level headings in the same document",
+    "description": "Multiple top-level headings in the same document",
     "tags": ["headings", "headers"],
     "function": function MD025(params, onError) {
         var level = Number(params.config.level || 1);

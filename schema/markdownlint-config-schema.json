@@ -690,7 +690,7 @@
       "additionalProperties": false
     },
     "MD025": {
-      "description": "MD025/single-title/single-h1 - Multiple top level headings in the same document",
+      "description": "MD025/single-title/single-h1 - Multiple top-level headings in the same document",
       "type": [
         "boolean",
         "object"
@@ -711,7 +711,7 @@
       "additionalProperties": false
     },
     "single-title": {
-      "description": "MD025/single-title/single-h1 - Multiple top level headings in the same document",
+      "description": "MD025/single-title/single-h1 - Multiple top-level headings in the same document",
       "type": [
         "boolean",
         "object"
@@ -732,7 +732,7 @@
       "additionalProperties": false
     },
     "single-h1": {
-      "description": "MD025/single-title/single-h1 - Multiple top level headings in the same document",
+      "description": "MD025/single-title/single-h1 - Multiple top-level headings in the same document",
       "type": [
         "boolean",
         "object"

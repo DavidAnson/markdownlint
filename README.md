@@ -76,7 +76,7 @@ playground for learning and exploring.
 * **[MD022](doc/Rules.md#md022)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
 * **[MD023](doc/Rules.md#md023)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
 * **[MD024](doc/Rules.md#md024)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
-* **[MD025](doc/Rules.md#md025)** *single-title/single-h1* - Multiple top level headings in the same document
+* **[MD025](doc/Rules.md#md025)** *single-title/single-h1* - Multiple top-level headings in the same document
 * **[MD026](doc/Rules.md#md026)** *no-trailing-punctuation* - Trailing punctuation in heading
 * **[MD027](doc/Rules.md#md027)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
 * **[MD028](doc/Rules.md#md028)** *no-blanks-blockquote* - Blank line inside blockquote
