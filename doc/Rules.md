@@ -426,7 +426,7 @@ Aliases: no-reversed-links
 
 Fixable: Most violations can be fixed by tooling
 
-This rule is triggered when a text that appears to be a link is encountered, but
+This rule is triggered when a piece of text that appears to be a link is encountered, but
 where the syntax appears to have been reversed (the `[]` and `()` are
 reversed):
 
