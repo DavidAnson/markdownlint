@@ -1121,7 +1121,7 @@
       "default": true
     },
     "MD041": {
-      "description": "MD041/first-line-heading/first-line-h1 - First line in file should be a top-level heading",
+      "description": "MD041/first-line-heading/first-line-h1 - The first line in the file should be a top-level heading",
       "type": [
         "boolean",
         "object"
@@ -1142,7 +1142,7 @@
       "additionalProperties": false
     },
     "first-line-heading": {
-      "description": "MD041/first-line-heading/first-line-h1 - First line in file should be a top-level heading",
+      "description": "MD041/first-line-heading/first-line-h1 - The first line in the file should be a top-level heading",
       "type": [
         "boolean",
         "object"
@@ -1163,7 +1163,7 @@
       "additionalProperties": false
     },
     "first-line-h1": {
-      "description": "MD041/first-line-heading/first-line-h1 - First line in file should be a top-level heading",
+      "description": "MD041/first-line-heading/first-line-h1 - The first line in the file should be a top-level heading",
       "type": [
         "boolean",
         "object"

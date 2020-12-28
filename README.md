@@ -92,7 +92,7 @@ playground for learning and exploring.
 * **[MD038](doc/Rules.md#md038)** *no-space-in-code* - Spaces inside code span elements
 * **[MD039](doc/Rules.md#md039)** *no-space-in-links* - Spaces inside link text
 * **[MD040](doc/Rules.md#md040)** *fenced-code-language* - Fenced code blocks should have a language specified
-* **[MD041](doc/Rules.md#md041)** *first-line-heading/first-line-h1* - First line in file should be a top-level heading
+* **[MD041](doc/Rules.md#md041)** *first-line-heading/first-line-h1* - The first line in the file should be a top-level heading
 * **[MD042](doc/Rules.md#md042)** *no-empty-links* - No empty links
 * **[MD043](doc/Rules.md#md043)** *required-headings/required-headers* - Required heading structure
 * **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
@@ -650,11 +650,11 @@ Output:
 bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
 bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.string"]
 bad.string: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This string fails        some rules."]
-bad.string: 1: MD041/first-line-heading/first-line-h1 First line in file should be a top-level heading [Context: "#bad.string"]
+bad.string: 1: MD041/first-line-heading/first-line-h1 The first line in the file should be a top-level heading [Context: "#bad.string"]
 bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
 bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
 bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in file should be a top-level heading [Context: "#bad.md"]
+bad.md: 1: MD041/first-line-heading/first-line-h1 The first line in the file should be a top-level heading [Context: "#bad.md"]
 ```
 
 Or invoke `markdownlint.sync` for a synchronous call:
@@ -703,7 +703,7 @@ Output:
       "errorRange": [ 1, 2 ] },
     { "lineNumber": 1,
       "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
-      "ruleDescription": "First line in file should be a top-level heading",
+      "ruleDescription": "The first line in the file should be a top-level heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md041",
       "errorDetail": null,
       "errorContext": "#bad.md",
@@ -742,7 +742,7 @@ Output:
 bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
 bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
 bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in file should be a top-level heading [Context: "#bad.md"]
+bad.md: 1: MD041/first-line-heading/first-line-h1 The first line in the file should be a top-level heading [Context: "#bad.md"]
 [00:00:00] Finished 'markdownlint' after 10 ms
 ```
 
@@ -783,7 +783,7 @@ Warning:
 bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
 bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
 bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in file should be a top-level heading [Context: "#bad.md"]
+bad.md: 1: MD041/first-line-heading/first-line-h1 The first line in the file should be a top-level heading [Context: "#bad.md"]
  Use --force to continue.
 ```
 
