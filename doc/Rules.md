@@ -25,7 +25,7 @@ We skipped out a 2nd level heading in this document
 ```
 
 When using multiple heading levels, nested headings should increase by only one
-the level at a time:
+level at a time:
 
 ```markdown
 # Heading 1
@@ -161,7 +161,7 @@ document:
 ```
 
 The configured list style can be a specific symbol to use (asterisk, plus, dash),
-can require that users be consistent within the document, or can require that each
+can require that usage is consistent within the document, or can require that each
 sublist has a consistent symbol that is different from its parent list.
 
 For example, the following is valid for the `sublist` style because the outer-most
@@ -311,7 +311,7 @@ Corrected Example:
 ```
 
 Note: This rule applies to a sublist only if its parent lists are all also
-unordered (otherwise, an extra indentation of ordered lists interferes with the
+unordered (otherwise, extra indentation of ordered lists interferes with the
 rule).
 
 The `start_indented` parameter allows the first level of lists to be indented by
@@ -426,7 +426,7 @@ Aliases: no-reversed-links
 
 Fixable: Most violations can be fixed by tooling
 
-This rule is triggered when the text that appears to be a link is encountered, but
+This rule is triggered when a text that appears to be a link is encountered, but
 where the syntax appears to have been reversed (the `[]` and `()` are
 reversed):
 
@@ -446,7 +446,7 @@ Note: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style footn
 For (example)[^1]
 ```
 
-Rationale: Reversed links are not rendered as useful links.
+Rationale: Reversed links are not rendered as usable links.
 
 <a name="md012"></a>
 
@@ -478,7 +478,7 @@ Some text here
 Some more text here
 ```
 
-Note: this rule will not be triggered if there are multiple consecutive blanks
+Note: this rule will not be triggered if there are multiple consecutive blank
 lines inside code blocks.
 
 Note: The `maximum` parameter can be used to configure the maximum number of
@@ -526,7 +526,7 @@ This-line-is-also-okay-because-there-are-no-spaces
 ```
 
 In `strict` or `stern` modes, the two middle lines above are a violation. The
-the third line is a violation in `strict` mode but allowed in `stern` mode.
+third line is a violation in `strict` mode but allowed in `stern` mode.
 
 You have the option to exclude this rule for code blocks, tables, or headings.
 To do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.
@@ -535,7 +535,7 @@ Code blocks are included in this rule by default since it is often a
 requirement for document readability, and tentatively compatible with code
 rules. Still, some languages do not lend themselves to short lines.
 
-Rationale: Extremely long lines can be difficult to work with with some editors.
+Rationale: Extremely long lines can be difficult to work with some editors.
 More information: <https://cirosantilli.com/markdown-style-guide#line-wrapping>.
 
 <a name="md014"></a>
@@ -917,7 +917,7 @@ To fix this, remove the trailing punctuation:
 
 Note: The `punctuation` parameter can be used to specify what characters count
 as punctuation at the end of a heading. For example, you can change it to
-`".,;:"` to allow headings that end with an exclamation point. The question mark is
+`".,;:"` to allow headings that end with an exclamation point. A question mark is
 allowed by default because of how common it is in headings of FAQ-style documents.
 Setting the `punctuation` parameter to `""` allows all characters - and is
 equivalent to disabling the rule.
@@ -1011,8 +1011,8 @@ Parameters: style ("one", "ordered", "one_or_ordered", "zero"; default "one_or_o
 
 This rule is triggered for ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
-configured style). The less-common patterns of using '0.' as a first prefix or
-for all prefixes are also supported.
+configured style). The less-common pattern of using '0.' as a first prefix or
+for all prefixes is also supported.
 
 Example valid list if the style is configured as 'one':
 
@@ -1288,7 +1288,7 @@ Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
 
 Rationale: Raw HTML is allowed in markdown, but this rule is included for
 those who want their documents to only include "pure" markdown, or for those
-who is rendering markdown documents in something other than HTML?
+who are rendering markdown documents in something other than HTML.
 
 <a name="md034"></a>
 
@@ -1510,7 +1510,7 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 <a name="md039"></a>
 
-## MD039 - Spaces inside the link text
+## MD039 - Spaces inside link text
 
 Tags: whitespace, links
 
@@ -1679,7 +1679,7 @@ To allow optional headings as with the following structure:
 ```
 
 Use the special value `"*"` meaning "zero or more unspecified headings" or the
-the special value `"+"` meaning "one or more unspecified headings" and set the
+special value `"+"` meaning "one or more unspecified headings" and set the
 `headings` parameter to:
 
 ```json
@@ -1733,13 +1733,13 @@ Rationale: Incorrect capitalization of proper names is usually a mistake.
 
 <a name="md045"></a>
 
-## MD045 - Images should have alternate text (alt-text)
+## MD045 - Images should have alternate text (alt text)
 
 Tags: accessibility, images
 
-Aliases: no-alt-text
+Aliases: no-alt text
 
-This rule is triggered when an image is missing alternate text (alt-text) information.
+This rule is triggered when an image is missing alternate text (alt text) information.
 
 Alternate text is commonly specified inline as:
 
@@ -1870,6 +1870,6 @@ document:
 ````
 
 The configured list style can be a specific symbol to use (backtick, tilde), or
-can require that users be consistent within the document.
+can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
