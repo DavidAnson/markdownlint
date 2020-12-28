@@ -11,7 +11,7 @@
     {
         "lineNumber": 1,
         "ruleNames": [ "MD002", "first-heading-h1", "first-header-h1" ],
-        "ruleDescription": "First heading should be a top level heading",
+        "ruleDescription": "First heading should be a top-level heading",
         "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md002",
         "errorDetail": "Expected: h1; Actual: h2",
         "errorContext": null,
