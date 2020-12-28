@@ -1737,7 +1737,7 @@ Rationale: Incorrect capitalization of proper names is usually a mistake.
 
 Tags: accessibility, images
 
-Aliases: no-alt text
+Aliases: no-alt-text
 
 This rule is triggered when an image is missing alternate text (alt text) information.
 
