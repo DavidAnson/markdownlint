@@ -161,8 +161,8 @@ document:
 ```
 
 The configured list style can be a specific symbol to use (asterisk, plus, dash),
-can require that usage is consistent within the document, or can require that each
-sublist has a consistent symbol that is different from its parent list.
+to ensure that all list styling is consistent, or to ensure that each
+sublist has a consistent symbol that differs from its parent list.
 
 For example, the following is valid for the `sublist` style because the outer-most
 indent uses asterisk, the middle indent uses plus, and the inner-most indent uses dash:
