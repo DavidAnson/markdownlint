@@ -3159,7 +3159,7 @@ module.exports = {
 var _a = require("../helpers"), addErrorContext = _a.addErrorContext, frontMatterHasTitle = _a.frontMatterHasTitle;
 module.exports = {
     "names": ["MD041", "first-line-heading", "first-line-h1"],
-    "description": "The first line in the file should be a top-level heading",
+    "description": "First line in a file should be a top-level heading",
     "tags": ["headings", "headers"],
     "function": function MD041(params, onError) {
         var level = Number(params.config.level || 1);

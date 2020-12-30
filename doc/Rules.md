@@ -1565,7 +1565,7 @@ correct syntax highlighting for code. More information:
 
 <a name="md041"></a>
 
-## MD041 - The first line in the file should be a top-level heading
+## MD041 - First line in a file should be a top-level heading
 
 Tags: headings, headers
 
