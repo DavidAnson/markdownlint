@@ -264,7 +264,7 @@ Some test
 ```
 
 Note: This rule is triggered for the following scenario because the unordered
-sublist is not recognized as such by the parser. Not being nested with 3 characters
+sublist is not recognized as such by the parser. Not being nested 3 characters
 as required by the outer ordered list, it creates a top-level unordered list
 instead.
 
@@ -426,7 +426,7 @@ Aliases: no-reversed-links
 
 Fixable: Most violations can be fixed by tooling
 
-This rule is triggered when a piece of text that appears to be a link is encountered, but
+This rule is triggered when text that appears to be a link is encountered, but
 where the syntax appears to have been reversed (the `[]` and `()` are
 reversed):
 
@@ -514,7 +514,7 @@ line length. This allows you to still include items such as long URLs without
 being forced to break them in the middle. To disable this exception, set the
 `strict` parameter to `true` to report an issue when any line is too long.
 To warn for lines that are too long and could be fixed but allow lines without
-spaces set the `stern` parameter to `true`.
+spaces, set the `stern` parameter to `true`.
 
 For example (assuming normal behavior):
 
@@ -535,7 +535,7 @@ Code blocks are included in this rule by default since it is often a
 requirement for document readability, and tentatively compatible with code
 rules. Still, some languages do not lend themselves to short lines.
 
-Rationale: Extremely long lines can be difficult to work with some editors.
+Rationale: Extremely long lines can be difficult to work with in some editors.
 More information: <https://cirosantilli.com/markdown-style-guide#line-wrapping>.
 
 <a name="md014"></a>
@@ -807,7 +807,7 @@ Aliases: no-duplicate-heading, no-duplicate-header
 
 Parameters: siblings_only, allow_different_nesting (boolean; default `false`)
 
-This rule is triggered if there are multiple headings in the document that has
+This rule is triggered if there are multiple headings in the document that have
 the same text:
 
 ```markdown
@@ -863,9 +863,9 @@ document:
 # Another top-level heading
 ```
 
-To fix, structure your document so that there is a single h1 heading that is
-the title for the document and all later headings are h2 or lower level
-headings:
+To fix, structure your document so there is a single h1 heading that is
+the title for the document. Subsequent headings must be
+lower-level headings (h2, h3, etc.):
 
 ```markdown
 # Title
@@ -917,7 +917,7 @@ To fix this, remove the trailing punctuation:
 
 Note: The `punctuation` parameter can be used to specify what characters count
 as punctuation at the end of a heading. For example, you can change it to
-`".,;:"` to allow headings that end with an exclamation point. A question mark is
+`".,;:"` to allow headings that end with an exclamation point. Question marks is
 allowed by default because of how common it is in headings of FAQ-style documents.
 Setting the `punctuation` parameter to `""` allows all characters - and is
 equivalent to disabling the rule.
