@@ -55,7 +55,7 @@ tape("resultFormattingV0", (test) => {
     let actualMessage = actualResult.toString();
     let expectedMessage =
       "./test/atx_heading_spacing.md: 3: MD002" +
-      " First heading should be a top level heading\n" +
+      " First heading should be a top-level heading\n" +
       "./test/atx_heading_spacing.md: 1: MD018" +
       " No space after hash on atx style heading\n" +
       "./test/atx_heading_spacing.md: 3: MD019" +
@@ -63,13 +63,13 @@ tape("resultFormattingV0", (test) => {
       "./test/atx_heading_spacing.md: 5: MD019" +
       " Multiple spaces after hash on atx style heading\n" +
       "./test/first_heading_bad_atx.md: 1: MD002" +
-      " First heading should be a top level heading";
+      " First heading should be a top-level heading";
     test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
     // @ts-ignore
     actualMessage = actualResult.toString(true);
     expectedMessage =
       "./test/atx_heading_spacing.md: 3: first-heading-h1" +
-      " First heading should be a top level heading\n" +
+      " First heading should be a top-level heading\n" +
       "./test/atx_heading_spacing.md: 1: no-missing-space-atx" +
       " No space after hash on atx style heading\n" +
       "./test/atx_heading_spacing.md: 3: no-multiple-space-atx" +
@@ -77,7 +77,7 @@ tape("resultFormattingV0", (test) => {
       "./test/atx_heading_spacing.md: 5: no-multiple-space-atx" +
       " Multiple spaces after hash on atx style heading\n" +
       "./test/first_heading_bad_atx.md: 1: first-heading-h1" +
-      " First heading should be a top level heading";
+      " First heading should be a top-level heading";
     test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
     test.end();
   });
@@ -111,7 +111,7 @@ tape("resultFormattingSyncV0", (test) => {
   let actualMessage = actualResult.toString();
   let expectedMessage =
     "./test/atx_heading_spacing.md: 3: MD002" +
-    " First heading should be a top level heading\n" +
+    " First heading should be a top-level heading\n" +
     "./test/atx_heading_spacing.md: 1: MD018" +
     " No space after hash on atx style heading\n" +
     "./test/atx_heading_spacing.md: 3: MD019" +
@@ -119,13 +119,13 @@ tape("resultFormattingSyncV0", (test) => {
     "./test/atx_heading_spacing.md: 5: MD019" +
     " Multiple spaces after hash on atx style heading\n" +
     "./test/first_heading_bad_atx.md: 1: MD002" +
-    " First heading should be a top level heading";
+    " First heading should be a top-level heading";
   test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
   // @ts-ignore
   actualMessage = actualResult.toString(true);
   expectedMessage =
     "./test/atx_heading_spacing.md: 3: first-heading-h1" +
-    " First heading should be a top level heading\n" +
+    " First heading should be a top-level heading\n" +
     "./test/atx_heading_spacing.md: 1: no-missing-space-atx" +
     " No space after hash on atx style heading\n" +
     "./test/atx_heading_spacing.md: 3: no-multiple-space-atx" +
@@ -133,7 +133,7 @@ tape("resultFormattingSyncV0", (test) => {
     "./test/atx_heading_spacing.md: 5: no-multiple-space-atx" +
     " Multiple spaces after hash on atx style heading\n" +
     "./test/first_heading_bad_atx.md: 1: first-heading-h1" +
-    " First heading should be a top level heading";
+    " First heading should be a top-level heading";
   test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
   test.end();
 });
@@ -173,7 +173,7 @@ tape("resultFormattingV1", (test) => {
         { "lineNumber": 3,
           "ruleName": "MD002",
           "ruleAlias": "first-heading-h1",
-          "ruleDescription": "First heading should be a top level heading",
+          "ruleDescription": "First heading should be a top-level heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
@@ -207,7 +207,7 @@ tape("resultFormattingV1", (test) => {
         { "lineNumber": 1,
           "ruleName": "MD002",
           "ruleAlias": "first-heading-h1",
-          "ruleDescription": "First heading should be a top level heading",
+          "ruleDescription": "First heading should be a top-level heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
@@ -218,7 +218,7 @@ tape("resultFormattingV1", (test) => {
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/atx_heading_spacing.md: 3: MD002/first-heading-h1" +
-      " First heading should be a top level heading" +
+      " First heading should be a top-level heading" +
       " [Expected: h1; Actual: h2]\n" +
       "./test/atx_heading_spacing.md: 1: MD018/no-missing-space-atx" +
       " No space after hash on atx style heading" +
@@ -230,7 +230,7 @@ tape("resultFormattingV1", (test) => {
       " Multiple spaces after hash on atx style heading" +
       " [Context: \"##   Heading 3 {MD019}\"]\n" +
       "./test/first_heading_bad_atx.md: 1: MD002/first-heading-h1" +
-      " First heading should be a top level heading" +
+      " First heading should be a top-level heading" +
       " [Expected: h1; Actual: h2]\n" +
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
       " Multiple spaces inside hashes on closed atx style heading" +
@@ -272,7 +272,7 @@ tape("resultFormattingV2", (test) => {
       "./test/atx_heading_spacing.md": [
         { "lineNumber": 3,
           "ruleNames": [ "MD002", "first-heading-h1", "first-header-h1" ],
-          "ruleDescription": "First heading should be a top level heading",
+          "ruleDescription": "First heading should be a top-level heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
@@ -302,7 +302,7 @@ tape("resultFormattingV2", (test) => {
       "./test/first_heading_bad_atx.md": [
         { "lineNumber": 1,
           "ruleNames": [ "MD002", "first-heading-h1", "first-header-h1" ],
-          "ruleDescription": "First heading should be a top level heading",
+          "ruleDescription": "First heading should be a top-level heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md002`,
           "errorDetail": "Expected: h1; Actual: h2",
           "errorContext": null,
@@ -314,7 +314,7 @@ tape("resultFormattingV2", (test) => {
     const expectedMessage =
       "./test/atx_heading_spacing.md: 3:" +
       " MD002/first-heading-h1/first-header-h1" +
-      " First heading should be a top level heading" +
+      " First heading should be a top-level heading" +
       " [Expected: h1; Actual: h2]\n" +
       "./test/atx_heading_spacing.md: 1: MD018/no-missing-space-atx" +
       " No space after hash on atx style heading" +
@@ -327,7 +327,7 @@ tape("resultFormattingV2", (test) => {
       " [Context: \"##   Heading 3 {MD019}\"]\n" +
       "./test/first_heading_bad_atx.md: 1:" +
       " MD002/first-heading-h1/first-header-h1" +
-      " First heading should be a top level heading" +
+      " First heading should be a top-level heading" +
       " [Expected: h1; Actual: h2]\n" +
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
       " Multiple spaces inside hashes on closed atx style heading" +

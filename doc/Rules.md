@@ -1,7 +1,7 @@
 # Rules
 
 This document contains a description of all rules, what they are checking for,
-as well as an examples of documents that break the rule and corrected
+as well as examples of documents that break the rule and corrected
 versions of the examples. Any rule whose heading is ~~struck through~~ is
 deprecated, but still provided for backward-compatibility.
 
@@ -47,7 +47,7 @@ when skipped - especially for accessibility scenarios. More information:
 
 <a name="md002"></a>
 
-## ~~MD002 - First heading should be a top level heading~~
+## ~~MD002 - First heading should be a top-level heading~~
 
 Tags: headings, headers
 
@@ -59,26 +59,26 @@ Parameters: level (number; default 1)
 > [MD041/first-line-heading](#md041) offers an improved implementation.
 
 This rule is intended to ensure document headings start at the top level and
-is triggered when the first heading in the document isn't a h1 heading:
+is triggered when the first heading in the document isn't an h1 heading:
 
 ```markdown
-## This isn't a H1 heading
+## This isn't an H1 heading
 
 ### Another heading
 ```
 
-The first heading in the document should be a h1 heading:
+The first heading in the document should be an h1 heading:
 
 ```markdown
-# Start with a H1 heading
+# Start with an H1 heading
 
 ## Then use an H2 for subsections
 ```
 
-Note: The `level` parameter can be used to change the top level (ex: to h2) in
-cases where a h1 is added externally.
+Note: The `level` parameter can be used to change the top-level (ex: to h2) in
+cases where an h1 is added externally.
 
-Rationale: The top level heading often acts as the title of a document. More
+Rationale: The top-level heading often acts as the title of a document. More
 information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 <a name="md003"></a>
@@ -127,7 +127,7 @@ Setext style H2
 
 Note: the configured heading style can be a specific style to use (atx,
 atx_closed, setext, setext_with_atx, setext_with_atx_closed), or simply require
-that the usage be consistent within the document.
+that the usage is consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -161,8 +161,8 @@ document:
 ```
 
 The configured list style can be a specific symbol to use (asterisk, plus, dash),
-can require that usage be consistent within the document, or can require that each
-sublist have a consistent symbol that is different from its parent list.
+to ensure that all list styling is consistent, or to ensure that each
+sublist has a consistent symbol that differs from its parent list.
 
 For example, the following is valid for the `sublist` style because the outer-most
 indent uses asterisk, the middle indent uses plus, and the inner-most indent uses dash:
@@ -198,7 +198,7 @@ but don't have the same indentation:
    * A misaligned item
 ```
 
-Usually this rule will be triggered because of a typo. Correct the indentation
+Usually, this rule will be triggered because of a typo. Correct the indentation
 for the list to fix it:
 
 ```markdown
@@ -244,7 +244,7 @@ Aliases: ul-start-left
 
 Fixable: Most violations can be fixed by tooling
 
-This rule is triggered when top level lists don't start at the beginning of a
+This rule is triggered when top-level lists don't start at the beginning of a
 line:
 
 ```markdown
@@ -254,7 +254,7 @@ Some text
   * List item
 ```
 
-To fix, ensure that top level list items are not indented:
+To fix, ensure that top-level list items are not indented:
 
 ```markdown
 Some test
@@ -322,7 +322,7 @@ Rationale: Indenting by 2 spaces allows the content of a nested list to be in
 line with the start of the content of the parent list when a single space is
 used after the list marker. Indenting by 4 spaces is consistent with code blocks
 and simpler for editors to implement. Additionally, this can be a compatibility
-issue for multi-markdown parsers, which require a 4-space indents. More information:
+issue for multi-markdown parsers, which require 4-space indents. More information:
 <https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists>
 and <http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting>.
 
@@ -526,7 +526,7 @@ This-line-is-also-okay-because-there-are-no-spaces
 ```
 
 In `strict` or `stern` modes, the two middle lines above are a violation. The
-third line is a violation in `strict` mode, but allowed in `stern` mode.
+third line is a violation in `strict` mode but allowed in `stern` mode.
 
 You have the option to exclude this rule for code blocks, tables, or headings.
 To do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.
@@ -764,7 +764,7 @@ number of blank lines (including 0) above or below each heading.
 Note: If `lines_above` or `lines_below` are configured to require more than one
 blank line, [MD012/no-multiple-blanks](#md012) should also be customized.
 
-Rationale: Aside from aesthetic reasons, some parsers, including kramdown, will
+Rationale: Aside from aesthetic reasons, some parsers, including `kramdown`, will
 not parse headings that don't have a blank line before, and will parse them as
 regular text.
 
@@ -826,7 +826,7 @@ To fix this, ensure that the content of each heading is different:
 
 If the parameter `siblings_only` (alternatively `allow_different_nesting`) is
 set to `true`, heading duplication is allowed for non-sibling headings (common
-in change logs):
+in changelogs):
 
 ```markdown
 # Change log
@@ -845,7 +845,7 @@ heading name; headings with the same content can cause problems with that.
 
 <a name="md025"></a>
 
-## MD025 - Multiple top level headings in the same document
+## MD025 - Multiple top-level headings in the same document
 
 Tags: headings, headers
 
@@ -853,19 +853,19 @@ Aliases: single-title, single-h1
 
 Parameters: level, front_matter_title (number; default 1, string; default "^\s*"?title"?\s*[:=]")
 
-This rule is triggered when a top level heading is in use (the first line of
-the file is a h1 heading), and more than one h1 heading is in use in the
+This rule is triggered when a top-level heading is in use (the first line of
+the file is an h1 heading), and more than one h1 heading is in use in the
 document:
 
 ```markdown
 # Top level heading
 
-# Another top level heading
+# Another top-level heading
 ```
 
-To fix, structure your document so that there is a single h1 heading that is
-the title for the document, and all later headings are h2 or lower level
-headings:
+To fix, structure your document so there is a single h1 heading that is
+the title for the document. Subsequent headings must be
+lower-level headings (h2, h3, etc.):
 
 ```markdown
 # Title
@@ -875,17 +875,17 @@ headings:
 ## Another heading
 ```
 
-Note: The `level` parameter can be used to change the top level (ex: to h2) in
-cases where a h1 is added externally.
+Note: The `level` parameter can be used to change the top-level (ex: to h2) in
+cases where an h1 is added externally.
 
 If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains
 a `title` property (commonly used with blog posts), this rule treats that as a top
-level heading and will report a violation for any subsequent top level headings.
-To use a different property name in front matter, specify the text of a regular
+level heading and will report a violation for any subsequent top-level headings.
+To use a different property name in the front matter, specify the text of a regular
 expression via the `front_matter_title` parameter. To disable the use of front
 matter by this rule, specify `""` for `front_matter_title`.
 
-Rationale: A top level heading is a h1 on the first line of the file, and
+Rationale: A top-level heading is an h1 on the first line of the file, and
 serves as the title for the document. If this convention is in use, then there
 can not be more than one title for the document, and the entire document
 should be contained within this heading.
@@ -917,7 +917,7 @@ To fix this, remove the trailing punctuation:
 
 Note: The `punctuation` parameter can be used to specify what characters count
 as punctuation at the end of a heading. For example, you can change it to
-`".,;:"` to allow headings that end with an exclamation point. Question mark is
+`".,;:"` to allow headings that end with an exclamation point. `?` is
 allowed by default because of how common it is in headings of FAQ-style documents.
 Setting the `punctuation` parameter to `""` allows all characters - and is
 equivalent to disabling the rule.
@@ -943,7 +943,7 @@ This rule is triggered when blockquotes have more than one space after the
 blockquote (`>`) symbol:
 
 ```markdown
->  This is a block quote with bad indentation
+>  This is a blockquote with bad indentation
 >  there should only be one.
 ```
 
@@ -1011,7 +1011,7 @@ Parameters: style ("one", "ordered", "one_or_ordered", "zero"; default "one_or_o
 
 This rule is triggered for ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
-configured style). The less-common patterns of using '0.' as a first prefix or
+configured style). The less-common pattern of using '0.' as a first prefix or
 for all prefixes is also supported.
 
 Example valid list if the style is configured as 'one':
@@ -1129,7 +1129,7 @@ default is 1 space after any list marker:
 
 A document style may change the number of spaces after unordered list items
 and ordered list items independently, as well as based on whether the content
-of every item in the list consists of a single paragraph, or multiple
+of every item in the list consists of a single paragraph or multiple
 paragraphs (including sub-lists and code blocks).
 
 For example, the style guide at
@@ -1165,7 +1165,7 @@ or
 1.  Bar
 ```
 
-To fix this, ensure the correct number of spaces are used after list marker
+To fix this, ensure the correct number of spaces are used after the list marker
 for your selected document style.
 
 Rationale: Violations of this rule can lead to improperly rendered content.
@@ -1373,7 +1373,7 @@ or match the given style if the rule is so configured:
 ```
 
 Note: by default, this rule is configured to just require that all horizontal
-rules in the document are the same, and will trigger if any of the horizontal
+rules in the document are the same and will trigger if any of the horizontal
 rules are different than the first one encountered in the document. If you
 want to configure the rule to match a specific style, the parameter given to
 the 'style' option is a string containing the exact horizontal rule text that
@@ -1417,7 +1417,7 @@ Lorem ipsum dolor sit amet...
 Consectetur adipiscing elit, sed do eiusmod.
 ```
 
-Note: This rule looks for single line paragraphs that consist entirely
+Note: This rule looks for single-line paragraphs that consist entirely
 of emphasized text. It won't fire on emphasis used within regular text,
 multi-line emphasized paragraphs, or paragraphs ending in punctuation
 (normal or full-width). Similarly to rule MD026, you can configure what
@@ -1463,7 +1463,7 @@ Here is some more _italic_ text.
 ```
 
 Rationale: Emphasis is only parsed as such when the asterisks/underscores
-aren't completely surrounded by spaces. This rule attempts to detect where
+aren't surrounded by spaces. This rule attempts to detect where
 they were surrounded by spaces, but it appears that emphasized text was
 intended by the author.
 
@@ -1499,7 +1499,7 @@ automatically trimmed (to allow for embedded backticks):
 `` `backticks` ``
 ```
 
-Note: A single leading or trailing space is allowed if used to separate codespan
+Note: A single leading or trailing space is allowed if used to separate code span
 markers from an embedded backtick:
 
 ```markdown
@@ -1565,7 +1565,7 @@ correct syntax highlighting for code. More information:
 
 <a name="md041"></a>
 
-## MD041 - First line in file should be a top level heading
+## MD041 - First line in a file should be a top-level heading
 
 Tags: headings, headers
 
@@ -1574,30 +1574,30 @@ Aliases: first-line-heading, first-line-h1
 Parameters: level, front_matter_title (number; default 1, string; default "^\s*"?title"?\s*[:=]")
 
 This rule is intended to ensure documents have a title and is triggered when
-the first line in the file isn't a top level (h1) heading:
+the first line in the file isn't a top-level (h1) heading:
 
 ```markdown
 This is a file without a heading
 ```
 
-To fix this, add a top level heading to the beginning of the file:
+To fix this, add a top-level heading to the beginning of the file:
 
 ```markdown
 # File with heading
 
-This is a file with a top level heading
+This is a file with a top-level heading
 ```
 
-Note: The `level` parameter can be used to change the top level (ex: to h2) in cases
-where a h1 is added externally.
+Note: The `level` parameter can be used to change the top-level (ex: to h2) in cases
+where an h1 is added externally.
 
 If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains a
 `title` property (commonly used with blog posts), this rule will not report a
-violation. To use a different property name in front matter, specify the text
+violation. To use a different property name in the front matter, specify the text
 of a regular expression via the `front_matter_title` parameter. To disable the
 use of front matter by this rule, specify `""` for `front_matter_title`.
 
-Rationale: The top level heading often acts as the title of a document. More
+Rationale: The top-level heading often acts as the title of a document. More
 information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 <a name="md042"></a>
@@ -1814,7 +1814,7 @@ Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when there is not a single newline character at the end of a file.
 
-Example that triggers the rule:
+An example that triggers the rule:
 
 ```markdown
 # Heading

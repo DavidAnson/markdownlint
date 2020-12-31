@@ -974,7 +974,7 @@ tape("customRulesThrowForStringHandled", (test) => {
           "lineNumber": 1,
           "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
           "ruleDescription":
-            "First line in file should be a top level heading",
+            "First line in a file should be a top-level heading",
           "ruleInformation":
             `${homepage}/blob/v${version}/doc/Rules.md#md041`,
           "errorDetail": null,
