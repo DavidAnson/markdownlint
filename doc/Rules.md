@@ -917,7 +917,7 @@ To fix this, remove the trailing punctuation:
 
 Note: The `punctuation` parameter can be used to specify what characters count
 as punctuation at the end of a heading. For example, you can change it to
-`".,;:"` to allow headings that end with an exclamation point. Question marks is
+`".,;:"` to allow headings that end with an exclamation point. `?` is
 allowed by default because of how common it is in headings of FAQ-style documents.
 Setting the `punctuation` parameter to `""` allows all characters - and is
 equivalent to disabling the rule.
