@@ -2,5 +2,6 @@ demo/markdown-it.min.js
 demo/markdownlint-browser.js
 demo/markdownlint-browser.min.js
 demo/markdownlint-rule-helpers-browser.js
+demo/markdownlint-rule-helpers-browser.min.js
 example/typescript/type-check.js
 lib-es3/

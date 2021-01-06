@@ -1,27 +1,18 @@
-/* markdownlint - https://github.com/DavidAnson/markdownlint - @license MIT */
+/*! markdownlint 0.22.0 https://github.com/DavidAnson/markdownlint @license MIT */
+var markdownlint;markdownlint =
+/******/ (() => { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
-(function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.markdownlint = f()}})(function(){var define,module,exports;return (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
+/***/ "../lib-es3/helpers/helpers.js":
+/*!*************************************!*\
+  !*** ../lib-es3/helpers/helpers.js ***!
+  \*************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-
-// Alias "markdown-it" (expected) to "markdownit" (exported)
-module.exports = window.markdownit;
-if (!module.exports) {
-  console.error("markdown-it must be loaded before markdownlint.");
-}
-
-// Stub missing implementation of util.promisify (unused here)
-// eslint-disable-next-line unicorn/import-style
-var util = require("util");
-if (!util.promisify) {
-  util.promisify = function promisify(fn) {
-    return fn;
-  };
-}
-
-},{"util":74}],2:[function(require,module,exports){
 // @ts-check
-"use strict";
-var os = require("os");
+
+var os = __webpack_require__(/*! os */ "?5533");
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 var newLineRe = /\r\n?|\n/g;
@@ -677,9 +668,18 @@ module.exports.applyFixes = function applyFixes(input, errors) {
     return lines.filter(function (line) { return line !== null; }).join(lineEnding);
 };
 
-},{"os":69}],3:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/cache.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/cache.js ***!
+  \*******************************/
+/***/ ((module) => {
+
 "use strict";
+// @ts-check
+
 var lineMetadata = null;
 module.exports.lineMetadata = function (value) {
     if (value) {
@@ -699,9 +699,18 @@ module.exports.clear = function () {
     flattenedLists = null;
 };
 
-},{}],4:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/markdownlint.js":
+/*!**************************************!*\
+  !*** ../lib-es3/lib/markdownlint.js ***!
+  \**************************************/
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+
 "use strict";
+// @ts-check
+
 var __assign = (this && this.__assign) || function () {
     __assign = Object.assign || function(t) {
         for (var s, i = 1, n = arguments.length; i < n; i++) {
@@ -720,13 +729,13 @@ var __spreadArrays = (this && this.__spreadArrays) || function () {
             r[k] = a[j];
     return r;
 };
-var fs = require("fs");
-var path = require("path");
-var promisify = require("util").promisify;
-var markdownIt = require("markdown-it");
-var rules = require("./rules");
-var helpers = require("../helpers");
-var cache = require("./cache");
+var fs = __webpack_require__(/*! fs */ "?65c5");
+var path = __webpack_require__(/*! path */ "?0f27");
+var promisify = __webpack_require__(/*! util */ "?0bed").promisify;
+var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
+var rules = __webpack_require__(/*! ./rules */ "../lib-es3/lib/rules.js");
+var helpers = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js");
+var cache = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js");
 var deprecatedRuleNames = ["MD002", "MD006"];
 /**
  * Validate the list of rules for structure and reuse.
@@ -1481,7 +1490,7 @@ function lintInput(options, synchronous, callback) {
 function markdownlint(options, callback) {
     return lintInput(options, false, callback);
 }
-var markdownlintPromisify = promisify(markdownlint);
+var markdownlintPromisify = promisify && promisify(markdownlint);
 /**
  * Lint specified Markdown files.
  *
@@ -1559,7 +1568,7 @@ function resolveConfigExtends(configFile, referenceId) {
         // If not a file or fs.statSync throws, try require.resolve
     }
     try {
-        return require.resolve(referenceId, { "paths": [configFileDirname] });
+        return __webpack_require__("../lib-es3/lib sync recursive").resolve(referenceId, { "paths": [configFileDirname] });
     }
     catch (_b) {
         // If require.resolve throws, return resolvedExtendsFile
@@ -1607,7 +1616,7 @@ function readConfig(file, parsers, callback) {
         return callback(null, config);
     });
 }
-var readConfigPromisify = promisify(readConfig);
+var readConfigPromisify = promisify && promisify(readConfig);
 /**
  * Read specified configuration file.
  *
@@ -1650,7 +1659,7 @@ function readConfigSync(file, parsers) {
  * @returns {string} SemVer string.
  */
 function getVersion() {
-    return require("../package.json").version;
+    return __webpack_require__(/*! ../package.json */ "../lib-es3/package.json").version;
 }
 // Export a/synchronous/Promise APIs
 markdownlint.sync = markdownlintSync;
@@ -1663,10 +1672,19 @@ markdownlint.promises = {
 };
 module.exports = markdownlint;
 
-},{"../helpers":2,"../package.json":50,"./cache":3,"./rules":49,"fs":53,"markdown-it":1,"path":70,"util":74}],5:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md001.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md001.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD001", "heading-increment", "header-increment"],
     "description": "Heading levels should only increment by one level at a time",
@@ -1683,10 +1701,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],6:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md002.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md002.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var addErrorDetailIf = require("../helpers").addErrorDetailIf;
+// @ts-check
+
+var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addErrorDetailIf;
 module.exports = {
     "names": ["MD002", "first-heading-h1", "first-header-h1"],
     "description": "First heading should be a top-level heading",
@@ -1704,10 +1731,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],7:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md003.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md003.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
 module.exports = {
     "names": ["MD003", "heading-style", "header-style"],
     "description": "Heading style",
@@ -1742,11 +1778,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],8:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md004.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md004.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp, unorderedListStyleFor = _a.unorderedListStyleFor;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp, unorderedListStyleFor = _a.unorderedListStyleFor;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD004", "ul-style"],
     "description": "Unordered list style",
@@ -1781,11 +1826,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],9:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md005.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md005.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD005", "list-indent"],
     "description": "Inconsistent indentation for list items at the same level",
@@ -1836,11 +1890,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],10:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md006.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md006.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD006", "ul-start-left"],
     "description": "Consider starting bulleted lists at the beginning of the line",
@@ -1859,11 +1922,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],11:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md007.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md007.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD007", "ul-indent"],
     "description": "Unordered list indentation",
@@ -1896,11 +1968,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],12:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md009.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md009.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe, numericSortAscending = _a.numericSortAscending;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe, numericSortAscending = _a.numericSortAscending;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD009", "no-trailing-spaces"],
     "description": "Trailing spaces",
@@ -1963,11 +2044,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],13:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md010.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md010.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, forEachLine = _a.forEachLine;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 var tabRe = /\t+/g;
 module.exports = {
     "names": ["MD010", "no-hard-tabs"],
@@ -1993,10 +2083,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],14:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md011.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md011.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild, unescapeMarkdown = _a.unescapeMarkdown;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild, unescapeMarkdown = _a.unescapeMarkdown;
 var reversedLinkRe = /\(([^)]+)\)\[([^\]^][^\]]*)]/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
@@ -2025,11 +2124,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],15:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md012.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md012.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, forEachLine = _a.forEachLine;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD012", "no-multiple-blanks"],
     "description": "Multiple consecutive blank lines",
@@ -2048,11 +2156,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],16:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md013.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md013.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 var longLineRePrefix = "^.{";
 var longLineRePostfixRelaxed = "}.*\\s.*$";
 var longLineRePostfixStrict = "}.+$";
@@ -2131,10 +2248,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],17:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md014.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md014.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 var dollarCommandRe = /^(\s*)(\$\s+)/;
 module.exports = {
     "names": ["MD014", "commands-show-output"],
@@ -2175,11 +2301,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],18:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md018.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md018.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD018", "no-missing-space-atx"],
     "description": "No space after hash on atx style heading",
@@ -2200,10 +2335,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],19:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md019.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md019.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
 module.exports = {
     "names": ["MD019", "no-multiple-space-atx"],
     "description": "Multiple spaces after hash on atx style heading",
@@ -2225,11 +2369,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],20:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md020.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md020.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD020", "no-missing-space-closed-atx"],
     "description": "No space inside hashes on closed atx style heading",
@@ -2267,10 +2420,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],21:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md021.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md021.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
 module.exports = {
     "names": ["MD021", "no-multiple-space-closed-atx"],
     "description": "Multiple spaces inside hashes on closed atx style heading",
@@ -2309,10 +2471,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],22:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md022.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md022.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, isBlankLine = _a.isBlankLine;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, isBlankLine = _a.isBlankLine;
 module.exports = {
     "names": ["MD022", "blanks-around-headings", "blanks-around-headers"],
     "description": "Headings should be surrounded by blank lines",
@@ -2348,10 +2519,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],23:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md023.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md023.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 var spaceBeforeHeadingRe = /^((?:\s+)|(?:[>\s]+\s\s))[^>\s]/;
 module.exports = {
     "names": ["MD023", "heading-start-left", "header-start-left"],
@@ -2377,10 +2557,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],24:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md024.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md024.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachHeading = _a.forEachHeading;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachHeading = _a.forEachHeading;
 module.exports = {
     "names": ["MD024", "no-duplicate-heading", "no-duplicate-header"],
     "description": "Multiple headings with the same content",
@@ -2414,10 +2603,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],25:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md025.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md025.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, frontMatterHasTitle = _a.frontMatterHasTitle;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, frontMatterHasTitle = _a.frontMatterHasTitle;
 module.exports = {
     "names": ["MD025", "single-title", "single-h1"],
     "description": "Multiple top-level headings in the same document",
@@ -2440,10 +2638,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],26:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md026.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md026.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, allPunctuationNoQuestion = _a.allPunctuationNoQuestion, escapeForRegExp = _a.escapeForRegExp, forEachHeading = _a.forEachHeading;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, allPunctuationNoQuestion = _a.allPunctuationNoQuestion, escapeForRegExp = _a.escapeForRegExp, forEachHeading = _a.forEachHeading;
 var endOfLineHtmlEntityRe = /&#?[0-9a-zA-Z]+;$/;
 module.exports = {
     "names": ["MD026", "no-trailing-punctuation"],
@@ -2470,10 +2677,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],27:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md027.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md027.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, newLineRe = _a.newLineRe;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, newLineRe = _a.newLineRe;
 var spaceAfterBlockQuoteRe = /^((?:\s*>)+)(\s{2,})\S/;
 module.exports = {
     "names": ["MD027", "no-multiple-space-blockquote"],
@@ -2516,10 +2732,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],28:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md028.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md028.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var addError = require("../helpers").addError;
+// @ts-check
+
+var addError = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addError;
 module.exports = {
     "names": ["MD028", "no-blanks-blockquote"],
     "description": "Blank line inside blockquote",
@@ -2542,11 +2767,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],29:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md029.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md029.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 var listStyleExamples = {
     "one": "1/1/1",
     "ordered": "1/2/3",
@@ -2603,11 +2837,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],30:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md030.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md030.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var addErrorDetailIf = require("../helpers").addErrorDetailIf;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addErrorDetailIf;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD030", "list-marker-space"],
     "description": "Spaces after list markers",
@@ -2643,11 +2886,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],31:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md031.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md031.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 var codeFencePrefixRe = /^(.*?)\s*[`~]/;
 module.exports = {
     "names": ["MD031", "blanks-around-fences"],
@@ -2674,11 +2926,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],32:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md032.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md032.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, isBlankLine = _a.isBlankLine;
-var flattenedLists = require("./cache").flattenedLists;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, isBlankLine = _a.isBlankLine;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
 var quotePrefixRe = /^[>\s]*/;
 module.exports = {
     "names": ["MD032", "blanks-around-lists"],
@@ -2708,11 +2969,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],33:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md033.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md033.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
 var inlineCodeRe = /^[^`]*(`+[^`]+`+[^`]+)*`+[^`]*$/;
@@ -2750,10 +3020,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],34:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md034.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md034.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, bareUrlRe = _a.bareUrlRe, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, bareUrlRe = _a.bareUrlRe, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD034", "no-bare-urls"],
     "description": "Bare URL used",
@@ -2802,10 +3081,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],35:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md035.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md035.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD035", "hr-style"],
     "description": "Horizontal rule style",
@@ -2822,10 +3110,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],36:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md036.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md036.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, allPunctuation = _a.allPunctuation;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, allPunctuation = _a.allPunctuation;
 module.exports = {
     "names": ["MD036", "no-emphasis-as-heading", "no-emphasis-as-header"],
     "description": "Emphasis used instead of a heading",
@@ -2878,11 +3175,20 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],37:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md037.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md037.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = require("./cache").lineMetadata;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
 var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
@@ -3025,10 +3331,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2,"./cache":3}],38:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md038.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md038.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe;
 var leftSpaceRe = /^\s([^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
 var singleLeftRightSpaceRe = /^\s(?:\S.*\S|\S)\s$/;
@@ -3079,10 +3394,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],39:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md039.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md039.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 var spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=\(\S*\))/;
 module.exports = {
     "names": ["MD039", "no-space-in-links"],
@@ -3136,10 +3460,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],40:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md040.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md040.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD040", "fenced-code-language"],
     "description": "Fenced code blocks should have a language specified",
@@ -3153,10 +3486,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],41:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md041.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md041.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, frontMatterHasTitle = _a.frontMatterHasTitle;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, frontMatterHasTitle = _a.frontMatterHasTitle;
 module.exports = {
     "names": ["MD041", "first-line-heading", "first-line-h1"],
     "description": "First line in a file should be a top-level heading",
@@ -3179,10 +3521,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],42:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md042.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md042.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
 var emptyLinkRe = /\[[^\]]*](?:\((?:#?|(?:<>))\))/;
 module.exports = {
     "names": ["MD042", "no-empty-links"],
@@ -3218,10 +3569,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],43:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md043.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md043.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorContext = _a.addErrorContext, addErrorDetailIf = _a.addErrorDetailIf, forEachHeading = _a.forEachHeading;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, addErrorDetailIf = _a.addErrorDetailIf, forEachHeading = _a.forEachHeading;
 module.exports = {
     "names": ["MD043", "required-headings", "required-headers"],
     "description": "Required heading structure",
@@ -3272,10 +3632,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],44:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md044.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md044.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, newLineRe = _a.newLineRe;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, newLineRe = _a.newLineRe;
 var startNonWordRe = /^\W/;
 var endNonWordRe = /\W$/;
 module.exports = {
@@ -3355,10 +3724,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],45:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md045.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md045.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild;
 module.exports = {
     "names": ["MD045", "no-alt-text"],
     "description": "Images should have alternate text (alt text)",
@@ -3372,10 +3750,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],46:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md046.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md046.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var addErrorDetailIf = require("../helpers").addErrorDetailIf;
+// @ts-check
+
+var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addErrorDetailIf;
 var tokenTypeToStyle = {
     "fence": "fenced",
     "code_block": "indented"
@@ -3398,10 +3785,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],47:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md047.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md047.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addError = _a.addError, isBlankLine = _a.isBlankLine;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, isBlankLine = _a.isBlankLine;
 module.exports = {
     "names": ["MD047", "single-trailing-newline"],
     "description": "Files should end with a single newline character",
@@ -3418,10 +3814,19 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],48:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/md048.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/md048.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var _a = require("../helpers"), addErrorDetailIf = _a.addErrorDetailIf, fencedCodeBlockStyleFor = _a.fencedCodeBlockStyleFor;
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, fencedCodeBlockStyleFor = _a.fencedCodeBlockStyleFor;
 module.exports = {
     "names": ["MD048", "code-fence-style"],
     "description": "Code fence style",
@@ -3441,57 +3846,66 @@ module.exports = {
     }
 };
 
-},{"../helpers":2}],49:[function(require,module,exports){
-// @ts-check
+
+/***/ }),
+
+/***/ "../lib-es3/lib/rules.js":
+/*!*******************************!*\
+  !*** ../lib-es3/lib/rules.js ***!
+  \*******************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
 "use strict";
-var packageJson = require("../package.json");
+// @ts-check
+
+var packageJson = __webpack_require__(/*! ../package.json */ "../lib-es3/package.json");
 var homepage = packageJson.homepage;
 var version = packageJson.version;
 var rules = [
-    require("./md001"),
-    require("./md002"),
-    require("./md003"),
-    require("./md004"),
-    require("./md005"),
-    require("./md006"),
-    require("./md007"),
-    require("./md009"),
-    require("./md010"),
-    require("./md011"),
-    require("./md012"),
-    require("./md013"),
-    require("./md014"),
-    require("./md018"),
-    require("./md019"),
-    require("./md020"),
-    require("./md021"),
-    require("./md022"),
-    require("./md023"),
-    require("./md024"),
-    require("./md025"),
-    require("./md026"),
-    require("./md027"),
-    require("./md028"),
-    require("./md029"),
-    require("./md030"),
-    require("./md031"),
-    require("./md032"),
-    require("./md033"),
-    require("./md034"),
-    require("./md035"),
-    require("./md036"),
-    require("./md037"),
-    require("./md038"),
-    require("./md039"),
-    require("./md040"),
-    require("./md041"),
-    require("./md042"),
-    require("./md043"),
-    require("./md044"),
-    require("./md045"),
-    require("./md046"),
-    require("./md047"),
-    require("./md048")
+    __webpack_require__(/*! ./md001 */ "../lib-es3/lib/md001.js"),
+    __webpack_require__(/*! ./md002 */ "../lib-es3/lib/md002.js"),
+    __webpack_require__(/*! ./md003 */ "../lib-es3/lib/md003.js"),
+    __webpack_require__(/*! ./md004 */ "../lib-es3/lib/md004.js"),
+    __webpack_require__(/*! ./md005 */ "../lib-es3/lib/md005.js"),
+    __webpack_require__(/*! ./md006 */ "../lib-es3/lib/md006.js"),
+    __webpack_require__(/*! ./md007 */ "../lib-es3/lib/md007.js"),
+    __webpack_require__(/*! ./md009 */ "../lib-es3/lib/md009.js"),
+    __webpack_require__(/*! ./md010 */ "../lib-es3/lib/md010.js"),
+    __webpack_require__(/*! ./md011 */ "../lib-es3/lib/md011.js"),
+    __webpack_require__(/*! ./md012 */ "../lib-es3/lib/md012.js"),
+    __webpack_require__(/*! ./md013 */ "../lib-es3/lib/md013.js"),
+    __webpack_require__(/*! ./md014 */ "../lib-es3/lib/md014.js"),
+    __webpack_require__(/*! ./md018 */ "../lib-es3/lib/md018.js"),
+    __webpack_require__(/*! ./md019 */ "../lib-es3/lib/md019.js"),
+    __webpack_require__(/*! ./md020 */ "../lib-es3/lib/md020.js"),
+    __webpack_require__(/*! ./md021 */ "../lib-es3/lib/md021.js"),
+    __webpack_require__(/*! ./md022 */ "../lib-es3/lib/md022.js"),
+    __webpack_require__(/*! ./md023 */ "../lib-es3/lib/md023.js"),
+    __webpack_require__(/*! ./md024 */ "../lib-es3/lib/md024.js"),
+    __webpack_require__(/*! ./md025 */ "../lib-es3/lib/md025.js"),
+    __webpack_require__(/*! ./md026 */ "../lib-es3/lib/md026.js"),
+    __webpack_require__(/*! ./md027 */ "../lib-es3/lib/md027.js"),
+    __webpack_require__(/*! ./md028 */ "../lib-es3/lib/md028.js"),
+    __webpack_require__(/*! ./md029 */ "../lib-es3/lib/md029.js"),
+    __webpack_require__(/*! ./md030 */ "../lib-es3/lib/md030.js"),
+    __webpack_require__(/*! ./md031 */ "../lib-es3/lib/md031.js"),
+    __webpack_require__(/*! ./md032 */ "../lib-es3/lib/md032.js"),
+    __webpack_require__(/*! ./md033 */ "../lib-es3/lib/md033.js"),
+    __webpack_require__(/*! ./md034 */ "../lib-es3/lib/md034.js"),
+    __webpack_require__(/*! ./md035 */ "../lib-es3/lib/md035.js"),
+    __webpack_require__(/*! ./md036 */ "../lib-es3/lib/md036.js"),
+    __webpack_require__(/*! ./md037 */ "../lib-es3/lib/md037.js"),
+    __webpack_require__(/*! ./md038 */ "../lib-es3/lib/md038.js"),
+    __webpack_require__(/*! ./md039 */ "../lib-es3/lib/md039.js"),
+    __webpack_require__(/*! ./md040 */ "../lib-es3/lib/md040.js"),
+    __webpack_require__(/*! ./md041 */ "../lib-es3/lib/md041.js"),
+    __webpack_require__(/*! ./md042 */ "../lib-es3/lib/md042.js"),
+    __webpack_require__(/*! ./md043 */ "../lib-es3/lib/md043.js"),
+    __webpack_require__(/*! ./md044 */ "../lib-es3/lib/md044.js"),
+    __webpack_require__(/*! ./md045 */ "../lib-es3/lib/md045.js"),
+    __webpack_require__(/*! ./md046 */ "../lib-es3/lib/md046.js"),
+    __webpack_require__(/*! ./md047 */ "../lib-es3/lib/md047.js"),
+    __webpack_require__(/*! ./md048 */ "../lib-es3/lib/md048.js")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
@@ -3500,3015 +3914,124 @@ rules.forEach(function (rule) {
 });
 module.exports = rules;
 
-},{"../package.json":50,"./md001":5,"./md002":6,"./md003":7,"./md004":8,"./md005":9,"./md006":10,"./md007":11,"./md009":12,"./md010":13,"./md011":14,"./md012":15,"./md013":16,"./md014":17,"./md018":18,"./md019":19,"./md020":20,"./md021":21,"./md022":22,"./md023":23,"./md024":24,"./md025":25,"./md026":26,"./md027":27,"./md028":28,"./md029":29,"./md030":30,"./md031":31,"./md032":32,"./md033":33,"./md034":34,"./md035":35,"./md036":36,"./md037":37,"./md038":38,"./md039":39,"./md040":40,"./md041":41,"./md042":42,"./md043":43,"./md044":44,"./md045":45,"./md046":46,"./md047":47,"./md048":48}],50:[function(require,module,exports){
-module.exports={
-    "name": "markdownlint",
-    "version": "0.22.0",
-    "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
-    "main": "lib/markdownlint.js",
-    "types": "lib/markdownlint.d.ts",
-    "author": "David Anson (https://dlaa.me/)",
-    "license": "MIT",
-    "homepage": "https://github.com/DavidAnson/markdownlint",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/DavidAnson/markdownlint.git"
-    },
-    "bugs": "https://github.com/DavidAnson/markdownlint/issues",
-    "scripts": {
-        "test": "tape test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js",
-        "test-cover": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test",
-        "test-declaration": "cd example/typescript && tsc && node type-check.js",
-        "test-extra": "node test/markdownlint-test-extra.js",
-        "lint": "eslint --max-warnings 0 .",
-        "ci": "npm run test-cover && npm run lint && npm run build-declaration && npm run test-declaration && npm run build-config-schema && npm run build-demo && git diff --exit-code",
-        "build-config-schema": "node schema/build-config-schema.js",
-        "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
-        "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && cpy file-header.js . --rename=markdownlint-browser.js && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && browserify ../lib-es3/lib/markdownlint.js --standalone markdownlint >> markdownlint-browser.js && browserify ../lib-es3/helpers/helpers.js --standalone helpers >> markdownlint-rule-helpers-browser.js && uglifyjs markdownlint-browser.js markdownlint-rule-helpers-browser.js --compress --mangle --comments --output markdownlint-browser.min.js",
-        "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
-        "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint",
-        "clone-test-repos": "mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet",
-        "clone-test-repos-large": "npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
-        "lint-test-repos": "node test/markdownlint-test-repos.js",
-        "clean-test-repos": "rimraf test-repos"
-    },
-    "engines": {
-        "node": ">=10"
-    },
-    "dependencies": {
-        "markdown-it": "12.0.2"
-    },
-    "devDependencies": {
-        "@types/node": "~14.14.9",
-        "browserify": "~17.0.0",
-        "c8": "~7.3.5",
-        "cpy-cli": "~3.1.1",
-        "eslint": "~7.14.0",
-        "eslint-plugin-jsdoc": "~30.7.8",
-        "eslint-plugin-node": "~11.1.0",
-        "eslint-plugin-unicorn": "~23.0.0",
-        "globby": "~11.0.1",
-        "js-yaml": "~3.14.0",
-        "markdown-it-for-inline": "~0.1.1",
-        "markdown-it-sub": "~1.0.0",
-        "markdown-it-sup": "~1.0.0",
-        "markdown-it-texmath": "~0.8.0",
-        "markdownlint-rule-helpers": "~0.12.0",
-        "rimraf": "~3.0.2",
-        "strip-json-comments": "~3.1.1",
-        "tape": "~5.0.1",
-        "tape-player": "~0.1.1",
-        "toml": "~3.0.0",
-        "tv4": "~1.3.0",
-        "typescript": "~4.1.2",
-        "uglify-js": "~3.12.0"
-    },
-    "keywords": [
-        "markdown",
-        "lint",
-        "md",
-        "CommonMark",
-        "markdownlint"
-    ],
-    "browser": {
-        "markdown-it": "../demo/markdown-it-stub.js"
-    }
-}
-
-},{}],51:[function(require,module,exports){
-
-/**
- * Array#filter.
- *
- * @param {Array} arr
- * @param {Function} fn
- * @param {Object=} self
- * @return {Array}
- * @throw TypeError
- */
-
-module.exports = function (arr, fn, self) {
-  if (arr.filter) return arr.filter(fn, self);
-  if (void 0 === arr || null === arr) throw new TypeError;
-  if ('function' != typeof fn) throw new TypeError;
-  var ret = [];
-  for (var i = 0; i < arr.length; i++) {
-    if (!hasOwn.call(arr, i)) continue;
-    var val = arr[i];
-    if (fn.call(self, val, i, arr)) ret.push(val);
-  }
-  return ret;
-};
-
-var hasOwn = Object.prototype.hasOwnProperty;
-
-},{}],52:[function(require,module,exports){
-(function (global){(function (){
-'use strict';
-
-var filter = require('array-filter');
-
-module.exports = function availableTypedArrays() {
-	return filter([
-		'BigInt64Array',
-		'BigUint64Array',
-		'Float32Array',
-		'Float64Array',
-		'Int16Array',
-		'Int32Array',
-		'Int8Array',
-		'Uint16Array',
-		'Uint32Array',
-		'Uint8Array',
-		'Uint8ClampedArray'
-	], function (typedArray) {
-		return typeof global[typedArray] === 'function';
-	});
-};
-
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"array-filter":51}],53:[function(require,module,exports){
-
-},{}],54:[function(require,module,exports){
-'use strict';
-
-var GetIntrinsic = require('get-intrinsic');
-
-var callBind = require('./');
-
-var $indexOf = callBind(GetIntrinsic('String.prototype.indexOf'));
-
-module.exports = function callBoundIntrinsic(name, allowMissing) {
-	var intrinsic = GetIntrinsic(name, !!allowMissing);
-	if (typeof intrinsic === 'function' && $indexOf(name, '.prototype.') > -1) {
-		return callBind(intrinsic);
-	}
-	return intrinsic;
-};
-
-},{"./":55,"get-intrinsic":61}],55:[function(require,module,exports){
-'use strict';
-
-var bind = require('function-bind');
-var GetIntrinsic = require('get-intrinsic');
-
-var $apply = GetIntrinsic('%Function.prototype.apply%');
-var $call = GetIntrinsic('%Function.prototype.call%');
-var $reflectApply = GetIntrinsic('%Reflect.apply%', true) || bind.call($call, $apply);
-
-var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
-
-if ($defineProperty) {
-	try {
-		$defineProperty({}, 'a', { value: 1 });
-	} catch (e) {
-		// IE 8 has a broken defineProperty
-		$defineProperty = null;
-	}
-}
-
-module.exports = function callBind() {
-	return $reflectApply(bind, $call, arguments);
-};
-
-var applyBind = function applyBind() {
-	return $reflectApply(bind, $apply, arguments);
-};
-
-if ($defineProperty) {
-	$defineProperty(module.exports, 'apply', { value: applyBind });
-} else {
-	module.exports.apply = applyBind;
-}
-
-},{"function-bind":60,"get-intrinsic":61}],56:[function(require,module,exports){
-'use strict';
-
-/* globals
-	AggregateError,
-	Atomics,
-	FinalizationRegistry,
-	SharedArrayBuffer,
-	WeakRef,
-*/
-
-var undefined;
-
-var $SyntaxError = SyntaxError;
-var $Function = Function;
-var $TypeError = TypeError;
-
-// eslint-disable-next-line consistent-return
-var getEvalledConstructor = function (expressionSyntax) {
-	try {
-		// eslint-disable-next-line no-new-func
-		return Function('"use strict"; return (' + expressionSyntax + ').constructor;')();
-	} catch (e) {}
-};
-
-var $gOPD = Object.getOwnPropertyDescriptor;
-if ($gOPD) {
-	try {
-		$gOPD({}, '');
-	} catch (e) {
-		$gOPD = null; // this is IE 8, which has a broken gOPD
-	}
-}
-
-var throwTypeError = function () { throw new $TypeError(); };
-var ThrowTypeError = $gOPD
-	? (function () {
-		try {
-			// eslint-disable-next-line no-unused-expressions, no-caller, no-restricted-properties
-			arguments.callee; // IE 8 does not throw here
-			return throwTypeError;
-		} catch (calleeThrows) {
-			try {
-				// IE 8 throws on Object.getOwnPropertyDescriptor(arguments, '')
-				return $gOPD(arguments, 'callee').get;
-			} catch (gOPDthrows) {
-				return throwTypeError;
-			}
-		}
-	}())
-	: throwTypeError;
-
-var hasSymbols = require('has-symbols')();
-
-var getProto = Object.getPrototypeOf || function (x) { return x.__proto__; }; // eslint-disable-line no-proto
-
-var asyncGenFunction = getEvalledConstructor('async function* () {}');
-var asyncGenFunctionPrototype = asyncGenFunction ? asyncGenFunction.prototype : undefined;
-var asyncGenPrototype = asyncGenFunctionPrototype ? asyncGenFunctionPrototype.prototype : undefined;
-
-var TypedArray = typeof Uint8Array === 'undefined' ? undefined : getProto(Uint8Array);
-
-var INTRINSICS = {
-	'%AggregateError%': typeof AggregateError === 'undefined' ? undefined : AggregateError,
-	'%Array%': Array,
-	'%ArrayBuffer%': typeof ArrayBuffer === 'undefined' ? undefined : ArrayBuffer,
-	'%ArrayIteratorPrototype%': hasSymbols ? getProto([][Symbol.iterator]()) : undefined,
-	'%AsyncFromSyncIteratorPrototype%': undefined,
-	'%AsyncFunction%': getEvalledConstructor('async function () {}'),
-	'%AsyncGenerator%': asyncGenFunctionPrototype,
-	'%AsyncGeneratorFunction%': asyncGenFunction,
-	'%AsyncIteratorPrototype%': asyncGenPrototype ? getProto(asyncGenPrototype) : undefined,
-	'%Atomics%': typeof Atomics === 'undefined' ? undefined : Atomics,
-	'%BigInt%': typeof BigInt === 'undefined' ? undefined : BigInt,
-	'%Boolean%': Boolean,
-	'%DataView%': typeof DataView === 'undefined' ? undefined : DataView,
-	'%Date%': Date,
-	'%decodeURI%': decodeURI,
-	'%decodeURIComponent%': decodeURIComponent,
-	'%encodeURI%': encodeURI,
-	'%encodeURIComponent%': encodeURIComponent,
-	'%Error%': Error,
-	'%eval%': eval, // eslint-disable-line no-eval
-	'%EvalError%': EvalError,
-	'%Float32Array%': typeof Float32Array === 'undefined' ? undefined : Float32Array,
-	'%Float64Array%': typeof Float64Array === 'undefined' ? undefined : Float64Array,
-	'%FinalizationRegistry%': typeof FinalizationRegistry === 'undefined' ? undefined : FinalizationRegistry,
-	'%Function%': $Function,
-	'%GeneratorFunction%': getEvalledConstructor('function* () {}'),
-	'%Int8Array%': typeof Int8Array === 'undefined' ? undefined : Int8Array,
-	'%Int16Array%': typeof Int16Array === 'undefined' ? undefined : Int16Array,
-	'%Int32Array%': typeof Int32Array === 'undefined' ? undefined : Int32Array,
-	'%isFinite%': isFinite,
-	'%isNaN%': isNaN,
-	'%IteratorPrototype%': hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined,
-	'%JSON%': typeof JSON === 'object' ? JSON : undefined,
-	'%Map%': typeof Map === 'undefined' ? undefined : Map,
-	'%MapIteratorPrototype%': typeof Map === 'undefined' || !hasSymbols ? undefined : getProto(new Map()[Symbol.iterator]()),
-	'%Math%': Math,
-	'%Number%': Number,
-	'%Object%': Object,
-	'%parseFloat%': parseFloat,
-	'%parseInt%': parseInt,
-	'%Promise%': typeof Promise === 'undefined' ? undefined : Promise,
-	'%Proxy%': typeof Proxy === 'undefined' ? undefined : Proxy,
-	'%RangeError%': RangeError,
-	'%ReferenceError%': ReferenceError,
-	'%Reflect%': typeof Reflect === 'undefined' ? undefined : Reflect,
-	'%RegExp%': RegExp,
-	'%Set%': typeof Set === 'undefined' ? undefined : Set,
-	'%SetIteratorPrototype%': typeof Set === 'undefined' || !hasSymbols ? undefined : getProto(new Set()[Symbol.iterator]()),
-	'%SharedArrayBuffer%': typeof SharedArrayBuffer === 'undefined' ? undefined : SharedArrayBuffer,
-	'%String%': String,
-	'%StringIteratorPrototype%': hasSymbols ? getProto(''[Symbol.iterator]()) : undefined,
-	'%Symbol%': hasSymbols ? Symbol : undefined,
-	'%SyntaxError%': $SyntaxError,
-	'%ThrowTypeError%': ThrowTypeError,
-	'%TypedArray%': TypedArray,
-	'%TypeError%': $TypeError,
-	'%Uint8Array%': typeof Uint8Array === 'undefined' ? undefined : Uint8Array,
-	'%Uint8ClampedArray%': typeof Uint8ClampedArray === 'undefined' ? undefined : Uint8ClampedArray,
-	'%Uint16Array%': typeof Uint16Array === 'undefined' ? undefined : Uint16Array,
-	'%Uint32Array%': typeof Uint32Array === 'undefined' ? undefined : Uint32Array,
-	'%URIError%': URIError,
-	'%WeakMap%': typeof WeakMap === 'undefined' ? undefined : WeakMap,
-	'%WeakRef%': typeof WeakRef === 'undefined' ? undefined : WeakRef,
-	'%WeakSet%': typeof WeakSet === 'undefined' ? undefined : WeakSet
-};
-
-var LEGACY_ALIASES = {
-	'%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
-	'%ArrayPrototype%': ['Array', 'prototype'],
-	'%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
-	'%ArrayProto_forEach%': ['Array', 'prototype', 'forEach'],
-	'%ArrayProto_keys%': ['Array', 'prototype', 'keys'],
-	'%ArrayProto_values%': ['Array', 'prototype', 'values'],
-	'%AsyncFunctionPrototype%': ['AsyncFunction', 'prototype'],
-	'%AsyncGenerator%': ['AsyncGeneratorFunction', 'prototype'],
-	'%AsyncGeneratorPrototype%': ['AsyncGeneratorFunction', 'prototype', 'prototype'],
-	'%BooleanPrototype%': ['Boolean', 'prototype'],
-	'%DataViewPrototype%': ['DataView', 'prototype'],
-	'%DatePrototype%': ['Date', 'prototype'],
-	'%ErrorPrototype%': ['Error', 'prototype'],
-	'%EvalErrorPrototype%': ['EvalError', 'prototype'],
-	'%Float32ArrayPrototype%': ['Float32Array', 'prototype'],
-	'%Float64ArrayPrototype%': ['Float64Array', 'prototype'],
-	'%FunctionPrototype%': ['Function', 'prototype'],
-	'%Generator%': ['GeneratorFunction', 'prototype'],
-	'%GeneratorPrototype%': ['GeneratorFunction', 'prototype', 'prototype'],
-	'%Int8ArrayPrototype%': ['Int8Array', 'prototype'],
-	'%Int16ArrayPrototype%': ['Int16Array', 'prototype'],
-	'%Int32ArrayPrototype%': ['Int32Array', 'prototype'],
-	'%JSONParse%': ['JSON', 'parse'],
-	'%JSONStringify%': ['JSON', 'stringify'],
-	'%MapPrototype%': ['Map', 'prototype'],
-	'%NumberPrototype%': ['Number', 'prototype'],
-	'%ObjectPrototype%': ['Object', 'prototype'],
-	'%ObjProto_toString%': ['Object', 'prototype', 'toString'],
-	'%ObjProto_valueOf%': ['Object', 'prototype', 'valueOf'],
-	'%PromisePrototype%': ['Promise', 'prototype'],
-	'%PromiseProto_then%': ['Promise', 'prototype', 'then'],
-	'%Promise_all%': ['Promise', 'all'],
-	'%Promise_reject%': ['Promise', 'reject'],
-	'%Promise_resolve%': ['Promise', 'resolve'],
-	'%RangeErrorPrototype%': ['RangeError', 'prototype'],
-	'%ReferenceErrorPrototype%': ['ReferenceError', 'prototype'],
-	'%RegExpPrototype%': ['RegExp', 'prototype'],
-	'%SetPrototype%': ['Set', 'prototype'],
-	'%SharedArrayBufferPrototype%': ['SharedArrayBuffer', 'prototype'],
-	'%StringPrototype%': ['String', 'prototype'],
-	'%SymbolPrototype%': ['Symbol', 'prototype'],
-	'%SyntaxErrorPrototype%': ['SyntaxError', 'prototype'],
-	'%TypedArrayPrototype%': ['TypedArray', 'prototype'],
-	'%TypeErrorPrototype%': ['TypeError', 'prototype'],
-	'%Uint8ArrayPrototype%': ['Uint8Array', 'prototype'],
-	'%Uint8ClampedArrayPrototype%': ['Uint8ClampedArray', 'prototype'],
-	'%Uint16ArrayPrototype%': ['Uint16Array', 'prototype'],
-	'%Uint32ArrayPrototype%': ['Uint32Array', 'prototype'],
-	'%URIErrorPrototype%': ['URIError', 'prototype'],
-	'%WeakMapPrototype%': ['WeakMap', 'prototype'],
-	'%WeakSetPrototype%': ['WeakSet', 'prototype']
-};
-
-var bind = require('function-bind');
-var hasOwn = require('has');
-var $concat = bind.call(Function.call, Array.prototype.concat);
-var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
-var $replace = bind.call(Function.call, String.prototype.replace);
-
-/* adapted from https://github.com/lodash/lodash/blob/4.17.15/dist/lodash.js#L6735-L6744 */
-var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
-var reEscapeChar = /\\(\\)?/g; /** Used to match backslashes in property paths. */
-var stringToPath = function stringToPath(string) {
-	var result = [];
-	$replace(string, rePropName, function (match, number, quote, subString) {
-		result[result.length] = quote ? $replace(subString, reEscapeChar, '$1') : number || match;
-	});
-	return result;
-};
-/* end adaptation */
-
-var getBaseIntrinsic = function getBaseIntrinsic(name, allowMissing) {
-	var intrinsicName = name;
-	var alias;
-	if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
-		alias = LEGACY_ALIASES[intrinsicName];
-		intrinsicName = '%' + alias[0] + '%';
-	}
-
-	if (hasOwn(INTRINSICS, intrinsicName)) {
-		var value = INTRINSICS[intrinsicName];
-		if (typeof value === 'undefined' && !allowMissing) {
-			throw new $TypeError('intrinsic ' + name + ' exists, but is not available. Please file an issue!');
-		}
-
-		return {
-			alias: alias,
-			name: intrinsicName,
-			value: value
-		};
-	}
-
-	throw new $SyntaxError('intrinsic ' + name + ' does not exist!');
-};
-
-module.exports = function GetIntrinsic(name, allowMissing) {
-	if (typeof name !== 'string' || name.length === 0) {
-		throw new $TypeError('intrinsic name must be a non-empty string');
-	}
-	if (arguments.length > 1 && typeof allowMissing !== 'boolean') {
-		throw new $TypeError('"allowMissing" argument must be a boolean');
-	}
-
-	var parts = stringToPath(name);
-	var intrinsicBaseName = parts.length > 0 ? parts[0] : '';
-
-	var intrinsic = getBaseIntrinsic('%' + intrinsicBaseName + '%', allowMissing);
-	var intrinsicRealName = intrinsic.name;
-	var value = intrinsic.value;
-	var skipFurtherCaching = false;
-
-	var alias = intrinsic.alias;
-	if (alias) {
-		intrinsicBaseName = alias[0];
-		$spliceApply(parts, $concat([0, 1], alias));
-	}
-
-	for (var i = 1, isOwn = true; i < parts.length; i += 1) {
-		var part = parts[i];
-		if (part === 'constructor' || !isOwn) {
-			skipFurtherCaching = true;
-		}
-
-		intrinsicBaseName += '.' + part;
-		intrinsicRealName = '%' + intrinsicBaseName + '%';
-
-		if (hasOwn(INTRINSICS, intrinsicRealName)) {
-			value = INTRINSICS[intrinsicRealName];
-		} else if (value != null) {
-			if ($gOPD && (i + 1) >= parts.length) {
-				var desc = $gOPD(value, part);
-				isOwn = !!desc;
-
-				if (!allowMissing && !(part in value)) {
-					throw new $TypeError('base intrinsic for ' + name + ' exists, but the property is not available.');
-				}
-				// By convention, when a data property is converted to an accessor
-				// property to emulate a data property that does not suffer from
-				// the override mistake, that accessor's getter is marked with
-				// an `originalValue` property. Here, when we detect this, we
-				// uphold the illusion by pretending to see that original data
-				// property, i.e., returning the value rather than the getter
-				// itself.
-				if (isOwn && 'get' in desc && !('originalValue' in desc.get)) {
-					value = desc.get;
-				} else {
-					value = value[part];
-				}
-			} else {
-				isOwn = hasOwn(value, part);
-				value = value[part];
-			}
-
-			if (isOwn && !skipFurtherCaching) {
-				INTRINSICS[intrinsicRealName] = value;
-			}
-		}
-	}
-	return value;
-};
-
-},{"function-bind":60,"has":64,"has-symbols":62}],57:[function(require,module,exports){
-'use strict';
-
-var GetIntrinsic = require('../GetIntrinsic');
-
-var $gOPD = GetIntrinsic('%Object.getOwnPropertyDescriptor%');
-if ($gOPD) {
-	try {
-		$gOPD([], 'length');
-	} catch (e) {
-		// IE 8 has a broken gOPD
-		$gOPD = null;
-	}
-}
-
-module.exports = $gOPD;
-
-},{"../GetIntrinsic":56}],58:[function(require,module,exports){
-
-var hasOwn = Object.prototype.hasOwnProperty;
-var toString = Object.prototype.toString;
-
-module.exports = function forEach (obj, fn, ctx) {
-    if (toString.call(fn) !== '[object Function]') {
-        throw new TypeError('iterator must be a function');
-    }
-    var l = obj.length;
-    if (l === +l) {
-        for (var i = 0; i < l; i++) {
-            fn.call(ctx, obj[i], i, obj);
-        }
-    } else {
-        for (var k in obj) {
-            if (hasOwn.call(obj, k)) {
-                fn.call(ctx, obj[k], k, obj);
-            }
-        }
-    }
-};
-
-
-},{}],59:[function(require,module,exports){
-'use strict';
-
-/* eslint no-invalid-this: 1 */
-
-var ERROR_MESSAGE = 'Function.prototype.bind called on incompatible ';
-var slice = Array.prototype.slice;
-var toStr = Object.prototype.toString;
-var funcType = '[object Function]';
-
-module.exports = function bind(that) {
-    var target = this;
-    if (typeof target !== 'function' || toStr.call(target) !== funcType) {
-        throw new TypeError(ERROR_MESSAGE + target);
-    }
-    var args = slice.call(arguments, 1);
-
-    var bound;
-    var binder = function () {
-        if (this instanceof bound) {
-            var result = target.apply(
-                this,
-                args.concat(slice.call(arguments))
-            );
-            if (Object(result) === result) {
-                return result;
-            }
-            return this;
-        } else {
-            return target.apply(
-                that,
-                args.concat(slice.call(arguments))
-            );
-        }
-    };
-
-    var boundLength = Math.max(0, target.length - args.length);
-    var boundArgs = [];
-    for (var i = 0; i < boundLength; i++) {
-        boundArgs.push('$' + i);
-    }
-
-    bound = Function('binder', 'return function (' + boundArgs.join(',') + '){ return binder.apply(this,arguments); }')(binder);
-
-    if (target.prototype) {
-        var Empty = function Empty() {};
-        Empty.prototype = target.prototype;
-        bound.prototype = new Empty();
-        Empty.prototype = null;
-    }
-
-    return bound;
-};
-
-},{}],60:[function(require,module,exports){
-'use strict';
-
-var implementation = require('./implementation');
-
-module.exports = Function.prototype.bind || implementation;
-
-},{"./implementation":59}],61:[function(require,module,exports){
-'use strict';
-
-/* globals
-	AggregateError,
-	Atomics,
-	FinalizationRegistry,
-	SharedArrayBuffer,
-	WeakRef,
-*/
-
-var undefined;
-
-var $SyntaxError = SyntaxError;
-var $Function = Function;
-var $TypeError = TypeError;
-
-// eslint-disable-next-line consistent-return
-var getEvalledConstructor = function (expressionSyntax) {
-	try {
-		// eslint-disable-next-line no-new-func
-		return Function('"use strict"; return (' + expressionSyntax + ').constructor;')();
-	} catch (e) {}
-};
-
-var $gOPD = Object.getOwnPropertyDescriptor;
-if ($gOPD) {
-	try {
-		$gOPD({}, '');
-	} catch (e) {
-		$gOPD = null; // this is IE 8, which has a broken gOPD
-	}
-}
-
-var throwTypeError = function () {
-	throw new $TypeError();
-};
-var ThrowTypeError = $gOPD
-	? (function () {
-		try {
-			// eslint-disable-next-line no-unused-expressions, no-caller, no-restricted-properties
-			arguments.callee; // IE 8 does not throw here
-			return throwTypeError;
-		} catch (calleeThrows) {
-			try {
-				// IE 8 throws on Object.getOwnPropertyDescriptor(arguments, '')
-				return $gOPD(arguments, 'callee').get;
-			} catch (gOPDthrows) {
-				return throwTypeError;
-			}
-		}
-	}())
-	: throwTypeError;
-
-var hasSymbols = require('has-symbols')();
-
-var getProto = Object.getPrototypeOf || function (x) { return x.__proto__; }; // eslint-disable-line no-proto
-
-var asyncGenFunction = getEvalledConstructor('async function* () {}');
-var asyncGenFunctionPrototype = asyncGenFunction ? asyncGenFunction.prototype : undefined;
-var asyncGenPrototype = asyncGenFunctionPrototype ? asyncGenFunctionPrototype.prototype : undefined;
-
-var TypedArray = typeof Uint8Array === 'undefined' ? undefined : getProto(Uint8Array);
-
-var INTRINSICS = {
-	'%AggregateError%': typeof AggregateError === 'undefined' ? undefined : AggregateError,
-	'%Array%': Array,
-	'%ArrayBuffer%': typeof ArrayBuffer === 'undefined' ? undefined : ArrayBuffer,
-	'%ArrayIteratorPrototype%': hasSymbols ? getProto([][Symbol.iterator]()) : undefined,
-	'%AsyncFromSyncIteratorPrototype%': undefined,
-	'%AsyncFunction%': getEvalledConstructor('async function () {}'),
-	'%AsyncGenerator%': asyncGenFunctionPrototype,
-	'%AsyncGeneratorFunction%': asyncGenFunction,
-	'%AsyncIteratorPrototype%': asyncGenPrototype ? getProto(asyncGenPrototype) : undefined,
-	'%Atomics%': typeof Atomics === 'undefined' ? undefined : Atomics,
-	'%BigInt%': typeof BigInt === 'undefined' ? undefined : BigInt,
-	'%Boolean%': Boolean,
-	'%DataView%': typeof DataView === 'undefined' ? undefined : DataView,
-	'%Date%': Date,
-	'%decodeURI%': decodeURI,
-	'%decodeURIComponent%': decodeURIComponent,
-	'%encodeURI%': encodeURI,
-	'%encodeURIComponent%': encodeURIComponent,
-	'%Error%': Error,
-	'%eval%': eval, // eslint-disable-line no-eval
-	'%EvalError%': EvalError,
-	'%Float32Array%': typeof Float32Array === 'undefined' ? undefined : Float32Array,
-	'%Float64Array%': typeof Float64Array === 'undefined' ? undefined : Float64Array,
-	'%FinalizationRegistry%': typeof FinalizationRegistry === 'undefined' ? undefined : FinalizationRegistry,
-	'%Function%': $Function,
-	'%GeneratorFunction%': getEvalledConstructor('function* () {}'),
-	'%Int8Array%': typeof Int8Array === 'undefined' ? undefined : Int8Array,
-	'%Int16Array%': typeof Int16Array === 'undefined' ? undefined : Int16Array,
-	'%Int32Array%': typeof Int32Array === 'undefined' ? undefined : Int32Array,
-	'%isFinite%': isFinite,
-	'%isNaN%': isNaN,
-	'%IteratorPrototype%': hasSymbols ? getProto(getProto([][Symbol.iterator]())) : undefined,
-	'%JSON%': typeof JSON === 'object' ? JSON : undefined,
-	'%Map%': typeof Map === 'undefined' ? undefined : Map,
-	'%MapIteratorPrototype%': typeof Map === 'undefined' || !hasSymbols ? undefined : getProto(new Map()[Symbol.iterator]()),
-	'%Math%': Math,
-	'%Number%': Number,
-	'%Object%': Object,
-	'%parseFloat%': parseFloat,
-	'%parseInt%': parseInt,
-	'%Promise%': typeof Promise === 'undefined' ? undefined : Promise,
-	'%Proxy%': typeof Proxy === 'undefined' ? undefined : Proxy,
-	'%RangeError%': RangeError,
-	'%ReferenceError%': ReferenceError,
-	'%Reflect%': typeof Reflect === 'undefined' ? undefined : Reflect,
-	'%RegExp%': RegExp,
-	'%Set%': typeof Set === 'undefined' ? undefined : Set,
-	'%SetIteratorPrototype%': typeof Set === 'undefined' || !hasSymbols ? undefined : getProto(new Set()[Symbol.iterator]()),
-	'%SharedArrayBuffer%': typeof SharedArrayBuffer === 'undefined' ? undefined : SharedArrayBuffer,
-	'%String%': String,
-	'%StringIteratorPrototype%': hasSymbols ? getProto(''[Symbol.iterator]()) : undefined,
-	'%Symbol%': hasSymbols ? Symbol : undefined,
-	'%SyntaxError%': $SyntaxError,
-	'%ThrowTypeError%': ThrowTypeError,
-	'%TypedArray%': TypedArray,
-	'%TypeError%': $TypeError,
-	'%Uint8Array%': typeof Uint8Array === 'undefined' ? undefined : Uint8Array,
-	'%Uint8ClampedArray%': typeof Uint8ClampedArray === 'undefined' ? undefined : Uint8ClampedArray,
-	'%Uint16Array%': typeof Uint16Array === 'undefined' ? undefined : Uint16Array,
-	'%Uint32Array%': typeof Uint32Array === 'undefined' ? undefined : Uint32Array,
-	'%URIError%': URIError,
-	'%WeakMap%': typeof WeakMap === 'undefined' ? undefined : WeakMap,
-	'%WeakRef%': typeof WeakRef === 'undefined' ? undefined : WeakRef,
-	'%WeakSet%': typeof WeakSet === 'undefined' ? undefined : WeakSet
-};
-
-var LEGACY_ALIASES = {
-	'%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
-	'%ArrayPrototype%': ['Array', 'prototype'],
-	'%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
-	'%ArrayProto_forEach%': ['Array', 'prototype', 'forEach'],
-	'%ArrayProto_keys%': ['Array', 'prototype', 'keys'],
-	'%ArrayProto_values%': ['Array', 'prototype', 'values'],
-	'%AsyncFunctionPrototype%': ['AsyncFunction', 'prototype'],
-	'%AsyncGenerator%': ['AsyncGeneratorFunction', 'prototype'],
-	'%AsyncGeneratorPrototype%': ['AsyncGeneratorFunction', 'prototype', 'prototype'],
-	'%BooleanPrototype%': ['Boolean', 'prototype'],
-	'%DataViewPrototype%': ['DataView', 'prototype'],
-	'%DatePrototype%': ['Date', 'prototype'],
-	'%ErrorPrototype%': ['Error', 'prototype'],
-	'%EvalErrorPrototype%': ['EvalError', 'prototype'],
-	'%Float32ArrayPrototype%': ['Float32Array', 'prototype'],
-	'%Float64ArrayPrototype%': ['Float64Array', 'prototype'],
-	'%FunctionPrototype%': ['Function', 'prototype'],
-	'%Generator%': ['GeneratorFunction', 'prototype'],
-	'%GeneratorPrototype%': ['GeneratorFunction', 'prototype', 'prototype'],
-	'%Int8ArrayPrototype%': ['Int8Array', 'prototype'],
-	'%Int16ArrayPrototype%': ['Int16Array', 'prototype'],
-	'%Int32ArrayPrototype%': ['Int32Array', 'prototype'],
-	'%JSONParse%': ['JSON', 'parse'],
-	'%JSONStringify%': ['JSON', 'stringify'],
-	'%MapPrototype%': ['Map', 'prototype'],
-	'%NumberPrototype%': ['Number', 'prototype'],
-	'%ObjectPrototype%': ['Object', 'prototype'],
-	'%ObjProto_toString%': ['Object', 'prototype', 'toString'],
-	'%ObjProto_valueOf%': ['Object', 'prototype', 'valueOf'],
-	'%PromisePrototype%': ['Promise', 'prototype'],
-	'%PromiseProto_then%': ['Promise', 'prototype', 'then'],
-	'%Promise_all%': ['Promise', 'all'],
-	'%Promise_reject%': ['Promise', 'reject'],
-	'%Promise_resolve%': ['Promise', 'resolve'],
-	'%RangeErrorPrototype%': ['RangeError', 'prototype'],
-	'%ReferenceErrorPrototype%': ['ReferenceError', 'prototype'],
-	'%RegExpPrototype%': ['RegExp', 'prototype'],
-	'%SetPrototype%': ['Set', 'prototype'],
-	'%SharedArrayBufferPrototype%': ['SharedArrayBuffer', 'prototype'],
-	'%StringPrototype%': ['String', 'prototype'],
-	'%SymbolPrototype%': ['Symbol', 'prototype'],
-	'%SyntaxErrorPrototype%': ['SyntaxError', 'prototype'],
-	'%TypedArrayPrototype%': ['TypedArray', 'prototype'],
-	'%TypeErrorPrototype%': ['TypeError', 'prototype'],
-	'%Uint8ArrayPrototype%': ['Uint8Array', 'prototype'],
-	'%Uint8ClampedArrayPrototype%': ['Uint8ClampedArray', 'prototype'],
-	'%Uint16ArrayPrototype%': ['Uint16Array', 'prototype'],
-	'%Uint32ArrayPrototype%': ['Uint32Array', 'prototype'],
-	'%URIErrorPrototype%': ['URIError', 'prototype'],
-	'%WeakMapPrototype%': ['WeakMap', 'prototype'],
-	'%WeakSetPrototype%': ['WeakSet', 'prototype']
-};
-
-var bind = require('function-bind');
-var hasOwn = require('has');
-var $concat = bind.call(Function.call, Array.prototype.concat);
-var $spliceApply = bind.call(Function.apply, Array.prototype.splice);
-var $replace = bind.call(Function.call, String.prototype.replace);
-var $strSlice = bind.call(Function.call, String.prototype.slice);
-
-/* adapted from https://github.com/lodash/lodash/blob/4.17.15/dist/lodash.js#L6735-L6744 */
-var rePropName = /[^%.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\\]|\\.)*?)\2)\]|(?=(?:\.|\[\])(?:\.|\[\]|%$))/g;
-var reEscapeChar = /\\(\\)?/g; /** Used to match backslashes in property paths. */
-var stringToPath = function stringToPath(string) {
-	var first = $strSlice(string, 0, 1);
-	var last = $strSlice(string, -1);
-	if (first === '%' && last !== '%') {
-		throw new $SyntaxError('invalid intrinsic syntax, expected closing `%`');
-	} else if (last === '%' && first !== '%') {
-		throw new $SyntaxError('invalid intrinsic syntax, expected opening `%`');
-	}
-	var result = [];
-	$replace(string, rePropName, function (match, number, quote, subString) {
-		result[result.length] = quote ? $replace(subString, reEscapeChar, '$1') : number || match;
-	});
-	return result;
-};
-/* end adaptation */
-
-var getBaseIntrinsic = function getBaseIntrinsic(name, allowMissing) {
-	var intrinsicName = name;
-	var alias;
-	if (hasOwn(LEGACY_ALIASES, intrinsicName)) {
-		alias = LEGACY_ALIASES[intrinsicName];
-		intrinsicName = '%' + alias[0] + '%';
-	}
-
-	if (hasOwn(INTRINSICS, intrinsicName)) {
-		var value = INTRINSICS[intrinsicName];
-		if (typeof value === 'undefined' && !allowMissing) {
-			throw new $TypeError('intrinsic ' + name + ' exists, but is not available. Please file an issue!');
-		}
-
-		return {
-			alias: alias,
-			name: intrinsicName,
-			value: value
-		};
-	}
-
-	throw new $SyntaxError('intrinsic ' + name + ' does not exist!');
-};
-
-module.exports = function GetIntrinsic(name, allowMissing) {
-	if (typeof name !== 'string' || name.length === 0) {
-		throw new $TypeError('intrinsic name must be a non-empty string');
-	}
-	if (arguments.length > 1 && typeof allowMissing !== 'boolean') {
-		throw new $TypeError('"allowMissing" argument must be a boolean');
-	}
-
-	var parts = stringToPath(name);
-	var intrinsicBaseName = parts.length > 0 ? parts[0] : '';
-
-	var intrinsic = getBaseIntrinsic('%' + intrinsicBaseName + '%', allowMissing);
-	var intrinsicRealName = intrinsic.name;
-	var value = intrinsic.value;
-	var skipFurtherCaching = false;
-
-	var alias = intrinsic.alias;
-	if (alias) {
-		intrinsicBaseName = alias[0];
-		$spliceApply(parts, $concat([0, 1], alias));
-	}
-
-	for (var i = 1, isOwn = true; i < parts.length; i += 1) {
-		var part = parts[i];
-		var first = $strSlice(part, 0, 1);
-		var last = $strSlice(part, -1);
-		if (
-			(
-				(first === '"' || first === "'" || first === '`')
-				|| (last === '"' || last === "'" || last === '`')
-			)
-			&& first !== last
-		) {
-			throw new $SyntaxError('property names with quotes must have matching quotes');
-		}
-		if (part === 'constructor' || !isOwn) {
-			skipFurtherCaching = true;
-		}
-
-		intrinsicBaseName += '.' + part;
-		intrinsicRealName = '%' + intrinsicBaseName + '%';
-
-		if (hasOwn(INTRINSICS, intrinsicRealName)) {
-			value = INTRINSICS[intrinsicRealName];
-		} else if (value != null) {
-			if (!(part in value)) {
-				if (!allowMissing) {
-					throw new $TypeError('base intrinsic for ' + name + ' exists, but the property is not available.');
-				}
-				return void undefined;
-			}
-			if ($gOPD && (i + 1) >= parts.length) {
-				var desc = $gOPD(value, part);
-				isOwn = !!desc;
-
-				// By convention, when a data property is converted to an accessor
-				// property to emulate a data property that does not suffer from
-				// the override mistake, that accessor's getter is marked with
-				// an `originalValue` property. Here, when we detect this, we
-				// uphold the illusion by pretending to see that original data
-				// property, i.e., returning the value rather than the getter
-				// itself.
-				if (isOwn && 'get' in desc && !('originalValue' in desc.get)) {
-					value = desc.get;
-				} else {
-					value = value[part];
-				}
-			} else {
-				isOwn = hasOwn(value, part);
-				value = value[part];
-			}
-
-			if (isOwn && !skipFurtherCaching) {
-				INTRINSICS[intrinsicRealName] = value;
-			}
-		}
-	}
-	return value;
-};
-
-},{"function-bind":60,"has":64,"has-symbols":62}],62:[function(require,module,exports){
-(function (global){(function (){
-'use strict';
-
-var origSymbol = global.Symbol;
-var hasSymbolSham = require('./shams');
-
-module.exports = function hasNativeSymbols() {
-	if (typeof origSymbol !== 'function') { return false; }
-	if (typeof Symbol !== 'function') { return false; }
-	if (typeof origSymbol('foo') !== 'symbol') { return false; }
-	if (typeof Symbol('bar') !== 'symbol') { return false; }
-
-	return hasSymbolSham();
-};
-
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./shams":63}],63:[function(require,module,exports){
-'use strict';
-
-/* eslint complexity: [2, 18], max-statements: [2, 33] */
-module.exports = function hasSymbols() {
-	if (typeof Symbol !== 'function' || typeof Object.getOwnPropertySymbols !== 'function') { return false; }
-	if (typeof Symbol.iterator === 'symbol') { return true; }
-
-	var obj = {};
-	var sym = Symbol('test');
-	var symObj = Object(sym);
-	if (typeof sym === 'string') { return false; }
-
-	if (Object.prototype.toString.call(sym) !== '[object Symbol]') { return false; }
-	if (Object.prototype.toString.call(symObj) !== '[object Symbol]') { return false; }
-
-	// temp disabled per https://github.com/ljharb/object.assign/issues/17
-	// if (sym instanceof Symbol) { return false; }
-	// temp disabled per https://github.com/WebReflection/get-own-property-symbols/issues/4
-	// if (!(symObj instanceof Symbol)) { return false; }
-
-	// if (typeof Symbol.prototype.toString !== 'function') { return false; }
-	// if (String(sym) !== Symbol.prototype.toString.call(sym)) { return false; }
-
-	var symVal = 42;
-	obj[sym] = symVal;
-	for (sym in obj) { return false; } // eslint-disable-line no-restricted-syntax
-	if (typeof Object.keys === 'function' && Object.keys(obj).length !== 0) { return false; }
-
-	if (typeof Object.getOwnPropertyNames === 'function' && Object.getOwnPropertyNames(obj).length !== 0) { return false; }
-
-	var syms = Object.getOwnPropertySymbols(obj);
-	if (syms.length !== 1 || syms[0] !== sym) { return false; }
-
-	if (!Object.prototype.propertyIsEnumerable.call(obj, sym)) { return false; }
-
-	if (typeof Object.getOwnPropertyDescriptor === 'function') {
-		var descriptor = Object.getOwnPropertyDescriptor(obj, sym);
-		if (descriptor.value !== symVal || descriptor.enumerable !== true) { return false; }
-	}
-
-	return true;
-};
-
-},{}],64:[function(require,module,exports){
-'use strict';
-
-var bind = require('function-bind');
-
-module.exports = bind.call(Function.call, Object.prototype.hasOwnProperty);
-
-},{"function-bind":60}],65:[function(require,module,exports){
-if (typeof Object.create === 'function') {
-  // implementation from standard node.js 'util' module
-  module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      ctor.prototype = Object.create(superCtor.prototype, {
-        constructor: {
-          value: ctor,
-          enumerable: false,
-          writable: true,
-          configurable: true
-        }
-      })
-    }
-  };
-} else {
-  // old school shim for old browsers
-  module.exports = function inherits(ctor, superCtor) {
-    if (superCtor) {
-      ctor.super_ = superCtor
-      var TempCtor = function () {}
-      TempCtor.prototype = superCtor.prototype
-      ctor.prototype = new TempCtor()
-      ctor.prototype.constructor = ctor
-    }
-  }
-}
-
-},{}],66:[function(require,module,exports){
-'use strict';
-
-var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
-var callBound = require('call-bind/callBound');
-
-var $toString = callBound('Object.prototype.toString');
-
-var isStandardArguments = function isArguments(value) {
-	if (hasToStringTag && value && typeof value === 'object' && Symbol.toStringTag in value) {
-		return false;
-	}
-	return $toString(value) === '[object Arguments]';
-};
-
-var isLegacyArguments = function isArguments(value) {
-	if (isStandardArguments(value)) {
-		return true;
-	}
-	return value !== null &&
-		typeof value === 'object' &&
-		typeof value.length === 'number' &&
-		value.length >= 0 &&
-		$toString(value) !== '[object Array]' &&
-		$toString(value.callee) === '[object Function]';
-};
-
-var supportsStandardArguments = (function () {
-	return isStandardArguments(arguments);
-}());
-
-isStandardArguments.isLegacyArguments = isLegacyArguments; // for tests
-
-module.exports = supportsStandardArguments ? isStandardArguments : isLegacyArguments;
-
-},{"call-bind/callBound":54}],67:[function(require,module,exports){
-'use strict';
-
-var toStr = Object.prototype.toString;
-var fnToStr = Function.prototype.toString;
-var isFnRegex = /^\s*(?:function)?\*/;
-var hasToStringTag = typeof Symbol === 'function' && typeof Symbol.toStringTag === 'symbol';
-var getProto = Object.getPrototypeOf;
-var getGeneratorFunc = function () { // eslint-disable-line consistent-return
-	if (!hasToStringTag) {
-		return false;
-	}
-	try {
-		return Function('return function*() {}')();
-	} catch (e) {
-	}
-};
-var generatorFunc = getGeneratorFunc();
-var GeneratorFunction = getProto && generatorFunc ? getProto(generatorFunc) : false;
-
-module.exports = function isGeneratorFunction(fn) {
-	if (typeof fn !== 'function') {
-		return false;
-	}
-	if (isFnRegex.test(fnToStr.call(fn))) {
-		return true;
-	}
-	if (!hasToStringTag) {
-		var str = toStr.call(fn);
-		return str === '[object GeneratorFunction]';
-	}
-	return getProto && getProto(fn) === GeneratorFunction;
-};
-
-},{}],68:[function(require,module,exports){
-(function (global){(function (){
-'use strict';
-
-var forEach = require('foreach');
-var availableTypedArrays = require('available-typed-arrays');
-var callBound = require('call-bind/callBound');
-
-var $toString = callBound('Object.prototype.toString');
-var hasSymbols = require('has-symbols')();
-var hasToStringTag = hasSymbols && typeof Symbol.toStringTag === 'symbol';
-
-var typedArrays = availableTypedArrays();
-
-var $indexOf = callBound('Array.prototype.indexOf', true) || function indexOf(array, value) {
-	for (var i = 0; i < array.length; i += 1) {
-		if (array[i] === value) {
-			return i;
-		}
-	}
-	return -1;
-};
-var $slice = callBound('String.prototype.slice');
-var toStrTags = {};
-var gOPD = require('es-abstract/helpers/getOwnPropertyDescriptor');
-var getPrototypeOf = Object.getPrototypeOf; // require('getprototypeof');
-if (hasToStringTag && gOPD && getPrototypeOf) {
-	forEach(typedArrays, function (typedArray) {
-		var arr = new global[typedArray]();
-		if (!(Symbol.toStringTag in arr)) {
-			throw new EvalError('this engine has support for Symbol.toStringTag, but ' + typedArray + ' does not have the property! Please report this.');
-		}
-		var proto = getPrototypeOf(arr);
-		var descriptor = gOPD(proto, Symbol.toStringTag);
-		if (!descriptor) {
-			var superProto = getPrototypeOf(proto);
-			descriptor = gOPD(superProto, Symbol.toStringTag);
-		}
-		toStrTags[typedArray] = descriptor.get;
-	});
-}
-
-var tryTypedArrays = function tryAllTypedArrays(value) {
-	var anyTrue = false;
-	forEach(toStrTags, function (getter, typedArray) {
-		if (!anyTrue) {
-			try {
-				anyTrue = getter.call(value) === typedArray;
-			} catch (e) { /**/ }
-		}
-	});
-	return anyTrue;
-};
-
-module.exports = function isTypedArray(value) {
-	if (!value || typeof value !== 'object') { return false; }
-	if (!hasToStringTag) {
-		var tag = $slice($toString(value), 8, -1);
-		return $indexOf(typedArrays, tag) > -1;
-	}
-	if (!gOPD) { return false; }
-	return tryTypedArrays(value);
-};
-
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":52,"call-bind/callBound":54,"es-abstract/helpers/getOwnPropertyDescriptor":57,"foreach":58,"has-symbols":62}],69:[function(require,module,exports){
-exports.endianness = function () { return 'LE' };
-
-exports.hostname = function () {
-    if (typeof location !== 'undefined') {
-        return location.hostname
-    }
-    else return '';
-};
-
-exports.loadavg = function () { return [] };
-
-exports.uptime = function () { return 0 };
-
-exports.freemem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.totalmem = function () {
-    return Number.MAX_VALUE;
-};
-
-exports.cpus = function () { return [] };
-
-exports.type = function () { return 'Browser' };
-
-exports.release = function () {
-    if (typeof navigator !== 'undefined') {
-        return navigator.appVersion;
-    }
-    return '';
-};
-
-exports.networkInterfaces
-= exports.getNetworkInterfaces
-= function () { return {} };
-
-exports.arch = function () { return 'javascript' };
-
-exports.platform = function () { return 'browser' };
-
-exports.tmpdir = exports.tmpDir = function () {
-    return '/tmp';
-};
-
-exports.EOL = '\n';
-
-exports.homedir = function () {
-	return '/'
-};
-
-},{}],70:[function(require,module,exports){
-(function (process){(function (){
-// 'path' module extracted from Node.js v8.11.1 (only the posix part)
-// transplited with Babel
-
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-'use strict';
-
-function assertPath(path) {
-  if (typeof path !== 'string') {
-    throw new TypeError('Path must be a string. Received ' + JSON.stringify(path));
-  }
-}
-
-// Resolves . and .. elements in a path with directory names
-function normalizeStringPosix(path, allowAboveRoot) {
-  var res = '';
-  var lastSegmentLength = 0;
-  var lastSlash = -1;
-  var dots = 0;
-  var code;
-  for (var i = 0; i <= path.length; ++i) {
-    if (i < path.length)
-      code = path.charCodeAt(i);
-    else if (code === 47 /*/*/)
-      break;
-    else
-      code = 47 /*/*/;
-    if (code === 47 /*/*/) {
-      if (lastSlash === i - 1 || dots === 1) {
-        // NOOP
-      } else if (lastSlash !== i - 1 && dots === 2) {
-        if (res.length < 2 || lastSegmentLength !== 2 || res.charCodeAt(res.length - 1) !== 46 /*.*/ || res.charCodeAt(res.length - 2) !== 46 /*.*/) {
-          if (res.length > 2) {
-            var lastSlashIndex = res.lastIndexOf('/');
-            if (lastSlashIndex !== res.length - 1) {
-              if (lastSlashIndex === -1) {
-                res = '';
-                lastSegmentLength = 0;
-              } else {
-                res = res.slice(0, lastSlashIndex);
-                lastSegmentLength = res.length - 1 - res.lastIndexOf('/');
-              }
-              lastSlash = i;
-              dots = 0;
-              continue;
-            }
-          } else if (res.length === 2 || res.length === 1) {
-            res = '';
-            lastSegmentLength = 0;
-            lastSlash = i;
-            dots = 0;
-            continue;
-          }
-        }
-        if (allowAboveRoot) {
-          if (res.length > 0)
-            res += '/..';
-          else
-            res = '..';
-          lastSegmentLength = 2;
-        }
-      } else {
-        if (res.length > 0)
-          res += '/' + path.slice(lastSlash + 1, i);
-        else
-          res = path.slice(lastSlash + 1, i);
-        lastSegmentLength = i - lastSlash - 1;
-      }
-      lastSlash = i;
-      dots = 0;
-    } else if (code === 46 /*.*/ && dots !== -1) {
-      ++dots;
-    } else {
-      dots = -1;
-    }
-  }
-  return res;
-}
-
-function _format(sep, pathObject) {
-  var dir = pathObject.dir || pathObject.root;
-  var base = pathObject.base || (pathObject.name || '') + (pathObject.ext || '');
-  if (!dir) {
-    return base;
-  }
-  if (dir === pathObject.root) {
-    return dir + base;
-  }
-  return dir + sep + base;
-}
-
-var posix = {
-  // path.resolve([from ...], to)
-  resolve: function resolve() {
-    var resolvedPath = '';
-    var resolvedAbsolute = false;
-    var cwd;
-
-    for (var i = arguments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
-      var path;
-      if (i >= 0)
-        path = arguments[i];
-      else {
-        if (cwd === undefined)
-          cwd = process.cwd();
-        path = cwd;
-      }
-
-      assertPath(path);
-
-      // Skip empty entries
-      if (path.length === 0) {
-        continue;
-      }
-
-      resolvedPath = path + '/' + resolvedPath;
-      resolvedAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    }
-
-    // At this point the path should be resolved to a full absolute path, but
-    // handle relative paths to be safe (might happen when process.cwd() fails)
-
-    // Normalize the path
-    resolvedPath = normalizeStringPosix(resolvedPath, !resolvedAbsolute);
-
-    if (resolvedAbsolute) {
-      if (resolvedPath.length > 0)
-        return '/' + resolvedPath;
-      else
-        return '/';
-    } else if (resolvedPath.length > 0) {
-      return resolvedPath;
-    } else {
-      return '.';
-    }
-  },
-
-  normalize: function normalize(path) {
-    assertPath(path);
-
-    if (path.length === 0) return '.';
-
-    var isAbsolute = path.charCodeAt(0) === 47 /*/*/;
-    var trailingSeparator = path.charCodeAt(path.length - 1) === 47 /*/*/;
-
-    // Normalize the path
-    path = normalizeStringPosix(path, !isAbsolute);
-
-    if (path.length === 0 && !isAbsolute) path = '.';
-    if (path.length > 0 && trailingSeparator) path += '/';
-
-    if (isAbsolute) return '/' + path;
-    return path;
-  },
-
-  isAbsolute: function isAbsolute(path) {
-    assertPath(path);
-    return path.length > 0 && path.charCodeAt(0) === 47 /*/*/;
-  },
-
-  join: function join() {
-    if (arguments.length === 0)
-      return '.';
-    var joined;
-    for (var i = 0; i < arguments.length; ++i) {
-      var arg = arguments[i];
-      assertPath(arg);
-      if (arg.length > 0) {
-        if (joined === undefined)
-          joined = arg;
-        else
-          joined += '/' + arg;
-      }
-    }
-    if (joined === undefined)
-      return '.';
-    return posix.normalize(joined);
-  },
-
-  relative: function relative(from, to) {
-    assertPath(from);
-    assertPath(to);
-
-    if (from === to) return '';
-
-    from = posix.resolve(from);
-    to = posix.resolve(to);
-
-    if (from === to) return '';
-
-    // Trim any leading backslashes
-    var fromStart = 1;
-    for (; fromStart < from.length; ++fromStart) {
-      if (from.charCodeAt(fromStart) !== 47 /*/*/)
-        break;
-    }
-    var fromEnd = from.length;
-    var fromLen = fromEnd - fromStart;
-
-    // Trim any leading backslashes
-    var toStart = 1;
-    for (; toStart < to.length; ++toStart) {
-      if (to.charCodeAt(toStart) !== 47 /*/*/)
-        break;
-    }
-    var toEnd = to.length;
-    var toLen = toEnd - toStart;
-
-    // Compare paths to find the longest common path from root
-    var length = fromLen < toLen ? fromLen : toLen;
-    var lastCommonSep = -1;
-    var i = 0;
-    for (; i <= length; ++i) {
-      if (i === length) {
-        if (toLen > length) {
-          if (to.charCodeAt(toStart + i) === 47 /*/*/) {
-            // We get here if `from` is the exact base path for `to`.
-            // For example: from='/foo/bar'; to='/foo/bar/baz'
-            return to.slice(toStart + i + 1);
-          } else if (i === 0) {
-            // We get here if `from` is the root
-            // For example: from='/'; to='/foo'
-            return to.slice(toStart + i);
-          }
-        } else if (fromLen > length) {
-          if (from.charCodeAt(fromStart + i) === 47 /*/*/) {
-            // We get here if `to` is the exact base path for `from`.
-            // For example: from='/foo/bar/baz'; to='/foo/bar'
-            lastCommonSep = i;
-          } else if (i === 0) {
-            // We get here if `to` is the root.
-            // For example: from='/foo'; to='/'
-            lastCommonSep = 0;
-          }
-        }
-        break;
-      }
-      var fromCode = from.charCodeAt(fromStart + i);
-      var toCode = to.charCodeAt(toStart + i);
-      if (fromCode !== toCode)
-        break;
-      else if (fromCode === 47 /*/*/)
-        lastCommonSep = i;
-    }
-
-    var out = '';
-    // Generate the relative path based on the path difference between `to`
-    // and `from`
-    for (i = fromStart + lastCommonSep + 1; i <= fromEnd; ++i) {
-      if (i === fromEnd || from.charCodeAt(i) === 47 /*/*/) {
-        if (out.length === 0)
-          out += '..';
-        else
-          out += '/..';
-      }
-    }
-
-    // Lastly, append the rest of the destination (`to`) path that comes after
-    // the common path parts
-    if (out.length > 0)
-      return out + to.slice(toStart + lastCommonSep);
-    else {
-      toStart += lastCommonSep;
-      if (to.charCodeAt(toStart) === 47 /*/*/)
-        ++toStart;
-      return to.slice(toStart);
-    }
-  },
-
-  _makeLong: function _makeLong(path) {
-    return path;
-  },
-
-  dirname: function dirname(path) {
-    assertPath(path);
-    if (path.length === 0) return '.';
-    var code = path.charCodeAt(0);
-    var hasRoot = code === 47 /*/*/;
-    var end = -1;
-    var matchedSlash = true;
-    for (var i = path.length - 1; i >= 1; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          if (!matchedSlash) {
-            end = i;
-            break;
-          }
-        } else {
-        // We saw the first non-path separator
-        matchedSlash = false;
-      }
-    }
-
-    if (end === -1) return hasRoot ? '/' : '.';
-    if (hasRoot && end === 1) return '//';
-    return path.slice(0, end);
-  },
-
-  basename: function basename(path, ext) {
-    if (ext !== undefined && typeof ext !== 'string') throw new TypeError('"ext" argument must be a string');
-    assertPath(path);
-
-    var start = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i;
-
-    if (ext !== undefined && ext.length > 0 && ext.length <= path.length) {
-      if (ext.length === path.length && ext === path) return '';
-      var extIdx = ext.length - 1;
-      var firstNonSlashEnd = -1;
-      for (i = path.length - 1; i >= 0; --i) {
-        var code = path.charCodeAt(i);
-        if (code === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else {
-          if (firstNonSlashEnd === -1) {
-            // We saw the first non-path separator, remember this index in case
-            // we need it if the extension ends up not matching
-            matchedSlash = false;
-            firstNonSlashEnd = i + 1;
-          }
-          if (extIdx >= 0) {
-            // Try to match the explicit extension
-            if (code === ext.charCodeAt(extIdx)) {
-              if (--extIdx === -1) {
-                // We matched the extension, so mark this as the end of our path
-                // component
-                end = i;
-              }
-            } else {
-              // Extension does not match, so our result is the entire path
-              // component
-              extIdx = -1;
-              end = firstNonSlashEnd;
-            }
-          }
-        }
-      }
-
-      if (start === end) end = firstNonSlashEnd;else if (end === -1) end = path.length;
-      return path.slice(start, end);
-    } else {
-      for (i = path.length - 1; i >= 0; --i) {
-        if (path.charCodeAt(i) === 47 /*/*/) {
-            // If we reached a path separator that was not part of a set of path
-            // separators at the end of the string, stop now
-            if (!matchedSlash) {
-              start = i + 1;
-              break;
-            }
-          } else if (end === -1) {
-          // We saw the first non-path separator, mark this as the end of our
-          // path component
-          matchedSlash = false;
-          end = i + 1;
-        }
-      }
-
-      if (end === -1) return '';
-      return path.slice(start, end);
-    }
-  },
-
-  extname: function extname(path) {
-    assertPath(path);
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-    for (var i = path.length - 1; i >= 0; --i) {
-      var code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1)
-            startDot = i;
-          else if (preDotState !== 1)
-            preDotState = 1;
-      } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-        // We saw a non-dot character immediately before the dot
-        preDotState === 0 ||
-        // The (right-most) trimmed path component is exactly '..'
-        preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      return '';
-    }
-    return path.slice(startDot, end);
-  },
-
-  format: function format(pathObject) {
-    if (pathObject === null || typeof pathObject !== 'object') {
-      throw new TypeError('The "pathObject" argument must be of type Object. Received type ' + typeof pathObject);
-    }
-    return _format('/', pathObject);
-  },
-
-  parse: function parse(path) {
-    assertPath(path);
-
-    var ret = { root: '', dir: '', base: '', ext: '', name: '' };
-    if (path.length === 0) return ret;
-    var code = path.charCodeAt(0);
-    var isAbsolute = code === 47 /*/*/;
-    var start;
-    if (isAbsolute) {
-      ret.root = '/';
-      start = 1;
-    } else {
-      start = 0;
-    }
-    var startDot = -1;
-    var startPart = 0;
-    var end = -1;
-    var matchedSlash = true;
-    var i = path.length - 1;
-
-    // Track the state of characters (if any) we see before our first dot and
-    // after any path separator we find
-    var preDotState = 0;
-
-    // Get non-dir info
-    for (; i >= start; --i) {
-      code = path.charCodeAt(i);
-      if (code === 47 /*/*/) {
-          // If we reached a path separator that was not part of a set of path
-          // separators at the end of the string, stop now
-          if (!matchedSlash) {
-            startPart = i + 1;
-            break;
-          }
-          continue;
-        }
-      if (end === -1) {
-        // We saw the first non-path separator, mark this as the end of our
-        // extension
-        matchedSlash = false;
-        end = i + 1;
-      }
-      if (code === 46 /*.*/) {
-          // If this is our first dot, mark it as the start of our extension
-          if (startDot === -1) startDot = i;else if (preDotState !== 1) preDotState = 1;
-        } else if (startDot !== -1) {
-        // We saw a non-dot and non-path separator before our dot, so we should
-        // have a good chance at having a non-empty extension
-        preDotState = -1;
-      }
-    }
-
-    if (startDot === -1 || end === -1 ||
-    // We saw a non-dot character immediately before the dot
-    preDotState === 0 ||
-    // The (right-most) trimmed path component is exactly '..'
-    preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
-      if (end !== -1) {
-        if (startPart === 0 && isAbsolute) ret.base = ret.name = path.slice(1, end);else ret.base = ret.name = path.slice(startPart, end);
-      }
-    } else {
-      if (startPart === 0 && isAbsolute) {
-        ret.name = path.slice(1, startDot);
-        ret.base = path.slice(1, end);
-      } else {
-        ret.name = path.slice(startPart, startDot);
-        ret.base = path.slice(startPart, end);
-      }
-      ret.ext = path.slice(startDot, end);
-    }
-
-    if (startPart > 0) ret.dir = path.slice(0, startPart - 1);else if (isAbsolute) ret.dir = '/';
-
-    return ret;
-  },
-
-  sep: '/',
-  delimiter: ':',
-  win32: null,
-  posix: null
-};
-
-posix.posix = posix;
-
-module.exports = posix;
-
-}).call(this)}).call(this,require('_process'))
-},{"_process":71}],71:[function(require,module,exports){
-// shim for using process in browser
-var process = module.exports = {};
-
-// cached from whatever global is present so that test runners that stub it
-// don't break things.  But we need to wrap it in a try catch in case it is
-// wrapped in strict mode code which doesn't define any globals.  It's inside a
-// function because try/catches deoptimize in certain engines.
-
-var cachedSetTimeout;
-var cachedClearTimeout;
-
-function defaultSetTimout() {
-    throw new Error('setTimeout has not been defined');
-}
-function defaultClearTimeout () {
-    throw new Error('clearTimeout has not been defined');
-}
-(function () {
-    try {
-        if (typeof setTimeout === 'function') {
-            cachedSetTimeout = setTimeout;
-        } else {
-            cachedSetTimeout = defaultSetTimout;
-        }
-    } catch (e) {
-        cachedSetTimeout = defaultSetTimout;
-    }
-    try {
-        if (typeof clearTimeout === 'function') {
-            cachedClearTimeout = clearTimeout;
-        } else {
-            cachedClearTimeout = defaultClearTimeout;
-        }
-    } catch (e) {
-        cachedClearTimeout = defaultClearTimeout;
-    }
-} ())
-function runTimeout(fun) {
-    if (cachedSetTimeout === setTimeout) {
-        //normal enviroments in sane situations
-        return setTimeout(fun, 0);
-    }
-    // if setTimeout wasn't available but was latter defined
-    if ((cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) && setTimeout) {
-        cachedSetTimeout = setTimeout;
-        return setTimeout(fun, 0);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedSetTimeout(fun, 0);
-    } catch(e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't trust the global object when called normally
-            return cachedSetTimeout.call(null, fun, 0);
-        } catch(e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error
-            return cachedSetTimeout.call(this, fun, 0);
-        }
-    }
-
-
-}
-function runClearTimeout(marker) {
-    if (cachedClearTimeout === clearTimeout) {
-        //normal enviroments in sane situations
-        return clearTimeout(marker);
-    }
-    // if clearTimeout wasn't available but was latter defined
-    if ((cachedClearTimeout === defaultClearTimeout || !cachedClearTimeout) && clearTimeout) {
-        cachedClearTimeout = clearTimeout;
-        return clearTimeout(marker);
-    }
-    try {
-        // when when somebody has screwed with setTimeout but no I.E. maddness
-        return cachedClearTimeout(marker);
-    } catch (e){
-        try {
-            // When we are in I.E. but the script has been evaled so I.E. doesn't  trust the global object when called normally
-            return cachedClearTimeout.call(null, marker);
-        } catch (e){
-            // same as above but when it's a version of I.E. that must have the global object for 'this', hopfully our context correct otherwise it will throw a global error.
-            // Some versions of I.E. have different rules for clearTimeout vs setTimeout
-            return cachedClearTimeout.call(this, marker);
-        }
-    }
-
-
-
-}
-var queue = [];
-var draining = false;
-var currentQueue;
-var queueIndex = -1;
-
-function cleanUpNextTick() {
-    if (!draining || !currentQueue) {
-        return;
-    }
-    draining = false;
-    if (currentQueue.length) {
-        queue = currentQueue.concat(queue);
-    } else {
-        queueIndex = -1;
-    }
-    if (queue.length) {
-        drainQueue();
-    }
-}
-
-function drainQueue() {
-    if (draining) {
-        return;
-    }
-    var timeout = runTimeout(cleanUpNextTick);
-    draining = true;
-
-    var len = queue.length;
-    while(len) {
-        currentQueue = queue;
-        queue = [];
-        while (++queueIndex < len) {
-            if (currentQueue) {
-                currentQueue[queueIndex].run();
-            }
-        }
-        queueIndex = -1;
-        len = queue.length;
-    }
-    currentQueue = null;
-    draining = false;
-    runClearTimeout(timeout);
-}
-
-process.nextTick = function (fun) {
-    var args = new Array(arguments.length - 1);
-    if (arguments.length > 1) {
-        for (var i = 1; i < arguments.length; i++) {
-            args[i - 1] = arguments[i];
-        }
-    }
-    queue.push(new Item(fun, args));
-    if (queue.length === 1 && !draining) {
-        runTimeout(drainQueue);
-    }
-};
-
-// v8 likes predictible objects
-function Item(fun, array) {
-    this.fun = fun;
-    this.array = array;
-}
-Item.prototype.run = function () {
-    this.fun.apply(null, this.array);
-};
-process.title = 'browser';
-process.browser = true;
-process.env = {};
-process.argv = [];
-process.version = ''; // empty string to avoid regexp issues
-process.versions = {};
-
-function noop() {}
-
-process.on = noop;
-process.addListener = noop;
-process.once = noop;
-process.off = noop;
-process.removeListener = noop;
-process.removeAllListeners = noop;
-process.emit = noop;
-process.prependListener = noop;
-process.prependOnceListener = noop;
-
-process.listeners = function (name) { return [] }
-
-process.binding = function (name) {
-    throw new Error('process.binding is not supported');
-};
-
-process.cwd = function () { return '/' };
-process.chdir = function (dir) {
-    throw new Error('process.chdir is not supported');
-};
-process.umask = function() { return 0; };
-
-},{}],72:[function(require,module,exports){
-module.exports = function isBuffer(arg) {
-  return arg && typeof arg === 'object'
-    && typeof arg.copy === 'function'
-    && typeof arg.fill === 'function'
-    && typeof arg.readUInt8 === 'function';
-}
-},{}],73:[function(require,module,exports){
-// Currently in sync with Node.js lib/internal/util/types.js
-// https://github.com/nodejs/node/commit/112cc7c27551254aa2b17098fb774867f05ed0d9
-
-'use strict';
-
-var isArgumentsObject = require('is-arguments');
-var isGeneratorFunction = require('is-generator-function');
-var whichTypedArray = require('which-typed-array');
-var isTypedArray = require('is-typed-array');
-
-function uncurryThis(f) {
-  return f.call.bind(f);
-}
-
-var BigIntSupported = typeof BigInt !== 'undefined';
-var SymbolSupported = typeof Symbol !== 'undefined';
-
-var ObjectToString = uncurryThis(Object.prototype.toString);
-
-var numberValue = uncurryThis(Number.prototype.valueOf);
-var stringValue = uncurryThis(String.prototype.valueOf);
-var booleanValue = uncurryThis(Boolean.prototype.valueOf);
-
-if (BigIntSupported) {
-  var bigIntValue = uncurryThis(BigInt.prototype.valueOf);
-}
-
-if (SymbolSupported) {
-  var symbolValue = uncurryThis(Symbol.prototype.valueOf);
-}
-
-function checkBoxedPrimitive(value, prototypeValueOf) {
-  if (typeof value !== 'object') {
-    return false;
-  }
-  try {
-    prototypeValueOf(value);
-    return true;
-  } catch(e) {
-    return false;
-  }
-}
-
-exports.isArgumentsObject = isArgumentsObject;
-exports.isGeneratorFunction = isGeneratorFunction;
-exports.isTypedArray = isTypedArray;
-
-// Taken from here and modified for better browser support
-// https://github.com/sindresorhus/p-is-promise/blob/cda35a513bda03f977ad5cde3a079d237e82d7ef/index.js
-function isPromise(input) {
-	return (
-		(
-			typeof Promise !== 'undefined' &&
-			input instanceof Promise
-		) ||
-		(
-			input !== null &&
-			typeof input === 'object' &&
-			typeof input.then === 'function' &&
-			typeof input.catch === 'function'
-		)
-	);
-}
-exports.isPromise = isPromise;
-
-function isArrayBufferView(value) {
-  if (typeof ArrayBuffer !== 'undefined' && ArrayBuffer.isView) {
-    return ArrayBuffer.isView(value);
-  }
-
-  return (
-    isTypedArray(value) ||
-    isDataView(value)
-  );
-}
-exports.isArrayBufferView = isArrayBufferView;
-
-
-function isUint8Array(value) {
-  return whichTypedArray(value) === 'Uint8Array';
-}
-exports.isUint8Array = isUint8Array;
-
-function isUint8ClampedArray(value) {
-  return whichTypedArray(value) === 'Uint8ClampedArray';
-}
-exports.isUint8ClampedArray = isUint8ClampedArray;
-
-function isUint16Array(value) {
-  return whichTypedArray(value) === 'Uint16Array';
-}
-exports.isUint16Array = isUint16Array;
-
-function isUint32Array(value) {
-  return whichTypedArray(value) === 'Uint32Array';
-}
-exports.isUint32Array = isUint32Array;
-
-function isInt8Array(value) {
-  return whichTypedArray(value) === 'Int8Array';
-}
-exports.isInt8Array = isInt8Array;
-
-function isInt16Array(value) {
-  return whichTypedArray(value) === 'Int16Array';
-}
-exports.isInt16Array = isInt16Array;
-
-function isInt32Array(value) {
-  return whichTypedArray(value) === 'Int32Array';
-}
-exports.isInt32Array = isInt32Array;
-
-function isFloat32Array(value) {
-  return whichTypedArray(value) === 'Float32Array';
-}
-exports.isFloat32Array = isFloat32Array;
-
-function isFloat64Array(value) {
-  return whichTypedArray(value) === 'Float64Array';
-}
-exports.isFloat64Array = isFloat64Array;
-
-function isBigInt64Array(value) {
-  return whichTypedArray(value) === 'BigInt64Array';
-}
-exports.isBigInt64Array = isBigInt64Array;
-
-function isBigUint64Array(value) {
-  return whichTypedArray(value) === 'BigUint64Array';
-}
-exports.isBigUint64Array = isBigUint64Array;
-
-function isMapToString(value) {
-  return ObjectToString(value) === '[object Map]';
-}
-isMapToString.working = (
-  typeof Map !== 'undefined' &&
-  isMapToString(new Map())
-);
-
-function isMap(value) {
-  if (typeof Map === 'undefined') {
-    return false;
-  }
-
-  return isMapToString.working
-    ? isMapToString(value)
-    : value instanceof Map;
-}
-exports.isMap = isMap;
-
-function isSetToString(value) {
-  return ObjectToString(value) === '[object Set]';
-}
-isSetToString.working = (
-  typeof Set !== 'undefined' &&
-  isSetToString(new Set())
-);
-function isSet(value) {
-  if (typeof Set === 'undefined') {
-    return false;
-  }
-
-  return isSetToString.working
-    ? isSetToString(value)
-    : value instanceof Set;
-}
-exports.isSet = isSet;
-
-function isWeakMapToString(value) {
-  return ObjectToString(value) === '[object WeakMap]';
-}
-isWeakMapToString.working = (
-  typeof WeakMap !== 'undefined' &&
-  isWeakMapToString(new WeakMap())
-);
-function isWeakMap(value) {
-  if (typeof WeakMap === 'undefined') {
-    return false;
-  }
-
-  return isWeakMapToString.working
-    ? isWeakMapToString(value)
-    : value instanceof WeakMap;
-}
-exports.isWeakMap = isWeakMap;
-
-function isWeakSetToString(value) {
-  return ObjectToString(value) === '[object WeakSet]';
-}
-isWeakSetToString.working = (
-  typeof WeakSet !== 'undefined' &&
-  isWeakSetToString(new WeakSet())
-);
-function isWeakSet(value) {
-  return isWeakSetToString(value);
-}
-exports.isWeakSet = isWeakSet;
-
-function isArrayBufferToString(value) {
-  return ObjectToString(value) === '[object ArrayBuffer]';
-}
-isArrayBufferToString.working = (
-  typeof ArrayBuffer !== 'undefined' &&
-  isArrayBufferToString(new ArrayBuffer())
-);
-function isArrayBuffer(value) {
-  if (typeof ArrayBuffer === 'undefined') {
-    return false;
-  }
-
-  return isArrayBufferToString.working
-    ? isArrayBufferToString(value)
-    : value instanceof ArrayBuffer;
-}
-exports.isArrayBuffer = isArrayBuffer;
-
-function isDataViewToString(value) {
-  return ObjectToString(value) === '[object DataView]';
-}
-isDataViewToString.working = (
-  typeof ArrayBuffer !== 'undefined' &&
-  typeof DataView !== 'undefined' &&
-  isDataViewToString(new DataView(new ArrayBuffer(1), 0, 1))
-);
-function isDataView(value) {
-  if (typeof DataView === 'undefined') {
-    return false;
-  }
-
-  return isDataViewToString.working
-    ? isDataViewToString(value)
-    : value instanceof DataView;
-}
-exports.isDataView = isDataView;
-
-function isSharedArrayBufferToString(value) {
-  return ObjectToString(value) === '[object SharedArrayBuffer]';
-}
-isSharedArrayBufferToString.working = (
-  typeof SharedArrayBuffer !== 'undefined' &&
-  isSharedArrayBufferToString(new SharedArrayBuffer())
-);
-function isSharedArrayBuffer(value) {
-  if (typeof SharedArrayBuffer === 'undefined') {
-    return false;
-  }
-
-  return isSharedArrayBufferToString.working
-    ? isSharedArrayBufferToString(value)
-    : value instanceof SharedArrayBuffer;
-}
-exports.isSharedArrayBuffer = isSharedArrayBuffer;
-
-function isAsyncFunction(value) {
-  return ObjectToString(value) === '[object AsyncFunction]';
-}
-exports.isAsyncFunction = isAsyncFunction;
-
-function isMapIterator(value) {
-  return ObjectToString(value) === '[object Map Iterator]';
-}
-exports.isMapIterator = isMapIterator;
-
-function isSetIterator(value) {
-  return ObjectToString(value) === '[object Set Iterator]';
-}
-exports.isSetIterator = isSetIterator;
-
-function isGeneratorObject(value) {
-  return ObjectToString(value) === '[object Generator]';
-}
-exports.isGeneratorObject = isGeneratorObject;
-
-function isWebAssemblyCompiledModule(value) {
-  return ObjectToString(value) === '[object WebAssembly.Module]';
-}
-exports.isWebAssemblyCompiledModule = isWebAssemblyCompiledModule;
-
-function isNumberObject(value) {
-  return checkBoxedPrimitive(value, numberValue);
-}
-exports.isNumberObject = isNumberObject;
-
-function isStringObject(value) {
-  return checkBoxedPrimitive(value, stringValue);
-}
-exports.isStringObject = isStringObject;
-
-function isBooleanObject(value) {
-  return checkBoxedPrimitive(value, booleanValue);
-}
-exports.isBooleanObject = isBooleanObject;
-
-function isBigIntObject(value) {
-  return BigIntSupported && checkBoxedPrimitive(value, bigIntValue);
-}
-exports.isBigIntObject = isBigIntObject;
-
-function isSymbolObject(value) {
-  return SymbolSupported && checkBoxedPrimitive(value, symbolValue);
-}
-exports.isSymbolObject = isSymbolObject;
-
-function isBoxedPrimitive(value) {
-  return (
-    isNumberObject(value) ||
-    isStringObject(value) ||
-    isBooleanObject(value) ||
-    isBigIntObject(value) ||
-    isSymbolObject(value)
-  );
-}
-exports.isBoxedPrimitive = isBoxedPrimitive;
-
-function isAnyArrayBuffer(value) {
-  return typeof Uint8Array !== 'undefined' && (
-    isArrayBuffer(value) ||
-    isSharedArrayBuffer(value)
-  );
-}
-exports.isAnyArrayBuffer = isAnyArrayBuffer;
-
-['isProxy', 'isExternal', 'isModuleNamespaceObject'].forEach(function(method) {
-  Object.defineProperty(exports, method, {
-    enumerable: false,
-    value: function() {
-      throw new Error(method + ' is not supported in userland');
-    }
-  });
-});
-
-},{"is-arguments":66,"is-generator-function":67,"is-typed-array":68,"which-typed-array":75}],74:[function(require,module,exports){
-(function (process){(function (){
-// Copyright Joyent, Inc. and other Node contributors.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a
-// copy of this software and associated documentation files (the
-// "Software"), to deal in the Software without restriction, including
-// without limitation the rights to use, copy, modify, merge, publish,
-// distribute, sublicense, and/or sell copies of the Software, and to permit
-// persons to whom the Software is furnished to do so, subject to the
-// following conditions:
-//
-// The above copyright notice and this permission notice shall be included
-// in all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
-// OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-// MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN
-// NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM,
-// DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
-// OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
-// USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-var getOwnPropertyDescriptors = Object.getOwnPropertyDescriptors ||
-  function getOwnPropertyDescriptors(obj) {
-    var keys = Object.keys(obj);
-    var descriptors = {};
-    for (var i = 0; i < keys.length; i++) {
-      descriptors[keys[i]] = Object.getOwnPropertyDescriptor(obj, keys[i]);
-    }
-    return descriptors;
-  };
-
-var formatRegExp = /%[sdj%]/g;
-exports.format = function(f) {
-  if (!isString(f)) {
-    var objects = [];
-    for (var i = 0; i < arguments.length; i++) {
-      objects.push(inspect(arguments[i]));
-    }
-    return objects.join(' ');
-  }
-
-  var i = 1;
-  var args = arguments;
-  var len = args.length;
-  var str = String(f).replace(formatRegExp, function(x) {
-    if (x === '%%') return '%';
-    if (i >= len) return x;
-    switch (x) {
-      case '%s': return String(args[i++]);
-      case '%d': return Number(args[i++]);
-      case '%j':
-        try {
-          return JSON.stringify(args[i++]);
-        } catch (_) {
-          return '[Circular]';
-        }
-      default:
-        return x;
-    }
-  });
-  for (var x = args[i]; i < len; x = args[++i]) {
-    if (isNull(x) || !isObject(x)) {
-      str += ' ' + x;
-    } else {
-      str += ' ' + inspect(x);
-    }
-  }
-  return str;
-};
-
-
-// Mark that a method should not be used.
-// Returns a modified function which warns once by default.
-// If --no-deprecation is set, then it is a no-op.
-exports.deprecate = function(fn, msg) {
-  if (typeof process !== 'undefined' && process.noDeprecation === true) {
-    return fn;
-  }
-
-  // Allow for deprecating things in the process of starting up.
-  if (typeof process === 'undefined') {
-    return function() {
-      return exports.deprecate(fn, msg).apply(this, arguments);
-    };
-  }
-
-  var warned = false;
-  function deprecated() {
-    if (!warned) {
-      if (process.throwDeprecation) {
-        throw new Error(msg);
-      } else if (process.traceDeprecation) {
-        console.trace(msg);
-      } else {
-        console.error(msg);
-      }
-      warned = true;
-    }
-    return fn.apply(this, arguments);
-  }
-
-  return deprecated;
-};
-
-
-var debugs = {};
-var debugEnvRegex = /^$/;
-
-if (process.env.NODE_DEBUG) {
-  var debugEnv = process.env.NODE_DEBUG;
-  debugEnv = debugEnv.replace(/[|\\{}()[\]^$+?.]/g, '\\$&')
-    .replace(/\*/g, '.*')
-    .replace(/,/g, '$|^')
-    .toUpperCase();
-  debugEnvRegex = new RegExp('^' + debugEnv + '$', 'i');
-}
-exports.debuglog = function(set) {
-  set = set.toUpperCase();
-  if (!debugs[set]) {
-    if (debugEnvRegex.test(set)) {
-      var pid = process.pid;
-      debugs[set] = function() {
-        var msg = exports.format.apply(exports, arguments);
-        console.error('%s %d: %s', set, pid, msg);
-      };
-    } else {
-      debugs[set] = function() {};
-    }
-  }
-  return debugs[set];
-};
-
-
-/**
- * Echos the value of a value. Trys to print the value out
- * in the best way possible given the different types.
- *
- * @param {Object} obj The object to print out.
- * @param {Object} opts Optional options object that alters the output.
- */
-/* legacy: obj, showHidden, depth, colors*/
-function inspect(obj, opts) {
-  // default options
-  var ctx = {
-    seen: [],
-    stylize: stylizeNoColor
-  };
-  // legacy...
-  if (arguments.length >= 3) ctx.depth = arguments[2];
-  if (arguments.length >= 4) ctx.colors = arguments[3];
-  if (isBoolean(opts)) {
-    // legacy...
-    ctx.showHidden = opts;
-  } else if (opts) {
-    // got an "options" object
-    exports._extend(ctx, opts);
-  }
-  // set default options
-  if (isUndefined(ctx.showHidden)) ctx.showHidden = false;
-  if (isUndefined(ctx.depth)) ctx.depth = 2;
-  if (isUndefined(ctx.colors)) ctx.colors = false;
-  if (isUndefined(ctx.customInspect)) ctx.customInspect = true;
-  if (ctx.colors) ctx.stylize = stylizeWithColor;
-  return formatValue(ctx, obj, ctx.depth);
-}
-exports.inspect = inspect;
-
-
-// http://en.wikipedia.org/wiki/ANSI_escape_code#graphics
-inspect.colors = {
-  'bold' : [1, 22],
-  'italic' : [3, 23],
-  'underline' : [4, 24],
-  'inverse' : [7, 27],
-  'white' : [37, 39],
-  'grey' : [90, 39],
-  'black' : [30, 39],
-  'blue' : [34, 39],
-  'cyan' : [36, 39],
-  'green' : [32, 39],
-  'magenta' : [35, 39],
-  'red' : [31, 39],
-  'yellow' : [33, 39]
-};
-
-// Don't use 'blue' not visible on cmd.exe
-inspect.styles = {
-  'special': 'cyan',
-  'number': 'yellow',
-  'boolean': 'yellow',
-  'undefined': 'grey',
-  'null': 'bold',
-  'string': 'green',
-  'date': 'magenta',
-  // "name": intentionally not styling
-  'regexp': 'red'
-};
-
-
-function stylizeWithColor(str, styleType) {
-  var style = inspect.styles[styleType];
-
-  if (style) {
-    return '\u001b[' + inspect.colors[style][0] + 'm' + str +
-           '\u001b[' + inspect.colors[style][1] + 'm';
-  } else {
-    return str;
-  }
-}
-
-
-function stylizeNoColor(str, styleType) {
-  return str;
-}
-
-
-function arrayToHash(array) {
-  var hash = {};
-
-  array.forEach(function(val, idx) {
-    hash[val] = true;
-  });
-
-  return hash;
-}
-
-
-function formatValue(ctx, value, recurseTimes) {
-  // Provide a hook for user-specified inspect functions.
-  // Check that value is an object with an inspect function on it
-  if (ctx.customInspect &&
-      value &&
-      isFunction(value.inspect) &&
-      // Filter out the util module, it's inspect function is special
-      value.inspect !== exports.inspect &&
-      // Also filter out any prototype objects using the circular check.
-      !(value.constructor && value.constructor.prototype === value)) {
-    var ret = value.inspect(recurseTimes, ctx);
-    if (!isString(ret)) {
-      ret = formatValue(ctx, ret, recurseTimes);
-    }
-    return ret;
-  }
-
-  // Primitive types cannot have properties
-  var primitive = formatPrimitive(ctx, value);
-  if (primitive) {
-    return primitive;
-  }
-
-  // Look up the keys of the object.
-  var keys = Object.keys(value);
-  var visibleKeys = arrayToHash(keys);
-
-  if (ctx.showHidden) {
-    keys = Object.getOwnPropertyNames(value);
-  }
-
-  // IE doesn't make error fields non-enumerable
-  // http://msdn.microsoft.com/en-us/library/ie/dww52sbt(v=vs.94).aspx
-  if (isError(value)
-      && (keys.indexOf('message') >= 0 || keys.indexOf('description') >= 0)) {
-    return formatError(value);
-  }
-
-  // Some type of object without properties can be shortcutted.
-  if (keys.length === 0) {
-    if (isFunction(value)) {
-      var name = value.name ? ': ' + value.name : '';
-      return ctx.stylize('[Function' + name + ']', 'special');
-    }
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    }
-    if (isDate(value)) {
-      return ctx.stylize(Date.prototype.toString.call(value), 'date');
-    }
-    if (isError(value)) {
-      return formatError(value);
-    }
-  }
-
-  var base = '', array = false, braces = ['{', '}'];
-
-  // Make Array say that they are Array
-  if (isArray(value)) {
-    array = true;
-    braces = ['[', ']'];
-  }
-
-  // Make functions say that they are functions
-  if (isFunction(value)) {
-    var n = value.name ? ': ' + value.name : '';
-    base = ' [Function' + n + ']';
-  }
-
-  // Make RegExps say that they are RegExps
-  if (isRegExp(value)) {
-    base = ' ' + RegExp.prototype.toString.call(value);
-  }
-
-  // Make dates with properties first say the date
-  if (isDate(value)) {
-    base = ' ' + Date.prototype.toUTCString.call(value);
-  }
-
-  // Make error with message first say the error
-  if (isError(value)) {
-    base = ' ' + formatError(value);
-  }
-
-  if (keys.length === 0 && (!array || value.length == 0)) {
-    return braces[0] + base + braces[1];
-  }
-
-  if (recurseTimes < 0) {
-    if (isRegExp(value)) {
-      return ctx.stylize(RegExp.prototype.toString.call(value), 'regexp');
-    } else {
-      return ctx.stylize('[Object]', 'special');
-    }
-  }
-
-  ctx.seen.push(value);
-
-  var output;
-  if (array) {
-    output = formatArray(ctx, value, recurseTimes, visibleKeys, keys);
-  } else {
-    output = keys.map(function(key) {
-      return formatProperty(ctx, value, recurseTimes, visibleKeys, key, array);
-    });
-  }
-
-  ctx.seen.pop();
-
-  return reduceToSingleString(output, base, braces);
-}
-
-
-function formatPrimitive(ctx, value) {
-  if (isUndefined(value))
-    return ctx.stylize('undefined', 'undefined');
-  if (isString(value)) {
-    var simple = '\'' + JSON.stringify(value).replace(/^"|"$/g, '')
-                                             .replace(/'/g, "\\'")
-                                             .replace(/\\"/g, '"') + '\'';
-    return ctx.stylize(simple, 'string');
-  }
-  if (isNumber(value))
-    return ctx.stylize('' + value, 'number');
-  if (isBoolean(value))
-    return ctx.stylize('' + value, 'boolean');
-  // For some reason typeof null is "object", so special case here.
-  if (isNull(value))
-    return ctx.stylize('null', 'null');
-}
-
-
-function formatError(value) {
-  return '[' + Error.prototype.toString.call(value) + ']';
-}
-
-
-function formatArray(ctx, value, recurseTimes, visibleKeys, keys) {
-  var output = [];
-  for (var i = 0, l = value.length; i < l; ++i) {
-    if (hasOwnProperty(value, String(i))) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          String(i), true));
-    } else {
-      output.push('');
-    }
-  }
-  keys.forEach(function(key) {
-    if (!key.match(/^\d+$/)) {
-      output.push(formatProperty(ctx, value, recurseTimes, visibleKeys,
-          key, true));
-    }
-  });
-  return output;
-}
-
-
-function formatProperty(ctx, value, recurseTimes, visibleKeys, key, array) {
-  var name, str, desc;
-  desc = Object.getOwnPropertyDescriptor(value, key) || { value: value[key] };
-  if (desc.get) {
-    if (desc.set) {
-      str = ctx.stylize('[Getter/Setter]', 'special');
-    } else {
-      str = ctx.stylize('[Getter]', 'special');
-    }
-  } else {
-    if (desc.set) {
-      str = ctx.stylize('[Setter]', 'special');
-    }
-  }
-  if (!hasOwnProperty(visibleKeys, key)) {
-    name = '[' + key + ']';
-  }
-  if (!str) {
-    if (ctx.seen.indexOf(desc.value) < 0) {
-      if (isNull(recurseTimes)) {
-        str = formatValue(ctx, desc.value, null);
-      } else {
-        str = formatValue(ctx, desc.value, recurseTimes - 1);
-      }
-      if (str.indexOf('\n') > -1) {
-        if (array) {
-          str = str.split('\n').map(function(line) {
-            return '  ' + line;
-          }).join('\n').substr(2);
-        } else {
-          str = '\n' + str.split('\n').map(function(line) {
-            return '   ' + line;
-          }).join('\n');
-        }
-      }
-    } else {
-      str = ctx.stylize('[Circular]', 'special');
-    }
-  }
-  if (isUndefined(name)) {
-    if (array && key.match(/^\d+$/)) {
-      return str;
-    }
-    name = JSON.stringify('' + key);
-    if (name.match(/^"([a-zA-Z_][a-zA-Z_0-9]*)"$/)) {
-      name = name.substr(1, name.length - 2);
-      name = ctx.stylize(name, 'name');
-    } else {
-      name = name.replace(/'/g, "\\'")
-                 .replace(/\\"/g, '"')
-                 .replace(/(^"|"$)/g, "'");
-      name = ctx.stylize(name, 'string');
-    }
-  }
-
-  return name + ': ' + str;
-}
-
-
-function reduceToSingleString(output, base, braces) {
-  var numLinesEst = 0;
-  var length = output.reduce(function(prev, cur) {
-    numLinesEst++;
-    if (cur.indexOf('\n') >= 0) numLinesEst++;
-    return prev + cur.replace(/\u001b\[\d\d?m/g, '').length + 1;
-  }, 0);
-
-  if (length > 60) {
-    return braces[0] +
-           (base === '' ? '' : base + '\n ') +
-           ' ' +
-           output.join(',\n  ') +
-           ' ' +
-           braces[1];
-  }
-
-  return braces[0] + base + ' ' + output.join(', ') + ' ' + braces[1];
-}
-
-
-// NOTE: These type checking functions intentionally don't use `instanceof`
-// because it is fragile and can be easily faked with `Object.create()`.
-exports.types = require('./support/types');
-
-function isArray(ar) {
-  return Array.isArray(ar);
-}
-exports.isArray = isArray;
-
-function isBoolean(arg) {
-  return typeof arg === 'boolean';
-}
-exports.isBoolean = isBoolean;
-
-function isNull(arg) {
-  return arg === null;
-}
-exports.isNull = isNull;
-
-function isNullOrUndefined(arg) {
-  return arg == null;
-}
-exports.isNullOrUndefined = isNullOrUndefined;
-
-function isNumber(arg) {
-  return typeof arg === 'number';
-}
-exports.isNumber = isNumber;
-
-function isString(arg) {
-  return typeof arg === 'string';
-}
-exports.isString = isString;
-
-function isSymbol(arg) {
-  return typeof arg === 'symbol';
-}
-exports.isSymbol = isSymbol;
-
-function isUndefined(arg) {
-  return arg === void 0;
-}
-exports.isUndefined = isUndefined;
-
-function isRegExp(re) {
-  return isObject(re) && objectToString(re) === '[object RegExp]';
-}
-exports.isRegExp = isRegExp;
-exports.types.isRegExp = isRegExp;
-
-function isObject(arg) {
-  return typeof arg === 'object' && arg !== null;
-}
-exports.isObject = isObject;
-
-function isDate(d) {
-  return isObject(d) && objectToString(d) === '[object Date]';
-}
-exports.isDate = isDate;
-exports.types.isDate = isDate;
-
-function isError(e) {
-  return isObject(e) &&
-      (objectToString(e) === '[object Error]' || e instanceof Error);
-}
-exports.isError = isError;
-exports.types.isNativeError = isError;
-
-function isFunction(arg) {
-  return typeof arg === 'function';
-}
-exports.isFunction = isFunction;
-
-function isPrimitive(arg) {
-  return arg === null ||
-         typeof arg === 'boolean' ||
-         typeof arg === 'number' ||
-         typeof arg === 'string' ||
-         typeof arg === 'symbol' ||  // ES6 symbol
-         typeof arg === 'undefined';
-}
-exports.isPrimitive = isPrimitive;
-
-exports.isBuffer = require('./support/isBuffer');
-
-function objectToString(o) {
-  return Object.prototype.toString.call(o);
-}
-
-
-function pad(n) {
-  return n < 10 ? '0' + n.toString(10) : n.toString(10);
-}
-
-
-var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep',
-              'Oct', 'Nov', 'Dec'];
-
-// 26 Feb 16:19:34
-function timestamp() {
-  var d = new Date();
-  var time = [pad(d.getHours()),
-              pad(d.getMinutes()),
-              pad(d.getSeconds())].join(':');
-  return [d.getDate(), months[d.getMonth()], time].join(' ');
-}
-
-
-// log is just a thin wrapper to console.log that prepends a timestamp
-exports.log = function() {
-  console.log('%s - %s', timestamp(), exports.format.apply(exports, arguments));
-};
-
-
-/**
- * Inherit the prototype methods from one constructor into another.
- *
- * The Function.prototype.inherits from lang.js rewritten as a standalone
- * function (not on Function.prototype). NOTE: If this file is to be loaded
- * during bootstrapping this function needs to be rewritten using some native
- * functions as prototype setup using normal JavaScript does not work as
- * expected during bootstrapping (see mirror.js in r114903).
- *
- * @param {function} ctor Constructor function which needs to inherit the
- *     prototype.
- * @param {function} superCtor Constructor function to inherit prototype from.
- */
-exports.inherits = require('inherits');
-
-exports._extend = function(origin, add) {
-  // Don't do anything if add isn't an object
-  if (!add || !isObject(add)) return origin;
-
-  var keys = Object.keys(add);
-  var i = keys.length;
-  while (i--) {
-    origin[keys[i]] = add[keys[i]];
-  }
-  return origin;
-};
-
-function hasOwnProperty(obj, prop) {
-  return Object.prototype.hasOwnProperty.call(obj, prop);
-}
-
-var kCustomPromisifiedSymbol = typeof Symbol !== 'undefined' ? Symbol('util.promisify.custom') : undefined;
-
-exports.promisify = function promisify(original) {
-  if (typeof original !== 'function')
-    throw new TypeError('The "original" argument must be of type Function');
-
-  if (kCustomPromisifiedSymbol && original[kCustomPromisifiedSymbol]) {
-    var fn = original[kCustomPromisifiedSymbol];
-    if (typeof fn !== 'function') {
-      throw new TypeError('The "util.promisify.custom" argument must be of type Function');
-    }
-    Object.defineProperty(fn, kCustomPromisifiedSymbol, {
-      value: fn, enumerable: false, writable: false, configurable: true
-    });
-    return fn;
-  }
-
-  function fn() {
-    var promiseResolve, promiseReject;
-    var promise = new Promise(function (resolve, reject) {
-      promiseResolve = resolve;
-      promiseReject = reject;
-    });
-
-    var args = [];
-    for (var i = 0; i < arguments.length; i++) {
-      args.push(arguments[i]);
-    }
-    args.push(function (err, value) {
-      if (err) {
-        promiseReject(err);
-      } else {
-        promiseResolve(value);
-      }
-    });
-
-    try {
-      original.apply(this, args);
-    } catch (err) {
-      promiseReject(err);
-    }
-
-    return promise;
-  }
-
-  Object.setPrototypeOf(fn, Object.getPrototypeOf(original));
-
-  if (kCustomPromisifiedSymbol) Object.defineProperty(fn, kCustomPromisifiedSymbol, {
-    value: fn, enumerable: false, writable: false, configurable: true
-  });
-  return Object.defineProperties(
-    fn,
-    getOwnPropertyDescriptors(original)
-  );
-}
-
-exports.promisify.custom = kCustomPromisifiedSymbol
-
-function callbackifyOnRejected(reason, cb) {
-  // `!reason` guard inspired by bluebird (Ref: https://goo.gl/t5IS6M).
-  // Because `null` is a special error value in callbacks which means "no error
-  // occurred", we error-wrap so the callback consumer can distinguish between
-  // "the promise rejected with null" or "the promise fulfilled with undefined".
-  if (!reason) {
-    var newReason = new Error('Promise was rejected with a falsy value');
-    newReason.reason = reason;
-    reason = newReason;
-  }
-  return cb(reason);
-}
-
-function callbackify(original) {
-  if (typeof original !== 'function') {
-    throw new TypeError('The "original" argument must be of type Function');
-  }
-
-  // We DO NOT return the promise as it gives the user a false sense that
-  // the promise is actually somehow related to the callback's execution
-  // and that the callback throwing will reject the promise.
-  function callbackified() {
-    var args = [];
-    for (var i = 0; i < arguments.length; i++) {
-      args.push(arguments[i]);
-    }
-
-    var maybeCb = args.pop();
-    if (typeof maybeCb !== 'function') {
-      throw new TypeError('The last argument must be of type Function');
-    }
-    var self = this;
-    var cb = function() {
-      return maybeCb.apply(self, arguments);
-    };
-    // In true node style we process the callback on `nextTick` with all the
-    // implications (stack, `uncaughtException`, `async_hooks`)
-    original.apply(this, args)
-      .then(function(ret) { process.nextTick(cb.bind(null, null, ret)) },
-            function(rej) { process.nextTick(callbackifyOnRejected.bind(null, rej, cb)) });
-  }
-
-  Object.setPrototypeOf(callbackified, Object.getPrototypeOf(original));
-  Object.defineProperties(callbackified,
-                          getOwnPropertyDescriptors(original));
-  return callbackified;
-}
-exports.callbackify = callbackify;
-
-}).call(this)}).call(this,require('_process'))
-},{"./support/isBuffer":72,"./support/types":73,"_process":71,"inherits":65}],75:[function(require,module,exports){
-(function (global){(function (){
-'use strict';
-
-var forEach = require('foreach');
-var availableTypedArrays = require('available-typed-arrays');
-var callBound = require('call-bind/callBound');
-
-var $toString = callBound('Object.prototype.toString');
-var hasSymbols = require('has-symbols')();
-var hasToStringTag = hasSymbols && typeof Symbol.toStringTag === 'symbol';
-
-var typedArrays = availableTypedArrays();
-
-var $slice = callBound('String.prototype.slice');
-var toStrTags = {};
-var gOPD = require('es-abstract/helpers/getOwnPropertyDescriptor');
-var getPrototypeOf = Object.getPrototypeOf; // require('getprototypeof');
-if (hasToStringTag && gOPD && getPrototypeOf) {
-	forEach(typedArrays, function (typedArray) {
-		if (typeof global[typedArray] === 'function') {
-			var arr = new global[typedArray]();
-			if (!(Symbol.toStringTag in arr)) {
-				throw new EvalError('this engine has support for Symbol.toStringTag, but ' + typedArray + ' does not have the property! Please report this.');
-			}
-			var proto = getPrototypeOf(arr);
-			var descriptor = gOPD(proto, Symbol.toStringTag);
-			if (!descriptor) {
-				var superProto = getPrototypeOf(proto);
-				descriptor = gOPD(superProto, Symbol.toStringTag);
-			}
-			toStrTags[typedArray] = descriptor.get;
-		}
-	});
-}
-
-var tryTypedArrays = function tryAllTypedArrays(value) {
-	var foundName = false;
-	forEach(toStrTags, function (getter, typedArray) {
-		if (!foundName) {
-			try {
-				var name = getter.call(value);
-				if (name === typedArray) {
-					foundName = name;
-				}
-			} catch (e) {}
-		}
-	});
-	return foundName;
-};
-
-var isTypedArray = require('is-typed-array');
-
-module.exports = function whichTypedArray(value) {
-	if (!isTypedArray(value)) { return false; }
-	if (!hasToStringTag) { return $slice($toString(value), 8, -1); }
-	return tryTypedArrays(value);
-};
 
-}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"available-typed-arrays":52,"call-bind/callBound":54,"es-abstract/helpers/getOwnPropertyDescriptor":57,"foreach":58,"has-symbols":62,"is-typed-array":68}]},{},[4])(4)
-});
+/***/ }),
+
+/***/ "../lib-es3/lib sync recursive":
+/*!****************************!*\
+  !*** ../lib-es3/lib/ sync ***!
+  \****************************/
+/***/ ((module) => {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = () => [];
+webpackEmptyContext.resolve = webpackEmptyContext;
+webpackEmptyContext.id = "../lib-es3/lib sync recursive";
+module.exports = webpackEmptyContext;
+
+/***/ }),
+
+/***/ "../lib-es3/package.json":
+/*!*******************************!*\
+  !*** ../lib-es3/package.json ***!
+  \*******************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse("{\"name\":\"markdownlint\",\"version\":\"0.22.0\",\"description\":\"A Node.js style checker and lint tool for Markdown/CommonMark files.\",\"main\":\"lib/markdownlint.js\",\"types\":\"lib/markdownlint.d.ts\",\"author\":\"David Anson (https://dlaa.me/)\",\"license\":\"MIT\",\"homepage\":\"https://github.com/DavidAnson/markdownlint\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/DavidAnson/markdownlint.git\"},\"bugs\":\"https://github.com/DavidAnson/markdownlint/issues\",\"scripts\":{\"test\":\"tape test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js\",\"test-cover\":\"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test\",\"test-declaration\":\"cd example/typescript && tsc && node type-check.js\",\"test-extra\":\"node test/markdownlint-test-extra.js\",\"lint\":\"eslint --max-warnings 0 .\",\"ci\":\"npm run test-cover && npm run lint && npm run build-declaration && npm run test-declaration && npm run build-config-schema && git diff --exit-code\",\"build-config-schema\":\"node schema/build-config-schema.js\",\"build-declaration\":\"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'\",\"build-demo\":\"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && webpack\",\"build-example\":\"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2\",\"example\":\"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint\",\"clone-test-repos\":\"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet\",\"clone-test-repos-large\":\"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet\",\"lint-test-repos\":\"node test/markdownlint-test-repos.js\",\"clean-test-repos\":\"rimraf test-repos\"},\"engines\":{\"node\":\">=10\"},\"dependencies\":{\"markdown-it\":\"12.0.2\"},\"devDependencies\":{\"@types/node\":\"~14.14.9\",\"c8\":\"~7.3.5\",\"cpy-cli\":\"~3.1.1\",\"eslint\":\"~7.14.0\",\"eslint-plugin-jsdoc\":\"~30.7.8\",\"eslint-plugin-node\":\"~11.1.0\",\"eslint-plugin-unicorn\":\"~23.0.0\",\"globby\":\"~11.0.1\",\"js-yaml\":\"~3.14.0\",\"markdown-it-for-inline\":\"~0.1.1\",\"markdown-it-sub\":\"~1.0.0\",\"markdown-it-sup\":\"~1.0.0\",\"markdown-it-texmath\":\"~0.8.0\",\"markdownlint-rule-helpers\":\"~0.12.0\",\"rimraf\":\"~3.0.2\",\"strip-json-comments\":\"~3.1.1\",\"tape\":\"~5.0.1\",\"tape-player\":\"~0.1.1\",\"toml\":\"~3.0.0\",\"tv4\":\"~1.3.0\",\"typescript\":\"~4.1.2\",\"webpack\":\"~5.11.1\",\"webpack-cli\":\"~4.3.1\"},\"keywords\":[\"markdown\",\"lint\",\"md\",\"CommonMark\",\"markdownlint\"]}");
+
+/***/ }),
+
+/***/ "markdown-it":
+/*!*****************************!*\
+  !*** external "markdownit" ***!
+  \*****************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = markdownit;
+
+/***/ }),
+
+/***/ "?65c5":
+/*!********************!*\
+  !*** fs (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?5533":
+/*!********************!*\
+  !*** os (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?0f27":
+/*!**********************!*\
+  !*** path (ignored) ***!
+  \**********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?0bed":
+/*!**********************!*\
+  !*** util (ignored) ***!
+  \**********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ })
+
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		if(__webpack_module_cache__[moduleId]) {
+/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => Object.prototype.hasOwnProperty.call(obj, prop)
+/******/ 	})();
+/******/ 	
+/************************************************************************/
+/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__("../lib-es3/lib/markdownlint.js");
+/******/ })()
+;

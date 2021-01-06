@@ -125,7 +125,8 @@
       case "#fix":
         var error = JSON.parse(decodeURIComponent(e.target.target));
         var errors = [ error ];
-        var fixed = window.helpers.applyFixes(markdown.value, errors);
+        var fixed =
+          window.markdownlintRuleHelpers.applyFixes(markdown.value, errors);
         markdown.value = fixed;
         onMarkdownInput();
         e.preventDefault();

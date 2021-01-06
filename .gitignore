@@ -1,7 +1,8 @@
 coverage
 demo/markdown-it.min.js
 demo/markdownlint-browser.min.js
-demo/markdownlint-rule-helpers-browser.js
+demo/markdownlint-browser.min.js.LICENSE.txt
+demo/markdownlint-rule-helpers-browser.*
 lib-es3
 node_modules
 !test/node_modules
