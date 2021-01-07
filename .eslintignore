@@ -4,4 +4,3 @@ demo/markdownlint-browser.min.js
 demo/markdownlint-rule-helpers-browser.js
 demo/markdownlint-rule-helpers-browser.min.js
 example/typescript/type-check.js
-lib-es3/

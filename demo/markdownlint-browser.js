@@ -3,10 +3,28 @@ var markdownlint;markdownlint =
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../lib-es3/helpers/helpers.js":
-/*!*************************************!*\
-  !*** ../lib-es3/helpers/helpers.js ***!
-  \*************************************/
+/***/ "../lib sync recursive":
+/*!********************!*\
+  !*** ../lib/ sync ***!
+  \********************/
+/***/ ((module) => {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = () => [];
+webpackEmptyContext.resolve = webpackEmptyContext;
+webpackEmptyContext.id = "../lib sync recursive";
+module.exports = webpackEmptyContext;
+
+/***/ }),
+
+/***/ "../helpers/helpers.js":
+/*!*****************************!*\
+  !*** ../helpers/helpers.js ***!
+  \*****************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -671,10 +689,10 @@ module.exports.applyFixes = function applyFixes(input, errors) {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/cache.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/cache.js ***!
-  \*******************************/
+/***/ "../lib/cache.js":
+/*!***********************!*\
+  !*** ../lib/cache.js ***!
+  \***********************/
 /***/ ((module) => {
 
 "use strict";
@@ -702,10 +720,10 @@ module.exports.clear = function () {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/markdownlint.js":
-/*!**************************************!*\
-  !*** ../lib-es3/lib/markdownlint.js ***!
-  \**************************************/
+/***/ "../lib/markdownlint.js":
+/*!******************************!*\
+  !*** ../lib/markdownlint.js ***!
+  \******************************/
 /***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
@@ -733,9 +751,9 @@ var fs = __webpack_require__(/*! fs */ "?65c5");
 var path = __webpack_require__(/*! path */ "?0f27");
 var promisify = __webpack_require__(/*! util */ "?0bed").promisify;
 var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
-var rules = __webpack_require__(/*! ./rules */ "../lib-es3/lib/rules.js");
-var helpers = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js");
-var cache = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js");
+var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
+var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 var deprecatedRuleNames = ["MD002", "MD006"];
 /**
  * Validate the list of rules for structure and reuse.
@@ -1568,7 +1586,7 @@ function resolveConfigExtends(configFile, referenceId) {
         // If not a file or fs.statSync throws, try require.resolve
     }
     try {
-        return __webpack_require__("../lib-es3/lib sync recursive").resolve(referenceId, { "paths": [configFileDirname] });
+        return __webpack_require__("../lib sync recursive").resolve(referenceId, { "paths": [configFileDirname] });
     }
     catch (_b) {
         // If require.resolve throws, return resolvedExtendsFile
@@ -1659,7 +1677,7 @@ function readConfigSync(file, parsers) {
  * @returns {string} SemVer string.
  */
 function getVersion() {
-    return __webpack_require__(/*! ../package.json */ "../lib-es3/package.json").version;
+    return __webpack_require__(/*! ../package.json */ "../package.json").version;
 }
 // Export a/synchronous/Promise APIs
 markdownlint.sync = markdownlintSync;
@@ -1675,16 +1693,16 @@ module.exports = markdownlint;
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md001.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md001.js ***!
-  \*******************************/
+/***/ "../lib/md001.js":
+/*!***********************!*\
+  !*** ../lib/md001.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD001", "heading-increment", "header-increment"],
     "description": "Heading levels should only increment by one level at a time",
@@ -1704,16 +1722,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md002.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md002.js ***!
-  \*******************************/
+/***/ "../lib/md002.js":
+/*!***********************!*\
+  !*** ../lib/md002.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addErrorDetailIf;
+var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
 module.exports = {
     "names": ["MD002", "first-heading-h1", "first-header-h1"],
     "description": "First heading should be a top-level heading",
@@ -1734,16 +1752,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md003.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md003.js ***!
-  \*******************************/
+/***/ "../lib/md003.js":
+/*!***********************!*\
+  !*** ../lib/md003.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
 module.exports = {
     "names": ["MD003", "heading-style", "header-style"],
     "description": "Heading style",
@@ -1781,17 +1799,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md004.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md004.js ***!
-  \*******************************/
+/***/ "../lib/md004.js":
+/*!***********************!*\
+  !*** ../lib/md004.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp, unorderedListStyleFor = _a.unorderedListStyleFor;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp, unorderedListStyleFor = _a.unorderedListStyleFor;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD004", "ul-style"],
     "description": "Unordered list style",
@@ -1829,17 +1847,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md005.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md005.js ***!
-  \*******************************/
+/***/ "../lib/md005.js":
+/*!***********************!*\
+  !*** ../lib/md005.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD005", "list-indent"],
     "description": "Inconsistent indentation for list items at the same level",
@@ -1893,17 +1911,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md006.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md006.js ***!
-  \*******************************/
+/***/ "../lib/md006.js":
+/*!***********************!*\
+  !*** ../lib/md006.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD006", "ul-start-left"],
     "description": "Consider starting bulleted lists at the beginning of the line",
@@ -1925,17 +1943,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md007.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md007.js ***!
-  \*******************************/
+/***/ "../lib/md007.js":
+/*!***********************!*\
+  !*** ../lib/md007.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD007", "ul-indent"],
     "description": "Unordered list indentation",
@@ -1971,17 +1989,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md009.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md009.js ***!
-  \*******************************/
+/***/ "../lib/md009.js":
+/*!***********************!*\
+  !*** ../lib/md009.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe, numericSortAscending = _a.numericSortAscending;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe, numericSortAscending = _a.numericSortAscending;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD009", "no-trailing-spaces"],
     "description": "Trailing spaces",
@@ -2047,17 +2065,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md010.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md010.js ***!
-  \*******************************/
+/***/ "../lib/md010.js":
+/*!***********************!*\
+  !*** ../lib/md010.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 var tabRe = /\t+/g;
 module.exports = {
     "names": ["MD010", "no-hard-tabs"],
@@ -2086,16 +2104,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md011.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md011.js ***!
-  \*******************************/
+/***/ "../lib/md011.js":
+/*!***********************!*\
+  !*** ../lib/md011.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild, unescapeMarkdown = _a.unescapeMarkdown;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild, unescapeMarkdown = _a.unescapeMarkdown;
 var reversedLinkRe = /\(([^)]+)\)\[([^\]^][^\]]*)]/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
@@ -2127,17 +2145,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md012.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md012.js ***!
-  \*******************************/
+/***/ "../lib/md012.js":
+/*!***********************!*\
+  !*** ../lib/md012.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD012", "no-multiple-blanks"],
     "description": "Multiple consecutive blank lines",
@@ -2159,17 +2177,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md013.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md013.js ***!
-  \*******************************/
+/***/ "../lib/md013.js":
+/*!***********************!*\
+  !*** ../lib/md013.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 var longLineRePrefix = "^.{";
 var longLineRePostfixRelaxed = "}.*\\s.*$";
 var longLineRePostfixStrict = "}.+$";
@@ -2251,16 +2269,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md014.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md014.js ***!
-  \*******************************/
+/***/ "../lib/md014.js":
+/*!***********************!*\
+  !*** ../lib/md014.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 var dollarCommandRe = /^(\s*)(\$\s+)/;
 module.exports = {
     "names": ["MD014", "commands-show-output"],
@@ -2304,17 +2322,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md018.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md018.js ***!
-  \*******************************/
+/***/ "../lib/md018.js":
+/*!***********************!*\
+  !*** ../lib/md018.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD018", "no-missing-space-atx"],
     "description": "No space after hash on atx style heading",
@@ -2338,16 +2356,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md019.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md019.js ***!
-  \*******************************/
+/***/ "../lib/md019.js":
+/*!***********************!*\
+  !*** ../lib/md019.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
 module.exports = {
     "names": ["MD019", "no-multiple-space-atx"],
     "description": "Multiple spaces after hash on atx style heading",
@@ -2372,17 +2390,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md020.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md020.js ***!
-  \*******************************/
+/***/ "../lib/md020.js":
+/*!***********************!*\
+  !*** ../lib/md020.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD020", "no-missing-space-closed-atx"],
     "description": "No space inside hashes on closed atx style heading",
@@ -2423,16 +2441,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md021.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md021.js ***!
-  \*******************************/
+/***/ "../lib/md021.js":
+/*!***********************!*\
+  !*** ../lib/md021.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
 module.exports = {
     "names": ["MD021", "no-multiple-space-closed-atx"],
     "description": "Multiple spaces inside hashes on closed atx style heading",
@@ -2474,16 +2492,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md022.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md022.js ***!
-  \*******************************/
+/***/ "../lib/md022.js":
+/*!***********************!*\
+  !*** ../lib/md022.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, isBlankLine = _a.isBlankLine;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, isBlankLine = _a.isBlankLine;
 module.exports = {
     "names": ["MD022", "blanks-around-headings", "blanks-around-headers"],
     "description": "Headings should be surrounded by blank lines",
@@ -2522,16 +2540,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md023.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md023.js ***!
-  \*******************************/
+/***/ "../lib/md023.js":
+/*!***********************!*\
+  !*** ../lib/md023.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 var spaceBeforeHeadingRe = /^((?:\s+)|(?:[>\s]+\s\s))[^>\s]/;
 module.exports = {
     "names": ["MD023", "heading-start-left", "header-start-left"],
@@ -2560,16 +2578,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md024.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md024.js ***!
-  \*******************************/
+/***/ "../lib/md024.js":
+/*!***********************!*\
+  !*** ../lib/md024.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachHeading = _a.forEachHeading;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachHeading = _a.forEachHeading;
 module.exports = {
     "names": ["MD024", "no-duplicate-heading", "no-duplicate-header"],
     "description": "Multiple headings with the same content",
@@ -2606,16 +2624,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md025.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md025.js ***!
-  \*******************************/
+/***/ "../lib/md025.js":
+/*!***********************!*\
+  !*** ../lib/md025.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, frontMatterHasTitle = _a.frontMatterHasTitle;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, frontMatterHasTitle = _a.frontMatterHasTitle;
 module.exports = {
     "names": ["MD025", "single-title", "single-h1"],
     "description": "Multiple top-level headings in the same document",
@@ -2641,16 +2659,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md026.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md026.js ***!
-  \*******************************/
+/***/ "../lib/md026.js":
+/*!***********************!*\
+  !*** ../lib/md026.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, allPunctuationNoQuestion = _a.allPunctuationNoQuestion, escapeForRegExp = _a.escapeForRegExp, forEachHeading = _a.forEachHeading;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, allPunctuationNoQuestion = _a.allPunctuationNoQuestion, escapeForRegExp = _a.escapeForRegExp, forEachHeading = _a.forEachHeading;
 var endOfLineHtmlEntityRe = /&#?[0-9a-zA-Z]+;$/;
 module.exports = {
     "names": ["MD026", "no-trailing-punctuation"],
@@ -2680,16 +2698,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md027.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md027.js ***!
-  \*******************************/
+/***/ "../lib/md027.js":
+/*!***********************!*\
+  !*** ../lib/md027.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, newLineRe = _a.newLineRe;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, newLineRe = _a.newLineRe;
 var spaceAfterBlockQuoteRe = /^((?:\s*>)+)(\s{2,})\S/;
 module.exports = {
     "names": ["MD027", "no-multiple-space-blockquote"],
@@ -2735,16 +2753,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md028.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md028.js ***!
-  \*******************************/
+/***/ "../lib/md028.js":
+/*!***********************!*\
+  !*** ../lib/md028.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var addError = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addError;
+var addError = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addError;
 module.exports = {
     "names": ["MD028", "no-blanks-blockquote"],
     "description": "Blank line inside blockquote",
@@ -2770,17 +2788,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md029.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md029.js ***!
-  \*******************************/
+/***/ "../lib/md029.js":
+/*!***********************!*\
+  !*** ../lib/md029.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 var listStyleExamples = {
     "one": "1/1/1",
     "ordered": "1/2/3",
@@ -2840,17 +2858,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md030.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md030.js ***!
-  \*******************************/
+/***/ "../lib/md030.js":
+/*!***********************!*\
+  !*** ../lib/md030.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addErrorDetailIf;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 module.exports = {
     "names": ["MD030", "list-marker-space"],
     "description": "Spaces after list markers",
@@ -2889,17 +2907,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md031.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md031.js ***!
-  \*******************************/
+/***/ "../lib/md031.js":
+/*!***********************!*\
+  !*** ../lib/md031.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 var codeFencePrefixRe = /^(.*?)\s*[`~]/;
 module.exports = {
     "names": ["MD031", "blanks-around-fences"],
@@ -2929,17 +2947,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md032.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md032.js ***!
-  \*******************************/
+/***/ "../lib/md032.js":
+/*!***********************!*\
+  !*** ../lib/md032.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, isBlankLine = _a.isBlankLine;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").flattenedLists;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, isBlankLine = _a.isBlankLine;
+var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
 var quotePrefixRe = /^[>\s]*/;
 module.exports = {
     "names": ["MD032", "blanks-around-lists"],
@@ -2972,17 +2990,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md033.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md033.js ***!
-  \*******************************/
+/***/ "../lib/md033.js":
+/*!***********************!*\
+  !*** ../lib/md033.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
 var inlineCodeRe = /^[^`]*(`+[^`]+`+[^`]+)*`+[^`]*$/;
@@ -3023,16 +3041,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md034.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md034.js ***!
-  \*******************************/
+/***/ "../lib/md034.js":
+/*!***********************!*\
+  !*** ../lib/md034.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, bareUrlRe = _a.bareUrlRe, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, bareUrlRe = _a.bareUrlRe, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD034", "no-bare-urls"],
     "description": "Bare URL used",
@@ -3084,16 +3102,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md035.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md035.js ***!
-  \*******************************/
+/***/ "../lib/md035.js":
+/*!***********************!*\
+  !*** ../lib/md035.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD035", "hr-style"],
     "description": "Horizontal rule style",
@@ -3113,16 +3131,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md036.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md036.js ***!
-  \*******************************/
+/***/ "../lib/md036.js":
+/*!***********************!*\
+  !*** ../lib/md036.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, allPunctuation = _a.allPunctuation;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, allPunctuation = _a.allPunctuation;
 module.exports = {
     "names": ["MD036", "no-emphasis-as-heading", "no-emphasis-as-header"],
     "description": "Emphasis used instead of a heading",
@@ -3178,17 +3196,17 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md037.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md037.js ***!
-  \*******************************/
+/***/ "../lib/md037.js":
+/*!***********************!*\
+  !*** ../lib/md037.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib-es3/lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
@@ -3334,16 +3352,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md038.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md038.js ***!
-  \*******************************/
+/***/ "../lib/md038.js":
+/*!***********************!*\
+  !*** ../lib/md038.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe;
 var leftSpaceRe = /^\s([^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
 var singleLeftRightSpaceRe = /^\s(?:\S.*\S|\S)\s$/;
@@ -3397,16 +3415,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md039.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md039.js ***!
-  \*******************************/
+/***/ "../lib/md039.js":
+/*!***********************!*\
+  !*** ../lib/md039.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 var spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=\(\S*\))/;
 module.exports = {
     "names": ["MD039", "no-space-in-links"],
@@ -3463,16 +3481,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md040.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md040.js ***!
-  \*******************************/
+/***/ "../lib/md040.js":
+/*!***********************!*\
+  !*** ../lib/md040.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD040", "fenced-code-language"],
     "description": "Fenced code blocks should have a language specified",
@@ -3489,16 +3507,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md041.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md041.js ***!
-  \*******************************/
+/***/ "../lib/md041.js":
+/*!***********************!*\
+  !*** ../lib/md041.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, frontMatterHasTitle = _a.frontMatterHasTitle;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, frontMatterHasTitle = _a.frontMatterHasTitle;
 module.exports = {
     "names": ["MD041", "first-line-heading", "first-line-h1"],
     "description": "First line in a file should be a top-level heading",
@@ -3524,16 +3542,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md042.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md042.js ***!
-  \*******************************/
+/***/ "../lib/md042.js":
+/*!***********************!*\
+  !*** ../lib/md042.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
 var emptyLinkRe = /\[[^\]]*](?:\((?:#?|(?:<>))\))/;
 module.exports = {
     "names": ["MD042", "no-empty-links"],
@@ -3572,16 +3590,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md043.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md043.js ***!
-  \*******************************/
+/***/ "../lib/md043.js":
+/*!***********************!*\
+  !*** ../lib/md043.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorContext = _a.addErrorContext, addErrorDetailIf = _a.addErrorDetailIf, forEachHeading = _a.forEachHeading;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, addErrorDetailIf = _a.addErrorDetailIf, forEachHeading = _a.forEachHeading;
 module.exports = {
     "names": ["MD043", "required-headings", "required-headers"],
     "description": "Required heading structure",
@@ -3606,7 +3624,7 @@ module.exports = {
                     var expected = getExpected_1();
                     if (expected === "*") {
                         matchAny_1 = true;
-                        expected = getExpected_1();
+                        getExpected_1();
                     }
                     else if (expected === "+") {
                         matchAny_1 = true;
@@ -3635,16 +3653,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md044.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md044.js ***!
-  \*******************************/
+/***/ "../lib/md044.js":
+/*!***********************!*\
+  !*** ../lib/md044.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, newLineRe = _a.newLineRe;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, newLineRe = _a.newLineRe;
 var startNonWordRe = /^\W/;
 var endNonWordRe = /\W$/;
 module.exports = {
@@ -3727,16 +3745,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md045.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md045.js ***!
-  \*******************************/
+/***/ "../lib/md045.js":
+/*!***********************!*\
+  !*** ../lib/md045.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild;
 module.exports = {
     "names": ["MD045", "no-alt-text"],
     "description": "Images should have alternate text (alt text)",
@@ -3753,16 +3771,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md046.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md046.js ***!
-  \*******************************/
+/***/ "../lib/md046.js":
+/*!***********************!*\
+  !*** ../lib/md046.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js").addErrorDetailIf;
+var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
 var tokenTypeToStyle = {
     "fence": "fenced",
     "code_block": "indented"
@@ -3788,16 +3806,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md047.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md047.js ***!
-  \*******************************/
+/***/ "../lib/md047.js":
+/*!***********************!*\
+  !*** ../lib/md047.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addError = _a.addError, isBlankLine = _a.isBlankLine;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, isBlankLine = _a.isBlankLine;
 module.exports = {
     "names": ["MD047", "single-trailing-newline"],
     "description": "Files should end with a single newline character",
@@ -3817,16 +3835,16 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/md048.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/md048.js ***!
-  \*******************************/
+/***/ "../lib/md048.js":
+/*!***********************!*\
+  !*** ../lib/md048.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../lib-es3/helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, fencedCodeBlockStyleFor = _a.fencedCodeBlockStyleFor;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, fencedCodeBlockStyleFor = _a.fencedCodeBlockStyleFor;
 module.exports = {
     "names": ["MD048", "code-fence-style"],
     "description": "Code fence style",
@@ -3849,63 +3867,63 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib-es3/lib/rules.js":
-/*!*******************************!*\
-  !*** ../lib-es3/lib/rules.js ***!
-  \*******************************/
+/***/ "../lib/rules.js":
+/*!***********************!*\
+  !*** ../lib/rules.js ***!
+  \***********************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
-var packageJson = __webpack_require__(/*! ../package.json */ "../lib-es3/package.json");
+var packageJson = __webpack_require__(/*! ../package.json */ "../package.json");
 var homepage = packageJson.homepage;
 var version = packageJson.version;
 var rules = [
-    __webpack_require__(/*! ./md001 */ "../lib-es3/lib/md001.js"),
-    __webpack_require__(/*! ./md002 */ "../lib-es3/lib/md002.js"),
-    __webpack_require__(/*! ./md003 */ "../lib-es3/lib/md003.js"),
-    __webpack_require__(/*! ./md004 */ "../lib-es3/lib/md004.js"),
-    __webpack_require__(/*! ./md005 */ "../lib-es3/lib/md005.js"),
-    __webpack_require__(/*! ./md006 */ "../lib-es3/lib/md006.js"),
-    __webpack_require__(/*! ./md007 */ "../lib-es3/lib/md007.js"),
-    __webpack_require__(/*! ./md009 */ "../lib-es3/lib/md009.js"),
-    __webpack_require__(/*! ./md010 */ "../lib-es3/lib/md010.js"),
-    __webpack_require__(/*! ./md011 */ "../lib-es3/lib/md011.js"),
-    __webpack_require__(/*! ./md012 */ "../lib-es3/lib/md012.js"),
-    __webpack_require__(/*! ./md013 */ "../lib-es3/lib/md013.js"),
-    __webpack_require__(/*! ./md014 */ "../lib-es3/lib/md014.js"),
-    __webpack_require__(/*! ./md018 */ "../lib-es3/lib/md018.js"),
-    __webpack_require__(/*! ./md019 */ "../lib-es3/lib/md019.js"),
-    __webpack_require__(/*! ./md020 */ "../lib-es3/lib/md020.js"),
-    __webpack_require__(/*! ./md021 */ "../lib-es3/lib/md021.js"),
-    __webpack_require__(/*! ./md022 */ "../lib-es3/lib/md022.js"),
-    __webpack_require__(/*! ./md023 */ "../lib-es3/lib/md023.js"),
-    __webpack_require__(/*! ./md024 */ "../lib-es3/lib/md024.js"),
-    __webpack_require__(/*! ./md025 */ "../lib-es3/lib/md025.js"),
-    __webpack_require__(/*! ./md026 */ "../lib-es3/lib/md026.js"),
-    __webpack_require__(/*! ./md027 */ "../lib-es3/lib/md027.js"),
-    __webpack_require__(/*! ./md028 */ "../lib-es3/lib/md028.js"),
-    __webpack_require__(/*! ./md029 */ "../lib-es3/lib/md029.js"),
-    __webpack_require__(/*! ./md030 */ "../lib-es3/lib/md030.js"),
-    __webpack_require__(/*! ./md031 */ "../lib-es3/lib/md031.js"),
-    __webpack_require__(/*! ./md032 */ "../lib-es3/lib/md032.js"),
-    __webpack_require__(/*! ./md033 */ "../lib-es3/lib/md033.js"),
-    __webpack_require__(/*! ./md034 */ "../lib-es3/lib/md034.js"),
-    __webpack_require__(/*! ./md035 */ "../lib-es3/lib/md035.js"),
-    __webpack_require__(/*! ./md036 */ "../lib-es3/lib/md036.js"),
-    __webpack_require__(/*! ./md037 */ "../lib-es3/lib/md037.js"),
-    __webpack_require__(/*! ./md038 */ "../lib-es3/lib/md038.js"),
-    __webpack_require__(/*! ./md039 */ "../lib-es3/lib/md039.js"),
-    __webpack_require__(/*! ./md040 */ "../lib-es3/lib/md040.js"),
-    __webpack_require__(/*! ./md041 */ "../lib-es3/lib/md041.js"),
-    __webpack_require__(/*! ./md042 */ "../lib-es3/lib/md042.js"),
-    __webpack_require__(/*! ./md043 */ "../lib-es3/lib/md043.js"),
-    __webpack_require__(/*! ./md044 */ "../lib-es3/lib/md044.js"),
-    __webpack_require__(/*! ./md045 */ "../lib-es3/lib/md045.js"),
-    __webpack_require__(/*! ./md046 */ "../lib-es3/lib/md046.js"),
-    __webpack_require__(/*! ./md047 */ "../lib-es3/lib/md047.js"),
-    __webpack_require__(/*! ./md048 */ "../lib-es3/lib/md048.js")
+    __webpack_require__(/*! ./md001 */ "../lib/md001.js"),
+    __webpack_require__(/*! ./md002 */ "../lib/md002.js"),
+    __webpack_require__(/*! ./md003 */ "../lib/md003.js"),
+    __webpack_require__(/*! ./md004 */ "../lib/md004.js"),
+    __webpack_require__(/*! ./md005 */ "../lib/md005.js"),
+    __webpack_require__(/*! ./md006 */ "../lib/md006.js"),
+    __webpack_require__(/*! ./md007 */ "../lib/md007.js"),
+    __webpack_require__(/*! ./md009 */ "../lib/md009.js"),
+    __webpack_require__(/*! ./md010 */ "../lib/md010.js"),
+    __webpack_require__(/*! ./md011 */ "../lib/md011.js"),
+    __webpack_require__(/*! ./md012 */ "../lib/md012.js"),
+    __webpack_require__(/*! ./md013 */ "../lib/md013.js"),
+    __webpack_require__(/*! ./md014 */ "../lib/md014.js"),
+    __webpack_require__(/*! ./md018 */ "../lib/md018.js"),
+    __webpack_require__(/*! ./md019 */ "../lib/md019.js"),
+    __webpack_require__(/*! ./md020 */ "../lib/md020.js"),
+    __webpack_require__(/*! ./md021 */ "../lib/md021.js"),
+    __webpack_require__(/*! ./md022 */ "../lib/md022.js"),
+    __webpack_require__(/*! ./md023 */ "../lib/md023.js"),
+    __webpack_require__(/*! ./md024 */ "../lib/md024.js"),
+    __webpack_require__(/*! ./md025 */ "../lib/md025.js"),
+    __webpack_require__(/*! ./md026 */ "../lib/md026.js"),
+    __webpack_require__(/*! ./md027 */ "../lib/md027.js"),
+    __webpack_require__(/*! ./md028 */ "../lib/md028.js"),
+    __webpack_require__(/*! ./md029 */ "../lib/md029.js"),
+    __webpack_require__(/*! ./md030 */ "../lib/md030.js"),
+    __webpack_require__(/*! ./md031 */ "../lib/md031.js"),
+    __webpack_require__(/*! ./md032 */ "../lib/md032.js"),
+    __webpack_require__(/*! ./md033 */ "../lib/md033.js"),
+    __webpack_require__(/*! ./md034 */ "../lib/md034.js"),
+    __webpack_require__(/*! ./md035 */ "../lib/md035.js"),
+    __webpack_require__(/*! ./md036 */ "../lib/md036.js"),
+    __webpack_require__(/*! ./md037 */ "../lib/md037.js"),
+    __webpack_require__(/*! ./md038 */ "../lib/md038.js"),
+    __webpack_require__(/*! ./md039 */ "../lib/md039.js"),
+    __webpack_require__(/*! ./md040 */ "../lib/md040.js"),
+    __webpack_require__(/*! ./md041 */ "../lib/md041.js"),
+    __webpack_require__(/*! ./md042 */ "../lib/md042.js"),
+    __webpack_require__(/*! ./md043 */ "../lib/md043.js"),
+    __webpack_require__(/*! ./md044 */ "../lib/md044.js"),
+    __webpack_require__(/*! ./md045 */ "../lib/md045.js"),
+    __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
+    __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
+    __webpack_require__(/*! ./md048 */ "../lib/md048.js")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
@@ -3917,32 +3935,14 @@ module.exports = rules;
 
 /***/ }),
 
-/***/ "../lib-es3/lib sync recursive":
-/*!****************************!*\
-  !*** ../lib-es3/lib/ sync ***!
-  \****************************/
-/***/ ((module) => {
-
-function webpackEmptyContext(req) {
-	var e = new Error("Cannot find module '" + req + "'");
-	e.code = 'MODULE_NOT_FOUND';
-	throw e;
-}
-webpackEmptyContext.keys = () => [];
-webpackEmptyContext.resolve = webpackEmptyContext;
-webpackEmptyContext.id = "../lib-es3/lib sync recursive";
-module.exports = webpackEmptyContext;
-
-/***/ }),
-
-/***/ "../lib-es3/package.json":
-/*!*******************************!*\
-  !*** ../lib-es3/package.json ***!
-  \*******************************/
+/***/ "../package.json":
+/*!***********************!*\
+  !*** ../package.json ***!
+  \***********************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"markdownlint\",\"version\":\"0.22.0\",\"description\":\"A Node.js style checker and lint tool for Markdown/CommonMark files.\",\"main\":\"lib/markdownlint.js\",\"types\":\"lib/markdownlint.d.ts\",\"author\":\"David Anson (https://dlaa.me/)\",\"license\":\"MIT\",\"homepage\":\"https://github.com/DavidAnson/markdownlint\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/DavidAnson/markdownlint.git\"},\"bugs\":\"https://github.com/DavidAnson/markdownlint/issues\",\"scripts\":{\"test\":\"tape test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js\",\"test-cover\":\"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test\",\"test-declaration\":\"cd example/typescript && tsc && node type-check.js\",\"test-extra\":\"node test/markdownlint-test-extra.js\",\"lint\":\"eslint --max-warnings 0 .\",\"ci\":\"npm run test-cover && npm run lint && npm run build-declaration && npm run test-declaration && npm run build-config-schema && git diff --exit-code\",\"build-config-schema\":\"node schema/build-config-schema.js\",\"build-declaration\":\"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'\",\"build-demo\":\"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && tsc --allowJs --resolveJsonModule --outDir ../lib-es3 ../lib/markdownlint.js && cpy ../helpers/package.json ../lib-es3/helpers && webpack\",\"build-example\":\"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2\",\"example\":\"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint\",\"clone-test-repos\":\"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet\",\"clone-test-repos-large\":\"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet\",\"lint-test-repos\":\"node test/markdownlint-test-repos.js\",\"clean-test-repos\":\"rimraf test-repos\"},\"engines\":{\"node\":\">=10\"},\"dependencies\":{\"markdown-it\":\"12.0.2\"},\"devDependencies\":{\"@types/node\":\"~14.14.9\",\"c8\":\"~7.3.5\",\"cpy-cli\":\"~3.1.1\",\"eslint\":\"~7.14.0\",\"eslint-plugin-jsdoc\":\"~30.7.8\",\"eslint-plugin-node\":\"~11.1.0\",\"eslint-plugin-unicorn\":\"~23.0.0\",\"globby\":\"~11.0.1\",\"js-yaml\":\"~3.14.0\",\"markdown-it-for-inline\":\"~0.1.1\",\"markdown-it-sub\":\"~1.0.0\",\"markdown-it-sup\":\"~1.0.0\",\"markdown-it-texmath\":\"~0.8.0\",\"markdownlint-rule-helpers\":\"~0.12.0\",\"rimraf\":\"~3.0.2\",\"strip-json-comments\":\"~3.1.1\",\"tape\":\"~5.0.1\",\"tape-player\":\"~0.1.1\",\"toml\":\"~3.0.0\",\"tv4\":\"~1.3.0\",\"typescript\":\"~4.1.2\",\"webpack\":\"~5.11.1\",\"webpack-cli\":\"~4.3.1\"},\"keywords\":[\"markdown\",\"lint\",\"md\",\"CommonMark\",\"markdownlint\"]}");
+module.exports = JSON.parse("{\"name\":\"markdownlint\",\"version\":\"0.22.0\",\"description\":\"A Node.js style checker and lint tool for Markdown/CommonMark files.\",\"main\":\"lib/markdownlint.js\",\"types\":\"lib/markdownlint.d.ts\",\"author\":\"David Anson (https://dlaa.me/)\",\"license\":\"MIT\",\"homepage\":\"https://github.com/DavidAnson/markdownlint\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/DavidAnson/markdownlint.git\"},\"bugs\":\"https://github.com/DavidAnson/markdownlint/issues\",\"scripts\":{\"test\":\"tape test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js\",\"test-cover\":\"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test\",\"test-declaration\":\"cd example/typescript && tsc && node type-check.js\",\"test-extra\":\"node test/markdownlint-test-extra.js\",\"lint\":\"eslint --max-warnings 0 .\",\"ci\":\"npm run test-cover && npm run lint && npm run build-declaration && npm run test-declaration && npm run build-config-schema && git diff --exit-code\",\"build-config-schema\":\"node schema/build-config-schema.js\",\"build-declaration\":\"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'\",\"build-demo\":\"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack\",\"build-example\":\"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2\",\"example\":\"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint\",\"clone-test-repos\":\"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet\",\"clone-test-repos-large\":\"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet\",\"lint-test-repos\":\"node test/markdownlint-test-repos.js\",\"clean-test-repos\":\"rimraf test-repos\"},\"engines\":{\"node\":\">=10\"},\"dependencies\":{\"markdown-it\":\"12.0.2\"},\"devDependencies\":{\"@types/node\":\"~14.14.9\",\"c8\":\"~7.3.5\",\"cpy-cli\":\"~3.1.1\",\"eslint\":\"~7.14.0\",\"eslint-plugin-jsdoc\":\"~30.7.8\",\"eslint-plugin-node\":\"~11.1.0\",\"eslint-plugin-unicorn\":\"~23.0.0\",\"globby\":\"~11.0.1\",\"js-yaml\":\"~3.14.0\",\"markdown-it-for-inline\":\"~0.1.1\",\"markdown-it-sub\":\"~1.0.0\",\"markdown-it-sup\":\"~1.0.0\",\"markdown-it-texmath\":\"~0.8.0\",\"markdownlint-rule-helpers\":\"~0.12.0\",\"rimraf\":\"~3.0.2\",\"strip-json-comments\":\"~3.1.1\",\"tape\":\"~5.0.1\",\"tape-player\":\"~0.1.1\",\"toml\":\"~3.0.0\",\"ts-loader\":\"~8.0.14\",\"tv4\":\"~1.3.0\",\"typescript\":\"~4.1.2\",\"webpack\":\"~5.11.1\",\"webpack-cli\":\"~4.3.1\"},\"keywords\":[\"markdown\",\"lint\",\"md\",\"CommonMark\",\"markdownlint\"]}");
 
 /***/ }),
 
@@ -4032,6 +4032,6 @@ module.exports = markdownit;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__("../lib-es3/lib/markdownlint.js");
+/******/ 	return __webpack_require__("../lib/markdownlint.js");
 /******/ })()
 ;
