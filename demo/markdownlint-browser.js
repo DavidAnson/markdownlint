@@ -3304,11 +3304,13 @@ module.exports = {
                     if (matchLength === effectiveEmphasisLength) {
                         // Ending an existing run, report any pending error
                         if (pendingError) {
+                            // @ts-ignore
                             addErrorContext.apply(void 0, pendingError);
                             pendingError = null;
                         }
                         var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex);
                         if (error) {
+                            // @ts-ignore
                             addErrorContext.apply(void 0, error);
                         }
                         // Reset
@@ -3927,7 +3929,8 @@ var rules = [
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
-    rule.information =
+    // eslint-disable-next-line dot-notation
+    rule["information"] =
         new URL(homepage + "/blob/v" + version + "/doc/Rules.md#" + name);
 });
 module.exports = rules;
