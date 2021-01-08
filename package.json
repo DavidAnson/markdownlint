@@ -15,7 +15,7 @@
   "scripts": {
     "build-config-schema": "node schema/build-config-schema.js",
     "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
-    "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack",
+    "build-demo": "cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack --no-stats",
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
     "ci": "npm run test-cover && npm run lint && npm run declaration && npm run build-config-schema && npm run build-demo && git diff --exit-code",
     "clean-test-repos": "rimraf test-repos",
