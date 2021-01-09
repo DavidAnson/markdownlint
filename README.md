@@ -14,12 +14,13 @@ npm install markdownlint --save-dev
 
 ## Overview
 
-The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language is
-designed to be easy to read, write, and understand. It succeeds - and its
-flexibility is both a benefit and a drawback. Many styles are possible, so
-formatting can be inconsistent. Some constructs don't work well in all
-parsers and should be avoided. The [CommonMark](https://commonmark.org/)
-specification standardizes parsers - but not authors.
+The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language
+is designed to be easy to read, write, and understand. It succeeds -
+and its flexibility is both a benefit and a drawback. Many styles are
+possible, so formatting can be inconsistent. Some constructs don't
+work well in all parsers and should be avoided. The
+[CommonMark](https://commonmark.org/) specification standardizes
+parsers - but not authors.
 
 `markdownlint` is a
 [static analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
@@ -39,7 +40,7 @@ and test cases came directly from that project.
   * [GitHub Super-Linter Action](https://github.com/github/super-linter)
   * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
 * Editor
-  * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items/DavidAnson.vscode-markdownlint)
+  * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
   * [Sublime Text markdownlint for Sublime Text](https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint)
   * [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
   * [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
@@ -55,6 +56,8 @@ and test cases came directly from that project.
 playground for learning and exploring.
 
 ## Rules / Aliases
+
+<!-- markdownlint-disable line-length -->
 
 * **[MD001](doc/Rules.md#md001)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
 * ~~**[MD002](doc/Rules.md#md002)** *first-heading-h1/first-header-h1* - First heading should be a top-level heading~~
@@ -101,17 +104,20 @@ playground for learning and exploring.
 * **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 * **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
 
+<!-- markdownlint-restore -->
+
 See [Rules.md](doc/Rules.md) for more details.
 
 ~~Struck through~~ rules are deprecated, and provided for backward-compatibility.
 
-> All rules with `heading` as part of their name are also available as `header`
-> aliases (e.g. `heading-increment` is also available as `header-increment`).
+> All rules with `heading` as part of their name are also available as
+> `header` aliases (e.g. `heading-increment` is also available as `header-increment`).
 > The use of `header` is deprecated and provided for backward-compatibility.
 
 ## Tags
 
-Tags group related rules and can be used to enable/disable multiple rules at once.
+Tags group related rules and can be used to enable/disable multiple
+rules at once.
 
 * **accessibility** - MD045
 * **atx** - MD018, MD019
@@ -122,10 +128,10 @@ Tags group related rules and can be used to enable/disable multiple rules at onc
 * **code** - MD014, MD031, MD038, MD040, MD046, MD048
 * **emphasis** - MD036, MD037
 * **hard_tab** - MD010
-* **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
-  MD024, MD025, MD026, MD036, MD041, MD043
-* **headings** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023,
-  MD024, MD025, MD026, MD036, MD041, MD043
+* **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022,
+  MD023, MD024, MD025, MD026, MD036, MD041, MD043
+* **headings** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022,
+  MD023, MD024, MD025, MD026, MD036, MD041, MD043
 * **hr** - MD035
 * **html** - MD033
 * **images** - MD045
@@ -138,20 +144,23 @@ Tags group related rules and can be used to enable/disable multiple rules at onc
 * **spelling** - MD044
 * **ul** - MD004, MD005, MD006, MD007, MD030, MD032
 * **url** - MD034
-* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039
+* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037,
+  MD038, MD039
 
 ## Configuration
 
-Text passed to `markdownlint` is parsed as Markdown, analyzed, and any issues reported.
-Two kinds of text are ignored:
+Text passed to `markdownlint` is parsed as Markdown, analyzed, and any
+issues reported. Two kinds of text are ignored:
 
 * [HTML comments](https://www.w3.org/TR/html5/syntax.html#comments)
-* [Front matter](https://jekyllrb.com/docs/frontmatter/) (see `options.frontMatter` below)
+* [Front matter](https://jekyllrb.com/docs/frontmatter/) (see
+  `options.frontMatter` below)
 
-Rules can be enabled, disabled, and configured via `options.config` (described
-below) to define the expected behavior for a set of inputs. To enable or disable
-rules at a particular location within a file, add one of these markers to the
-appropriate place (HTML comments don't appear in the final markup):
+Rules can be enabled, disabled, and configured via `options.config`
+(described below) to define the expected behavior for a set of inputs.
+To enable or disable rules at a particular location within a file, add
+one of these markers to the appropriate place (HTML comments don't
+appear in the final markup):
 
 * Disable all rules: `<!-- markdownlint-disable -->`
 * Enable all rules: `<!-- markdownlint-enable -->`
@@ -186,9 +195,9 @@ any violations you want
 <!-- markdownlint-restore -->
 ```
 
-The initial configuration is captured by default (as if every document began
-with `<!-- markdownlint-capture -->`), so the pattern above can be expressed
-more simply:
+The initial configuration is captured by default (as if every document
+began with `<!-- markdownlint-capture -->`), so the pattern above can
+be expressed more simply:
 
 ```markdown
 <!-- markdownlint-disable -->
@@ -213,8 +222,8 @@ the following syntax is supported:
 
 This can be used to "hide" `markdownlint` comments at the bottom of a file.
 
-In cases where it is desirable to change the configuration of one or more rules
-for a file, the following more advanced syntax is supported:
+In cases where it is desirable to change the configuration of one or
+more rules for a file, the following more advanced syntax is supported:
 
 * Configure: `<!-- markdownlint-configure-file { options.config JSON } -->`
 
@@ -237,8 +246,8 @@ or
 -->
 ```
 
-These changes apply to the entire file regardless of where the comment is
-located. Multiple such comments (if present) are applied top-to-bottom.
+These changes apply to the entire file regardless of where the comment
+is located. Multiple such comments (if present) are applied top-to-bottom.
 
 ## API
 
@@ -294,8 +303,9 @@ Type: `Array` of `Object`
 
 List of custom rules to include with the default rule set for linting.
 
-Each array element should define a rule. Rules are typically exported by another
-package, but can be defined locally. Custom rules are identified by the
+Each array element should define a rule. Rules are typically exported
+by another package, but can be defined locally. Custom rules are
+identified by the
 [keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule).
 
 Example:
@@ -307,7 +317,8 @@ const options = {
 };
 ```
 
-See [CustomRules.md](doc/CustomRules.md) for details about authoring custom rules.
+See [CustomRules.md](doc/CustomRules.md) for details about authoring
+custom rules.
 
 ##### options.files
 
@@ -316,8 +327,8 @@ Type: `Array` of `String`
 List of files to lint.
 
 Each array element should be a single file (via relative or absolute path);
-[globbing](https://en.wikipedia.org/wiki/Glob_%28programming%29) is the caller's
-responsibility.
+[globbing](https://en.wikipedia.org/wiki/Glob_%28programming%29) is the
+caller's responsibility.
 
 Example: `[ "one.md", "dir/two.md" ]`
 
@@ -327,9 +338,9 @@ Type: `Object` mapping `String` to `String`
 
 Map of identifiers to strings for linting.
 
-When Markdown content is not available as files, it can be passed as strings.
-The keys of the `strings` object are used to identify each input value in the
-`result` summary.
+When Markdown content is not available as files, it can be passed as
+strings. The keys of the `strings` object are used to identify each
+input value in the `result` summary.
 
 Example:
 
@@ -349,12 +360,13 @@ Configures the rules to use.
 Object keys are rule names or aliases and values are the rule's configuration.
 The value `false` disables a rule, `true` enables its default configuration,
 and passing an object customizes its settings. Setting the special `default`
-rule to `true` or `false` includes/excludes all rules by default. Enabling or
-disabling a tag name (ex: `whitespace`) affects all rules having that tag.
+rule to `true` or `false` includes/excludes all rules by default. Enabling
+or disabling a tag name (ex: `whitespace`) affects all rules having that
+tag.
 
-The `default` rule is applied first, then keys are processed in order from top
-to bottom with later values overriding earlier ones. Keys (including rule names,
-aliases, tags, and `default`) are not case-sensitive.
+The `default` rule is applied first, then keys are processed in order
+from top to bottom with later values overriding earlier ones. Keys
+(including rule names, aliases, tags, and `default`) are not case-sensitive.
 
 Example:
 
@@ -368,8 +380,8 @@ Example:
 }
 ```
 
-Sets of rules (known as a "style") can be stored separately and loaded as
-[JSON](https://en.wikipedia.org/wiki/JSON).
+Sets of rules (known as a "style") can be stored separately and loaded
+as [JSON](https://en.wikipedia.org/wiki/JSON).
 
 Example:
 
@@ -383,10 +395,12 @@ const options = {
 See the [style](style) directory for more samples.
 
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
-for the [JSON Schema](https://json-schema.org/) of the `options.config` object.
+for the [JSON Schema](https://json-schema.org/) of the `options.config`
+object.
 
-For more advanced scenarios, styles can reference and extend other styles. The
-`readConfig` and `readConfigSync` functions can be used to read such styles.
+For more advanced scenarios, styles can reference and extend other styles.
+The `readConfig` and `readConfigSync` functions can be used to read such
+styles.
 
 For example, assuming a `base.json` configuration file:
 
@@ -428,12 +442,12 @@ const options = {
 
 Type: `RegExp`
 
-Matches any [front matter](https://jekyllrb.com/docs/frontmatter/) found at the
-beginning of a file.
+Matches any [front matter](https://jekyllrb.com/docs/frontmatter/)
+found at the beginning of a file.
 
-Some Markdown content begins with metadata; the default `RegExp` for this option
-ignores common forms of "front matter". To match differently, specify a custom
-`RegExp` or use the value `null` to disable the feature.
+Some Markdown content begins with metadata; the default `RegExp` for
+this option ignores common forms of "front matter". To match differently,
+specify a custom `RegExp` or use the value `null` to disable the feature.
 
 The default value:
 
@@ -458,16 +472,16 @@ Note: Matches must occur at the start of the file.
 
 Type: `Boolean`
 
-Catches exceptions thrown during rule processing and reports the problem as a
-rule violation.
+Catches exceptions thrown during rule processing and reports the problem
+as a rule violation.
 
 By default, exceptions thrown by rules (or the library itself) are unhandled
 and bubble up the stack to the caller in the conventional manner. By setting
-`handleRuleFailures` to `true`, exceptions thrown by failing rules will be
-handled by the library and the exception message logged as a rule violation.
+`handleRuleFailures` to `true`, exceptions thrown by failing rules will
+be handled by the library and the exception message logged as a rule violation.
 This setting can be useful in the presence of (custom) rules that encounter
-unexpected syntax and fail. By enabling this option, the linting process is
-allowed to continue and report any violations that were found.
+unexpected syntax and fail. By enabling this option, the linting process
+is allowed to continue and report any violations that were found.
 
 ##### options.noInlineConfig
 
