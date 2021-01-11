@@ -2,16 +2,15 @@
 
 "use strict";
 
-const tape = require("tape");
-require("tape-player");
+const test = require("ava").default;
 const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const customRules = require("./rules/rules.js");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
-tape("customRulesV0", (test) => {
-  test.plan(4);
+test.cb("customRulesV0", (t) => {
+  t.plan(4);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -19,7 +18,7 @@ tape("customRulesV0", (test) => {
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = {
       "any-blockquote": [ 12 ],
@@ -27,7 +26,7 @@ tape("customRulesV0", (test) => {
       "first-line": [ 1 ],
       "letters-E-X": [ 3, 7 ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
     let actualMessage = actualResult.toString();
     let expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
@@ -48,7 +47,7 @@ tape("customRulesV0", (test) => {
       " Rule that reports an error for lines with the letters 'EX'\n" +
       "./test/custom-rules.md: 7: letters-E-X" +
       " Rule that reports an error for lines with the letters 'EX'";
-    test.equal(actualMessage, expectedMessage, "Incorrect message (name).");
+    t.is(actualMessage, expectedMessage, "Incorrect message (name).");
     // @ts-ignore
     actualMessage = actualResult.toString(true);
     expectedMessage =
@@ -70,13 +69,13 @@ tape("customRulesV0", (test) => {
       " Rule that reports an error for lines with the letters 'EX'\n" +
       "./test/custom-rules.md: 7: letter-E-letter-X" +
       " Rule that reports an error for lines with the letters 'EX'";
-    test.equal(actualMessage, expectedMessage, "Incorrect message (alias).");
-    test.end();
+    t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
+    t.end();
   });
 });
 
-tape("customRulesV1", (test) => {
-  test.plan(3);
+test.cb("customRulesV1", (t) => {
+  t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -84,7 +83,7 @@ tape("customRulesV1", (test) => {
     "resultVersion": 1
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
@@ -163,7 +162,7 @@ tape("customRulesV1", (test) => {
         "errorContext": "text",
         "errorRange": null }
     ];
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote/any-blockquote" +
@@ -187,13 +186,13 @@ tape("customRulesV1", (test) => {
       "./test/custom-rules.md: 7: letters-E-X/letter-E-letter-X" +
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]";
-    test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.end();
+    t.is(actualMessage, expectedMessage, "Incorrect message.");
+    t.end();
   });
 });
 
-tape("customRulesV2", (test) => {
-  test.plan(3);
+test.cb("customRulesV2", (t) => {
+  t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -201,7 +200,7 @@ tape("customRulesV2", (test) => {
     "resultVersion": 2
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
@@ -271,7 +270,7 @@ tape("customRulesV2", (test) => {
         "errorContext": "text",
         "errorRange": null }
     ];
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
@@ -295,13 +294,13 @@ tape("customRulesV2", (test) => {
       "./test/custom-rules.md: 7: letters-E-X/letter-E-letter-X/contains-ex" +
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]";
-    test.equal(actualMessage, expectedMessage, "Incorrect message.");
-    test.end();
+    t.is(actualMessage, expectedMessage, "Incorrect message.");
+    t.end();
   });
 });
 
-tape("customRulesConfig", (test) => {
-  test.plan(2);
+test.cb("customRulesConfig", (t) => {
+  t.plan(2);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
     "customRules": customRules.all,
@@ -316,7 +315,7 @@ tape("customRulesConfig", (test) => {
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = {
       "any-blockquote": [ 12 ],
@@ -324,13 +323,13 @@ tape("customRulesConfig", (test) => {
       "first-line": [ 1 ],
       "letters-E-X": [ 7 ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
 });
 
-tape("customRulesNpmPackage", (test) => {
-  test.plan(2);
+test("customRulesNpmPackage", (t) => {
+  t.plan(2);
   const options = {
     "customRules": [ require("./rules/npm") ],
     "strings": {
@@ -339,18 +338,18 @@ tape("customRulesNpmPackage", (test) => {
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {};
     expectedResult.string = {
       "sample-rule": [ 3 ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    // @ts-ignore
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
   });
 });
 
-tape("customRulesBadProperty", (test) => {
-  test.plan(23);
+test("customRulesBadProperty", (t) => {
+  t.plan(23);
   [
     {
       "propertyName": "names",
@@ -382,22 +381,22 @@ tape("customRulesBadProperty", (test) => {
       const options = {
         "customRules": [ badRule ]
       };
-      test.throws(
+      t.throws(
         function badRuleCall() {
           markdownlint.sync(options);
         },
-        new RegExp(
-          `Property '${propertyName}' of custom rule at index 0 is incorrect.`
-        ),
+        {
+          "message":
+            `Property '${propertyName}' of custom rule at index 0 is incorrect.`
+        },
         "Did not get correct exception for missing property."
       );
     });
   });
-  test.end();
 });
 
-tape("customRulesUsedNameName", (test) => {
-  test.plan(4);
+test("customRulesUsedNameName", (t) => {
+  t.plan(4);
   markdownlint({
     "customRules": [
       {
@@ -408,19 +407,18 @@ tape("customRulesUsedNameName", (test) => {
       }
     ]
   }, function callback(err, result) {
-    test.ok(err, "Did not get an error for duplicate name.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message,
+    t.truthy(err, "Did not get an error for duplicate name.");
+    t.true(err instanceof Error, "Error not instance of Error.");
+    t.is(err.message,
       "Name 'NO-missing-SPACE-atx' of custom rule at index 0 is " +
         "already used as a name or tag.",
       "Incorrect message for duplicate name.");
-    test.ok(!result, "Got result for duplicate name.");
-    test.end();
+    t.true(!result, "Got result for duplicate name.");
   });
 });
 
-tape("customRulesUsedNameTag", (test) => {
-  test.plan(4);
+test("customRulesUsedNameTag", (t) => {
+  t.plan(4);
   markdownlint({
     "customRules": [
       {
@@ -431,18 +429,17 @@ tape("customRulesUsedNameTag", (test) => {
       }
     ]
   }, function callback(err, result) {
-    test.ok(err, "Did not get an error for duplicate name.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message,
+    t.truthy(err, "Did not get an error for duplicate name.");
+    t.true(err instanceof Error, "Error not instance of Error.");
+    t.is(err.message,
       "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
       "Incorrect message for duplicate name.");
-    test.ok(!result, "Got result for duplicate name.");
-    test.end();
+    t.true(!result, "Got result for duplicate name.");
   });
 });
 
-tape("customRulesUsedTagName", (test) => {
-  test.plan(4);
+test("customRulesUsedTagName", (t) => {
+  t.plan(4);
   markdownlint({
     "customRules": [
       {
@@ -459,19 +456,18 @@ tape("customRulesUsedTagName", (test) => {
       }
     ]
   }, function callback(err, result) {
-    test.ok(err, "Did not get an error for duplicate tag.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message,
+    t.truthy(err, "Did not get an error for duplicate tag.");
+    t.true(err instanceof Error, "Error not instance of Error.");
+    t.is(err.message,
       "Tag 'NO-missing-SPACE-atx' of custom rule at index 1 is " +
         "already used as a name.",
       "Incorrect message for duplicate name.");
-    test.ok(!result, "Got result for duplicate tag.");
-    test.end();
+    t.true(!result, "Got result for duplicate tag.");
   });
 });
 
-tape("customRulesThrowForFile", (test) => {
-  test.plan(4);
+test.cb("customRulesThrowForFile", (t) => {
+  t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
     "customRules": [
@@ -486,19 +482,19 @@ tape("customRulesThrowForFile", (test) => {
     ],
     "files": [ "./test/custom-rules.md" ]
   }, function callback(err, result) {
-    test.ok(err, "Did not get an error for function thrown.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, exceptionMessage,
+    t.truthy(err, "Did not get an error for function thrown.");
+    t.true(err instanceof Error, "Error not instance of Error.");
+    t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
-    test.ok(!result, "Got result for function thrown.");
-    test.end();
+    t.true(!result, "Got result for function thrown.");
+    t.end();
   });
 });
 
-tape("customRulesThrowForFileSync", (test) => {
-  test.plan(1);
+test("customRulesThrowForFileSync", (t) => {
+  t.plan(1);
   const exceptionMessage = "Test exception message";
-  test.throws(
+  t.throws(
     function customRuleThrowsCall() {
       markdownlint.sync({
         "customRules": [
@@ -514,14 +510,15 @@ tape("customRulesThrowForFileSync", (test) => {
         "files": [ "./test/custom-rules.md" ]
       });
     },
-    new RegExp(exceptionMessage),
+    {
+      "message": exceptionMessage
+    },
     "Did not get correct exception for function thrown."
   );
-  test.end();
 });
 
-tape("customRulesThrowForString", (test) => {
-  test.plan(4);
+test("customRulesThrowForString", (t) => {
+  t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
     "customRules": [
@@ -538,17 +535,16 @@ tape("customRulesThrowForString", (test) => {
       "string": "String"
     }
   }, function callback(err, result) {
-    test.ok(err, "Did not get an error for function thrown.");
-    test.ok(err instanceof Error, "Error not instance of Error.");
-    test.equal(err.message, exceptionMessage,
+    t.truthy(err, "Did not get an error for function thrown.");
+    t.true(err instanceof Error, "Error not instance of Error.");
+    t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
-    test.ok(!result, "Got result for function thrown.");
-    test.end();
+    t.true(!result, "Got result for function thrown.");
   });
 });
 
-tape("customRulesOnErrorNull", (test) => {
-  test.plan(1);
+test("customRulesOnErrorNull", (t) => {
+  t.plan(1);
   const options = {
     "customRules": [
       {
@@ -564,18 +560,19 @@ tape("customRulesOnErrorNull", (test) => {
       "string": "String"
     }
   };
-  test.throws(
+  t.throws(
     function nullErrorCall() {
       markdownlint.sync(options);
     },
-    /Property 'lineNumber' of onError parameter is incorrect./,
+    {
+      "message": "Property 'lineNumber' of onError parameter is incorrect."
+    },
     "Did not get correct exception for null object."
   );
-  test.end();
 });
 
-tape("customRulesOnErrorBad", (test) => {
-  test.plan(21);
+test("customRulesOnErrorBad", (t) => {
+  t.plan(21);
   [
     {
       "propertyName": "lineNumber",
@@ -652,22 +649,22 @@ tape("customRulesOnErrorBad", (test) => {
           "string": "String"
         }
       };
-      test.throws(
+      t.throws(
         function badErrorCall() {
           markdownlint.sync(options);
         },
-        new RegExp(
-          `Property '${propertyNames}' of onError parameter is incorrect.`
-        ),
+        {
+          "message":
+            `Property '${propertyNames}' of onError parameter is incorrect.`
+        },
         "Did not get correct exception for bad object."
       );
     });
   });
-  test.end();
 });
 
-tape("customRulesOnErrorInvalid", (test) => {
-  test.plan(17);
+test("customRulesOnErrorInvalid", (t) => {
+  t.plan(17);
   [
     {
       "propertyName": "lineNumber",
@@ -724,22 +721,22 @@ tape("customRulesOnErrorInvalid", (test) => {
           "string": "Text\ntext"
         }
       };
-      test.throws(
+      t.throws(
         function invalidErrorCall() {
           markdownlint.sync(options);
         },
-        new RegExp(
-          `Property '${propertyNames}' of onError parameter is incorrect.`
-        ),
+        {
+          "message":
+            `Property '${propertyNames}' of onError parameter is incorrect.`
+        },
         "Did not get correct exception for invalid object."
       );
     });
   });
-  test.end();
 });
 
-tape("customRulesOnErrorValid", (test) => {
-  test.plan(24);
+test("customRulesOnErrorValid", (t) => {
+  t.plan(24);
   [
     {
       "propertyName": "lineNumber",
@@ -800,14 +797,13 @@ tape("customRulesOnErrorValid", (test) => {
         }
       };
       markdownlint.sync(options);
-      test.ok(true);
+      t.truthy(true);
     });
   });
-  test.end();
 });
 
-tape("customRulesOnErrorLazy", (test) => {
-  test.plan(2);
+test("customRulesOnErrorLazy", (t) => {
+  t.plan(2);
   const options = {
     "customRules": [
       {
@@ -829,7 +825,7 @@ tape("customRulesOnErrorLazy", (test) => {
     }
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {
       "string": [
         {
@@ -843,13 +839,12 @@ tape("customRulesOnErrorLazy", (test) => {
         }
       ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
   });
 });
 
-tape("customRulesOnErrorModified", (test) => {
-  test.plan(2);
+test("customRulesOnErrorModified", (t) => {
+  t.plan(2);
   const errorObject = {
     "lineNumber": 1,
     "detail": "detail",
@@ -885,7 +880,7 @@ tape("customRulesOnErrorModified", (test) => {
     "resultVersion": 3
   };
   markdownlint(options, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {
       "string": [
         {
@@ -904,13 +899,12 @@ tape("customRulesOnErrorModified", (test) => {
         }
       ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
   });
 });
 
-tape("customRulesThrowForFileHandled", (test) => {
-  test.plan(2);
+test.cb("customRulesThrowForFileHandled", (t) => {
+  t.plan(2);
   const exceptionMessage = "Test exception message";
   markdownlint({
     "customRules": [
@@ -926,7 +920,7 @@ tape("customRulesThrowForFileHandled", (test) => {
     "files": [ "./test/custom-rules.md" ],
     "handleRuleFailures": true
   }, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {
       "./test/custom-rules.md": [
         {
@@ -941,13 +935,13 @@ tape("customRulesThrowForFileHandled", (test) => {
         }
       ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
 });
 
-tape("customRulesThrowForStringHandled", (test) => {
-  test.plan(2);
+test("customRulesThrowForStringHandled", (t) => {
+  t.plan(2);
   const exceptionMessage = "Test exception message";
   const informationUrl = "https://example.com/rule";
   markdownlint({
@@ -967,7 +961,7 @@ tape("customRulesThrowForStringHandled", (test) => {
     },
     "handleRuleFailures": true
   }, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {
       "string": [
         {
@@ -993,13 +987,12 @@ tape("customRulesThrowForStringHandled", (test) => {
         }
       ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
   });
 });
 
-tape("customRulesOnErrorInvalidHandled", (test) => {
-  test.plan(2);
+test("customRulesOnErrorInvalidHandled", (t) => {
+  t.plan(2);
   markdownlint({
     "customRules": [
       {
@@ -1019,7 +1012,7 @@ tape("customRulesOnErrorInvalidHandled", (test) => {
     },
     "handleRuleFailures": true
   }, function callback(err, actualResult) {
-    test.ifError(err);
+    t.falsy(err);
     const expectedResult = {
       "string": [
         {
@@ -1034,13 +1027,12 @@ tape("customRulesOnErrorInvalidHandled", (test) => {
         }
       ]
     };
-    test.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    test.end();
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
   });
 });
 
-tape("customRulesFileName", (test) => {
-  test.plan(2);
+test.cb("customRulesFileName", (t) => {
+  t.plan(2);
   const options = {
     "customRules": [
       {
@@ -1048,20 +1040,20 @@ tape("customRulesFileName", (test) => {
         "description": "description",
         "tags": [ "tag" ],
         "function": function stringName(params) {
-          test.equal(params.name, "doc/CustomRules.md", "Incorrect file name");
+          t.is(params.name, "doc/CustomRules.md", "Incorrect file name");
         }
       }
     ],
     "files": "doc/CustomRules.md"
   };
   markdownlint(options, function callback(err) {
-    test.ifError(err);
-    test.end();
+    t.falsy(err);
+    t.end();
   });
 });
 
-tape("customRulesStringName", (test) => {
-  test.plan(2);
+test("customRulesStringName", (t) => {
+  t.plan(2);
   const options = {
     "customRules": [
       {
@@ -1069,7 +1061,7 @@ tape("customRulesStringName", (test) => {
         "description": "description",
         "tags": [ "tag" ],
         "function": function stringName(params) {
-          test.equal(params.name, "string", "Incorrect string name");
+          t.is(params.name, "string", "Incorrect string name");
         }
       }
     ],
@@ -1078,34 +1070,33 @@ tape("customRulesStringName", (test) => {
     }
   };
   markdownlint(options, function callback(err) {
-    test.ifError(err);
-    test.end();
+    t.falsy(err);
   });
 });
 
-tape("customRulesDoc", (test) => {
-  test.plan(2);
+test.cb("customRulesDoc", (t) => {
+  t.plan(2);
   markdownlint({
-    "files": "doc/CustomRules.md",
+    "files": "./doc/CustomRules.md",
     "config": {
       "MD013": { "line_length": 200 }
     }
   }, function callback(err, actual) {
-    test.ifError(err);
-    const expected = { "doc/CustomRules.md": [] };
-    test.deepEqual(actual, expected, "Unexpected issues.");
-    test.end();
+    t.falsy(err);
+    const expected = { "./doc/CustomRules.md": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    t.end();
   });
 });
 
-tape("customRulesLintJavaScript", (test) => {
-  test.plan(2);
+test.cb("customRulesLintJavaScript", (t) => {
+  t.plan(2);
   const options = {
     "customRules": customRules.lintJavaScript,
     "files": "test/lint-javascript.md"
   };
   markdownlint(options, (err, actual) => {
-    test.ifError(err);
+    t.falsy(err);
     const expected = {
       "test/lint-javascript.md": [
         {
@@ -1128,7 +1119,7 @@ tape("customRulesLintJavaScript", (test) => {
         }
       ]
     };
-    test.deepEqual(actual, expected, "Unexpected issues.");
-    test.end();
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    t.end();
   });
 });

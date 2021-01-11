@@ -35,8 +35,11 @@ function assertLintResults(results: markdownlint.LintResults) {
   assert.equal(results["string"][0].errorContext, null);
   assert.deepEqual(results["string"][0].errorRange, [ 9, 1 ]);
   assert(!!results["string"][0].fixInfo);
+  // @ts-ignore
   assert.equal(results["string"][0].fixInfo.editColumn, 10);
+  // @ts-ignore
   assert(!results["string"][0].fixInfo.deleteCount);
+  // @ts-ignore
   assert.equal(results["string"][0].fixInfo.insertText, "\n");
   assert.equal(results["../bad.md"].length, 2);
   // Deliberate assignment to unused variable validates types

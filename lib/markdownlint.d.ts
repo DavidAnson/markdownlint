@@ -310,7 +310,7 @@ type LintError = {
     /**
      * Fix information.
      */
-    fixInfo: FixInfo;
+    fixInfo?: FixInfo;
 };
 /**
  * Fix information.

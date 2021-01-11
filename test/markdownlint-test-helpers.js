@@ -3,12 +3,11 @@
 "use strict";
 
 const os = require("os");
-const tape = require("tape");
-require("tape-player");
+const test = require("ava").default;
 const helpers = require("../helpers");
 
-tape("clearHtmlCommentTextValid", (test) => {
-  test.plan(1);
+test("clearHtmlCommentTextValid", (t) => {
+  t.plan(1);
   const validComments = [
     "<!-- text -->",
     "<!--text-->",
@@ -85,12 +84,11 @@ tape("clearHtmlCommentTextValid", (test) => {
   ];
   const actual = helpers.clearHtmlCommentText(validComments.join("\n"));
   const expected = validResult.join("\n");
-  test.equal(actual, expected);
-  test.end();
+  t.is(actual, expected);
 });
 
-tape("clearHtmlCommentTextInvalid", (test) => {
-  test.plan(1);
+test("clearHtmlCommentTextInvalid", (t) => {
+  t.plan(1);
   const invalidComments = [
     "<!>",
     "<!->",
@@ -111,12 +109,11 @@ tape("clearHtmlCommentTextInvalid", (test) => {
   ];
   const actual = helpers.clearHtmlCommentText(invalidComments.join("\n"));
   const expected = invalidComments.join("\n");
-  test.equal(actual, expected);
-  test.end();
+  t.is(actual, expected);
 });
 
-tape("clearHtmlCommentTextNonGreedy", (test) => {
-  test.plan(1);
+test("clearHtmlCommentTextNonGreedy", (t) => {
+  t.plan(1);
   const nonGreedyComments = [
     "<!-- text --> -->",
     "<!---text --> -->",
@@ -131,12 +128,11 @@ tape("clearHtmlCommentTextNonGreedy", (test) => {
   ];
   const actual = helpers.clearHtmlCommentText(nonGreedyComments.join("\n"));
   const expected = nonGreedyResult.join("\n");
-  test.equal(actual, expected);
-  test.end();
+  t.is(actual, expected);
 });
 
-tape("clearHtmlCommentTextEmbedded", (test) => {
-  test.plan(1);
+test("clearHtmlCommentTextEmbedded", (t) => {
+  t.plan(1);
   const embeddedComments = [
     "text<!--text-->text",
     "<!-- markdownlint-disable MD010 -->",
@@ -153,12 +149,11 @@ tape("clearHtmlCommentTextEmbedded", (test) => {
   ];
   const actual = helpers.clearHtmlCommentText(embeddedComments.join("\n"));
   const expected = embeddedResult.join("\n");
-  test.equal(actual, expected);
-  test.end();
+  t.is(actual, expected);
 });
 
-tape("unescapeMarkdown", (test) => {
-  test.plan(7);
+test("unescapeMarkdown", (t) => {
+  t.plan(7);
   // Test cases from https://spec.commonmark.org/0.29/#backslash-escapes
   const testCases = [
     [
@@ -214,13 +209,12 @@ bar`
   testCases.forEach(function forTestCase(testCase) {
     const [ markdown, expected, replacement ] = testCase;
     const actual = helpers.unescapeMarkdown(markdown, replacement);
-    test.equal(actual, expected);
+    t.is(actual, expected);
   });
-  test.end();
 });
 
-tape("isBlankLine", (test) => {
-  test.plan(25);
+test("isBlankLine", (t) => {
+  t.plan(25);
   const blankLines = [
     null,
     "",
@@ -240,7 +234,7 @@ tape("isBlankLine", (test) => {
     "> <!--text-->",
     ">><!--text-->"
   ];
-  blankLines.forEach((line) => test.ok(helpers.isBlankLine(line), line));
+  blankLines.forEach((line) => t.true(helpers.isBlankLine(line), line || ""));
   const nonBlankLines = [
     "text",
     " text ",
@@ -251,12 +245,11 @@ tape("isBlankLine", (test) => {
     "<!--",
     "-->"
   ];
-  nonBlankLines.forEach((line) => test.ok(!helpers.isBlankLine(line), line));
-  test.end();
+  nonBlankLines.forEach((line) => t.true(!helpers.isBlankLine(line), line));
 });
 
-tape("includesSorted", (test) => {
-  test.plan(154);
+test("includesSorted", (t) => {
+  t.plan(154);
   const inputs = [
     [ ],
     [ 8 ],
@@ -268,14 +261,13 @@ tape("includesSorted", (test) => {
   ];
   inputs.forEach((input) => {
     for (let i = 0; i <= 21; i++) {
-      test.equal(helpers.includesSorted(input, i), input.includes(i));
+      t.is(helpers.includesSorted(input, i), input.includes(i));
     }
   });
-  test.end();
 });
 
-tape("forEachInlineCodeSpan", (test) => {
-  test.plan(99);
+test("forEachInlineCodeSpan", (t) => {
+  t.plan(99);
   const testCases =
     [
       {
@@ -369,18 +361,17 @@ tape("forEachInlineCodeSpan", (test) => {
     helpers.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
       const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
         expecteds.shift();
-      test.equal(code, expectedCode, input);
-      test.equal(line, expectedLine, input);
-      test.equal(column, expectedColumn, input);
-      test.equal(ticks, expectedTicks, input);
+      t.is(code, expectedCode, input);
+      t.is(line, expectedLine, input);
+      t.is(column, expectedColumn, input);
+      t.is(ticks, expectedTicks, input);
     });
-    test.equal(expecteds.length, 0, "length");
+    t.is(expecteds.length, 0, "length");
   });
-  test.end();
 });
 
-tape("getPreferredLineEnding", (test) => {
-  test.plan(17);
+test("getPreferredLineEnding", (t) => {
+  t.plan(17);
   const testCases = [
     [ "", os.EOL ],
     [ "\r", "\r" ],
@@ -403,13 +394,12 @@ tape("getPreferredLineEnding", (test) => {
   testCases.forEach((testCase) => {
     const [ input, expected ] = testCase;
     const actual = helpers.getPreferredLineEnding(input);
-    test.equal(actual, expected, "Incorrect line ending returned.");
+    t.is(actual, expected, "Incorrect line ending returned.");
   });
-  test.end();
 });
 
-tape("applyFix", (test) => {
-  test.plan(4);
+test("applyFix", (t) => {
+  t.plan(4);
   const testCases = [
     [
       "Hello world.",
@@ -452,13 +442,12 @@ tape("applyFix", (test) => {
     const [ line, fixInfo, lineEnding, expected ] = testCase;
     // @ts-ignore
     const actual = helpers.applyFix(line, fixInfo, lineEnding);
-    test.equal(actual, expected, "Incorrect fix applied.");
+    t.is(actual, expected, "Incorrect fix applied.");
   });
-  test.end();
 });
 
-tape("applyFixes", (test) => {
-  test.plan(29);
+test("applyFixes", (t) => {
+  t.plan(29);
   const testCases = [
     [
       "Hello world.",
@@ -909,7 +898,6 @@ tape("applyFixes", (test) => {
   testCases.forEach((testCase) => {
     const [ input, errors, expected ] = testCase;
     const actual = helpers.applyFixes(input, errors);
-    test.equal(actual, expected, "Incorrect fix applied.");
+    t.is(actual, expected, "Incorrect fix applied.");
   });
-  test.end();
 });

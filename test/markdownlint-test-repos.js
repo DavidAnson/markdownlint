@@ -9,8 +9,7 @@ const { promisify } = require("util");
 const globby = require("globby");
 const jsYaml = require("js-yaml");
 const stripJsonComments = require("strip-json-comments");
-const tape = require("tape");
-require("tape-player");
+const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 const markdownlintPromise = promisify(markdownlint);
 const readConfigPromise = promisify(markdownlint.readConfig);
@@ -38,13 +37,14 @@ function yamlParse(yaml) {
 /**
  * Lints a test repository.
  *
- * @param {Object} test Test instance.
+ * @param {Object} t Test instance.
  * @param {string[]} globPatterns Array of files to in/exclude.
  * @param {string} configPath Path to config file.
+ * @returns {Promise} Test result.
  */
-function lintTestRepo(test, globPatterns, configPath) {
-  test.plan(1);
-  Promise.all([
+function lintTestRepo(t, globPatterns, configPath) {
+  t.plan(1);
+  return Promise.all([
     globby(globPatterns),
     // @ts-ignore
     readConfigPromise(configPath, [ jsoncParse, yamlParse ])
@@ -60,22 +60,21 @@ function lintTestRepo(test, globPatterns, configPath) {
         // eslint-disable-next-line no-console
         console.log(resultsString);
       }
-      test.ok(!resultsString.length, "Unexpected linting violations");
-      test.end();
+      t.true(!resultsString.length, "Unexpected linting violations");
     });
   });
 }
 
 // Run markdownlint the same way the corresponding repositories do
 
-tape("https://github.com/eslint/eslint", (test) => {
+test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  lintTestRepo(test, globPatterns, configPath);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
-tape("https://github.com/mkdocs/mkdocs", (test) => {
+test("https://github.com/mkdocs/mkdocs", (t) => {
   const rootDir = "./test-repos/mkdocs-mkdocs";
   const globPatterns = [
     join(rootDir, "README.md"),
@@ -84,21 +83,21 @@ tape("https://github.com/mkdocs/mkdocs", (test) => {
     "!" + join(rootDir, "docs/CNAME")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
-  lintTestRepo(test, globPatterns, configPath);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
-tape("https://github.com/pi-hole/docs", (test) => {
+test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  lintTestRepo(test, globPatterns, configPath);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 // Optional repositories (very large)
 
 const dotnetDocsDir = "./test-repos/dotnet-docs";
 if (existsSync(dotnetDocsDir)) {
-  tape("https://github.com/dotnet/docs", (test) => {
+  test("https://github.com/dotnet/docs", (t) => {
     const rootDir = dotnetDocsDir;
     const globPatterns = [
       join(rootDir, "**/*.md"),
@@ -111,6 +110,6 @@ if (existsSync(dotnetDocsDir)) {
       )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
-    lintTestRepo(test, globPatterns, configPath);
+    return lintTestRepo(t, globPatterns, configPath);
   });
 }

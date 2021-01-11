@@ -5,8 +5,7 @@
 const fs = require("fs");
 const path = require("path");
 const { promisify } = require("util");
-const tape = require("tape");
-require("tape-player");
+const test = require("ava").default;
 const { version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const helpers = require("../helpers");
@@ -19,9 +18,9 @@ const helpers = require("../helpers");
  */
 function createTestForFile(file) {
   const markdownlintPromise = promisify(markdownlint);
-  return function testForFile(test) {
+  return function testForFile(t) {
     const detailedResults = /[/\\]detailed-results-/.test(file);
-    test.plan(detailedResults ? 3 : 2);
+    t.plan(detailedResults ? 3 : 2);
     const resultsFile = file.replace(/\.md$/, ".results.json");
     const fixedFile = file.replace(/\.md$/, ".md.fixed");
     const configFile = file.replace(/\.md$/, ".json");
@@ -66,8 +65,7 @@ function createTestForFile(file) {
                 const actual = helpers.applyFixes(content, errors);
                 // Uncomment the following line to update *.md.fixed files
                 // fs.writeFileSync(fixedFile, actual, "utf8");
-                test.equal(actual, expected,
-                  "Unexpected output from applyFixes.");
+                t.is(actual, expected, "Unexpected output from applyFixes.");
                 return resultVersion2or3;
               }) :
             resultVersion2or3;
@@ -128,18 +126,18 @@ function createTestForFile(file) {
             });
             return sortedResults;
           });
-    Promise.all([ actualPromise, expectedPromise ])
+    return Promise.all([ actualPromise, expectedPromise ])
       .then(
         function compareResults(fulfillments) {
           const [ [ actual0, actual2or3 ], expected ] = fulfillments;
           const actual = detailedResults ? actual2or3 : actual0;
-          test.deepEqual(actual, expected, "Line numbers are not correct.");
+          t.deepEqual(actual, expected, "Line numbers are not correct.");
           return actual2or3;
         })
       .then(
         function verifyFixes(errors) {
           if (detailedResults) {
-            return test.ok(true);
+            return t.true(true);
           }
           return fs.promises.readFile(file, "utf8")
             .then(
@@ -157,16 +155,16 @@ function createTestForFile(file) {
               function checkFixes(newErrors) {
                 const unfixed = newErrors.input
                   .filter((error) => !!error.fixInfo);
-                test.deepEqual(unfixed, [], "Fixable error was not fixed.");
+                t.deepEqual(unfixed, [], "Fixable error was not fixed.");
               }
             );
         })
       .catch()
-      .then(test.done);
+      .then(t.done);
   };
 }
 
 fs.readdirSync("./test")
   .filter((file) => /\.md$/.test(file))
   // @ts-ignore
-  .forEach((file) => tape(file, createTestForFile(path.join("./test", file))));
+  .forEach((file) => test(file, createTestForFile(path.join("./test", file))));
