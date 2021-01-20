@@ -9,6 +9,7 @@ const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const pluginTexMath = require("markdown-it-texmath");
+const stripJsonComments = require("strip-json-comments");
 const test = require("ava").default;
 const tv4 = require("tv4");
 const { homepage, version } = require("../package.json");
@@ -1004,6 +1005,18 @@ test("validateConfigSchemaAllowsUnknownProperties", (t) => {
       tv4.validate(testCase, configSchemaStrict),
       "Unknown property allowed when strict: " + JSON.stringify(testCase));
   });
+});
+
+test("validateConfigExampleJson", (t) => {
+  const file = ".markdownlint.jsonc";
+  const data = fs.readFileSync(
+    path.join(__dirname, "../schema", file),
+    "utf8"
+  );
+  t.true(
+    // @ts-ignore
+    tv4.validate(JSON.parse(stripJsonComments(data)), configSchemaStrict),
+    file + "\n" + JSON.stringify(tv4.error, null, 2));
 });
 
 test.cb("configSingle", (t) => {

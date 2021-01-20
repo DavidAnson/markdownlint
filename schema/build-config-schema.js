@@ -18,7 +18,10 @@ const schema = {
     },
     "extends": {
       "description": "Path to configuration file to extend",
-      "type": "string",
+      "type": [
+        "string",
+        "null"
+      ],
       "default": null
     },
     "$schema": {
@@ -331,7 +334,7 @@ rules.forEach(function forRule(rule) {
           "items": {
             "type": "string"
           },
-          "default": null
+          "default": []
         },
         "headers": {
           "description": "List of headings",
@@ -339,7 +342,7 @@ rules.forEach(function forRule(rule) {
           "items": {
             "type": "string"
           },
-          "default": null
+          "default": []
         }
       };
       break;
@@ -351,7 +354,7 @@ rules.forEach(function forRule(rule) {
           "items": {
             "type": "string"
           },
-          "default": null
+          "default": []
         },
         "code_blocks": {
           "description": "Include code blocks",
