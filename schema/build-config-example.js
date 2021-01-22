@@ -25,13 +25,29 @@ for (const rule in configSchema.properties) {
   }
 }
 
-const configString = JSON.stringify(configExample, null, 2)
+const configStringJson = JSON.stringify(configExample, null, 2)
   // eslint-disable-next-line max-len
   .replace(/^\{/, "{\n  // Example markdownlint JSON(C) configuration with all properties set to their default value")
   .replace(/(\s+)"[^-"]+-description": "(.+)",/g, "\n$1// $2")
   .replace(/"[^-"]+-sub-description": "(.+)",/g, "// $1");
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.jsonc"),
-  configString,
+  configStringJson,
+  "utf8"
+);
+
+const configStringYaml = configStringJson
+  .replace(/JSON\(C\)/, "YAML")
+  .replace(/\n {2}/g, "\n")
+  .replace(/\/\/ /g, "# ")
+  .replace(/(\s*)"([^"]+)":/g, "$1$2:")
+  .replace(/: \{/g, ":")
+  .replace(/\n\}/g, "")
+  .replace(/,\n/g, "\n")
+  .replace(/^\{\n/, "")
+  .replace(/\}$/, "");
+fs.writeFileSync(
+  path.join(__dirname, ".markdownlint.yaml"),
+  configStringYaml,
   "utf8"
 );

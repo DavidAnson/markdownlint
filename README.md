@@ -380,8 +380,9 @@ Example:
 }
 ```
 
-See [.markdownlint.jsonc](schema/.markdownlint.jsonc) for an example
-configuration object with all properties set to their default value.
+See [.markdownlint.jsonc](schema/.markdownlint.jsonc) and/or
+[.markdownlint.yaml](schema/.markdownlint.yaml) for an example
+configuration object with all properties set to the default value.
 
 Sets of rules (known as a "style") can be stored separately and loaded
 as [JSON](https://en.wikipedia.org/wiki/JSON).

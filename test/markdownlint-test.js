@@ -4,6 +4,7 @@
 
 const fs = require("fs");
 const path = require("path");
+const jsYaml = require("js-yaml");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
@@ -1008,15 +1009,29 @@ test("validateConfigSchemaAllowsUnknownProperties", (t) => {
 });
 
 test("validateConfigExampleJson", (t) => {
-  const file = ".markdownlint.jsonc";
-  const data = fs.readFileSync(
-    path.join(__dirname, "../schema", file),
+  t.plan(2);
+
+  // Validate JSONC
+  const fileJson = ".markdownlint.jsonc";
+  const dataJson = fs.readFileSync(
+    path.join(__dirname, "../schema", fileJson),
     "utf8"
   );
+  const jsonObject = JSON.parse(stripJsonComments(dataJson));
   t.true(
     // @ts-ignore
-    tv4.validate(JSON.parse(stripJsonComments(data)), configSchemaStrict),
-    file + "\n" + JSON.stringify(tv4.error, null, 2));
+    tv4.validate(jsonObject, configSchemaStrict),
+    fileJson + "\n" + JSON.stringify(tv4.error, null, 2));
+
+  // Validate YAML
+  const fileYaml = ".markdownlint.yaml";
+  const dataYaml = fs.readFileSync(
+    path.join(__dirname, "../schema", fileYaml),
+    "utf8"
+  );
+  const yamlObject = jsYaml.safeLoad(dataYaml);
+  t.deepEqual(yamlObject, jsonObject,
+    "YAML example does not match JSON example.");
 });
 
 test.cb("configSingle", (t) => {
