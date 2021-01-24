@@ -3211,6 +3211,7 @@ var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
 var rightSpaceRe = /\s+$/;
+var tablePipeRe = /\|/;
 module.exports = {
     "names": ["MD037", "no-space-in-emphasis"],
     "description": "Spaces inside emphasis markers",
@@ -3227,7 +3228,7 @@ module.exports = {
             pendingError = null;
         }
         // eslint-disable-next-line jsdoc/require-jsdoc
-        function handleRunEnd(line, lineIndex, contextLength, match, matchIndex) {
+        function handleRunEnd(line, lineIndex, contextLength, match, matchIndex, inTable) {
             // Close current run
             var content = line.substring(emphasisIndex, matchIndex);
             if (!emphasisLength) {
@@ -3238,7 +3239,8 @@ module.exports = {
             }
             var leftSpace = leftSpaceRe.test(content);
             var rightSpace = rightSpaceRe.test(content);
-            if (leftSpace || rightSpace) {
+            if ((leftSpace || rightSpace) &&
+                (!inTable || !tablePipeRe.test(content))) {
                 // Report the violation
                 var contextStart = emphasisIndex - emphasisLength;
                 var contextEnd = matchIndex + contextLength;
@@ -3308,7 +3310,7 @@ module.exports = {
                             addErrorContext.apply(void 0, pendingError);
                             pendingError = null;
                         }
-                        var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex);
+                        var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex, inTable);
                         if (error) {
                             // @ts-ignore
                             addErrorContext.apply(void 0, error);
@@ -3342,7 +3344,7 @@ module.exports = {
             }
             if (emphasisIndex !== -1) {
                 pendingError = pendingError ||
-                    handleRunEnd(line, lineIndex, 0, null, line.length);
+                    handleRunEnd(line, lineIndex, 0, null, line.length, inTable);
                 // Adjust for pending run on new line
                 emphasisIndex = 0;
                 emphasisLength = 0;

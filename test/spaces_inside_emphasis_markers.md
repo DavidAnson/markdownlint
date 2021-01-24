@@ -313,3 +313,31 @@ text [reference*link] star * star text
 *** text
 **text**
 ***
+
+| Table | Table |
+| ----- | ----- |
+| star  | x * y |
+| under | x _ y |
+
+| Table | Table |
+| ----- | ----- |
+| star  | x * y |
+| star  | x * y |
+| under | x _ y |
+| under | x _ y |
+
+| Table | Table                     |
+| ----- | ------------------------- |
+| star  | text *text* text          |
+| star  | text * text* text {MD037} |
+| star  | text *text * text {MD037} |
+| under | text _text_ text          |
+| under | text _ text_ text {MD037} |
+| under | text _text _ text {MD037} |
+
+| Table | Table |
+| ----- | ----- |
+| x * y | x * y |
+| x** y | x** y |
+| x _ y | x _ y |
+| x__ y | x__ y |
