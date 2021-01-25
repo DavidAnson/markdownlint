@@ -223,37 +223,56 @@ function filterTokens(params, type, handler) {
 }
 module.exports.filterTokens = filterTokens;
 
+/**
+ * Returns whether a token is a math block (created by markdown-it-texmath).
+ *
+ * @param {Object} token MarkdownItToken instance.
+ * @returns {boolean} True iff token is a math block.
+ */
+function isMathBlock(token) {
+  return (
+    (token.tag === "math") &&
+    token.type.startsWith("math_block") &&
+    !token.type.endsWith("_end")
+  );
+}
+
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
-  const lineMetadata = params.lines.map(function mapLine(line, index) {
-    return [ line, index, false, 0, false, false ];
-  });
-  filterTokens(params, "fence", function forToken(token) {
+  const lineMetadata = params.lines.map(
+    (line, index) => [ line, index, false, 0, false, false, false, false ]
+  );
+  filterTokens(params, "fence", (token) => {
     lineMetadata[token.map[0]][3] = 1;
     lineMetadata[token.map[1] - 1][3] = -1;
     for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
       lineMetadata[i][2] = true;
     }
   });
-  filterTokens(params, "code_block", function forToken(token) {
+  filterTokens(params, "code_block", (token) => {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][2] = true;
     }
   });
-  filterTokens(params, "table_open", function forToken(token) {
+  filterTokens(params, "table_open", (token) => {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][4] = true;
     }
   });
-  filterTokens(params, "list_item_open", function forToken(token) {
+  filterTokens(params, "list_item_open", (token) => {
     let count = 1;
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][5] = count;
       count++;
     }
   });
-  filterTokens(params, "hr", function forToken(token) {
+  filterTokens(params, "hr", (token) => {
     lineMetadata[token.map[0]][6] = true;
+  });
+  params.tokens.filter(isMathBlock).forEach((token) => {
+    for (let i = token.map[0]; i < token.map[1]; i++) {
+      lineMetadata[i][7] = true;
+    }
   });
   return lineMetadata;
 };
@@ -261,7 +280,8 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
 // Calls the provided function for each line (with context)
 module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
   lineMetadata.forEach(function forMetadata(metadata) {
-    // Parameters: line, lineIndex, inCode, onFence, inTable, inItem, inBreak
+    // Parameters:
+    // line, lineIndex, inCode, onFence, inTable, inItem, inBreak, inMath
     handler(...metadata);
   });
 };
@@ -274,13 +294,9 @@ module.exports.flattenLists = function flattenLists(params) {
   let nesting = 0;
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
-  params.tokens.forEach(function forToken(token) {
-    if (
-      (token.type === "math_block") &&
-      (token.tag === "math") &&
-      token.map[1]
-    ) {
-      // markdown-it-texmath package does not account for math_block_end
+  params.tokens.forEach((token) => {
+    if (isMathBlock(token) && token.map[1]) {
+      // markdown-it-texmath plugin does not account for math_block_end
       token.map[1]++;
     }
     if ((token.type === "bullet_list_open") ||

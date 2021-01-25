@@ -1508,15 +1508,19 @@ $$\n`
   });
 });
 
-test.cb("texmath-content-in-lists with texmath plugin", (t) => {
+test.cb("texmath test files with texmath plugin", (t) => {
   t.plan(2);
   markdownlint({
-    "files": [ "./test/texmath-content-in-lists.md" ],
+    "files": [
+      "./test/texmath-content-in-lists.md",
+      "./test/texmath-content-violating-md037.md"
+    ],
     "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ]
   }, function callback(err, actual) {
     t.falsy(err);
     const expected = {
-      "./test/texmath-content-in-lists.md": []
+      "./test/texmath-content-in-lists.md": [],
+      "./test/texmath-content-violating-md037.md": []
     };
     t.deepEqual(actual, expected, "Unexpected issues.");
     t.end();
