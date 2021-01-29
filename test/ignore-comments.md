@@ -20,7 +20,7 @@ Hard	tab
 
 <!--
 Hard	tab {MD010}
-Invalid--comment
+Invalid--!>comment
 Hard	tab {MD010}
 -->
 

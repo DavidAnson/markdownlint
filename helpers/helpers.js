@@ -114,12 +114,16 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
       break;
     }
     const comment = text.slice(i + htmlCommentBegin.length, j);
-    if ((comment.length > 0) &&
-        (comment[0] !== ">") &&
-        (comment[comment.length - 1] !== "-") &&
-        !comment.includes("--") &&
-        (text.slice(i, j + htmlCommentEnd.length)
-          .search(inlineCommentRe) === -1)) {
+    if (
+      (comment.length > 0) &&
+      !comment.startsWith(">") &&
+      !comment.startsWith("->") &&
+      !comment.endsWith("<!-") &&
+      !comment.includes("<!--") &&
+      // !comment.includes("-->") &&
+      !comment.includes("--!>") &&
+      (text.slice(i, j + htmlCommentEnd.length).search(inlineCommentRe) === -1)
+    ) {
       const blanks = comment
         .replace(/[^\r\n]/g, " ")
         .replace(/ ([\r\n])/g, "\\$1");
