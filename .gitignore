@@ -7,4 +7,5 @@ node_modules
 !test/node_modules
 npm-debug.log
 test-repos
+.DS_Store
 .vscode
