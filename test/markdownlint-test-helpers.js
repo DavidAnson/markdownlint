@@ -56,17 +56,17 @@ test("clearHtmlCommentTextValid", (t) => {
     "<!-->",
     "<!--->",
     "<!---->",
-    "<!--         -->",
-    " <!--         -->",
-    "  <!--         -->",
-    "<!--      -->",
-    "<!--    -->",
-    "<!-- -->",
-    "<!--    -->",
+    "<!--.........-->",
+    " <!--.........-->",
+    "  <!--.........-->",
+    "<!--......-->",
+    "<!--....-->",
+    "<!--.-->",
+    "<!--....-->",
     "<!---->",
-    "<!--     -->",
-    "<!--         -->",
-    "<!--  -->",
+    "<!--.....-->",
+    "<!--.........-->",
+    "<!--..-->",
     "<!--",
     "-->",
     "<!--",
@@ -78,21 +78,21 @@ test("clearHtmlCommentTextValid", (t) => {
     "-->",
     "<!--",
     "",
-    "     \\",
+    "......",
     "",
     "-->",
-    "<!--   \\",
+    "<!--....",
     "",
-    "    -->",
-    "text<!--    -->text",
+    "....-->",
+    "text<!--....-->text",
     "text<!--",
     "-->text",
     "text<!--",
-    "   \\",
+    "....",
     "-->text",
-    "<!--    --><!--    -->",
-    "text<!--    -->text<!--    -->text",
-    "text<!--              -->text",
+    "<!--....--><!--....-->",
+    "text<!--....-->text<!--....-->text",
+    "text<!--..............-->text",
     "<!--",
     "text"
   ];
@@ -133,9 +133,9 @@ test("clearHtmlCommentTextNonGreedy", (t) => {
     "<!----> -->"
   ];
   const nonGreedyResult = [
-    "<!--      --> -->",
-    "<!--      --> -->",
-    "<!-- --> -->",
+    "<!--......--> -->",
+    "<!--......--> -->",
+    "<!--.--> -->",
     "<!----> -->"
   ];
   const actual = helpers.clearHtmlCommentText(nonGreedyComments.join("\n"));
@@ -153,11 +153,11 @@ test("clearHtmlCommentTextEmbedded", (t) => {
     "text<!--text-->text"
   ];
   const embeddedResult = [
-    "text<!--    -->text",
+    "text<!--....-->text",
     "<!-- markdownlint-disable MD010 -->",
-    "text<!--    -->text",
+    "text<!--....-->text",
     "text<!-- markdownlint-disable MD010 -->text",
-    "text<!--    -->text"
+    "text<!--....-->text"
   ];
   const actual = helpers.clearHtmlCommentText(embeddedComments.join("\n"));
   const expected = embeddedResult.join("\n");

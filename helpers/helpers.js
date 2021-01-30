@@ -99,9 +99,8 @@ module.exports.includesSorted = function includesSorted(array, element) {
   return false;
 };
 
-// Replaces the text of all properly-formatted HTML comments with whitespace
+// Replaces the content of properly-formatted CommonMark comments with "."
 // This preserves the line/column information for the rest of the document
-// Trailing whitespace is avoided with a '\' character in the last column
 // https://spec.commonmark.org/0.29/#html-blocks
 // https://spec.commonmark.org/0.29/#html-comment
 const htmlCommentBegin = "<!--";
@@ -134,12 +133,9 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
             .search(inlineCommentRe);
           // If not a markdownlint inline directive...
           if (inlineCommentIndex === -1) {
-            const blanks = content
-              .replace(/[^\r\n]/g, " ")
-              .replace(/ ([\r\n])/g, "\\$1");
             text =
               text.slice(0, i + htmlCommentBegin.length) +
-              blanks +
+              content.replace(/[^\r\n]/g, ".") +
               text.slice(j);
           }
         }
