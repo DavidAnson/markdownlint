@@ -36,6 +36,7 @@
     "id-length": "off",
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": "off",
+    "max-depth": "off",
     "max-lines": "off",
     "max-lines-per-function": "off",
     "max-params": ["error", 10],

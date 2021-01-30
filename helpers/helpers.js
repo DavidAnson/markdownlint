@@ -102,33 +102,48 @@ module.exports.includesSorted = function includesSorted(array, element) {
 // Replaces the text of all properly-formatted HTML comments with whitespace
 // This preserves the line/column information for the rest of the document
 // Trailing whitespace is avoided with a '\' character in the last column
-// See https://www.w3.org/TR/html5/syntax.html#comments for details
+// https://spec.commonmark.org/0.29/#html-blocks
+// https://spec.commonmark.org/0.29/#html-comment
 const htmlCommentBegin = "<!--";
 const htmlCommentEnd = "-->";
 module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
   let i = 0;
   while ((i = text.indexOf(htmlCommentBegin, i)) !== -1) {
-    const j = text.indexOf(htmlCommentEnd, i);
+    const j = text.indexOf(htmlCommentEnd, i + 2);
     if (j === -1) {
       // Un-terminated comments are treated as text
       break;
     }
-    const comment = text.slice(i + htmlCommentBegin.length, j);
-    if (
-      (comment.length > 0) &&
-      !comment.startsWith(">") &&
-      !comment.startsWith("->") &&
-      !comment.endsWith("<!-") &&
-      !comment.includes("<!--") &&
-      // !comment.includes("-->") &&
-      !comment.includes("--!>") &&
-      (text.slice(i, j + htmlCommentEnd.length).search(inlineCommentRe) === -1)
-    ) {
-      const blanks = comment
-        .replace(/[^\r\n]/g, " ")
-        .replace(/ ([\r\n])/g, "\\$1");
-      text = text.slice(0, i + htmlCommentBegin.length) +
-        blanks + text.slice(j);
+    // If the comment has content...
+    if (j > i + htmlCommentBegin.length) {
+      let k = i - 1;
+      while (text[k] === " ") {
+        k--;
+      }
+      // If comment is not within an indented code block...
+      if (k >= i - 4) {
+        const content = text.slice(i + htmlCommentBegin.length, j);
+        const isBlock = (k < 0) || (text[k] === "\n");
+        const isValid = isBlock ||
+          (!content.startsWith(">") && !content.startsWith("->") &&
+           !content.endsWith("-") && !content.includes("--"));
+        // If a valid block/inline comment...
+        if (isValid) {
+          const inlineCommentIndex = text
+            .slice(i, j + htmlCommentEnd.length)
+            .search(inlineCommentRe);
+          // If not a markdownlint inline directive...
+          if (inlineCommentIndex === -1) {
+            const blanks = content
+              .replace(/[^\r\n]/g, " ")
+              .replace(/ ([\r\n])/g, "\\$1");
+            text =
+              text.slice(0, i + htmlCommentBegin.length) +
+              blanks +
+              text.slice(j);
+          }
+        }
+      }
     }
     i = j + htmlCommentEnd.length;
   }

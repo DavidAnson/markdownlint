@@ -18,11 +18,11 @@ Hard	tab
 Hard	tab
 -->
 
-<!--
+Text <!--
 Hard	tab {MD010}
 Invalid--!>comment
 Hard	tab {MD010}
--->
+--> text
 
 Te<!-- Hard	tab -->xt
 

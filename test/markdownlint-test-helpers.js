@@ -9,6 +9,12 @@ const helpers = require("../helpers");
 test("clearHtmlCommentTextValid", (t) => {
   t.plan(1);
   const validComments = [
+    "<!-->",
+    "<!--->",
+    "<!---->",
+    "<!-- comment -->",
+    " <!-- comment -->",
+    "  <!-- comment -->",
     "<!-- text -->",
     "<!--text-->",
     "<!-- -->",
@@ -47,6 +53,12 @@ test("clearHtmlCommentTextValid", (t) => {
     "text"
   ];
   const validResult = [
+    "<!-->",
+    "<!--->",
+    "<!---->",
+    "<!--         -->",
+    " <!--         -->",
+    "  <!--         -->",
     "<!--      -->",
     "<!--    -->",
     "<!-- -->",
@@ -100,22 +112,12 @@ test("clearHtmlCommentTextInvalid", (t) => {
     "<!-->text-->",
     "<!--->text-->",
     "<!---->",
-    // Restrictions from specification
     "<!-->-->",
     "<!-->t-->",
     "<!--->-->",
     "<!--->t-->",
-    "<!--<!--t-->",
-    "<!--t<!---->",
-    "<!--t<!--t-->",
-    // "<!---->t-->",
-    // "<!--t-->-->",
-    // "<!--t-->t-->",
-    "<!----!>t-->",
-    "<!--t--!>-->",
-    "<!--t--!>t-->",
-    "<!--<!--->",
-    "<!--t<!--->"
+    "<!---->t-->",
+    "    <!-- indented code block -->"
   ];
   const actual = helpers.clearHtmlCommentText(invalidComments.join("\n"));
   const expected = invalidComments.join("\n");
