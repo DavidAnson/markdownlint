@@ -1588,6 +1588,16 @@ To fix this, add a top-level heading to the beginning of the file:
 This is a file with a top-level heading
 ```
 
+Because it is common for projects on GitHub to use an image for the heading of
+`README.md` and that is not well-supported by Markdown, HTML headings are also
+permitted by this rule. For example:
+
+```markdown
+<h1 align="center"><img src="https://placekitten.com/300/150"/></h1>
+
+This is a file with a top-level HTML heading
+```
+
 Note: The `level` parameter can be used to change the top-level (ex: to h2) in cases
 where an h1 is added externally.
 

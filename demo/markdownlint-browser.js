@@ -3558,11 +3558,24 @@ module.exports = {
         var tag = "h" + level;
         var foundFrontMatterTitle = frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title);
         if (!foundFrontMatterTitle) {
+            var htmlHeadingRe_1 = new RegExp("^<h" + level + "[ />]", "i");
             params.tokens.every(function (token) {
+                var isError = false;
                 if (token.type === "html_block") {
-                    return true;
+                    if (token.content.startsWith("<!--")) {
+                        // Ignore leading HTML comments
+                        return true;
+                    }
+                    else if (!htmlHeadingRe_1.test(token.content)) {
+                        // Something other than an HTML heading
+                        isError = true;
+                    }
                 }
-                if ((token.type !== "heading_open") || (token.tag !== tag)) {
+                else if ((token.type !== "heading_open") || (token.tag !== tag)) {
+                    // Something other than a Markdown heading
+                    isError = true;
+                }
+                if (isError) {
                     addErrorContext(onError, token.lineNumber, token.line);
                 }
                 return false;
