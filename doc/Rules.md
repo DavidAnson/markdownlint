@@ -165,7 +165,8 @@ to ensure that all list styling is consistent, or to ensure that each
 sublist has a consistent symbol that differs from its parent list.
 
 For example, the following is valid for the `sublist` style because the outer-most
-indent uses asterisk, the middle indent uses plus, and the inner-most indent uses dash:
+indent uses asterisk, the middle indent uses plus, and the inner-most indent uses
+dash:
 
 ```markdown
 * Item 1
@@ -334,7 +335,11 @@ Tags: whitespace
 
 Aliases: no-trailing-spaces
 
+<!-- markdownlint-disable line-length -->
+
 Parameters: br_spaces, list_item_empty_lines, strict (number; default 2, boolean; default false, boolean; default false)
+
+<!-- markdownlint-restore -->
 
 Fixable: Most violations can be fixed by tooling
 
@@ -399,7 +404,7 @@ Some text
 	* hard tab character used to indent the list item
 ```
 
-<!-- markdownlint-enable no-hard-tabs -->
+<!-- markdownlint-restore -->
 
 Corrected example:
 
@@ -440,7 +445,8 @@ To fix this, swap the `[]` and `()` around:
 [Correct link syntax](https://www.example.com/)
 ```
 
-Note: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style footnotes do not trigger this rule:
+Note: [Markdown Extra](https://en.wikipedia.org/wiki/Markdown_Extra)-style
+footnotes do not trigger this rule:
 
 ```markdown
 For (example)[^1]
@@ -499,7 +505,7 @@ Aliases: line-length
 
 Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers, strict, stern (number; default 80 for *_length, boolean; default true (except strict/stern which default false))
 
-<!-- markdownlint-enable line-length -->
+<!-- markdownlint-restore -->
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -559,7 +565,7 @@ $ cat foo
 $ less bar
 ```
 
-<!-- markdownlint-enable commands-show-output -->
+<!-- markdownlint-restore -->
 
 The dollar signs are unnecessary in this situation, and should not be
 included:
@@ -1064,8 +1070,9 @@ This rule supports 0-prefixing ordered list items for uniform indentation:
 ...
 ```
 
-Note: This rule will report violations for cases like the following where an improperly-indented code block (or similar) appears between two list
-items and "breaks" the list in two:
+Note: This rule will report violations for cases like the following where an
+improperly-indented code block (or similar) appears between two list items and
+"breaks" the list in two:
 
 <!-- markdownlint-disable code-fence-style -->
 
@@ -1079,7 +1086,8 @@ Code block
 1. Second list
 ~~~
 
-The fix is to indent the code block so it becomes part of the preceding list item as intended:
+The fix is to indent the code block so it becomes part of the preceding list
+item as intended:
 
 ~~~markdown
 1. First list
@@ -1091,7 +1099,7 @@ The fix is to indent the code block so it becomes part of the preceding list ite
 2. Still first list
 ~~~
 
-<!-- markdownlint-enable code-fence-style -->
+<!-- markdownlint-restore -->
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -1601,11 +1609,11 @@ This is a file with a top-level HTML heading
 Note: The `level` parameter can be used to change the top-level (ex: to h2) in cases
 where an h1 is added externally.
 
-If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains a
-`title` property (commonly used with blog posts), this rule will not report a
-violation. To use a different property name in the front matter, specify the text
-of a regular expression via the `front_matter_title` parameter. To disable the
-use of front matter by this rule, specify `""` for `front_matter_title`.
+If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and
+contains a `title` property (commonly used with blog posts), this rule will not
+report a violation. To use a different property name in the front matter,
+specify the text of a regular expression via the `front_matter_title` parameter.
+To disable the use of front matter by this rule, specify `""` for `front_matter_title`.
 
 Rationale: The top-level heading often acts as the title of a document. More
 information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
@@ -1803,12 +1811,13 @@ In the default configuration this rule reports a violation for the following doc
 
     More text.
 
-<!-- markdownlint-enable code-block-style -->
+<!-- markdownlint-restore -->
 
-To fix violations of this rule, use a consistent style (either indenting or code fences).
+To fix violations of this rule, use a consistent style (either indenting or code
+fences).
 
-The specified style can be specific (`fenced`, `indented`) or simply require that usage
-be consistent within the document (`consistent`).
+The specified style can be specific (`fenced`, `indented`) or simply require
+that usage be consistent within the document (`consistent`).
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -1822,7 +1831,8 @@ Aliases: single-trailing-newline
 
 Fixable: Most violations can be fixed by tooling
 
-This rule is triggered when there is not a single newline character at the end of a file.
+This rule is triggered when there is not a single newline character at the end
+of a file.
 
 An example that triggers the rule:
 
@@ -1854,7 +1864,8 @@ Aliases: code-fence-style
 
 Parameters: style ("consistent", "tilde", "backtick"; default "consistent")
 
-This rule is triggered when the symbols used in the document for fenced code blocks do not match the configured code fence style:
+This rule is triggered when the symbols used in the document for fenced code
+blocks do not match the configured code fence style:
 
 ````markdown
 ```ruby

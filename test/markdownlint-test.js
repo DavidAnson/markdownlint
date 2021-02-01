@@ -106,7 +106,6 @@ test.cb("projectFilesInlineConfig", (t) => {
   const options = {
     "files": [ "doc/Rules.md" ],
     "config": {
-      "line-length": { "line_length": 150 },
       "no-inline-html": false
     }
   };
