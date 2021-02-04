@@ -2368,7 +2368,7 @@ module.exports = {
     "function": function MD018(params, onError) {
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode &&
-                /^#+[^#\s]/.test(line) &&
+                /^#+[^# \t]/.test(line) &&
                 !/#\s*$/.test(line) &&
                 !line.startsWith("#️⃣")) {
                 var hashCount = /^#+/.exec(line)[0].length;
@@ -2402,7 +2402,7 @@ module.exports = {
         filterTokens(params, "heading_open", function (token) {
             if (headingStyleFor(token) === "atx") {
                 var line = token.line, lineNumber = token.lineNumber;
-                var match = /^(#+)(\s{2,})(?:\S)/.exec(line);
+                var match = /^(#+)([ \t]{2,})(?:\S)/.exec(line);
                 if (match) {
                     var hashLength = match[1]["length"], spacesLength = match[2]["length"];
                     addErrorContext(onError, lineNumber, line.trim(), null, null, [1, hashLength + spacesLength + 1], {
@@ -2436,7 +2436,7 @@ module.exports = {
     "function": function MD020(params, onError) {
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode) {
-                var match = /^(#+)(\s*)([^#]*?[^#\\])(\s*)((?:\\#)?)(#+)(\s*)$/.exec(line);
+                var match = /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
                 if (match) {
                     var leftHash = match[1], leftSpaceLength = match[2]["length"], content = match[3], rightSpaceLength = match[4]["length"], rightEscape = match[5], rightHash = match[6], trailSpaceLength = match[7]["length"];
                     var leftHashLength = leftHash.length;
@@ -2487,7 +2487,7 @@ module.exports = {
         filterTokens(params, "heading_open", function (token) {
             if (headingStyleFor(token) === "atx_closed") {
                 var line = token.line, lineNumber = token.lineNumber;
-                var match = /^(#+)(\s+)([^#]+?)(\s+)(#+)(\s*)$/.exec(line);
+                var match = /^(#+)([ \t]+)([^#]+?)([ \t]+)(#+)(\s*)$/.exec(line);
                 if (match) {
                     var leftHash = match[1], leftSpaceLength = match[2]["length"], content = match[3], rightSpaceLength = match[4]["length"], rightHash = match[5], trailSpaceLength = match[6]["length"];
                     var left = leftSpaceLength > 1;
