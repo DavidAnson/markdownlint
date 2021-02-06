@@ -14,6 +14,7 @@
   var markdownit = window.markdownit({ "html": true });
   var newLineRe = /\r\n|\r|\n/;
   var hashPrefix = "%m";
+  var allLintErrors = [];
 
   // Do-nothing function
   function noop() {}
@@ -54,8 +55,8 @@
       "handleRuleFailures": true,
       "resultVersion": 3
     };
-    var results = window.markdownlint.sync(options);
-    violations.innerHTML = results.content.map(function mapResult(result) {
+    allLintErrors = window.markdownlint.sync(options).content;
+    violations.innerHTML = allLintErrors.map(function mapResult(result) {
       var ruleName = result.ruleNames.slice(0, 2).join(" / ");
       return "<em><a href='#line' target='" + result.lineNumber + "'>" +
         result.lineNumber + "</a></em> - <a href='" + result.ruleInformation +
@@ -123,8 +124,9 @@
   function onViolationClick(e) {
     switch (e.target.hash) {
       case "#fix":
-        var error = JSON.parse(decodeURIComponent(e.target.target));
-        var errors = [ error ];
+        var errors = e.shiftKey ?
+          allLintErrors :
+          [ JSON.parse(decodeURIComponent(e.target.target)) ];
         var fixed =
           window.markdownlintRuleHelpers.applyFixes(markdown.value, errors);
         markdown.value = fixed;
