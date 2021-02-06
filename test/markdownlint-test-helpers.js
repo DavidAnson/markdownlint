@@ -459,7 +459,7 @@ test("applyFix", (t) => {
 });
 
 test("applyFixes", (t) => {
-  t.plan(29);
+  t.plan(30);
   const testCases = [
     [
       "Hello world.",
@@ -905,6 +905,27 @@ test("applyFixes", (t) => {
         }
       ],
       ""
+    ],
+    [
+      " hello world",
+      [
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 1,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 2,
+            "deleteCount": 1,
+            "insertText": "H"
+          }
+        }
+      ],
+      "Hello world"
     ]
   ];
   testCases.forEach((testCase) => {

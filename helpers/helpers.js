@@ -723,8 +723,9 @@ module.exports.applyFixes = function applyFixes(input, errors) {
     const editIndex = editColumn - 1;
     if (
       (lineIndex !== lastLineIndex) ||
-      ((editIndex + deleteCount) < lastEditIndex) ||
-      (deleteCount === -1)
+      (deleteCount === -1) ||
+      ((editIndex + deleteCount) <=
+        (lastEditIndex - ((deleteCount > 0) ? 0 : 1)))
     ) {
       lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
     }

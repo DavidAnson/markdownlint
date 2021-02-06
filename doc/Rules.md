@@ -142,6 +142,8 @@ Aliases: ul-style
 Parameters: style ("consistent", "asterisk", "plus", "dash", "sublist"; default
 "consistent")
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when the symbols used in the document for unordered
 list items do not match the configured unordered list style:
 

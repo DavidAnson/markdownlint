@@ -47,12 +47,18 @@
       - item
         * item
           * item {MD004}
-          + item
+          + item {MD004}
 
 - item
   * item
     + item
       - item
         * item
-          - item {MD004}
-          + item
+          - item
+          + item {MD004}
+
+<!-- markdownlint-configure-file {
+  "ul-style": {
+    "style": "sublist"
+  }
+} -->

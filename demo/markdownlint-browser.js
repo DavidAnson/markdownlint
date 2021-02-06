@@ -703,8 +703,9 @@ module.exports.applyFixes = function applyFixes(input, errors) {
         var lineIndex = lineNumber - 1;
         var editIndex = editColumn - 1;
         if ((lineIndex !== lastLineIndex) ||
-            ((editIndex + deleteCount) < lastEditIndex) ||
-            (deleteCount === -1)) {
+            (deleteCount === -1) ||
+            ((editIndex + deleteCount) <=
+                (lastEditIndex - ((deleteCount > 0) ? 0 : 1)))) {
             lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
         }
         lastLineIndex = lineIndex;
@@ -1836,8 +1837,18 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp, unorderedListStyleFor = _a.unorderedListStyleFor;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, unorderedListStyleFor = _a.unorderedListStyleFor;
 var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var expectedStyleToMarker = {
+    "dash": "-",
+    "plus": "+",
+    "asterisk": "*"
+};
+var differentItemStyle = {
+    "dash": "plus",
+    "plus": "asterisk",
+    "asterisk": "dash"
+};
 module.exports = {
     "names": ["MD004", "ul-style"],
     "description": "Unordered list style",
@@ -1855,17 +1866,28 @@ module.exports = {
                     var itemStyle = unorderedListStyleFor(item);
                     if (style === "sublist") {
                         var nesting = list.nesting;
-                        if (!nestingStyles[nesting] &&
-                            (itemStyle !== nestingStyles[nesting - 1])) {
-                            nestingStyles[nesting] = itemStyle;
+                        if (!nestingStyles[nesting]) {
+                            nestingStyles[nesting] =
+                                (itemStyle === nestingStyles[nesting - 1]) ?
+                                    differentItemStyle[itemStyle] :
+                                    itemStyle;
                         }
-                        else {
-                            addErrorDetailIf(onError, item.lineNumber, nestingStyles[nesting], itemStyle, null, null, rangeFromRegExp(item.line, listItemMarkerRe));
-                        }
+                        expectedStyle = nestingStyles[nesting];
                     }
-                    else {
-                        addErrorDetailIf(onError, item.lineNumber, expectedStyle, itemStyle, null, null, rangeFromRegExp(item.line, listItemMarkerRe));
+                    var range = null;
+                    var fixInfo = null;
+                    var match = item.line.match(listItemMarkerRe);
+                    if (match) {
+                        var column = match.index + 1;
+                        var length_1 = match[0].length;
+                        range = [column, length_1];
+                        fixInfo = {
+                            "editColumn": match[1].length + 1,
+                            "deleteCount": 1,
+                            "insertText": expectedStyleToMarker[expectedStyle]
+                        };
                     }
+                    addErrorDetailIf(onError, item.lineNumber, expectedStyle, itemStyle, null, null, range, fixInfo);
                 });
             }
         });
