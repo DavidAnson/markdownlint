@@ -1849,6 +1849,7 @@ var differentItemStyle = {
     "plus": "asterisk",
     "asterisk": "dash"
 };
+var validStyles = Object.keys(expectedStyleToMarker);
 module.exports = {
     "names": ["MD004", "ul-style"],
     "description": "Unordered list style",
@@ -1873,6 +1874,9 @@ module.exports = {
                                     itemStyle;
                         }
                         expectedStyle = nestingStyles[nesting];
+                    }
+                    if (!validStyles.includes(expectedStyle)) {
+                        expectedStyle = validStyles[0];
                     }
                     var range = null;
                     var fixInfo = null;
