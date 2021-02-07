@@ -188,7 +188,7 @@ module.exports.fencedCodeBlockStyleFor =
  */
 function indentFor(token) {
   const line = token.line.replace(/^[\s>]*(> |>)/, "");
-  return line.length - line.trimLeft().length;
+  return line.length - line.trimStart().length;
 }
 module.exports.indentFor = indentFor;
 

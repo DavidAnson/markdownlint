@@ -60,7 +60,7 @@ function lintTestRepo(t, globPatterns, configPath) {
         // eslint-disable-next-line no-console
         console.log(resultsString);
       }
-      t.true(!resultsString.length, "Unexpected linting violations");
+      t.is(resultsString.length, 0, "Unexpected linting violations");
     });
   });
 }

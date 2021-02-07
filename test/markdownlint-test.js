@@ -887,6 +887,7 @@ test.cb("rules", (t) => {
       const tagAliasParameterRe = /, |: | /;
       // eslint-disable-next-line func-style
       const testTagsAliasesParams = (r) => {
+        // eslint-disable-next-line unicorn/prefer-default-parameters
         r = r || "[NO RULE]";
         t.true(ruleHasTags,
           "Missing tags for rule " + r.names + ".");

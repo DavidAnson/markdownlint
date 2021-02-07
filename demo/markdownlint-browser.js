@@ -197,7 +197,7 @@ module.exports.fencedCodeBlockStyleFor =
  */
 function indentFor(token) {
     var line = token.line.replace(/^[\s>]*(> |>)/, "");
-    return line.length - line.trimLeft().length;
+    return line.length - line.trimStart().length;
 }
 module.exports.indentFor = indentFor;
 // Returns the heading style for a heading token
@@ -822,10 +822,10 @@ function validateRuleList(ruleList) {
                 result = newError(property);
             }
         });
-        if (!result && rule.information) {
-            if (Object.getPrototypeOf(rule.information) !== URL.prototype) {
-                result = newError("information");
-            }
+        if (!result &&
+            rule.information &&
+            (Object.getPrototypeOf(rule.information) !== URL.prototype)) {
+            result = newError("information");
         }
         if (!result) {
             rule.names.forEach(function forName(name) {
@@ -1437,6 +1437,7 @@ function lintInput(options, synchronous, callback) {
     // Normalize inputs
     options = options || {};
     callback = callback || function noop() { };
+    // eslint-disable-next-line unicorn/prefer-spread
     var ruleList = rules.concat(options.customRules || []);
     var ruleErr = validateRuleList(ruleList);
     if (ruleErr) {
@@ -1986,7 +1987,7 @@ module.exports = {
                 list.items.forEach(function (item) {
                     var lineNumber = item.lineNumber, line = item.line;
                     addErrorDetailIf(onError, lineNumber, 0, list.indent, null, null, rangeFromRegExp(line, listItemMarkerRe), {
-                        "deleteCount": line.length - line.trimLeft().length
+                        "deleteCount": line.length - line.trimStart().length
                     });
                 });
             }
@@ -2097,20 +2098,20 @@ module.exports = {
         var expected = (brSpaces < 2) ? 0 : brSpaces;
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             var lineNumber = lineIndex + 1;
-            var trailingSpaces = line.length - line.trimRight().length;
-            if (trailingSpaces && !inCode &&
-                !includesSorted(listItemLineNumbers, lineNumber)) {
-                if ((expected !== trailingSpaces) ||
+            var trailingSpaces = line.length - line.trimEnd().length;
+            if (trailingSpaces &&
+                !inCode &&
+                !includesSorted(listItemLineNumbers, lineNumber) &&
+                ((expected !== trailingSpaces) ||
                     (strict &&
                         (!includesSorted(paragraphLineNumbers, lineNumber) ||
-                            includesSorted(codeInlineLineNumbers, lineNumber)))) {
-                    var column = line.length - trailingSpaces + 1;
-                    addError(onError, lineNumber, "Expected: " + (expected === 0 ? "" : "0 or ") +
-                        expected + "; Actual: " + trailingSpaces, null, [column, trailingSpaces], {
-                        "editColumn": column,
-                        "deleteCount": trailingSpaces
-                    });
-                }
+                            includesSorted(codeInlineLineNumbers, lineNumber))))) {
+                var column = line.length - trailingSpaces + 1;
+                addError(onError, lineNumber, "Expected: " + (expected === 0 ? "" : "0 or ") +
+                    expected + "; Actual: " + trailingSpaces, null, [column, trailingSpaces], {
+                    "editColumn": column,
+                    "deleteCount": trailingSpaces
+                });
             }
         });
     }
@@ -2616,7 +2617,7 @@ module.exports = {
             if (match) {
                 var prefixAndFirstChar = match[0], prefix = match[1];
                 var deleteCount = prefix.length;
-                var prefixLengthNoSpace = prefix.trimRight().length;
+                var prefixLengthNoSpace = prefix.trimEnd().length;
                 if (prefixLengthNoSpace) {
                     deleteCount -= prefixLengthNoSpace - 1;
                 }
@@ -3023,7 +3024,7 @@ module.exports = {
             var firstIndex = list.open.map[0];
             if (!isBlankLine(lines[firstIndex - 1])) {
                 var line = lines[firstIndex];
-                var quotePrefix = line.match(quotePrefixRe)[0].trimRight();
+                var quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, firstIndex + 1, line.trim(), null, null, null, {
                     "insertText": quotePrefix + "\n"
                 });
@@ -3031,7 +3032,7 @@ module.exports = {
             var lastIndex = list.lastLineIndex - 1;
             if (!isBlankLine(lines[lastIndex + 1])) {
                 var line = lines[lastIndex];
-                var quotePrefix = line.match(quotePrefixRe)[0].trimRight();
+                var quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, lastIndex + 1, line.trim(), null, null, null, {
                     "lineNumber": lastIndex + 2,
                     "insertText": quotePrefix + "\n"
@@ -3286,10 +3287,10 @@ module.exports = {
             // Close current run
             var content = line.substring(emphasisIndex, matchIndex);
             if (!emphasisLength) {
-                content = content.trimLeft();
+                content = content.trimStart();
             }
             if (!match) {
-                content = content.trimRight();
+                content = content.trimEnd();
             }
             var leftSpace = leftSpaceRe.test(content);
             var rightSpace = rightSpaceRe.test(content);
@@ -3503,8 +3504,8 @@ module.exports = {
                 }
                 else if (type === "link_close") {
                     inLink = false;
-                    var left = linkText.trimLeft().length !== linkText.length;
-                    var right = linkText.trimRight().length !== linkText.length;
+                    var left = linkText.trimStart().length !== linkText.length;
+                    var right = linkText.trimEnd().length !== linkText.length;
                     if (left || right) {
                         var line = params.lines[lineNumber - 1];
                         var range = null;
@@ -4014,7 +4015,7 @@ module.exports = rules;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"markdownlint\",\"version\":\"0.22.0\",\"description\":\"A Node.js style checker and lint tool for Markdown/CommonMark files.\",\"main\":\"lib/markdownlint.js\",\"types\":\"lib/markdownlint.d.ts\",\"author\":\"David Anson (https://dlaa.me/)\",\"license\":\"MIT\",\"homepage\":\"https://github.com/DavidAnson/markdownlint\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/DavidAnson/markdownlint.git\"},\"bugs\":\"https://github.com/DavidAnson/markdownlint/issues\",\"scripts\":{\"build-config\":\"npm run build-config-schema && npm run build-config-example\",\"build-config-example\":\"node schema/build-config-example.js\",\"build-config-schema\":\"node schema/build-config-schema.js\",\"build-declaration\":\"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'\",\"build-demo\":\"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack --no-stats\",\"build-example\":\"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2\",\"ci\":\"npm-run-all --continue-on-error --parallel test-cover lint declaration build-config build-demo && git diff --exit-code\",\"clean-test-repos\":\"rimraf test-repos\",\"clone-test-repos\":\"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet\",\"clone-test-repos-large\":\"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet\",\"declaration\":\"npm run build-declaration && npm run test-declaration\",\"example\":\"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint\",\"lint\":\"eslint --max-warnings 0 .\",\"lint-test-repos\":\"ava --timeout=5m test/markdownlint-test-repos.js\",\"test\":\"ava test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js\",\"test-cover\":\"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test\",\"test-declaration\":\"cd example/typescript && tsc && node type-check.js\",\"test-extra\":\"ava --timeout=5m test/markdownlint-test-extra.js\"},\"engines\":{\"node\":\">=10\"},\"dependencies\":{\"markdown-it\":\"12.0.4\"},\"devDependencies\":{\"ava\":\"~3.15.0\",\"c8\":\"~7.5.0\",\"cpy-cli\":\"~3.1.1\",\"eslint\":\"~7.19.0\",\"eslint-plugin-jsdoc\":\"~30.7.8\",\"eslint-plugin-node\":\"~11.1.0\",\"eslint-plugin-unicorn\":\"~23.0.0\",\"globby\":\"~11.0.2\",\"js-yaml\":\"~4.0.0\",\"markdown-it-for-inline\":\"~0.1.1\",\"markdown-it-sub\":\"~1.0.0\",\"markdown-it-sup\":\"~1.0.0\",\"markdown-it-texmath\":\"~0.8.0\",\"markdownlint-rule-helpers\":\"~0.13.0\",\"npm-run-all\":\"~4.1.5\",\"rimraf\":\"~3.0.2\",\"strip-json-comments\":\"~3.1.1\",\"toml\":\"~3.0.0\",\"ts-loader\":\"~8.0.15\",\"tv4\":\"~1.3.0\",\"typescript\":\"~4.1.3\",\"webpack\":\"~5.21.1\",\"webpack-cli\":\"~4.5.0\"},\"keywords\":[\"markdown\",\"lint\",\"md\",\"CommonMark\",\"markdownlint\"]}");
+module.exports = JSON.parse("{\"name\":\"markdownlint\",\"version\":\"0.22.0\",\"description\":\"A Node.js style checker and lint tool for Markdown/CommonMark files.\",\"main\":\"lib/markdownlint.js\",\"types\":\"lib/markdownlint.d.ts\",\"author\":\"David Anson (https://dlaa.me/)\",\"license\":\"MIT\",\"homepage\":\"https://github.com/DavidAnson/markdownlint\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/DavidAnson/markdownlint.git\"},\"bugs\":\"https://github.com/DavidAnson/markdownlint/issues\",\"scripts\":{\"build-config\":\"npm run build-config-schema && npm run build-config-example\",\"build-config-example\":\"node schema/build-config-example.js\",\"build-config-schema\":\"node schema/build-config-schema.js\",\"build-declaration\":\"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'\",\"build-demo\":\"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack --no-stats\",\"build-example\":\"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2\",\"ci\":\"npm-run-all --continue-on-error --parallel test-cover lint declaration build-config build-demo && git diff --exit-code\",\"clean-test-repos\":\"rimraf test-repos\",\"clone-test-repos\":\"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet\",\"clone-test-repos-large\":\"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet\",\"declaration\":\"npm run build-declaration && npm run test-declaration\",\"example\":\"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint\",\"lint\":\"eslint --max-warnings 0 .\",\"lint-test-repos\":\"ava --timeout=5m test/markdownlint-test-repos.js\",\"test\":\"ava test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js\",\"test-cover\":\"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test\",\"test-declaration\":\"cd example/typescript && tsc && node type-check.js\",\"test-extra\":\"ava --timeout=5m test/markdownlint-test-extra.js\"},\"engines\":{\"node\":\">=10\"},\"dependencies\":{\"markdown-it\":\"12.0.4\"},\"devDependencies\":{\"ava\":\"~3.15.0\",\"c8\":\"~7.5.0\",\"cpy-cli\":\"~3.1.1\",\"eslint\":\"~7.19.0\",\"eslint-plugin-jsdoc\":\"~31.6.0\",\"eslint-plugin-node\":\"~11.1.0\",\"eslint-plugin-unicorn\":\"~27.0.0\",\"globby\":\"~11.0.2\",\"js-yaml\":\"~4.0.0\",\"markdown-it-for-inline\":\"~0.1.1\",\"markdown-it-sub\":\"~1.0.0\",\"markdown-it-sup\":\"~1.0.0\",\"markdown-it-texmath\":\"~0.8.0\",\"markdownlint-rule-helpers\":\"~0.13.0\",\"npm-run-all\":\"~4.1.5\",\"rimraf\":\"~3.0.2\",\"strip-json-comments\":\"~3.1.1\",\"toml\":\"~3.0.0\",\"ts-loader\":\"~8.0.15\",\"tv4\":\"~1.3.0\",\"typescript\":\"~4.1.3\",\"webpack\":\"~5.21.1\",\"webpack-cli\":\"~4.5.0\"},\"keywords\":[\"markdown\",\"lint\",\"md\",\"CommonMark\",\"markdownlint\"]}");
 
 /***/ }),
 
