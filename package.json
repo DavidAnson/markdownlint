@@ -39,7 +39,6 @@
     "markdown-it": "12.0.4"
   },
   "devDependencies": {
-    "@types/node": "~14.14.9",
     "ava": "~3.15.0",
     "c8": "~7.3.5",
     "cpy-cli": "~3.1.1",
