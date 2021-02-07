@@ -31,7 +31,7 @@ function jsoncParse(json) {
  * @returns {Object} Object representation.
  */
 function yamlParse(yaml) {
-  return jsYaml.safeLoad(yaml);
+  return jsYaml.load(yaml);
 }
 
 /**

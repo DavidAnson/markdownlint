@@ -625,7 +625,7 @@ should come before flexible parsers.
 For example:
 
 ```js
-[ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]
+[ JSON.parse, require("toml").parse, require("js-yaml").load ]
 ```
 
 #### callback

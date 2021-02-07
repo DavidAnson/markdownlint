@@ -1028,7 +1028,7 @@ test("validateConfigExampleJson", (t) => {
     path.join(__dirname, "../schema", fileYaml),
     "utf8"
   );
-  const yamlObject = jsYaml.safeLoad(dataYaml);
+  const yamlObject = jsYaml.load(dataYaml);
   t.deepEqual(yamlObject, jsonObject,
     "YAML example does not match JSON example.");
 });
@@ -1154,7 +1154,7 @@ test.cb("configSingleYaml", (t) => {
   markdownlint.readConfig(
     "./test/config/config-child.yaml",
     // @ts-ignore
-    [ require("js-yaml").safeLoad ],
+    [ require("js-yaml").load ],
     function callback(err, actual) {
       t.falsy(err);
       const expected = require("./config/config-child.json");
@@ -1168,7 +1168,7 @@ test.cb("configMultipleYaml", (t) => {
   markdownlint.readConfig(
     "./test/config/config-grandparent.yaml",
     // @ts-ignore
-    [ require("js-yaml").safeLoad ],
+    [ require("js-yaml").load ],
     function callback(err, actual) {
       t.falsy(err);
       const expected = {
@@ -1187,7 +1187,7 @@ test.cb("configMultipleHybrid", (t) => {
   markdownlint.readConfig(
     "./test/config/config-grandparent-hybrid.yaml",
     // @ts-ignore
-    [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
+    [ JSON.parse, require("toml").parse, require("js-yaml").load ],
     function callback(err, actual) {
       t.falsy(err);
       const expected = {
@@ -1206,13 +1206,13 @@ test.cb("configBadHybrid", (t) => {
   markdownlint.readConfig(
     "./test/config/config-badcontent.txt",
     // @ts-ignore
-    [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ],
+    [ JSON.parse, require("toml").parse, require("js-yaml").load ],
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad child JSON.");
       t.true(err instanceof Error, "Error not instance of Error.");
       t.truthy(err.message.match(
         // eslint-disable-next-line max-len
-        /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*$/
+        /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+;/
       ), "Error message unexpected.");
       t.true(!result, "Got result for bad child JSON.");
       t.end();
@@ -1305,7 +1305,7 @@ test("configSingleYamlSync", (t) => {
   t.plan(1);
   const actual = markdownlint.readConfigSync(
     // @ts-ignore
-    "./test/config/config-child.yaml", [ require("js-yaml").safeLoad ]);
+    "./test/config/config-child.yaml", [ require("js-yaml").load ]);
   const expected = require("./config/config-child.json");
   t.deepEqual(actual, expected, "Config object not correct.");
 });
@@ -1314,7 +1314,7 @@ test("configMultipleYamlSync", (t) => {
   t.plan(1);
   const actual = markdownlint.readConfigSync(
     // @ts-ignore
-    "./test/config/config-grandparent.yaml", [ require("js-yaml").safeLoad ]);
+    "./test/config/config-grandparent.yaml", [ require("js-yaml").load ]);
   const expected = {
     ...require("./config/config-child.json"),
     ...require("./config/config-parent.json"),
@@ -1329,7 +1329,7 @@ test("configMultipleHybridSync", (t) => {
   const actual = markdownlint.readConfigSync(
     "./test/config/config-grandparent-hybrid.yaml",
     // @ts-ignore
-    [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
+    [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
   const expected = {
     ...require("./config/config-child.json"),
     ...require("./config/config-parent.json"),
@@ -1346,11 +1346,11 @@ test("configBadHybridSync", (t) => {
       markdownlint.readConfigSync(
         "./test/config/config-badcontent.txt",
         // @ts-ignore
-        [ JSON.parse, require("toml").parse, require("js-yaml").safeLoad ]);
+        [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
     },
     {
       // eslint-disable-next-line max-len
-      "message": /Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+; Expected [^;]+ or end of input but "\S+" found.; end of the stream or a document separator is expected at line \d+, column \d+:[^;]*/
+      "message": /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+;/
     },
     "Did not get correct exception for bad content."
   );
