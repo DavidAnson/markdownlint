@@ -9,5 +9,6 @@ demo/*
 !demo/markdownlint-browser.js
 example
 npm-debug.log
+schema/*.js
 test
 test-repos
