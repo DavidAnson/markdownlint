@@ -940,6 +940,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 * 0.23.0 - Add comprehensive example `.markdownlint.jsonc`/`.markdownlint.yaml` files, add fix
            information for MD004/ul-style, improve MD018/MD019/MD020/MD021/MD037/MD041, improve
            HTML comment handling, update test runner and test suite, update dependencies.
+  * 0.23.1 - Work around lack of webpack support for dynamic calls to `require` (`.resolve`).
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
