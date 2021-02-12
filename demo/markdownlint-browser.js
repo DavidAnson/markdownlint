@@ -783,6 +783,10 @@ var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+// @ts-ignore
+// eslint-disable-next-line camelcase, max-len, no-inline-comments, no-undef
+var dynamicRequire = (typeof require === "undefined") ? __webpack_require__("../lib sync recursive") : /* c8 ignore next */ require;
+// Capture native require implementation for dynamic loading of modules
 var deprecatedRuleNames = ["MD002", "MD006"];
 /**
  * Validate the list of rules for structure and reuse.
@@ -1616,7 +1620,7 @@ function resolveConfigExtends(configFile, referenceId) {
         // If not a file or fs.statSync throws, try require.resolve
     }
     try {
-        return __webpack_require__("../lib sync recursive").resolve(referenceId, { "paths": [configFileDirname] });
+        return dynamicRequire.resolve(referenceId, { "paths": [configFileDirname] });
     }
     catch (_b) {
         // If require.resolve throws, return resolvedExtendsFile
