@@ -15,7 +15,7 @@ jobs:
       - uses: JustinBeckwith/linkinator-action@v1
         with:
           paths: '**/*.md'
-          linksToSkip: "node_modules/ test/ ^https://github.com/.*/search\?q= lib style"
+          linksToSkip: "node_modules/ test/ ^https://github.com/.*/search\\?q= lib style"
   linkinator:
     runs-on: ubuntu-latest
     steps:
