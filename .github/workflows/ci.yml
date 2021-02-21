@@ -2,11 +2,6 @@ name: CI
 
 on:
   pull_request:
-  push:
-  schedule:
-    - cron: '30 12 * * *'
-  workflow_dispatch:
-
 jobs:
   linkinator-action:
     runs-on: ubuntu-latest
