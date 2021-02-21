@@ -8,6 +8,22 @@ on:
   workflow_dispatch:
 
 jobs:
+  linkinator-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: JustinBeckwith/linkinator-action@v1
+        with:
+          paths: '**/*.md'
+          linksToSkip: "node_modules/ test/ ^https://github.com/.*/search\?q= lib style"
+  linkinator:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+      - run: npm install --no-package-lock
+      - run: npm run linkinator
+
   build:
 
     runs-on: ${{ matrix.os }}
