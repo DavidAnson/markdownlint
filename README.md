@@ -835,7 +835,8 @@ const results = window.markdownlint.sync(options).toString();
 
 ## Examples
 
-For ideas how to integrate `markdownlint` into your workflow, refer to the following projects:
+For ideas how to integrate `markdownlint` into your workflow, refer to the
+following projects or one of the tools in the [Related section](#Related):
 
 * [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/) ([Search repository](https://github.com/dotnet/docs/search?q=markdownlint))
 * [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
