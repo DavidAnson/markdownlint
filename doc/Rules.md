@@ -1569,6 +1569,14 @@ echo Hello world
 ```
 ````
 
+If your code is just plain text, use the `text` language specifier:
+
+````markdown
+```text
+Some text I want in a code block
+```
+````
+
 Rationale: Specifying a language improves content rendering by using the
 correct syntax highlighting for code. More information:
 <https://cirosantilli.com/markdown-style-guide#option-code-fenced>.
