@@ -1569,11 +1569,11 @@ echo Hello world
 ```
 ````
 
-If your code is just plain text, use the `text` language specifier:
+To display a code block without syntax highlighting, use:
 
 ````markdown
 ```text
-Some text I want in a code block
+Plain text in a code block
 ```
 ````
 
