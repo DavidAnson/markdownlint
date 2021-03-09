@@ -1569,6 +1569,14 @@ echo Hello world
 ```
 ````
 
+To display a code block without syntax highlighting, use:
+
+````markdown
+```text
+Plain text in a code block
+```
+````
+
 Rationale: Specifying a language improves content rendering by using the
 correct syntax highlighting for code. More information:
 <https://cirosantilli.com/markdown-style-guide#option-code-fenced>.
