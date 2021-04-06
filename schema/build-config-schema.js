@@ -137,7 +137,7 @@ rules.forEach(function forRule(rule) {
           "default": true
         },
         "spaces_per_tab": {
-          "description": "Configure the spaces multiplier when fixing tabs",
+          "description": "Number of spaces for each hard tab",
           "type": "number",
           "default": 1
         }
