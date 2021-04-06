@@ -2153,11 +2153,10 @@ module.exports = {
                 while ((match = tabRe.exec(line)) !== null) {
                     var column = match.index + 1;
                     var length_1 = match[0].length;
-                    var paddingMultiplier = column === 1 ? spaceMultiplier : 1;
                     addError(onError, lineIndex + 1, "Column: " + column, null, [column, length_1], {
                         "editColumn": column,
                         "deleteCount": length_1,
-                        "insertText": "".padEnd(length_1 * paddingMultiplier)
+                        "insertText": "".padEnd(length_1 * spaceMultiplier)
                     });
                 }
             }

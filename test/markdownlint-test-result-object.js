@@ -384,7 +384,7 @@ test.cb("resultFormattingV3", (t) => {
           "fixInfo": {
             "editColumn": 5,
             "deleteCount": 1,
-            "insertText": " "
+            "insertText": "  "
           }
         },
         {
@@ -398,7 +398,7 @@ test.cb("resultFormattingV3", (t) => {
           "fixInfo": {
             "editColumn": 10,
             "deleteCount": 2,
-            "insertText": "  "
+            "insertText": "    "
           }
         },
         {
