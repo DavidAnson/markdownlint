@@ -388,7 +388,7 @@ Tags: whitespace, hard_tab
 
 Aliases: no-hard-tabs
 
-Parameters: code_blocks (boolean; default true)
+Parameters: code_blocks, spaces (boolean; default true, number; default 1)
 
 Fixable: Most violations can be fixed by tooling
 

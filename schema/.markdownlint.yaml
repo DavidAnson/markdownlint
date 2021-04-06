@@ -50,6 +50,8 @@ MD009:
 MD010:
   # Include code blocks
   code_blocks: true
+  # Configure the spaces multiplier when fixing tabs
+  spaces: 1
 
 # MD011/no-reversed-links - Reversed link syntax
 MD011: true

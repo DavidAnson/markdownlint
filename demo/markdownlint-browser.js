@@ -2143,16 +2143,21 @@ module.exports = {
     "function": function MD010(params, onError) {
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
+        var spaceMultiplierProvided = params.config.spaces;
+        var spaceMultiplier = (spaceMultiplierProvided === undefined) ?
+            1 :
+            Number(spaceMultiplierProvided);
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode || includeCodeBlocks) {
                 var match = null;
                 while ((match = tabRe.exec(line)) !== null) {
                     var column = match.index + 1;
                     var length_1 = match[0].length;
+                    var paddingMultiplier = column === 1 ? spaceMultiplier : 1;
                     addError(onError, lineIndex + 1, "Column: " + column, null, [column, length_1], {
                         "editColumn": column,
                         "deleteCount": length_1,
-                        "insertText": "".padEnd(length_1)
+                        "insertText": "".padEnd(length_1 * paddingMultiplier)
                     });
                 }
             }

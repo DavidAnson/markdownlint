@@ -346,7 +346,13 @@ test.cb("resultFormattingV3", (t) => {
         "# Heading   \n" +
         "\n" +
         "Text\ttext\t\ttext\n" +
-        "Text * emphasis * text"
+        "Text * emphasis * text\n" +
+        "\t\tInformation"
+    },
+    "config": {
+      "no-hard-tabs": {
+        "spaces": 2
+      }
     },
     "resultVersion": 3
   };
@@ -396,6 +402,20 @@ test.cb("resultFormattingV3", (t) => {
           }
         },
         {
+          "lineNumber": 5,
+          "ruleNames": [ "MD010", "no-hard-tabs" ],
+          "ruleDescription": "Hard tabs",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md010`,
+          "errorDetail": "Column: 1",
+          "errorContext": null,
+          "errorRange": [ 1, 2 ],
+          "fixInfo": {
+            "editColumn": 1,
+            "deleteCount": 2,
+            "insertText": "    "
+          }
+        },
+        {
           "lineNumber": 4,
           "ruleNames": [ "MD037", "no-space-in-emphasis" ],
           "ruleDescription": "Spaces inside emphasis markers",
@@ -410,16 +430,16 @@ test.cb("resultFormattingV3", (t) => {
           }
         },
         {
-          "lineNumber": 4,
+          "lineNumber": 5,
           "ruleNames": [ "MD047", "single-trailing-newline" ],
           "ruleDescription": "Files should end with a single newline character",
           "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
           "errorDetail": null,
           "errorContext": null,
-          "errorRange": [ 22, 1 ],
+          "errorRange": [ 13, 1 ],
           "fixInfo": {
             "insertText": "\n",
-            "editColumn": 23
+            "editColumn": 14
           }
         }
       ]
@@ -433,9 +453,11 @@ test.cb("resultFormattingV3", (t) => {
       " Hard tabs [Column: 5]\n" +
       "input: 3: MD010/no-hard-tabs" +
       " Hard tabs [Column: 10]\n" +
+      "input: 5: MD010/no-hard-tabs" +
+      " Hard tabs [Column: 1]\n" +
       "input: 4: MD037/no-space-in-emphasis" +
       " Spaces inside emphasis markers [Context: \"* emphasis *\"]\n" +
-      "input: 4: MD047/single-trailing-newline" +
+      "input: 5: MD047/single-trailing-newline" +
       " Files should end with a single newline character";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
     t.end();

@@ -135,6 +135,11 @@ rules.forEach(function forRule(rule) {
           "description": "Include code blocks",
           "type": "boolean",
           "default": true
+        },
+        "spaces": {
+          "description": "Configure the spaces multiplier when fixing tabs",
+          "type": "number",
+          "default": 1
         }
       };
       break;
