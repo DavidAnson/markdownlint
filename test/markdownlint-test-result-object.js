@@ -351,7 +351,7 @@ test.cb("resultFormattingV3", (t) => {
     },
     "config": {
       "no-hard-tabs": {
-        "spaces": 2
+        "spaces_per_tab": 2
       }
     },
     "resultVersion": 3

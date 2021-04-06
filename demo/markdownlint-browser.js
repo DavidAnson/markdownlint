@@ -2143,10 +2143,10 @@ module.exports = {
     "function": function MD010(params, onError) {
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
-        var spaceMultiplierProvided = params.config.spaces;
-        var spaceMultiplier = (spaceMultiplierProvided === undefined) ?
+        var spacesPerTab = params.config.spaces_per_tab;
+        var spaceMultiplier = (spacesPerTab === undefined) ?
             1 :
-            Number(spaceMultiplierProvided);
+            Number(spacesPerTab);
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode || includeCodeBlocks) {
                 var match = null;
