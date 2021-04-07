@@ -2146,7 +2146,7 @@ module.exports = {
         var spacesPerTab = params.config.spaces_per_tab;
         var spaceMultiplier = (spacesPerTab === undefined) ?
             1 :
-            Number(spacesPerTab);
+            Math.max(0, Number(spacesPerTab));
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode || includeCodeBlocks) {
                 var match = null;
