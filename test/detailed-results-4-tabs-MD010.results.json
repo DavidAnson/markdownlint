@@ -1,0 +1,29 @@
+[
+  {
+    "errorContext": null,
+    "errorDetail": "Column: 1",
+    "errorRange": [1, 13],
+    "lineNumber": 1,
+    "ruleDescription": "Hard tabs",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.23.1/doc/Rules.md#md010",
+    "ruleNames": ["MD010", "no-hard-tabs"]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Column: 5",
+    "errorRange": [5, 2],
+    "lineNumber": 2,
+    "ruleDescription": "Hard tabs",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.23.1/doc/Rules.md#md010",
+    "ruleNames": ["MD010", "no-hard-tabs"]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Column: 27",
+    "errorRange": [27, 3],
+    "lineNumber": 3,
+    "ruleDescription": "Hard tabs",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.23.1/doc/Rules.md#md010",
+    "ruleNames": ["MD010", "no-hard-tabs"]
+  }
+]
