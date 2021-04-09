@@ -388,7 +388,7 @@ Tags: whitespace, hard_tab
 
 Aliases: no-hard-tabs
 
-Parameters: code_blocks (boolean; default true)
+Parameters: code_blocks, spaces_per_tab (boolean; default true, number; default 1)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -419,6 +419,9 @@ Some text
 You have the option to exclude this rule for code blocks. To do so, set the
 `code_blocks` parameter to `false`. Code blocks are included by default since
 handling of tabs by tools is often inconsistent (ex: using 4 vs. 8 spaces).
+
+If you would like the fixer to change tabs to x spaces, then configure the `spaces_per_tab`
+parameter to the number x. The default value would be 1.
 
 Rationale: Hard tabs are often rendered inconsistently by different editors and
 can be harder to work with than spaces.

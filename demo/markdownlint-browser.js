@@ -2143,6 +2143,10 @@ module.exports = {
     "function": function MD010(params, onError) {
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
+        var spacesPerTab = params.config.spaces_per_tab;
+        var spaceMultiplier = (spacesPerTab === undefined) ?
+            1 :
+            Math.max(0, Number(spacesPerTab));
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (!inCode || includeCodeBlocks) {
                 var match = null;
@@ -2152,7 +2156,7 @@ module.exports = {
                     addError(onError, lineIndex + 1, "Column: " + column, null, [column, length_1], {
                         "editColumn": column,
                         "deleteCount": length_1,
-                        "insertText": "".padEnd(length_1)
+                        "insertText": "".padEnd(length_1 * spaceMultiplier)
                     });
                 }
             }
