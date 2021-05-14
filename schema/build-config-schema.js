@@ -385,7 +385,7 @@ rules.forEach(function forRule(rule) {
     case "MD048":
       scheme.properties = {
         "style": {
-          "description": "Code fence syle",
+          "description": "Code fence style",
           "type": "string",
           "enum": [
             "consistent",
