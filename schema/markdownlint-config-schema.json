@@ -1406,7 +1406,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Code fence syle",
+          "description": "Code fence style",
           "type": "string",
           "enum": [
             "consistent",
@@ -1427,7 +1427,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Code fence syle",
+          "description": "Code fence style",
           "type": "string",
           "enum": [
             "consistent",
