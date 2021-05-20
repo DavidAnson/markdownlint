@@ -39,7 +39,9 @@
     // Spaces for indent
     "indent": 2,
     // Whether to indent the first level of the list
-    "start_indented": false
+    "start_indented": false,
+    // How many spaces to indent the first level of the list
+    "start_indent": 0
   },
 
   // MD009/no-trailing-spaces - Trailing spaces

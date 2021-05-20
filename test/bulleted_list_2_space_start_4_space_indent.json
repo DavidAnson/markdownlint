@@ -1,0 +1,8 @@
+{
+    "default": true,
+    "MD007": {
+        "start_indented": true,
+        "start_indent": 2,
+        "indent": 4
+    }
+}

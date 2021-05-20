@@ -107,6 +107,11 @@ rules.forEach(function forRule(rule) {
           "description": "Whether to indent the first level of the list",
           "type": "boolean",
           "default": false
+        },
+        "start_indent": {
+          "description": "How many spaces to indent the first level of the list",
+          "type": "integer",
+          "default": 0
         }
       };
       break;
