@@ -1,0 +1,14 @@
+{
+  "default": true,
+  "MD043": {
+    "headings": [
+      "# One",
+      "*",
+      "### Three",
+      "*",
+      "### Five",
+      "*",
+      "#### FOO"
+    ]
+  }
+}
