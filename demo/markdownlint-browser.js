@@ -3703,8 +3703,11 @@ module.exports = {
                     var actual = levels_1[heading.tag] + " " + content;
                     var expected = getExpected_1();
                     if (expected === "*") {
-                        matchAny_1 = true;
-                        getExpected_1();
+                        var nextExpected = getExpected_1();
+                        if (nextExpected.toLowerCase() !== actual.toLowerCase()) {
+                            matchAny_1 = true;
+                            i_1--;
+                        }
                     }
                     else if (expected === "+") {
                         matchAny_1 = true;
@@ -3721,8 +3724,10 @@ module.exports = {
                     }
                 }
             });
+            var extraHeadings = requiredHeadings.length - i_1;
             if (!hasError_1 &&
-                (i_1 < requiredHeadings.length) &&
+                ((extraHeadings > 1) ||
+                    ((extraHeadings === 1) && (requiredHeadings[i_1] !== "*"))) &&
                 (anyHeadings_1 || !requiredHeadings.every(function (heading) { return heading === "*"; }))) {
                 addErrorContext(onError, params.lines.length, requiredHeadings[i_1]);
             }
