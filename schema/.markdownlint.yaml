@@ -73,7 +73,7 @@ MD013:
   tables: true
   # Include headings
   headings: true
-  # Include headings
+  # Include headers
   headers: true
   # Strict length checking
   strict: false
