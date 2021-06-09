@@ -1,5 +1,5 @@
 /*! markdownlint 0.23.1 https://github.com/DavidAnson/markdownlint @license MIT */
-var markdownlint;markdownlint =
+var markdownlint;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
@@ -30,7 +30,7 @@ module.exports = webpackEmptyContext;
 "use strict";
 // @ts-check
 
-var os = __webpack_require__(/*! os */ "?5533");
+var os = __webpack_require__(/*! os */ "?591e");
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 var newLineRe = /\r\n?|\n/g;
@@ -769,16 +769,14 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArrays = (this && this.__spreadArrays) || function () {
-    for (var s = 0, i = 0, il = arguments.length; i < il; i++) s += arguments[i].length;
-    for (var r = Array(s), k = 0, i = 0; i < il; i++)
-        for (var a = arguments[i], j = 0, jl = a.length; j < jl; j++, k++)
-            r[k] = a[j];
-    return r;
+var __spreadArray = (this && this.__spreadArray) || function (to, from) {
+    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
+        to[j] = from[i];
+    return to;
 };
-var fs = __webpack_require__(/*! fs */ "?65c5");
-var path = __webpack_require__(/*! path */ "?0f27");
-var promisify = __webpack_require__(/*! util */ "?0bed").promisify;
+var fs = __webpack_require__(/*! fs */ "?ec0a");
+var path = __webpack_require__(/*! path */ "?b85c");
+var promisify = __webpack_require__(/*! util */ "?96a2").promisify;
 var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
@@ -952,7 +950,7 @@ function annotateTokens(tokens, lines) {
         // Handle missing maps for table head/body
         if ((token.type === "thead_open") ||
             (token.type === "tbody_open")) {
-            tableMap = token.map.slice();
+            tableMap = __spreadArray([], token.map);
         }
         else if ((token.type === "tr_close") &&
             tableMap) {
@@ -963,7 +961,7 @@ function annotateTokens(tokens, lines) {
             tableMap = null;
         }
         if (tableMap && !token.map) {
-            token.map = tableMap.slice();
+            token.map = __spreadArray([], tableMap);
         }
         // Update token metadata
         if (token.map) {
@@ -1323,7 +1321,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 "lineNumber": errorInfo.lineNumber + frontMatterLines.length,
                 "detail": errorInfo.detail || null,
                 "context": errorInfo.context || null,
-                "range": errorInfo.range ? __spreadArrays(errorInfo.range) : null,
+                "range": errorInfo.range ? __spreadArray([], errorInfo.range) : null,
                 "fixInfo": fixInfo ? cleanFixInfo : null
             });
         }
@@ -1449,7 +1447,7 @@ function lintInput(options, synchronous, callback) {
     }
     var files = [];
     if (Array.isArray(options.files)) {
-        files = options.files.slice();
+        files = __spreadArray([], options.files);
     }
     else if (options.files) {
         files = [String(options.files)];
@@ -4028,7 +4026,7 @@ module.exports = rules;
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse("{\"name\":\"markdownlint\",\"version\":\"0.23.1\",\"description\":\"A Node.js style checker and lint tool for Markdown/CommonMark files.\",\"main\":\"lib/markdownlint.js\",\"types\":\"lib/markdownlint.d.ts\",\"author\":\"David Anson (https://dlaa.me/)\",\"license\":\"MIT\",\"homepage\":\"https://github.com/DavidAnson/markdownlint\",\"repository\":{\"type\":\"git\",\"url\":\"https://github.com/DavidAnson/markdownlint.git\"},\"bugs\":\"https://github.com/DavidAnson/markdownlint/issues\",\"scripts\":{\"build-config\":\"npm run build-config-schema && npm run build-config-example\",\"build-config-example\":\"node schema/build-config-example.js\",\"build-config-schema\":\"node schema/build-config-schema.js\",\"build-declaration\":\"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'\",\"build-demo\":\"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack --no-stats\",\"build-example\":\"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2\",\"ci\":\"npm-run-all --continue-on-error --parallel test-cover lint declaration build-config build-demo && git diff --exit-code\",\"clean-test-repos\":\"rimraf test-repos\",\"clone-test-repos\":\"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet\",\"clone-test-repos-large\":\"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet\",\"declaration\":\"npm run build-declaration && npm run test-declaration\",\"example\":\"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint\",\"lint\":\"eslint --max-warnings 0 .\",\"lint-test-repos\":\"ava --timeout=5m test/markdownlint-test-repos.js\",\"test\":\"ava test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js\",\"test-cover\":\"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test\",\"test-declaration\":\"cd example/typescript && tsc && node type-check.js\",\"test-extra\":\"ava --timeout=5m test/markdownlint-test-extra.js\"},\"engines\":{\"node\":\">=10\"},\"dependencies\":{\"markdown-it\":\"12.0.6\"},\"devDependencies\":{\"ava\":\"~3.15.0\",\"c8\":\"~7.5.0\",\"cpy-cli\":\"~3.1.1\",\"eslint\":\"~7.19.0\",\"eslint-plugin-jsdoc\":\"~31.6.0\",\"eslint-plugin-node\":\"~11.1.0\",\"eslint-plugin-unicorn\":\"~27.0.0\",\"globby\":\"~11.0.2\",\"js-yaml\":\"~4.0.0\",\"markdown-it-for-inline\":\"~0.1.1\",\"markdown-it-sub\":\"~1.0.0\",\"markdown-it-sup\":\"~1.0.0\",\"markdown-it-texmath\":\"~0.8.0\",\"markdownlint-rule-helpers\":\"~0.13.0\",\"npm-run-all\":\"~4.1.5\",\"rimraf\":\"~3.0.2\",\"strip-json-comments\":\"~3.1.1\",\"toml\":\"~3.0.0\",\"ts-loader\":\"~8.0.15\",\"tv4\":\"~1.3.0\",\"typescript\":\"~4.1.3\",\"webpack\":\"~5.21.1\",\"webpack-cli\":\"~4.5.0\"},\"keywords\":[\"markdown\",\"lint\",\"md\",\"CommonMark\",\"markdownlint\"]}");
+module.exports = JSON.parse('{"name":"markdownlint","version":"0.23.1","description":"A Node.js style checker and lint tool for Markdown/CommonMark files.","main":"lib/markdownlint.js","types":"lib/markdownlint.d.ts","author":"David Anson (https://dlaa.me/)","license":"MIT","homepage":"https://github.com/DavidAnson/markdownlint","repository":{"type":"git","url":"https://github.com/DavidAnson/markdownlint.git"},"bugs":"https://github.com/DavidAnson/markdownlint/issues","scripts":{"build-config":"npm run build-config-schema && npm run build-config-example","build-config-example":"node schema/build-config-example.js","build-config-schema":"node schema/build-config-schema.js","build-declaration":"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && rimraf \'lib/{c,md,r}*.d.ts\' \'helpers/*.d.ts\'","build-demo":"cpy node_modules/markdown-it/dist/markdown-it.min.js demo && cd demo && rimraf markdownlint-browser.* && webpack --no-stats","build-example":"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2","ci":"npm-run-all --continue-on-error --parallel test-cover lint declaration build-config build-demo && git diff --exit-code","clean-test-repos":"rimraf test-repos","clone-test-repos":"mkdir test-repos && cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet","clone-test-repos-large":"npm run clone-test-repos && cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet","declaration":"npm run build-declaration && npm run test-declaration","example":"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint","lint":"eslint --max-warnings 0 .","lint-test-repos":"ava --timeout=5m test/markdownlint-test-repos.js","test":"ava test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js","test-cover":"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test","test-declaration":"cd example/typescript && tsc && node type-check.js","test-extra":"ava --timeout=5m test/markdownlint-test-extra.js"},"engines":{"node":">=10"},"dependencies":{"markdown-it":"12.0.6"},"devDependencies":{"ava":"~3.15.0","c8":"~7.7.2","cpy-cli":"~3.1.1","eslint":"~7.28.0","eslint-plugin-jsdoc":"~35.1.3","eslint-plugin-node":"~11.1.0","eslint-plugin-unicorn":"~33.0.1","globby":"~11.0.3","js-yaml":"~4.1.0","markdown-it-for-inline":"~0.1.1","markdown-it-sub":"~1.0.0","markdown-it-sup":"~1.0.0","markdown-it-texmath":"~0.9.0","markdownlint-rule-helpers":"~0.14.0","npm-run-all":"~4.1.5","rimraf":"~3.0.2","strip-json-comments":"~3.1.1","toml":"~3.0.0","ts-loader":"~9.2.3","tv4":"~1.3.0","typescript":"~4.3.2","webpack":"~5.38.1","webpack-cli":"~4.7.2"},"keywords":["markdown","lint","md","CommonMark","markdownlint"]}');
 
 /***/ }),
 
@@ -4043,17 +4041,7 @@ module.exports = markdownit;
 
 /***/ }),
 
-/***/ "?65c5":
-/*!********************!*\
-  !*** fs (ignored) ***!
-  \********************/
-/***/ (() => {
-
-/* (ignored) */
-
-/***/ }),
-
-/***/ "?5533":
+/***/ "?591e":
 /*!********************!*\
   !*** os (ignored) ***!
   \********************/
@@ -4063,7 +4051,17 @@ module.exports = markdownit;
 
 /***/ }),
 
-/***/ "?0f27":
+/***/ "?ec0a":
+/*!********************!*\
+  !*** fs (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?b85c":
 /*!**********************!*\
   !*** path (ignored) ***!
   \**********************/
@@ -4073,7 +4071,7 @@ module.exports = markdownit;
 
 /***/ }),
 
-/***/ "?0bed":
+/***/ "?96a2":
 /*!**********************!*\
   !*** util (ignored) ***!
   \**********************/
@@ -4091,8 +4089,9 @@ module.exports = markdownit;
 /******/ 	// The require function
 /******/ 	function __webpack_require__(moduleId) {
 /******/ 		// Check if module is in cache
-/******/ 		if(__webpack_module_cache__[moduleId]) {
-/******/ 			return __webpack_module_cache__[moduleId].exports;
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
@@ -4115,9 +4114,12 @@ module.exports = markdownit;
 /******/ 	})();
 /******/ 	
 /************************************************************************/
-/******/ 	// module exports must be returned from runtime so entry inlining is disabled
+/******/ 	
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__("../lib/markdownlint.js");
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __webpack_require__("../lib/markdownlint.js");
+/******/ 	markdownlint = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;

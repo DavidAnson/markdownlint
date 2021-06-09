@@ -334,12 +334,12 @@ type FixInfo = {
  * {@link ../schema/markdownlint-config-schema.json}.
  */
 type Configuration = {
-    [x: string]: any;
+    [x: string]: RuleConfiguration;
 };
 /**
  * Rule configuration.
  */
-type RuleConfiguration = any;
+type RuleConfiguration = boolean | any;
 /**
  * Parses a configuration string and returns a configuration object.
  */

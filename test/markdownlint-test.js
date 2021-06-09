@@ -681,7 +681,7 @@ test.cb("filesArrayNotModified", (t) => {
     "./test/atx_heading_spacing.md",
     "./test/first_heading_bad_atx.md"
   ];
-  const expectedFiles = files.slice();
+  const expectedFiles = [ ...files ];
   markdownlint({ "files": files }, function callback(err) {
     t.falsy(err);
     t.deepEqual(files, expectedFiles, "Files modified.");
@@ -811,12 +811,13 @@ test.cb("readme", (t) => {
   fs.readFile("README.md", "utf8",
     function readFile(err, contents) {
       t.falsy(err);
-      const rulesLeft = rules.slice();
+      const rulesLeft = [ ...rules ];
       let seenRelated = false;
       let seenRules = false;
       let inRules = false;
       let seenTags = false;
       let inTags = false;
+      // @ts-ignore
       md.parse(contents, {}).forEach(function forToken(token) {
         if (
           (token.type === "bullet_list_open") &&
@@ -878,7 +879,7 @@ test.cb("rules", (t) => {
   fs.readFile("doc/Rules.md", "utf8",
     (err, contents) => {
       t.falsy(err);
-      const rulesLeft = rules.slice();
+      const rulesLeft = [ ...rules ];
       let inHeading = false;
       let rule = null;
       let ruleHasTags = true;
@@ -896,6 +897,7 @@ test.cb("rules", (t) => {
         t.true(!ruleUsesParams,
           "Missing parameters for rule " + r.names + ".");
       };
+      // @ts-ignore
       md.parse(contents, {}).forEach(function forToken(token) {
         if ((token.type === "heading_open") && (token.tag === "h2")) {
           inHeading = true;
