@@ -54,6 +54,7 @@ function lintTestRepo(t, globPatterns, configPath) {
       files,
       config
     };
+    // eslint-disable-next-line no-console
     console.log(`${t.title}: Linting ${files.length} files...`);
     return markdownlintPromise(options).then((results) => {
       const resultsString = results.toString();
