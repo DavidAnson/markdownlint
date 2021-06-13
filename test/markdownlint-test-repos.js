@@ -54,6 +54,7 @@ function lintTestRepo(t, globPatterns, configPath) {
       files,
       config
     };
+    console.log(`${t.title}: Linting ${files.length} files...`);
     return markdownlintPromise(options).then((results) => {
       const resultsString = results.toString();
       if (resultsString.length > 0) {
@@ -79,15 +80,46 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
   const globPatterns = [
     join(rootDir, "README.md"),
     join(rootDir, "CONTRIBUTING.md"),
-    join(rootDir, "docs/*"),
+    join(rootDir, "docs/**/*.md"),
     "!" + join(rootDir, "docs/CNAME")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
   return lintTestRepo(t, globPatterns, configPath);
 });
 
+test("https://github.com/mochajs/mocha", (t) => {
+  const rootDir = "./test-repos/mochajs-mocha";
+  const globPatterns = [
+    join(rootDir, "*.md"),
+    join(rootDir, "docs/**/*.md"),
+    join(rootDir, ".github/*.md"),
+    join(rootDir, "lib/**/*.md"),
+    join(rootDir, "test/**/*.md"),
+    join(rootDir, "example/**/*.md")
+  ];
+  const configPath = join(rootDir, ".markdownlint.json");
+  return lintTestRepo(t, globPatterns, configPath);
+});
+
 test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
+  const globPatterns = [ join(rootDir, "**/*.md") ];
+  const configPath = join(rootDir, ".markdownlint.json");
+  return lintTestRepo(t, globPatterns, configPath);
+});
+
+test("https://github.com/webhintio/hint", (t) => {
+  const rootDir = "./test-repos/webhintio-hint";
+  const globPatterns = [
+    join(rootDir, "**/*.md"),
+    "!" + join(rootDir, "**/CHANGELOG.md")
+  ];
+  const configPath = join(rootDir, ".markdownlintrc");
+  return lintTestRepo(t, globPatterns, configPath);
+});
+
+test("https://github.com/webpack/webpack.js.org", (t) => {
+  const rootDir = "./test-repos/webpack-webpack-js-org";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
   return lintTestRepo(t, globPatterns, configPath);
@@ -108,6 +140,16 @@ if (existsSync(dotnetDocsDir)) {
         "docs/framework/wcf/feature-details/configuring-iis-for-wcf.md"
       )
     ];
+    const configPath = join(rootDir, ".markdownlint.json");
+    return lintTestRepo(t, globPatterns, configPath);
+  });
+}
+
+const v8v8DevDir = "./test-repos/v8-v8-dev";
+if (existsSync(v8v8DevDir)) {
+  test("https://github.com/v8/v8.dev", (t) => {
+    const rootDir = v8v8DevDir;
+    const globPatterns = [ join(rootDir, "src/**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
     return lintTestRepo(t, globPatterns, configPath);
   });
