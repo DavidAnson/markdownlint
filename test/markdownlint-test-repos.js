@@ -102,11 +102,10 @@ if (existsSync(dotnetDocsDir)) {
     const globPatterns = [
       join(rootDir, "**/*.md"),
       "!" + join(rootDir, "samples/**/*.md"),
-      // A table parsing change in markdown-it v12 causes a new issue here
+      // MD044 newly detects an issue in this file
       "!" + join(
         rootDir,
-        "docs/standard/base-types/" +
-        "regular-expression-example-scanning-for-hrefs.md"
+        "docs/framework/wcf/feature-details/configuring-iis-for-wcf.md"
       )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
