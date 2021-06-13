@@ -3745,9 +3745,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, newLineRe = _a.newLineRe;
-var startNonWordRe = /^\W/;
-var endNonWordRe = /\W$/;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, newLineRe = _a.newLineRe, forEachInlineCodeSpan = _a.forEachInlineCodeSpan;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
     "description": "Proper names should have the correct capitalization",
@@ -3755,73 +3754,55 @@ module.exports = {
     "function": function MD044(params, onError) {
         var names = params.config.names;
         names = Array.isArray(names) ? names : [];
+        names.sort(function (a, b) { return (b.length - a.length) || a.localeCompare(b); });
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
-        // Text of automatic hyperlinks is implicitly a URL
-        var autolinkText = new Set();
-        filterTokens(params, "inline", function (token) {
-            var inAutoLink = false;
-            token.children.forEach(function (child) {
-                var info = child.info, type = child.type;
-                if ((type === "link_open") && (info === "auto")) {
-                    inAutoLink = true;
-                }
-                else if (type === "link_close") {
-                    inAutoLink = false;
-                }
-                else if ((type === "text") && inAutoLink) {
-                    autolinkText.add(child);
+        var exclusions = [];
+        if (!includeCodeBlocks) {
+            forEachInlineCodeSpan(params.lines.join("\n"), function (code, lineIndex, columnIndex) {
+                var codeLines = code.split(newLineRe);
+                // eslint-disable-next-line unicorn/no-for-loop
+                for (var i = 0; i < codeLines.length; i++) {
+                    exclusions.push([lineIndex + i, columnIndex, codeLines[i].length]);
+                    columnIndex = 0;
                 }
             });
-        });
-        // For each proper name...
-        names.forEach(function (name) {
-            var escapedName = escapeForRegExp(name);
-            var startNamePattern = startNonWordRe.test(name) ? "" : "\\S*\\b";
-            var endNamePattern = endNonWordRe.test(name) ? "" : "\\b\\S*";
-            var namePattern = "(" + startNamePattern + ")(" + escapedName + ")(" + endNamePattern + ")";
-            var anyNameRe = new RegExp(namePattern, "gi");
-            // eslint-disable-next-line jsdoc/require-jsdoc
-            function forToken(token) {
-                if (!autolinkText.has(token)) {
-                    var fenceOffset_1 = (token.type === "fence") ? 1 : 0;
-                    token.content.split(newLineRe).forEach(function (line, index) {
-                        var match = null;
-                        while ((match = anyNameRe.exec(line)) !== null) {
-                            var fullMatch = match[0], leftMatch = match[1], nameMatch = match[2], rightMatch = match[3];
-                            if (fullMatch.search(bareUrlRe) === -1) {
-                                var wordMatch = fullMatch
-                                    .replace(new RegExp("^\\W{0," + leftMatch.length + "}"), "")
-                                    .replace(new RegExp("\\W{0," + rightMatch.length + "}$"), "");
-                                if (!names.includes(wordMatch)) {
-                                    var lineNumber = token.lineNumber + index + fenceOffset_1;
-                                    var fullLine = params.lines[lineNumber - 1];
-                                    var matchLength = wordMatch.length;
-                                    var matchIndex = fullLine.indexOf(wordMatch);
-                                    var range = (matchIndex === -1) ?
-                                        null :
-                                        [matchIndex + 1, matchLength];
-                                    var fixInfo = (matchIndex === -1) ?
-                                        null :
-                                        {
-                                            "editColumn": matchIndex + 1,
-                                            "deleteCount": matchLength,
-                                            "insertText": name
-                                        };
-                                    addErrorDetailIf(onError, lineNumber, name, nameMatch, null, null, range, fixInfo);
-                                }
-                            }
+        }
+        var _loop_1 = function (name_1) {
+            var escapedName = escapeForRegExp(name_1);
+            var startNamePattern = /^\W/.test(name_1) ? "" : "[^\\s([\"]*\\b_*";
+            var endNamePattern = /\W$/.test(name_1) ? "" : "_*\\b[^\\s)\\]\"]*";
+            var namePattern = "(" + startNamePattern + ")(" + escapedName + ")" + endNamePattern;
+            var nameRe = new RegExp(namePattern, "gi");
+            forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
+                if (includeCodeBlocks || (!inCode && !onFence)) {
+                    var match = null;
+                    var _loop_2 = function () {
+                        var fullMatch = match[0], leftMatch = match[1], nameMatch = match[2];
+                        var index = match.index + leftMatch.length;
+                        var length_1 = nameMatch.length;
+                        if ((fullMatch.search(bareUrlRe) === -1) &&
+                            exclusions.every(function (span) { return ((lineIndex !== span[0]) ||
+                                (index + length_1 < span[1]) ||
+                                (index > span[1] + span[2])); })) {
+                            addErrorDetailIf(onError, lineIndex + 1, name_1, nameMatch, null, null, [index + 1, length_1], {
+                                "editColumn": index + 1,
+                                "deleteCount": length_1,
+                                "insertText": name_1
+                            });
                         }
-                    });
+                        exclusions.push([lineIndex, index, length_1]);
+                    };
+                    while ((match = nameRe.exec(line)) !== null) {
+                        _loop_2();
+                    }
                 }
-            }
-            forEachInlineChild(params, "text", forToken);
-            if (includeCodeBlocks) {
-                forEachInlineChild(params, "code_inline", forToken);
-                filterTokens(params, "code_block", forToken);
-                filterTokens(params, "fence", forToken);
-            }
-        });
+            });
+        };
+        for (var _i = 0, names_1 = names; _i < names_1.length; _i++) {
+            var name_1 = names_1[_i];
+            _loop_1(name_1);
+        }
     }
 };
 

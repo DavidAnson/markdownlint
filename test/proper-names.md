@@ -72,12 +72,12 @@ javascript. {MD044}
 
 {MD044} `javascript`
 
-{MD044} `code
-javascript`
+`code
+javascript` {MD044}
 
-{MD044} `code
-javascript
+`code
+javascript {MD044}
 code`
 
-{MD044} `javascript
+`javascript {MD044}
 code`

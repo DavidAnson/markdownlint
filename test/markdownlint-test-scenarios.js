@@ -29,6 +29,7 @@ function createTestForFile(file) {
       .then(
         function configFileExists() {
           return fs.promises.readFile(configFile, "utf8")
+            // @ts-ignore
             .then(JSON.parse);
         },
         function noConfigFile() {
