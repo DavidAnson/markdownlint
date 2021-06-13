@@ -29,7 +29,11 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for inline links and shortcut reference links
-const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
+const linkRe = /(\[(?:[^[\]]|\[[^\]]*\])*\])(\(\S*\)|\[\S*\])?/g;
+module.exports.linkRe = linkRe;
+
+// Regular expression for link reference definition lines
+module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = "utf8";

@@ -51,7 +51,10 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 var emphasisMarkersRe = /[_*]/g;
 // Regular expression for inline links and shortcut reference links
-var linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
+var linkRe = /(\[(?:[^[\]]|\[[^\]]*\])*\])(\(\S*\)|\[\S*\])?/g;
+module.exports.linkRe = linkRe;
+// Regular expression for link reference definition lines
+module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 // readFile options for reading with the UTF-8 encoding
 module.exports.utf8Encoding = "utf8";
 // All punctuation characters (normal and full-width)
@@ -3745,7 +3748,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, newLineRe = _a.newLineRe, forEachInlineCodeSpan = _a.forEachInlineCodeSpan;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe, newLineRe = _a.newLineRe, forEachInlineCodeSpan = _a.forEachInlineCodeSpan;
 var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
@@ -3758,6 +3761,23 @@ module.exports = {
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
         var exclusions = [];
+        forEachLine(lineMetadata(), function (line, lineIndex) {
+            if (linkReferenceRe.test(line)) {
+                exclusions.push([lineIndex, 0, line.length]);
+            }
+            else {
+                var match = null;
+                while ((match = bareUrlRe.exec(line)) !== null) {
+                    exclusions.push([lineIndex, match.index, match[0].length]);
+                }
+                while ((match = linkRe.exec(line)) !== null) {
+                    var text = match[1], destination = match[2];
+                    if (destination) {
+                        exclusions.push([lineIndex, match.index + text.length, destination.length]);
+                    }
+                }
+            }
+        });
         if (!includeCodeBlocks) {
             forEachInlineCodeSpan(params.lines.join("\n"), function (code, lineIndex, columnIndex) {
                 var codeLines = code.split(newLineRe);
@@ -3770,21 +3790,20 @@ module.exports = {
         }
         var _loop_1 = function (name_1) {
             var escapedName = escapeForRegExp(name_1);
-            var startNamePattern = /^\W/.test(name_1) ? "" : "[^\\s([\"]*\\b_*";
-            var endNamePattern = /\W$/.test(name_1) ? "" : "_*\\b[^\\s)\\]\"]*";
+            var startNamePattern = /^\W/.test(name_1) ? "" : "\\b_*";
+            var endNamePattern = /\W$/.test(name_1) ? "" : "_*\\b";
             var namePattern = "(" + startNamePattern + ")(" + escapedName + ")" + endNamePattern;
             var nameRe = new RegExp(namePattern, "gi");
             forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
                 if (includeCodeBlocks || (!inCode && !onFence)) {
                     var match = null;
                     var _loop_2 = function () {
-                        var fullMatch = match[0], leftMatch = match[1], nameMatch = match[2];
+                        var leftMatch = match[1], nameMatch = match[2];
                         var index = match.index + leftMatch.length;
                         var length_1 = nameMatch.length;
-                        if ((fullMatch.search(bareUrlRe) === -1) &&
-                            exclusions.every(function (span) { return ((lineIndex !== span[0]) ||
-                                (index + length_1 < span[1]) ||
-                                (index > span[1] + span[2])); })) {
+                        if (exclusions.every(function (span) { return ((lineIndex !== span[0]) ||
+                            (index + length_1 < span[1]) ||
+                            (index > span[1] + span[2])); })) {
                             addErrorDetailIf(onError, lineIndex + 1, name_1, nameMatch, null, null, [index + 1, length_1], {
                                 "editColumn": index + 1,
                                 "deleteCount": length_1,
