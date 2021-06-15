@@ -45,7 +45,7 @@ function createTestForFile(file) {
           return markdownlintPromise({
             "files": [ file ],
             config,
-            "resultVersion": detailedResults ? 2 : 3
+            "resultVersion": 3
           });
         })
       .then(

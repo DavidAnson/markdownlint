@@ -1,29 +1,62 @@
 [
   {
-    "errorContext": null,
-    "errorDetail": "Column: 1",
-    "errorRange": [1, 13],
     "lineNumber": 1,
+    "ruleNames": [
+      "MD010",
+      "no-hard-tabs"
+    ],
     "ruleDescription": "Hard tabs",
     "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
-    "ruleNames": ["MD010", "no-hard-tabs"]
+    "errorDetail": "Column: 1",
+    "errorContext": null,
+    "errorRange": [
+      1,
+      13
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 13,
+      "insertText": "                                                    "
+    }
   },
   {
-    "errorContext": null,
-    "errorDetail": "Column: 5",
-    "errorRange": [5, 2],
     "lineNumber": 2,
+    "ruleNames": [
+      "MD010",
+      "no-hard-tabs"
+    ],
     "ruleDescription": "Hard tabs",
     "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
-    "ruleNames": ["MD010", "no-hard-tabs"]
+    "errorDetail": "Column: 5",
+    "errorContext": null,
+    "errorRange": [
+      5,
+      2
+    ],
+    "fixInfo": {
+      "editColumn": 5,
+      "deleteCount": 2,
+      "insertText": "        "
+    }
   },
   {
-    "errorContext": null,
-    "errorDetail": "Column: 27",
-    "errorRange": [27, 3],
     "lineNumber": 3,
+    "ruleNames": [
+      "MD010",
+      "no-hard-tabs"
+    ],
     "ruleDescription": "Hard tabs",
     "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
-    "ruleNames": ["MD010", "no-hard-tabs"]
+    "errorDetail": "Column: 27",
+    "errorContext": null,
+    "errorRange": [
+      27,
+      3
+    ],
+    "fixInfo": {
+      "editColumn": 27,
+      "deleteCount": 3,
+      "insertText": "            "
+    }
   }
 ]

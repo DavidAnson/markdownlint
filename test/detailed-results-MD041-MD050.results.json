@@ -1,119 +1,212 @@
 [
-    {
-        "lineNumber": 1,
-        "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
-        "ruleDescription": "First line in a file should be a top-level heading",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md041",
-        "errorDetail": null,
-        "errorContext": "Not a heading",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 3,
-        "ruleNames": [ "MD042", "no-empty-links" ],
-        "ruleDescription": "No empty links",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
-        "errorDetail": null,
-        "errorContext": "[empty]()",
-        "errorRange": [4, 9]
-    },
-    {
-        "lineNumber": 5,
-        "ruleNames": [ "MD042", "no-empty-links" ],
-        "ruleDescription": "No empty links",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
-        "errorDetail": null,
-        "errorContext": "[empty]()",
-        "errorRange": [4, 10]
-    },
-    {
-        "lineNumber": 7,
-        "ruleNames": [ "MD042", "no-empty-links" ],
-        "ruleDescription": "No empty links",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
-        "errorDetail": null,
-        "errorContext": "[empty]()",
-        "errorRange": [4, 11]
-    },
-    {
-        "lineNumber": 17,
-        "ruleNames": [ "MD042", "no-empty-links" ],
-        "ruleDescription": "No empty links",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
-        "errorDetail": null,
-        "errorContext": "[empty one]()",
-        "errorRange": [25, 13]
-    },
-    {
-        "lineNumber": 31,
-        "ruleNames": [ "MD043", "required-headings", "required-headers" ],
-        "ruleDescription": "Required heading structure",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md043",
-        "errorDetail": null,
-        "errorContext": "# Heading",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 9,
-        "ruleNames": [ "MD044", "proper-names" ],
-        "ruleDescription": "Proper names should have the correct capitalization",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
-        "errorDetail": "Expected: markdownlint; Actual: MARKDOWNLINT",
-        "errorContext": null,
-        "errorRange": [29, 12]
-    },
-    {
-        "lineNumber": 12,
-        "ruleNames": [ "MD044", "proper-names" ],
-        "ruleDescription": "Proper names should have the correct capitalization",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
-        "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
-        "errorContext": null,
-        "errorRange": [7, 12]
-    },
-    {
-        "lineNumber": 15,
-        "ruleNames": [ "MD044", "proper-names" ],
-        "ruleDescription": "Proper names should have the correct capitalization",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
-        "errorDetail": "Expected: markdownlint; Actual: MarkDownLint",
-        "errorContext": null,
-        "errorRange": [1, 12]
-    },
-    {
-        "lineNumber": 19,
-        "ruleNames": [ "MD045", "no-alt-text" ],
-        "ruleDescription": "Images should have alternate text (alt text)",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md045",
-        "errorDetail": null,
-        "errorContext": null,
-        "errorRange": null
-    },
-    {
-        "lineNumber": 25,
-        "ruleNames": [ "MD046", "code-block-style" ],
-        "ruleDescription": "Code block style",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md046",
-        "errorDetail": "Expected: fenced; Actual: indented",
-        "errorContext": null,
-        "errorRange": null
-    },
-    {
-        "lineNumber": 31,
-        "ruleNames": [ "MD047", "single-trailing-newline" ],
-        "ruleDescription": "Files should end with a single newline character",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md047",
-        "errorDetail": null,
-        "errorContext": null,
-        "errorRange": [ 25, 1 ]
-    },
-    {
-        "lineNumber": 27,
-        "ruleNames": [ "MD048", "code-fence-style" ],
-        "ruleDescription": "Code fence style",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md048",
-        "errorDetail": "Expected: backtick; Actual: tilde",
-        "errorContext": null,
-        "errorRange": null
+  {
+    "lineNumber": 1,
+    "ruleNames": [
+      "MD041",
+      "first-line-heading",
+      "first-line-h1"
+    ],
+    "ruleDescription": "First line in a file should be a top-level heading",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md041",
+    "errorDetail": null,
+    "errorContext": "Not a heading",
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 3,
+    "ruleNames": [
+      "MD042",
+      "no-empty-links"
+    ],
+    "ruleDescription": "No empty links",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
+    "errorDetail": null,
+    "errorContext": "[empty]()",
+    "errorRange": [
+      4,
+      9
+    ],
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 5,
+    "ruleNames": [
+      "MD042",
+      "no-empty-links"
+    ],
+    "ruleDescription": "No empty links",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
+    "errorDetail": null,
+    "errorContext": "[empty]()",
+    "errorRange": [
+      4,
+      10
+    ],
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 7,
+    "ruleNames": [
+      "MD042",
+      "no-empty-links"
+    ],
+    "ruleDescription": "No empty links",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
+    "errorDetail": null,
+    "errorContext": "[empty]()",
+    "errorRange": [
+      4,
+      11
+    ],
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 17,
+    "ruleNames": [
+      "MD042",
+      "no-empty-links"
+    ],
+    "ruleDescription": "No empty links",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
+    "errorDetail": null,
+    "errorContext": "[empty one]()",
+    "errorRange": [
+      25,
+      13
+    ],
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 31,
+    "ruleNames": [
+      "MD043",
+      "required-headings",
+      "required-headers"
+    ],
+    "ruleDescription": "Required heading structure",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md043",
+    "errorDetail": null,
+    "errorContext": "# Heading",
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 9,
+    "ruleNames": [
+      "MD044",
+      "proper-names"
+    ],
+    "ruleDescription": "Proper names should have the correct capitalization",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+    "errorDetail": "Expected: markdownlint; Actual: MARKDOWNLINT",
+    "errorContext": null,
+    "errorRange": [
+      29,
+      12
+    ],
+    "fixInfo": {
+      "editColumn": 29,
+      "deleteCount": 12,
+      "insertText": "markdownlint"
     }
+  },
+  {
+    "lineNumber": 12,
+    "ruleNames": [
+      "MD044",
+      "proper-names"
+    ],
+    "ruleDescription": "Proper names should have the correct capitalization",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+    "errorDetail": "Expected: markdownlint; Actual: Markdownlint",
+    "errorContext": null,
+    "errorRange": [
+      7,
+      12
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 12,
+      "insertText": "markdownlint"
+    }
+  },
+  {
+    "lineNumber": 15,
+    "ruleNames": [
+      "MD044",
+      "proper-names"
+    ],
+    "ruleDescription": "Proper names should have the correct capitalization",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md044",
+    "errorDetail": "Expected: markdownlint; Actual: MarkDownLint",
+    "errorContext": null,
+    "errorRange": [
+      1,
+      12
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 12,
+      "insertText": "markdownlint"
+    }
+  },
+  {
+    "lineNumber": 19,
+    "ruleNames": [
+      "MD045",
+      "no-alt-text"
+    ],
+    "ruleDescription": "Images should have alternate text (alt text)",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md045",
+    "errorDetail": null,
+    "errorContext": null,
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 25,
+    "ruleNames": [
+      "MD046",
+      "code-block-style"
+    ],
+    "ruleDescription": "Code block style",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md046",
+    "errorDetail": "Expected: fenced; Actual: indented",
+    "errorContext": null,
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 31,
+    "ruleNames": [
+      "MD047",
+      "single-trailing-newline"
+    ],
+    "ruleDescription": "Files should end with a single newline character",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md047",
+    "errorDetail": null,
+    "errorContext": null,
+    "errorRange": [
+      25,
+      1
+    ],
+    "fixInfo": {
+      "editColumn": 26,
+      "insertText": "\n"
+    }
+  },
+  {
+    "lineNumber": 27,
+    "ruleNames": [
+      "MD048",
+      "code-fence-style"
+    ],
+    "ruleDescription": "Code fence style",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md048",
+    "errorDetail": "Expected: backtick; Actual: tilde",
+    "errorContext": null,
+    "errorRange": null,
+    "fixInfo": null
+  }
 ]

@@ -1,263 +1,585 @@
 [
-    {
-        "lineNumber": 3,
-        "ruleNames": [ "MD031", "blanks-around-fences" ],
-        "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
-        "errorDetail": null,
-        "errorContext": "```",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 4,
-        "ruleNames": [ "MD032", "blanks-around-lists" ],
-        "ruleDescription": "Lists should be surrounded by blank lines",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md032",
-        "errorDetail": null,
-        "errorContext": "* List",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 47,
-        "ruleNames": [ "MD032", "blanks-around-lists" ],
-        "ruleDescription": "Lists should be surrounded by blank lines",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md032",
-        "errorDetail": null,
-        "errorContext": "* List",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 6,
-        "ruleNames": [ "MD033", "no-inline-html" ],
-        "ruleDescription": "Inline HTML",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
-        "errorDetail": "Element: hr",
-        "errorContext": null,
-        "errorRange": [ 7, 5 ]
-    },
-    {
-        "lineNumber": 8,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com",
-        "errorRange": [ 6, 19 ]
-    },
-    {
-        "lineNumber": 11,
-        "ruleNames": [ "MD035", "hr-style" ],
-        "ruleDescription": "Horizontal rule style",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md035",
-        "errorDetail": "Expected: ---; Actual: ***",
-        "errorContext": null,
-        "errorRange": null
-    },
-    {
-        "lineNumber": 13,
-        "ruleNames": [ "MD036", "no-emphasis-as-heading", "no-emphasis-as-header" ],
-        "ruleDescription": "Emphasis used instead of a heading",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md036",
-        "errorDetail": null,
-        "errorContext": "Emphasis",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 15,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "* inside *",
-        "errorRange": [ 7, 10 ]
-    },
-    {
-        "lineNumber": 31,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "* some*",
-        "errorRange": [ 17, 7 ]
-    },
-    {
-        "lineNumber": 32,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "*some *",
-        "errorRange": [ 17, 7 ]
-    },
-    {
-        "lineNumber": 33,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "**some **",
-        "errorRange": [ 17, 9 ]
-    },
-    {
-        "lineNumber": 34,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "_ some_",
-        "errorRange": [ 17, 7 ]
-    },
-    {
-        "lineNumber": 35,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "__ some __",
-        "errorRange": [ 19, 10 ]
-    },
-    {
-        "lineNumber": 62,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "* inside",
-        "errorRange": [ 7, 8 ]
-    },
-    {
-        "lineNumber": 63,
-        "ruleNames": [ "MD037", "no-space-in-emphasis" ],
-        "ruleDescription": "Spaces inside emphasis markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
-        "errorDetail": null,
-        "errorContext": "multi-line *",
-        "errorRange": [ 1, 12 ]
-    },
-    {
-        "lineNumber": 17,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "` inside`",
-        "errorRange": [ 7, 9 ]
-    },
-    {
-        "lineNumber": 24,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "`` inside``",
-        "errorRange": [ 7, 11 ]
-    },
-    {
-        "lineNumber": 25,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "` code`",
-        "errorRange": [ 19, 7 ]
-    },
-    {
-        "lineNumber": 26,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "` elements`",
-        "errorRange": [ 26, 11 ]
-    },
-    {
-        "lineNumber": 27,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "`` code``",
-        "errorRange": [ 21, 9 ]
-    },
-    {
-        "lineNumber": 28,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "``  ` embedded backtick``",
-        "errorRange": [ 1, 25 ]
-    },
-    {
-        "lineNumber": 29,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "``embedded backtick`  ``",
-        "errorRange": [ 1, 24 ]
-    },
-    {
-        "lineNumber": 38,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "` code",
-        "errorRange": [ 6, 6 ]
-    },
-    {
-        "lineNumber": 44,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "span  `",
-        "errorRange": [ 1, 7 ]
-    },
-    {
-        "lineNumber": 53,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "span code ```",
-        "errorRange": [ 1, 13 ]
-    },
-    {
-        "lineNumber": 55,
-        "ruleNames": [ "MD038", "no-space-in-code" ],
-        "ruleDescription": "Spaces inside code span elements",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
-        "errorDetail": null,
-        "errorContext": "```` code",
-        "errorRange": [ 11, 9 ]
-    },
-    {
-        "lineNumber": 19,
-        "ruleNames": [ "MD039", "no-space-in-links" ],
-        "ruleDescription": "Spaces inside link text",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
-        "errorDetail": null,
-        "errorContext": "[ inside ]",
-        "errorRange": [ 7, 10 ]
-    },
-    {
-        "lineNumber": 60,
-        "ruleNames": [ "MD039", "no-space-in-links" ],
-        "ruleDescription": "Spaces inside link text",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
-        "errorDetail": null,
-        "errorContext": "[ space]",
-        "errorRange": [ 6, 8 ]
-    },
-    {
-        "lineNumber": 21,
-        "ruleNames": [ "MD040", "fenced-code-language" ],
-        "ruleDescription": "Fenced code blocks should have a language specified",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md040",
-        "errorDetail": null,
-        "errorContext": "```",
-        "errorRange": null
+  {
+    "lineNumber": 3,
+    "ruleNames": [
+      "MD031",
+      "blanks-around-fences"
+    ],
+    "ruleDescription": "Fenced code blocks should be surrounded by blank lines",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md031",
+    "errorDetail": null,
+    "errorContext": "```",
+    "errorRange": null,
+    "fixInfo": {
+      "lineNumber": 4,
+      "insertText": "\n"
     }
+  },
+  {
+    "lineNumber": 4,
+    "ruleNames": [
+      "MD032",
+      "blanks-around-lists"
+    ],
+    "ruleDescription": "Lists should be surrounded by blank lines",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md032",
+    "errorDetail": null,
+    "errorContext": "* List",
+    "errorRange": null,
+    "fixInfo": {
+      "insertText": "\n"
+    }
+  },
+  {
+    "lineNumber": 47,
+    "ruleNames": [
+      "MD032",
+      "blanks-around-lists"
+    ],
+    "ruleDescription": "Lists should be surrounded by blank lines",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md032",
+    "errorDetail": null,
+    "errorContext": "* List",
+    "errorRange": null,
+    "fixInfo": {
+      "lineNumber": 48,
+      "insertText": "\n"
+    }
+  },
+  {
+    "lineNumber": 6,
+    "ruleNames": [
+      "MD033",
+      "no-inline-html"
+    ],
+    "ruleDescription": "Inline HTML",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md033",
+    "errorDetail": "Element: hr",
+    "errorContext": null,
+    "errorRange": [
+      7,
+      5
+    ],
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 8,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com",
+    "errorRange": [
+      6,
+      19
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 19,
+      "insertText": "<https://example.com>"
+    }
+  },
+  {
+    "lineNumber": 11,
+    "ruleNames": [
+      "MD035",
+      "hr-style"
+    ],
+    "ruleDescription": "Horizontal rule style",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md035",
+    "errorDetail": "Expected: ---; Actual: ***",
+    "errorContext": null,
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 13,
+    "ruleNames": [
+      "MD036",
+      "no-emphasis-as-heading",
+      "no-emphasis-as-header"
+    ],
+    "ruleDescription": "Emphasis used instead of a heading",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md036",
+    "errorDetail": null,
+    "errorContext": "Emphasis",
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 15,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "* inside *",
+    "errorRange": [
+      7,
+      10
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 10,
+      "insertText": "*inside*"
+    }
+  },
+  {
+    "lineNumber": 31,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "* some*",
+    "errorRange": [
+      17,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 17,
+      "deleteCount": 7,
+      "insertText": "*some*"
+    }
+  },
+  {
+    "lineNumber": 32,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "*some *",
+    "errorRange": [
+      17,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 17,
+      "deleteCount": 7,
+      "insertText": "*some*"
+    }
+  },
+  {
+    "lineNumber": 33,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "**some **",
+    "errorRange": [
+      17,
+      9
+    ],
+    "fixInfo": {
+      "editColumn": 17,
+      "deleteCount": 9,
+      "insertText": "**some**"
+    }
+  },
+  {
+    "lineNumber": 34,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "_ some_",
+    "errorRange": [
+      17,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 17,
+      "deleteCount": 7,
+      "insertText": "_some_"
+    }
+  },
+  {
+    "lineNumber": 35,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "__ some __",
+    "errorRange": [
+      19,
+      10
+    ],
+    "fixInfo": {
+      "editColumn": 19,
+      "deleteCount": 10,
+      "insertText": "__some__"
+    }
+  },
+  {
+    "lineNumber": 62,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "* inside",
+    "errorRange": [
+      7,
+      8
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 8,
+      "insertText": "*inside"
+    }
+  },
+  {
+    "lineNumber": 63,
+    "ruleNames": [
+      "MD037",
+      "no-space-in-emphasis"
+    ],
+    "ruleDescription": "Spaces inside emphasis markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md037",
+    "errorDetail": null,
+    "errorContext": "multi-line *",
+    "errorRange": [
+      1,
+      12
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 12,
+      "insertText": "multi-line*"
+    }
+  },
+  {
+    "lineNumber": 17,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "` inside`",
+    "errorRange": [
+      7,
+      9
+    ],
+    "fixInfo": {
+      "editColumn": 8,
+      "deleteCount": 7,
+      "insertText": "inside"
+    }
+  },
+  {
+    "lineNumber": 24,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "`` inside``",
+    "errorRange": [
+      7,
+      11
+    ],
+    "fixInfo": {
+      "editColumn": 9,
+      "deleteCount": 7,
+      "insertText": "inside"
+    }
+  },
+  {
+    "lineNumber": 25,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "` code`",
+    "errorRange": [
+      19,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 20,
+      "deleteCount": 5,
+      "insertText": "code"
+    }
+  },
+  {
+    "lineNumber": 26,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "` elements`",
+    "errorRange": [
+      26,
+      11
+    ],
+    "fixInfo": {
+      "editColumn": 27,
+      "deleteCount": 9,
+      "insertText": "elements"
+    }
+  },
+  {
+    "lineNumber": 27,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "`` code``",
+    "errorRange": [
+      21,
+      9
+    ],
+    "fixInfo": {
+      "editColumn": 23,
+      "deleteCount": 5,
+      "insertText": "code"
+    }
+  },
+  {
+    "lineNumber": 28,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "``  ` embedded backtick``",
+    "errorRange": [
+      1,
+      25
+    ],
+    "fixInfo": {
+      "editColumn": 3,
+      "deleteCount": 21,
+      "insertText": " ` embedded backtick"
+    }
+  },
+  {
+    "lineNumber": 29,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "``embedded backtick`  ``",
+    "errorRange": [
+      1,
+      24
+    ],
+    "fixInfo": {
+      "editColumn": 3,
+      "deleteCount": 20,
+      "insertText": "embedded backtick` "
+    }
+  },
+  {
+    "lineNumber": 38,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "` code",
+    "errorRange": [
+      6,
+      6
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 5,
+      "insertText": "code"
+    }
+  },
+  {
+    "lineNumber": 44,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "span  `",
+    "errorRange": [
+      1,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 6,
+      "insertText": "span"
+    }
+  },
+  {
+    "lineNumber": 53,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "span code ```",
+    "errorRange": [
+      1,
+      13
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 10,
+      "insertText": "span code"
+    }
+  },
+  {
+    "lineNumber": 55,
+    "ruleNames": [
+      "MD038",
+      "no-space-in-code"
+    ],
+    "ruleDescription": "Spaces inside code span elements",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md038",
+    "errorDetail": null,
+    "errorContext": "```` code",
+    "errorRange": [
+      11,
+      9
+    ],
+    "fixInfo": {
+      "editColumn": 15,
+      "deleteCount": 5,
+      "insertText": "code"
+    }
+  },
+  {
+    "lineNumber": 19,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ inside ]",
+    "errorRange": [
+      7,
+      10
+    ],
+    "fixInfo": {
+      "editColumn": 8,
+      "deleteCount": 8,
+      "insertText": "inside"
+    }
+  },
+  {
+    "lineNumber": 60,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ space]",
+    "errorRange": [
+      6,
+      8
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 6,
+      "insertText": "space"
+    }
+  },
+  {
+    "lineNumber": 60,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[space ]",
+    "errorRange": [
+      26,
+      8
+    ],
+    "fixInfo": {
+      "editColumn": 27,
+      "deleteCount": 6,
+      "insertText": "space"
+    }
+  },
+  {
+    "lineNumber": 60,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ space ]",
+    "errorRange": [
+      46,
+      9
+    ],
+    "fixInfo": {
+      "editColumn": 47,
+      "deleteCount": 7,
+      "insertText": "space"
+    }
+  },
+  {
+    "lineNumber": 21,
+    "ruleNames": [
+      "MD040",
+      "fenced-code-language"
+    ],
+    "ruleDescription": "Fenced code blocks should have a language specified",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md040",
+    "errorDetail": null,
+    "errorContext": "```",
+    "errorRange": null,
+    "fixInfo": null
+  }
 ]

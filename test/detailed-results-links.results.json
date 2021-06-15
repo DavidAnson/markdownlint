@@ -1,110 +1,275 @@
 [
-    {
-        "lineNumber": 30,
-        "ruleNames": [ "MD011", "no-reversed-links" ],
-        "ruleDescription": "Reversed link syntax",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md011",
-        "errorDetail": "(Incorrect link syntax)[https://www.example.com/]",
-        "errorContext": null,
-        "errorRange": [ 1, 49 ]
-    },
-    {
-        "lineNumber": 3,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/",
-        "errorRange": [ 6, 20 ]
-    },
-    {
-        "lineNumber": 5,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/bare",
-        "errorRange": [ 42, 24 ]
-    },
-    {
-        "lineNumber": 7,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/bare",
-        "errorRange": [ 6, 24 ]
-    },
-    {
-        "lineNumber": 9,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/",
-        "errorRange": [ 48, 20 ]
-    },
-    {
-        "lineNumber": 11,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/bare",
-        "errorRange": [ 44, 24 ]
-    },
-    {
-        "lineNumber": 13,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/dir",
-        "errorRange": [ 6, 23 ]
-    },
-    {
-        "lineNumber": 14,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/file.txt",
-        "errorRange": [ 6, 28 ]
-    },
-    {
-        "lineNumber": 16,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/dir/dir/fi...",
-        "errorRange": [ 6, 44 ]
-    },
-    {
-        "lineNumber": 24,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/same",
-        "errorRange": [ 43, 24 ]
-    },
-    {
-        "lineNumber": 26,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/same",
-        "errorRange": null
-    },
-    {
-        "lineNumber": 28,
-        "ruleNames": [ "MD034", "no-bare-urls" ],
-        "ruleDescription": "Bare URL used",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
-        "errorDetail": null,
-        "errorContext": "https://example.com/first",
-        "errorRange": [ 6, 25 ]
+  {
+    "lineNumber": 30,
+    "ruleNames": [
+      "MD011",
+      "no-reversed-links"
+    ],
+    "ruleDescription": "Reversed link syntax",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md011",
+    "errorDetail": "(Incorrect link syntax)[https://www.example.com/]",
+    "errorContext": null,
+    "errorRange": [
+      1,
+      49
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 49,
+      "insertText": "[Incorrect link syntax](https://www.example.com/)"
     }
+  },
+  {
+    "lineNumber": 3,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/",
+    "errorRange": [
+      6,
+      20
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 20,
+      "insertText": "<https://example.com/>"
+    }
+  },
+  {
+    "lineNumber": 5,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/bare",
+    "errorRange": [
+      42,
+      24
+    ],
+    "fixInfo": {
+      "editColumn": 42,
+      "deleteCount": 24,
+      "insertText": "<https://example.com/bare>"
+    }
+  },
+  {
+    "lineNumber": 7,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/bare",
+    "errorRange": [
+      6,
+      24
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 24,
+      "insertText": "<https://example.com/bare>"
+    }
+  },
+  {
+    "lineNumber": 9,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/",
+    "errorRange": [
+      48,
+      20
+    ],
+    "fixInfo": {
+      "editColumn": 48,
+      "deleteCount": 20,
+      "insertText": "<https://example.com/>"
+    }
+  },
+  {
+    "lineNumber": 11,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/bare",
+    "errorRange": [
+      44,
+      24
+    ],
+    "fixInfo": {
+      "editColumn": 44,
+      "deleteCount": 24,
+      "insertText": "<https://example.com/bare>"
+    }
+  },
+  {
+    "lineNumber": 13,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/dir",
+    "errorRange": [
+      6,
+      23
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 23,
+      "insertText": "<https://example.com/dir>"
+    }
+  },
+  {
+    "lineNumber": 14,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/file.txt",
+    "errorRange": [
+      6,
+      28
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 28,
+      "insertText": "<https://example.com/file.txt>"
+    }
+  },
+  {
+    "lineNumber": 16,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/dir/dir/fi...",
+    "errorRange": [
+      6,
+      44
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 44,
+      "insertText": "<https://example.com/dir/dir/file?query=param>"
+    }
+  },
+  {
+    "lineNumber": 24,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/same",
+    "errorRange": [
+      43,
+      24
+    ],
+    "fixInfo": {
+      "editColumn": 43,
+      "deleteCount": 24,
+      "insertText": "<https://example.com/same>"
+    }
+  },
+  {
+    "lineNumber": 26,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/same",
+    "errorRange": null,
+    "fixInfo": null
+  },
+  {
+    "lineNumber": 28,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/first",
+    "errorRange": [
+      6,
+      25
+    ],
+    "fixInfo": {
+      "editColumn": 6,
+      "deleteCount": 25,
+      "insertText": "<https://example.com/first>"
+    }
+  },
+  {
+    "lineNumber": 28,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/second",
+    "errorRange": [
+      42,
+      26
+    ],
+    "fixInfo": {
+      "editColumn": 42,
+      "deleteCount": 26,
+      "insertText": "<https://example.com/second>"
+    }
+  },
+  {
+    "lineNumber": 28,
+    "ruleNames": [
+      "MD034",
+      "no-bare-urls"
+    ],
+    "ruleDescription": "Bare URL used",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md034",
+    "errorDetail": null,
+    "errorContext": "https://example.com/third",
+    "errorRange": [
+      85,
+      25
+    ],
+    "fixInfo": {
+      "editColumn": 85,
+      "deleteCount": 25,
+      "insertText": "<https://example.com/third>"
+    }
+  }
 ]
