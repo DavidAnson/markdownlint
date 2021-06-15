@@ -34,13 +34,14 @@ function assertLintResults(results: markdownlint.LintResults) {
   assert.equal(results["string"][0].errorDetail, null);
   assert.equal(results["string"][0].errorContext, null);
   assert.deepEqual(results["string"][0].errorRange, [ 9, 1 ]);
-  assert(!!results["string"][0].fixInfo);
-  // @ts-ignore
-  assert.equal(results["string"][0].fixInfo.editColumn, 10);
-  // @ts-ignore
-  assert(!results["string"][0].fixInfo.deleteCount);
-  // @ts-ignore
-  assert.equal(results["string"][0].fixInfo.insertText, "\n");
+  const fixInfo = results["string"][0].fixInfo;
+  assert(!!fixInfo);
+  if (fixInfo) {
+    assert.equal(fixInfo.lineNumber, null);
+    assert.equal(fixInfo.editColumn, 10);
+    assert(!fixInfo.deleteCount);
+    assert.equal(fixInfo.insertText, "\n");
+  }
   assert.equal(results["../bad.md"].length, 2);
   // Deliberate assignment to unused variable validates types
   // False-positive for js/useless-assignment-to-local

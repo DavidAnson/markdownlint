@@ -317,6 +317,10 @@ type LintError = {
  */
 type FixInfo = {
     /**
+     * Line number (1-based).
+     */
+    lineNumber?: number;
+    /**
      * Column of the fix (1-based).
      */
     editColumn?: number;
