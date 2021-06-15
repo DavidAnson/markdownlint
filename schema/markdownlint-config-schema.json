@@ -1561,7 +1561,7 @@
     }
   },
   "additionalProperties": {
-    "type:": [
+    "type": [
       "boolean",
       "object"
     ]

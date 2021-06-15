@@ -32,7 +32,7 @@ const schema = {
     }
   },
   "additionalProperties": {
-    "type:": [
+    "type": [
       "boolean",
       "object"
     ]
