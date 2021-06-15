@@ -134,12 +134,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [
       join(rootDir, "**/*.md"),
-      "!" + join(rootDir, "samples/**/*.md"),
-      // MD044 newly detects an issue in this file
-      "!" + join(
-        rootDir,
-        "docs/framework/wcf/feature-details/configuring-iis-for-wcf.md"
-      )
+      "!" + join(rootDir, "samples/**/*.md")
     ];
     const configPath = join(rootDir, ".markdownlint.json");
     return lintTestRepo(t, globPatterns, configPath);
