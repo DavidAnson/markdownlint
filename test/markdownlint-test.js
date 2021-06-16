@@ -1010,6 +1010,22 @@ test("validateConfigSchemaAllowsUnknownProperties", (t) => {
   });
 });
 
+test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
+  t.plan(4);
+  for (const allowed of [ true, {} ]) {
+    t.true(
+      // @ts-ignore
+      tv4.validate({ "property": allowed }, configSchema),
+      `Unknown property value ${allowed} blocked`);
+  }
+  for (const blocked of [ 2, "string" ]) {
+    t.false(
+      // @ts-ignore
+      tv4.validate({ "property": blocked }, configSchema),
+      `Unknown property value ${blocked} allowed`);
+  }
+});
+
 test("validateConfigExampleJson", (t) => {
   t.plan(2);
 
