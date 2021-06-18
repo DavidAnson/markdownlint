@@ -519,6 +519,36 @@ module.exports.addErrorContext = function addErrorContext(onError, lineNumber, c
     }
     addError(onError, lineNumber, null, context, range, fixInfo);
 };
+/**
+ * Returns an array of code span ranges.
+ *
+ * @param {string[]} lines Lines to scan for code span ranges.
+ * @returns {number[][]} Array of ranges (line, index, length).
+ */
+module.exports.inlineCodeSpanRanges = function (lines) {
+    var exclusions = [];
+    forEachInlineCodeSpan(lines.join("\n"), function (code, lineIndex, columnIndex) {
+        var codeLines = code.split(newLineRe);
+        // eslint-disable-next-line unicorn/no-for-loop
+        for (var i = 0; i < codeLines.length; i++) {
+            exclusions.push([lineIndex + i, columnIndex, codeLines[i].length]);
+            columnIndex = 0;
+        }
+    });
+    return exclusions;
+};
+/**
+ * Determines whether the specified range overlaps another range.
+ *
+ * @param {number[][]} ranges Array of ranges (line, index, length).
+ * @param {number} lineIndex Line index to check.
+ * @param {number} index Index to check.
+ * @param {number} length Length to check.
+ * @returns {boolean} True iff the specified range overlaps.
+ */
+module.exports.overlapsAnyRange = function (ranges, lineIndex, index, length) { return (!ranges.every(function (span) { return ((lineIndex !== span[0]) ||
+    (index + length < span[1]) ||
+    (index > span[1] + span[2])); })); };
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
     var range = null;
@@ -2177,30 +2207,30 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachInlineChild = _a.forEachInlineChild, unescapeMarkdown = _a.unescapeMarkdown;
-var reversedLinkRe = /\(([^)]+)\)\[([^\]^][^\]]*)]/g;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, inlineCodeSpanRanges = _a.inlineCodeSpanRanges, overlapsAnyRange = _a.overlapsAnyRange;
+var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var reversedLinkRe = /(?<![\\\]])\(([^)]+)(?<!\\)\)\[([^\]^][^\]]*)(?<!\\)](?!\()/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
     "description": "Reversed link syntax",
     "tags": ["links"],
     "function": function MD011(params, onError) {
-        forEachInlineChild(params, "text", function (token) {
-            var lineNumber = token.lineNumber, content = token.content;
-            var match = null;
-            while ((match = reversedLinkRe.exec(content)) !== null) {
-                var reversedLink = match[0], linkText = match[1], linkDestination = match[2];
-                var line = params.lines[lineNumber - 1];
-                var column = unescapeMarkdown(line).indexOf(reversedLink) + 1;
-                var length_1 = reversedLink.length;
-                var range = column ? [column, length_1] : null;
-                var fixInfo = column ?
-                    {
-                        "editColumn": column,
-                        "deleteCount": length_1,
-                        "insertText": "[" + linkText + "](" + linkDestination + ")"
-                    } :
-                    null;
-                addError(onError, lineNumber, reversedLink, null, range, fixInfo);
+        var exclusions = inlineCodeSpanRanges(params.lines);
+        forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
+            if (!inCode && !onFence) {
+                var match = null;
+                while ((match = reversedLinkRe.exec(line)) !== null) {
+                    var reversedLink = match[0], linkText = match[1], linkDestination = match[2];
+                    var index = match.index;
+                    var length_1 = match[0].length;
+                    if (!overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
+                        addError(onError, lineIndex + 1, reversedLink, null, [index + 1, length_1], {
+                            "editColumn": index + 1,
+                            "deleteCount": length_1,
+                            "insertText": "[" + linkText + "](" + linkDestination + ")"
+                        });
+                    }
+                }
             }
         });
     }
@@ -3748,7 +3778,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe, newLineRe = _a.newLineRe, forEachInlineCodeSpan = _a.forEachInlineCodeSpan;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, inlineCodeSpanRanges = _a.inlineCodeSpanRanges, overlapsAnyRange = _a.overlapsAnyRange, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe;
 var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
@@ -3779,14 +3809,7 @@ module.exports = {
             }
         });
         if (!includeCodeBlocks) {
-            forEachInlineCodeSpan(params.lines.join("\n"), function (code, lineIndex, columnIndex) {
-                var codeLines = code.split(newLineRe);
-                // eslint-disable-next-line unicorn/no-for-loop
-                for (var i = 0; i < codeLines.length; i++) {
-                    exclusions.push([lineIndex + i, columnIndex, codeLines[i].length]);
-                    columnIndex = 0;
-                }
-            });
+            exclusions.push.apply(exclusions, inlineCodeSpanRanges(params.lines));
         }
         var _loop_1 = function (name_1) {
             var escapedName = escapeForRegExp(name_1);
@@ -3797,13 +3820,11 @@ module.exports = {
             forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
                 if (includeCodeBlocks || (!inCode && !onFence)) {
                     var match = null;
-                    var _loop_2 = function () {
+                    while ((match = nameRe.exec(line)) !== null) {
                         var leftMatch = match[1], nameMatch = match[2];
                         var index = match.index + leftMatch.length;
                         var length_1 = nameMatch.length;
-                        if (exclusions.every(function (span) { return ((lineIndex !== span[0]) ||
-                            (index + length_1 < span[1]) ||
-                            (index > span[1] + span[2])); })) {
+                        if (!overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
                             addErrorDetailIf(onError, lineIndex + 1, name_1, nameMatch, null, null, [index + 1, length_1], {
                                 "editColumn": index + 1,
                                 "deleteCount": length_1,
@@ -3811,9 +3832,6 @@ module.exports = {
                             });
                         }
                         exclusions.push([lineIndex, index, length_1]);
-                    };
-                    while ((match = nameRe.exec(line)) !== null) {
-                        _loop_2();
                     }
                 }
             });
