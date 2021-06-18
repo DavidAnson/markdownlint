@@ -303,14 +303,14 @@ module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
     });
 };
 // Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(params) {
+module.exports.flattenLists = function flattenLists(tokens) {
     var flattenedLists = [];
     var stack = [];
     var current = null;
     var nesting = 0;
     var nestingStack = [];
     var lastWithMap = { "map": [0, 1] };
-    params.tokens.forEach(function (token) {
+    tokens.forEach(function (token) {
         if (isMathBlock(token) && token.map[1]) {
             // markdown-it-texmath plugin does not account for math_block_end
             token.map[1]++;
@@ -760,13 +760,6 @@ module.exports.applyFixes = function applyFixes(input, errors) {
 "use strict";
 // @ts-check
 
-var lineMetadata = null;
-module.exports.lineMetadata = function (value) {
-    if (value) {
-        lineMetadata = value;
-    }
-    return lineMetadata;
-};
 var flattenedLists = null;
 module.exports.flattenedLists = function (value) {
     if (value) {
@@ -774,9 +767,24 @@ module.exports.flattenedLists = function (value) {
     }
     return flattenedLists;
 };
+var inlineCodeSpanRanges = null;
+module.exports.inlineCodeSpanRanges = function (value) {
+    if (value) {
+        inlineCodeSpanRanges = value;
+    }
+    return inlineCodeSpanRanges;
+};
+var lineMetadata = null;
+module.exports.lineMetadata = function (value) {
+    if (value) {
+        lineMetadata = value;
+    }
+    return lineMetadata;
+};
 module.exports.clear = function () {
-    lineMetadata = null;
     flattenedLists = null;
+    inlineCodeSpanRanges = null;
+    lineMetadata = null;
 };
 
 
@@ -1268,7 +1276,8 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         frontMatterLines: frontMatterLines
     };
     cache.lineMetadata(helpers.getLineMetadata(params));
-    cache.flattenedLists(helpers.flattenLists(params));
+    cache.flattenedLists(helpers.flattenLists(params.tokens));
+    cache.inlineCodeSpanRanges(helpers.inlineCodeSpanRanges(params.lines));
     // Function to run for each rule
     var result = (resultVersion === 0) ? {} : [];
     // eslint-disable-next-line jsdoc/require-jsdoc
@@ -2207,15 +2216,15 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, inlineCodeSpanRanges = _a.inlineCodeSpanRanges, overlapsAnyRange = _a.overlapsAnyRange;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), inlineCodeSpanRanges = _b.inlineCodeSpanRanges, lineMetadata = _b.lineMetadata;
 var reversedLinkRe = /(?<![\\\]])\(([^)]+)(?<!\\)\)\[([^\]^][^\]]*)(?<!\\)](?!\()/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
     "description": "Reversed link syntax",
     "tags": ["links"],
     "function": function MD011(params, onError) {
-        var exclusions = inlineCodeSpanRanges(params.lines);
+        var exclusions = inlineCodeSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
             if (!inCode && !onFence) {
                 var match = null;
@@ -3778,8 +3787,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, inlineCodeSpanRanges = _a.inlineCodeSpanRanges, overlapsAnyRange = _a.overlapsAnyRange, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), inlineCodeSpanRanges = _b.inlineCodeSpanRanges, lineMetadata = _b.lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
     "description": "Proper names should have the correct capitalization",
@@ -3809,7 +3818,7 @@ module.exports = {
             }
         });
         if (!includeCodeBlocks) {
-            exclusions.push.apply(exclusions, inlineCodeSpanRanges(params.lines));
+            exclusions.push.apply(exclusions, inlineCodeSpanRanges());
         }
         var _loop_1 = function (name_1) {
             var escapedName = escapeForRegExp(name_1);

@@ -306,14 +306,14 @@ module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
 };
 
 // Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(params) {
+module.exports.flattenLists = function flattenLists(tokens) {
   const flattenedLists = [];
   const stack = [];
   let current = null;
   let nesting = 0;
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
-  params.tokens.forEach((token) => {
+  tokens.forEach((token) => {
     if (isMathBlock(token) && token.map[1]) {
       // markdown-it-texmath plugin does not account for math_block_end
       token.map[1]++;
