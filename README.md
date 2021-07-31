@@ -249,6 +249,19 @@ or
 These changes apply to the entire file regardless of where the comment
 is located. Multiple such comments (if present) are applied top-to-bottom.
 
+### Ignoring files and folders
+
+You can ignore files and folders by creating a `.markdownlintignore` file.
+
+The syntax of this file is the same as other ignore files such as `.gitignore` or `.eslintignore`.
+For example
+
+```sh
+dict       # ignore this folder
+note.md    # ignore this file
+*.draft.md # ignore with wildcards
+```
+
 ## API
 
 ### Linting
