@@ -31,9 +31,6 @@ const emphasisMarkersRe = /[_*]/g;
 // Regular expression for inline links and shortcut reference links
 const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
 
-// readFile options for reading with the UTF-8 encoding
-module.exports.utf8Encoding = "utf8";
-
 // All punctuation characters (normal and full-width)
 const allPunctuation = ".,;:!?。，；：！？";
 module.exports.allPunctuation = allPunctuation;
