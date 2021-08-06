@@ -55,8 +55,6 @@ var linkRe = /(\[(?:[^[\]]|\[[^\]]*\])*\])(\(\S*\)|\[\S*\])?/g;
 module.exports.linkRe = linkRe;
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
-// readFile options for reading with the UTF-8 encoding
-module.exports.utf8Encoding = "utf8";
 // All punctuation characters (normal and full-width)
 var allPunctuation = ".,;:!?。，；：！？";
 module.exports.allPunctuation = allPunctuation;
@@ -1463,10 +1461,10 @@ function lintFile(ruleList, file, md, config, frontMatter, handleRuleFailures, n
     // Make a/synchronous call to read file
     if (synchronous) {
         // @ts-ignore
-        lintContentWrapper(null, fs.readFileSync(file, helpers.utf8Encoding));
+        lintContentWrapper(null, fs.readFileSync(file, "utf8"));
     }
     else {
-        fs.readFile(file, helpers.utf8Encoding, lintContentWrapper);
+        fs.readFile(file, "utf8", lintContentWrapper);
     }
 }
 /**
@@ -1683,7 +1681,7 @@ function readConfig(file, parsers, callback) {
         parsers = null;
     }
     // Read file
-    fs.readFile(file, helpers.utf8Encoding, function (err, content) {
+    fs.readFile(file, "utf8", function (err, content) {
         if (err) {
             return callback(err);
         }
@@ -1730,7 +1728,7 @@ function readConfigPromise(file, parsers) {
 function readConfigSync(file, parsers) {
     // Read file
     // @ts-ignore
-    var content = fs.readFileSync(file, helpers.utf8Encoding);
+    var content = fs.readFileSync(file, "utf8");
     // Try to parse file
     var _a = parseConfiguration(file, content, parsers), config = _a.config, message = _a.message;
     if (!config) {
