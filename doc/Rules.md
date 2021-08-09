@@ -1175,8 +1175,11 @@ or
 1.  Bar
 ```
 
+Also, Prettier, the famous code formatter, forces the latter style (always 3 spaces after the markers) if the indent size is 4 spaces.
+
 To fix this, ensure the correct number of spaces are used after the list marker
 for your selected document style.
+If you are conplaining about the default rule, cosider adding `ul_single`, `ul_multi`, `ol_single`, and `ol_multi` in `MD030` in the configuration (See the example [.markdownlint.jsonc`](https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.jsonc) or [.markdown.yaml](https://github.com/DavidAnson/markdownlint/blob/main/schema/.markdownlint.yaml)) to adjust the number of spaces.
 
 Rationale: Violations of this rule can lead to improperly rendered content.
 
