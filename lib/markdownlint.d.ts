@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -58,7 +58,7 @@ type Options = {
     fs?: any;
 };
 /**
- * Called with the result of the lint operation.
+ * Called with the result of the lint function.
  */
 type LintCallback = (err: Error | null, results?: LintResults) => void;
 /**
@@ -355,9 +355,13 @@ type RuleConfiguration = boolean | any;
  */
 type ConfigurationParser = (text: string) => Configuration;
 /**
- * Called with the result of the readConfig operation.
+ * Called with the result of the readConfig function.
  */
 type ReadConfigCallback = (err: Error | null, config?: Configuration) => void;
+/**
+ * Called with the result of the resolveConfigExtends function.
+ */
+type ResolveConfigExtendsCallback = (err: Error | null, path?: string) => void;
 /**
  * Lint specified Markdown files.
  *

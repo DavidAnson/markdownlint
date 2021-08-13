@@ -649,7 +649,7 @@ In advanced scenarios, it may be desirable to bypass the default file system API
 If a custom file system implementation is provided, `markdownlint` will use that
 instead of invoking `require("fs")`.
 
-Note: The only methods called are `readFile`, `readFileSync`, and `accessSync`.
+Note: The only methods called are `readFile`, `readFileSync`, `access`, and `accessSync`.
 
 #### callback
 

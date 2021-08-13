@@ -1155,8 +1155,9 @@ test.cb("configCustomFileSystem", (t) => {
     "MD002": true
   };
   const fsApi = {
-    "accessSync": (p) => {
-      t.is(p, extended);
+    "access": (p, m, cb) => {
+      t.is(path.resolve(p), extended);
+      return (cb || m)();
     },
     "readFile": (p, o, cb) => {
       switch (p) {
@@ -1455,7 +1456,7 @@ test("configCustomFileSystemSync", (t) => {
   };
   const fsApi = {
     "accessSync": (p) => {
-      t.is(p, extended);
+      t.is(path.resolve(p), extended);
     },
     "readFileSync": (p) => {
       switch (p) {
@@ -1520,8 +1521,9 @@ test.cb("configCustomFileSystemPromise", (t) => {
     "MD002": true
   };
   const fsApi = {
-    "accessSync": (p) => {
-      t.is(p, extended);
+    "access": (p, m, cb) => {
+      t.is(path.resolve(p), extended);
+      return (cb || m)();
     },
     "readFile": (p, o, cb) => {
       switch (p) {

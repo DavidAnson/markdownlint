@@ -1645,9 +1645,36 @@ function parseConfiguration(name, content, parsers) {
  * @param {string} configFile Configuration file name.
  * @param {string} referenceId Referenced identifier to resolve.
  * @param {Object} fs File system implementation.
+ * @param {ResolveConfigExtendsCallback} [callback] Callback (err, result)
+ * function.
+ * @returns {void}
+ */
+function resolveConfigExtends(configFile, referenceId, fs, callback) {
+    var configFileDirname = path.dirname(configFile);
+    var resolvedExtendsFile = path.resolve(configFileDirname, referenceId);
+    fs.access(resolvedExtendsFile, function (err) {
+        if (err) {
+            // Not a file, try require.resolve
+            try {
+                return callback(null, dynamicRequire.resolve(referenceId, { "paths": [configFileDirname] }));
+            }
+            catch (_a) {
+                // Unable to resolve, use resolvedExtendsFile
+            }
+        }
+        return callback(null, resolvedExtendsFile);
+    });
+}
+/**
+ * Resolve referenced "extends" path in a configuration file
+ * using path.resolve() with require.resolve() as a fallback.
+ *
+ * @param {string} configFile Configuration file name.
+ * @param {string} referenceId Referenced identifier to resolve.
+ * @param {Object} fs File system implementation.
  * @returns {string} Resolved path to file.
  */
-function resolveConfigExtends(configFile, referenceId, fs) {
+function resolveConfigExtendsSync(configFile, referenceId, fs) {
     var configFileDirname = path.dirname(configFile);
     var resolvedExtendsFile = path.resolve(configFileDirname, referenceId);
     try {
@@ -1705,13 +1732,12 @@ function readConfig(file, parsers, fs, callback) {
         var configExtends = config["extends"];
         if (configExtends) {
             delete config["extends"];
-            var resolvedExtends = resolveConfigExtends(file, configExtends, fs);
-            return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
+            return resolveConfigExtends(file, configExtends, fs, function (_, resolvedExtends) { return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
                 if (errr) {
                     return callback(errr);
                 }
                 return callback(null, __assign(__assign({}, extendsConfig), config));
-            });
+            }); });
         }
         return callback(null, config);
     });
@@ -1752,7 +1778,7 @@ function readConfigSync(file, parsers, fs) {
     var configExtends = config["extends"];
     if (configExtends) {
         delete config["extends"];
-        var resolvedExtends = resolveConfigExtends(file, configExtends, fs);
+        var resolvedExtends = resolveConfigExtendsSync(file, configExtends, fs);
         return __assign(__assign({}, readConfigSync(resolvedExtends, parsers, fs)), config);
     }
     return config;
