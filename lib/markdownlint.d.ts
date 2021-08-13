@@ -52,6 +52,10 @@ type Options = {
      * Additional plugins.
      */
     markdownItPlugins?: Plugin[];
+    /**
+     * File system implementation.
+     */
+    fs?: any;
 };
 /**
  * Called with the result of the lint operation.
@@ -70,18 +74,20 @@ declare function markdownlintSync(options: Options): LintResults;
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing
  * function(s).
+ * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadConfigCallback, callback?: ReadConfigCallback): void;
+declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadConfigCallback, fs?: any, callback?: ReadConfigCallback): void;
 /**
  * Read specified configuration file synchronously.
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
  */
-declare function readConfigSync(file: string, parsers?: ConfigurationParser[]): Configuration;
+declare function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: any): Configuration;
 /**
  * Gets the (semantic) version of the library.
  *
@@ -364,6 +370,7 @@ declare function markdownlintPromise(options: Options): Promise<LintResults>;
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Promise<Configuration>} Configuration object.
  */
-declare function readConfigPromise(file: string, parsers?: ConfigurationParser[]): Promise<Configuration>;
+declare function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;

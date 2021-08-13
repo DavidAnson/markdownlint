@@ -294,7 +294,8 @@ function markdownlint(options) { ... }
 
 Type: `Object`
 
-Configures the function.
+Configures the function. All properties are optional, but at least one
+of `files` or `strings` should be set to provide input.
 
 ##### options.customRules
 
@@ -534,6 +535,16 @@ Each item in the top-level `Array` should be of the form:
 [ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
 ```
 
+##### options.fs
+
+Type: `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+
+In advanced scenarios, it may be desirable to bypass the default file system API.
+If a custom file system implementation is provided, `markdownlint` will use that
+instead of invoking `require("fs")`.
+
+Note: The only methods called are `readFile` and `readFileSync`.
+
 #### callback
 
 Type: `Function` taking (`Error`, `Object`)
@@ -566,10 +577,11 @@ Asynchronous API:
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-function readConfig(file, parsers, callback) { ... }
+function readConfig(file, parsers, fs, callback) { ... }
 ```
 
 Synchronous API:
@@ -580,13 +592,14 @@ Synchronous API:
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
  */
-function readConfigSync(file, parsers) { ... }
+function readConfigSync(file, parsers, fs) { ... }
 ```
 
 Promise API (in the `promises` namespace like Node.js's
-[`fs` Promises API](https://nodejs.org/api/fs.html#fs_fs_promises_api)):
+[`fs` Promises API](https://nodejs.org/api/fs.html#fs_promises_api)):
 
 ```js
 /**
@@ -594,9 +607,10 @@ Promise API (in the `promises` namespace like Node.js's
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Promise<Configuration>} Configuration object.
  */
-function readConfig(file, parsers) { ... }
+function readConfig(file, parsers, fs) { ... }
 ```
 
 #### file
@@ -626,6 +640,16 @@ For example:
 ```js
 [ JSON.parse, require("toml").parse, require("js-yaml").load ]
 ```
+
+#### fs
+
+Type: *Optional* `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+
+In advanced scenarios, it may be desirable to bypass the default file system API.
+If a custom file system implementation is provided, `markdownlint` will use that
+instead of invoking `require("fs")`.
+
+Note: The only methods called are `readFile`, `readFileSync`, and `accessSync`.
 
 #### callback
 

@@ -652,11 +652,13 @@ test.cb("readmeHeadings", (t) => {
           "##### options.noInlineConfig",
           "##### options.resultVersion",
           "##### options.markdownItPlugins",
+          "##### options.fs",
           "#### callback",
           "#### result",
           "### Config",
           "#### file",
           "#### parsers",
+          "#### fs",
           "#### callback",
           "#### result",
           "## Usage",
@@ -798,6 +800,40 @@ test.cb("missingStringValue", (t) => {
   });
 });
 
+test("customFileSystemSync", (t) => {
+  t.plan(2);
+  const file = "/dir/file.md";
+  const fsApi = {
+    "readFileSync": (p) => {
+      t.is(p, file);
+      return "# Heading";
+    }
+  };
+  const result = markdownlint.sync({
+    "files": file,
+    "fs": fsApi
+  });
+  t.deepEqual(result[file].length, 1, "Did not report violations.");
+});
+
+test.cb("customFileSystemAsync", (t) => {
+  t.plan(3);
+  const file = "/dir/file.md";
+  const fsApi = {
+    "readFile": (p, o, cb) => {
+      t.is(p, file);
+      cb(null, "# Heading");
+    }
+  };
+  markdownlint({
+    "files": file,
+    "fs": fsApi
+  }, function callback(err, result) {
+    t.falsy(err);
+    t.deepEqual(result[file].length, 1, "Did not report violations.");
+    t.end();
+  });
+});
 test.cb("readme", (t) => {
   t.plan(115);
   const tagToRules = {};
@@ -1105,6 +1141,52 @@ test.cb("configMultipleWithRequireResolve", (t) => {
     });
 });
 
+test.cb("configCustomFileSystem", (t) => {
+  t.plan(5);
+  const file = "/dir/file.json";
+  const extended = "/dir/extended.json";
+  const fileContent = {
+    "extends": extended,
+    "default": true,
+    "MD001": false
+  };
+  const extendedContent = {
+    "MD001": true,
+    "MD002": true
+  };
+  const fsApi = {
+    "accessSync": (p) => {
+      t.is(p, extended);
+    },
+    "readFile": (p, o, cb) => {
+      switch (p) {
+        case file:
+          t.is(p, file);
+          return cb(null, JSON.stringify(fileContent));
+        case extended:
+          t.is(p, extended);
+          return cb(null, JSON.stringify(extendedContent));
+        default:
+          return t.fail();
+      }
+    }
+  };
+  markdownlint.readConfig(
+    file,
+    null,
+    fsApi,
+    function callback(err, actual) {
+      t.falsy(err);
+      const expected = {
+        ...extendedContent,
+        ...fileContent
+      };
+      delete expected.extends;
+      t.deepEqual(actual, expected, "Config object not correct.");
+      t.end();
+    });
+});
+
 test.cb("configBadFile", (t) => {
   t.plan(4);
   markdownlint.readConfig("./test/config/config-badfile.json",
@@ -1358,6 +1440,45 @@ test("configMultipleHybridSync", (t) => {
   t.like(actual, expected, "Config object not correct.");
 });
 
+test("configCustomFileSystemSync", (t) => {
+  t.plan(4);
+  const file = "/dir/file.json";
+  const extended = "/dir/extended.json";
+  const fileContent = {
+    "extends": extended,
+    "default": true,
+    "MD001": false
+  };
+  const extendedContent = {
+    "MD001": true,
+    "MD002": true
+  };
+  const fsApi = {
+    "accessSync": (p) => {
+      t.is(p, extended);
+    },
+    "readFileSync": (p) => {
+      switch (p) {
+        case file:
+          t.is(p, file);
+          return JSON.stringify(fileContent);
+        case extended:
+          t.is(p, extended);
+          return JSON.stringify(extendedContent);
+        default:
+          return t.fail();
+      }
+    }
+  };
+  const actual = markdownlint.readConfigSync(file, null, fsApi);
+  const expected = {
+    ...extendedContent,
+    ...fileContent
+  };
+  delete expected.extends;
+  t.deepEqual(actual, expected, "Config object not correct.");
+});
+
 test("configBadHybridSync", (t) => {
   t.plan(1);
   t.throws(
@@ -1380,6 +1501,48 @@ test.cb("configSinglePromise", (t) => {
   markdownlint.promises.readConfig("./test/config/config-child.json")
     .then((actual) => {
       const expected = require("./config/config-child.json");
+      t.deepEqual(actual, expected, "Config object not correct.");
+      t.end();
+    });
+});
+
+test.cb("configCustomFileSystemPromise", (t) => {
+  t.plan(4);
+  const file = "/dir/file.json";
+  const extended = "/dir/extended.json";
+  const fileContent = {
+    "extends": extended,
+    "default": true,
+    "MD001": false
+  };
+  const extendedContent = {
+    "MD001": true,
+    "MD002": true
+  };
+  const fsApi = {
+    "accessSync": (p) => {
+      t.is(p, extended);
+    },
+    "readFile": (p, o, cb) => {
+      switch (p) {
+        case file:
+          t.is(p, file);
+          return cb(null, JSON.stringify(fileContent));
+        case extended:
+          t.is(p, extended);
+          return cb(null, JSON.stringify(extendedContent));
+        default:
+          return t.fail();
+      }
+    }
+  };
+  markdownlint.promises.readConfig(file, null, fsApi)
+    .then((actual) => {
+      const expected = {
+        ...extendedContent,
+        ...fileContent
+      };
+      delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
       t.end();
     });

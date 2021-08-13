@@ -813,7 +813,6 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
         to[j] = from[i];
     return to;
 };
-var fs = __webpack_require__(/*! fs */ "?ec0a");
 var path = __webpack_require__(/*! path */ "?b85c");
 var promisify = __webpack_require__(/*! util */ "?96a2").promisify;
 var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
@@ -1446,11 +1445,12 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
  * @param {number} resultVersion Version of the LintResults object to return.
+ * @param {Object} fs File system implementation.
  * @param {boolean} synchronous Whether to execute synchronously.
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintFile(ruleList, file, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, synchronous, callback) {
+function lintFile(ruleList, file, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
     // eslint-disable-next-line jsdoc/require-jsdoc
     function lintContentWrapper(err, content) {
         if (err) {
@@ -1460,7 +1460,6 @@ function lintFile(ruleList, file, md, config, frontMatter, handleRuleFailures, n
     }
     // Make a/synchronous call to read file
     if (synchronous) {
-        // @ts-ignore
         lintContentWrapper(null, fs.readFileSync(file, "utf8"));
     }
     else {
@@ -1507,6 +1506,7 @@ function lintInput(options, synchronous, callback) {
         // @ts-ignore
         md.use.apply(md, plugin);
     });
+    var fs = options.fs || __webpack_require__(/*! fs */ "?ec0a");
     var results = newResults(ruleList);
     var done = false;
     // Linting of strings is always synchronous
@@ -1526,7 +1526,7 @@ function lintInput(options, synchronous, callback) {
     if (synchronous) {
         // Lint files synchronously
         while (!done && (syncItem = files.shift())) {
-            lintFile(ruleList, syncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, synchronous, syncCallback);
+            lintFile(ruleList, syncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, syncCallback);
         }
         return done || callback(null, results);
     }
@@ -1540,7 +1540,7 @@ function lintInput(options, synchronous, callback) {
         }
         else if (asyncItem) {
             concurrency++;
-            lintFile(ruleList, asyncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, synchronous, function (err, result) {
+            lintFile(ruleList, asyncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, function (err, result) {
                 concurrency--;
                 if (err) {
                     done = true;
@@ -1644,24 +1644,24 @@ function parseConfiguration(name, content, parsers) {
  *
  * @param {string} configFile Configuration file name.
  * @param {string} referenceId Referenced identifier to resolve.
+ * @param {Object} fs File system implementation.
  * @returns {string} Resolved path to file.
  */
-function resolveConfigExtends(configFile, referenceId) {
+function resolveConfigExtends(configFile, referenceId, fs) {
     var configFileDirname = path.dirname(configFile);
     var resolvedExtendsFile = path.resolve(configFileDirname, referenceId);
     try {
-        if (fs.statSync(resolvedExtendsFile).isFile()) {
-            return resolvedExtendsFile;
-        }
+        fs.accessSync(resolvedExtendsFile);
+        return resolvedExtendsFile;
     }
     catch (_a) {
-        // If not a file or fs.statSync throws, try require.resolve
+        // Not a file, try require.resolve
     }
     try {
         return dynamicRequire.resolve(referenceId, { "paths": [configFileDirname] });
     }
     catch (_b) {
-        // If require.resolve throws, return resolvedExtendsFile
+        // Unable to resolve, return resolvedExtendsFile
     }
     return resolvedExtendsFile;
 }
@@ -1671,14 +1671,24 @@ function resolveConfigExtends(configFile, referenceId) {
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing
  * function(s).
+ * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-function readConfig(file, parsers, callback) {
+function readConfig(file, parsers, fs, callback) {
     if (!callback) {
-        // @ts-ignore
-        callback = parsers;
-        parsers = null;
+        if (fs) {
+            callback = fs;
+            fs = null;
+        }
+        else {
+            // @ts-ignore
+            callback = parsers;
+            parsers = null;
+        }
+    }
+    if (!fs) {
+        fs = __webpack_require__(/*! fs */ "?ec0a");
     }
     // Read file
     fs.readFile(file, "utf8", function (err, content) {
@@ -1695,8 +1705,8 @@ function readConfig(file, parsers, callback) {
         var configExtends = config["extends"];
         if (configExtends) {
             delete config["extends"];
-            var resolvedExtends = resolveConfigExtends(file, configExtends);
-            return readConfig(resolvedExtends, parsers, function (errr, extendsConfig) {
+            var resolvedExtends = resolveConfigExtends(file, configExtends, fs);
+            return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
                 if (errr) {
                     return callback(errr);
                 }
@@ -1712,22 +1722,26 @@ var readConfigPromisify = promisify && promisify(readConfig);
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Promise<Configuration>} Configuration object.
  */
-function readConfigPromise(file, parsers) {
+function readConfigPromise(file, parsers, fs) {
     // @ts-ignore
-    return readConfigPromisify(file, parsers);
+    return readConfigPromisify(file, parsers, fs);
 }
 /**
  * Read specified configuration file synchronously.
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
  */
-function readConfigSync(file, parsers) {
+function readConfigSync(file, parsers, fs) {
+    if (!fs) {
+        fs = __webpack_require__(/*! fs */ "?ec0a");
+    }
     // Read file
-    // @ts-ignore
     var content = fs.readFileSync(file, "utf8");
     // Try to parse file
     var _a = parseConfiguration(file, content, parsers), config = _a.config, message = _a.message;
@@ -1738,8 +1752,8 @@ function readConfigSync(file, parsers) {
     var configExtends = config["extends"];
     if (configExtends) {
         delete config["extends"];
-        var resolvedExtends = resolveConfigExtends(file, configExtends);
-        return __assign(__assign({}, readConfigSync(resolvedExtends, parsers)), config);
+        var resolvedExtends = resolveConfigExtends(file, configExtends, fs);
+        return __assign(__assign({}, readConfigSync(resolvedExtends, parsers, fs)), config);
     }
     return config;
 }

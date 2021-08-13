@@ -39,7 +39,7 @@
     "max-depth": "off",
     "max-lines": "off",
     "max-lines-per-function": "off",
-    "max-params": ["error", 10],
+    "max-params": ["off"],
     "max-statements": "off",
     "multiline-comment-style": ["error", "separate-lines"],
     "multiline-ternary": "off",
