@@ -1143,8 +1143,8 @@ test.cb("configMultipleWithRequireResolve", (t) => {
 
 test.cb("configCustomFileSystem", (t) => {
   t.plan(5);
-  const file = "/dir/file.json";
-  const extended = "/dir/extended.json";
+  const file = path.resolve("/dir/file.json");
+  const extended = path.resolve("/dir/extended.json");
   const fileContent = {
     "extends": extended,
     "default": true,
@@ -1156,7 +1156,7 @@ test.cb("configCustomFileSystem", (t) => {
   };
   const fsApi = {
     "access": (p, m, cb) => {
-      t.is(path.resolve(p), extended);
+      t.is(p, extended);
       return (cb || m)();
     },
     "readFile": (p, o, cb) => {
@@ -1443,8 +1443,8 @@ test("configMultipleHybridSync", (t) => {
 
 test("configCustomFileSystemSync", (t) => {
   t.plan(4);
-  const file = "/dir/file.json";
-  const extended = "/dir/extended.json";
+  const file = path.resolve("/dir/file.json");
+  const extended = path.resolve("/dir/extended.json");
   const fileContent = {
     "extends": extended,
     "default": true,
@@ -1456,7 +1456,7 @@ test("configCustomFileSystemSync", (t) => {
   };
   const fsApi = {
     "accessSync": (p) => {
-      t.is(path.resolve(p), extended);
+      t.is(p, extended);
     },
     "readFileSync": (p) => {
       switch (p) {
@@ -1509,8 +1509,8 @@ test.cb("configSinglePromise", (t) => {
 
 test.cb("configCustomFileSystemPromise", (t) => {
   t.plan(4);
-  const file = "/dir/file.json";
-  const extended = "/dir/extended.json";
+  const file = path.resolve("/dir/file.json");
+  const extended = path.resolve("/dir/extended.json");
   const fileContent = {
     "extends": extended,
     "default": true,
@@ -1522,7 +1522,7 @@ test.cb("configCustomFileSystemPromise", (t) => {
   };
   const fsApi = {
     "access": (p, m, cb) => {
-      t.is(path.resolve(p), extended);
+      t.is(p, extended);
       return (cb || m)();
     },
     "readFile": (p, o, cb) => {
