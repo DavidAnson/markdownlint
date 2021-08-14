@@ -329,6 +329,8 @@ issue for multi-markdown parsers, which require 4-space indents. More informatio
 <https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists>
 and <http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting>.
 
+Note: See [Prettier.md](Prettier.md) for compatibility information.
+
 <a name="md009"></a>
 
 ## MD009 - Trailing spaces
@@ -1182,6 +1184,8 @@ To fix this, ensure the correct number of spaces are used after the list marker
 for your selected document style.
 
 Rationale: Violations of this rule can lead to improperly rendered content.
+
+Note: See [Prettier.md](Prettier.md) for compatibility information.
 
 <a name="md031"></a>
 

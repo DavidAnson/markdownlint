@@ -80,6 +80,7 @@ test.cb("projectFilesNoInlineConfig", (t) => {
       "README.md",
       "CONTRIBUTING.md",
       "doc/CustomRules.md",
+      "doc/Prettier.md",
       "helpers/README.md"
     ],
     "noInlineConfig": true,
@@ -94,6 +95,7 @@ test.cb("projectFilesNoInlineConfig", (t) => {
       "README.md": [],
       "CONTRIBUTING.md": [],
       "doc/CustomRules.md": [],
+      "doc/Prettier.md": [],
       "helpers/README.md": []
     };
     t.deepEqual(actual, expected, "Issue(s) with project files.");
