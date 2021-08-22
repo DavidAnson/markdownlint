@@ -3412,11 +3412,19 @@ module.exports = {
         resetRunTracking();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, onBreak, inMath) {
             var onItemStart = (inItem === 1);
-            if (inCode || inTable || onBreak || onItemStart || isBlankLine(line)) {
+            if (inCode ||
+                onFence ||
+                inTable ||
+                onBreak ||
+                onItemStart ||
+                isBlankLine(line)) {
                 // Emphasis resets when leaving a block
                 resetRunTracking();
             }
-            if (inCode || onBreak || inMath) {
+            if (inCode ||
+                onFence ||
+                onBreak ||
+                inMath) {
                 // Emphasis has no meaning here
                 return;
             }
