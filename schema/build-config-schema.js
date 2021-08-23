@@ -32,7 +32,7 @@ const schema = {
     }
   },
   "additionalProperties": {
-    "type:": [
+    "type": [
       "boolean",
       "object"
     ]
@@ -135,6 +135,11 @@ rules.forEach(function forRule(rule) {
           "description": "Include code blocks",
           "type": "boolean",
           "default": true
+        },
+        "spaces_per_tab": {
+          "description": "Number of spaces for each hard tab",
+          "type": "number",
+          "default": 1
         }
       };
       break;
@@ -380,7 +385,7 @@ rules.forEach(function forRule(rule) {
     case "MD048":
       scheme.properties = {
         "style": {
-          "description": "Code fence syle",
+          "description": "Code fence style",
           "type": "string",
           "enum": [
             "consistent",

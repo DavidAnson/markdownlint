@@ -32,14 +32,16 @@ The library vue-router
 
 Not Vue-router {MD044}
 
-Or vue-router-extra {MD044}
+But vue-router-extra is different
 
-Or extra-vue-router {MD044}
+As is extra-vue-router
 
 Quoted "Vue" and "vue-router"
 
 Emphasized *Vue* and *vue-router*
 
+Underscored _Vue_ and _vue-router_
+
 Call it npm
-Or NPM
 But not Npm {MD044}
+Or NPM {MD044}

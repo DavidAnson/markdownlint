@@ -29,7 +29,11 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for inline links and shortcut reference links
-const linkRe = /\[(?:[^[\]]|\[[^\]]*\])*\](?:\(\S*\))?/g;
+const linkRe = /(\[(?:[^[\]]|\[[^\]]*\])*\])(\(\S*\)|\[\S*\])?/g;
+module.exports.linkRe = linkRe;
+
+// Regular expression for link reference definition lines
+module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 
 // All punctuation characters (normal and full-width)
 const allPunctuation = ".,;:!?。，；：！？";
@@ -299,14 +303,14 @@ module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
 };
 
 // Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(params) {
+module.exports.flattenLists = function flattenLists(tokens) {
   const flattenedLists = [];
   const stack = [];
   let current = null;
   let nesting = 0;
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
-  params.tokens.forEach((token) => {
+  tokens.forEach((token) => {
     if (isMathBlock(token) && token.map[1]) {
       // markdown-it-texmath plugin does not account for math_block_end
       token.map[1]++;
@@ -515,6 +519,47 @@ module.exports.addErrorContext = function addErrorContext(
   }
   addError(onError, lineNumber, null, context, range, fixInfo);
 };
+
+/**
+ * Returns an array of code span ranges.
+ *
+ * @param {string[]} lines Lines to scan for code span ranges.
+ * @returns {number[][]} Array of ranges (line, index, length).
+ */
+module.exports.inlineCodeSpanRanges = (lines) => {
+  const exclusions = [];
+  forEachInlineCodeSpan(
+    lines.join("\n"),
+    (code, lineIndex, columnIndex) => {
+      const codeLines = code.split(newLineRe);
+      // eslint-disable-next-line unicorn/no-for-loop
+      for (let i = 0; i < codeLines.length; i++) {
+        exclusions.push(
+          [ lineIndex + i, columnIndex, codeLines[i].length ]
+        );
+        columnIndex = 0;
+      }
+    }
+  );
+  return exclusions;
+};
+
+/**
+ * Determines whether the specified range overlaps another range.
+ *
+ * @param {number[][]} ranges Array of ranges (line, index, length).
+ * @param {number} lineIndex Line index to check.
+ * @param {number} index Index to check.
+ * @param {number} length Length to check.
+ * @returns {boolean} True iff the specified range overlaps.
+ */
+module.exports.overlapsAnyRange = (ranges, lineIndex, index, length) => (
+  !ranges.every((span) => (
+    (lineIndex !== span[0]) ||
+    (index + length < span[1]) ||
+    (index > span[1] + span[2])
+  ))
+);
 
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {

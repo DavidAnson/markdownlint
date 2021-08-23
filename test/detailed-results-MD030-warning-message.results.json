@@ -1,20 +1,42 @@
 [
-    {
-        "lineNumber": 19,
-        "ruleNames": [ "MD030", "list-marker-space" ],
-        "ruleDescription": "Spaces after list markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
-        "errorDetail": "Expected: 1; Actual: 2",
-        "errorContext": null,
-        "errorRange": [1, 3]
-    },
-    {
-        "lineNumber": 21,
-        "ruleNames": [ "MD030", "list-marker-space" ],
-        "ruleDescription": "Spaces after list markers",
-        "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
-        "errorDetail": "Expected: 1; Actual: 2",
-        "errorContext": null,
-        "errorRange": [1, 4]
+  {
+    "lineNumber": 19,
+    "ruleNames": [
+      "MD030",
+      "list-marker-space"
+    ],
+    "ruleDescription": "Spaces after list markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
+    "errorDetail": "Expected: 1; Actual: 2",
+    "errorContext": null,
+    "errorRange": [
+      1,
+      3
+    ],
+    "fixInfo": {
+      "editColumn": 2,
+      "deleteCount": 2,
+      "insertText": " "
     }
+  },
+  {
+    "lineNumber": 21,
+    "ruleNames": [
+      "MD030",
+      "list-marker-space"
+    ],
+    "ruleDescription": "Spaces after list markers",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md030",
+    "errorDetail": "Expected: 1; Actual: 2",
+    "errorContext": null,
+    "errorRange": [
+      1,
+      4
+    ],
+    "fixInfo": {
+      "editColumn": 3,
+      "deleteCount": 2,
+      "insertText": " "
+    }
+  }
 ]

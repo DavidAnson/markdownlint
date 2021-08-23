@@ -329,6 +329,8 @@ issue for multi-markdown parsers, which require 4-space indents. More informatio
 <https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists>
 and <http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting>.
 
+Note: See [Prettier.md](Prettier.md) for compatibility information.
+
 <a name="md009"></a>
 
 ## MD009 - Trailing spaces
@@ -388,7 +390,7 @@ Tags: whitespace, hard_tab
 
 Aliases: no-hard-tabs
 
-Parameters: code_blocks (boolean; default true)
+Parameters: code_blocks, spaces_per_tab (boolean; default true, number; default 1)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -419,6 +421,9 @@ Some text
 You have the option to exclude this rule for code blocks. To do so, set the
 `code_blocks` parameter to `false`. Code blocks are included by default since
 handling of tabs by tools is often inconsistent (ex: using 4 vs. 8 spaces).
+
+If you would like the fixer to change tabs to x spaces, then configure the `spaces_per_tab`
+parameter to the number x. The default value would be 1.
 
 Rationale: Hard tabs are often rendered inconsistently by different editors and
 can be harder to work with than spaces.
@@ -1180,6 +1185,8 @@ for your selected document style.
 
 Rationale: Violations of this rule can lead to improperly rendered content.
 
+Note: See [Prettier.md](Prettier.md) for compatibility information.
+
 <a name="md031"></a>
 
 ## MD031 - Fenced code blocks should be surrounded by blank lines
@@ -1566,6 +1573,14 @@ To fix this, add a language specifier to the code block:
 ```bash
 #!/bin/bash
 echo Hello world
+```
+````
+
+To display a code block without syntax highlighting, use:
+
+````markdown
+```text
+Plain text in a code block
 ```
 ````
 

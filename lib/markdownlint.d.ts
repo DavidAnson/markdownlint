@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -52,9 +52,13 @@ type Options = {
      * Additional plugins.
      */
     markdownItPlugins?: Plugin[];
+    /**
+     * File system implementation.
+     */
+    fs?: any;
 };
 /**
- * Called with the result of the lint operation.
+ * Called with the result of the lint function.
  */
 type LintCallback = (err: Error | null, results?: LintResults) => void;
 /**
@@ -70,18 +74,21 @@ declare function markdownlintSync(options: Options): LintResults;
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing
  * function(s).
+ * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadConfigCallback, callback?: ReadConfigCallback): void;
+declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadConfigCallback, fs?: any, callback?: ReadConfigCallback): void;
 /**
  * Read specified configuration file synchronously.
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
+ * @throws An Error if processing fails.
  */
-declare function readConfigSync(file: string, parsers?: ConfigurationParser[]): Configuration;
+declare function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: any): Configuration;
 /**
  * Gets the (semantic) version of the library.
  *
@@ -317,6 +324,10 @@ type LintError = {
  */
 type FixInfo = {
     /**
+     * Line number (1-based).
+     */
+    lineNumber?: number;
+    /**
      * Column of the fix (1-based).
      */
     editColumn?: number;
@@ -334,20 +345,24 @@ type FixInfo = {
  * {@link ../schema/markdownlint-config-schema.json}.
  */
 type Configuration = {
-    [x: string]: any;
+    [x: string]: RuleConfiguration;
 };
 /**
  * Rule configuration.
  */
-type RuleConfiguration = any;
+type RuleConfiguration = boolean | any;
 /**
  * Parses a configuration string and returns a configuration object.
  */
 type ConfigurationParser = (text: string) => Configuration;
 /**
- * Called with the result of the readConfig operation.
+ * Called with the result of the readConfig function.
  */
 type ReadConfigCallback = (err: Error | null, config?: Configuration) => void;
+/**
+ * Called with the result of the resolveConfigExtends function.
+ */
+type ResolveConfigExtendsCallback = (err: Error | null, path?: string) => void;
 /**
  * Lint specified Markdown files.
  *
@@ -360,6 +375,7 @@ declare function markdownlintPromise(options: Options): Promise<LintResults>;
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Promise<Configuration>} Configuration object.
  */
-declare function readConfigPromise(file: string, parsers?: ConfigurationParser[]): Promise<Configuration>;
+declare function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;

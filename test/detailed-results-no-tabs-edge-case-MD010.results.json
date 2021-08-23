@@ -1,0 +1,62 @@
+[
+  {
+    "lineNumber": 1,
+    "ruleNames": [
+      "MD010",
+      "no-hard-tabs"
+    ],
+    "ruleDescription": "Hard tabs",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
+    "errorDetail": "Column: 1",
+    "errorContext": null,
+    "errorRange": [
+      1,
+      13
+    ],
+    "fixInfo": {
+      "editColumn": 1,
+      "deleteCount": 13,
+      "insertText": ""
+    }
+  },
+  {
+    "lineNumber": 2,
+    "ruleNames": [
+      "MD010",
+      "no-hard-tabs"
+    ],
+    "ruleDescription": "Hard tabs",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
+    "errorDetail": "Column: 5",
+    "errorContext": null,
+    "errorRange": [
+      5,
+      2
+    ],
+    "fixInfo": {
+      "editColumn": 5,
+      "deleteCount": 2,
+      "insertText": ""
+    }
+  },
+  {
+    "lineNumber": 3,
+    "ruleNames": [
+      "MD010",
+      "no-hard-tabs"
+    ],
+    "ruleDescription": "Hard tabs",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
+    "errorDetail": "Column: 27",
+    "errorContext": null,
+    "errorRange": [
+      27,
+      3
+    ],
+    "fixInfo": {
+      "editColumn": 27,
+      "deleteCount": 3,
+      "insertText": ""
+    }
+  }
+]

@@ -22,4 +22,22 @@ node.js is runtime
 
 A short paragraph
 about node.js and {MD044}
-javascript. {MD044}
+also javascript. {MD044}
+
+`javascript`
+
+`code
+javascript`
+
+`code
+javascript
+code`
+
+`javascript
+code`
+
+text JavaScript text `javascript` text JavaScript text
+text `javascript` text JavaScript text `javascript` text
+
+text javascript text `javascript` text {MD044}
+text `javascript` text javascript text {MD044}

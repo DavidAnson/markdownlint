@@ -120,3 +120,10 @@ multi-line emphasis
 scenario * that
 should * not trigger
 violations * either`.
+
+<!-- markdownlint-disable MD031 -->
+*text
+```text
+```
+text *
+<!-- markdownlint-restore -->

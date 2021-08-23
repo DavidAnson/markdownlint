@@ -55,7 +55,9 @@
   // MD010/no-hard-tabs - Hard tabs
   "MD010": {
     // Include code blocks
-    "code_blocks": true
+    "code_blocks": true,
+    // Number of spaces for each hard tab
+    "spaces_per_tab": 1
   },
 
   // MD011/no-reversed-links - Reversed link syntax
@@ -244,7 +246,7 @@
 
   // MD048/code-fence-style - Code fence style
   "MD048": {
-    // Code fence syle
+    // Code fence style
     "style": "consistent"
   }
 }

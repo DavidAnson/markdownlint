@@ -3,7 +3,6 @@
 > A Node.js style checker and lint tool for Markdown/CommonMark files.
 
 [![npm version][npm-image]][npm-url]
-[![CI Status][ci-image]][ci-url]
 [![License][license-image]][license-url]
 
 ## Install
@@ -295,7 +294,8 @@ function markdownlint(options) { ... }
 
 Type: `Object`
 
-Configures the function.
+Configures the function. All properties are optional, but at least one
+of `files` or `strings` should be set to provide input.
 
 ##### options.customRules
 
@@ -535,6 +535,16 @@ Each item in the top-level `Array` should be of the form:
 [ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
 ```
 
+##### options.fs
+
+Type: `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+
+In advanced scenarios, it may be desirable to bypass the default file system API.
+If a custom file system implementation is provided, `markdownlint` will use that
+instead of invoking `require("fs")`.
+
+Note: The only methods called are `readFile` and `readFileSync`.
+
 #### callback
 
 Type: `Function` taking (`Error`, `Object`)
@@ -567,10 +577,11 @@ Asynchronous API:
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-function readConfig(file, parsers, callback) { ... }
+function readConfig(file, parsers, fs, callback) { ... }
 ```
 
 Synchronous API:
@@ -581,13 +592,14 @@ Synchronous API:
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
  */
-function readConfigSync(file, parsers) { ... }
+function readConfigSync(file, parsers, fs) { ... }
 ```
 
 Promise API (in the `promises` namespace like Node.js's
-[`fs` Promises API](https://nodejs.org/api/fs.html#fs_fs_promises_api)):
+[`fs` Promises API](https://nodejs.org/api/fs.html#fs_promises_api)):
 
 ```js
 /**
@@ -595,9 +607,10 @@ Promise API (in the `promises` namespace like Node.js's
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
  * @returns {Promise<Configuration>} Configuration object.
  */
-function readConfig(file, parsers) { ... }
+function readConfig(file, parsers, fs) { ... }
 ```
 
 #### file
@@ -627,6 +640,16 @@ For example:
 ```js
 [ JSON.parse, require("toml").parse, require("js-yaml").load ]
 ```
+
+#### fs
+
+Type: *Optional* `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+
+In advanced scenarios, it may be desirable to bypass the default file system API.
+If a custom file system implementation is provided, `markdownlint` will use that
+instead of invoking `require("fs")`.
+
+Note: The only methods called are `readFile`, `readFileSync`, `access`, and `accessSync`.
 
 #### callback
 
@@ -835,7 +858,8 @@ const results = window.markdownlint.sync(options).toString();
 
 ## Examples
 
-For ideas how to integrate `markdownlint` into your workflow, refer to the following projects:
+For ideas how to integrate `markdownlint` into your workflow, refer to the
+following projects or one of the tools in the [Related section](#Related):
 
 * [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/) ([Search repository](https://github.com/dotnet/docs/search?q=markdownlint))
 * [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
@@ -843,12 +867,12 @@ For ideas how to integrate `markdownlint` into your workflow, refer to the follo
 * [CodiMD](https://github.com/hackmdio/codimd) ([Search repository](https://github.com/hackmdio/codimd/search?q=markdownlint))
 * [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
 * [Garden React Components](https://zendeskgarden.github.io/react-components/) ([Search repository](https://github.com/zendeskgarden/react-components/search?q=markdownlint))
+* [MDN Web Docs](https://developer.mozilla.org/) ([Search repository](https://github.com/mdn/content/search?q=markdownlint))
 * [MkDocs](https://www.mkdocs.org/) ([Search repository](https://github.com/mkdocs/mkdocs/search?q=markdownlint))
 * [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
 * [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
 * [Sinon.JS](https://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
 * [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
-* [TypeScript Handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html) ([Search repository](https://github.com/Microsoft/TypeScript-Handbook/search?q=markdownlint))
 * [V8](https://v8.dev/) ([Search repository](https://github.com/v8/v8.dev/search?q=markdownlint))
 * [webhint](https://webhint.io/) ([Search repository](https://github.com/webhintio/hint/search?q=markdownlint))
 * [webpack](https://webpack.js.org/) ([Search repository](https://github.com/webpack/webpack.js.org/search?q=markdownlint))
@@ -941,10 +965,11 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            information for MD004/ul-style, improve MD018/MD019/MD020/MD021/MD037/MD041, improve
            HTML comment handling, update test runner and test suite, update dependencies.
   * 0.23.1 - Work around lack of webpack support for dynamic calls to `require` (`.resolve`).
+* 0.24.0 - Remove support for end-of-life Node version 10, add support for custom file system
+           module, improve MD010/MD011/MD037/MD043/MD044, improve TypeScript declaration file
+           and JSON schema, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
-[ci-image]: https://github.com/DavidAnson/markdownlint/workflows/CI/badge.svg?branch=main
-[ci-url]: https://github.com/DavidAnson/markdownlint/actions?query=branch%3Amain
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: https://opensource.org/licenses/MIT

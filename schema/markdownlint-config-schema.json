@@ -327,6 +327,11 @@
           "description": "Include code blocks",
           "type": "boolean",
           "default": true
+        },
+        "spaces_per_tab": {
+          "description": "Number of spaces for each hard tab",
+          "type": "number",
+          "default": 1
         }
       },
       "additionalProperties": false
@@ -343,6 +348,11 @@
           "description": "Include code blocks",
           "type": "boolean",
           "default": true
+        },
+        "spaces_per_tab": {
+          "description": "Number of spaces for each hard tab",
+          "type": "number",
+          "default": 1
         }
       },
       "additionalProperties": false
@@ -1396,7 +1406,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Code fence syle",
+          "description": "Code fence style",
           "type": "string",
           "enum": [
             "consistent",
@@ -1417,7 +1427,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Code fence syle",
+          "description": "Code fence style",
           "type": "string",
           "enum": [
             "consistent",
@@ -1551,7 +1561,7 @@
     }
   },
   "additionalProperties": {
-    "type:": [
+    "type": [
       "boolean",
       "object"
     ]
