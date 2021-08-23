@@ -965,6 +965,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            information for MD004/ul-style, improve MD018/MD019/MD020/MD021/MD037/MD041, improve
            HTML comment handling, update test runner and test suite, update dependencies.
   * 0.23.1 - Work around lack of webpack support for dynamic calls to `require` (`.resolve`).
+* 0.24.0 - Remove support for end-of-life Node version 10, add support for custom file system
+           module, improve MD010/MD011/MD037/MD043/MD044, improve TypeScript declaration file
+           and JSON schema, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
