@@ -2257,7 +2257,7 @@ module.exports = {
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
 var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), inlineCodeSpanRanges = _b.inlineCodeSpanRanges, lineMetadata = _b.lineMetadata;
-var reversedLinkRe = /(?<![\\\]])\(([^)]+)(?<!\\)\)\[([^\]^][^\]]*)(?<!\\)](?!\()/g;
+var reversedLinkRe = /(^|[^\\])\(([^)]+)\)\[([^\]^][^\]]*)](?!\()/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
     "description": "Reversed link syntax",
@@ -2268,11 +2268,13 @@ module.exports = {
             if (!inCode && !onFence) {
                 var match = null;
                 while ((match = reversedLinkRe.exec(line)) !== null) {
-                    var reversedLink = match[0], linkText = match[1], linkDestination = match[2];
-                    var index = match.index;
-                    var length_1 = match[0].length;
-                    if (!overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
-                        addError(onError, lineIndex + 1, reversedLink, null, [index + 1, length_1], {
+                    var reversedLink = match[0], preChar = match[1], linkText = match[2], linkDestination = match[3];
+                    var index = match.index + preChar.length;
+                    var length_1 = match[0].length - preChar.length;
+                    if (!linkText.endsWith("\\") &&
+                        !linkDestination.endsWith("\\") &&
+                        !overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
+                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length_1], {
                             "editColumn": index + 1,
                             "deleteCount": length_1,
                             "insertText": "[" + linkText + "](" + linkDestination + ")"
