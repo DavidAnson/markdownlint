@@ -86,6 +86,7 @@ declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadC
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
  * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
+ * @throws An Error if processing fails.
  */
 declare function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: any): Configuration;
 /**
