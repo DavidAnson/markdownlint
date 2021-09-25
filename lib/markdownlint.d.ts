@@ -206,9 +206,9 @@ type RuleOnErrorInfo = {
      */
     lineNumber: number;
     /**
-     * Details about the error.
+     * Detail about the error.
      */
-    details?: string;
+    detail?: string;
     /**
      * Context for the error.
      */

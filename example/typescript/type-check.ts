@@ -139,7 +139,7 @@ const testRule = {
     let ruleOnErrorInfo: markdownlint.RuleOnErrorInfo;
     ruleOnErrorInfo = {
       "lineNumber": 1,
-      "details": "details",
+      "detail": "detail",
       "context": "context",
       "range": [ 1, 2 ],
       "fixInfo": {
