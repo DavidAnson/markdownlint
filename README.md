@@ -33,8 +33,8 @@ and test cases came directly from that project.
 ### Related
 
 * CLI
-  * [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
-  * [markdownlint-cli2 command-line interface for Node.js](https://github.com/DavidAnson/markdownlint-cli2)
+  * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) command-line interface for Node.js ([works with pre-commit](https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit))
+  * [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) command-line interface for Node.js ([works with pre-commit](https://github.com/DavidAnson/markdownlint-cli2#pre-commit))
 * GitHub
   * [GitHub Super-Linter Action](https://github.com/github/super-linter)
   * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
