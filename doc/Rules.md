@@ -1911,3 +1911,34 @@ The configured list style can be a specific symbol to use (backtick, tilde), or
 can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
+
+<a name="md049"></a>
+
+## MD049 - Emphasis strong style
+
+Tags: emphasis
+
+Aliases: emphasis-strong-style
+
+Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+
+This rule is triggered when the symbols used in the document for emphasis strong
+do not match the configured emphasis strong style:
+
+```markdown
+**foo**
+__bar__
+```
+
+To fix this issue, use the configured code fence style throughout the
+document:
+
+```markdown
+**foo**
+**bar**
+```
+
+The configured list style can be a specific symbol to use (asterisk,
+underscore), or can require that usage be consistent within the document.
+
+Rationale: Consistent formatting makes it easier to understand a document.

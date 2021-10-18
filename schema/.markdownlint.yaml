@@ -225,3 +225,8 @@ MD047: true
 MD048:
   # Code fence style
   style: "consistent"
+
+# MD049/emphasis-strong-style - Emphasis strong style
+MD049:
+  # Emphasis strong style
+  style: "consistent"
