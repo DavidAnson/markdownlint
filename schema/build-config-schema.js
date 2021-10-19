@@ -399,7 +399,7 @@ rules.forEach(function forRule(rule) {
     case "MD049":
       scheme.properties = {
         "style": {
-          "description": "Emphasis strong style",
+          "description": "Strong style should be consistent",
           "type": "string",
           "enum": [
             "consistent",

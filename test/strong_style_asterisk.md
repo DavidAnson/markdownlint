@@ -1,4 +1,4 @@
-# Emphasis strong style asterisk
+# Strong style asterisk
 
 This is **fine**
 

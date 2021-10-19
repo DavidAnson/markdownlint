@@ -102,7 +102,7 @@ playground for learning and exploring.
 * **[MD046](doc/Rules.md#md046)** *code-block-style* - Code block style
 * **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 * **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
-* **[MD049](doc/Rules.md#md049)** *emphasis-strong-style* - Emphasis strong style
+* **[MD049](doc/Rules.md#md049)** *strong-style* - Strong style should be consistent
 
 <!-- markdownlint-restore -->
 

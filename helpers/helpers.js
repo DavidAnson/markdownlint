@@ -182,13 +182,13 @@ module.exports.fencedCodeBlockStyleFor =
   };
 
 /**
- * Return the string representation of a emphasis markup character.
+ * Return the string representation of a strong or emphasis markup character.
  *
- * @param {string} markup Emphasis string.
+ * @param {string} markup Strong or emphasis string.
  * @returns {string} String representation.
  */
-module.exports.emphasisStyleFor =
-  function emphasisStyleFor(markup) {
+module.exports.strongEmphasisStyleFor =
+  function strongEmphasisStyleFor(markup) {
     switch (markup[0]) {
       case "*":
         return "asterisk";

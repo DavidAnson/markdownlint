@@ -1440,7 +1440,7 @@
       "additionalProperties": false
     },
     "MD049": {
-      "description": "MD049/emphasis-strong-style - Emphasis strong style",
+      "description": "MD049/strong-style - Strong style should be consistent",
       "type": [
         "boolean",
         "object"
@@ -1448,7 +1448,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Emphasis strong style",
+          "description": "Strong style should be consistent",
           "type": "string",
           "enum": [
             "consistent",
@@ -1460,8 +1460,8 @@
       },
       "additionalProperties": false
     },
-    "emphasis-strong-style": {
-      "description": "MD049/emphasis-strong-style - Emphasis strong style",
+    "strong-style": {
+      "description": "MD049/strong-style - Strong style should be consistent",
       "type": [
         "boolean",
         "object"
@@ -1469,7 +1469,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Emphasis strong style",
+          "description": "Strong style should be consistent",
           "type": "string",
           "enum": [
             "consistent",
