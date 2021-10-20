@@ -1912,9 +1912,9 @@ can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
-<a name="md049"></a>
+<a name="md050"></a>
 
-## MD049 - Strong style should be consistent
+## MD050 - Strong style should be consistent
 
 Tags: emphasis
 
@@ -1923,7 +1923,7 @@ Aliases: strong-style
 Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
 
 This rule is triggered when the symbols used in the document for strong do not
-match the configured emphasis strong style:
+match the configured strong style:
 
 ```markdown
 **Text**

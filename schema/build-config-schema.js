@@ -396,7 +396,7 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
-    case "MD049":
+    case "MD050":
       scheme.properties = {
         "style": {
           "description": "Strong style should be consistent",

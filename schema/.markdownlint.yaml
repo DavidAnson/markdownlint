@@ -226,7 +226,7 @@ MD048:
   # Code fence style
   style: "consistent"
 
-# MD049/strong-style - Strong style should be consistent
-MD049:
+# MD050/strong-style - Strong style should be consistent
+MD050:
   # Strong style should be consistent
   style: "consistent"

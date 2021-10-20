@@ -71,7 +71,13 @@ function lintTestRepo(t, globPatterns, configPath) {
 
 test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
-  const globPatterns = [ join(rootDir, "docs/**/*.md") ];
+  const globPatterns = [
+    join(rootDir, "docs/**/*.md"),
+    "!" + join(
+      rootDir,
+      "docs/rules/array-callback-return.md"
+    )
+  ];
   const configPath = join(rootDir, ".markdownlint.yml");
   return lintTestRepo(t, globPatterns, configPath);
 });
@@ -134,7 +140,17 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [
       join(rootDir, "**/*.md"),
-      "!" + join(rootDir, "samples/**/*.md")
+      "!" + join(rootDir, "samples/**/*.md"),
+      "!" + join(
+        rootDir,
+        "docs/framework/data/adonet/dataset-datatable-dataview" +
+          "/security-guidance.md"
+      ),
+      "!" + join(rootDir, "docs/standard/native-interop/best-practices.md"),
+      "!" + join(
+        rootDir,
+        "docs/standard/serialization/binaryformatter-security-guide.md"
+      )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
     return lintTestRepo(t, globPatterns, configPath);

@@ -2,4 +2,4 @@
 
 This is __fine__
 
-This is **not** {MD049}
+This is **not** {MD050}
