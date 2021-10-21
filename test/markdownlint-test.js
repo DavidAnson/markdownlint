@@ -492,9 +492,10 @@ test.cb("styleAll", (t) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 92 ],
+        "MD047": [ 96 ],
         "MD048": [ 77 ],
-        "MD050": [ 90 ]
+        "MD049": [ 90 ],
+        "MD050": [ 94 ]
       }
     };
     // @ts-ignore
@@ -536,9 +537,10 @@ test.cb("styleRelaxed", (t) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 92 ],
+        "MD047": [ 96 ],
         "MD048": [ 77 ],
-        "MD050": [ 90 ]
+        "MD049": [ 90 ],
+        "MD050": [ 94 ]
       }
     };
     // @ts-ignore
@@ -839,7 +841,7 @@ test.cb("customFileSystemAsync", (t) => {
   });
 });
 test.cb("readme", (t) => {
-  t.plan(117);
+  t.plan(119);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -915,7 +917,7 @@ test.cb("readme", (t) => {
 });
 
 test.cb("rules", (t) => {
-  t.plan(344);
+  t.plan(352);
   fs.readFile("doc/Rules.md", "utf8",
     (err, contents) => {
       t.falsy(err);
@@ -1568,7 +1570,7 @@ test.cb("configBadFilePromise", (t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(135);
+  t.plan(138);
   rules.forEach(function forRule(rule) {
     t.truthy(rule.information);
     t.true(Object.getPrototypeOf(rule.information) === URL.prototype);

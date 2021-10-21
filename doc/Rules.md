@@ -1331,20 +1331,20 @@ For more information, see <https://www.example.com/>.
 ```
 
 Note: To use a bare URL without it being converted into a link, enclose it in
-a code block, otherwise in some markdown parsers it _will_ be converted:
+a code block, otherwise in some markdown parsers it *will* be converted:
 
 ```markdown
 `https://www.example.com`
 ```
 
-Note: The following scenario does _not_ trigger this rule to avoid conflicts
+Note: The following scenario does *not* trigger this rule to avoid conflicts
 with `MD011`/`no-reversed-links`:
 
 ```markdown
 [https://www.example.com]
 ```
 
-The use of quotes around a bare link will _not_ trigger this rule, either:
+The use of quotes around a bare link will *not* trigger this rule, either:
 
 ```markdown
 "https://www.example.com"
@@ -1909,6 +1909,36 @@ document:
 
 The configured list style can be a specific symbol to use (backtick, tilde), or
 can require that usage be consistent within the document.
+
+Rationale: Consistent formatting makes it easier to understand a document.
+
+<a name="md049"></a>
+
+## MD049 - Emphasis style should be consistent
+
+Tags: emphasis
+
+Aliases: emphasis-style
+
+Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+
+This rule is triggered when the symbols used in the document for emphasis do not
+match the configured emphasis style:
+
+```markdown
+*Text*
+_Text_
+```
+
+To fix this issue, use the configured emphasis style throughout the document:
+
+```markdown
+*Text*
+*Text*
+```
+
+The configured emphasis style can be a specific symbol to use ("asterisk",
+"underscore"), or can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
 

@@ -32,15 +32,15 @@ This long line includes a simple [reference][label] link and is long enough to v
 
 *[This long line is comprised of an emphasized link](https://example.com "This is the long link's title")*
 
-_[This long line is comprised of an emphasized link](https://example.com "This is the long link's title")_
+_[This long line is comprised of an emphasized link {MD049}](https://example.com "This is the long link's title")_
 
 **[This long line is comprised of a bolded link](https://example.com "This is the long link's title")**
 
 __[This long line is comprised of a bolded link {MD050}](https://example.com "This is the long link's title")__
 
-_**[This long line is comprised of an emphasized and bolded link](https://example.com "This is the long link's title")**_
+_**[This long line is comprised of an emphasized and bolded link {MD049}](https://example.com "This is the long link's title")**_
 
-**_[This long line is comprised of an emphasized and bolded link](https://example.com "This is the long link's title")_**
+**_[This long line is comprised of an emphasized and bolded link {MD049}](https://example.com "This is the long link's title")_**
 
 *[](https://example.com "This long line is comprised of an emphasized link with empty text and a non-empty title")*
 

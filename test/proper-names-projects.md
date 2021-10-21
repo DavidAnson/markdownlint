@@ -40,7 +40,7 @@ Quoted "Vue" and "vue-router"
 
 Emphasized *Vue* and *vue-router*
 
-Underscored _Vue_ and _vue-router_
+Underscored _Vue_ and _vue-router_ {MD049}
 
 Call it npm
 But not Npm {MD044}
