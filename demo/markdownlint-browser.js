@@ -3143,11 +3143,10 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, newLineRe = _a.newLineRe, unescapeMarkdown = _a.unescapeMarkdown;
 var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
-var inlineCodeRe = /^[^`]*(`+[^`]+`+[^`]+)*`+[^`]*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
 var emailAddressRe = 
 // eslint-disable-next-line max-len
@@ -3160,19 +3159,54 @@ module.exports = {
         var allowedElements = params.config.allowed_elements;
         allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
         allowedElements = allowedElements.map(function (element) { return element.toLowerCase(); });
+        // compute inline code spans bounds
+        var codeSpanRanges = [];
+        forEachInlineCodeSpan(params.lines.join("\n"), function (code, lineIndex, columnIndex) {
+            var codeLines = code.split(newLineRe);
+            codeSpanRanges.push({
+                "start": [lineIndex, columnIndex],
+                "end": [
+                    lineIndex + codeLines.length - 1,
+                    codeLines.length > 1 ?
+                        codeLines[codeLines.length - 1].length + 1 :
+                        columnIndex + code.length + 1
+                ]
+            });
+        });
+        /**
+         * Check if a HTML element is inside a code span.
+         *
+         * @param {number} lineIndex Index of line for HTML element found.
+         * @param {number} elementIndex Index of HTML element start inside its line.
+         * @param {string} elementContent Content of the HTML element.
+         * @returns {boolean} True if HTML element is inside a code span.
+         */
+        function htmlInsideCodeSpan(lineIndex, elementIndex, elementContent) {
+            var insideCodeSpan = false;
+            for (var _i = 0, codeSpanRanges_1 = codeSpanRanges; _i < codeSpanRanges_1.length; _i++) {
+                var _a = codeSpanRanges_1[_i], start = _a.start, end = _a.end;
+                if (start[0] <= lineIndex &&
+                    end[0] >= lineIndex + elementContent.split("\n").length - 1 &&
+                    end[1] >= elementIndex + elementContent.length) {
+                    insideCodeSpan = true;
+                    break;
+                }
+            }
+            return insideCodeSpan;
+        }
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             var match = null;
             // eslint-disable-next-line no-unmodified-loop-condition
             while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
                 var tag = match[0], content = match[1], element = match[2];
-                if (!allowedElements.includes(element.toLowerCase()) &&
+                if (!htmlInsideCodeSpan(lineIndex, match.index, match[0]) &&
+                    !allowedElements.includes(element.toLowerCase()) &&
                     !tag.endsWith("\\>") &&
                     !emailAddressRe.test(content)) {
                     var prefix = line.substring(0, match.index);
-                    if (!linkDestinationRe.test(prefix) && !inlineCodeRe.test(prefix)) {
+                    if (!linkDestinationRe.test(prefix)) {
                         var unescaped = unescapeMarkdown(prefix + "<", "_");
-                        if (!unescaped.endsWith("_") &&
-                            ((unescaped + "`").match(/`/g).length % 2)) {
+                        if (!unescaped.endsWith("_")) {
                             addError(onError, lineIndex + 1, "Element: " + element, null, [match.index + 1, tag.length]);
                         }
                     }
