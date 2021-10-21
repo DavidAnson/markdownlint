@@ -102,6 +102,7 @@ playground for learning and exploring.
 * **[MD046](doc/Rules.md#md046)** *code-block-style* - Code block style
 * **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 * **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
+* **[MD050](doc/Rules.md#md050)** *strong-style* - Strong style should be consistent
 
 <!-- markdownlint-restore -->
 
@@ -125,7 +126,7 @@ rules at once.
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
 * **code** - MD014, MD031, MD038, MD040, MD046, MD048
-* **emphasis** - MD036, MD037
+* **emphasis** - MD036, MD037, MD050
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022,
   MD023, MD024, MD025, MD026, MD036, MD041, MD043

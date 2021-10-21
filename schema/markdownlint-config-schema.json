@@ -1439,6 +1439,48 @@
       },
       "additionalProperties": false
     },
+    "MD050": {
+      "description": "MD050/strong-style - Strong style should be consistent",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Strong style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "asterisk",
+            "underscore"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "strong-style": {
+      "description": "MD050/strong-style - Strong style should be consistent",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Strong style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "asterisk",
+            "underscore"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1535,7 +1577,7 @@
       "default": true
     },
     "emphasis": {
-      "description": "emphasis - MD036, MD037",
+      "description": "emphasis - MD036, MD037, MD050",
       "type": "boolean",
       "default": true
     },

@@ -191,6 +191,21 @@ module.exports.fencedCodeBlockStyleFor =
         }
     };
 /**
+ * Return the string representation of a emphasis or strong markup character.
+ *
+ * @param {string} markup Emphasis or strong string.
+ * @returns {string} String representation.
+ */
+module.exports.emphasisOrStrongStyleFor =
+    function emphasisOrStrongStyleFor(markup) {
+        switch (markup[0]) {
+            case "*":
+                return "asterisk";
+            default:
+                return "underscore";
+        }
+    };
+/**
  * Return the number of characters of indent for a token.
  *
  * @param {Object} token MarkdownItToken instance.
@@ -4026,6 +4041,36 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md050.js":
+/*!***********************!*\
+  !*** ../lib/md050.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild;
+module.exports = {
+    "names": ["MD050", "strong-style"],
+    "description": "Strong style should be consistent",
+    "tags": ["emphasis"],
+    "function": function MD050(params, onError) {
+        var expectedStyle = String(params.config.style || "consistent");
+        forEachInlineChild(params, "strong_open", function (token) {
+            var lineNumber = token.lineNumber, markup = token.markup;
+            var markupStyle = emphasisOrStrongStyleFor(markup);
+            if (expectedStyle === "consistent") {
+                expectedStyle = markupStyle;
+            }
+            addErrorDetailIf(onError, lineNumber, expectedStyle, markupStyle);
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -4082,7 +4127,8 @@ var rules = [
     __webpack_require__(/*! ./md045 */ "../lib/md045.js"),
     __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
-    __webpack_require__(/*! ./md048 */ "../lib/md048.js")
+    __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
+    __webpack_require__(/*! ./md050 */ "../lib/md050.js")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();

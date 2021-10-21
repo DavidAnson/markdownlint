@@ -1911,3 +1911,33 @@ The configured list style can be a specific symbol to use (backtick, tilde), or
 can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
+
+<a name="md050"></a>
+
+## MD050 - Strong style should be consistent
+
+Tags: emphasis
+
+Aliases: strong-style
+
+Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+
+This rule is triggered when the symbols used in the document for strong do not
+match the configured strong style:
+
+```markdown
+**Text**
+__Text__
+```
+
+To fix this issue, use the configured strong style throughout the document:
+
+```markdown
+**Text**
+**Text**
+```
+
+The configured strong style can be a specific symbol to use ("asterisk",
+"underscore"), or can require that usage be consistent within the document.
+
+Rationale: Consistent formatting makes it easier to understand a document.

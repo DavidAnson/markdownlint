@@ -182,6 +182,22 @@ module.exports.fencedCodeBlockStyleFor =
   };
 
 /**
+ * Return the string representation of a emphasis or strong markup character.
+ *
+ * @param {string} markup Emphasis or strong string.
+ * @returns {string} String representation.
+ */
+module.exports.emphasisOrStrongStyleFor =
+  function emphasisOrStrongStyleFor(markup) {
+    switch (markup[0]) {
+      case "*":
+        return "asterisk";
+      default:
+        return "underscore";
+    }
+  };
+
+/**
  * Return the number of characters of indent for a token.
  *
  * @param {Object} token MarkdownItToken instance.

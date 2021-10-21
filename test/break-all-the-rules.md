@@ -85,4 +85,8 @@ markdownLint {MD044}
 ![](image.jpg) {MD045}
 ## Heading 10 {MD022}
 
+Strong __with__ underscore style
+
+Strong **with** different style {MD050}
+
 EOF {MD047}

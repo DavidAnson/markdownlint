@@ -36,7 +36,7 @@ _[This long line is comprised of an emphasized link](https://example.com "This i
 
 **[This long line is comprised of a bolded link](https://example.com "This is the long link's title")**
 
-__[This long line is comprised of a bolded link](https://example.com "This is the long link's title")__
+__[This long line is comprised of a bolded link {MD050}](https://example.com "This is the long link's title")__
 
 _**[This long line is comprised of an emphasized and bolded link](https://example.com "This is the long link's title")**_
 
