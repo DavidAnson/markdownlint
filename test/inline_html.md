@@ -22,6 +22,26 @@ Text \` text `<code>` text \` text `<code>` text
 Text \`\` text `<code>` text
 Text `<code>` text \` text `<code>` text
 
+## Elements in multiple liner code spans
+
+Text `foo
+<bar/>`
+
+`foo
+<bar/>`
+
+`foo
+<bar/>` text
+
+Text `foo
+bar
+<baz/>
+<qux/>`
+
+``text ``` ```` `
+<code>code
+</code>``
+
 ## Slash in element name
 
 Text **\<base directory>\another\directory\\<slash/directory>** text
