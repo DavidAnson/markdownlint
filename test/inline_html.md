@@ -22,6 +22,63 @@ Text \` text `<code>` text \` text `<code>` text
 Text \`\` text `<code>` text
 Text `<code>` text \` text `<code>` text
 
+## Elements in multiple line code spans
+
+Text `code
+<element/>`
+
+`code
+<element/>`
+
+`code
+<element/>` text
+
+Text `code
+code
+<element/>
+<element/>`
+
+``code ``` ```` `
+<code>code
+</code>``
+
+Text `code
+</element>
+code` text
+
+Text `code code
+code <element>` text
+
+Text `code <element>
+code code` text
+
+Text `code code
+code <element> code
+code code` text
+
+Text ````code code
+code <element> code
+code code```` text
+
+Text `code code
+code <element>` text
+text `code code
+code code` text
+
+Text `code code
+code code` text
+text `code code
+code <element>` text
+
+Text `code code
+code <element>` text
+text `code code
+code <element>` text
+
+Text `code code
+code` text <element> text `code {MD033}
+code code` text
+
 ## Slash in element name
 
 Text **\<base directory>\another\directory\\<slash/directory>** text
