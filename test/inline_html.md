@@ -22,25 +22,62 @@ Text \` text `<code>` text \` text `<code>` text
 Text \`\` text `<code>` text
 Text `<code>` text \` text `<code>` text
 
-## Elements in multiple liner code spans
+## Elements in multiple line code spans
 
-Text `foo
-<bar/>`
+Text `code
+<element/>`
 
-`foo
-<bar/>`
+`code
+<element/>`
 
-`foo
-<bar/>` text
+`code
+<element/>` text
 
-Text `foo
-bar
-<baz/>
-<qux/>`
+Text `code
+code
+<element/>
+<element/>`
 
-``text ``` ```` `
+``code ``` ```` `
 <code>code
 </code>``
+
+Text `code
+</element>
+code` text
+
+Text `code code
+code <element>` text
+
+Text `code <element>
+code code` text
+
+Text `code code
+code <element> code
+code code` text
+
+Text ````code code
+code <element> code
+code code```` text
+
+Text `code code
+code <element>` text
+text `code code
+code code` text
+
+Text `code code
+code code` text
+text `code code
+code <element>` text
+
+Text `code code
+code <element>` text
+text `code code
+code <element>` text
+
+Text `code code
+code` text <element> text `code {MD033}
+code code` text
 
 ## Slash in element name
 
