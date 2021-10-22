@@ -51,7 +51,7 @@ A rule is implemented as an `Object` with one optional and four required propert
     - `config` is an `Object` corresponding to the rule's entry in `options.config` (if present).
   - `onError` is a function that takes a single `Object` parameter with one required and four optional properties:
     - `lineNumber` is a required `Number` specifying the 1-based line number of the error.
-    - `details` is an optional `String` with information about what caused the error.
+    - `detail` is an optional `String` with information about what caused the error.
     - `context` is an optional `String` with relevant text surrounding the error location.
     - `range` is an optional `Array` with two `Number` values identifying the 1-based column and length of the error.
     - `fixInfo` is an optional `Object` with information about how to fix the error (all properties are optional, but
