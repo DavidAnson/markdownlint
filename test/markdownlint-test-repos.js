@@ -145,6 +145,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [
       join(rootDir, "**/*.md"),
+      "!" + join(rootDir, "samples/**/*.md"),
       "!" + join(rootDir, "docs/architecture/cloud-native/candidate-apps.md"),
       "!" + join(
         rootDir,
@@ -332,7 +333,15 @@ if (existsSync(dotnetDocsDir)) {
         rootDir,
         "docs/standard/serialization/binaryformatter-security-guide.md"
       ),
-      "!" + join(rootDir, "samples/**/*.md")
+      "!" + join(
+        rootDir,
+        "docs/framework/windows-workflow-foundation/authoring-workflows-" +
+          "activities-and-expressions-using-imperative-code.md"
+      ),
+      "!" + join(
+        rootDir,
+        "docs/spark/how-to-guides/deploy-worker-udf-binaries.md"
+      )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
     return lintTestRepo(t, globPatterns, configPath);

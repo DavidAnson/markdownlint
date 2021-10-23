@@ -3158,11 +3158,10 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange, unescapeMarkdown = _a.unescapeMarkdown;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), inlineCodeSpanRanges = _b.inlineCodeSpanRanges, lineMetadata = _b.lineMetadata;
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
-var inlineCodeRe = /^[^`]*(`+[^`]+`+[^`]+)*`+[^`]*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
 var emailAddressRe = 
 // eslint-disable-next-line max-len
@@ -3175,6 +3174,7 @@ module.exports = {
         var allowedElements = params.config.allowed_elements;
         allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
         allowedElements = allowedElements.map(function (element) { return element.toLowerCase(); });
+        var exclusions = inlineCodeSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             var match = null;
             // eslint-disable-next-line no-unmodified-loop-condition
@@ -3182,12 +3182,12 @@ module.exports = {
                 var tag = match[0], content = match[1], element = match[2];
                 if (!allowedElements.includes(element.toLowerCase()) &&
                     !tag.endsWith("\\>") &&
-                    !emailAddressRe.test(content)) {
+                    !emailAddressRe.test(content) &&
+                    !overlapsAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
                     var prefix = line.substring(0, match.index);
-                    if (!linkDestinationRe.test(prefix) && !inlineCodeRe.test(prefix)) {
+                    if (!linkDestinationRe.test(prefix)) {
                         var unescaped = unescapeMarkdown(prefix + "<", "_");
-                        if (!unescaped.endsWith("_") &&
-                            ((unescaped + "`").match(/`/g).length % 2)) {
+                        if (!unescaped.endsWith("_")) {
                             addError(onError, lineIndex + 1, "Element: " + element, null, [match.index + 1, tag.length]);
                         }
                     }
