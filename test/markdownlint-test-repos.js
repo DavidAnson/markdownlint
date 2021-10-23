@@ -150,6 +150,15 @@ if (existsSync(dotnetDocsDir)) {
       "!" + join(
         rootDir,
         "docs/standard/serialization/binaryformatter-security-guide.md"
+      ),
+      "!" + join(
+        rootDir,
+        "docs/framework/windows-workflow-foundation/authoring-workflows-" +
+        "activities-and-expressions-using-imperative-code.md"
+      ),
+      "!" + join(
+        rootDir,
+        "docs/spark/how-to-guides/deploy-worker-udf-binaries.md"
       )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
