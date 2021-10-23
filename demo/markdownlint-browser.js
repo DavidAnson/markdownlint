@@ -3159,7 +3159,6 @@ module.exports = {
         var allowedElements = params.config.allowed_elements;
         allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
         allowedElements = allowedElements.map(function (element) { return element.toLowerCase(); });
-        // compute inline code spans bounds
         var exclusions = inlineCodeSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             var match = null;
