@@ -6,7 +6,7 @@ Quoted "Markdownlint" {MD044}
 
 Emphasized *Markdownlint* {MD044}
 
-Emphasized _Markdownlint_ {MD044}
+Emphasized _Markdownlint_ {MD044} {MD049}
 
 JavaScript is a language
 

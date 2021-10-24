@@ -396,6 +396,20 @@ rules.forEach(function forRule(rule) {
         }
       };
       break;
+    case "MD049":
+      scheme.properties = {
+        "style": {
+          "description": "Emphasis style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "asterisk",
+            "underscore"
+          ],
+          "default": "consistent"
+        }
+      };
+      break;
     case "MD050":
       scheme.properties = {
         "style": {

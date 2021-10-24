@@ -4041,6 +4041,36 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md049.js":
+/*!***********************!*\
+  !*** ../lib/md049.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild;
+module.exports = {
+    "names": ["MD049", "emphasis-style"],
+    "description": "Emphasis style should be consistent",
+    "tags": ["emphasis"],
+    "function": function MD049(params, onError) {
+        var expectedStyle = String(params.config.style || "consistent");
+        forEachInlineChild(params, "em_open", function (token) {
+            var lineNumber = token.lineNumber, markup = token.markup;
+            var markupStyle = emphasisOrStrongStyleFor(markup);
+            if (expectedStyle === "consistent") {
+                expectedStyle = markupStyle;
+            }
+            addErrorDetailIf(onError, lineNumber, expectedStyle, markupStyle);
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/md050.js":
 /*!***********************!*\
   !*** ../lib/md050.js ***!
@@ -4128,6 +4158,7 @@ var rules = [
     __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
     __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
+    __webpack_require__(/*! ./md049 */ "../lib/md049.js"),
     __webpack_require__(/*! ./md050 */ "../lib/md050.js")
 ];
 rules.forEach(function (rule) {
