@@ -67,16 +67,24 @@ function lintTestRepo(t, globPatterns, configPath) {
   });
 }
 
+/**
+ * Excludes a list of globs.
+ *
+ * @param {string} rootDir Root directory for globs.
+ * @param {...string} globs Globs to exclude.
+ * @returns {string[]} Array of excluded globs.
+ */
+function excludeGlobs(rootDir, ...globs) {
+  return globs.map((glob) => "!" + join(rootDir, glob));
+}
+
 // Run markdownlint the same way the corresponding repositories do
 
 test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [
     join(rootDir, "docs/**/*.md"),
-    "!" + join(
-      rootDir,
-      "docs/rules/array-callback-return.md"
-    )
+    ...excludeGlobs(rootDir, "docs/rules/array-callback-return.md")
   ];
   const configPath = join(rootDir, ".markdownlint.yml");
   return lintTestRepo(t, globPatterns, configPath);
@@ -88,7 +96,7 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
     join(rootDir, "README.md"),
     join(rootDir, "CONTRIBUTING.md"),
     join(rootDir, "docs/**/*.md"),
-    "!" + join(rootDir, "docs/CNAME")
+    ...excludeGlobs(rootDir, "docs/CNAME")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
   return lintTestRepo(t, globPatterns, configPath);
@@ -112,9 +120,11 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [
     join(rootDir, "**/*.md"),
-    "!" + join(rootDir, "docs/guides/dns/unbound.md"),
-    "!" + join(rootDir, "docs/index.md"),
-    "!" + join(rootDir, "docs/main/prerequisites.md")
+    ...excludeGlobs(rootDir,
+      "docs/guides/dns/unbound.md",
+      "docs/index.md",
+      "docs/main/prerequisites.md"
+    )
   ];
   const configPath = join(rootDir, ".markdownlint.json");
   return lintTestRepo(t, globPatterns, configPath);
@@ -124,7 +134,7 @@ test("https://github.com/webhintio/hint", (t) => {
   const rootDir = "./test-repos/webhintio-hint";
   const globPatterns = [
     join(rootDir, "**/*.md"),
-    "!" + join(rootDir, "**/CHANGELOG.md")
+    ...excludeGlobs(rootDir, "**/CHANGELOG.md")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
   return lintTestRepo(t, globPatterns, configPath);
@@ -145,202 +155,73 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [
       join(rootDir, "**/*.md"),
-      "!" + join(rootDir, "samples/**/*.md"),
-      "!" + join(rootDir, "docs/architecture/cloud-native/candidate-apps.md"),
-      "!" + join(
-        rootDir,
-        "docs/architecture/containerized-lifecycle/docker-devops-workflow" +
-          "/docker-application-outer-loop-devops-workflow.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/dapr-for-net-developers/getting-started.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/grpc-for-wcf-developers/channel-credentials.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/microservices/implement-resilient-applications" +
-          "/use-httpclientfactory-to-implement-resilient-http-requests.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/microservices" +
-          "/multi-container-microservice-net-applications" +
-          "/implement-api-gateways-with-ocelot.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/modern-web-apps-azure/architectural-principles.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/modern-web-apps-azure" +
-          "/azure-hosting-recommendations-for-asp-net-web-apps.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/modern-web-apps-azure" +
-          "/common-client-side-web-technologies.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/modern-web-apps-azure" +
-          "/develop-asp-net-core-mvc-apps.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/architecture/modern-web-apps-azure" +
-          "/development-process-for-azure.md"
-      ),
-      "!" + join(rootDir, "docs/architecture/modern-web-apps-azure/index.md"),
-      "!" + join(rootDir, "docs/core/additional-tools/dotnet-svcutil-guide.md"),
-      "!" + join(rootDir, "docs/core/dependency-loading/collect-details.md"),
-      "!" + join(rootDir, "docs/core/deploying/single-file.md"),
-      "!" + join(rootDir, "docs/core/deploying/trimming/trimming-options.md"),
-      "!" + join(rootDir, "docs/core/extensions/cloud-service.md"),
-      "!" + join(rootDir, "docs/core/extensions/console-log-formatter.md"),
-      "!" + join(rootDir, "docs/core/extensions/create-resource-files.md"),
-      "!" + join(rootDir, "docs/core/extensions/localization.md"),
-      "!" + join(rootDir, "docs/core/install/linux-alpine.md"),
-      "!" + join(rootDir, "docs/core/install/windows.md"),
-      "!" + join(rootDir, "docs/core/porting/third-party-deps.md"),
-      "!" + join(rootDir, "docs/core/project-sdk/msbuild-props-desktop.md"),
-      "!" + join(rootDir, "docs/core/testing/unit-testing-code-coverage.md"),
-      "!" + join(rootDir, "docs/core/tools/troubleshoot-usage-issues.md"),
-      "!" + join(
-        rootDir,
-        "docs/core/tutorials/cli-templates-create-item-template.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/core/tutorials/cli-templates-create-project-template.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/core/tutorials/cli-templates-create-template-pack.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/core/tutorials/cli-templates-create-item-template.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/core/tutorials/cli-templates-create-project-template.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/core/tutorials/cli-templates-create-template-pack.md"
-      ),
-      "!" + join(rootDir, "docs/core/whats-new/dotnet-core-3-0.md"),
-      "!" + join(
-        rootDir,
-        "docs/csharp/language-reference/compiler-options/code-generation.md"
-      ),
-      "!" + join(rootDir, "docs/csharp/linq/query-expression-basics.md"),
-      "!" + join(
-        rootDir,
-        "docs/csharp/programming-guide/classes-and-structs" +
-          "/named-and-optional-arguments.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/csharp/roslyn-sdk/tutorials" +
-          "/how-to-write-csharp-analyzer-code-fix.md"
-      ),
-      "!" + join(rootDir, "docs/csharp/tutorials/attributes.md"),
-      "!" + join(rootDir, "docs/csharp/whats-new/csharp-version-history.md"),
-      "!" + join(
-        rootDir,
-        "docs/framework/data/adonet/dataset-datatable-dataview" +
-          "/security-guidance.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/fsharp/language-reference/compiler-directives.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/fsharp/language-reference/exception-handling" +
-          "/the-try-with-expression.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/fsharp/language-reference/xml-documentation.md"
-      ),
-      "!" + join(rootDir, "docs/fsharp/style-guide/conventions.md"),
-      "!" + join(
-        rootDir,
-        "docs/fsharp/tutorials/asynchronous-and-concurrent-programming/async.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/fundamentals/code-analysis/configuration-files.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/fundamentals/code-analysis/style-rules/naming-rules.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/machine-learning/tutorials" +
-          "/health-violation-classification-model-builder.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/machine-learning/tutorials/object-detection-model-builder.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/machine-learning/tutorials/object-detection-onnx.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/machine-learning/tutorials/text-classification-tf.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/standard/asynchronous-programming-patterns" +
-          "/event-based-asynchronous-pattern-overview.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/standard/asynchronous-programming-patterns" +
-          "/implementing-the-event-based-asynchronous-pattern.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/standard/base-types/string-comparison-net-5-plus.md"
-      ),
-      "!" + join(rootDir, "docs/standard/delegates-lambdas.md"),
-      "!" + join(rootDir, "docs/standard/io/isolated-storage.md"),
-      "!" + join(
-        rootDir,
-        "docs/standard/native-interop/tutorial-comwrappers.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/standard/serialization/xml-schema-definition-tool-xsd-exe.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/standard/serialization/xml-serializer-generator-tool-sgen-exe.md"
-      ),
-      "!" + join(rootDir, "docs/standard/native-interop/best-practices.md"),
-      "!" + join(
-        rootDir,
-        "docs/standard/serialization/binaryformatter-security-guide.md"
-      ),
-      "!" + join(
-        rootDir,
-        "docs/framework/windows-workflow-foundation/authoring-workflows-" +
-          "activities-and-expressions-using-imperative-code.md"
-      ),
-      "!" + join(
-        rootDir,
+      ...excludeGlobs(rootDir,
+        "samples/**/*.md",
+        /* eslint-disable max-len */
+        "docs/architecture/cloud-native/candidate-apps.md",
+        "docs/architecture/containerized-lifecycle/docker-devops-workflow/docker-application-outer-loop-devops-workflow.md",
+        "docs/architecture/dapr-for-net-developers/getting-started.md",
+        "docs/architecture/grpc-for-wcf-developers/channel-credentials.md",
+        "docs/architecture/microservices/implement-resilient-applications/use-httpclientfactory-to-implement-resilient-http-requests.md",
+        "docs/architecture/microservices/multi-container-microservice-net-applications/implement-api-gateways-with-ocelot.md",
+        "docs/architecture/modern-web-apps-azure/architectural-principles.md",
+        "docs/architecture/modern-web-apps-azure/azure-hosting-recommendations-for-asp-net-web-apps.md",
+        "docs/architecture/modern-web-apps-azure/common-client-side-web-technologies.md",
+        "docs/architecture/modern-web-apps-azure/develop-asp-net-core-mvc-apps.md",
+        "docs/architecture/modern-web-apps-azure/development-process-for-azure.md",
+        "docs/architecture/modern-web-apps-azure/index.md",
+        "docs/core/additional-tools/dotnet-svcutil-guide.md",
+        "docs/core/dependency-loading/collect-details.md",
+        "docs/core/deploying/single-file.md",
+        "docs/core/deploying/trimming/trimming-options.md",
+        "docs/core/extensions/cloud-service.md",
+        "docs/core/extensions/console-log-formatter.md",
+        "docs/core/extensions/create-resource-files.md",
+        "docs/core/extensions/localization.md",
+        "docs/core/install/linux-alpine.md",
+        "docs/core/install/windows.md",
+        "docs/core/porting/third-party-deps.md",
+        "docs/core/project-sdk/msbuild-props-desktop.md",
+        "docs/core/testing/unit-testing-code-coverage.md",
+        "docs/core/tools/troubleshoot-usage-issues.md",
+        "docs/core/tutorials/cli-templates-create-item-template.md",
+        "docs/core/tutorials/cli-templates-create-project-template.md",
+        "docs/core/tutorials/cli-templates-create-template-pack.md",
+        "docs/core/tutorials/cli-templates-create-item-template.md",
+        "docs/core/tutorials/cli-templates-create-project-template.md",
+        "docs/core/tutorials/cli-templates-create-template-pack.md",
+        "docs/core/whats-new/dotnet-core-3-0.md",
+        "docs/csharp/language-reference/compiler-options/code-generation.md",
+        "docs/csharp/linq/query-expression-basics.md",
+        "docs/csharp/programming-guide/classes-and-structs/named-and-optional-arguments.md",
+        "docs/csharp/roslyn-sdk/tutorials/how-to-write-csharp-analyzer-code-fix.md",
+        "docs/csharp/tutorials/attributes.md",
+        "docs/csharp/whats-new/csharp-version-history.md",
+        "docs/framework/data/adonet/dataset-datatable-dataview/security-guidance.md",
+        "docs/fsharp/language-reference/compiler-directives.md",
+        "docs/fsharp/language-reference/exception-handling/the-try-with-expression.md",
+        "docs/fsharp/language-reference/xml-documentation.md",
+        "docs/fsharp/style-guide/conventions.md",
+        "docs/fsharp/tutorials/asynchronous-and-concurrent-programming/async.md",
+        "docs/fundamentals/code-analysis/configuration-files.md",
+        "docs/fundamentals/code-analysis/style-rules/naming-rules.md",
+        "docs/machine-learning/tutorials/health-violation-classification-model-builder.md",
+        "docs/machine-learning/tutorials/object-detection-model-builder.md",
+        "docs/machine-learning/tutorials/object-detection-onnx.md",
+        "docs/machine-learning/tutorials/text-classification-tf.md",
+        "docs/standard/asynchronous-programming-patterns/event-based-asynchronous-pattern-overview.md",
+        "docs/standard/asynchronous-programming-patterns/implementing-the-event-based-asynchronous-pattern.md",
+        "docs/standard/base-types/string-comparison-net-5-plus.md",
+        "docs/standard/delegates-lambdas.md",
+        "docs/standard/io/isolated-storage.md",
+        "docs/standard/native-interop/tutorial-comwrappers.md",
+        "docs/standard/serialization/xml-schema-definition-tool-xsd-exe.md",
+        "docs/standard/serialization/xml-serializer-generator-tool-sgen-exe.md",
+        "docs/standard/native-interop/best-practices.md",
+        "docs/standard/serialization/binaryformatter-security-guide.md",
+        "docs/framework/windows-workflow-foundation/authoring-workflows-activities-and-expressions-using-imperative-code.md",
         "docs/spark/how-to-guides/deploy-worker-udf-binaries.md"
+        /* eslint-enable max-len */
       )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
@@ -354,18 +235,20 @@ if (existsSync(v8v8DevDir)) {
     const rootDir = v8v8DevDir;
     const globPatterns = [
       join(rootDir, "src/**/*.md"),
-      "!" + join(rootDir, "src/blog/array-sort.md"),
-      "!" + join(rootDir, "src/blog/code-caching-for-devs.md"),
-      "!" + join(rootDir, "src/blog/fast-async.md"),
-      "!" + join(rootDir, "src/blog/liftoff.md"),
-      "!" + join(rootDir, "src/blog/pointer-compression.md"),
-      "!" + join(rootDir, "src/blog/react-cliff.md"),
-      "!" + join(rootDir, "src/blog/slack-tracking.md"),
-      "!" + join(rootDir, "src/blog/v8-release-74.md"),
-      "!" + join(rootDir, "src/features/bigint.md"),
-      "!" + join(rootDir, "src/features/dynamic-import.md"),
-      "!" + join(rootDir, "src/features/globalthis.md"),
-      "!" + join(rootDir, "src/features/modules.md")
+      ...excludeGlobs(rootDir,
+        "src/blog/array-sort.md",
+        "src/blog/code-caching-for-devs.md",
+        "src/blog/fast-async.md",
+        "src/blog/liftoff.md",
+        "src/blog/pointer-compression.md",
+        "src/blog/react-cliff.md",
+        "src/blog/slack-tracking.md",
+        "src/blog/v8-release-74.md",
+        "src/features/bigint.md",
+        "src/features/dynamic-import.md",
+        "src/features/globalthis.md",
+        "src/features/modules.md"
+      )
     ];
     const configPath = join(rootDir, ".markdownlint.json");
     return lintTestRepo(t, globPatterns, configPath);
