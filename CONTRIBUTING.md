@@ -49,7 +49,7 @@ When the commit is merged to the main branch during the release process, the iss
 (See [Closing issues using keywords](https://help.github.com/articles/closing-issues-using-keywords/) for details.)
 
 Please refrain from using slang or meaningless placeholder words.
-Sample text can be "Text" or "text text text" or the like.
+Sample content can be "text", "code", "heading", or the like.
 Sample URLs should use [example.com](https://en.wikipedia.org/wiki/Example.com) which is safe for this purpose.
 Profanity is not allowed.
 
