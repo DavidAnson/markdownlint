@@ -187,6 +187,7 @@ if (existsSync(dotnetDocsDir)) {
         "docs/core/tutorials/cli-templates-create-item-template.md",
         "docs/core/tutorials/cli-templates-create-project-template.md",
         "docs/core/tutorials/cli-templates-create-template-pack.md",
+        "docs/core/tutorials/cli-templates-create-template-package.md",
         "docs/core/tutorials/cli-templates-create-item-template.md",
         "docs/core/tutorials/cli-templates-create-project-template.md",
         "docs/core/tutorials/cli-templates-create-template-pack.md",
