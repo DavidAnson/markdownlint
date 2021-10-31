@@ -1,27 +1,60 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 2019
-  },
   "env": {
     "node": true,
     "es6": true
+  },
+  "extends": [
+    "eslint:all",
+    "plugin:jsdoc/recommended"
+  ],
+  "ignorePatterns": [
+    "demo/markdown-it.min.js",
+    "demo/markdownlint-browser.js",
+    "demo/markdownlint-browser.min.js",
+    "demo/markdownlint-rule-helpers-browser.js",
+    "demo/markdownlint-rule-helpers-browser.min.js",
+    "example/typescript/type-check.js",
+    "test-repos/"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "demo/*.js"
+      ],
+      "env": {
+        "browser": true
+      },
+      "rules": {
+        "jsdoc/require-jsdoc": "off",
+        "unicorn/prefer-query-selector": "off",
+        "unicorn/prefer-add-event-listener": "off",
+        "no-console": "off",
+        "no-shadow": "off",
+        "no-var": "off"
+      }
+    },
+    {
+      "files": [
+        "example/*.js"
+      ],
+      "rules": {
+        "node/no-missing-require": "off",
+        "node/no-extraneous-require": "off",
+        "no-console": "off",
+        "no-invalid-this": "off",
+        "no-shadow": "off",
+        "object-property-newline": "off"
+      }
+    }
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2019
   },
   "plugins": [
     "jsdoc",
     "node",
     "unicorn"
   ],
-  "extends": [
-    "eslint:all",
-    "plugin:jsdoc/recommended"
-  ],
-  "settings": {
-    "jsdoc": {
-      "preferredTypes": {
-        "object": "Object"
-      }
-    }
-  },
   "reportUnusedDisableDirectives": true,
   "rules": {
     "array-bracket-spacing": ["error", "always"],
@@ -243,35 +276,11 @@
     "unicorn/string-content": "error",
     "unicorn/throw-new-error": "error"
   },
-  "overrides": [
-    {
-      "files": [
-        "demo/*.js"
-      ],
-      "env": {
-        "browser": true
-      },
-      "rules": {
-        "jsdoc/require-jsdoc": "off",
-        "unicorn/prefer-query-selector": "off",
-        "unicorn/prefer-add-event-listener": "off",
-        "no-console": "off",
-        "no-shadow": "off",
-        "no-var": "off"
-      }
-    },
-    {
-      "files": [
-        "example/*.js"
-      ],
-      "rules": {
-        "node/no-missing-require": "off",
-        "node/no-extraneous-require": "off",
-        "no-console": "off",
-        "no-invalid-this": "off",
-        "no-shadow": "off",
-        "object-property-newline": "off"
+  "settings": {
+    "jsdoc": {
+      "preferredTypes": {
+        "object": "Object"
       }
     }
-  ]
+  }
 }
