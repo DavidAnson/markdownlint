@@ -42,7 +42,7 @@
     "test-extra": "ava --timeout=5m test/markdownlint-test-extra.js"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "dependencies": {
     "markdown-it": "12.2.0"
