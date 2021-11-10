@@ -2,7 +2,6 @@
 
 "use strict";
 
-const path = require("path");
 const webpack = require("webpack");
 
 function config(options) {
@@ -23,7 +22,7 @@ function config(options) {
             {
               "loader": "ts-loader",
               "options": {
-                "configFile": path.resolve(__dirname, "tsconfig.json")
+                "configFile": "../demo/tsconfig.json"
               }
             }
           ]
@@ -39,9 +38,6 @@ function config(options) {
     "plugins": [
       new webpack.BannerPlugin({
         "banner": `${name} ${version} ${homepage} @license ${license}`
-      }),
-      new webpack.DefinePlugin({
-        "process.env.NODE_DEBUG": false
       })
     ],
     "resolve": {
