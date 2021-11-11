@@ -15,6 +15,7 @@ const test = require("ava").default;
 const tv4 = require("tv4");
 const { homepage, version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
+const constants = require("../lib/constants");
 const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
@@ -1721,4 +1722,10 @@ test("getVersion", (t) => {
   const actual = markdownlint.getVersion();
   const expected = version;
   t.is(actual, expected, "Version string not correct.");
+});
+
+test("constants", (t) => {
+  t.plan(2);
+  t.is(constants.homepage, homepage);
+  t.is(constants.version, version);
 });
