@@ -175,6 +175,7 @@ if (existsSync(dotnetDocsDir)) {
         "docs/core/deploying/single-file.md",
         "docs/core/deploying/trimming/trimming-options.md",
         "docs/core/extensions/cloud-service.md",
+        "docs/core/extensions/configuration-providers.md",
         "docs/core/extensions/console-log-formatter.md",
         "docs/core/extensions/create-resource-files.md",
         "docs/core/extensions/localization.md",
