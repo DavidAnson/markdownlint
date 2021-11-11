@@ -872,6 +872,7 @@ following projects or one of the tools in the [Related section](#Related):
 * [MDN Web Docs](https://developer.mozilla.org/) ([Search repository](https://github.com/mdn/content/search?q=markdownlint))
 * [MkDocs](https://www.mkdocs.org/) ([Search repository](https://github.com/mkdocs/mkdocs/search?q=markdownlint))
 * [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
+* [Pi-hole documentation](https://docs.pi-hole.net) ([Search repository](https://github.com/pi-hole/docs/search?q=markdownlint))
 * [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
 * [Sinon.JS](https://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
 * [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
