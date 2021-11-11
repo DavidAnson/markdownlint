@@ -33,8 +33,10 @@ and test cases came directly from that project.
 ### Related
 
 * CLI
-  * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli) command-line interface for Node.js ([works with pre-commit](https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit))
-  * [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) command-line interface for Node.js ([works with pre-commit](https://github.com/DavidAnson/markdownlint-cli2#pre-commit))
+  * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
+    command-line interface for Node.js ([works with pre-commit](https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit))
+  * [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2)
+    command-line interface for Node.js ([works with pre-commit](https://github.com/DavidAnson/markdownlint-cli2#pre-commit))
 * GitHub
   * [GitHub Super-Linter Action](https://github.com/github/super-linter)
   * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
@@ -165,10 +167,12 @@ appear in the final markup):
 
 * Disable all rules: `<!-- markdownlint-disable -->`
 * Enable all rules: `<!-- markdownlint-enable -->`
-* Disable all rules for the next line only: `<!-- markdownlint-disable-next-line -->`
+* Disable all rules for the next line only:
+  `<!-- markdownlint-disable-next-line -->`
 * Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
 * Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
-* Disable one or more rules by name for the next line only: `<!-- markdownlint-disable-next-line MD001 MD005 -->`
+* Disable one or more rules by name for the next line only:
+  `<!-- markdownlint-disable-next-line MD001 MD005 -->`
 * Capture the current rule configuration: `<!-- markdownlint-capture -->`
 * Restore the captured rule configuration: `<!-- markdownlint-restore -->`
 
@@ -231,7 +235,7 @@ more rules for a file, the following more advanced syntax is supported:
 For example:
 
 ```markdown
-<!-- markdownlint-configure-file { "MD013": { "line_length": 70 } } -->
+<!-- markdownlint-configure-file { "MD013": { "code_blocks": false } } -->
 ```
 
 or
