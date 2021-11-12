@@ -25,7 +25,7 @@ const pluginTexMathOptions = {
     "renderToString": () => ""
   }
 };
-const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
+const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const configSchemaStrict = {
   ...configSchema,
   "additionalProperties": false

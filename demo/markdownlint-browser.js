@@ -812,6 +812,7 @@ module.exports.clear = function () {
 "use strict";
 // @ts-check
 
+module.exports.deprecatedRuleNames = ["MD002", "MD006"];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.24.0";
 
@@ -846,6 +847,7 @@ var __spreadArray = (this && this.__spreadArray) || function (to, from) {
 var path = __webpack_require__(/*! path */ "?b85c");
 var promisify = __webpack_require__(/*! util */ "?96a2").promisify;
 var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
+var deprecatedRuleNames = __webpack_require__(/*! ./constants */ "../lib/constants.js").deprecatedRuleNames;
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -853,7 +855,6 @@ var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 // eslint-disable-next-line camelcase, max-len, no-inline-comments, no-undef
 var dynamicRequire = (typeof require === "undefined") ? __webpack_require__("../lib sync recursive") : /* c8 ignore next */ require;
 // Capture native require implementation for dynamic loading of modules
-var deprecatedRuleNames = ["MD002", "MD006"];
 /**
  * Validate the list of rules for structure and reuse.
  *
