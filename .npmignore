@@ -10,5 +10,6 @@ demo/*
 example
 npm-debug.log
 schema/*.js
+scripts
 test
 test-repos
