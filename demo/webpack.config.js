@@ -22,7 +22,8 @@ function config(options) {
             {
               "loader": "ts-loader",
               "options": {
-                "configFile": "../demo/tsconfig.json"
+                "configFile": "../demo/tsconfig.json",
+                "transpileOnly": true
               }
             }
           ]

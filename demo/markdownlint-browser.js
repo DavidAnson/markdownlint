@@ -568,8 +568,8 @@ module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
     var match = line.match(regexp);
     if (match) {
         var column = match.index + 1;
-        var length_1 = match[0].length;
-        range = [column, length_1];
+        var length = match[0].length;
+        range = [column, length];
     }
     return range;
 };
@@ -1398,7 +1398,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         // Call (possibly external) rule function
         if (handleRuleFailures) {
             try {
-                rule["function"](params, onError);
+                rule.function(params, onError);
             }
             catch (error) {
                 onError({
@@ -1408,7 +1408,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
             }
         }
         else {
-            rule["function"](params, onError);
+            rule.function(params, onError);
         }
         // Record any errors (significant performance benefit from length check)
         if (errors.length > 0) {
@@ -1760,9 +1760,9 @@ function readConfig(file, parsers, fs, callback) {
             return callback(new Error(message));
         }
         // Extend configuration
-        var configExtends = config["extends"];
+        var configExtends = config.extends;
         if (configExtends) {
-            delete config["extends"];
+            delete config.extends;
             return resolveConfigExtends(file, configExtends, fs, function (_, resolvedExtends) { return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
                 if (errr) {
                     return callback(errr);
@@ -1807,9 +1807,9 @@ function readConfigSync(file, parsers, fs) {
         throw new Error(message);
     }
     // Extend configuration
-    var configExtends = config["extends"];
+    var configExtends = config.extends;
     if (configExtends) {
-        delete config["extends"];
+        delete config.extends;
         var resolvedExtends = resolveConfigExtendsSync(file, configExtends, fs);
         return __assign(__assign({}, readConfigSync(resolvedExtends, parsers, fs)), config);
     }
@@ -1998,8 +1998,8 @@ module.exports = {
                     var match = item.line.match(listItemMarkerRe);
                     if (match) {
                         var column = match.index + 1;
-                        var length_1 = match[0].length;
-                        range = [column, length_1];
+                        var length = match[0].length;
+                        range = [column, length];
                         fixInfo = {
                             "editColumn": match[1].length + 1,
                             "deleteCount": 1,
@@ -2262,11 +2262,11 @@ module.exports = {
                 var match = null;
                 while ((match = tabRe.exec(line)) !== null) {
                     var column = match.index + 1;
-                    var length_1 = match[0].length;
-                    addError(onError, lineIndex + 1, "Column: " + column, null, [column, length_1], {
+                    var length = match[0].length;
+                    addError(onError, lineIndex + 1, "Column: " + column, null, [column, length], {
                         "editColumn": column,
-                        "deleteCount": length_1,
-                        "insertText": "".padEnd(length_1 * spaceMultiplier)
+                        "deleteCount": length,
+                        "insertText": "".padEnd(length * spaceMultiplier)
                     });
                 }
             }
@@ -2301,13 +2301,13 @@ module.exports = {
                 while ((match = reversedLinkRe.exec(line)) !== null) {
                     var reversedLink = match[0], preChar = match[1], linkText = match[2], linkDestination = match[3];
                     var index = match.index + preChar.length;
-                    var length_1 = match[0].length - preChar.length;
+                    var length = match[0].length - preChar.length;
                     if (!linkText.endsWith("\\") &&
                         !linkDestination.endsWith("\\") &&
-                        !overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
-                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length_1], {
+                        !overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length], {
                             "editColumn": index + 1,
-                            "deleteCount": length_1,
+                            "deleteCount": length,
                             "insertText": "[" + linkText + "](" + linkDestination + ")"
                         });
                     }
@@ -2472,8 +2472,8 @@ module.exports = {
                         var match = dollarCommandRe.exec(line);
                         if (match) {
                             var column = match[1].length + 1;
-                            var length_1 = match[2].length;
-                            dollarInstances.push([i, lineTrim, column, length_1]);
+                            var length = match[2].length;
+                            dollarInstances.push([i, lineTrim, column, length]);
                         }
                         else {
                             allDollars = false;
@@ -2640,7 +2640,7 @@ module.exports = {
                     var left = leftSpaceLength > 1;
                     var right = rightSpaceLength > 1;
                     if (left || right) {
-                        var length_1 = line.length;
+                        var length = line.length;
                         var leftHashLength = leftHash.length;
                         var rightHashLength = rightHash.length;
                         var range = left ?
@@ -2649,12 +2649,12 @@ module.exports = {
                                 leftHashLength + leftSpaceLength + 1
                             ] :
                             [
-                                length_1 - trailSpaceLength - rightHashLength - rightSpaceLength,
+                                length - trailSpaceLength - rightHashLength - rightSpaceLength,
                                 rightSpaceLength + rightHashLength + 1
                             ];
                         addErrorContext(onError, lineNumber, line.trim(), left, right, range, {
                             "editColumn": 1,
-                            "deleteCount": length_1,
+                            "deleteCount": length,
                             "insertText": leftHash + " " + content + " " + rightHash
                         });
                     }
@@ -2860,10 +2860,10 @@ module.exports = {
             if (match && !endOfLineHtmlEntityRe.test(trimmedLine)) {
                 var fullMatch = match[0];
                 var column = match.index + 1;
-                var length_1 = fullMatch.length;
-                addError(onError, lineNumber, "Punctuation: '" + fullMatch + "'", null, [column, length_1], {
+                var length = fullMatch.length;
+                addError(onError, lineNumber, "Punctuation: '" + fullMatch + "'", null, [column, length], {
                     "editColumn": column,
-                    "deleteCount": length_1
+                    "deleteCount": length
                 });
             }
         });
@@ -3421,7 +3421,7 @@ module.exports = {
                 var contextEnd = matchIndex + contextLength;
                 var context = line.substring(contextStart, contextEnd);
                 var column = contextStart + 1;
-                var length_1 = contextEnd - contextStart;
+                var length = contextEnd - contextStart;
                 var leftMarker = line.substring(contextStart, emphasisIndex);
                 var rightMarker = match ? (match[2] || match[3]) : "";
                 var fixedText = "" + leftMarker + content.trim() + rightMarker;
@@ -3431,10 +3431,10 @@ module.exports = {
                     context,
                     leftSpace,
                     rightSpace,
-                    [column, length_1],
+                    [column, length],
                     {
                         "editColumn": column,
-                        "deleteCount": length_1,
+                        "deleteCount": length,
                         "insertText": fixedText
                     }
                 ];
@@ -3641,14 +3641,14 @@ module.exports = {
                         var match = line.slice(lineIndex).match(spaceInLinkRe);
                         if (match) {
                             var column = match.index + lineIndex + 1;
-                            var length_1 = match[0].length;
-                            range = [column, length_1];
+                            var length = match[0].length;
+                            range = [column, length];
                             fixInfo = {
                                 "editColumn": column + 1,
-                                "deleteCount": length_1 - 2,
+                                "deleteCount": length - 2,
                                 "insertText": linkText.trim()
                             };
-                            lineIndex = column + length_1 - 1;
+                            lineIndex = column + length - 1;
                         }
                         addErrorContext(onError, lineNumber, "[" + linkText + "]", left, right, range, fixInfo);
                     }
@@ -3900,10 +3900,10 @@ module.exports = {
         if (!includeCodeBlocks) {
             exclusions.push.apply(exclusions, inlineCodeSpanRanges());
         }
-        var _loop_1 = function (name_1) {
-            var escapedName = escapeForRegExp(name_1);
-            var startNamePattern = /^\W/.test(name_1) ? "" : "\\b_*";
-            var endNamePattern = /\W$/.test(name_1) ? "" : "_*\\b";
+        var _loop_1 = function (name) {
+            var escapedName = escapeForRegExp(name);
+            var startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
+            var endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
             var namePattern = "(" + startNamePattern + ")(" + escapedName + ")" + endNamePattern;
             var nameRe = new RegExp(namePattern, "gi");
             forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
@@ -3912,22 +3912,22 @@ module.exports = {
                     while ((match = nameRe.exec(line)) !== null) {
                         var leftMatch = match[1], nameMatch = match[2];
                         var index = match.index + leftMatch.length;
-                        var length_1 = nameMatch.length;
-                        if (!overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
-                            addErrorDetailIf(onError, lineIndex + 1, name_1, nameMatch, null, null, [index + 1, length_1], {
+                        var length = nameMatch.length;
+                        if (!overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                            addErrorDetailIf(onError, lineIndex + 1, name, nameMatch, null, null, [index + 1, length], {
                                 "editColumn": index + 1,
-                                "deleteCount": length_1,
-                                "insertText": name_1
+                                "deleteCount": length,
+                                "insertText": name
                             });
                         }
-                        exclusions.push([lineIndex, index, length_1]);
+                        exclusions.push([lineIndex, index, length]);
                     }
                 }
             });
         };
         for (var _i = 0, names_1 = names; _i < names_1.length; _i++) {
-            var name_1 = names_1[_i];
-            _loop_1(name_1);
+            var name = names_1[_i];
+            _loop_1(name);
         }
     }
 };
