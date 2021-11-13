@@ -19,7 +19,7 @@
     "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && node scripts delete 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
     "build-demo": "node scripts copy node_modules/markdown-it/dist/markdown-it.min.js demo/markdown-it.min.js && cd demo && webpack --no-stats",
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
-    "ci": "npm-run-all --continue-on-error --parallel test-cover lint declaration build-config build-demo && git diff --exit-code",
+    "ci": "npm-run-all --continue-on-error --parallel declaration lint --parallel build-config build-demo test-cover && git diff --exit-code",
     "clone-test-repos-dotnet-docs": "cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
     "clone-test-repos-eslint-eslint": "cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet",
     "clone-test-repos-mkdocs-mkdocs": "cd test-repos && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet",
