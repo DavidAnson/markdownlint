@@ -78,7 +78,7 @@
     "fixInfo": null
   },
   {
-    "lineNumber": 31,
+    "lineNumber": 45,
     "ruleNames": [
       "MD043",
       "required-headings",
@@ -178,7 +178,7 @@
     "fixInfo": null
   },
   {
-    "lineNumber": 31,
+    "lineNumber": 45,
     "ruleNames": [
       "MD047",
       "single-trailing-newline"
@@ -208,5 +208,57 @@
     "errorContext": null,
     "errorRange": null,
     "fixInfo": null
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: asterisk; Actual: underscore",
+    "errorRange": null,
+    "fixInfo": null,
+    "lineNumber": 31,
+    "ruleDescription": "Emphasis style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md049",
+    "ruleNames": [
+      "MD049",
+      "emphasis-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: asterisk; Actual: underscore",
+    "errorRange": null,
+    "fixInfo": null,
+    "lineNumber": 36,
+    "ruleDescription": "Emphasis style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md049",
+    "ruleNames": [
+      "MD049",
+      "emphasis-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: underscore; Actual: asterisk",
+    "errorRange": null,
+    "fixInfo": null,
+    "lineNumber": 33,
+    "ruleDescription": "Strong style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
+    "ruleNames": [
+      "MD050",
+      "strong-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: underscore; Actual: asterisk",
+    "errorRange": null,
+    "fixInfo": null,
+    "lineNumber": 41,
+    "ruleDescription": "Strong style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
+    "ruleNames": [
+      "MD050",
+      "strong-style"
+    ]
   }
 ]
