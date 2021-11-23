@@ -309,14 +309,20 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   return lineMetadata;
 };
 
-// Calls the provided function for each line (with context)
-module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
+/**
+ * Calls the provided function for each line.
+ *
+ * @param {Object} lineMetadata Line metadata object.
+ * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
+ * inTable, inItem, inBreak, inMath).
+ * @returns {void}
+ */
+function forEachLine(lineMetadata, handler) {
   lineMetadata.forEach(function forMetadata(metadata) {
-    // Parameters:
-    // line, lineIndex, inCode, onFence, inTable, inItem, inBreak, inMath
     handler(...metadata);
   });
-};
+}
+module.exports.forEachLine = forEachLine;
 
 // Returns (nested) lists as a flat array (in order)
 module.exports.flattenLists = function flattenLists(tokens) {
@@ -402,7 +408,8 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
  * Calls the provided function for each inline code span's content.
  *
  * @param {string} input Markdown content.
- * @param {Function} handler Callback function.
+ * @param {Function} handler Callback function taking (code, lineIndex,
+ * columnIndex, ticks).
  * @returns {void}
  */
 function forEachInlineCodeSpan(input, handler) {
@@ -537,26 +544,39 @@ module.exports.addErrorContext = function addErrorContext(
 };
 
 /**
- * Returns an array of code span ranges.
+ * Returns an array of code block and span content ranges.
  *
- * @param {string[]} lines Lines to scan for code span ranges.
- * @returns {number[][]} Array of ranges (line, index, length).
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
  */
-module.exports.inlineCodeSpanRanges = (lines) => {
+module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
   const exclusions = [];
-  forEachInlineCodeSpan(
-    lines.join("\n"),
-    (code, lineIndex, columnIndex) => {
-      const codeLines = code.split(newLineRe);
-      // eslint-disable-next-line unicorn/no-for-loop
-      for (let i = 0; i < codeLines.length; i++) {
-        exclusions.push(
-          [ lineIndex + i, columnIndex, codeLines[i].length ]
-        );
-        columnIndex = 0;
-      }
+  // Add code block ranges (excludes fences)
+  forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
+    if (inCode && !onFence) {
+      exclusions.push(lineIndex, 0, line.length);
     }
-  );
+  });
+  // Add code span ranges (excludes ticks)
+  filterTokens(params, "inline", (token) => {
+    if (token.children.some((child) => child.type === "code_inline")) {
+      const tokenLines = params.lines.slice(token.map[0], token.map[1]);
+      forEachInlineCodeSpan(
+        tokenLines.join("\n"),
+        (code, lineIndex, columnIndex) => {
+          const codeLines = code.split(newLineRe);
+          for (const [ i, line ] of codeLines.entries()) {
+            exclusions.push([
+              token.lineNumber - 1 + lineIndex + i,
+              i ? 0 : columnIndex,
+              line.length
+            ]);
+          }
+        }
+      );
+    }
+  });
   return exclusions;
 };
 

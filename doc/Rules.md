@@ -1762,7 +1762,8 @@ the proper capitalization, specify the desired letter case in the `names` array:
 ]
 ```
 
-Set the `code_blocks` parameter to `false` to disable this rule for code blocks.
+Set the `code_blocks` parameter to `false` to disable this rule for code blocks
+and spans.
 
 Rationale: Incorrect capitalization of proper names is usually a mistake.
 

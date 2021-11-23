@@ -96,3 +96,25 @@ Text **\<base directory>\another\directory\\<slash/directory>** text
 <a href="https://example.com" target="_blank">Google</a> {MD033}
 
 <a href="https://example.com:9999" target="_blank">Google</a> {MD033}
+
+## Unterminated code span followed by element in code span
+
+Text text `text text
+
+Text `<element>` text
+
+Text
+text `text
+text
+
+Text `code <element> code` text
+
+```lang
+code {MD046:112}
+
+<element>
+```
+
+Text `code <element> code` text
+
+Text <element> text {MD033}
