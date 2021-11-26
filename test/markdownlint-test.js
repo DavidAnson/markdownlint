@@ -1717,6 +1717,40 @@ test.cb("texmath test files with texmath plugin", (t) => {
   });
 });
 
+test("token-map-spans", (t) => {
+  t.plan(38);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "token-map-spans" ],
+        "description": "token-map-spans",
+        "tags": [ "tms" ],
+        "function": function tokenMapSpans(params) {
+          const tokenLines = [];
+          let lastLineNumber = -1;
+          const inlines = params.tokens.filter((c) => c.type === "inline");
+          for (const token of inlines) {
+            t.truthy(token.map);
+            for (let i = token.map[0]; i < token.map[1]; i++) {
+              if (tokenLines.includes(i)) {
+                t.true(
+                  lastLineNumber === token.lineNumber,
+                  `Line ${i + 1} is part of token maps from multiple lines.`
+                );
+              } else {
+                tokenLines.push(i);
+              }
+              lastLineNumber = token.lineNumber;
+            }
+          }
+        }
+      }
+    ],
+    "files": [ "./test/token-map-spans.md" ]
+  };
+  markdownlint.sync(options);
+});
+
 test("getVersion", (t) => {
   t.plan(1);
   const actual = markdownlint.getVersion();

@@ -1002,7 +1002,7 @@ test("customRulesOnErrorInvalidHandled", (t) => {
         "function": function onErrorInvalid(params, onError) {
           onError({
             "lineNumber": 13,
-            "details": "N/A"
+            "detail": "N/A"
           });
         }
       }

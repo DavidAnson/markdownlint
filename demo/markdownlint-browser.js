@@ -1037,23 +1037,17 @@ function removeFrontMatter(content, frontMatter) {
  * @returns {void}
  */
 function annotateTokens(tokens, lines) {
-    var tableMap = null;
+    var trMap = null;
     tokens.forEach(function forToken(token) {
-        // Handle missing maps for table head/body
-        if ((token.type === "thead_open") ||
-            (token.type === "tbody_open")) {
-            tableMap = __spreadArray([], token.map);
+        // Provide missing maps for table content
+        if (token.type === "tr_open") {
+            trMap = token.map;
         }
-        else if ((token.type === "tr_close") &&
-            tableMap) {
-            tableMap[0]++;
+        else if (token.type === "tr_close") {
+            trMap = null;
         }
-        else if ((token.type === "thead_close") ||
-            (token.type === "tbody_close")) {
-            tableMap = null;
-        }
-        if (tableMap && !token.map) {
-            token.map = __spreadArray([], tableMap);
+        if (!token.map && trMap) {
+            token.map = __spreadArray([], trMap);
         }
         // Update token metadata
         if (token.map) {
