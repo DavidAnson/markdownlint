@@ -613,6 +613,18 @@ module.exports.frontMatterHasTitle =
 function emphasisMarkersInContent(params) {
     var lines = params.lines;
     var byLine = new Array(lines.length);
+    // Search links
+    lines.forEach(function (tokenLine, tokenLineIndex) {
+        var inLine = [];
+        var linkMatch = null;
+        while ((linkMatch = linkRe.exec(tokenLine))) {
+            var markerMatch = null;
+            while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
+                inLine.push(linkMatch.index + markerMatch.index);
+            }
+        }
+        byLine[tokenLineIndex] = inLine;
+    });
     // Search code spans
     filterTokens(params, "inline", function (token) {
         var children = token.children, lineNumber = token.lineNumber, map = token.map;
@@ -621,28 +633,16 @@ function emphasisMarkersInContent(params) {
             forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, column, tickCount) {
                 var codeLines = code.split(newLineRe);
                 codeLines.forEach(function (codeLine, codeLineIndex) {
+                    var byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
+                    var inLine = byLine[byLineIndex];
+                    var codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
                     var match = null;
                     while ((match = emphasisMarkersRe.exec(codeLine))) {
-                        var byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
-                        var inLine = byLine[byLineIndex] || [];
-                        var codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
                         inLine.push(codeLineOffset + match.index);
-                        byLine[byLineIndex] = inLine;
                     }
+                    byLine[byLineIndex] = inLine;
                 });
             });
-        }
-    });
-    // Search links
-    lines.forEach(function (tokenLine, tokenLineIndex) {
-        var linkMatch = null;
-        while ((linkMatch = linkRe.exec(tokenLine))) {
-            var markerMatch = null;
-            while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
-                var inLine = byLine[tokenLineIndex] || [];
-                inLine.push(linkMatch.index + markerMatch.index);
-                byLine[tokenLineIndex] = inLine;
-            }
         }
     });
     return byLine;
@@ -3486,7 +3486,7 @@ module.exports = {
             var match = null;
             // Match all emphasis-looking runs in the line...
             while ((match = emphasisRe.exec(line))) {
-                var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex] || [];
+                var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex];
                 var matchIndex = match.index + match[1].length;
                 if (ignoreMarkersForLine.includes(matchIndex)) {
                     // Ignore emphasis markers inside code spans and links

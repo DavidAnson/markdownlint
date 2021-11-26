@@ -632,6 +632,18 @@ module.exports.frontMatterHasTitle =
 function emphasisMarkersInContent(params) {
   const { lines } = params;
   const byLine = new Array(lines.length);
+  // Search links
+  lines.forEach((tokenLine, tokenLineIndex) => {
+    const inLine = [];
+    let linkMatch = null;
+    while ((linkMatch = linkRe.exec(tokenLine))) {
+      let markerMatch = null;
+      while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
+        inLine.push(linkMatch.index + markerMatch.index);
+      }
+    }
+    byLine[tokenLineIndex] = inLine;
+  });
   // Search code spans
   filterTokens(params, "inline", (token) => {
     const { children, lineNumber, map } = token;
@@ -642,29 +654,17 @@ function emphasisMarkersInContent(params) {
         (code, lineIndex, column, tickCount) => {
           const codeLines = code.split(newLineRe);
           codeLines.forEach((codeLine, codeLineIndex) => {
+            const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
+            const inLine = byLine[byLineIndex];
+            const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
             let match = null;
             while ((match = emphasisMarkersRe.exec(codeLine))) {
-              const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
-              const inLine = byLine[byLineIndex] || [];
-              const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
               inLine.push(codeLineOffset + match.index);
-              byLine[byLineIndex] = inLine;
             }
+            byLine[byLineIndex] = inLine;
           });
         }
       );
-    }
-  });
-  // Search links
-  lines.forEach((tokenLine, tokenLineIndex) => {
-    let linkMatch = null;
-    while ((linkMatch = linkRe.exec(tokenLine))) {
-      let markerMatch = null;
-      while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
-        const inLine = byLine[tokenLineIndex] || [];
-        inLine.push(linkMatch.index + markerMatch.index);
-        byLine[tokenLineIndex] = inLine;
-      }
     }
   });
   return byLine;
