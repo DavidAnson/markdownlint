@@ -6,8 +6,6 @@ Quoted "Markdownlint" {MD044}
 
 Emphasized *Markdownlint* {MD044}
 
-Emphasized _Markdownlint_ {MD044} {MD049}
-
 JavaScript is a language
 
 JavaScript is not Java
@@ -52,7 +50,7 @@ HTML <u>javascript</u> {MD033} {MD044}
     node.js is runtime {MD044}
 
 ```js
-javascript is code {MD044} {MD046:54}
+javascript is code {MD044} {MD046:52}
 node.js is runtime {MD044}
 ```
 

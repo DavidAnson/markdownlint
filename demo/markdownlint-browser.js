@@ -783,6 +783,57 @@ module.exports.applyFixes = function applyFixes(input, errors) {
     // Return corrected input
     return lines.filter(function (line) { return line !== null; }).join(lineEnding);
 };
+/**
+ * Gets the range and fixInfo values for reporting an error if the expected
+ * text is found on the specified line.
+ *
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index to check.
+ * @param {string} search Text to search for.
+ * @param {string} replace Text to replace with.
+ * @returns {Object} Range and fixInfo wrapper.
+ */
+function getRangeAndFixInfoIfFound(lines, lineIndex, search, replace) {
+    var range = null;
+    var fixInfo = null;
+    var searchIndex = lines[lineIndex].indexOf(search);
+    if (searchIndex !== -1) {
+        var column = searchIndex + 1;
+        var length = search.length;
+        range = [column, length];
+        fixInfo = {
+            "editColumn": column,
+            "deleteCount": length,
+            "insertText": replace
+        };
+    }
+    return {
+        range: range,
+        fixInfo: fixInfo
+    };
+}
+module.exports.getRangeAndFixInfoIfFound = getRangeAndFixInfoIfFound;
+/**
+ * Gets the next (subsequent) child token if it is of the expected type.
+ *
+ * @param {Object} parentToken Parent token.
+ * @param {Object} childToken Child token basis.
+ * @param {string} nextType Token type of next token.
+ * @param {string} nextNextType Token type of next-next token.
+ * @returns {Object} Next token.
+ */
+function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
+    var children = parentToken.children;
+    var index = children.indexOf(childToken);
+    if ((index !== -1) &&
+        (children.length > index + 2) &&
+        (children[index + 1].type === nextType) &&
+        (children[index + 2].type === nextNextType)) {
+        return children[index + 1];
+    }
+    return null;
+}
+module.exports.getNextChildToken = getNextChildToken;
 
 
 /***/ }),
@@ -4083,20 +4134,31 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild, getNextChildToken = _a.getNextChildToken, getRangeAndFixInfoIfFound = _a.getRangeAndFixInfoIfFound;
 module.exports = {
     "names": ["MD049", "emphasis-style"],
     "description": "Emphasis style should be consistent",
     "tags": ["emphasis"],
     "function": function MD049(params, onError) {
         var expectedStyle = String(params.config.style || "consistent");
-        forEachInlineChild(params, "em_open", function (token) {
+        forEachInlineChild(params, "em_open", function (token, parent) {
             var lineNumber = token.lineNumber, markup = token.markup;
             var markupStyle = emphasisOrStrongStyleFor(markup);
             if (expectedStyle === "consistent") {
                 expectedStyle = markupStyle;
             }
-            addErrorDetailIf(onError, lineNumber, expectedStyle, markupStyle);
+            if (expectedStyle !== markupStyle) {
+                var rangeAndFixInfo = {};
+                var contentToken = getNextChildToken(parent, token, "text", "em_close");
+                if (contentToken) {
+                    var content = contentToken.content;
+                    var actual = "" + markup + content + markup;
+                    var expectedMarkup = (expectedStyle === "asterisk") ? "*" : "_";
+                    var expected = "" + expectedMarkup + content + expectedMarkup;
+                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
+                }
+                addError(onError, lineNumber, "Expected: " + expectedStyle + "; Actual: " + markupStyle, null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+            }
         });
     }
 };
@@ -4113,20 +4175,31 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild, getNextChildToken = _a.getNextChildToken, getRangeAndFixInfoIfFound = _a.getRangeAndFixInfoIfFound;
 module.exports = {
     "names": ["MD050", "strong-style"],
     "description": "Strong style should be consistent",
     "tags": ["emphasis"],
     "function": function MD050(params, onError) {
         var expectedStyle = String(params.config.style || "consistent");
-        forEachInlineChild(params, "strong_open", function (token) {
+        forEachInlineChild(params, "strong_open", function (token, parent) {
             var lineNumber = token.lineNumber, markup = token.markup;
             var markupStyle = emphasisOrStrongStyleFor(markup);
             if (expectedStyle === "consistent") {
                 expectedStyle = markupStyle;
             }
-            addErrorDetailIf(onError, lineNumber, expectedStyle, markupStyle);
+            if (expectedStyle !== markupStyle) {
+                var rangeAndFixInfo = {};
+                var contentToken = getNextChildToken(parent, token, "text", "strong_close");
+                if (contentToken) {
+                    var content = contentToken.content;
+                    var actual = "" + markup + content + markup;
+                    var expectedMarkup = (expectedStyle === "asterisk") ? "**" : "__";
+                    var expected = "" + expectedMarkup + content + expectedMarkup;
+                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
+                }
+                addError(onError, lineNumber, "Expected: " + expectedStyle + "; Actual: " + markupStyle, null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+            }
         });
     }
 };

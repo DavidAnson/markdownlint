@@ -28,9 +28,9 @@ Fenced code
 Fenced code
 ~~~
 
-Mixed *emphasis* on _this_ line
+Mixed *emphasis* on *this* line *with* multiple *issues*
 
-Mixed __strong emphasis__ on **this** line
+Mixed __strong emphasis__ on __this__ line __with__ multiple __issues__
 
 Inconsistent
 emphasis _text

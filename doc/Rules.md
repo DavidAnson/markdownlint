@@ -1923,6 +1923,8 @@ Aliases: emphasis-style
 
 Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when the symbols used in the document for emphasis do not
 match the configured emphasis style:
 
@@ -1952,6 +1954,8 @@ Tags: emphasis
 Aliases: strong-style
 
 Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+
+Fixable: Most violations can be fixed by tooling
 
 This rule is triggered when the symbols used in the document for strong do not
 match the configured strong style:

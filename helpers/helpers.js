@@ -813,3 +813,58 @@ module.exports.applyFixes = function applyFixes(input, errors) {
   // Return corrected input
   return lines.filter((line) => line !== null).join(lineEnding);
 };
+
+/**
+ * Gets the range and fixInfo values for reporting an error if the expected
+ * text is found on the specified line.
+ *
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index to check.
+ * @param {string} search Text to search for.
+ * @param {string} replace Text to replace with.
+ * @returns {Object} Range and fixInfo wrapper.
+ */
+function getRangeAndFixInfoIfFound(lines, lineIndex, search, replace) {
+  let range = null;
+  let fixInfo = null;
+  const searchIndex = lines[lineIndex].indexOf(search);
+  if (searchIndex !== -1) {
+    const column = searchIndex + 1;
+    const length = search.length;
+    range = [ column, length ];
+    fixInfo = {
+      "editColumn": column,
+      "deleteCount": length,
+      "insertText": replace
+    };
+  }
+  return {
+    range,
+    fixInfo
+  };
+}
+module.exports.getRangeAndFixInfoIfFound = getRangeAndFixInfoIfFound;
+
+/**
+ * Gets the next (subsequent) child token if it is of the expected type.
+ *
+ * @param {Object} parentToken Parent token.
+ * @param {Object} childToken Child token basis.
+ * @param {string} nextType Token type of next token.
+ * @param {string} nextNextType Token type of next-next token.
+ * @returns {Object} Next token.
+ */
+function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
+  const { children } = parentToken;
+  const index = children.indexOf(childToken);
+  if (
+    (index !== -1) &&
+    (children.length > index + 2) &&
+    (children[index + 1].type === nextType) &&
+    (children[index + 2].type === nextNextType)
+  ) {
+    return children[index + 1];
+  }
+  return null;
+}
+module.exports.getNextChildToken = getNextChildToken;

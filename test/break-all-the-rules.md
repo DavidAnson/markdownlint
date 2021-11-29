@@ -64,7 +64,7 @@ https://example.com/page {MD034}
 
 _Section {MD036} Heading_
 
-Emphasis *with * space {MD037}
+Emphasis _with _ space {MD037}
 
 Code `with ` space {MD038}
 
