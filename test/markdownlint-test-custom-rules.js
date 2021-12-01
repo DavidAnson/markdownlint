@@ -328,7 +328,7 @@ test.cb("customRulesConfig", (t) => {
   });
 });
 
-test("customRulesNpmPackage", (t) => {
+test.cb("customRulesNpmPackage", (t) => {
   t.plan(2);
   const options = {
     "customRules": [ require("./rules/npm") ],
@@ -345,6 +345,7 @@ test("customRulesNpmPackage", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
 });
 
@@ -395,7 +396,7 @@ test("customRulesBadProperty", (t) => {
   });
 });
 
-test("customRulesUsedNameName", (t) => {
+test.cb("customRulesUsedNameName", (t) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -414,10 +415,11 @@ test("customRulesUsedNameName", (t) => {
         "already used as a name or tag.",
       "Incorrect message for duplicate name.");
     t.true(!result, "Got result for duplicate name.");
+    t.end();
   });
 });
 
-test("customRulesUsedNameTag", (t) => {
+test.cb("customRulesUsedNameTag", (t) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -435,10 +437,11 @@ test("customRulesUsedNameTag", (t) => {
       "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
       "Incorrect message for duplicate name.");
     t.true(!result, "Got result for duplicate name.");
+    t.end();
   });
 });
 
-test("customRulesUsedTagName", (t) => {
+test.cb("customRulesUsedTagName", (t) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -463,6 +466,7 @@ test("customRulesUsedTagName", (t) => {
         "already used as a name.",
       "Incorrect message for duplicate name.");
     t.true(!result, "Got result for duplicate tag.");
+    t.end();
   });
 });
 
@@ -517,7 +521,7 @@ test("customRulesThrowForFileSync", (t) => {
   );
 });
 
-test("customRulesThrowForString", (t) => {
+test.cb("customRulesThrowForString", (t) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
@@ -540,10 +544,69 @@ test("customRulesThrowForString", (t) => {
     t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
     t.true(!result, "Got result for function thrown.");
+    t.end();
   });
 });
 
-test("customRulesOnErrorNull", (t) => {
+test("customRulesThrowForStringSync", (t) => {
+  t.plan(1);
+  const exceptionMessage = "Test exception message";
+  t.throws(
+    function customRuleThrowsCall() {
+      markdownlint.sync({
+        "customRules": [
+          {
+            "names": [ "name" ],
+            "description": "description",
+            "tags": [ "tag" ],
+            "function": function throws() {
+              throw new Error(exceptionMessage);
+            }
+          }
+        ],
+        "strings": {
+          "string": "String"
+        }
+      });
+    },
+    {
+      "message": exceptionMessage
+    },
+    "Did not get correct exception for function thrown."
+  );
+});
+
+test.cb("customRulesOnErrorNull", (t) => {
+  t.plan(4);
+  markdownlint({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function onErrorNull(params, onError) {
+          onError(null);
+        }
+      }
+    ],
+    "strings": {
+      "string": "String"
+    }
+  },
+  function callback(err, result) {
+    t.truthy(err, "Did not get an error for function thrown.");
+    t.true(err instanceof Error, "Error not instance of Error.");
+    t.is(
+      err.message,
+      "Property 'lineNumber' of onError parameter is incorrect.",
+      "Did not get correct exception for null object."
+    );
+    t.true(!result, "Got result for function thrown.");
+    t.end();
+  });
+});
+
+test("customRulesOnErrorNullSync", (t) => {
   t.plan(1);
   const options = {
     "customRules": [
@@ -802,7 +865,7 @@ test("customRulesOnErrorValid", (t) => {
   });
 });
 
-test("customRulesOnErrorLazy", (t) => {
+test.cb("customRulesOnErrorLazy", (t) => {
   t.plan(2);
   const options = {
     "customRules": [
@@ -840,10 +903,11 @@ test("customRulesOnErrorLazy", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
 });
 
-test("customRulesOnErrorModified", (t) => {
+test.cb("customRulesOnErrorModified", (t) => {
   t.plan(2);
   const errorObject = {
     "lineNumber": 1,
@@ -900,6 +964,7 @@ test("customRulesOnErrorModified", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
 });
 
@@ -940,7 +1005,41 @@ test.cb("customRulesThrowForFileHandled", (t) => {
   });
 });
 
-test("customRulesThrowForStringHandled", (t) => {
+test("customRulesThrowForFileHandledSync", (t) => {
+  t.plan(1);
+  const exceptionMessage = "Test exception message";
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
+        }
+      }
+    ],
+    "files": [ "./test/custom-rules.md" ],
+    "handleRuleFailures": true
+  });
+  const expectedResult = {
+    "./test/custom-rules.md": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "name" ],
+        "ruleDescription": "description",
+        "ruleInformation": null,
+        "errorDetail":
+          `This rule threw an exception: ${exceptionMessage}`,
+        "errorContext": null,
+        "errorRange": null
+      }
+    ]
+  };
+  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+});
+
+test.cb("customRulesThrowForStringHandled", (t) => {
   t.plan(2);
   const exceptionMessage = "Test exception message";
   const informationUrl = "https://example.com/rule";
@@ -988,10 +1087,60 @@ test("customRulesThrowForStringHandled", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
 });
 
-test("customRulesOnErrorInvalidHandled", (t) => {
+test("customRulesThrowForStringHandledSync", (t) => {
+  t.plan(1);
+  const exceptionMessage = "Test exception message";
+  const informationUrl = "https://example.com/rule";
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "information": new URL(informationUrl),
+        "tags": [ "tag" ],
+        "function": function throws() {
+          throw new Error(exceptionMessage);
+        }
+      }
+    ],
+    "strings": {
+      "string": "String\n"
+    },
+    "handleRuleFailures": true
+  });
+  const expectedResult = {
+    "string": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
+        "ruleDescription":
+          "First line in a file should be a top-level heading",
+        "ruleInformation":
+          `${homepage}/blob/v${version}/doc/Rules.md#md041`,
+        "errorDetail": null,
+        "errorContext": "String",
+        "errorRange": null
+      },
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "name" ],
+        "ruleDescription": "description",
+        "ruleInformation": informationUrl,
+        "errorDetail":
+          `This rule threw an exception: ${exceptionMessage}`,
+        "errorContext": null,
+        "errorRange": null
+      }
+    ]
+  };
+  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+});
+
+test.cb("customRulesOnErrorInvalidHandled", (t) => {
   t.plan(2);
   markdownlint({
     "customRules": [
@@ -1028,7 +1177,46 @@ test("customRulesOnErrorInvalidHandled", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    t.end();
   });
+});
+
+test("customRulesOnErrorInvalidHandledSync", (t) => {
+  t.plan(1);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": function onErrorInvalid(params, onError) {
+          onError({
+            "lineNumber": 13,
+            "detail": "N/A"
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    },
+    "handleRuleFailures": true
+  });
+  const expectedResult = {
+    "string": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "name" ],
+        "ruleDescription": "description",
+        "ruleInformation": null,
+        "errorDetail": "This rule threw an exception: " +
+          "Property 'lineNumber' of onError parameter is incorrect.",
+        "errorContext": null,
+        "errorRange": null
+      }
+    ]
+  };
+  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
 });
 
 test.cb("customRulesFileName", (t) => {
@@ -1052,7 +1240,7 @@ test.cb("customRulesFileName", (t) => {
   });
 });
 
-test("customRulesStringName", (t) => {
+test.cb("customRulesStringName", (t) => {
   t.plan(2);
   const options = {
     "customRules": [
@@ -1071,6 +1259,7 @@ test("customRulesStringName", (t) => {
   };
   markdownlint(options, function callback(err) {
     t.falsy(err);
+    t.end();
   });
 });
 
