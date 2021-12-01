@@ -1717,13 +1717,14 @@ function parseConfiguration(name, content, parsers) {
     var config = null;
     var message = "";
     var errors = [];
+    var index = 0;
     // Try each parser
     (parsers || [JSON.parse]).every(function (parser) {
         try {
             config = parser(content);
         }
         catch (error) {
-            errors.push(error.message);
+            errors.push("Parser " + index++ + ": " + error.message);
         }
         return !config;
     });
