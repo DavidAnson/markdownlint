@@ -1608,65 +1608,63 @@ function lintInput(options, synchronous, callback) {
     var fs = options.fs || __webpack_require__(/*! fs */ "?ec0a");
     var results = newResults(ruleList);
     var done = false;
-    // Linting of strings is always synchronous
-    var syncItem = null;
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function syncCallback(err, result) {
-        if (err) {
-            done = true;
-            return callback(err);
-        }
-        results[syncItem] = result;
-        return null;
-    }
-    while (!done && (syncItem = stringsKeys.shift())) {
-        lintContent(ruleList, syncItem, strings[syncItem] || "", md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, syncCallback);
-    }
-    if (synchronous) {
-        // Lint files synchronously
-        while (!done && (syncItem = files.shift())) {
-            lintFile(ruleList, syncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, syncCallback);
-        }
-        return done || callback(null, results);
-    }
-    // Lint files asynchronously
     var concurrency = 0;
     // eslint-disable-next-line jsdoc/require-jsdoc
-    function lintConcurrently() {
-        var asyncItem = files.shift();
-        if (done) {
-            // Nothing to do
+    function lintWorker() {
+        var currentItem = null;
+        // eslint-disable-next-line jsdoc/require-jsdoc
+        function lintWorkerCallback(err, result) {
+            concurrency--;
+            if (err) {
+                done = true;
+                return callback(err);
+            }
+            results[currentItem] = result;
+            if (!synchronous) {
+                lintWorker();
+            }
+            return null;
         }
-        else if (asyncItem) {
+        if (done) {
+            // Abort for error or nothing left to do
+        }
+        else if (files.length > 0) {
+            // Lint next file
             concurrency++;
-            lintFile(ruleList, asyncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, function (err, result) {
-                concurrency--;
-                if (err) {
-                    done = true;
-                    return callback(err);
-                }
-                results[asyncItem] = result;
-                lintConcurrently();
-                return null;
-            });
+            currentItem = files.shift();
+            lintFile(ruleList, currentItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
+        }
+        else if (stringsKeys.length > 0) {
+            // Lint next string
+            concurrency++;
+            currentItem = stringsKeys.shift();
+            lintContent(ruleList, currentItem, strings[currentItem] || "", md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
         }
         else if (concurrency === 0) {
+            // Finish
             done = true;
             return callback(null, results);
         }
         return null;
     }
-    // Testing on a Raspberry Pi 4 Model B with an artificial 5ms file access
-    // delay suggests that a concurrency factor of 8 can eliminate the impact
-    // of that delay (i.e., total time is the same as with no delay).
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
+    if (synchronous) {
+        while (!done) {
+            lintWorker();
+        }
+    }
+    else {
+        // Testing on a Raspberry Pi 4 Model B with an artificial 5ms file access
+        // delay suggests that a concurrency factor of 8 can eliminate the impact
+        // of that delay (i.e., total time is the same as with no delay).
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+    }
     return null;
 }
 /**
