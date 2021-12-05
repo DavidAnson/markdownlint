@@ -1307,35 +1307,6 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     };
 }
 /**
- * Compare function for Array.prototype.sort for ascending order of errors.
- *
- * @param {LintError} a First error.
- * @param {LintError} b Second error.
- * @returns {number} Positive value if a>b, negative value if b<a, 0 otherwise.
- */
-function lineNumberComparison(a, b) {
-    return a.lineNumber - b.lineNumber;
-}
-/**
- * Filter function to include everything.
- *
- * @returns {boolean} True.
- */
-function filterAllValues() {
-    return true;
-}
-/**
- * Function to return unique values from a sorted errors array.
- *
- * @param {LintError} value Error instance.
- * @param {number} index Index in array.
- * @param {LintError[]} array Array of errors.
- * @returns {boolean} Filter value.
- */
-function uniqueFilterForSortedErrors(value, index, array) {
-    return (index === 0) || (value.lineNumber > array[index - 1].lineNumber);
-}
-/**
  * Lints a string containing Markdown content.
  *
  * @param {Rule[]} ruleList List of rules.
@@ -1375,7 +1346,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     cache.flattenedLists(helpers.flattenLists(params.tokens));
     cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(params, cache.lineMetadata()));
     // Function to run for each rule
-    var result = (resultVersion === 0) ? {} : [];
+    var results = [];
     // eslint-disable-next-line jsdoc/require-jsdoc
     function forRule(rule) {
         // Configure rule
@@ -1463,7 +1434,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 "fixInfo": fixInfo ? cleanFixInfo : null
             });
         }
-        // Call (possibly external) rule function
+        // Call (possibly external) rule function to report errors
         if (handleRuleFailures) {
             try {
                 rule.function(params, onError);
@@ -1480,46 +1451,20 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         }
         // Record any errors (significant performance benefit from length check)
         if (errors.length > 0) {
-            errors.sort(lineNumberComparison);
             var filteredErrors = errors
-                .filter((resultVersion === 3) ?
-                filterAllValues :
-                uniqueFilterForSortedErrors)
-                .filter(function removeDisabledRules(error) {
-                return enabledRulesPerLineNumber[error.lineNumber][ruleName];
-            })
-                .map(function formatResults(error) {
-                if (resultVersion === 0) {
-                    return error.lineNumber;
-                }
-                var errorObject = {};
-                errorObject.lineNumber = error.lineNumber;
-                if (resultVersion === 1) {
-                    errorObject.ruleName = ruleNameFriendly;
-                    errorObject.ruleAlias = rule.names[1] || rule.names[0];
-                }
-                else {
-                    errorObject.ruleNames = rule.names;
-                }
-                errorObject.ruleDescription = rule.description;
-                errorObject.ruleInformation =
-                    rule.information ? rule.information.href : null;
-                errorObject.errorDetail = error.detail;
-                errorObject.errorContext = error.context;
-                errorObject.errorRange = error.range;
-                if (resultVersion === 3) {
-                    errorObject.fixInfo = error.fixInfo;
-                }
-                return errorObject;
-            });
-            if (filteredErrors.length > 0) {
-                if (resultVersion === 0) {
-                    result[ruleNameFriendly] = filteredErrors;
-                }
-                else {
-                    Array.prototype.push.apply(result, filteredErrors);
-                }
-            }
+                .filter(function (error) { return (enabledRulesPerLineNumber[error.lineNumber][ruleName]); })
+                .map(function (error) { return ({
+                "lineNumber": error.lineNumber,
+                "ruleName": rule.names[0],
+                "ruleNames": rule.names,
+                "ruleDescription": rule.description,
+                "ruleInformation": rule.information ? rule.information.href : null,
+                "errorDetail": error.detail,
+                "errorContext": error.context,
+                "errorRange": error.range,
+                "fixInfo": error.fixInfo
+            }); });
+            Array.prototype.push.apply(results, filteredErrors);
         }
     }
     // Run all rules
@@ -1531,7 +1476,50 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         return callback(error);
     }
     cache.clear();
-    return callback(null, result);
+    // Sort results by rule name by line number
+    results.sort(function (a, b) { return (a.ruleName.localeCompare(b.ruleName) ||
+        a.lineNumber - b.lineNumber); });
+    if (resultVersion < 3) {
+        // Remove fixInfo and multiple errors for the same rule and line number
+        var noPrevious_1 = {
+            "ruleName": null,
+            "lineNumber": -1
+        };
+        results = results.filter(function (error, index, array) {
+            delete error.fixInfo;
+            var previous = array[index - 1] || noPrevious_1;
+            return ((error.ruleName !== previous.ruleName) ||
+                (error.lineNumber !== previous.lineNumber));
+        });
+    }
+    if (resultVersion === 0) {
+        // Return a dictionary of rule->[line numbers]
+        var dictionary = {};
+        for (var _i = 0, results_1 = results; _i < results_1.length; _i++) {
+            var error = results_1[_i];
+            var ruleLines = dictionary[error.ruleName] || [];
+            ruleLines.push(error.lineNumber);
+            dictionary[error.ruleName] = ruleLines;
+        }
+        // @ts-ignore
+        results = dictionary;
+    }
+    else if (resultVersion === 1) {
+        // Use ruleAlias instead of ruleNames
+        for (var _b = 0, results_2 = results; _b < results_2.length; _b++) {
+            var error = results_2[_b];
+            error.ruleAlias = error.ruleNames[1] || error.ruleName;
+            delete error.ruleNames;
+        }
+    }
+    else {
+        // resultVersion 2 or 3: Remove unwanted ruleName
+        for (var _c = 0, results_3 = results; _c < results_3.length; _c++) {
+            var error = results_3[_c];
+            delete error.ruleName;
+        }
+    }
+    return callback(null, results);
 }
 /**
  * Lints a file containing Markdown content.
