@@ -1350,14 +1350,12 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     // eslint-disable-next-line jsdoc/require-jsdoc
     function forRule(rule) {
         // Configure rule
-        var ruleNameFriendly = rule.names[0];
-        var ruleName = ruleNameFriendly.toUpperCase();
+        var ruleName = rule.names[0].toUpperCase();
         params.config = effectiveConfig[ruleName];
         // eslint-disable-next-line jsdoc/require-jsdoc
         function throwError(property) {
             throw new Error("Property '" + property + "' of onError parameter is incorrect.");
         }
-        var errors = [];
         // eslint-disable-next-line jsdoc/require-jsdoc
         function onError(errorInfo) {
             if (!errorInfo ||
@@ -1365,6 +1363,10 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 (errorInfo.lineNumber < 1) ||
                 (errorInfo.lineNumber > lines.length)) {
                 throwError("lineNumber");
+            }
+            var lineNumber = errorInfo.lineNumber + frontMatterLines.length;
+            if (!enabledRulesPerLineNumber[lineNumber][ruleName]) {
+                return;
             }
             if (errorInfo.detail &&
                 !helpers.isString(errorInfo.detail)) {
@@ -1426,11 +1428,15 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                     cleanFixInfo.insertText = fixInfo.insertText;
                 }
             }
-            errors.push({
-                "lineNumber": errorInfo.lineNumber + frontMatterLines.length,
-                "detail": errorInfo.detail || null,
-                "context": errorInfo.context || null,
-                "range": errorInfo.range ? __spreadArray([], errorInfo.range) : null,
+            results.push({
+                lineNumber: lineNumber,
+                "ruleName": rule.names[0],
+                "ruleNames": rule.names,
+                "ruleDescription": rule.description,
+                "ruleInformation": rule.information ? rule.information.href : null,
+                "errorDetail": errorInfo.detail || null,
+                "errorContext": errorInfo.context || null,
+                "errorRange": errorInfo.range ? __spreadArray([], errorInfo.range) : null,
                 "fixInfo": fixInfo ? cleanFixInfo : null
             });
         }
@@ -1448,23 +1454,6 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         }
         else {
             rule.function(params, onError);
-        }
-        // Record any errors (significant performance benefit from length check)
-        if (errors.length > 0) {
-            var filteredErrors = errors
-                .filter(function (error) { return (enabledRulesPerLineNumber[error.lineNumber][ruleName]); })
-                .map(function (error) { return ({
-                "lineNumber": error.lineNumber,
-                "ruleName": rule.names[0],
-                "ruleNames": rule.names,
-                "ruleDescription": rule.description,
-                "ruleInformation": rule.information ? rule.information.href : null,
-                "errorDetail": error.detail,
-                "errorContext": error.context,
-                "errorRange": error.range,
-                "fixInfo": error.fixInfo
-            }); });
-            Array.prototype.push.apply(results, filteredErrors);
         }
     }
     // Run all rules
