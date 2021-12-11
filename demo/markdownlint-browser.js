@@ -1446,9 +1446,10 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 rule.function(params, onError);
             }
             catch (error) {
+                var message = (error instanceof Error) ? error.message : error;
                 onError({
                     "lineNumber": 1,
-                    "detail": "This rule threw an exception: " + error.message
+                    "detail": "This rule threw an exception: " + message
                 });
             }
         }
@@ -1462,7 +1463,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     }
     catch (error) {
         cache.clear();
-        return callback(error);
+        return callback((error instanceof Error) ? error : new Error(error));
     }
     cache.clear();
     // Sort results by rule name by line number

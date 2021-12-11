@@ -7,7 +7,6 @@ const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const customRules = require("./rules/rules.js");
 const homepage = packageJson.homepage;
-const version = packageJson.version;
 
 test.cb("customRulesV0", (t) => {
   t.plan(4);
@@ -968,178 +967,6 @@ test.cb("customRulesOnErrorModified", (t) => {
   });
 });
 
-test.cb("customRulesThrowForFileHandled", (t) => {
-  t.plan(2);
-  const exceptionMessage = "Test exception message";
-  markdownlint({
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "tags": [ "tag" ],
-        "function": function throws() {
-          throw new Error(exceptionMessage);
-        }
-      }
-    ],
-    "files": [ "./test/custom-rules.md" ],
-    "handleRuleFailures": true
-  }, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/custom-rules.md": [
-        {
-          "lineNumber": 1,
-          "ruleNames": [ "name" ],
-          "ruleDescription": "description",
-          "ruleInformation": null,
-          "errorDetail":
-            `This rule threw an exception: ${exceptionMessage}`,
-          "errorContext": null,
-          "errorRange": null
-        }
-      ]
-    };
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
-  });
-});
-
-test("customRulesThrowForFileHandledSync", (t) => {
-  t.plan(1);
-  const exceptionMessage = "Test exception message";
-  const actualResult = markdownlint.sync({
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "tags": [ "tag" ],
-        "function": function throws() {
-          throw new Error(exceptionMessage);
-        }
-      }
-    ],
-    "files": [ "./test/custom-rules.md" ],
-    "handleRuleFailures": true
-  });
-  const expectedResult = {
-    "./test/custom-rules.md": [
-      {
-        "lineNumber": 1,
-        "ruleNames": [ "name" ],
-        "ruleDescription": "description",
-        "ruleInformation": null,
-        "errorDetail":
-          `This rule threw an exception: ${exceptionMessage}`,
-        "errorContext": null,
-        "errorRange": null
-      }
-    ]
-  };
-  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-});
-
-test.cb("customRulesThrowForStringHandled", (t) => {
-  t.plan(2);
-  const exceptionMessage = "Test exception message";
-  const informationUrl = "https://example.com/rule";
-  markdownlint({
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "information": new URL(informationUrl),
-        "tags": [ "tag" ],
-        "function": function throws() {
-          throw new Error(exceptionMessage);
-        }
-      }
-    ],
-    "strings": {
-      "string": "String\n"
-    },
-    "handleRuleFailures": true
-  }, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "string": [
-        {
-          "lineNumber": 1,
-          "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
-          "ruleDescription":
-            "First line in a file should be a top-level heading",
-          "ruleInformation":
-            `${homepage}/blob/v${version}/doc/Rules.md#md041`,
-          "errorDetail": null,
-          "errorContext": "String",
-          "errorRange": null
-        },
-        {
-          "lineNumber": 1,
-          "ruleNames": [ "name" ],
-          "ruleDescription": "description",
-          "ruleInformation": informationUrl,
-          "errorDetail":
-            `This rule threw an exception: ${exceptionMessage}`,
-          "errorContext": null,
-          "errorRange": null
-        }
-      ]
-    };
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
-  });
-});
-
-test("customRulesThrowForStringHandledSync", (t) => {
-  t.plan(1);
-  const exceptionMessage = "Test exception message";
-  const informationUrl = "https://example.com/rule";
-  const actualResult = markdownlint.sync({
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "information": new URL(informationUrl),
-        "tags": [ "tag" ],
-        "function": function throws() {
-          throw new Error(exceptionMessage);
-        }
-      }
-    ],
-    "strings": {
-      "string": "String\n"
-    },
-    "handleRuleFailures": true
-  });
-  const expectedResult = {
-    "string": [
-      {
-        "lineNumber": 1,
-        "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
-        "ruleDescription":
-          "First line in a file should be a top-level heading",
-        "ruleInformation":
-          `${homepage}/blob/v${version}/doc/Rules.md#md041`,
-        "errorDetail": null,
-        "errorContext": "String",
-        "errorRange": null
-      },
-      {
-        "lineNumber": 1,
-        "ruleNames": [ "name" ],
-        "ruleDescription": "description",
-        "ruleInformation": informationUrl,
-        "errorDetail":
-          `This rule threw an exception: ${exceptionMessage}`,
-        "errorContext": null,
-        "errorRange": null
-      }
-    ]
-  };
-  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-});
-
 test.cb("customRulesOnErrorInvalidHandled", (t) => {
   t.plan(2);
   markdownlint({
@@ -1150,8 +977,7 @@ test.cb("customRulesOnErrorInvalidHandled", (t) => {
         "tags": [ "tag" ],
         "function": function onErrorInvalid(params, onError) {
           onError({
-            "lineNumber": 13,
-            "detail": "N/A"
+            "lineNumber": 13
           });
         }
       }
@@ -1310,5 +1136,127 @@ test.cb("customRulesLintJavaScript", (t) => {
     };
     t.deepEqual(actual, expected, "Unexpected issues.");
     t.end();
+  });
+});
+
+const errorMessage = "Custom error message.";
+const stringScenarios = [
+  [
+    "Files",
+    [ "./test/custom-rules.md" ],
+    null
+  ],
+  [
+    "Strings",
+    null,
+    { "./test/custom-rules.md": "# Heading\n" }
+  ]
+];
+
+[
+  [
+    "customRulesThrowString",
+    () => {
+      throw errorMessage;
+    }
+  ],
+  [
+    "customRulesThrowError",
+    () => {
+      throw new Error(errorMessage);
+    }
+  ]
+].forEach((flavor) => {
+  const [ name, func ] = flavor;
+  const customRule = [
+    {
+      "names": [ "name" ],
+      "description": "description",
+      "tags": [ "tag" ],
+      "function": func
+    }
+  ];
+  const expectedResult = {
+    "./test/custom-rules.md": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "name" ],
+        "ruleDescription": "description",
+        "ruleInformation": null,
+        "errorDetail": `This rule threw an exception: ${errorMessage}`,
+        "errorContext": null,
+        "errorRange": null
+      }
+    ]
+  };
+  stringScenarios.forEach((inputs) => {
+    const [ subname, files, strings ] = inputs;
+
+    test.cb(`${name}${subname}UnhandledAsync`, (t) => {
+      t.plan(4);
+      markdownlint({
+        // @ts-ignore
+        "customRules": customRule,
+        // @ts-ignore
+        files,
+        // @ts-ignore
+        strings
+      }, function callback(err, result) {
+        t.truthy(err, "Did not get an error for exception.");
+        t.true(err instanceof Error, "Error not instance of Error.");
+        t.is(err.message, errorMessage, "Incorrect message for exception.");
+        t.true(!result, "Got result for exception.");
+        t.end();
+      });
+    });
+
+    test.cb(`${name}${subname}HandledAsync`, (t) => {
+      t.plan(2);
+      markdownlint({
+        // @ts-ignore
+        "customRules": customRule,
+        // @ts-ignore
+        files,
+        // @ts-ignore
+        strings,
+        "handleRuleFailures": true
+      }, function callback(err, actualResult) {
+        t.falsy(err);
+        t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+        t.end();
+      });
+    });
+
+    test(`${name}${subname}UnhandledSync`, (t) => {
+      t.plan(1);
+      t.throws(
+        () => markdownlint.sync({
+          // @ts-ignore
+          "customRules": customRule,
+          // @ts-ignore
+          files,
+          // @ts-ignore
+          strings
+        }),
+        {
+          "message": errorMessage
+        },
+        "Unexpected exception."
+      );
+    });
+
+    test(`${name}${subname}HandledSync`, (t) => {
+      t.plan(1);
+      const actualResult = markdownlint.sync({
+        // @ts-ignore
+        "customRules": customRule,
+        // @ts-ignore
+        files,
+        // @ts-ignore
+        strings,
+        "handleRuleFailures": true
+      });
+      t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    });
   });
 });
