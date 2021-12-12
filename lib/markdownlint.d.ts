@@ -264,6 +264,10 @@ type Rule = {
      */
     tags: string[];
     /**
+     * True if asynchronous.
+     */
+    asynchronous?: boolean;
+    /**
      * Rule implementation.
      */
     function: RuleFunction;

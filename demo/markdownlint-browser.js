@@ -933,9 +933,10 @@ var dynamicRequire = (typeof require === "undefined") ? __webpack_require__("../
  * Validate the list of rules for structure and reuse.
  *
  * @param {Rule[]} ruleList List of rules.
+ * @param {boolean} synchronous Whether to execute synchronously.
  * @returns {string} Error message if validation fails.
  */
-function validateRuleList(ruleList) {
+function validateRuleList(ruleList, synchronous) {
     var result = null;
     if (ruleList.length === rules.length) {
         // No need to validate if only using built-in rules
@@ -971,6 +972,15 @@ function validateRuleList(ruleList) {
             rule.information &&
             (Object.getPrototypeOf(rule.information) !== URL.prototype)) {
             result = newError("information");
+        }
+        if (!result &&
+            (rule.asynchronous !== undefined) &&
+            (typeof rule.asynchronous !== "boolean")) {
+            result = newError("asynchronous");
+        }
+        if (!result && rule.asynchronous && synchronous) {
+            result = new Error("Custom rule " + rule.names.join("/") + " at index " + customIndex +
+                " is asynchronous and can not be used in a synchronous context.");
         }
         if (!result) {
             rule.names.forEach(function forName(name) {
@@ -1441,75 +1451,106 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
             });
         }
         // Call (possibly external) rule function to report errors
-        if (handleRuleFailures) {
-            try {
-                rule.function(params, onError);
+        // eslint-disable-next-line func-style
+        var catchCallsOnError = function (error) { return onError({
+            "lineNumber": 1,
+            "detail": "This rule threw an exception: " + (error.message || error)
+        }); };
+        // eslint-disable-next-line func-style
+        var invokeRuleFunction = function () { return rule.function(params, onError); };
+        if (rule.asynchronous) {
+            // Asynchronous rule, ensure it returns a Promise
+            var ruleFunctionPromise = Promise.resolve().then(invokeRuleFunction);
+            return handleRuleFailures ?
+                ruleFunctionPromise.catch(catchCallsOnError) :
+                ruleFunctionPromise;
+        }
+        // Synchronous rule
+        try {
+            invokeRuleFunction();
+        }
+        catch (error) {
+            if (handleRuleFailures) {
+                catchCallsOnError(error);
             }
-            catch (error) {
-                var message = (error instanceof Error) ? error.message : error;
-                onError({
-                    "lineNumber": 1,
-                    "detail": "This rule threw an exception: " + message
-                });
+            else {
+                throw error;
+            }
+        }
+        return null;
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function formatResults() {
+        // Sort results by rule name by line number
+        results.sort(function (a, b) { return (a.ruleName.localeCompare(b.ruleName) ||
+            a.lineNumber - b.lineNumber); });
+        if (resultVersion < 3) {
+            // Remove fixInfo and multiple errors for the same rule and line number
+            var noPrevious_1 = {
+                "ruleName": null,
+                "lineNumber": -1
+            };
+            results = results.filter(function (error, index, array) {
+                delete error.fixInfo;
+                var previous = array[index - 1] || noPrevious_1;
+                return ((error.ruleName !== previous.ruleName) ||
+                    (error.lineNumber !== previous.lineNumber));
+            });
+        }
+        if (resultVersion === 0) {
+            // Return a dictionary of rule->[line numbers]
+            var dictionary = {};
+            for (var _i = 0, results_1 = results; _i < results_1.length; _i++) {
+                var error = results_1[_i];
+                var ruleLines = dictionary[error.ruleName] || [];
+                ruleLines.push(error.lineNumber);
+                dictionary[error.ruleName] = ruleLines;
+            }
+            // @ts-ignore
+            results = dictionary;
+        }
+        else if (resultVersion === 1) {
+            // Use ruleAlias instead of ruleNames
+            for (var _a = 0, results_2 = results; _a < results_2.length; _a++) {
+                var error = results_2[_a];
+                error.ruleAlias = error.ruleNames[1] || error.ruleName;
+                delete error.ruleNames;
             }
         }
         else {
-            rule.function(params, onError);
+            // resultVersion 2 or 3: Remove unwanted ruleName
+            for (var _b = 0, results_3 = results; _b < results_3.length; _b++) {
+                var error = results_3[_b];
+                delete error.ruleName;
+            }
         }
+        return results;
     }
     // Run all rules
+    var ruleListAsync = ruleList.filter(function (rule) { return rule.asynchronous; });
+    var ruleListSync = ruleList.filter(function (rule) { return !rule.asynchronous; });
+    var ruleListAsyncFirst = __spreadArray(__spreadArray([], ruleListAsync), ruleListSync);
+    // eslint-disable-next-line func-style
+    var callbackSuccess = function () { return callback(null, formatResults()); };
+    // eslint-disable-next-line func-style
+    var callbackError = function (error) { return callback(error instanceof Error ? error : new Error(error)); };
     try {
-        ruleList.forEach(forRule);
+        var ruleResults = ruleListAsyncFirst.map(forRule);
+        if (ruleListAsync.length > 0) {
+            Promise.all(ruleResults.slice(0, ruleListAsync.length))
+                .then(callbackSuccess)
+                .catch(callbackError);
+        }
+        else {
+            callbackSuccess();
+        }
     }
     catch (error) {
+        callbackError(error);
+    }
+    finally {
         cache.clear();
-        return callback((error instanceof Error) ? error : new Error(error));
     }
-    cache.clear();
-    // Sort results by rule name by line number
-    results.sort(function (a, b) { return (a.ruleName.localeCompare(b.ruleName) ||
-        a.lineNumber - b.lineNumber); });
-    if (resultVersion < 3) {
-        // Remove fixInfo and multiple errors for the same rule and line number
-        var noPrevious_1 = {
-            "ruleName": null,
-            "lineNumber": -1
-        };
-        results = results.filter(function (error, index, array) {
-            delete error.fixInfo;
-            var previous = array[index - 1] || noPrevious_1;
-            return ((error.ruleName !== previous.ruleName) ||
-                (error.lineNumber !== previous.lineNumber));
-        });
-    }
-    if (resultVersion === 0) {
-        // Return a dictionary of rule->[line numbers]
-        var dictionary = {};
-        for (var _i = 0, results_1 = results; _i < results_1.length; _i++) {
-            var error = results_1[_i];
-            var ruleLines = dictionary[error.ruleName] || [];
-            ruleLines.push(error.lineNumber);
-            dictionary[error.ruleName] = ruleLines;
-        }
-        // @ts-ignore
-        results = dictionary;
-    }
-    else if (resultVersion === 1) {
-        // Use ruleAlias instead of ruleNames
-        for (var _b = 0, results_2 = results; _b < results_2.length; _b++) {
-            var error = results_2[_b];
-            error.ruleAlias = error.ruleNames[1] || error.ruleName;
-            delete error.ruleNames;
-        }
-    }
-    else {
-        // resultVersion 2 or 3: Remove unwanted ruleName
-        for (var _c = 0, results_3 = results; _c < results_3.length; _c++) {
-            var error = results_3[_c];
-            delete error.ruleName;
-        }
-    }
-    return callback(null, results);
 }
 /**
  * Lints a file containing Markdown content.
@@ -1557,7 +1598,7 @@ function lintInput(options, synchronous, callback) {
     callback = callback || function noop() { };
     // eslint-disable-next-line unicorn/prefer-spread
     var ruleList = rules.concat(options.customRules || []);
-    var ruleErr = validateRuleList(ruleList);
+    var ruleErr = validateRuleList(ruleList, synchronous);
     if (ruleErr) {
         return callback(ruleErr);
     }

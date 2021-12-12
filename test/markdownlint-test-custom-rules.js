@@ -2,11 +2,11 @@
 
 "use strict";
 
+const fs = require("fs").promises;
 const test = require("ava").default;
-const packageJson = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const customRules = require("./rules/rules.js");
-const homepage = packageJson.homepage;
+const { homepage, version } = require("../package.json");
 
 test.cb("customRulesV0", (t) => {
   t.plan(4);
@@ -349,7 +349,7 @@ test.cb("customRulesNpmPackage", (t) => {
 });
 
 test("customRulesBadProperty", (t) => {
-  t.plan(23);
+  t.plan(27);
   [
     {
       "propertyName": "names",
@@ -363,6 +363,10 @@ test("customRulesBadProperty", (t) => {
     {
       "propertyName": "information",
       "propertyValues": [ 10, [], "string", "https://example.com" ]
+    },
+    {
+      "propertyName": "asynchronous",
+      "propertyValues": [ null, 10, "", [] ]
     },
     {
       "propertyName": "tags",
@@ -1139,6 +1143,168 @@ test.cb("customRulesLintJavaScript", (t) => {
   });
 });
 
+test("customRulesAsyncThrowsInSyncContext", (t) => {
+  t.plan(1);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name1", "name2" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "asynchronous": true,
+        "function": () => {}
+      }
+    ],
+    "strings": {
+      "string": "Unused"
+    }
+  };
+  t.throws(
+    () => markdownlint.sync(options),
+    {
+      "message": "Custom rule name1/name2 at index 0 is asynchronous and " +
+        "can not be used in a synchronous context."
+    },
+    "Did not get correct exception for async rule in sync context."
+  );
+});
+
+test("customRulesAsyncReadFiles", (t) => {
+  t.plan(3);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name1" ],
+        "description": "description1",
+        "information": new URL("https://example.com/asyncRule1"),
+        "tags": [ "tag" ],
+        "asynchronous": true,
+        "function":
+          (params, onError) => fs.readFile(__filename, "utf8").then(
+            (content) => {
+              t.true(content.length > 0);
+              onError({
+                "lineNumber": 1,
+                "detail": "detail1",
+                "context": "context1",
+                "range": [ 2, 3 ]
+              });
+            }
+          )
+      },
+      {
+        "names": [ "name2" ],
+        "description": "description2",
+        "tags": [ "tag" ],
+        "asynchronous": true,
+        "function":
+          (params, onError) => fs.readFile(__filename, "utf8").then(
+            (content) => {
+              t.true(content.length > 0);
+              onError({
+                "lineNumber": 1,
+                "detail": "detail2",
+                "context": "context2"
+              });
+            }
+          )
+      }
+    ],
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  const expected = {
+    "string": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "MD047", "single-trailing-newline" ],
+        "ruleDescription": "Files should end with a single newline character",
+        "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": [ 9, 1 ]
+      },
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "name1" ],
+        "ruleDescription": "description1",
+        "ruleInformation": "https://example.com/asyncRule1",
+        "errorDetail": "detail1",
+        "errorContext": "context1",
+        "errorRange": [ 2, 3 ]
+      },
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "name2" ],
+        "ruleDescription": "description2",
+        "ruleInformation": null,
+        "errorDetail": "detail2",
+        "errorContext": "context2",
+        "errorRange": null
+      }
+    ]
+  };
+  return markdownlint.promises.markdownlint(options)
+    .then((actual) => t.deepEqual(actual, expected, "Unexpected issues."));
+});
+
+test("customRulesAsyncIgnoresSyncReturn", (t) => {
+  t.plan(1);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "sync" ],
+        "description": "description",
+        "information": new URL("https://example.com/asyncRule"),
+        "tags": [ "tag" ],
+        "asynchronous": false,
+        "function": () => new Promise(() => {
+          // Never resolves
+        })
+      },
+      {
+        "names": [ "async" ],
+        "description": "description",
+        "information": new URL("https://example.com/asyncRule"),
+        "tags": [ "tag" ],
+        "asynchronous": true,
+        "function": (params, onError) => new Promise((resolve) => {
+          onError({ "lineNumber": 1 });
+          resolve();
+        })
+      }
+    ],
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  const expected = {
+    "string": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "async" ],
+        "ruleDescription": "description",
+        "ruleInformation": "https://example.com/asyncRule",
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null
+      },
+      {
+        "lineNumber": 1,
+        "ruleNames": [ "MD047", "single-trailing-newline" ],
+        "ruleDescription": "Files should end with a single newline character",
+        "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": [ 9, 1 ]
+      }
+    ]
+  };
+  return markdownlint.promises.markdownlint(options)
+    .then((actual) => t.deepEqual(actual, expected, "Unexpected issues."));
+});
+
 const errorMessage = "Custom error message.";
 const stringScenarios = [
   [
@@ -1257,6 +1423,105 @@ const stringScenarios = [
         "handleRuleFailures": true
       });
       t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    });
+  });
+});
+
+[
+  [
+    "customRulesAsyncExceptionString",
+    () => {
+      throw errorMessage;
+    }
+  ],
+  [
+    "customRulesAsyncExceptionError",
+    () => {
+      throw new Error(errorMessage);
+    }
+  ],
+  [
+    "customRulesAsyncDeferredString",
+    () => fs.readFile(__filename, "utf8").then(
+      () => {
+        throw errorMessage;
+      }
+    )
+  ],
+  [
+    "customRulesAsyncDeferredError",
+    () => fs.readFile(__filename, "utf8").then(
+      () => {
+        throw new Error(errorMessage);
+      }
+    )
+  ],
+  [
+    "customRulesAsyncRejectString",
+    () => Promise.reject(errorMessage)
+  ],
+  [
+    "customRulesAsyncRejectError",
+    () => Promise.reject(new Error(errorMessage))
+  ]
+].forEach((flavor) => {
+  const [ name, func ] = flavor;
+  const customRule = {
+    "names": [ "name" ],
+    "description": "description",
+    "tags": [ "tag" ],
+    "asynchronous": true,
+    "function": func
+  };
+  stringScenarios.forEach((inputs) => {
+    const [ subname, files, strings ] = inputs;
+
+    test.cb(`${name}${subname}Unhandled`, (t) => {
+      t.plan(4);
+      markdownlint({
+        // @ts-ignore
+        "customRules": [ customRule ],
+        // @ts-ignore
+        files,
+        // @ts-ignore
+        strings
+      }, function callback(err, result) {
+        t.truthy(err, "Did not get an error for rejection.");
+        t.true(err instanceof Error, "Error not instance of Error.");
+        t.is(err.message, errorMessage, "Incorrect message for rejection.");
+        t.true(!result, "Got result for rejection.");
+        t.end();
+      });
+    });
+
+    test.cb(`${name}${subname}Handled`, (t) => {
+      t.plan(2);
+      markdownlint({
+        // @ts-ignore
+        "customRules": [ customRule ],
+        // @ts-ignore
+        files,
+        // @ts-ignore
+        strings,
+        "handleRuleFailures": true
+      }, function callback(err, actualResult) {
+        t.falsy(err);
+        const expectedResult = {
+          "./test/custom-rules.md": [
+            {
+              "lineNumber": 1,
+              "ruleNames": [ "name" ],
+              "ruleDescription": "description",
+              "ruleInformation": null,
+              "errorDetail": `This rule threw an exception: ${errorMessage}`,
+              "errorContext": null,
+              "errorRange": null
+            }
+          ]
+        };
+        t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+        t.end();
+      });
     });
   });
 });
