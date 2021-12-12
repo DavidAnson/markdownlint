@@ -62,7 +62,7 @@
     "capitalized-comments": "off",
     "complexity": "off",
     "dot-location": ["error", "property"],
-    "func-style": ["error", "declaration"],
+    "func-style": "off",
     "function-call-argument-newline": "off",
     "function-paren-newline": "off",
     "global-require": "off",

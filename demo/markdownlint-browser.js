@@ -1451,12 +1451,10 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
             });
         }
         // Call (possibly external) rule function to report errors
-        // eslint-disable-next-line func-style
         var catchCallsOnError = function (error) { return onError({
             "lineNumber": 1,
             "detail": "This rule threw an exception: " + (error.message || error)
         }); };
-        // eslint-disable-next-line func-style
         var invokeRuleFunction = function () { return rule.function(params, onError); };
         if (rule.asynchronous) {
             // Asynchronous rule, ensure it returns a Promise
@@ -1530,9 +1528,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     var ruleListAsync = ruleList.filter(function (rule) { return rule.asynchronous; });
     var ruleListSync = ruleList.filter(function (rule) { return !rule.asynchronous; });
     var ruleListAsyncFirst = __spreadArray(__spreadArray([], ruleListAsync), ruleListSync);
-    // eslint-disable-next-line func-style
     var callbackSuccess = function () { return callback(null, formatResults()); };
-    // eslint-disable-next-line func-style
     var callbackError = function (error) { return callback(error instanceof Error ? error : new Error(error)); };
     try {
         var ruleResults = ruleListAsyncFirst.map(forRule);
@@ -3901,7 +3897,6 @@ module.exports = {
             var matchAny_1 = false;
             var hasError_1 = false;
             var anyHeadings_1 = false;
-            // eslint-disable-next-line func-style
             var getExpected_1 = function () { return requiredHeadings[i_1++] || "[None]"; };
             forEachHeading(params, function (heading, content) {
                 if (!hasError_1) {

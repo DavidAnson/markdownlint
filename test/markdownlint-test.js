@@ -930,7 +930,6 @@ test.cb("rules", (t) => {
       let ruleHasAliases = true;
       let ruleUsesParams = null;
       const tagAliasParameterRe = /, |: | /;
-      // eslint-disable-next-line func-style
       const testTagsAliasesParams = (r) => {
         // eslint-disable-next-line unicorn/prefer-default-parameters
         r = r || "[NO RULE]";
