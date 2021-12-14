@@ -292,7 +292,11 @@ Tags: bullet, ul, indentation
 
 Aliases: ul-indent
 
-Parameters: indent, start_indented (number; default 2, boolean; default false)
+<!-- markdownlint-disable line-length -->
+
+Parameters: indent, start_indented, start_indent (number; default 2, boolean; default false, number; defaults to indent)
+
+<!-- markdownlint-restore -->
 
 Fixable: Most violations can be fixed by tooling
 
@@ -319,7 +323,9 @@ rule).
 
 The `start_indented` parameter allows the first level of lists to be indented by
 the configured number of spaces rather than starting at zero (the inverse of
-MD006).
+MD006). The `start_indent` parameter allows the first level of lists to be indented
+by a different number of spaces than the rest (ignored when `start_indented` is not
+set).
 
 Rationale: Indenting by 2 spaces allows the content of a nested list to be in
 line with the start of the content of the parent list when a single space is

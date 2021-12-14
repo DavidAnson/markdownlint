@@ -2212,12 +2212,13 @@ module.exports = {
     "function": function MD007(params, onError) {
         var indent = Number(params.config.indent || 2);
         var startIndented = !!params.config.start_indented;
+        var startIndent = Number(params.config.start_indent || indent);
         flattenedLists().forEach(function (list) {
             if (list.unordered && list.parentsUnordered) {
                 list.items.forEach(function (item) {
                     var lineNumber = item.lineNumber, line = item.line;
-                    var expectedNesting = list.nesting + (startIndented ? 1 : 0);
-                    var expectedIndent = expectedNesting * indent;
+                    var expectedIndent = (startIndented ? startIndent : 0) +
+                        (list.nesting * indent);
                     var actualIndent = indentFor(item);
                     var range = null;
                     var editColumn = 1;
