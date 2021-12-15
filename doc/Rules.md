@@ -1368,8 +1368,8 @@ Tags: hr
 
 Aliases: hr-style
 
-Parameters: style ("consistent", "---", "***", or other string specifying the
-horizontal rule; default "consistent")
+Parameters: style ("consistent", "---", "***", "___", or other string specifying
+the horizontal rule; default "consistent")
 
 This rule is triggered when inconsistent styles of horizontal rules are used
 in the document:

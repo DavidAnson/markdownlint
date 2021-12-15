@@ -3376,12 +3376,12 @@ module.exports = {
     "tags": ["hr"],
     "function": function MD035(params, onError) {
         var style = String(params.config.style || "consistent");
-        filterTokens(params, "hr", function forToken(token) {
-            var lineTrim = token.line.trim();
+        filterTokens(params, "hr", function (token) {
+            var lineNumber = token.lineNumber, markup = token.markup;
             if (style === "consistent") {
-                style = lineTrim;
+                style = markup;
             }
-            addErrorDetailIf(onError, token.lineNumber, style, lineTrim);
+            addErrorDetailIf(onError, lineNumber, style, markup);
         });
     }
 };
