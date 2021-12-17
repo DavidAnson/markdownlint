@@ -263,7 +263,7 @@ module.exports.filterTokens = filterTokens;
  */
 function isMathBlock(token) {
   return (
-    (token.tag === "math") &&
+    ((token.tag === "$$") || (token.tag === "math")) &&
     token.type.startsWith("math_block") &&
     !token.type.endsWith("_end")
   );

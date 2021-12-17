@@ -266,7 +266,7 @@ module.exports.filterTokens = filterTokens;
  * @returns {boolean} True iff token is a math block.
  */
 function isMathBlock(token) {
-    return ((token.tag === "math") &&
+    return (((token.tag === "$$") || (token.tag === "math")) &&
         token.type.startsWith("math_block") &&
         !token.type.endsWith("_end"));
 }
