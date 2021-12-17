@@ -39,7 +39,7 @@
     "test": "ava test/markdownlint-test.js test/markdownlint-test-config.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js",
     "test-cover": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test",
     "test-declaration": "cd example/typescript && tsc && node type-check.js",
-    "test-extra": "ava --timeout=5m test/markdownlint-test-extra.js"
+    "test-extra": "ava --timeout=5m test/markdownlint-test-extra-parse.js test/markdownlint-test-extra-type.js"
   },
   "engines": {
     "node": ">=12"

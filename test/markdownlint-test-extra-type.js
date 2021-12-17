@@ -4,7 +4,6 @@
 
 const fs = require("fs");
 const path = require("path");
-const globby = require("globby");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 
@@ -25,17 +24,5 @@ files.filter((file) => /\.md$/.test(file)).forEach((file) => {
       "resultVersion": 0
     });
     t.pass();
-  });
-});
-
-// Parses all Markdown files in all package dependencies
-test.cb("parseAllFiles", (t) => {
-  t.plan(1);
-  const options = {
-    "files": globby.sync("**/*.{md,markdown}")
-  };
-  markdownlint(options, (err) => {
-    t.falsy(err);
-    t.end();
   });
 });
