@@ -424,12 +424,14 @@ Some text
     * Spaces used to indent the list item instead
 ```
 
-You have the option to exclude this rule for code blocks. To do so, set the
-`code_blocks` parameter to `false`. Code blocks are included by default since
-handling of tabs by tools is often inconsistent (ex: using 4 vs. 8 spaces).
+You have the option to exclude this rule for code blocks and spans. To do so,
+set the `code_blocks` parameter to `false`. Code blocks and spans are included
+by default since handling of tabs by Markdown tools can be inconsistent (e.g.,
+using 4 vs. 8 spaces).
 
-If you would like the fixer to change tabs to x spaces, then configure the `spaces_per_tab`
-parameter to the number x. The default value would be 1.
+By default, violations of this rule are fixed by replacing the tab with 1 space
+character. To use a different number of spaces, set the `spaces_per_tab`
+parameter to the desired value.
 
 Rationale: Hard tabs are often rendered inconsistently by different editors and
 can be harder to work with than spaces.

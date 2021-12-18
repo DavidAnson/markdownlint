@@ -551,7 +551,7 @@ module.exports.codeBlockAndSpanRanges = function (params, lineMetadata) {
     // Add code block ranges (excludes fences)
     forEachLine(lineMetadata, function (line, lineIndex, inCode, onFence) {
         if (inCode && !onFence) {
-            exclusions.push(lineIndex, 0, line.length);
+            exclusions.push([lineIndex, 0, line.length]);
         }
     });
     // Add code span ranges (excludes ticks)
@@ -2326,8 +2326,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 var tabRe = /\t+/g;
 module.exports = {
     "names": ["MD010", "no-hard-tabs"],
@@ -2335,22 +2335,26 @@ module.exports = {
     "tags": ["whitespace", "hard_tab"],
     "function": function MD010(params, onError) {
         var codeBlocks = params.config.code_blocks;
-        var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
+        var includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
         var spacesPerTab = params.config.spaces_per_tab;
         var spaceMultiplier = (spacesPerTab === undefined) ?
             1 :
             Math.max(0, Number(spacesPerTab));
+        var exclusions = includeCode ? [] : codeBlockAndSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
-            if (!inCode || includeCodeBlocks) {
+            if (includeCode || !inCode) {
                 var match = null;
                 while ((match = tabRe.exec(line)) !== null) {
-                    var column = match.index + 1;
+                    var index = match.index;
+                    var column = index + 1;
                     var length = match[0].length;
-                    addError(onError, lineIndex + 1, "Column: " + column, null, [column, length], {
-                        "editColumn": column,
-                        "deleteCount": length,
-                        "insertText": "".padEnd(length * spaceMultiplier)
-                    });
+                    if (!overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                        addError(onError, lineIndex + 1, "Column: " + column, null, [column, length], {
+                            "editColumn": column,
+                            "deleteCount": length,
+                            "insertText": "".padEnd(length * spaceMultiplier)
+                        });
+                    }
                 }
             }
         });

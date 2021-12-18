@@ -555,7 +555,7 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
   // Add code block ranges (excludes fences)
   forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
     if (inCode && !onFence) {
-      exclusions.push(lineIndex, 0, line.length);
+      exclusions.push([ lineIndex, 0, line.length ]);
     }
   });
   // Add code span ranges (excludes ticks)
