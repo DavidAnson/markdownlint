@@ -913,15 +913,19 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var path = __webpack_require__(/*! path */ "?b85c");
-var promisify = __webpack_require__(/*! util */ "?96a2").promisify;
+var promisify = (__webpack_require__(/*! util */ "?96a2").promisify);
 var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
-var deprecatedRuleNames = __webpack_require__(/*! ./constants */ "../lib/constants.js").deprecatedRuleNames;
+var deprecatedRuleNames = (__webpack_require__(/*! ./constants */ "../lib/constants.js").deprecatedRuleNames);
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -1108,7 +1112,7 @@ function annotateTokens(tokens, lines) {
             trMap = null;
         }
         if (!token.map && trMap) {
-            token.map = __spreadArray([], trMap);
+            token.map = __spreadArray([], trMap, true);
         }
         // Update token metadata
         if (token.map) {
@@ -1446,14 +1450,14 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 "ruleInformation": rule.information ? rule.information.href : null,
                 "errorDetail": errorInfo.detail || null,
                 "errorContext": errorInfo.context || null,
-                "errorRange": errorInfo.range ? __spreadArray([], errorInfo.range) : null,
+                "errorRange": errorInfo.range ? __spreadArray([], errorInfo.range, true) : null,
                 "fixInfo": fixInfo ? cleanFixInfo : null
             });
         }
         // Call (possibly external) rule function to report errors
         var catchCallsOnError = function (error) { return onError({
             "lineNumber": 1,
-            "detail": "This rule threw an exception: " + (error.message || error)
+            "detail": "This rule threw an exception: ".concat(error.message || error)
         }); };
         var invokeRuleFunction = function () { return rule.function(params, onError); };
         if (rule.asynchronous) {
@@ -1527,7 +1531,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     // Run all rules
     var ruleListAsync = ruleList.filter(function (rule) { return rule.asynchronous; });
     var ruleListSync = ruleList.filter(function (rule) { return !rule.asynchronous; });
-    var ruleListAsyncFirst = __spreadArray(__spreadArray([], ruleListAsync), ruleListSync);
+    var ruleListAsyncFirst = __spreadArray(__spreadArray([], ruleListAsync, true), ruleListSync, true);
     var callbackSuccess = function () { return callback(null, formatResults()); };
     var callbackError = function (error) { return callback(error instanceof Error ? error : new Error(error)); };
     try {
@@ -1600,7 +1604,7 @@ function lintInput(options, synchronous, callback) {
     }
     var files = [];
     if (Array.isArray(options.files)) {
-        files = __spreadArray([], options.files);
+        files = __spreadArray([], options.files, true);
     }
     else if (options.files) {
         files = [String(options.files)];
@@ -1737,13 +1741,13 @@ function parseConfiguration(name, content, parsers) {
             config = parser(content);
         }
         catch (error) {
-            errors.push("Parser " + index++ + ": " + error.message);
+            errors.push("Parser ".concat(index++, ": ").concat(error.message));
         }
         return !config;
     });
     // Message if unable to parse
     if (!config) {
-        errors.unshift("Unable to parse '" + name + "'");
+        errors.unshift("Unable to parse '".concat(name, "'"));
         message = errors.join("; ");
     }
     return {
@@ -1903,7 +1907,7 @@ function readConfigSync(file, parsers, fs) {
  * @returns {string} SemVer string.
  */
 function getVersion() {
-    return __webpack_require__(/*! ./constants */ "../lib/constants.js").version;
+    return (__webpack_require__(/*! ./constants */ "../lib/constants.js").version);
 }
 // Export a/synchronous/Promise APIs
 markdownlint.sync = markdownlintSync;
@@ -1957,7 +1961,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
+var addErrorDetailIf = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf);
 module.exports = {
     "names": ["MD002", "first-heading-h1", "first-header-h1"],
     "description": "First heading should be a top-level heading",
@@ -2035,7 +2039,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, unorderedListStyleFor = _a.unorderedListStyleFor;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 var expectedStyleToMarker = {
     "dash": "-",
     "plus": "+",
@@ -2108,7 +2112,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD005", "list-indent"],
     "description": "Inconsistent indentation for list items at the same level",
@@ -2138,8 +2142,8 @@ module.exports = {
                         }
                         else {
                             var detail = endMatching ?
-                                "Expected: (" + expectedEnd + "); Actual: (" + actualEnd + ")" :
-                                "Expected: " + expectedIndent + "; Actual: " + actualIndent;
+                                "Expected: (".concat(expectedEnd, "); Actual: (").concat(actualEnd, ")") :
+                                "Expected: ".concat(expectedIndent, "; Actual: ").concat(actualIndent);
                             var expected = endMatching ?
                                 expectedEnd - markerLength :
                                 expectedIndent;
@@ -2172,7 +2176,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD006", "ul-start-left"],
     "description": "Consider starting bulleted lists at the beginning of the line",
@@ -2204,7 +2208,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD007", "ul-indent"],
     "description": "Unordered list indentation",
@@ -2251,7 +2255,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe, numericSortAscending = _a.numericSortAscending;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD009", "no-trailing-spaces"],
     "description": "Trailing spaces",
@@ -2395,7 +2399,7 @@ module.exports = {
                         addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length], {
                             "editColumn": index + 1,
                             "deleteCount": length,
-                            "insertText": "[" + linkText + "](" + linkDestination + ")"
+                            "insertText": "[".concat(linkText, "](").concat(linkDestination, ")")
                         });
                     }
                 }
@@ -2417,7 +2421,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD012", "no-multiple-blanks"],
     "description": "Multiple consecutive blank lines",
@@ -2449,7 +2453,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var longLineRePrefix = "^.{";
 var longLineRePostfixRelaxed = "}.*\\s.*$";
 var longLineRePostfixStrict = "}.+$";
@@ -2594,7 +2598,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD018", "no-missing-space-atx"],
     "description": "No space after hash on atx style heading",
@@ -2662,7 +2666,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD020", "no-missing-space-closed-atx"],
     "description": "No space inside hashes on closed atx style heading",
@@ -2677,7 +2681,7 @@ module.exports = {
                     var rightHashLength = rightHash.length;
                     var left = !leftSpaceLength;
                     var right = !rightSpaceLength || rightEscape;
-                    var rightEscapeReplacement = rightEscape ? rightEscape + " " : "";
+                    var rightEscapeReplacement = rightEscape ? "".concat(rightEscape, " ") : "";
                     if (left || right) {
                         var range = left ?
                             [
@@ -2691,7 +2695,7 @@ module.exports = {
                         addErrorContext(onError, lineIndex + 1, line.trim(), left, right, range, {
                             "editColumn": 1,
                             "deleteCount": line.length,
-                            "insertText": leftHash + " " + content + " " + rightEscapeReplacement + rightHash
+                            "insertText": "".concat(leftHash, " ").concat(content, " ").concat(rightEscapeReplacement).concat(rightHash)
                         });
                     }
                 }
@@ -2742,7 +2746,7 @@ module.exports = {
                         addErrorContext(onError, lineNumber, line.trim(), left, right, range, {
                             "editColumn": 1,
                             "deleteCount": length,
-                            "insertText": leftHash + " " + content + " " + rightHash
+                            "insertText": "".concat(leftHash, " ").concat(content, " ").concat(rightHash)
                         });
                     }
                 }
@@ -2948,7 +2952,7 @@ module.exports = {
                 var fullMatch = match[0];
                 var column = match.index + 1;
                 var length = fullMatch.length;
-                addError(onError, lineNumber, "Punctuation: '" + fullMatch + "'", null, [column, length], {
+                addError(onError, lineNumber, "Punctuation: '".concat(fullMatch, "'"), null, [column, length], {
                     "editColumn": column,
                     "deleteCount": length
                 });
@@ -3024,7 +3028,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addError = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addError;
+var addError = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addError);
 module.exports = {
     "names": ["MD028", "no-blanks-blockquote"],
     "description": "Blank line inside blockquote",
@@ -3060,7 +3064,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 var listStyleExamples = {
     "one": "1/1/1",
     "ordered": "1/2/3",
@@ -3129,8 +3133,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var addErrorDetailIf = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf);
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD030", "list-marker-space"],
     "description": "Spaces after list markers",
@@ -3179,7 +3183,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var codeFencePrefixRe = /^(.*?)\s*[`~]/;
 module.exports = {
     "names": ["MD031", "blanks-around-fences"],
@@ -3198,7 +3202,7 @@ module.exports = {
                 var _a = line.match(codeFencePrefixRe) || [], prefix = _a[1];
                 var fixInfo = (prefix === undefined) ? null : {
                     "lineNumber": i + (onTopFence ? 1 : 2),
-                    "insertText": prefix + "\n"
+                    "insertText": "".concat(prefix, "\n")
                 };
                 addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, fixInfo);
             }
@@ -3219,7 +3223,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, isBlankLine = _a.isBlankLine;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 var quotePrefixRe = /^[>\s]*/;
 module.exports = {
     "names": ["MD032", "blanks-around-lists"],
@@ -3233,7 +3237,7 @@ module.exports = {
                 var line = lines[firstIndex];
                 var quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, firstIndex + 1, line.trim(), null, null, null, {
-                    "insertText": quotePrefix + "\n"
+                    "insertText": "".concat(quotePrefix, "\n")
                 });
             }
             var lastIndex = list.lastLineIndex - 1;
@@ -3242,7 +3246,7 @@ module.exports = {
                 var quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, lastIndex + 1, line.trim(), null, null, null, {
                     "lineNumber": lastIndex + 2,
-                    "insertText": quotePrefix + "\n"
+                    "insertText": "".concat(quotePrefix, "\n")
                 });
             }
         });
@@ -3350,7 +3354,7 @@ module.exports = {
                             var fixInfo = range ? {
                                 "editColumn": range[0],
                                 "deleteCount": range[1],
-                                "insertText": "<" + bareUrl + ">"
+                                "insertText": "<".concat(bareUrl, ">")
                             } : null;
                             addErrorContext(onError, lineNumber, bareUrl, null, null, range, fixInfo);
                         }
@@ -3468,7 +3472,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
@@ -3511,7 +3515,7 @@ module.exports = {
                 var length = contextEnd - contextStart;
                 var leftMarker = line.substring(contextStart, emphasisIndex);
                 var rightMarker = match ? (match[2] || match[3]) : "";
-                var fixedText = "" + leftMarker + content.trim() + rightMarker;
+                var fixedText = "".concat(leftMarker).concat(content.trim()).concat(rightMarker);
                 return [
                     onError,
                     lineIndex + 1,
@@ -3737,7 +3741,7 @@ module.exports = {
                             };
                             lineIndex = column + length - 1;
                         }
-                        addErrorContext(onError, lineNumber, "[" + linkText + "]", left, right, range, fixInfo);
+                        addErrorContext(onError, lineNumber, "[".concat(linkText, "]"), left, right, range, fixInfo);
                     }
                 }
                 else if ((type === "softbreak") || (type === "hardbreak")) {
@@ -3800,7 +3804,7 @@ module.exports = {
         var tag = "h" + level;
         var foundFrontMatterTitle = frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title);
         if (!foundFrontMatterTitle) {
-            var htmlHeadingRe_1 = new RegExp("^<h" + level + "[ />]", "i");
+            var htmlHeadingRe_1 = new RegExp("^<h".concat(level, "[ />]"), "i");
             params.tokens.every(function (token) {
                 var isError = false;
                 if (token.type === "html_block") {
@@ -3990,7 +3994,7 @@ module.exports = {
             var escapedName = escapeForRegExp(name);
             var startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
             var endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
-            var namePattern = "(" + startNamePattern + ")(" + escapedName + ")" + endNamePattern;
+            var namePattern = "(".concat(startNamePattern, ")(").concat(escapedName, ")").concat(endNamePattern);
             var nameRe = new RegExp(namePattern, "gi");
             forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
                 if (includeCodeBlocks || (!inCode && !onFence)) {
@@ -4056,7 +4060,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
+var addErrorDetailIf = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf);
 var tokenTypeToStyle = {
     "fence": "fenced",
     "code_block": "indented"
@@ -4170,12 +4174,12 @@ module.exports = {
                 var contentToken = getNextChildToken(parent, token, "text", "em_close");
                 if (contentToken) {
                     var content = contentToken.content;
-                    var actual = "" + markup + content + markup;
+                    var actual = "".concat(markup).concat(content).concat(markup);
                     var expectedMarkup = (expectedStyle === "asterisk") ? "*" : "_";
-                    var expected = "" + expectedMarkup + content + expectedMarkup;
+                    var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
                     rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
                 }
-                addError(onError, lineNumber, "Expected: " + expectedStyle + "; Actual: " + markupStyle, null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+                addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
             }
         });
     }
@@ -4211,12 +4215,12 @@ module.exports = {
                 var contentToken = getNextChildToken(parent, token, "text", "strong_close");
                 if (contentToken) {
                     var content = contentToken.content;
-                    var actual = "" + markup + content + markup;
+                    var actual = "".concat(markup).concat(content).concat(markup);
                     var expectedMarkup = (expectedStyle === "asterisk") ? "**" : "__";
-                    var expected = "" + expectedMarkup + content + expectedMarkup;
+                    var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
                     rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
                 }
-                addError(onError, lineNumber, "Expected: " + expectedStyle + "; Actual: " + markupStyle, null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+                addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
             }
         });
     }
@@ -4287,7 +4291,7 @@ rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
     // eslint-disable-next-line dot-notation
     rule["information"] =
-        new URL(homepage + "/blob/v" + version + "/doc/Rules.md#" + name);
+        new URL("".concat(homepage, "/blob/v").concat(version, "/doc/Rules.md#").concat(name));
 });
 module.exports = rules;
 
