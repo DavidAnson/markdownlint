@@ -1305,8 +1305,9 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     // eslint-disable-next-line jsdoc/require-jsdoc
     function disableNextLine(action, parameter, lineNumber) {
         if (action === "DISABLE-NEXT-LINE") {
-            enabledRulesPerLineNumber[lineNumber + 1] =
-                applyEnableDisable(action, parameter, enabledRulesPerLineNumber[lineNumber + 1] || {});
+            var nextLineNumber = frontMatterLines.length + lineNumber + 1;
+            enabledRulesPerLineNumber[nextLineNumber] =
+                applyEnableDisable(action, parameter, enabledRulesPerLineNumber[nextLineNumber] || {});
         }
     }
     // Handle inline comments
