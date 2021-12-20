@@ -63,12 +63,20 @@ module.exports.isObject = function isObject(obj) {
 };
 
 // Returns true iff the input line is blank (no content)
-// Example: Contains nothing, whitespace, or comments
-const blankLineRe = />|(?:<!--.*?-->)/g;
+// Example: Contains nothing, whitespace, or comment (unclosed start/end okay)
 module.exports.isBlankLine = function isBlankLine(line) {
   // Call to String.replace follows best practices and is not a security check
   // False-positive for js/incomplete-multi-character-sanitization
-  return !line || !line.trim() || !line.replace(blankLineRe, "").trim();
+  return (
+    !line ||
+    !line.trim() ||
+    !line
+      .replace(/<!--.*?-->/g, "")
+      .replace(/<!--.*$/g, "")
+      .replace(/^.*-->/g, "")
+      .replace(/>/g, "")
+      .trim()
+  );
 };
 
 /**

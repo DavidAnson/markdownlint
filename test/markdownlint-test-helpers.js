@@ -226,7 +226,7 @@ bar`
 });
 
 test("isBlankLine", (t) => {
-  t.plan(25);
+  t.plan(29);
   const blankLines = [
     null,
     "",
@@ -244,7 +244,11 @@ test("isBlankLine", (t) => {
     "> ",
     "> > > \t",
     "> <!--text-->",
-    ">><!--text-->"
+    ">><!--text-->",
+    "<!--",
+    "  <!-- text",
+    "text -->  ",
+    "-->"
   ];
   blankLines.forEach((line) => t.true(helpers.isBlankLine(line), line || ""));
   const nonBlankLines = [
@@ -253,9 +257,9 @@ test("isBlankLine", (t) => {
     ".",
     "> .",
     "<!--text--> text",
-    "<!--->",
-    "<!--",
-    "-->"
+    "text <!--text-->",
+    "text <!--",
+    "--> text"
   ];
   nonBlankLines.forEach((line) => t.true(!helpers.isBlankLine(line), line));
 });
