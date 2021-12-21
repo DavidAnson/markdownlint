@@ -60,7 +60,11 @@ function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
     return markdownlintPromise(options).then((results) => {
       let resultsString = results.toString();
       for (const ignoreRe of (ignoreRes || [])) {
+        const lengthBefore = resultsString.length;
         resultsString = resultsString.replace(ignoreRe, "");
+        if (resultsString.length === lengthBefore) {
+          t.fail(`Unnecessary ignore: ${ignoreRe}`);
+        }
       }
       if (resultsString.length > 0) {
         // eslint-disable-next-line no-console
@@ -158,10 +162,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [
-      /^[^:]+: \d+: (MD049|MD050)\/.*$\r?\n?/gm,
-      /^[^:]+\/dotnet-dump\.md: \d+: MD033\/.*$\r?\n?/gm
-    ];
+    const ignoreRes = [ /^[^:]+: \d+: (MD049|MD050)\/.*$\r?\n?/gm ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
