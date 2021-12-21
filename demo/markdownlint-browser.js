@@ -3480,6 +3480,7 @@ module.exports = {
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
 var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
+var embeddedUnderscoreRe = /([A-Za-z0-9])_([A-Za-z0-9])/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
 var rightSpaceRe = /\s+$/;
@@ -3559,13 +3560,14 @@ module.exports = {
                 // Emphasis has no meaning here
                 return;
             }
+            var patchedLine = line.replace(embeddedUnderscoreRe, "$1 $2");
             if (onItemStart) {
                 // Trim overlapping '*' list item marker
-                line = line.replace(asteriskListItemMarkerRe, "$1 $2");
+                patchedLine = patchedLine.replace(asteriskListItemMarkerRe, "$1 $2");
             }
             var match = null;
             // Match all emphasis-looking runs in the line...
-            while ((match = emphasisRe.exec(line))) {
+            while ((match = emphasisRe.exec(patchedLine))) {
                 var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex];
                 var matchIndex = match.index + match[1].length;
                 if (ignoreMarkersForLine.includes(matchIndex)) {
