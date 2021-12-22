@@ -3712,7 +3712,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
-var spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=\(\S*\))/;
+var spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=((?:\([^)]*\))|(?:\[[^\]]*\])))/;
 module.exports = {
     "names": ["MD039", "no-space-in-links"],
     "description": "Spaces inside link text",

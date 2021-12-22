@@ -50,3 +50,15 @@ Wrapped [ link with leading space
   ](https://example.com) {MD039}
 
 Non-wrapped [ link with leading space](https://example.com) {MD039}
+
+[][ref]
+
+[link][ref]
+
+[link ][ref] {MD039}
+
+[ link][ref] {MD039}
+
+[ link ][ref] {MD039}
+
+[ref]: https://example.com
