@@ -1239,8 +1239,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     var enabledRulesPerLineNumber = new Array(1 + frontMatterLines.length);
     // Helper functions
     // eslint-disable-next-line jsdoc/require-jsdoc
-    function handleInlineConfig(perLine, forEachMatch, forEachLine) {
-        var input = perLine ? lines : [lines.join("\n")];
+    function handleInlineConfig(input, forEachMatch, forEachLine) {
         input.forEach(function (line, lineIndex) {
             if (!noInlineConfig) {
                 var match = null;
@@ -1269,6 +1268,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function applyEnableDisable(action, parameter, state) {
+        state = __assign({}, state);
         var enabled = (action.startsWith("ENABLE"));
         var items = parameter ?
             parameter.trim().toUpperCase().split(/\s+/) :
@@ -1278,38 +1278,39 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
                 state[ruleName] = enabled;
             });
         });
+        return state;
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function enableDisableFile(action, parameter) {
         if ((action === "ENABLE-FILE") || (action === "DISABLE-FILE")) {
-            applyEnableDisable(action, parameter, enabledRules);
+            enabledRules = applyEnableDisable(action, parameter, enabledRules);
         }
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function captureRestoreEnableDisable(action, parameter) {
         if (action === "CAPTURE") {
-            capturedRules = __assign({}, enabledRules);
+            capturedRules = enabledRules;
         }
         else if (action === "RESTORE") {
-            enabledRules = __assign({}, capturedRules);
+            enabledRules = capturedRules;
         }
         else if ((action === "ENABLE") || (action === "DISABLE")) {
-            enabledRules = __assign({}, enabledRules);
-            applyEnableDisable(action, parameter, enabledRules);
+            enabledRules = applyEnableDisable(action, parameter, enabledRules);
         }
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function updateLineState() {
-        enabledRulesPerLineNumber.push(__assign({}, enabledRules));
+        enabledRulesPerLineNumber.push(enabledRules);
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function disableNextLine(action, parameter, lineNumber) {
         if (action === "DISABLE-NEXT-LINE") {
-            applyEnableDisable(action, parameter, enabledRulesPerLineNumber[lineNumber + 1] || {});
+            enabledRulesPerLineNumber[lineNumber + 1] =
+                applyEnableDisable(action, parameter, enabledRulesPerLineNumber[lineNumber + 1] || {});
         }
     }
     // Handle inline comments
-    handleInlineConfig(false, configureFile);
+    handleInlineConfig([lines.join("\n")], configureFile);
     var effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
     ruleList.forEach(function (rule) {
         var ruleName = rule.names[0].toUpperCase();
@@ -1317,9 +1318,9 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
         enabledRules[ruleName] = !!effectiveConfig[ruleName];
     });
     capturedRules = enabledRules;
-    handleInlineConfig(true, enableDisableFile);
-    handleInlineConfig(true, captureRestoreEnableDisable, updateLineState);
-    handleInlineConfig(true, disableNextLine);
+    handleInlineConfig(lines, enableDisableFile);
+    handleInlineConfig(lines, captureRestoreEnableDisable, updateLineState);
+    handleInlineConfig(lines, disableNextLine);
     // Return results
     return {
         effectiveConfig: effectiveConfig,
