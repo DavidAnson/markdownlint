@@ -84,11 +84,12 @@ test.cb("projectFilesNoInlineConfig", (t) => {
       "doc/Prettier.md",
       "helpers/README.md"
     ],
-    "noInlineConfig": true,
     "config": {
       "line-length": { "line_length": 150 },
       "no-duplicate-heading": false
-    }
+    },
+    "customRules": [ require("markdownlint-rule-github-internal-links") ],
+    "noInlineConfig": true
   };
   markdownlint(options, function callback(err, actual) {
     t.falsy(err);
