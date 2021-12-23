@@ -276,6 +276,7 @@ function isMathBlock(token) {
         token.type.startsWith("math_block") &&
         !token.type.endsWith("_end"));
 }
+module.exports.isMathBlock = isMathBlock;
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
     var lineMetadata = params.lines.map(function (line, index) { return [line, index, false, 0, false, false, false, false]; });
@@ -336,10 +337,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
     var nestingStack = [];
     var lastWithMap = { "map": [0, 1] };
     tokens.forEach(function (token) {
-        if (isMathBlock(token) && token.map[1]) {
-            // markdown-it-texmath plugin does not account for math_block_end
-            token.map[1]++;
-        }
         if ((token.type === "bullet_list_open") ||
             (token.type === "ordered_list_open")) {
             // Save current context and start a new one
@@ -840,6 +837,28 @@ function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
     return null;
 }
 module.exports.getNextChildToken = getNextChildToken;
+/**
+ * Calls Object.freeze() on an object and its children.
+ *
+ * @param {Object} obj Object to deep freeze.
+ * @returns {Object} Object passed to the function.
+ */
+function deepFreeze(obj) {
+    var pending = [obj];
+    var current = null;
+    while ((current = pending.shift())) {
+        Object.freeze(current);
+        for (var _i = 0, _a = Object.getOwnPropertyNames(current); _i < _a.length; _i++) {
+            var name = _a[_i];
+            var value = current[name];
+            if (value && (typeof value === "object")) {
+                pending.push(value);
+            }
+        }
+    }
+    return obj;
+}
+module.exports.deepFreeze = deepFreeze;
 
 
 /***/ }),
@@ -1120,6 +1139,11 @@ function annotateTokens(tokens, lines) {
         if (!token.map && trMap) {
             token.map = __spreadArray([], trMap, true);
         }
+        // Adjust maps for math blocks
+        if (helpers.isMathBlock(token) && token.map[1]) {
+            // markdown-it-texmath plugin does not account for math_block_end
+            token.map[1]++;
+        }
         // Update token metadata
         if (token.map) {
             token.line = lines[token.map[0]];
@@ -1359,10 +1383,10 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     var _a = getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames), effectiveConfig = _a.effectiveConfig, enabledRulesPerLineNumber = _a.enabledRulesPerLineNumber;
     // Create parameters for rules
     var params = {
-        name: name,
-        tokens: tokens,
-        lines: lines,
-        frontMatterLines: frontMatterLines
+        "name": helpers.deepFreeze(name),
+        "tokens": helpers.deepFreeze(tokens),
+        "lines": helpers.deepFreeze(lines),
+        "frontMatterLines": helpers.deepFreeze(frontMatterLines)
     };
     cache.lineMetadata(helpers.getLineMetadata(params));
     cache.flattenedLists(helpers.flattenLists(params.tokens));

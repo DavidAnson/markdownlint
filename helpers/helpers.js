@@ -276,6 +276,7 @@ function isMathBlock(token) {
     !token.type.endsWith("_end")
   );
 }
+module.exports.isMathBlock = isMathBlock;
 
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
@@ -341,10 +342,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
   tokens.forEach((token) => {
-    if (isMathBlock(token) && token.map[1]) {
-      // markdown-it-texmath plugin does not account for math_block_end
-      token.map[1]++;
-    }
     if ((token.type === "bullet_list_open") ||
         (token.type === "ordered_list_open")) {
       // Save current context and start a new one
@@ -876,3 +873,25 @@ function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
   return null;
 }
 module.exports.getNextChildToken = getNextChildToken;
+
+/**
+ * Calls Object.freeze() on an object and its children.
+ *
+ * @param {Object} obj Object to deep freeze.
+ * @returns {Object} Object passed to the function.
+ */
+function deepFreeze(obj) {
+  const pending = [ obj ];
+  let current = null;
+  while ((current = pending.shift())) {
+    Object.freeze(current);
+    for (const name of Object.getOwnPropertyNames(current)) {
+      const value = current[name];
+      if (value && (typeof value === "object")) {
+        pending.push(value);
+      }
+    }
+  }
+  return obj;
+}
+module.exports.deepFreeze = deepFreeze;

@@ -938,3 +938,37 @@ test("applyFixes", (t) => {
     t.is(actual, expected, "Incorrect fix applied.");
   });
 });
+
+test("deepFreeze", (t) => {
+  t.plan(6);
+  const obj = {
+    "prop": true,
+    "func": () => true,
+    "sub": {
+      "prop": [ 1 ],
+      "sub": {
+        "prop": "one"
+      }
+    }
+  };
+  t.is(helpers.deepFreeze(obj), obj, "Did not return object.");
+  [
+    () => {
+      obj.prop = false;
+    },
+    () => {
+      obj.func = () => false;
+    },
+    () => {
+      obj.sub.prop = [];
+    },
+    () => {
+      obj.sub.prop[0] = 0;
+    },
+    () => {
+      obj.sub.sub.prop = "zero";
+    }
+  ].forEach((scenario) => {
+    t.throws(scenario, null, "Assigned to frozen object.");
+  });
+});
