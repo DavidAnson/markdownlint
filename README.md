@@ -4,6 +4,7 @@
 
 [![npm version][npm-image]][npm-url]
 [![License][license-image]][license-url]
+[![CI][ci-image]][ci-url]
 
 ## Install
 
@@ -973,3 +974,5 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 [npm-url]: https://www.npmjs.com/package/markdownlint
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: https://opensource.org/licenses/MIT
+[ci-image]: https://github.com/DavidAnson/markdownlint/actions/workflows/ci.yml/badge.svg?branch=main
+[ci-url]: https://github.com/DavidAnson/markdownlint/actions/workflows/ci.yml
