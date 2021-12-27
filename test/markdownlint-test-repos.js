@@ -8,31 +8,10 @@ const { join } = require("path");
 const { promisify } = require("util");
 const globby = require("globby");
 const jsYaml = require("js-yaml");
-const stripJsonComments = require("strip-json-comments");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 const markdownlintPromise = promisify(markdownlint);
 const readConfigPromise = promisify(markdownlint.readConfig);
-
-/**
- * Parses JSONC text.
- *
- * @param {string} json JSON to parse.
- * @returns {Object} Object representation.
- */
-function jsoncParse(json) {
-  return JSON.parse(stripJsonComments(json));
-}
-
-/**
- * Parses YAML text.
- *
- * @param {string} yaml YAML to parse.
- * @returns {Object} Object representation.
- */
-function yamlParse(yaml) {
-  return jsYaml.load(yaml);
-}
 
 /**
  * Lints a test repository.
@@ -43,8 +22,12 @@ function yamlParse(yaml) {
  * @param {RegExp[]} [ignoreRes] Array of RegExp violations to ignore.
  * @returns {Promise} Test result.
  */
-function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
+async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
   t.plan(1);
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { "default": stripJsonComments } = await import("strip-json-comments");
+  const jsoncParse = (json) => JSON.parse(stripJsonComments(json));
+  const yamlParse = (yaml) => jsYaml.load(yaml);
   return Promise.all([
     globby(globPatterns),
     // @ts-ignore
