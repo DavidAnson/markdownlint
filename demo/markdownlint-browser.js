@@ -25,12 +25,11 @@ module.exports = webpackEmptyContext;
 /*!*****************************!*\
   !*** ../helpers/helpers.js ***!
   \*****************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
 // @ts-check
 
-var os = __webpack_require__(/*! os */ "?591e");
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 var newLineRe = /\r\n?|\n/g;
@@ -655,9 +654,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
+ * @param {string} [platform] Platform identifier (process.platform).
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input) {
+function getPreferredLineEnding(input, platform) {
     var cr = 0;
     var lf = 0;
     var crlf = 0;
@@ -678,7 +678,8 @@ function getPreferredLineEnding(input) {
     });
     var preferredLineEnding = null;
     if (!cr && !lf && !crlf) {
-        preferredLineEnding = os.EOL;
+        preferredLineEnding =
+            ((platform || process.platform) === "win32") ? "\r\n" : "\n";
     }
     else if ((lf >= crlf) && (lf >= cr)) {
         preferredLineEnding = "\n";
@@ -4340,16 +4341,6 @@ module.exports = rules;
 
 "use strict";
 module.exports = markdownit;
-
-/***/ }),
-
-/***/ "?591e":
-/*!********************!*\
-  !*** os (ignored) ***!
-  \********************/
-/***/ (() => {
-
-/* (ignored) */
 
 /***/ }),
 

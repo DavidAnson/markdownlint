@@ -387,7 +387,7 @@ test("forEachInlineCodeSpan", (t) => {
 });
 
 test("getPreferredLineEnding", (t) => {
-  t.plan(17);
+  t.plan(19);
   const testCases = [
     [ "", os.EOL ],
     [ "\r", "\r" ],
@@ -412,6 +412,16 @@ test("getPreferredLineEnding", (t) => {
     const actual = helpers.getPreferredLineEnding(input);
     t.is(actual, expected, "Incorrect line ending returned.");
   });
+  t.is(
+    helpers.getPreferredLineEnding("", "linux"),
+    "\n",
+    "Incorrect line ending for linux"
+  );
+  t.is(
+    helpers.getPreferredLineEnding("", "win32"),
+    "\r\n",
+    "Incorrect line ending for win32"
+  );
 });
 
 test("applyFix", (t) => {

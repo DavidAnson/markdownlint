@@ -2,8 +2,6 @@
 
 "use strict";
 
-const os = require("os");
-
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 const newLineRe = /\r\n?|\n/g;
@@ -680,9 +678,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
+ * @param {string} [platform] Platform identifier (process.platform).
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input) {
+function getPreferredLineEnding(input, platform) {
   let cr = 0;
   let lf = 0;
   let crlf = 0;
@@ -703,7 +702,8 @@ function getPreferredLineEnding(input) {
   });
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
-    preferredLineEnding = os.EOL;
+    preferredLineEnding =
+      ((platform || process.platform) === "win32") ? "\r\n" : "\n";
   } else if ((lf >= crlf) && (lf >= cr)) {
     preferredLineEnding = "\n";
   } else if (crlf >= cr) {
