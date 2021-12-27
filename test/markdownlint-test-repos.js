@@ -6,7 +6,6 @@ const { existsSync } = require("fs");
 // eslint-disable-next-line unicorn/import-style
 const { join } = require("path");
 const { promisify } = require("util");
-const globby = require("globby");
 const jsYaml = require("js-yaml");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
@@ -24,6 +23,8 @@ const readConfigPromise = promisify(markdownlint.readConfig);
  */
 async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
   t.plan(1);
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { globby } = await import("globby");
   // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { "default": stripJsonComments } = await import("strip-json-comments");
   const jsoncParse = (json) => JSON.parse(stripJsonComments(json));
