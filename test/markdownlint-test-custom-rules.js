@@ -1198,16 +1198,15 @@ test("customRulesAsyncReadFiles", (t) => {
         "tags": [ "tag" ],
         "asynchronous": true,
         "function":
-          (params, onError) => fs.readFile(__filename, "utf8").then(
-            (content) => {
-              t.true(content.length > 0);
-              onError({
-                "lineNumber": 1,
-                "detail": "detail2",
-                "context": "context2"
-              });
-            }
-          )
+          async(params, onError) => {
+            const content = await fs.readFile(__filename, "utf8");
+            t.true(content.length > 0);
+            onError({
+              "lineNumber": 1,
+              "detail": "detail2",
+              "context": "context2"
+            });
+          }
       }
     ],
     "strings": {
