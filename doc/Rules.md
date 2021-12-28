@@ -292,7 +292,11 @@ Tags: bullet, ul, indentation
 
 Aliases: ul-indent
 
-Parameters: indent, start_indented (number; default 2, boolean; default false)
+<!-- markdownlint-disable line-length -->
+
+Parameters: indent, start_indented, start_indent (number; default 2, boolean; default false, number; defaults to indent)
+
+<!-- markdownlint-restore -->
 
 Fixable: Most violations can be fixed by tooling
 
@@ -319,7 +323,9 @@ rule).
 
 The `start_indented` parameter allows the first level of lists to be indented by
 the configured number of spaces rather than starting at zero (the inverse of
-MD006).
+MD006). The `start_indent` parameter allows the first level of lists to be indented
+by a different number of spaces than the rest (ignored when `start_indented` is not
+set).
 
 Rationale: Indenting by 2 spaces allows the content of a nested list to be in
 line with the start of the content of the parent list when a single space is
@@ -418,12 +424,14 @@ Some text
     * Spaces used to indent the list item instead
 ```
 
-You have the option to exclude this rule for code blocks. To do so, set the
-`code_blocks` parameter to `false`. Code blocks are included by default since
-handling of tabs by tools is often inconsistent (ex: using 4 vs. 8 spaces).
+You have the option to exclude this rule for code blocks and spans. To do so,
+set the `code_blocks` parameter to `false`. Code blocks and spans are included
+by default since handling of tabs by Markdown tools can be inconsistent (e.g.,
+using 4 vs. 8 spaces).
 
-If you would like the fixer to change tabs to x spaces, then configure the `spaces_per_tab`
-parameter to the number x. The default value would be 1.
+By default, violations of this rule are fixed by replacing the tab with 1 space
+character. To use a different number of spaces, set the `spaces_per_tab`
+parameter to the desired value.
 
 Rationale: Hard tabs are often rendered inconsistently by different editors and
 can be harder to work with than spaces.
@@ -1331,20 +1339,20 @@ For more information, see <https://www.example.com/>.
 ```
 
 Note: To use a bare URL without it being converted into a link, enclose it in
-a code block, otherwise in some markdown parsers it _will_ be converted:
+a code block, otherwise in some markdown parsers it *will* be converted:
 
 ```markdown
 `https://www.example.com`
 ```
 
-Note: The following scenario does _not_ trigger this rule to avoid conflicts
+Note: The following scenario does *not* trigger this rule to avoid conflicts
 with `MD011`/`no-reversed-links`:
 
 ```markdown
 [https://www.example.com]
 ```
 
-The use of quotes around a bare link will _not_ trigger this rule, either:
+The use of quotes around a bare link will *not* trigger this rule, either:
 
 ```markdown
 "https://www.example.com"
@@ -1362,8 +1370,8 @@ Tags: hr
 
 Aliases: hr-style
 
-Parameters: style ("consistent", "---", "***", or other string specifying the
-horizontal rule; default "consistent")
+Parameters: style ("consistent", "---", "***", "___", or other string specifying
+the horizontal rule; default "consistent")
 
 This rule is triggered when inconsistent styles of horizontal rules are used
 in the document:
@@ -1762,7 +1770,8 @@ the proper capitalization, specify the desired letter case in the `names` array:
 ]
 ```
 
-Set the `code_blocks` parameter to `false` to disable this rule for code blocks.
+Set the `code_blocks` parameter to `false` to disable this rule for code blocks
+and spans.
 
 Rationale: Incorrect capitalization of proper names is usually a mistake.
 
@@ -1909,5 +1918,69 @@ document:
 
 The configured list style can be a specific symbol to use (backtick, tilde), or
 can require that usage be consistent within the document.
+
+Rationale: Consistent formatting makes it easier to understand a document.
+
+<a name="md049"></a>
+
+## MD049 - Emphasis style should be consistent
+
+Tags: emphasis
+
+Aliases: emphasis-style
+
+Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+
+Fixable: Most violations can be fixed by tooling
+
+This rule is triggered when the symbols used in the document for emphasis do not
+match the configured emphasis style:
+
+```markdown
+*Text*
+_Text_
+```
+
+To fix this issue, use the configured emphasis style throughout the document:
+
+```markdown
+*Text*
+*Text*
+```
+
+The configured emphasis style can be a specific symbol to use ("asterisk",
+"underscore"), or can require that usage be consistent within the document.
+
+Rationale: Consistent formatting makes it easier to understand a document.
+
+<a name="md050"></a>
+
+## MD050 - Strong style should be consistent
+
+Tags: emphasis
+
+Aliases: strong-style
+
+Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+
+Fixable: Most violations can be fixed by tooling
+
+This rule is triggered when the symbols used in the document for strong do not
+match the configured strong style:
+
+```markdown
+**Text**
+__Text__
+```
+
+To fix this issue, use the configured strong style throughout the document:
+
+```markdown
+**Text**
+**Text**
+```
+
+The configured strong style can be a specific symbol to use ("asterisk",
+"underscore"), or can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.

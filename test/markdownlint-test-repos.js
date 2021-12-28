@@ -6,33 +6,11 @@ const { existsSync } = require("fs");
 // eslint-disable-next-line unicorn/import-style
 const { join } = require("path");
 const { promisify } = require("util");
-const globby = require("globby");
 const jsYaml = require("js-yaml");
-const stripJsonComments = require("strip-json-comments");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 const markdownlintPromise = promisify(markdownlint);
 const readConfigPromise = promisify(markdownlint.readConfig);
-
-/**
- * Parses JSONC text.
- *
- * @param {string} json JSON to parse.
- * @returns {Object} Object representation.
- */
-function jsoncParse(json) {
-  return JSON.parse(stripJsonComments(json));
-}
-
-/**
- * Parses YAML text.
- *
- * @param {string} yaml YAML to parse.
- * @returns {Object} Object representation.
- */
-function yamlParse(yaml) {
-  return jsYaml.load(yaml);
-}
 
 /**
  * Lints a test repository.
@@ -40,10 +18,17 @@ function yamlParse(yaml) {
  * @param {Object} t Test instance.
  * @param {string[]} globPatterns Array of files to in/exclude.
  * @param {string} configPath Path to config file.
+ * @param {RegExp[]} [ignoreRes] Array of RegExp violations to ignore.
  * @returns {Promise} Test result.
  */
-function lintTestRepo(t, globPatterns, configPath) {
+async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
   t.plan(1);
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { globby } = await import("globby");
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { "default": stripJsonComments } = await import("strip-json-comments");
+  const jsoncParse = (json) => JSON.parse(stripJsonComments(json));
+  const yamlParse = (yaml) => jsYaml.load(yaml);
   return Promise.all([
     globby(globPatterns),
     // @ts-ignore
@@ -57,7 +42,14 @@ function lintTestRepo(t, globPatterns, configPath) {
     // eslint-disable-next-line no-console
     console.log(`${t.title}: Linting ${files.length} files...`);
     return markdownlintPromise(options).then((results) => {
-      const resultsString = results.toString();
+      let resultsString = results.toString();
+      for (const ignoreRe of (ignoreRes || [])) {
+        const lengthBefore = resultsString.length;
+        resultsString = resultsString.replace(ignoreRe, "");
+        if (resultsString.length === lengthBefore) {
+          t.fail(`Unnecessary ignore: ${ignoreRe}`);
+        }
+      }
       if (resultsString.length > 0) {
         // eslint-disable-next-line no-console
         console.log(resultsString);
@@ -67,13 +59,26 @@ function lintTestRepo(t, globPatterns, configPath) {
   });
 }
 
+/**
+ * Excludes a list of globs.
+ *
+ * @param {string} rootDir Root directory for globs.
+ * @param {...string} globs Globs to exclude.
+ * @returns {string[]} Array of excluded globs.
+ */
+function excludeGlobs(rootDir, ...globs) {
+  return globs.map((glob) => "!" + join(rootDir, glob));
+}
+
 // Run markdownlint the same way the corresponding repositories do
 
 test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes =
+    [ /^[^:]+\/array-callback-return\.md: \d+: MD050\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/mkdocs/mkdocs", (t) => {
@@ -81,8 +86,13 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
   const globPatterns = [
     join(rootDir, "README.md"),
     join(rootDir, "CONTRIBUTING.md"),
-    join(rootDir, "docs/**/*.md"),
-    "!" + join(rootDir, "docs/CNAME")
+    join(rootDir, "docs"),
+    ...excludeGlobs(
+      rootDir,
+      "docs/CNAME",
+      "docs/**/*.css",
+      "docs/**/*.png"
+    )
   ];
   const configPath = join(rootDir, ".markdownlintrc");
   return lintTestRepo(t, globPatterns, configPath);
@@ -106,14 +116,16 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes =
+    [ /^[^:]+\/(unbound|index|prerequisites)\.md: \d+: MD049\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
   const rootDir = "./test-repos/webhintio-hint";
   const globPatterns = [
     join(rootDir, "**/*.md"),
-    "!" + join(rootDir, "**/CHANGELOG.md")
+    ...excludeGlobs(rootDir, "**/CHANGELOG.md")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
   return lintTestRepo(t, globPatterns, configPath);
@@ -132,12 +144,10 @@ const dotnetDocsDir = "./test-repos/dotnet-docs";
 if (existsSync(dotnetDocsDir)) {
   test("https://github.com/dotnet/docs", (t) => {
     const rootDir = dotnetDocsDir;
-    const globPatterns = [
-      join(rootDir, "**/*.md"),
-      "!" + join(rootDir, "samples/**/*.md")
-    ];
+    const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    return lintTestRepo(t, globPatterns, configPath);
+    const ignoreRes = [ /^[^:]+: \d+: (MD049|MD050)\/.*$\r?\n?/gm ];
+    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
 
@@ -147,6 +157,7 @@ if (existsSync(v8v8DevDir)) {
     const rootDir = v8v8DevDir;
     const globPatterns = [ join(rootDir, "src/**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    return lintTestRepo(t, globPatterns, configPath);
+    const ignoreRes = [ /^[^:]+: \d+: MD049\/.*$\r?\n?/gm ];
+    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }

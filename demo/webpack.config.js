@@ -22,7 +22,8 @@ function config(options) {
             {
               "loader": "ts-loader",
               "options": {
-                "configFile": "../demo/tsconfig.json"
+                "configFile": "../demo/tsconfig.json",
+                "transpileOnly": true
               }
             }
           ]
@@ -43,7 +44,6 @@ function config(options) {
     "resolve": {
       "fallback": {
         "fs": false,
-        "os": false,
         "path": false,
         "util": false
       }

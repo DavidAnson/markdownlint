@@ -1,4 +1,4 @@
-/*! markdownlint 0.24.0 https://github.com/DavidAnson/markdownlint @license MIT */
+/*! markdownlint 0.25.0 https://github.com/DavidAnson/markdownlint @license MIT */
 var markdownlint;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
@@ -25,12 +25,11 @@ module.exports = webpackEmptyContext;
 /*!*****************************!*\
   !*** ../helpers/helpers.js ***!
   \*****************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((module) => {
 
 "use strict";
 // @ts-check
 
-var os = __webpack_require__(/*! os */ "?591e");
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 var newLineRe = /\r\n?|\n/g;
@@ -77,12 +76,18 @@ module.exports.isObject = function isObject(obj) {
     return (obj !== null) && (typeof obj === "object") && !Array.isArray(obj);
 };
 // Returns true iff the input line is blank (no content)
-// Example: Contains nothing, whitespace, or comments
-var blankLineRe = />|(?:<!--.*?-->)/g;
+// Example: Contains nothing, whitespace, or comment (unclosed start/end okay)
 module.exports.isBlankLine = function isBlankLine(line) {
     // Call to String.replace follows best practices and is not a security check
     // False-positive for js/incomplete-multi-character-sanitization
-    return !line || !line.trim() || !line.replace(blankLineRe, "").trim();
+    return (!line ||
+        !line.trim() ||
+        !line
+            .replace(/<!--.*?-->/g, "")
+            .replace(/<!--.*$/g, "")
+            .replace(/^.*-->/g, "")
+            .replace(/>/g, "")
+            .trim());
 };
 /**
  * Compare function for Array.prototype.sort for ascending order of numbers.
@@ -191,6 +196,21 @@ module.exports.fencedCodeBlockStyleFor =
         }
     };
 /**
+ * Return the string representation of a emphasis or strong markup character.
+ *
+ * @param {string} markup Emphasis or strong string.
+ * @returns {string} String representation.
+ */
+module.exports.emphasisOrStrongStyleFor =
+    function emphasisOrStrongStyleFor(markup) {
+        switch (markup[0]) {
+            case "*":
+                return "asterisk";
+            default:
+                return "underscore";
+        }
+    };
+/**
  * Return the number of characters of indent for a token.
  *
  * @param {Object} token MarkdownItToken instance.
@@ -255,6 +275,7 @@ function isMathBlock(token) {
         token.type.startsWith("math_block") &&
         !token.type.endsWith("_end"));
 }
+module.exports.isMathBlock = isMathBlock;
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
     var lineMetadata = params.lines.map(function (line, index) { return [line, index, false, 0, false, false, false, false]; });
@@ -292,14 +313,20 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
     });
     return lineMetadata;
 };
-// Calls the provided function for each line (with context)
-module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
+/**
+ * Calls the provided function for each line.
+ *
+ * @param {Object} lineMetadata Line metadata object.
+ * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
+ * inTable, inItem, inBreak, inMath).
+ * @returns {void}
+ */
+function forEachLine(lineMetadata, handler) {
     lineMetadata.forEach(function forMetadata(metadata) {
-        // Parameters:
-        // line, lineIndex, inCode, onFence, inTable, inItem, inBreak, inMath
         handler.apply(void 0, metadata);
     });
-};
+}
+module.exports.forEachLine = forEachLine;
 // Returns (nested) lists as a flat array (in order)
 module.exports.flattenLists = function flattenLists(tokens) {
     var flattenedLists = [];
@@ -309,10 +336,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
     var nestingStack = [];
     var lastWithMap = { "map": [0, 1] };
     tokens.forEach(function (token) {
-        if (isMathBlock(token) && token.map[1]) {
-            // markdown-it-texmath plugin does not account for math_block_end
-            token.map[1]++;
-        }
         if ((token.type === "bullet_list_open") ||
             (token.type === "ordered_list_open")) {
             // Save current context and start a new one
@@ -388,7 +411,8 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
  * Calls the provided function for each inline code span's content.
  *
  * @param {string} input Markdown content.
- * @param {Function} handler Callback function.
+ * @param {Function} handler Callback function taking (code, lineIndex,
+ * columnIndex, ticks).
  * @returns {void}
  */
 function forEachInlineCodeSpan(input, handler) {
@@ -518,19 +542,35 @@ module.exports.addErrorContext = function addErrorContext(onError, lineNumber, c
     addError(onError, lineNumber, null, context, range, fixInfo);
 };
 /**
- * Returns an array of code span ranges.
+ * Returns an array of code block and span content ranges.
  *
- * @param {string[]} lines Lines to scan for code span ranges.
- * @returns {number[][]} Array of ranges (line, index, length).
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
  */
-module.exports.inlineCodeSpanRanges = function (lines) {
+module.exports.codeBlockAndSpanRanges = function (params, lineMetadata) {
     var exclusions = [];
-    forEachInlineCodeSpan(lines.join("\n"), function (code, lineIndex, columnIndex) {
-        var codeLines = code.split(newLineRe);
-        // eslint-disable-next-line unicorn/no-for-loop
-        for (var i = 0; i < codeLines.length; i++) {
-            exclusions.push([lineIndex + i, columnIndex, codeLines[i].length]);
-            columnIndex = 0;
+    // Add code block ranges (excludes fences)
+    forEachLine(lineMetadata, function (line, lineIndex, inCode, onFence) {
+        if (inCode && !onFence) {
+            exclusions.push([lineIndex, 0, line.length]);
+        }
+    });
+    // Add code span ranges (excludes ticks)
+    filterTokens(params, "inline", function (token) {
+        if (token.children.some(function (child) { return child.type === "code_inline"; })) {
+            var tokenLines = params.lines.slice(token.map[0], token.map[1]);
+            forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, columnIndex) {
+                var codeLines = code.split(newLineRe);
+                for (var _i = 0, _a = codeLines.entries(); _i < _a.length; _i++) {
+                    var _b = _a[_i], i = _b[0], line = _b[1];
+                    exclusions.push([
+                        token.lineNumber - 1 + lineIndex + i,
+                        i ? 0 : columnIndex,
+                        line.length
+                    ]);
+                }
+            });
         }
     });
     return exclusions;
@@ -553,8 +593,8 @@ module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
     var match = line.match(regexp);
     if (match) {
         var column = match.index + 1;
-        var length_1 = match[0].length;
-        range = [column, length_1];
+        var length = match[0].length;
+        range = [column, length];
     }
     return range;
 };
@@ -575,6 +615,18 @@ module.exports.frontMatterHasTitle =
 function emphasisMarkersInContent(params) {
     var lines = params.lines;
     var byLine = new Array(lines.length);
+    // Search links
+    lines.forEach(function (tokenLine, tokenLineIndex) {
+        var inLine = [];
+        var linkMatch = null;
+        while ((linkMatch = linkRe.exec(tokenLine))) {
+            var markerMatch = null;
+            while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
+                inLine.push(linkMatch.index + markerMatch.index);
+            }
+        }
+        byLine[tokenLineIndex] = inLine;
+    });
     // Search code spans
     filterTokens(params, "inline", function (token) {
         var children = token.children, lineNumber = token.lineNumber, map = token.map;
@@ -583,28 +635,16 @@ function emphasisMarkersInContent(params) {
             forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, column, tickCount) {
                 var codeLines = code.split(newLineRe);
                 codeLines.forEach(function (codeLine, codeLineIndex) {
+                    var byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
+                    var inLine = byLine[byLineIndex];
+                    var codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
                     var match = null;
                     while ((match = emphasisMarkersRe.exec(codeLine))) {
-                        var byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
-                        var inLine = byLine[byLineIndex] || [];
-                        var codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
                         inLine.push(codeLineOffset + match.index);
-                        byLine[byLineIndex] = inLine;
                     }
+                    byLine[byLineIndex] = inLine;
                 });
             });
-        }
-    });
-    // Search links
-    lines.forEach(function (tokenLine, tokenLineIndex) {
-        var linkMatch = null;
-        while ((linkMatch = linkRe.exec(tokenLine))) {
-            var markerMatch = null;
-            while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
-                var inLine = byLine[tokenLineIndex] || [];
-                inLine.push(linkMatch.index + markerMatch.index);
-                byLine[tokenLineIndex] = inLine;
-            }
         }
     });
     return byLine;
@@ -614,9 +654,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
+ * @param {string} [platform] Platform identifier (process.platform).
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input) {
+function getPreferredLineEnding(input, platform) {
     var cr = 0;
     var lf = 0;
     var crlf = 0;
@@ -637,7 +678,8 @@ function getPreferredLineEnding(input) {
     });
     var preferredLineEnding = null;
     if (!cr && !lf && !crlf) {
-        preferredLineEnding = os.EOL;
+        preferredLineEnding =
+            ((platform || process.platform) === "win32") ? "\r\n" : "\n";
     }
     else if ((lf >= crlf) && (lf >= cr)) {
         preferredLineEnding = "\n";
@@ -745,6 +787,79 @@ module.exports.applyFixes = function applyFixes(input, errors) {
     // Return corrected input
     return lines.filter(function (line) { return line !== null; }).join(lineEnding);
 };
+/**
+ * Gets the range and fixInfo values for reporting an error if the expected
+ * text is found on the specified line.
+ *
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index to check.
+ * @param {string} search Text to search for.
+ * @param {string} replace Text to replace with.
+ * @returns {Object} Range and fixInfo wrapper.
+ */
+function getRangeAndFixInfoIfFound(lines, lineIndex, search, replace) {
+    var range = null;
+    var fixInfo = null;
+    var searchIndex = lines[lineIndex].indexOf(search);
+    if (searchIndex !== -1) {
+        var column = searchIndex + 1;
+        var length = search.length;
+        range = [column, length];
+        fixInfo = {
+            "editColumn": column,
+            "deleteCount": length,
+            "insertText": replace
+        };
+    }
+    return {
+        range: range,
+        fixInfo: fixInfo
+    };
+}
+module.exports.getRangeAndFixInfoIfFound = getRangeAndFixInfoIfFound;
+/**
+ * Gets the next (subsequent) child token if it is of the expected type.
+ *
+ * @param {Object} parentToken Parent token.
+ * @param {Object} childToken Child token basis.
+ * @param {string} nextType Token type of next token.
+ * @param {string} nextNextType Token type of next-next token.
+ * @returns {Object} Next token.
+ */
+function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
+    var children = parentToken.children;
+    var index = children.indexOf(childToken);
+    if ((index !== -1) &&
+        (children.length > index + 2) &&
+        (children[index + 1].type === nextType) &&
+        (children[index + 2].type === nextNextType)) {
+        return children[index + 1];
+    }
+    return null;
+}
+module.exports.getNextChildToken = getNextChildToken;
+/**
+ * Calls Object.freeze() on an object and its children.
+ *
+ * @param {Object} obj Object to deep freeze.
+ * @returns {Object} Object passed to the function.
+ */
+function deepFreeze(obj) {
+    var pending = [obj];
+    var current = null;
+    while ((current = pending.shift())) {
+        Object.freeze(current);
+        for (var _i = 0, _a = Object.getOwnPropertyNames(current); _i < _a.length; _i++) {
+            var name = _a[_i];
+            var value = current[name];
+            if (value && (typeof value === "object")) {
+                pending.push(value);
+            }
+        }
+    }
+    return obj;
+}
+module.exports.deepFreeze = deepFreeze;
 
 
 /***/ }),
@@ -758,19 +873,19 @@ module.exports.applyFixes = function applyFixes(input, errors) {
 "use strict";
 // @ts-check
 
+var codeBlockAndSpanRanges = null;
+module.exports.codeBlockAndSpanRanges = function (value) {
+    if (value) {
+        codeBlockAndSpanRanges = value;
+    }
+    return codeBlockAndSpanRanges;
+};
 var flattenedLists = null;
 module.exports.flattenedLists = function (value) {
     if (value) {
         flattenedLists = value;
     }
     return flattenedLists;
-};
-var inlineCodeSpanRanges = null;
-module.exports.inlineCodeSpanRanges = function (value) {
-    if (value) {
-        inlineCodeSpanRanges = value;
-    }
-    return inlineCodeSpanRanges;
 };
 var lineMetadata = null;
 module.exports.lineMetadata = function (value) {
@@ -780,10 +895,26 @@ module.exports.lineMetadata = function (value) {
     return lineMetadata;
 };
 module.exports.clear = function () {
+    codeBlockAndSpanRanges = null;
     flattenedLists = null;
-    inlineCodeSpanRanges = null;
     lineMetadata = null;
 };
+
+
+/***/ }),
+
+/***/ "../lib/constants.js":
+/*!***************************!*\
+  !*** ../lib/constants.js ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+// @ts-check
+
+module.exports.deprecatedRuleNames = ["MD002", "MD006"];
+module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
+module.exports.version = "0.25.0";
 
 
 /***/ }),
@@ -808,14 +939,19 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
-var __spreadArray = (this && this.__spreadArray) || function (to, from) {
-    for (var i = 0, il = from.length, j = to.length; i < il; i++, j++)
-        to[j] = from[i];
-    return to;
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
 };
 var path = __webpack_require__(/*! path */ "?b85c");
-var promisify = __webpack_require__(/*! util */ "?96a2").promisify;
+var promisify = (__webpack_require__(/*! util */ "?96a2").promisify);
 var markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
+var deprecatedRuleNames = (__webpack_require__(/*! ./constants */ "../lib/constants.js").deprecatedRuleNames);
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -823,14 +959,14 @@ var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 // eslint-disable-next-line camelcase, max-len, no-inline-comments, no-undef
 var dynamicRequire = (typeof require === "undefined") ? __webpack_require__("../lib sync recursive") : /* c8 ignore next */ require;
 // Capture native require implementation for dynamic loading of modules
-var deprecatedRuleNames = ["MD002", "MD006"];
 /**
  * Validate the list of rules for structure and reuse.
  *
  * @param {Rule[]} ruleList List of rules.
+ * @param {boolean} synchronous Whether to execute synchronously.
  * @returns {string} Error message if validation fails.
  */
-function validateRuleList(ruleList) {
+function validateRuleList(ruleList, synchronous) {
     var result = null;
     if (ruleList.length === rules.length) {
         // No need to validate if only using built-in rules
@@ -866,6 +1002,15 @@ function validateRuleList(ruleList) {
             rule.information &&
             (Object.getPrototypeOf(rule.information) !== URL.prototype)) {
             result = newError("information");
+        }
+        if (!result &&
+            (rule.asynchronous !== undefined) &&
+            (typeof rule.asynchronous !== "boolean")) {
+            result = newError("asynchronous");
+        }
+        if (!result && rule.asynchronous && synchronous) {
+            result = new Error("Custom rule " + rule.names.join("/") + " at index " + customIndex +
+                " is asynchronous and can not be used in a synchronous context.");
         }
         if (!result) {
             rule.names.forEach(function forName(name) {
@@ -983,23 +1128,22 @@ function removeFrontMatter(content, frontMatter) {
  * @returns {void}
  */
 function annotateTokens(tokens, lines) {
-    var tableMap = null;
+    var trMap = null;
     tokens.forEach(function forToken(token) {
-        // Handle missing maps for table head/body
-        if ((token.type === "thead_open") ||
-            (token.type === "tbody_open")) {
-            tableMap = __spreadArray([], token.map);
+        // Provide missing maps for table content
+        if (token.type === "tr_open") {
+            trMap = token.map;
         }
-        else if ((token.type === "tr_close") &&
-            tableMap) {
-            tableMap[0]++;
+        else if (token.type === "tr_close") {
+            trMap = null;
         }
-        else if ((token.type === "thead_close") ||
-            (token.type === "tbody_close")) {
-            tableMap = null;
+        if (!token.map && trMap) {
+            token.map = __spreadArray([], trMap, true);
         }
-        if (tableMap && !token.map) {
-            token.map = __spreadArray([], tableMap);
+        // Adjust maps for math blocks
+        if (helpers.isMathBlock(token) && token.map[1]) {
+            // markdown-it-texmath plugin does not account for math_block_end
+            token.map[1]++;
         }
         // Update token metadata
         if (token.map) {
@@ -1120,8 +1264,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     var enabledRulesPerLineNumber = new Array(1 + frontMatterLines.length);
     // Helper functions
     // eslint-disable-next-line jsdoc/require-jsdoc
-    function handleInlineConfig(perLine, forEachMatch, forEachLine) {
-        var input = perLine ? lines : [lines.join("\n")];
+    function handleInlineConfig(input, forEachMatch, forEachLine) {
         input.forEach(function (line, lineIndex) {
             if (!noInlineConfig) {
                 var match = null;
@@ -1150,6 +1293,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function applyEnableDisable(action, parameter, state) {
+        state = __assign({}, state);
         var enabled = (action.startsWith("ENABLE"));
         var items = parameter ?
             parameter.trim().toUpperCase().split(/\s+/) :
@@ -1159,38 +1303,40 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
                 state[ruleName] = enabled;
             });
         });
+        return state;
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function enableDisableFile(action, parameter) {
         if ((action === "ENABLE-FILE") || (action === "DISABLE-FILE")) {
-            applyEnableDisable(action, parameter, enabledRules);
+            enabledRules = applyEnableDisable(action, parameter, enabledRules);
         }
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function captureRestoreEnableDisable(action, parameter) {
         if (action === "CAPTURE") {
-            capturedRules = __assign({}, enabledRules);
+            capturedRules = enabledRules;
         }
         else if (action === "RESTORE") {
-            enabledRules = __assign({}, capturedRules);
+            enabledRules = capturedRules;
         }
         else if ((action === "ENABLE") || (action === "DISABLE")) {
-            enabledRules = __assign({}, enabledRules);
-            applyEnableDisable(action, parameter, enabledRules);
+            enabledRules = applyEnableDisable(action, parameter, enabledRules);
         }
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function updateLineState() {
-        enabledRulesPerLineNumber.push(__assign({}, enabledRules));
+        enabledRulesPerLineNumber.push(enabledRules);
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function disableNextLine(action, parameter, lineNumber) {
         if (action === "DISABLE-NEXT-LINE") {
-            applyEnableDisable(action, parameter, enabledRulesPerLineNumber[lineNumber + 1] || {});
+            var nextLineNumber = frontMatterLines.length + lineNumber + 1;
+            enabledRulesPerLineNumber[nextLineNumber] =
+                applyEnableDisable(action, parameter, enabledRulesPerLineNumber[nextLineNumber] || {});
         }
     }
     // Handle inline comments
-    handleInlineConfig(false, configureFile);
+    handleInlineConfig([lines.join("\n")], configureFile);
     var effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
     ruleList.forEach(function (rule) {
         var ruleName = rule.names[0].toUpperCase();
@@ -1198,43 +1344,14 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
         enabledRules[ruleName] = !!effectiveConfig[ruleName];
     });
     capturedRules = enabledRules;
-    handleInlineConfig(true, enableDisableFile);
-    handleInlineConfig(true, captureRestoreEnableDisable, updateLineState);
-    handleInlineConfig(true, disableNextLine);
+    handleInlineConfig(lines, enableDisableFile);
+    handleInlineConfig(lines, captureRestoreEnableDisable, updateLineState);
+    handleInlineConfig(lines, disableNextLine);
     // Return results
     return {
         effectiveConfig: effectiveConfig,
         enabledRulesPerLineNumber: enabledRulesPerLineNumber
     };
-}
-/**
- * Compare function for Array.prototype.sort for ascending order of errors.
- *
- * @param {LintError} a First error.
- * @param {LintError} b Second error.
- * @returns {number} Positive value if a>b, negative value if b<a, 0 otherwise.
- */
-function lineNumberComparison(a, b) {
-    return a.lineNumber - b.lineNumber;
-}
-/**
- * Filter function to include everything.
- *
- * @returns {boolean} True.
- */
-function filterAllValues() {
-    return true;
-}
-/**
- * Function to return unique values from a sorted errors array.
- *
- * @param {LintError} value Error instance.
- * @param {number} index Index in array.
- * @param {LintError[]} array Array of errors.
- * @returns {boolean} Filter value.
- */
-function uniqueFilterForSortedErrors(value, index, array) {
-    return (index === 0) || (value.lineNumber > array[index - 1].lineNumber);
 }
 /**
  * Lints a string containing Markdown content.
@@ -1267,27 +1384,25 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     var _a = getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames), effectiveConfig = _a.effectiveConfig, enabledRulesPerLineNumber = _a.enabledRulesPerLineNumber;
     // Create parameters for rules
     var params = {
-        name: name,
-        tokens: tokens,
-        lines: lines,
-        frontMatterLines: frontMatterLines
+        "name": helpers.deepFreeze(name),
+        "tokens": helpers.deepFreeze(tokens),
+        "lines": helpers.deepFreeze(lines),
+        "frontMatterLines": helpers.deepFreeze(frontMatterLines)
     };
     cache.lineMetadata(helpers.getLineMetadata(params));
     cache.flattenedLists(helpers.flattenLists(params.tokens));
-    cache.inlineCodeSpanRanges(helpers.inlineCodeSpanRanges(params.lines));
+    cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(params, cache.lineMetadata()));
     // Function to run for each rule
-    var result = (resultVersion === 0) ? {} : [];
+    var results = [];
     // eslint-disable-next-line jsdoc/require-jsdoc
     function forRule(rule) {
         // Configure rule
-        var ruleNameFriendly = rule.names[0];
-        var ruleName = ruleNameFriendly.toUpperCase();
+        var ruleName = rule.names[0].toUpperCase();
         params.config = effectiveConfig[ruleName];
         // eslint-disable-next-line jsdoc/require-jsdoc
         function throwError(property) {
             throw new Error("Property '" + property + "' of onError parameter is incorrect.");
         }
-        var errors = [];
         // eslint-disable-next-line jsdoc/require-jsdoc
         function onError(errorInfo) {
             if (!errorInfo ||
@@ -1295,6 +1410,10 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                 (errorInfo.lineNumber < 1) ||
                 (errorInfo.lineNumber > lines.length)) {
                 throwError("lineNumber");
+            }
+            var lineNumber = errorInfo.lineNumber + frontMatterLines.length;
+            if (!enabledRulesPerLineNumber[lineNumber][ruleName]) {
+                return;
             }
             if (errorInfo.detail &&
                 !helpers.isString(errorInfo.detail)) {
@@ -1356,83 +1475,115 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
                     cleanFixInfo.insertText = fixInfo.insertText;
                 }
             }
-            errors.push({
-                "lineNumber": errorInfo.lineNumber + frontMatterLines.length,
-                "detail": errorInfo.detail || null,
-                "context": errorInfo.context || null,
-                "range": errorInfo.range ? __spreadArray([], errorInfo.range) : null,
+            results.push({
+                lineNumber: lineNumber,
+                "ruleName": rule.names[0],
+                "ruleNames": rule.names,
+                "ruleDescription": rule.description,
+                "ruleInformation": rule.information ? rule.information.href : null,
+                "errorDetail": errorInfo.detail || null,
+                "errorContext": errorInfo.context || null,
+                "errorRange": errorInfo.range ? __spreadArray([], errorInfo.range, true) : null,
                 "fixInfo": fixInfo ? cleanFixInfo : null
             });
         }
-        // Call (possibly external) rule function
-        if (handleRuleFailures) {
-            try {
-                rule["function"](params, onError);
+        // Call (possibly external) rule function to report errors
+        var catchCallsOnError = function (error) { return onError({
+            "lineNumber": 1,
+            "detail": "This rule threw an exception: ".concat(error.message || error)
+        }); };
+        var invokeRuleFunction = function () { return rule.function(params, onError); };
+        if (rule.asynchronous) {
+            // Asynchronous rule, ensure it returns a Promise
+            var ruleFunctionPromise = Promise.resolve().then(invokeRuleFunction);
+            return handleRuleFailures ?
+                ruleFunctionPromise.catch(catchCallsOnError) :
+                ruleFunctionPromise;
+        }
+        // Synchronous rule
+        try {
+            invokeRuleFunction();
+        }
+        catch (error) {
+            if (handleRuleFailures) {
+                catchCallsOnError(error);
             }
-            catch (error) {
-                onError({
-                    "lineNumber": 1,
-                    "detail": "This rule threw an exception: " + error.message
-                });
+            else {
+                throw error;
+            }
+        }
+        return null;
+    }
+    // eslint-disable-next-line jsdoc/require-jsdoc
+    function formatResults() {
+        // Sort results by rule name by line number
+        results.sort(function (a, b) { return (a.ruleName.localeCompare(b.ruleName) ||
+            a.lineNumber - b.lineNumber); });
+        if (resultVersion < 3) {
+            // Remove fixInfo and multiple errors for the same rule and line number
+            var noPrevious_1 = {
+                "ruleName": null,
+                "lineNumber": -1
+            };
+            results = results.filter(function (error, index, array) {
+                delete error.fixInfo;
+                var previous = array[index - 1] || noPrevious_1;
+                return ((error.ruleName !== previous.ruleName) ||
+                    (error.lineNumber !== previous.lineNumber));
+            });
+        }
+        if (resultVersion === 0) {
+            // Return a dictionary of rule->[line numbers]
+            var dictionary = {};
+            for (var _i = 0, results_1 = results; _i < results_1.length; _i++) {
+                var error = results_1[_i];
+                var ruleLines = dictionary[error.ruleName] || [];
+                ruleLines.push(error.lineNumber);
+                dictionary[error.ruleName] = ruleLines;
+            }
+            // @ts-ignore
+            results = dictionary;
+        }
+        else if (resultVersion === 1) {
+            // Use ruleAlias instead of ruleNames
+            for (var _a = 0, results_2 = results; _a < results_2.length; _a++) {
+                var error = results_2[_a];
+                error.ruleAlias = error.ruleNames[1] || error.ruleName;
+                delete error.ruleNames;
             }
         }
         else {
-            rule["function"](params, onError);
-        }
-        // Record any errors (significant performance benefit from length check)
-        if (errors.length > 0) {
-            errors.sort(lineNumberComparison);
-            var filteredErrors = errors
-                .filter((resultVersion === 3) ?
-                filterAllValues :
-                uniqueFilterForSortedErrors)
-                .filter(function removeDisabledRules(error) {
-                return enabledRulesPerLineNumber[error.lineNumber][ruleName];
-            })
-                .map(function formatResults(error) {
-                if (resultVersion === 0) {
-                    return error.lineNumber;
-                }
-                var errorObject = {};
-                errorObject.lineNumber = error.lineNumber;
-                if (resultVersion === 1) {
-                    errorObject.ruleName = ruleNameFriendly;
-                    errorObject.ruleAlias = rule.names[1] || rule.names[0];
-                }
-                else {
-                    errorObject.ruleNames = rule.names;
-                }
-                errorObject.ruleDescription = rule.description;
-                errorObject.ruleInformation =
-                    rule.information ? rule.information.href : null;
-                errorObject.errorDetail = error.detail;
-                errorObject.errorContext = error.context;
-                errorObject.errorRange = error.range;
-                if (resultVersion === 3) {
-                    errorObject.fixInfo = error.fixInfo;
-                }
-                return errorObject;
-            });
-            if (filteredErrors.length > 0) {
-                if (resultVersion === 0) {
-                    result[ruleNameFriendly] = filteredErrors;
-                }
-                else {
-                    Array.prototype.push.apply(result, filteredErrors);
-                }
+            // resultVersion 2 or 3: Remove unwanted ruleName
+            for (var _b = 0, results_3 = results; _b < results_3.length; _b++) {
+                var error = results_3[_b];
+                delete error.ruleName;
             }
         }
+        return results;
     }
     // Run all rules
+    var ruleListAsync = ruleList.filter(function (rule) { return rule.asynchronous; });
+    var ruleListSync = ruleList.filter(function (rule) { return !rule.asynchronous; });
+    var ruleListAsyncFirst = __spreadArray(__spreadArray([], ruleListAsync, true), ruleListSync, true);
+    var callbackSuccess = function () { return callback(null, formatResults()); };
+    var callbackError = function (error) { return callback(error instanceof Error ? error : new Error(error)); };
     try {
-        ruleList.forEach(forRule);
+        var ruleResults = ruleListAsyncFirst.map(forRule);
+        if (ruleListAsync.length > 0) {
+            Promise.all(ruleResults.slice(0, ruleListAsync.length))
+                .then(callbackSuccess)
+                .catch(callbackError);
+        }
+        else {
+            callbackSuccess();
+        }
     }
     catch (error) {
-        cache.clear();
-        return callback(error);
+        callbackError(error);
     }
-    cache.clear();
-    return callback(null, result);
+    finally {
+        cache.clear();
+    }
 }
 /**
  * Lints a file containing Markdown content.
@@ -1480,13 +1631,13 @@ function lintInput(options, synchronous, callback) {
     callback = callback || function noop() { };
     // eslint-disable-next-line unicorn/prefer-spread
     var ruleList = rules.concat(options.customRules || []);
-    var ruleErr = validateRuleList(ruleList);
+    var ruleErr = validateRuleList(ruleList, synchronous);
     if (ruleErr) {
         return callback(ruleErr);
     }
     var files = [];
     if (Array.isArray(options.files)) {
-        files = __spreadArray([], options.files);
+        files = __spreadArray([], options.files, true);
     }
     else if (options.files) {
         files = [String(options.files)];
@@ -1509,65 +1660,63 @@ function lintInput(options, synchronous, callback) {
     var fs = options.fs || __webpack_require__(/*! fs */ "?ec0a");
     var results = newResults(ruleList);
     var done = false;
-    // Linting of strings is always synchronous
-    var syncItem = null;
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function syncCallback(err, result) {
-        if (err) {
-            done = true;
-            return callback(err);
-        }
-        results[syncItem] = result;
-        return null;
-    }
-    while (!done && (syncItem = stringsKeys.shift())) {
-        lintContent(ruleList, syncItem, strings[syncItem] || "", md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, syncCallback);
-    }
-    if (synchronous) {
-        // Lint files synchronously
-        while (!done && (syncItem = files.shift())) {
-            lintFile(ruleList, syncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, syncCallback);
-        }
-        return done || callback(null, results);
-    }
-    // Lint files asynchronously
     var concurrency = 0;
     // eslint-disable-next-line jsdoc/require-jsdoc
-    function lintConcurrently() {
-        var asyncItem = files.shift();
-        if (done) {
-            // Nothing to do
+    function lintWorker() {
+        var currentItem = null;
+        // eslint-disable-next-line jsdoc/require-jsdoc
+        function lintWorkerCallback(err, result) {
+            concurrency--;
+            if (err) {
+                done = true;
+                return callback(err);
+            }
+            results[currentItem] = result;
+            if (!synchronous) {
+                lintWorker();
+            }
+            return null;
         }
-        else if (asyncItem) {
+        if (done) {
+            // Abort for error or nothing left to do
+        }
+        else if (files.length > 0) {
+            // Lint next file
             concurrency++;
-            lintFile(ruleList, asyncItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, function (err, result) {
-                concurrency--;
-                if (err) {
-                    done = true;
-                    return callback(err);
-                }
-                results[asyncItem] = result;
-                lintConcurrently();
-                return null;
-            });
+            currentItem = files.shift();
+            lintFile(ruleList, currentItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
+        }
+        else if (stringsKeys.length > 0) {
+            // Lint next string
+            concurrency++;
+            currentItem = stringsKeys.shift();
+            lintContent(ruleList, currentItem, strings[currentItem] || "", md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
         }
         else if (concurrency === 0) {
+            // Finish
             done = true;
             return callback(null, results);
         }
         return null;
     }
-    // Testing on a Raspberry Pi 4 Model B with an artificial 5ms file access
-    // delay suggests that a concurrency factor of 8 can eliminate the impact
-    // of that delay (i.e., total time is the same as with no delay).
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
-    lintConcurrently();
+    if (synchronous) {
+        while (!done) {
+            lintWorker();
+        }
+    }
+    else {
+        // Testing on a Raspberry Pi 4 Model B with an artificial 5ms file access
+        // delay suggests that a concurrency factor of 8 can eliminate the impact
+        // of that delay (i.e., total time is the same as with no delay).
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+        lintWorker();
+    }
     return null;
 }
 /**
@@ -1618,19 +1767,20 @@ function parseConfiguration(name, content, parsers) {
     var config = null;
     var message = "";
     var errors = [];
+    var index = 0;
     // Try each parser
     (parsers || [JSON.parse]).every(function (parser) {
         try {
             config = parser(content);
         }
         catch (error) {
-            errors.push(error.message);
+            errors.push("Parser ".concat(index++, ": ").concat(error.message));
         }
         return !config;
     });
     // Message if unable to parse
     if (!config) {
-        errors.unshift("Unable to parse '" + name + "'");
+        errors.unshift("Unable to parse '".concat(name, "'"));
         message = errors.join("; ");
     }
     return {
@@ -1729,9 +1879,9 @@ function readConfig(file, parsers, fs, callback) {
             return callback(new Error(message));
         }
         // Extend configuration
-        var configExtends = config["extends"];
+        var configExtends = config.extends;
         if (configExtends) {
-            delete config["extends"];
+            delete config.extends;
             return resolveConfigExtends(file, configExtends, fs, function (_, resolvedExtends) { return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
                 if (errr) {
                     return callback(errr);
@@ -1776,9 +1926,9 @@ function readConfigSync(file, parsers, fs) {
         throw new Error(message);
     }
     // Extend configuration
-    var configExtends = config["extends"];
+    var configExtends = config.extends;
     if (configExtends) {
-        delete config["extends"];
+        delete config.extends;
         var resolvedExtends = resolveConfigExtendsSync(file, configExtends, fs);
         return __assign(__assign({}, readConfigSync(resolvedExtends, parsers, fs)), config);
     }
@@ -1790,7 +1940,7 @@ function readConfigSync(file, parsers, fs) {
  * @returns {string} SemVer string.
  */
 function getVersion() {
-    return __webpack_require__(/*! ../package.json */ "../package.json").version;
+    return (__webpack_require__(/*! ./constants */ "../lib/constants.js").version);
 }
 // Export a/synchronous/Promise APIs
 markdownlint.sync = markdownlintSync;
@@ -1844,7 +1994,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
+var addErrorDetailIf = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf);
 module.exports = {
     "names": ["MD002", "first-heading-h1", "first-header-h1"],
     "description": "First heading should be a top-level heading",
@@ -1922,7 +2072,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, unorderedListStyleFor = _a.unorderedListStyleFor;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 var expectedStyleToMarker = {
     "dash": "-",
     "plus": "+",
@@ -1967,8 +2117,8 @@ module.exports = {
                     var match = item.line.match(listItemMarkerRe);
                     if (match) {
                         var column = match.index + 1;
-                        var length_1 = match[0].length;
-                        range = [column, length_1];
+                        var length = match[0].length;
+                        range = [column, length];
                         fixInfo = {
                             "editColumn": match[1].length + 1,
                             "deleteCount": 1,
@@ -1995,7 +2145,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD005", "list-indent"],
     "description": "Inconsistent indentation for list items at the same level",
@@ -2025,8 +2175,8 @@ module.exports = {
                         }
                         else {
                             var detail = endMatching ?
-                                "Expected: (" + expectedEnd + "); Actual: (" + actualEnd + ")" :
-                                "Expected: " + expectedIndent + "; Actual: " + actualIndent;
+                                "Expected: (".concat(expectedEnd, "); Actual: (").concat(actualEnd, ")") :
+                                "Expected: ".concat(expectedIndent, "; Actual: ").concat(actualIndent);
                             var expected = endMatching ?
                                 expectedEnd - markerLength :
                                 expectedIndent;
@@ -2059,7 +2209,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD006", "ul-start-left"],
     "description": "Consider starting bulleted lists at the beginning of the line",
@@ -2091,7 +2241,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, indentFor = _a.indentFor, listItemMarkerRe = _a.listItemMarkerRe;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD007", "ul-indent"],
     "description": "Unordered list indentation",
@@ -2099,12 +2249,13 @@ module.exports = {
     "function": function MD007(params, onError) {
         var indent = Number(params.config.indent || 2);
         var startIndented = !!params.config.start_indented;
+        var startIndent = Number(params.config.start_indent || indent);
         flattenedLists().forEach(function (list) {
             if (list.unordered && list.parentsUnordered) {
                 list.items.forEach(function (item) {
                     var lineNumber = item.lineNumber, line = item.line;
-                    var expectedNesting = list.nesting + (startIndented ? 1 : 0);
-                    var expectedIndent = expectedNesting * indent;
+                    var expectedIndent = (startIndented ? startIndent : 0) +
+                        (list.nesting * indent);
                     var actualIndent = indentFor(item);
                     var range = null;
                     var editColumn = 1;
@@ -2137,7 +2288,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, filterTokens = _a.filterTokens, forEachInlineCodeSpan = _a.forEachInlineCodeSpan, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, newLineRe = _a.newLineRe, numericSortAscending = _a.numericSortAscending;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD009", "no-trailing-spaces"],
     "description": "Trailing spaces",
@@ -2212,8 +2363,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 var tabRe = /\t+/g;
 module.exports = {
     "names": ["MD010", "no-hard-tabs"],
@@ -2221,22 +2372,26 @@ module.exports = {
     "tags": ["whitespace", "hard_tab"],
     "function": function MD010(params, onError) {
         var codeBlocks = params.config.code_blocks;
-        var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
+        var includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
         var spacesPerTab = params.config.spaces_per_tab;
         var spaceMultiplier = (spacesPerTab === undefined) ?
             1 :
             Math.max(0, Number(spacesPerTab));
+        var exclusions = includeCode ? [] : codeBlockAndSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
-            if (!inCode || includeCodeBlocks) {
+            if (includeCode || !inCode) {
                 var match = null;
                 while ((match = tabRe.exec(line)) !== null) {
-                    var column = match.index + 1;
-                    var length_1 = match[0].length;
-                    addError(onError, lineIndex + 1, "Column: " + column, null, [column, length_1], {
-                        "editColumn": column,
-                        "deleteCount": length_1,
-                        "insertText": "".padEnd(length_1 * spaceMultiplier)
-                    });
+                    var index = match.index;
+                    var column = index + 1;
+                    var length = match[0].length;
+                    if (!overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                        addError(onError, lineIndex + 1, "Column: " + column, null, [column, length], {
+                            "editColumn": column,
+                            "deleteCount": length,
+                            "insertText": "".padEnd(length * spaceMultiplier)
+                        });
+                    }
                 }
             }
         });
@@ -2256,28 +2411,28 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
-var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), inlineCodeSpanRanges = _b.inlineCodeSpanRanges, lineMetadata = _b.lineMetadata;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 var reversedLinkRe = /(^|[^\\])\(([^)]+)\)\[([^\]^][^\]]*)](?!\()/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
     "description": "Reversed link syntax",
     "tags": ["links"],
     "function": function MD011(params, onError) {
-        var exclusions = inlineCodeSpanRanges();
+        var exclusions = codeBlockAndSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
             if (!inCode && !onFence) {
                 var match = null;
                 while ((match = reversedLinkRe.exec(line)) !== null) {
                     var reversedLink = match[0], preChar = match[1], linkText = match[2], linkDestination = match[3];
                     var index = match.index + preChar.length;
-                    var length_1 = match[0].length - preChar.length;
+                    var length = match[0].length - preChar.length;
                     if (!linkText.endsWith("\\") &&
                         !linkDestination.endsWith("\\") &&
-                        !overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
-                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length_1], {
+                        !overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length], {
                             "editColumn": index + 1,
-                            "deleteCount": length_1,
-                            "insertText": "[" + linkText + "](" + linkDestination + ")"
+                            "deleteCount": length,
+                            "insertText": "[".concat(linkText, "](").concat(linkDestination, ")")
                         });
                     }
                 }
@@ -2299,7 +2454,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD012", "no-multiple-blanks"],
     "description": "Multiple consecutive blank lines",
@@ -2331,7 +2486,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var longLineRePrefix = "^.{";
 var longLineRePostfixRelaxed = "}.*\\s.*$";
 var longLineRePostfixStrict = "}.+$";
@@ -2441,8 +2596,8 @@ module.exports = {
                         var match = dollarCommandRe.exec(line);
                         if (match) {
                             var column = match[1].length + 1;
-                            var length_1 = match[2].length;
-                            dollarInstances.push([i, lineTrim, column, length_1]);
+                            var length = match[2].length;
+                            dollarInstances.push([i, lineTrim, column, length]);
                         }
                         else {
                             allDollars = false;
@@ -2476,7 +2631,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD018", "no-missing-space-atx"],
     "description": "No space after hash on atx style heading",
@@ -2544,7 +2699,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 module.exports = {
     "names": ["MD020", "no-missing-space-closed-atx"],
     "description": "No space inside hashes on closed atx style heading",
@@ -2559,7 +2714,7 @@ module.exports = {
                     var rightHashLength = rightHash.length;
                     var left = !leftSpaceLength;
                     var right = !rightSpaceLength || rightEscape;
-                    var rightEscapeReplacement = rightEscape ? rightEscape + " " : "";
+                    var rightEscapeReplacement = rightEscape ? "".concat(rightEscape, " ") : "";
                     if (left || right) {
                         var range = left ?
                             [
@@ -2573,7 +2728,7 @@ module.exports = {
                         addErrorContext(onError, lineIndex + 1, line.trim(), left, right, range, {
                             "editColumn": 1,
                             "deleteCount": line.length,
-                            "insertText": leftHash + " " + content + " " + rightEscapeReplacement + rightHash
+                            "insertText": "".concat(leftHash, " ").concat(content, " ").concat(rightEscapeReplacement).concat(rightHash)
                         });
                     }
                 }
@@ -2609,7 +2764,7 @@ module.exports = {
                     var left = leftSpaceLength > 1;
                     var right = rightSpaceLength > 1;
                     if (left || right) {
-                        var length_1 = line.length;
+                        var length = line.length;
                         var leftHashLength = leftHash.length;
                         var rightHashLength = rightHash.length;
                         var range = left ?
@@ -2618,13 +2773,13 @@ module.exports = {
                                 leftHashLength + leftSpaceLength + 1
                             ] :
                             [
-                                length_1 - trailSpaceLength - rightHashLength - rightSpaceLength,
+                                length - trailSpaceLength - rightHashLength - rightSpaceLength,
                                 rightSpaceLength + rightHashLength + 1
                             ];
                         addErrorContext(onError, lineNumber, line.trim(), left, right, range, {
                             "editColumn": 1,
-                            "deleteCount": length_1,
-                            "insertText": leftHash + " " + content + " " + rightHash
+                            "deleteCount": length,
+                            "insertText": "".concat(leftHash, " ").concat(content, " ").concat(rightHash)
                         });
                     }
                 }
@@ -2829,10 +2984,10 @@ module.exports = {
             if (match && !endOfLineHtmlEntityRe.test(trimmedLine)) {
                 var fullMatch = match[0];
                 var column = match.index + 1;
-                var length_1 = fullMatch.length;
-                addError(onError, lineNumber, "Punctuation: '" + fullMatch + "'", null, [column, length_1], {
+                var length = fullMatch.length;
+                addError(onError, lineNumber, "Punctuation: '".concat(fullMatch, "'"), null, [column, length], {
                     "editColumn": column,
-                    "deleteCount": length_1
+                    "deleteCount": length
                 });
             }
         });
@@ -2906,7 +3061,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addError = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addError;
+var addError = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addError);
 module.exports = {
     "names": ["MD028", "no-blanks-blockquote"],
     "description": "Blank line inside blockquote",
@@ -2942,7 +3097,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, listItemMarkerRe = _a.listItemMarkerRe, orderedListItemMarkerRe = _a.orderedListItemMarkerRe, rangeFromRegExp = _a.rangeFromRegExp;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 var listStyleExamples = {
     "one": "1/1/1",
     "ordered": "1/2/3",
@@ -3011,8 +3166,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var addErrorDetailIf = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf);
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 module.exports = {
     "names": ["MD030", "list-marker-space"],
     "description": "Spaces after list markers",
@@ -3061,7 +3216,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var codeFencePrefixRe = /^(.*?)\s*[`~]/;
 module.exports = {
     "names": ["MD031", "blanks-around-fences"],
@@ -3080,7 +3235,7 @@ module.exports = {
                 var _a = line.match(codeFencePrefixRe) || [], prefix = _a[1];
                 var fixInfo = (prefix === undefined) ? null : {
                     "lineNumber": i + (onTopFence ? 1 : 2),
-                    "insertText": prefix + "\n"
+                    "insertText": "".concat(prefix, "\n")
                 };
                 addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, fixInfo);
             }
@@ -3101,7 +3256,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, isBlankLine = _a.isBlankLine;
-var flattenedLists = __webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists;
+var flattenedLists = (__webpack_require__(/*! ./cache */ "../lib/cache.js").flattenedLists);
 var quotePrefixRe = /^[>\s]*/;
 module.exports = {
     "names": ["MD032", "blanks-around-lists"],
@@ -3115,7 +3270,7 @@ module.exports = {
                 var line = lines[firstIndex];
                 var quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, firstIndex + 1, line.trim(), null, null, null, {
-                    "insertText": quotePrefix + "\n"
+                    "insertText": "".concat(quotePrefix, "\n")
                 });
             }
             var lastIndex = list.lastLineIndex - 1;
@@ -3124,7 +3279,7 @@ module.exports = {
                 var quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, lastIndex + 1, line.trim(), null, null, null, {
                     "lineNumber": lastIndex + 2,
-                    "insertText": quotePrefix + "\n"
+                    "insertText": "".concat(quotePrefix, "\n")
                 });
             }
         });
@@ -3143,11 +3298,10 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, unescapeMarkdown = _a.unescapeMarkdown;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange, unescapeMarkdown = _a.unescapeMarkdown;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
-var inlineCodeRe = /^[^`]*(`+[^`]+`+[^`]+)*`+[^`]*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
 var emailAddressRe = 
 // eslint-disable-next-line max-len
@@ -3160,6 +3314,7 @@ module.exports = {
         var allowedElements = params.config.allowed_elements;
         allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
         allowedElements = allowedElements.map(function (element) { return element.toLowerCase(); });
+        var exclusions = codeBlockAndSpanRanges();
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             var match = null;
             // eslint-disable-next-line no-unmodified-loop-condition
@@ -3167,12 +3322,12 @@ module.exports = {
                 var tag = match[0], content = match[1], element = match[2];
                 if (!allowedElements.includes(element.toLowerCase()) &&
                     !tag.endsWith("\\>") &&
-                    !emailAddressRe.test(content)) {
+                    !emailAddressRe.test(content) &&
+                    !overlapsAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
                     var prefix = line.substring(0, match.index);
-                    if (!linkDestinationRe.test(prefix) && !inlineCodeRe.test(prefix)) {
+                    if (!linkDestinationRe.test(prefix)) {
                         var unescaped = unescapeMarkdown(prefix + "<", "_");
-                        if (!unescaped.endsWith("_") &&
-                            ((unescaped + "`").match(/`/g).length % 2)) {
+                        if (!unescaped.endsWith("_")) {
                             addError(onError, lineIndex + 1, "Element: " + element, null, [match.index + 1, tag.length]);
                         }
                     }
@@ -3232,7 +3387,7 @@ module.exports = {
                             var fixInfo = range ? {
                                 "editColumn": range[0],
                                 "deleteCount": range[1],
-                                "insertText": "<" + bareUrl + ">"
+                                "insertText": "<".concat(bareUrl, ">")
                             } : null;
                             addErrorContext(onError, lineNumber, bareUrl, null, null, range, fixInfo);
                         }
@@ -3262,12 +3417,12 @@ module.exports = {
     "tags": ["hr"],
     "function": function MD035(params, onError) {
         var style = String(params.config.style || "consistent");
-        filterTokens(params, "hr", function forToken(token) {
-            var lineTrim = token.line.trim();
+        filterTokens(params, "hr", function (token) {
+            var lineNumber = token.lineNumber, markup = token.markup;
             if (style === "consistent") {
-                style = lineTrim;
+                style = markup;
             }
-            addErrorDetailIf(onError, token.lineNumber, style, lineTrim);
+            addErrorDetailIf(onError, lineNumber, style, markup);
         });
     }
 };
@@ -3350,8 +3505,9 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, emphasisMarkersInContent = _a.emphasisMarkersInContent, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
-var lineMetadata = __webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata;
+var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
+var embeddedUnderscoreRe = /([A-Za-z0-9])_([A-Za-z0-9])/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
 var rightSpaceRe = /\s+$/;
@@ -3390,20 +3546,20 @@ module.exports = {
                 var contextEnd = matchIndex + contextLength;
                 var context = line.substring(contextStart, contextEnd);
                 var column = contextStart + 1;
-                var length_1 = contextEnd - contextStart;
+                var length = contextEnd - contextStart;
                 var leftMarker = line.substring(contextStart, emphasisIndex);
                 var rightMarker = match ? (match[2] || match[3]) : "";
-                var fixedText = "" + leftMarker + content.trim() + rightMarker;
+                var fixedText = "".concat(leftMarker).concat(content.trim()).concat(rightMarker);
                 return [
                     onError,
                     lineIndex + 1,
                     context,
                     leftSpace,
                     rightSpace,
-                    [column, length_1],
+                    [column, length],
                     {
                         "editColumn": column,
-                        "deleteCount": length_1,
+                        "deleteCount": length,
                         "insertText": fixedText
                     }
                 ];
@@ -3431,14 +3587,15 @@ module.exports = {
                 // Emphasis has no meaning here
                 return;
             }
+            var patchedLine = line.replace(embeddedUnderscoreRe, "$1 $2");
             if (onItemStart) {
                 // Trim overlapping '*' list item marker
-                line = line.replace(asteriskListItemMarkerRe, "$1 $2");
+                patchedLine = patchedLine.replace(asteriskListItemMarkerRe, "$1 $2");
             }
             var match = null;
             // Match all emphasis-looking runs in the line...
-            while ((match = emphasisRe.exec(line))) {
-                var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex] || [];
+            while ((match = emphasisRe.exec(patchedLine))) {
+                var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex];
                 var matchIndex = match.index + match[1].length;
                 if (ignoreMarkersForLine.includes(matchIndex)) {
                     // Ignore emphasis markers inside code spans and links
@@ -3581,7 +3738,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens;
-var spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=\(\S*\))/;
+var spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=((?:\([^)]*\))|(?:\[[^\]]*\])))/;
 module.exports = {
     "names": ["MD039", "no-space-in-links"],
     "description": "Spaces inside link text",
@@ -3610,16 +3767,16 @@ module.exports = {
                         var match = line.slice(lineIndex).match(spaceInLinkRe);
                         if (match) {
                             var column = match.index + lineIndex + 1;
-                            var length_1 = match[0].length;
-                            range = [column, length_1];
+                            var length = match[0].length;
+                            range = [column, length];
                             fixInfo = {
                                 "editColumn": column + 1,
-                                "deleteCount": length_1 - 2,
+                                "deleteCount": length - 2,
                                 "insertText": linkText.trim()
                             };
-                            lineIndex = column + length_1 - 1;
+                            lineIndex = column + length - 1;
                         }
-                        addErrorContext(onError, lineNumber, "[" + linkText + "]", left, right, range, fixInfo);
+                        addErrorContext(onError, lineNumber, "[".concat(linkText, "]"), left, right, range, fixInfo);
                     }
                 }
                 else if ((type === "softbreak") || (type === "hardbreak")) {
@@ -3682,7 +3839,7 @@ module.exports = {
         var tag = "h" + level;
         var foundFrontMatterTitle = frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title);
         if (!foundFrontMatterTitle) {
-            var htmlHeadingRe_1 = new RegExp("^<h" + level + "[ />]", "i");
+            var htmlHeadingRe_1 = new RegExp("^<h".concat(level, "[ />]"), "i");
             params.tokens.every(function (token) {
                 var isError = false;
                 if (token.type === "html_block") {
@@ -3784,7 +3941,6 @@ module.exports = {
             var matchAny_1 = false;
             var hasError_1 = false;
             var anyHeadings_1 = false;
-            // eslint-disable-next-line func-style
             var getExpected_1 = function () { return requiredHeadings[i_1++] || "[None]"; };
             forEachHeading(params, function (heading, content) {
                 if (!hasError_1) {
@@ -3837,7 +3993,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe;
-var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), inlineCodeSpanRanges = _b.inlineCodeSpanRanges, lineMetadata = _b.lineMetadata;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
     "description": "Proper names should have the correct capitalization",
@@ -3867,13 +4023,13 @@ module.exports = {
             }
         });
         if (!includeCodeBlocks) {
-            exclusions.push.apply(exclusions, inlineCodeSpanRanges());
+            exclusions.push.apply(exclusions, codeBlockAndSpanRanges());
         }
-        var _loop_1 = function (name_1) {
-            var escapedName = escapeForRegExp(name_1);
-            var startNamePattern = /^\W/.test(name_1) ? "" : "\\b_*";
-            var endNamePattern = /\W$/.test(name_1) ? "" : "_*\\b";
-            var namePattern = "(" + startNamePattern + ")(" + escapedName + ")" + endNamePattern;
+        var _loop_1 = function (name) {
+            var escapedName = escapeForRegExp(name);
+            var startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
+            var endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
+            var namePattern = "(".concat(startNamePattern, ")(").concat(escapedName, ")").concat(endNamePattern);
             var nameRe = new RegExp(namePattern, "gi");
             forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
                 if (includeCodeBlocks || (!inCode && !onFence)) {
@@ -3881,22 +4037,22 @@ module.exports = {
                     while ((match = nameRe.exec(line)) !== null) {
                         var leftMatch = match[1], nameMatch = match[2];
                         var index = match.index + leftMatch.length;
-                        var length_1 = nameMatch.length;
-                        if (!overlapsAnyRange(exclusions, lineIndex, index, length_1)) {
-                            addErrorDetailIf(onError, lineIndex + 1, name_1, nameMatch, null, null, [index + 1, length_1], {
+                        var length = nameMatch.length;
+                        if (!overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                            addErrorDetailIf(onError, lineIndex + 1, name, nameMatch, null, null, [index + 1, length], {
                                 "editColumn": index + 1,
-                                "deleteCount": length_1,
-                                "insertText": name_1
+                                "deleteCount": length,
+                                "insertText": name
                             });
                         }
-                        exclusions.push([lineIndex, index, length_1]);
+                        exclusions.push([lineIndex, index, length]);
                     }
                 }
             });
         };
         for (var _i = 0, names_1 = names; _i < names_1.length; _i++) {
-            var name_1 = names_1[_i];
-            _loop_1(name_1);
+            var name = names_1[_i];
+            _loop_1(name);
         }
     }
 };
@@ -3939,7 +4095,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var addErrorDetailIf = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf;
+var addErrorDetailIf = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addErrorDetailIf);
 var tokenTypeToStyle = {
     "fence": "fenced",
     "code_block": "indented"
@@ -4026,6 +4182,88 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md049.js":
+/*!***********************!*\
+  !*** ../lib/md049.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild, getNextChildToken = _a.getNextChildToken, getRangeAndFixInfoIfFound = _a.getRangeAndFixInfoIfFound;
+module.exports = {
+    "names": ["MD049", "emphasis-style"],
+    "description": "Emphasis style should be consistent",
+    "tags": ["emphasis"],
+    "function": function MD049(params, onError) {
+        var expectedStyle = String(params.config.style || "consistent");
+        forEachInlineChild(params, "em_open", function (token, parent) {
+            var lineNumber = token.lineNumber, markup = token.markup;
+            var markupStyle = emphasisOrStrongStyleFor(markup);
+            if (expectedStyle === "consistent") {
+                expectedStyle = markupStyle;
+            }
+            if (expectedStyle !== markupStyle) {
+                var rangeAndFixInfo = {};
+                var contentToken = getNextChildToken(parent, token, "text", "em_close");
+                if (contentToken) {
+                    var content = contentToken.content;
+                    var actual = "".concat(markup).concat(content).concat(markup);
+                    var expectedMarkup = (expectedStyle === "asterisk") ? "*" : "_";
+                    var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
+                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
+                }
+                addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+            }
+        });
+    }
+};
+
+
+/***/ }),
+
+/***/ "../lib/md050.js":
+/*!***********************!*\
+  !*** ../lib/md050.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild, getNextChildToken = _a.getNextChildToken, getRangeAndFixInfoIfFound = _a.getRangeAndFixInfoIfFound;
+module.exports = {
+    "names": ["MD050", "strong-style"],
+    "description": "Strong style should be consistent",
+    "tags": ["emphasis"],
+    "function": function MD050(params, onError) {
+        var expectedStyle = String(params.config.style || "consistent");
+        forEachInlineChild(params, "strong_open", function (token, parent) {
+            var lineNumber = token.lineNumber, markup = token.markup;
+            var markupStyle = emphasisOrStrongStyleFor(markup);
+            if (expectedStyle === "consistent") {
+                expectedStyle = markupStyle;
+            }
+            if (expectedStyle !== markupStyle) {
+                var rangeAndFixInfo = {};
+                var contentToken = getNextChildToken(parent, token, "text", "strong_close");
+                if (contentToken) {
+                    var content = contentToken.content;
+                    var actual = "".concat(markup).concat(content).concat(markup);
+                    var expectedMarkup = (expectedStyle === "asterisk") ? "**" : "__";
+                    var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
+                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
+                }
+                addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+            }
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -4035,9 +4273,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var packageJson = __webpack_require__(/*! ../package.json */ "../package.json");
-var homepage = packageJson.homepage;
-var version = packageJson.version;
+var _a = __webpack_require__(/*! ./constants */ "../lib/constants.js"), homepage = _a.homepage, version = _a.version;
 var rules = [
     __webpack_require__(/*! ./md001 */ "../lib/md001.js"),
     __webpack_require__(/*! ./md002 */ "../lib/md002.js"),
@@ -4082,13 +4318,15 @@ var rules = [
     __webpack_require__(/*! ./md045 */ "../lib/md045.js"),
     __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
-    __webpack_require__(/*! ./md048 */ "../lib/md048.js")
+    __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
+    __webpack_require__(/*! ./md049 */ "../lib/md049.js"),
+    __webpack_require__(/*! ./md050 */ "../lib/md050.js")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
     // eslint-disable-next-line dot-notation
     rule["information"] =
-        new URL(homepage + "/blob/v" + version + "/doc/Rules.md#" + name);
+        new URL("".concat(homepage, "/blob/v").concat(version, "/doc/Rules.md#").concat(name));
 });
 module.exports = rules;
 
@@ -4103,16 +4341,6 @@ module.exports = rules;
 
 "use strict";
 module.exports = markdownit;
-
-/***/ }),
-
-/***/ "?591e":
-/*!********************!*\
-  !*** os (ignored) ***!
-  \********************/
-/***/ (() => {
-
-/* (ignored) */
 
 /***/ }),
 
@@ -4143,17 +4371,6 @@ module.exports = markdownit;
 /***/ (() => {
 
 /* (ignored) */
-
-/***/ }),
-
-/***/ "../package.json":
-/*!***********************!*\
-  !*** ../package.json ***!
-  \***********************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = JSON.parse('{"name":"markdownlint","version":"0.24.0","description":"A Node.js style checker and lint tool for Markdown/CommonMark files.","main":"lib/markdownlint.js","types":"lib/markdownlint.d.ts","author":"David Anson (https://dlaa.me/)","license":"MIT","homepage":"https://github.com/DavidAnson/markdownlint","repository":{"type":"git","url":"https://github.com/DavidAnson/markdownlint.git"},"bugs":"https://github.com/DavidAnson/markdownlint/issues","scripts":{"build-config":"npm run build-config-schema && npm run build-config-example","build-config-example":"node schema/build-config-example.js","build-config-schema":"node schema/build-config-schema.js","build-declaration":"tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && node scripts delete \'lib/{c,md,r}*.d.ts\' \'helpers/*.d.ts\'","build-demo":"node scripts copy node_modules/markdown-it/dist/markdown-it.min.js demo/markdown-it.min.js && cd demo && webpack --no-stats","build-example":"npm install --no-save --ignore-scripts grunt grunt-cli gulp through2","ci":"npm-run-all --continue-on-error --parallel declaration lint --parallel build-config build-demo test-cover && git diff --exit-code","clone-test-repos-dotnet-docs":"cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet","clone-test-repos-eslint-eslint":"cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet","clone-test-repos-mkdocs-mkdocs":"cd test-repos && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet","clone-test-repos-mochajs-mocha":"cd test-repos && git clone https://github.com/mochajs/mocha mochajs-mocha --depth 1 --no-tags --quiet","clone-test-repos-pi-hole-docs":"cd test-repos && git clone https://github.com/pi-hole/docs pi-hole-docs --depth 1 --no-tags --quiet","clone-test-repos-v8-v8-dev":"cd test-repos && git clone https://github.com/v8/v8.dev v8-v8-dev --depth 1 --no-tags --quiet","clone-test-repos-webhintio-hint":"cd test-repos && git clone https://github.com/webhintio/hint webhintio-hint --depth 1 --no-tags --quiet","clone-test-repos-webpack-webpack-js-org":"cd test-repos && git clone https://github.com/webpack/webpack.js.org webpack-webpack-js-org --depth 1 --no-tags --quiet","clone-test-repos":"mkdir test-repos && cd test-repos && npm run clone-test-repos-eslint-eslint && npm run clone-test-repos-mkdocs-mkdocs && npm run clone-test-repos-mochajs-mocha && npm run clone-test-repos-pi-hole-docs && npm run clone-test-repos-webhintio-hint && npm run clone-test-repos-webpack-webpack-js-org","clone-test-repos-large":"npm run clone-test-repos && cd test-repos && npm run clone-test-repos-dotnet-docs && npm run clone-test-repos-v8-v8-dev","declaration":"npm run build-declaration && npm run test-declaration","example":"cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint","lint":"eslint --max-warnings 0 .","lint-test-repos":"ava --timeout=5m test/markdownlint-test-repos.js","test":"ava test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js","test-cover":"c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test","test-declaration":"cd example/typescript && tsc && node type-check.js","test-extra":"ava --timeout=5m test/markdownlint-test-extra.js"},"engines":{"node":">=10"},"dependencies":{"markdown-it":"12.2.0"},"devDependencies":{"ava":"~3.15.0","c8":"~7.8.0","eslint":"~7.32.0","eslint-plugin-jsdoc":"~36.0.7","eslint-plugin-node":"~11.1.0","eslint-plugin-unicorn":"~35.0.0","globby":"~11.0.4","js-yaml":"~4.1.0","markdown-it-for-inline":"~0.1.1","markdown-it-sub":"~1.0.0","markdown-it-sup":"~1.0.0","markdown-it-texmath":"~0.9.1","markdownlint-rule-helpers":"~0.14.0","npm-run-all":"~4.1.5","strip-json-comments":"~3.1.1","toml":"~3.0.0","ts-loader":"~9.2.5","tv4":"~1.3.0","typescript":"~4.3.5","webpack":"~5.51.1","webpack-cli":"~4.8.0"},"keywords":["markdown","lint","md","CommonMark","markdownlint"]}');
 
 /***/ })
 

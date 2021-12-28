@@ -1,27 +1,60 @@
 {
-  "parserOptions": {
-    "ecmaVersion": 2019
-  },
   "env": {
     "node": true,
     "es6": true
+  },
+  "extends": [
+    "eslint:all",
+    "plugin:jsdoc/recommended"
+  ],
+  "ignorePatterns": [
+    "demo/markdown-it.min.js",
+    "demo/markdownlint-browser.js",
+    "demo/markdownlint-browser.min.js",
+    "demo/markdownlint-rule-helpers-browser.js",
+    "demo/markdownlint-rule-helpers-browser.min.js",
+    "example/typescript/type-check.js",
+    "test-repos/"
+  ],
+  "overrides": [
+    {
+      "files": [
+        "demo/*.js"
+      ],
+      "env": {
+        "browser": true
+      },
+      "rules": {
+        "jsdoc/require-jsdoc": "off",
+        "unicorn/prefer-query-selector": "off",
+        "unicorn/prefer-add-event-listener": "off",
+        "no-console": "off",
+        "no-shadow": "off",
+        "no-var": "off"
+      }
+    },
+    {
+      "files": [
+        "example/*.js"
+      ],
+      "rules": {
+        "node/no-missing-require": "off",
+        "node/no-extraneous-require": "off",
+        "no-console": "off",
+        "no-invalid-this": "off",
+        "no-shadow": "off",
+        "object-property-newline": "off"
+      }
+    }
+  ],
+  "parserOptions": {
+    "ecmaVersion": 2020
   },
   "plugins": [
     "jsdoc",
     "node",
     "unicorn"
   ],
-  "extends": [
-    "eslint:all",
-    "plugin:jsdoc/recommended"
-  ],
-  "settings": {
-    "jsdoc": {
-      "preferredTypes": {
-        "object": "Object"
-      }
-    }
-  },
   "reportUnusedDisableDirectives": true,
   "rules": {
     "array-bracket-spacing": ["error", "always"],
@@ -29,7 +62,7 @@
     "capitalized-comments": "off",
     "complexity": "off",
     "dot-location": ["error", "property"],
-    "func-style": ["error", "declaration"],
+    "func-style": "off",
     "function-call-argument-newline": "off",
     "function-paren-newline": "off",
     "global-require": "off",
@@ -72,7 +105,7 @@
 
     "jsdoc/check-access": "error",
     "jsdoc/check-alignment": "error",
-    "jsdoc/check-examples": "error",
+    "jsdoc/check-examples": "off",
     "jsdoc/check-indentation": "error",
     "jsdoc/check-line-alignment": "error",
     "jsdoc/check-param-names": "error",
@@ -174,11 +207,14 @@
     "unicorn/no-array-method-this-argument": "error",
     "unicorn/no-array-push-push": "error",
     "unicorn/no-array-reduce": "error",
+    "unicorn/no-await-expression-member": "error",
     "unicorn/no-console-spaces": "error",
     "unicorn/no-document-cookie": "error",
+    "unicorn/no-empty-file": "error",
     "unicorn/no-for-loop": "error",
     "unicorn/no-hex-escape": "error",
     "unicorn/no-instanceof-array": "error",
+    "unicorn/no-invalid-remove-event-listener": "error",
     "unicorn/no-keyword-prefix": "off",
     "unicorn/no-lonely-if": "error",
     "unicorn/no-nested-ternary": "error",
@@ -192,6 +228,7 @@
     "unicorn/no-unreadable-array-destructuring": "error",
     "unicorn/no-unsafe-regex": "off",
     "unicorn/no-unused-properties": "error",
+    "unicorn/no-useless-fallback-in-spread": "error",
     "unicorn/no-useless-length-check": "error",
     "unicorn/no-useless-spread": "error",
     "unicorn/no-useless-undefined": "error",
@@ -205,12 +242,14 @@
     "unicorn/prefer-array-index-of": "error",
     "unicorn/prefer-array-some": "error",
     "unicorn/prefer-at": "off",
+    "unicorn/prefer-code-point": "error",
     "unicorn/prefer-date-now": "error",
     "unicorn/prefer-default-parameters": "error",
     "unicorn/prefer-dom-node-append": "error",
     "unicorn/prefer-dom-node-dataset": "error",
     "unicorn/prefer-dom-node-remove": "error",
     "unicorn/prefer-dom-node-text-content": "error",
+    "unicorn/prefer-export-from": "error",
     "unicorn/prefer-includes": "error",
     "unicorn/prefer-keyboard-event-key": "error",
     "unicorn/prefer-math-trunc": "error",
@@ -241,37 +280,14 @@
     "unicorn/require-number-to-fixed-digits-argument": "error",
     "unicorn/require-post-message-target-origin": "error",
     "unicorn/string-content": "error",
+    "unicorn/template-indent": "error",
     "unicorn/throw-new-error": "error"
   },
-  "overrides": [
-    {
-      "files": [
-        "demo/*.js"
-      ],
-      "env": {
-        "browser": true
-      },
-      "rules": {
-        "jsdoc/require-jsdoc": "off",
-        "unicorn/prefer-query-selector": "off",
-        "unicorn/prefer-add-event-listener": "off",
-        "no-console": "off",
-        "no-shadow": "off",
-        "no-var": "off"
-      }
-    },
-    {
-      "files": [
-        "example/*.js"
-      ],
-      "rules": {
-        "node/no-missing-require": "off",
-        "node/no-extraneous-require": "off",
-        "no-console": "off",
-        "no-invalid-this": "off",
-        "no-shadow": "off",
-        "object-property-newline": "off"
+  "settings": {
+    "jsdoc": {
+      "preferredTypes": {
+        "object": "Object"
       }
     }
-  ]
+  }
 }

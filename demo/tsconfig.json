@@ -1,8 +1,7 @@
 {
   "compilerOptions": {
     "allowJs": true,
-    "outDir": "unused",
-    "resolveJsonModule": true
+    "outDir": "unused"
   },
   "include": [
     "../lib/*.js"

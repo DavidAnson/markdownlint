@@ -28,4 +28,18 @@ Fenced code
 Fenced code
 ~~~
 
+Mixed *emphasis* on *this* line *with* multiple *issues*
+
+Mixed __strong emphasis__ on __this__ line __with__ multiple __issues__
+
+Inconsistent
+emphasis _text
+spanning_ many
+lines
+
+Inconsistent
+strong **emphasis
+spanning** many
+lines
+
 Missing newline character

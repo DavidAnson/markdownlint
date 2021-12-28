@@ -41,7 +41,8 @@ A rule is implemented as an `Object` with one optional and four required propert
 - `description` is a required `String` value that describes the rule in output messages.
 - `information` is an optional (absolute) `URL` of a link to more information about the rule.
 - `tags` is a required `Array` of `String` values that groups related rules for easier customization.
-- `function` is a required synchronous `Function` that implements the rule and is passed two parameters:
+- `asynchronous` is an optional `Boolean` value that indicates whether the rule returns a `Promise` and runs asynchronously.
+- `function` is a required `Function` that implements the rule and is passed two parameters:
   - `params` is an `Object` with properties that describe the content being analyzed:
     - `name` is a `String` that identifies the input file/string.
     - `tokens` is an `Array` of [`markdown-it` `Token` objects](https://markdown-it.github.io/markdown-it/#Token)
@@ -51,7 +52,7 @@ A rule is implemented as an `Object` with one optional and four required propert
     - `config` is an `Object` corresponding to the rule's entry in `options.config` (if present).
   - `onError` is a function that takes a single `Object` parameter with one required and four optional properties:
     - `lineNumber` is a required `Number` specifying the 1-based line number of the error.
-    - `details` is an optional `String` with information about what caused the error.
+    - `detail` is an optional `String` with information about what caused the error.
     - `context` is an optional `String` with relevant text surrounding the error location.
     - `range` is an optional `Array` with two `Number` values identifying the 1-based column and length of the error.
     - `fixInfo` is an optional `Object` with information about how to fix the error (all properties are optional, but
@@ -66,15 +67,25 @@ A rule is implemented as an `Object` with one optional and four required propert
 The collection of helper functions shared by the built-in rules is available for use by custom rules in the
 [markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
 
+### Asynchronous Rules
+
+If a rule needs to perform asynchronous operations (such as fetching a network resource), it can specify the value `true` for its `asynchronous` property.
+Asynchronous rules should return a `Promise` from their `function` implementation that is resolved when the rule completes.
+(The value passed to `resolve(...)` is ignored.)
+Linting violations from asynchronous rules are reported via the `onError` function just like for synchronous rules.
+
+**Note**: Asynchronous rules cannot be referenced in a synchronous calling context (i.e., `markdownlint.sync(...)`).
+Attempting to do so throws an exception.
+
 ## Examples
 
 - [Simple rules used by the project's test cases](../test/rules)
 - [Code for all `markdownlint` built-in rules](../lib)
 - [Package configuration for publishing to npm](../test/rules/npm)
   - Packages should export a single rule object or an `Array` of rule objects
-- [Custom rules from the Microsoft/vscode-docs-authoring repository](https://github.com/microsoft/vscode-docs-authoring/tree/master/packages/docs-linting/markdownlint-custom-rules)
+- [Custom rules from the Microsoft/vscode-docs-authoring repository](https://github.com/microsoft/vscode-docs-authoring/tree/main/packages/docs-linting/markdownlint-custom-rules)
 - [Custom rules from the axibase/docs-util repository](https://github.com/axibase/docs-util/tree/master/linting-rules)
-- [Custom rules from the webhintio/hint repository](https://github.com/webhintio/hint/blob/master/scripts/lint-markdown.js)
+- [Custom rules from the webhintio/hint repository](https://github.com/webhintio/hint/blob/main/scripts/lint-markdown.js)
 
 ## References
 

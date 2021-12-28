@@ -33,8 +33,10 @@ and test cases came directly from that project.
 ### Related
 
 * CLI
-  * [markdownlint-cli command-line interface for Node.js](https://github.com/igorshubovych/markdownlint-cli)
-  * [markdownlint-cli2 command-line interface for Node.js](https://github.com/DavidAnson/markdownlint-cli2)
+  * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
+    command-line interface for Node.js ([works with pre-commit](https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit))
+  * [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2)
+    command-line interface for Node.js ([works with pre-commit](https://github.com/DavidAnson/markdownlint-cli2#pre-commit))
 * GitHub
   * [GitHub Super-Linter Action](https://github.com/github/super-linter)
   * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
@@ -102,6 +104,8 @@ playground for learning and exploring.
 * **[MD046](doc/Rules.md#md046)** *code-block-style* - Code block style
 * **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
 * **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
+* **[MD049](doc/Rules.md#md049)** *emphasis-style* - Emphasis style should be consistent
+* **[MD050](doc/Rules.md#md050)** *strong-style* - Strong style should be consistent
 
 <!-- markdownlint-restore -->
 
@@ -125,7 +129,7 @@ rules at once.
 * **blockquote** - MD027, MD028
 * **bullet** - MD004, MD005, MD006, MD007, MD032
 * **code** - MD014, MD031, MD038, MD040, MD046, MD048
-* **emphasis** - MD036, MD037
+* **emphasis** - MD036, MD037, MD049, MD050
 * **hard_tab** - MD010
 * **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022,
   MD023, MD024, MD025, MD026, MD036, MD041, MD043
@@ -163,10 +167,12 @@ appear in the final markup):
 
 * Disable all rules: `<!-- markdownlint-disable -->`
 * Enable all rules: `<!-- markdownlint-enable -->`
-* Disable all rules for the next line only: `<!-- markdownlint-disable-next-line -->`
+* Disable all rules for the next line only:
+  `<!-- markdownlint-disable-next-line -->`
 * Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
 * Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
-* Disable one or more rules by name for the next line only: `<!-- markdownlint-disable-next-line MD001 MD005 -->`
+* Disable one or more rules by name for the next line only:
+  `<!-- markdownlint-disable-next-line MD001 MD005 -->`
 * Capture the current rule configuration: `<!-- markdownlint-capture -->`
 * Restore the captured rule configuration: `<!-- markdownlint-restore -->`
 
@@ -229,7 +235,7 @@ more rules for a file, the following more advanced syntax is supported:
 For example:
 
 ```markdown
-<!-- markdownlint-configure-file { "MD013": { "line_length": 70 } } -->
+<!-- markdownlint-configure-file { "MD013": { "code_blocks": false } } -->
 ```
 
 or
@@ -859,7 +865,7 @@ const results = window.markdownlint.sync(options).toString();
 ## Examples
 
 For ideas how to integrate `markdownlint` into your workflow, refer to the
-following projects or one of the tools in the [Related section](#Related):
+following projects or one of the tools in the [Related section](#related):
 
 * [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/) ([Search repository](https://github.com/dotnet/docs/search?q=markdownlint))
 * [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
@@ -870,6 +876,7 @@ following projects or one of the tools in the [Related section](#Related):
 * [MDN Web Docs](https://developer.mozilla.org/) ([Search repository](https://github.com/mdn/content/search?q=markdownlint))
 * [MkDocs](https://www.mkdocs.org/) ([Search repository](https://github.com/mkdocs/mkdocs/search?q=markdownlint))
 * [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
+* [Pi-hole documentation](https://docs.pi-hole.net) ([Search repository](https://github.com/pi-hole/docs/search?q=markdownlint))
 * [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
 * [Sinon.JS](https://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
 * [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
@@ -968,6 +975,9 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 * 0.24.0 - Remove support for end-of-life Node version 10, add support for custom file system
            module, improve MD010/MD011/MD037/MD043/MD044, improve TypeScript declaration file
            and JSON schema, update dependencies.
+* 0.25.0 - Add MD049/MD050 for consistent emphasis/strong style (both auto-fixable), improve
+           MD007/MD010/MD032/MD033/MD035/MD037/MD039, support asynchronous custom rules,
+           improve performance, improve CI process, reduce dependencies, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint

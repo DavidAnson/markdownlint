@@ -107,6 +107,12 @@ rules.forEach(function forRule(rule) {
           "description": "Whether to indent the first level of the list",
           "type": "boolean",
           "default": false
+        },
+        "start_indent": {
+          "description":
+            "Spaces for first level indent (when start_indented is set)",
+          "type": "integer",
+          "default": 2
         }
       };
       break;
@@ -391,6 +397,34 @@ rules.forEach(function forRule(rule) {
             "consistent",
             "backtick",
             "tilde"
+          ],
+          "default": "consistent"
+        }
+      };
+      break;
+    case "MD049":
+      scheme.properties = {
+        "style": {
+          "description": "Emphasis style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "asterisk",
+            "underscore"
+          ],
+          "default": "consistent"
+        }
+      };
+      break;
+    case "MD050":
+      scheme.properties = {
+        "style": {
+          "description": "Strong style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "asterisk",
+            "underscore"
           ],
           "default": "consistent"
         }

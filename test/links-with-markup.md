@@ -10,7 +10,7 @@
 
 [This link has `code` and right space ](link) {MD039}
 
-[ This link has _emphasis_ and left space](link) {MD039}
+[ This link has *emphasis* and left space](link) {MD039}
 
 [This](link) line has [multiple](link) links.
 

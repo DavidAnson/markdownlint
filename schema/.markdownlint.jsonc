@@ -39,7 +39,9 @@
     // Spaces for indent
     "indent": 2,
     // Whether to indent the first level of the list
-    "start_indented": false
+    "start_indented": false,
+    // Spaces for first level indent (when start_indented is set)
+    "start_indent": 2
   },
 
   // MD009/no-trailing-spaces - Trailing spaces
@@ -247,6 +249,18 @@
   // MD048/code-fence-style - Code fence style
   "MD048": {
     // Code fence style
+    "style": "consistent"
+  },
+
+  // MD049/emphasis-style - Emphasis style should be consistent
+  "MD049": {
+    // Emphasis style should be consistent
+    "style": "consistent"
+  },
+
+  // MD050/strong-style - Strong style should be consistent
+  "MD050": {
+    // Strong style should be consistent
     "style": "consistent"
   }
 }

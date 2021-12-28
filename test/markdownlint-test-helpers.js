@@ -226,7 +226,7 @@ bar`
 });
 
 test("isBlankLine", (t) => {
-  t.plan(25);
+  t.plan(29);
   const blankLines = [
     null,
     "",
@@ -244,7 +244,11 @@ test("isBlankLine", (t) => {
     "> ",
     "> > > \t",
     "> <!--text-->",
-    ">><!--text-->"
+    ">><!--text-->",
+    "<!--",
+    "  <!-- text",
+    "text -->  ",
+    "-->"
   ];
   blankLines.forEach((line) => t.true(helpers.isBlankLine(line), line || ""));
   const nonBlankLines = [
@@ -253,9 +257,9 @@ test("isBlankLine", (t) => {
     ".",
     "> .",
     "<!--text--> text",
-    "<!--->",
-    "<!--",
-    "-->"
+    "text <!--text-->",
+    "text <!--",
+    "--> text"
   ];
   nonBlankLines.forEach((line) => t.true(!helpers.isBlankLine(line), line));
 });
@@ -383,7 +387,7 @@ test("forEachInlineCodeSpan", (t) => {
 });
 
 test("getPreferredLineEnding", (t) => {
-  t.plan(17);
+  t.plan(19);
   const testCases = [
     [ "", os.EOL ],
     [ "\r", "\r" ],
@@ -408,6 +412,16 @@ test("getPreferredLineEnding", (t) => {
     const actual = helpers.getPreferredLineEnding(input);
     t.is(actual, expected, "Incorrect line ending returned.");
   });
+  t.is(
+    helpers.getPreferredLineEnding("", "linux"),
+    "\n",
+    "Incorrect line ending for linux"
+  );
+  t.is(
+    helpers.getPreferredLineEnding("", "win32"),
+    "\r\n",
+    "Incorrect line ending for win32"
+  );
 });
 
 test("applyFix", (t) => {
@@ -932,5 +946,39 @@ test("applyFixes", (t) => {
     const [ input, errors, expected ] = testCase;
     const actual = helpers.applyFixes(input, errors);
     t.is(actual, expected, "Incorrect fix applied.");
+  });
+});
+
+test("deepFreeze", (t) => {
+  t.plan(6);
+  const obj = {
+    "prop": true,
+    "func": () => true,
+    "sub": {
+      "prop": [ 1 ],
+      "sub": {
+        "prop": "one"
+      }
+    }
+  };
+  t.is(helpers.deepFreeze(obj), obj, "Did not return object.");
+  [
+    () => {
+      obj.prop = false;
+    },
+    () => {
+      obj.func = () => false;
+    },
+    () => {
+      obj.sub.prop = [];
+    },
+    () => {
+      obj.sub.prop[0] = 0;
+    },
+    () => {
+      obj.sub.sub.prop = "zero";
+    }
+  ].forEach((scenario) => {
+    t.throws(scenario, null, "Assigned to frozen object.");
   });
 });

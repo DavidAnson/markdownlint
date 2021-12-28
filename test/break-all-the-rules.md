@@ -64,7 +64,7 @@ https://example.com/page {MD034}
 
 _Section {MD036} Heading_
 
-Emphasis *with * space {MD037}
+Emphasis _with _ space {MD037}
 
 Code `with ` space {MD038}
 
@@ -84,5 +84,13 @@ markdownLint {MD044}
 
 ![](image.jpg) {MD045}
 ## Heading 10 {MD022}
+
+Emphasis _with_ underscore style
+
+Emphasis *with* different style {MD049}
+
+Strong __with__ underscore style
+
+Strong **with** different style {MD050}
 
 EOF {MD047}

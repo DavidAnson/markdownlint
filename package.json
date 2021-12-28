@@ -1,6 +1,6 @@
 {
   "name": "markdownlint",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
   "main": "lib/markdownlint.js",
   "types": "lib/markdownlint.d.ts",
@@ -19,7 +19,7 @@
     "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && node scripts delete 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
     "build-demo": "node scripts copy node_modules/markdown-it/dist/markdown-it.min.js demo/markdown-it.min.js && cd demo && webpack --no-stats",
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
-    "ci": "npm-run-all --continue-on-error --parallel declaration lint --parallel build-config build-demo test-cover && git diff --exit-code",
+    "ci": "npm-run-all --continue-on-error --parallel build-config lint serial-declaration-demo test-cover && git diff --exit-code",
     "clone-test-repos-dotnet-docs": "cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
     "clone-test-repos-eslint-eslint": "cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet",
     "clone-test-repos-mkdocs-mkdocs": "cd test-repos && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet",
@@ -32,41 +32,46 @@
     "clone-test-repos-large": "npm run clone-test-repos && cd test-repos && npm run clone-test-repos-dotnet-docs && npm run clone-test-repos-v8-v8-dev",
     "declaration": "npm run build-declaration && npm run test-declaration",
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint",
+    "docker-npm-install": "docker run --rm --tty --name npm-install --volume $PWD:/home/workdir --workdir /home/workdir --user node node:16 npm install",
+    "docker-npm-run-upgrade": "docker run --rm --tty --name npm-run-upgrade --volume $PWD:/home/workdir --workdir /home/workdir --user node node:16 npm run upgrade",
     "lint": "eslint --max-warnings 0 .",
     "lint-test-repos": "ava --timeout=5m test/markdownlint-test-repos.js",
-    "test": "ava test/markdownlint-test.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js",
+    "serial-declaration-demo": "npm run build-declaration && npm-run-all --continue-on-error --parallel build-demo test-declaration",
+    "test": "ava test/markdownlint-test.js test/markdownlint-test-config.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js",
     "test-cover": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test",
     "test-declaration": "cd example/typescript && tsc && node type-check.js",
-    "test-extra": "ava --timeout=5m test/markdownlint-test-extra.js"
+    "test-extra": "ava --timeout=5m test/markdownlint-test-extra-parse.js test/markdownlint-test-extra-type.js",
+    "upgrade": "npx npm-check-updates --upgrade"
   },
   "engines": {
-    "node": ">=10"
+    "node": ">=12"
   },
   "dependencies": {
-    "markdown-it": "12.2.0"
+    "markdown-it": "12.3.0"
   },
   "devDependencies": {
     "ava": "~3.15.0",
-    "c8": "~7.8.0",
-    "eslint": "~7.32.0",
-    "eslint-plugin-jsdoc": "~36.0.7",
+    "c8": "~7.10.0",
+    "eslint": "~8.5.0",
+    "eslint-plugin-jsdoc": "~37.4.0",
     "eslint-plugin-node": "~11.1.0",
-    "eslint-plugin-unicorn": "~35.0.0",
-    "globby": "~11.0.4",
+    "eslint-plugin-unicorn": "~39.0.0",
+    "globby": "~12.0.2",
     "js-yaml": "~4.1.0",
     "markdown-it-for-inline": "~0.1.1",
     "markdown-it-sub": "~1.0.0",
     "markdown-it-sup": "~1.0.0",
-    "markdown-it-texmath": "~0.9.1",
-    "markdownlint-rule-helpers": "~0.14.0",
+    "markdown-it-texmath": "~0.9.7",
+    "markdownlint-rule-github-internal-links": "~0.1.0",
+    "markdownlint-rule-helpers": "~0.15.0",
     "npm-run-all": "~4.1.5",
-    "strip-json-comments": "~3.1.1",
+    "strip-json-comments": "~4.0.0",
     "toml": "~3.0.0",
-    "ts-loader": "~9.2.5",
+    "ts-loader": "~9.2.6",
     "tv4": "~1.3.0",
-    "typescript": "~4.3.5",
-    "webpack": "~5.51.1",
-    "webpack-cli": "~4.8.0"
+    "typescript": "~4.5.4",
+    "webpack": "~5.65.0",
+    "webpack-cli": "~4.9.1"
   },
   "keywords": [
     "markdown",

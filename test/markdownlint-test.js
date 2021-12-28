@@ -10,11 +10,11 @@ const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const pluginTexMath = require("markdown-it-texmath");
-const stripJsonComments = require("strip-json-comments");
 const test = require("ava").default;
 const tv4 = require("tv4");
 const { homepage, version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
+const constants = require("../lib/constants");
 const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
@@ -24,7 +24,7 @@ const pluginTexMathOptions = {
     "renderToString": () => ""
   }
 };
-const deprecatedRuleNames = new Set([ "MD002", "MD006" ]);
+const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const configSchemaStrict = {
   ...configSchema,
   "additionalProperties": false
@@ -83,11 +83,12 @@ test.cb("projectFilesNoInlineConfig", (t) => {
       "doc/Prettier.md",
       "helpers/README.md"
     ],
-    "noInlineConfig": true,
     "config": {
       "line-length": { "line_length": 150 },
       "no-duplicate-heading": false
-    }
+    },
+    "customRules": [ require("markdownlint-rule-github-internal-links") ],
+    "noInlineConfig": true
   };
   markdownlint(options, function callback(err, actual) {
     t.falsy(err);
@@ -492,8 +493,10 @@ test.cb("styleAll", (t) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 88 ],
-        "MD048": [ 77 ]
+        "MD047": [ 96 ],
+        "MD048": [ 77 ],
+        "MD049": [ 90 ],
+        "MD050": [ 94 ]
       }
     };
     // @ts-ignore
@@ -535,8 +538,10 @@ test.cb("styleRelaxed", (t) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 88 ],
-        "MD048": [ 77 ]
+        "MD047": [ 96 ],
+        "MD048": [ 77 ],
+        "MD049": [ 90 ],
+        "MD050": [ 94 ]
       }
     };
     // @ts-ignore
@@ -836,8 +841,9 @@ test.cb("customFileSystemAsync", (t) => {
     t.end();
   });
 });
+
 test.cb("readme", (t) => {
-  t.plan(115);
+  t.plan(119);
   const tagToRules = {};
   rules.forEach(function forRule(rule) {
     rule.tags.forEach(function forTag(tag) {
@@ -913,7 +919,7 @@ test.cb("readme", (t) => {
 });
 
 test.cb("rules", (t) => {
-  t.plan(336);
+  t.plan(352);
   fs.readFile("doc/Rules.md", "utf8",
     (err, contents) => {
       t.falsy(err);
@@ -924,7 +930,6 @@ test.cb("rules", (t) => {
       let ruleHasAliases = true;
       let ruleUsesParams = null;
       const tagAliasParameterRe = /, |: | /;
-      // eslint-disable-next-line func-style
       const testTagsAliasesParams = (r) => {
         // eslint-disable-next-line unicorn/prefer-default-parameters
         r = r || "[NO RULE]";
@@ -1064,9 +1069,10 @@ test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
   }
 });
 
-test("validateConfigExampleJson", (t) => {
+test("validateConfigExampleJson", async(t) => {
   t.plan(2);
-
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { "default": stripJsonComments } = await import("strip-json-comments");
   // Validate JSONC
   const fileJson = ".markdownlint.jsonc";
   const dataJson = fs.readFileSync(
@@ -1078,7 +1084,6 @@ test("validateConfigExampleJson", (t) => {
     // @ts-ignore
     tv4.validate(jsonObject, configSchemaStrict),
     fileJson + "\n" + JSON.stringify(tv4.error, null, 2));
-
   // Validate YAML
   const fileYaml = ".markdownlint.yaml";
   const dataYaml = fs.readFileSync(
@@ -1090,483 +1095,8 @@ test("validateConfigExampleJson", (t) => {
     "YAML example does not match JSON example.");
 });
 
-test.cb("configSingle", (t) => {
-  t.plan(2);
-  markdownlint.readConfig("./test/config/config-child.json",
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = require("./config/config-child.json");
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configAbsolute", (t) => {
-  t.plan(2);
-  markdownlint.readConfig(path.join(__dirname, "config", "config-child.json"),
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = require("./config/config-child.json");
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configMultiple", (t) => {
-  t.plan(2);
-  markdownlint.readConfig("./test/config/config-grandparent.json",
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = {
-        ...require("./config/config-child.json"),
-        ...require("./config/config-parent.json"),
-        ...require("./config/config-grandparent.json")
-      };
-      delete expected.extends;
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configMultipleWithRequireResolve", (t) => {
-  t.plan(2);
-  markdownlint.readConfig("./test/config/config-packageparent.json",
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = {
-        ...require("./node_modules/pseudo-package/config-frompackage.json"),
-        ...require("./config/config-packageparent.json")
-      };
-      delete expected.extends;
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configCustomFileSystem", (t) => {
-  t.plan(5);
-  const file = path.resolve("/dir/file.json");
-  const extended = path.resolve("/dir/extended.json");
-  const fileContent = {
-    "extends": extended,
-    "default": true,
-    "MD001": false
-  };
-  const extendedContent = {
-    "MD001": true,
-    "MD002": true
-  };
-  const fsApi = {
-    "access": (p, m, cb) => {
-      t.is(p, extended);
-      return (cb || m)();
-    },
-    "readFile": (p, o, cb) => {
-      switch (p) {
-        case file:
-          t.is(p, file);
-          return cb(null, JSON.stringify(fileContent));
-        case extended:
-          t.is(p, extended);
-          return cb(null, JSON.stringify(extendedContent));
-        default:
-          return t.fail();
-      }
-    }
-  };
-  markdownlint.readConfig(
-    file,
-    null,
-    fsApi,
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = {
-        ...extendedContent,
-        ...fileContent
-      };
-      delete expected.extends;
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configBadFile", (t) => {
-  t.plan(4);
-  markdownlint.readConfig("./test/config/config-badfile.json",
-    function callback(err, result) {
-      t.truthy(err, "Did not get an error for bad file.");
-      t.true(err instanceof Error, "Error not instance of Error.");
-      // @ts-ignore
-      t.is(err.code, "ENOENT", "Error code for bad file not ENOENT.");
-      t.true(!result, "Got result for bad file.");
-      t.end();
-    });
-});
-
-test.cb("configBadChildFile", (t) => {
-  t.plan(4);
-  markdownlint.readConfig("./test/config/config-badchildfile.json",
-    function callback(err, result) {
-      t.truthy(err, "Did not get an error for bad child file.");
-      t.true(err instanceof Error, "Error not instance of Error.");
-      // @ts-ignore
-      t.is(err.code, "ENOENT",
-        "Error code for bad child file not ENOENT.");
-      t.true(!result, "Got result for bad child file.");
-      t.end();
-    });
-});
-
-test.cb("configBadChildPackage", (t) => {
-  t.plan(4);
-  markdownlint.readConfig("./test/config/config-badchildpackage.json",
-    function callback(err, result) {
-      t.truthy(err, "Did not get an error for bad child package.");
-      t.true(err instanceof Error, "Error not instance of Error.");
-      // @ts-ignore
-      t.is(err.code, "ENOENT",
-        "Error code for bad child package not ENOENT.");
-      t.true(!result, "Got result for bad child package.");
-      t.end();
-    });
-});
-
-test.cb("configBadJson", (t) => {
-  t.plan(3);
-  markdownlint.readConfig("./test/config/config-badjson.json",
-    function callback(err, result) {
-      t.truthy(err, "Did not get an error for bad JSON.");
-      t.true(err instanceof Error, "Error not instance of Error.");
-      t.true(!result, "Got result for bad JSON.");
-      t.end();
-    });
-});
-
-test.cb("configBadChildJson", (t) => {
-  t.plan(3);
-  markdownlint.readConfig("./test/config/config-badchildjson.json",
-    function callback(err, result) {
-      t.truthy(err, "Did not get an error for bad child JSON.");
-      t.true(err instanceof Error, "Error not instance of Error.");
-      t.true(!result, "Got result for bad child JSON.");
-      t.end();
-    });
-});
-
-test.cb("configSingleYaml", (t) => {
-  t.plan(2);
-  markdownlint.readConfig(
-    "./test/config/config-child.yaml",
-    // @ts-ignore
-    [ require("js-yaml").load ],
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = require("./config/config-child.json");
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configMultipleYaml", (t) => {
-  t.plan(2);
-  markdownlint.readConfig(
-    "./test/config/config-grandparent.yaml",
-    // @ts-ignore
-    [ require("js-yaml").load ],
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = {
-        ...require("./config/config-child.json"),
-        ...require("./config/config-parent.json"),
-        ...require("./config/config-grandparent.json")
-      };
-      delete expected.extends;
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configMultipleHybrid", (t) => {
-  t.plan(2);
-  markdownlint.readConfig(
-    "./test/config/config-grandparent-hybrid.yaml",
-    // @ts-ignore
-    [ JSON.parse, require("toml").parse, require("js-yaml").load ],
-    function callback(err, actual) {
-      t.falsy(err);
-      const expected = {
-        ...require("./config/config-child.json"),
-        ...require("./config/config-parent.json"),
-        ...require("./config/config-grandparent.json")
-      };
-      delete expected.extends;
-      t.like(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configBadHybrid", (t) => {
-  t.plan(4);
-  markdownlint.readConfig(
-    "./test/config/config-badcontent.txt",
-    // @ts-ignore
-    [ JSON.parse, require("toml").parse, require("js-yaml").load ],
-    function callback(err, result) {
-      t.truthy(err, "Did not get an error for bad child JSON.");
-      t.true(err instanceof Error, "Error not instance of Error.");
-      t.truthy(err.message.match(
-        // eslint-disable-next-line max-len
-        /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+;/
-      ), "Error message unexpected.");
-      t.true(!result, "Got result for bad child JSON.");
-      t.end();
-    });
-});
-
-test("configSingleSync", (t) => {
-  t.plan(1);
-  const actual = markdownlint.readConfigSync("./test/config/config-child.json");
-  const expected = require("./config/config-child.json");
-  t.deepEqual(actual, expected, "Config object not correct.");
-});
-
-test("configAbsoluteSync", (t) => {
-  t.plan(1);
-  const actual = markdownlint.readConfigSync(
-    path.join(__dirname, "config", "config-child.json"));
-  const expected = require("./config/config-child.json");
-  t.deepEqual(actual, expected, "Config object not correct.");
-});
-
-test("configMultipleSync", (t) => {
-  t.plan(1);
-  const actual =
-    markdownlint.readConfigSync("./test/config/config-grandparent.json");
-  const expected = {
-    ...require("./config/config-child.json"),
-    ...require("./config/config-parent.json"),
-    ...require("./config/config-grandparent.json")
-  };
-  delete expected.extends;
-  t.deepEqual(actual, expected, "Config object not correct.");
-});
-
-test("configBadFileSync", (t) => {
-  t.plan(1);
-  t.throws(
-    function badFileCall() {
-      markdownlint.readConfigSync("./test/config/config-badfile.json");
-    },
-    {
-      "message": /ENOENT/
-    },
-    "Did not get correct exception for bad file."
-  );
-});
-
-test("configBadChildFileSync", (t) => {
-  t.plan(1);
-  t.throws(
-    function badChildFileCall() {
-      markdownlint.readConfigSync("./test/config/config-badchildfile.json");
-    },
-    {
-      "message": /ENOENT/
-    },
-    "Did not get correct exception for bad child file."
-  );
-});
-
-test("configBadJsonSync", (t) => {
-  t.plan(1);
-  t.throws(
-    function badJsonCall() {
-      markdownlint.readConfigSync("./test/config/config-badjson.json");
-    },
-    {
-      "message":
-        /Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+/
-    },
-    "Did not get correct exception for bad JSON."
-  );
-});
-
-test("configBadChildJsonSync", (t) => {
-  t.plan(1);
-  t.throws(
-    function badChildJsonCall() {
-      markdownlint.readConfigSync("./test/config/config-badchildjson.json");
-    },
-    {
-      "message":
-        /Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+/
-    },
-    "Did not get correct exception for bad child JSON."
-  );
-});
-
-test("configSingleYamlSync", (t) => {
-  t.plan(1);
-  const actual = markdownlint.readConfigSync(
-    // @ts-ignore
-    "./test/config/config-child.yaml", [ require("js-yaml").load ]);
-  const expected = require("./config/config-child.json");
-  t.deepEqual(actual, expected, "Config object not correct.");
-});
-
-test("configMultipleYamlSync", (t) => {
-  t.plan(1);
-  const actual = markdownlint.readConfigSync(
-    // @ts-ignore
-    "./test/config/config-grandparent.yaml", [ require("js-yaml").load ]);
-  const expected = {
-    ...require("./config/config-child.json"),
-    ...require("./config/config-parent.json"),
-    ...require("./config/config-grandparent.json")
-  };
-  delete expected.extends;
-  t.deepEqual(actual, expected, "Config object not correct.");
-});
-
-test("configMultipleHybridSync", (t) => {
-  t.plan(1);
-  const actual = markdownlint.readConfigSync(
-    "./test/config/config-grandparent-hybrid.yaml",
-    // @ts-ignore
-    [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
-  const expected = {
-    ...require("./config/config-child.json"),
-    ...require("./config/config-parent.json"),
-    ...require("./config/config-grandparent.json")
-  };
-  delete expected.extends;
-  t.like(actual, expected, "Config object not correct.");
-});
-
-test("configCustomFileSystemSync", (t) => {
-  t.plan(4);
-  const file = path.resolve("/dir/file.json");
-  const extended = path.resolve("/dir/extended.json");
-  const fileContent = {
-    "extends": extended,
-    "default": true,
-    "MD001": false
-  };
-  const extendedContent = {
-    "MD001": true,
-    "MD002": true
-  };
-  const fsApi = {
-    "accessSync": (p) => {
-      t.is(p, extended);
-    },
-    "readFileSync": (p) => {
-      switch (p) {
-        case file:
-          t.is(p, file);
-          return JSON.stringify(fileContent);
-        case extended:
-          t.is(p, extended);
-          return JSON.stringify(extendedContent);
-        default:
-          return t.fail();
-      }
-    }
-  };
-  const actual = markdownlint.readConfigSync(file, null, fsApi);
-  const expected = {
-    ...extendedContent,
-    ...fileContent
-  };
-  delete expected.extends;
-  t.deepEqual(actual, expected, "Config object not correct.");
-});
-
-test("configBadHybridSync", (t) => {
-  t.plan(1);
-  t.throws(
-    function badHybridCall() {
-      markdownlint.readConfigSync(
-        "./test/config/config-badcontent.txt",
-        // @ts-ignore
-        [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
-    },
-    {
-      // eslint-disable-next-line max-len
-      "message": /^Unable to parse '[^']*'; Unexpected token \S+ in JSON at position \d+;/
-    },
-    "Did not get correct exception for bad content."
-  );
-});
-
-test.cb("configSinglePromise", (t) => {
-  t.plan(1);
-  markdownlint.promises.readConfig("./test/config/config-child.json")
-    .then((actual) => {
-      const expected = require("./config/config-child.json");
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configCustomFileSystemPromise", (t) => {
-  t.plan(4);
-  const file = path.resolve("/dir/file.json");
-  const extended = path.resolve("/dir/extended.json");
-  const fileContent = {
-    "extends": extended,
-    "default": true,
-    "MD001": false
-  };
-  const extendedContent = {
-    "MD001": true,
-    "MD002": true
-  };
-  const fsApi = {
-    "access": (p, m, cb) => {
-      t.is(p, extended);
-      return (cb || m)();
-    },
-    "readFile": (p, o, cb) => {
-      switch (p) {
-        case file:
-          t.is(p, file);
-          return cb(null, JSON.stringify(fileContent));
-        case extended:
-          t.is(p, extended);
-          return cb(null, JSON.stringify(extendedContent));
-        default:
-          return t.fail();
-      }
-    }
-  };
-  markdownlint.promises.readConfig(file, null, fsApi)
-    .then((actual) => {
-      const expected = {
-        ...extendedContent,
-        ...fileContent
-      };
-      delete expected.extends;
-      t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
-    });
-});
-
-test.cb("configBadFilePromise", (t) => {
-  t.plan(2);
-  markdownlint.promises.readConfig("./test/config/config-badfile.json")
-    .then(
-      null,
-      (error) => {
-        t.truthy(error, "Did not get an error for bad JSON.");
-        t.true(error instanceof Error, "Error not instance of Error.");
-        t.end();
-      }
-    );
-});
-
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(132);
+  t.plan(138);
   rules.forEach(function forRule(rule) {
     t.truthy(rule.information);
     t.true(Object.getPrototypeOf(rule.information) === URL.prototype);
@@ -1712,9 +1242,49 @@ test.cb("texmath test files with texmath plugin", (t) => {
   });
 });
 
+test("token-map-spans", (t) => {
+  t.plan(38);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "token-map-spans" ],
+        "description": "token-map-spans",
+        "tags": [ "tms" ],
+        "function": function tokenMapSpans(params) {
+          const tokenLines = [];
+          let lastLineNumber = -1;
+          const inlines = params.tokens.filter((c) => c.type === "inline");
+          for (const token of inlines) {
+            t.truthy(token.map);
+            for (let i = token.map[0]; i < token.map[1]; i++) {
+              if (tokenLines.includes(i)) {
+                t.true(
+                  lastLineNumber === token.lineNumber,
+                  `Line ${i + 1} is part of token maps from multiple lines.`
+                );
+              } else {
+                tokenLines.push(i);
+              }
+              lastLineNumber = token.lineNumber;
+            }
+          }
+        }
+      }
+    ],
+    "files": [ "./test/token-map-spans.md" ]
+  };
+  markdownlint.sync(options);
+});
+
 test("getVersion", (t) => {
   t.plan(1);
   const actual = markdownlint.getVersion();
   const expected = version;
   t.is(actual, expected, "Version string not correct.");
+});
+
+test("constants", (t) => {
+  t.plan(2);
+  t.is(constants.homepage, homepage);
+  t.is(constants.version, version);
 });

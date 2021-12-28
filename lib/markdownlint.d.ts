@@ -206,9 +206,9 @@ type RuleOnErrorInfo = {
      */
     lineNumber: number;
     /**
-     * Details about the error.
+     * Detail about the error.
      */
-    details?: string;
+    detail?: string;
     /**
      * Context for the error.
      */
@@ -263,6 +263,10 @@ type Rule = {
      * Rule tag(s).
      */
     tags: string[];
+    /**
+     * True if asynchronous.
+     */
+    asynchronous?: boolean;
     /**
      * Rule implementation.
      */

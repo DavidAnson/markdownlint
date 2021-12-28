@@ -23,7 +23,7 @@ Try to break the new code now, or else it will get broken later.
 
 Run tests before sending a pull request via `npm test` in the [usual manner](https://docs.npmjs.com/misc/scripts).
 Tests should all pass on all platforms.
-The test runner is [tape](https://www.npmjs.com/package/tape) and test cases are located in `test/markdownlint-test*.js`.
+The test runner is [AVA](https://github.com/avajs/ava) and test cases are located in `test/markdownlint-test*.js`.
 When running tests, `test/*.md` files are enumerated, linted, and fail if any violations are missing a corresponding `{MD###}` marker in the test file.
 For example, the line `### Heading {MD001}` is expected to trigger the rule `MD001`.
 For cases where the marker text can not be present on the same line, the syntax `{MD###:#}` can be used to include a line number.
@@ -33,7 +33,8 @@ Lint before sending a pull request by running `npm run lint`.
 There should be no issues.
 
 Run a full continuous integration pass before sending a pull request via `npm run ci`.
-Code coverage should remain at 100%.
+Code coverage should always be 100%.
+As part of a continuous integration run, generated files may get updated and fail the run - commit them to the repository and rerun continuous integration.
 
 Pull requests should contain a single commit.
 If necessary, squash multiple commits before creating the pull request and when making changes.
@@ -43,9 +44,18 @@ Open pull requests against the `next` branch.
 That's where the latest changes are staged for the next release.
 Include the text "(fixes #??)" at the end of the commit message so the pull request will be associated with the relevant issue.
 End commit messages with a period (`.`).
-Do not include `package-lock.json` in the pull request.
 Once accepted, the tag `fixed in next` will be added to the issue.
 When the commit is merged to the main branch during the release process, the issue will be closed automatically.
 (See [Closing issues using keywords](https://help.github.com/articles/closing-issues-using-keywords/) for details.)
+
+Please refrain from using slang or meaningless placeholder words.
+Sample content can be "text", "code", "heading", or the like.
+Sample URLs should use [example.com](https://en.wikipedia.org/wiki/Example.com) which is safe for this purpose.
+Profanity is not allowed.
+
+In order to maintain the permissive MIT license this project uses, all contributions must be your own and released under that license.
+Code you add should be an original work and should not be copied from elsewhere.
+Taking code from a different project, Stack Overflow, or the like is not allowed.
+The use of tools such as GitHub Copilot that generate code from other projects is not allowed.
 
 Thank you!

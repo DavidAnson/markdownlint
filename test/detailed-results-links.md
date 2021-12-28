@@ -28,3 +28,17 @@ Text <https://example.com/same> more \* text https://example.com/same more \[ te
 Text https://example.com/first more text https://example.com/second still more text https://example.com/third done
 
 (Incorrect link syntax)[https://www.example.com/]
+
+Text [link ](https://example.com/) text.
+
+Text [ link](https://example.com/) text.
+
+Text [ link ](https://example.com/) text.
+
+Text [link ][reference] text.
+
+Text [ link][reference] text.
+
+Text [ link ][reference] text.
+
+[reference]: https://example.com/

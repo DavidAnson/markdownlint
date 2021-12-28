@@ -100,7 +100,7 @@ code
 
 Mixed `code_span`
 scenarios
-are _also_ okay.
+are _also_ okay. {MD049}
 
 Mixed `code*span`
 scenarios

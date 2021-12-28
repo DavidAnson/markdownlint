@@ -271,5 +271,125 @@
       "deleteCount": 25,
       "insertText": "<https://example.com/third>"
     }
+  },
+  {
+    "lineNumber": 32,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[link ]",
+    "errorRange": [
+      6,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 5,
+      "insertText": "link"
+    }
+  },
+  {
+    "lineNumber": 34,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ link]",
+    "errorRange": [
+      6,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 5,
+      "insertText": "link"
+    }
+  },
+  {
+    "lineNumber": 36,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ link ]",
+    "errorRange": [
+      6,
+      8
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 6,
+      "insertText": "link"
+    }
+  },
+  {
+    "lineNumber": 38,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[link ]",
+    "errorRange": [
+      6,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 5,
+      "insertText": "link"
+    }
+  },
+  {
+    "lineNumber": 40,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ link]",
+    "errorRange": [
+      6,
+      7
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 5,
+      "insertText": "link"
+    }
+  },
+  {
+    "lineNumber": 42,
+    "ruleNames": [
+      "MD039",
+      "no-space-in-links"
+    ],
+    "ruleDescription": "Spaces inside link text",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md039",
+    "errorDetail": null,
+    "errorContext": "[ link ]",
+    "errorRange": [
+      6,
+      8
+    ],
+    "fixInfo": {
+      "editColumn": 7,
+      "deleteCount": 6,
+      "insertText": "link"
+    }
   }
 ]

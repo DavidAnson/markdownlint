@@ -2,8 +2,6 @@
 
 "use strict";
 
-const os = require("os");
-
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 const newLineRe = /\r\n?|\n/g;
@@ -63,12 +61,20 @@ module.exports.isObject = function isObject(obj) {
 };
 
 // Returns true iff the input line is blank (no content)
-// Example: Contains nothing, whitespace, or comments
-const blankLineRe = />|(?:<!--.*?-->)/g;
+// Example: Contains nothing, whitespace, or comment (unclosed start/end okay)
 module.exports.isBlankLine = function isBlankLine(line) {
   // Call to String.replace follows best practices and is not a security check
   // False-positive for js/incomplete-multi-character-sanitization
-  return !line || !line.trim() || !line.replace(blankLineRe, "").trim();
+  return (
+    !line ||
+    !line.trim() ||
+    !line
+      .replace(/<!--.*?-->/g, "")
+      .replace(/<!--.*$/g, "")
+      .replace(/^.*-->/g, "")
+      .replace(/>/g, "")
+      .trim()
+  );
 };
 
 /**
@@ -182,6 +188,22 @@ module.exports.fencedCodeBlockStyleFor =
   };
 
 /**
+ * Return the string representation of a emphasis or strong markup character.
+ *
+ * @param {string} markup Emphasis or strong string.
+ * @returns {string} String representation.
+ */
+module.exports.emphasisOrStrongStyleFor =
+  function emphasisOrStrongStyleFor(markup) {
+    switch (markup[0]) {
+      case "*":
+        return "asterisk";
+      default:
+        return "underscore";
+    }
+  };
+
+/**
  * Return the number of characters of indent for a token.
  *
  * @param {Object} token MarkdownItToken instance.
@@ -252,6 +274,7 @@ function isMathBlock(token) {
     !token.type.endsWith("_end")
   );
 }
+module.exports.isMathBlock = isMathBlock;
 
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
@@ -293,14 +316,20 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   return lineMetadata;
 };
 
-// Calls the provided function for each line (with context)
-module.exports.forEachLine = function forEachLine(lineMetadata, handler) {
+/**
+ * Calls the provided function for each line.
+ *
+ * @param {Object} lineMetadata Line metadata object.
+ * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
+ * inTable, inItem, inBreak, inMath).
+ * @returns {void}
+ */
+function forEachLine(lineMetadata, handler) {
   lineMetadata.forEach(function forMetadata(metadata) {
-    // Parameters:
-    // line, lineIndex, inCode, onFence, inTable, inItem, inBreak, inMath
     handler(...metadata);
   });
-};
+}
+module.exports.forEachLine = forEachLine;
 
 // Returns (nested) lists as a flat array (in order)
 module.exports.flattenLists = function flattenLists(tokens) {
@@ -311,10 +340,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
   tokens.forEach((token) => {
-    if (isMathBlock(token) && token.map[1]) {
-      // markdown-it-texmath plugin does not account for math_block_end
-      token.map[1]++;
-    }
     if ((token.type === "bullet_list_open") ||
         (token.type === "ordered_list_open")) {
       // Save current context and start a new one
@@ -386,7 +411,8 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
  * Calls the provided function for each inline code span's content.
  *
  * @param {string} input Markdown content.
- * @param {Function} handler Callback function.
+ * @param {Function} handler Callback function taking (code, lineIndex,
+ * columnIndex, ticks).
  * @returns {void}
  */
 function forEachInlineCodeSpan(input, handler) {
@@ -521,26 +547,39 @@ module.exports.addErrorContext = function addErrorContext(
 };
 
 /**
- * Returns an array of code span ranges.
+ * Returns an array of code block and span content ranges.
  *
- * @param {string[]} lines Lines to scan for code span ranges.
- * @returns {number[][]} Array of ranges (line, index, length).
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
  */
-module.exports.inlineCodeSpanRanges = (lines) => {
+module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
   const exclusions = [];
-  forEachInlineCodeSpan(
-    lines.join("\n"),
-    (code, lineIndex, columnIndex) => {
-      const codeLines = code.split(newLineRe);
-      // eslint-disable-next-line unicorn/no-for-loop
-      for (let i = 0; i < codeLines.length; i++) {
-        exclusions.push(
-          [ lineIndex + i, columnIndex, codeLines[i].length ]
-        );
-        columnIndex = 0;
-      }
+  // Add code block ranges (excludes fences)
+  forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
+    if (inCode && !onFence) {
+      exclusions.push([ lineIndex, 0, line.length ]);
     }
-  );
+  });
+  // Add code span ranges (excludes ticks)
+  filterTokens(params, "inline", (token) => {
+    if (token.children.some((child) => child.type === "code_inline")) {
+      const tokenLines = params.lines.slice(token.map[0], token.map[1]);
+      forEachInlineCodeSpan(
+        tokenLines.join("\n"),
+        (code, lineIndex, columnIndex) => {
+          const codeLines = code.split(newLineRe);
+          for (const [ i, line ] of codeLines.entries()) {
+            exclusions.push([
+              token.lineNumber - 1 + lineIndex + i,
+              i ? 0 : columnIndex,
+              line.length
+            ]);
+          }
+        }
+      );
+    }
+  });
   return exclusions;
 };
 
@@ -596,6 +635,18 @@ module.exports.frontMatterHasTitle =
 function emphasisMarkersInContent(params) {
   const { lines } = params;
   const byLine = new Array(lines.length);
+  // Search links
+  lines.forEach((tokenLine, tokenLineIndex) => {
+    const inLine = [];
+    let linkMatch = null;
+    while ((linkMatch = linkRe.exec(tokenLine))) {
+      let markerMatch = null;
+      while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
+        inLine.push(linkMatch.index + markerMatch.index);
+      }
+    }
+    byLine[tokenLineIndex] = inLine;
+  });
   // Search code spans
   filterTokens(params, "inline", (token) => {
     const { children, lineNumber, map } = token;
@@ -606,29 +657,17 @@ function emphasisMarkersInContent(params) {
         (code, lineIndex, column, tickCount) => {
           const codeLines = code.split(newLineRe);
           codeLines.forEach((codeLine, codeLineIndex) => {
+            const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
+            const inLine = byLine[byLineIndex];
+            const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
             let match = null;
             while ((match = emphasisMarkersRe.exec(codeLine))) {
-              const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
-              const inLine = byLine[byLineIndex] || [];
-              const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
               inLine.push(codeLineOffset + match.index);
-              byLine[byLineIndex] = inLine;
             }
+            byLine[byLineIndex] = inLine;
           });
         }
       );
-    }
-  });
-  // Search links
-  lines.forEach((tokenLine, tokenLineIndex) => {
-    let linkMatch = null;
-    while ((linkMatch = linkRe.exec(tokenLine))) {
-      let markerMatch = null;
-      while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
-        const inLine = byLine[tokenLineIndex] || [];
-        inLine.push(linkMatch.index + markerMatch.index);
-        byLine[tokenLineIndex] = inLine;
-      }
     }
   });
   return byLine;
@@ -639,9 +678,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
+ * @param {string} [platform] Platform identifier (process.platform).
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input) {
+function getPreferredLineEnding(input, platform) {
   let cr = 0;
   let lf = 0;
   let crlf = 0;
@@ -662,7 +702,8 @@ function getPreferredLineEnding(input) {
   });
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
-    preferredLineEnding = os.EOL;
+    preferredLineEnding =
+      ((platform || process.platform) === "win32") ? "\r\n" : "\n";
   } else if ((lf >= crlf) && (lf >= cr)) {
     preferredLineEnding = "\n";
   } else if (crlf >= cr) {
@@ -777,3 +818,80 @@ module.exports.applyFixes = function applyFixes(input, errors) {
   // Return corrected input
   return lines.filter((line) => line !== null).join(lineEnding);
 };
+
+/**
+ * Gets the range and fixInfo values for reporting an error if the expected
+ * text is found on the specified line.
+ *
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index to check.
+ * @param {string} search Text to search for.
+ * @param {string} replace Text to replace with.
+ * @returns {Object} Range and fixInfo wrapper.
+ */
+function getRangeAndFixInfoIfFound(lines, lineIndex, search, replace) {
+  let range = null;
+  let fixInfo = null;
+  const searchIndex = lines[lineIndex].indexOf(search);
+  if (searchIndex !== -1) {
+    const column = searchIndex + 1;
+    const length = search.length;
+    range = [ column, length ];
+    fixInfo = {
+      "editColumn": column,
+      "deleteCount": length,
+      "insertText": replace
+    };
+  }
+  return {
+    range,
+    fixInfo
+  };
+}
+module.exports.getRangeAndFixInfoIfFound = getRangeAndFixInfoIfFound;
+
+/**
+ * Gets the next (subsequent) child token if it is of the expected type.
+ *
+ * @param {Object} parentToken Parent token.
+ * @param {Object} childToken Child token basis.
+ * @param {string} nextType Token type of next token.
+ * @param {string} nextNextType Token type of next-next token.
+ * @returns {Object} Next token.
+ */
+function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
+  const { children } = parentToken;
+  const index = children.indexOf(childToken);
+  if (
+    (index !== -1) &&
+    (children.length > index + 2) &&
+    (children[index + 1].type === nextType) &&
+    (children[index + 2].type === nextNextType)
+  ) {
+    return children[index + 1];
+  }
+  return null;
+}
+module.exports.getNextChildToken = getNextChildToken;
+
+/**
+ * Calls Object.freeze() on an object and its children.
+ *
+ * @param {Object} obj Object to deep freeze.
+ * @returns {Object} Object passed to the function.
+ */
+function deepFreeze(obj) {
+  const pending = [ obj ];
+  let current = null;
+  while ((current = pending.shift())) {
+    Object.freeze(current);
+    for (const name of Object.getOwnPropertyNames(current)) {
+      const value = current[name];
+      if (value && (typeof value === "object")) {
+        pending.push(value);
+      }
+    }
+  }
+  return obj;
+}
+module.exports.deepFreeze = deepFreeze;
