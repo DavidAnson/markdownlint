@@ -1109,7 +1109,7 @@ test("allBuiltInRulesHaveValidUrl", (t) => {
 });
 
 test("someCustomRulesHaveValidUrl", (t) => {
-  t.plan(7);
+  t.plan(8);
   customRules.all.forEach(function forRule(rule) {
     t.true(!rule.information ||
       (Object.getPrototypeOf(rule.information) === URL.prototype));

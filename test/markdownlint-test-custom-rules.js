@@ -1143,6 +1143,32 @@ test.cb("customRulesLintJavaScript", (t) => {
   });
 });
 
+test.cb("customRulesValidateJson", (t) => {
+  t.plan(2);
+  const options = {
+    "customRules": customRules.validateJson,
+    "files": "test/validate-json.md"
+  };
+  markdownlint(options, (err, actual) => {
+    t.falsy(err);
+    const expected = {
+      "test/validate-json.md": [
+        {
+          "lineNumber": 22,
+          "ruleNames": [ "validate-json" ],
+          "ruleDescription": "Rule that validates JSON code",
+          "ruleInformation": null,
+          "errorDetail": "Unexpected end of JSON input",
+          "errorContext": null,
+          "errorRange": null
+        }
+      ]
+    };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    t.end();
+  });
+});
+
 test("customRulesAsyncThrowsInSyncContext", (t) => {
   t.plan(1);
   const options = {
