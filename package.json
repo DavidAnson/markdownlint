@@ -41,7 +41,7 @@
     "test-cover": "c8 --check-coverage --branches 100 --functions 100 --lines 100 --statements 100 npm test",
     "test-declaration": "cd example/typescript && tsc && node type-check.js",
     "test-extra": "ava --timeout=5m test/markdownlint-test-extra-parse.js test/markdownlint-test-extra-type.js",
-    "upgrade": "npx npm-check-updates --upgrade"
+    "upgrade": "npx --yes npm-check-updates --upgrade"
   },
   "engines": {
     "node": ">=12"
