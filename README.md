@@ -978,6 +978,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 * 0.25.0 - Add MD049/MD050 for consistent emphasis/strong style (both auto-fixable), improve
            MD007/MD010/MD032/MD033/MD035/MD037/MD039, support asynchronous custom rules,
            improve performance, improve CI process, reduce dependencies, update dependencies.
+  * 0.25.1 - Update dependencies for CVE-2022-21670.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint

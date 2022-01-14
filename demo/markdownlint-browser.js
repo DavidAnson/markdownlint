@@ -1,4 +1,4 @@
-/*! markdownlint 0.25.0 https://github.com/DavidAnson/markdownlint @license MIT */
+/*! markdownlint 0.25.1 https://github.com/DavidAnson/markdownlint @license MIT */
 var markdownlint;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
@@ -914,7 +914,7 @@ module.exports.clear = function () {
 
 module.exports.deprecatedRuleNames = ["MD002", "MD006"];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
-module.exports.version = "0.25.0";
+module.exports.version = "0.25.1";
 
 
 /***/ }),
