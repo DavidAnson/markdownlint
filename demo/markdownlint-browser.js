@@ -2979,7 +2979,7 @@ module.exports = {
         var trailingPunctuationRe = new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
         forEachHeading(params, function (heading) {
             var line = heading.line, lineNumber = heading.lineNumber;
-            var trimmedLine = line.replace(/[\s#]*$/, "");
+            var trimmedLine = line.replace(/([^\s#])[\s#]+$/, "$1");
             var match = trailingPunctuationRe.exec(trimmedLine);
             if (match && !endOfLineHtmlEntityRe.test(trimmedLine)) {
                 var fullMatch = match[0];
