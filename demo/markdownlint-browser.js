@@ -2750,6 +2750,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, headingStyleFor = _a.headingStyleFor;
+var closedAtxRe = /^(#+)([ \t]+)([^ \t]|[^ \t].*[^ \t])([ \t]+)(#+)(\s*)$/;
 module.exports = {
     "names": ["MD021", "no-multiple-space-closed-atx"],
     "description": "Multiple spaces inside hashes on closed atx style heading",
@@ -2758,7 +2759,7 @@ module.exports = {
         filterTokens(params, "heading_open", function (token) {
             if (headingStyleFor(token) === "atx_closed") {
                 var line = token.line, lineNumber = token.lineNumber;
-                var match = /^(#+)([ \t]+)([^#]+?)([ \t]+)(#+)(\s*)$/.exec(line);
+                var match = closedAtxRe.exec(line);
                 if (match) {
                     var leftHash = match[1], leftSpaceLength = match[2]["length"], content = match[3], rightSpaceLength = match[4]["length"], rightHash = match[5], trailSpaceLength = match[6]["length"];
                     var left = leftSpaceLength > 1;
