@@ -31,6 +31,12 @@ const schema = {
         "/main/schema/markdownlint-config-schema.json"
     }
   },
+  "additionalProperties": {
+    "type": [
+      "boolean",
+      "object"
+    ]
+  }
 };
 const tags = {};
 
@@ -117,7 +123,7 @@ rules.forEach(function forRule(rule) {
         "br_spaces": {
           "description": "Spaces for line break",
           "type": "integer",
-          "minimum": 1,
+          "minimum": 0,
           "default": 2
         },
         "list_item_empty_lines": {
@@ -142,7 +148,7 @@ rules.forEach(function forRule(rule) {
         "spaces_per_tab": {
           "description": "Number of spaces for each hard tab",
           "type": "integer",
-          "minimum": 1,
+          "minimum": 0,
           "default": 1
         }
       };
@@ -214,13 +220,13 @@ rules.forEach(function forRule(rule) {
         "lines_above": {
           "description": "Blank lines above heading",
           "type": "integer",
-          "minimum": 1,
+          "minimum": 0,
           "default": 1
         },
         "lines_below": {
           "description": "Blank lines below heading",
           "type": "integer",
-          "minimum": 1,
+          "minimum": 0,
           "default": 1
         }
       };
