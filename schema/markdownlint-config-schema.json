@@ -26,14 +26,10 @@
       "default": true
     },
     "heading-increment": {
-      "description": "MD001/heading-increment/header-increment - Heading levels should only increment by one level at a time",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD001"
     },
     "header-increment": {
-      "description": "MD001/heading-increment/header-increment - Heading levels should only increment by one level at a time",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD001"
     },
     "MD002": {
       "description": "MD002/first-heading-h1/first-header-h1 - First heading should be a top-level heading",
@@ -46,42 +42,18 @@
         "level": {
           "description": "Heading level",
           "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
           "default": 1
         }
       },
       "additionalProperties": false
     },
     "first-heading-h1": {
-      "description": "MD002/first-heading-h1/first-header-h1 - First heading should be a top-level heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD002"
     },
     "first-header-h1": {
-      "description": "MD002/first-heading-h1/first-header-h1 - First heading should be a top-level heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD002"
     },
     "MD003": {
       "description": "MD003/heading-style/header-style - Heading style",
@@ -108,52 +80,10 @@
       "additionalProperties": false
     },
     "heading-style": {
-      "description": "MD003/heading-style/header-style - Heading style",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Heading style",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "atx",
-            "atx_closed",
-            "setext",
-            "setext_with_atx",
-            "setext_with_atx_closed"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD003"
     },
     "header-style": {
-      "description": "MD003/heading-style/header-style - Heading style",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Heading style",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "atx",
-            "atx_closed",
-            "setext",
-            "setext_with_atx",
-            "setext_with_atx_closed"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD003"
     },
     "MD004": {
       "description": "MD004/ul-style - Unordered list style",
@@ -179,27 +109,7 @@
       "additionalProperties": false
     },
     "ul-style": {
-      "description": "MD004/ul-style - Unordered list style",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "List style",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "asterisk",
-            "plus",
-            "dash",
-            "sublist"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD004"
     },
     "MD005": {
       "description": "MD005/list-indent - Inconsistent indentation for list items at the same level",
@@ -207,9 +117,7 @@
       "default": true
     },
     "list-indent": {
-      "description": "MD005/list-indent - Inconsistent indentation for list items at the same level",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD005"
     },
     "MD006": {
       "description": "MD006/ul-start-left - Consider starting bulleted lists at the beginning of the line",
@@ -217,9 +125,7 @@
       "default": true
     },
     "ul-start-left": {
-      "description": "MD006/ul-start-left - Consider starting bulleted lists at the beginning of the line",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD006"
     },
     "MD007": {
       "description": "MD007/ul-indent - Unordered list indentation",
@@ -232,6 +138,7 @@
         "indent": {
           "description": "Spaces for indent",
           "type": "integer",
+          "minimum": 1,
           "default": 2
         },
         "start_indented": {
@@ -242,36 +149,14 @@
         "start_indent": {
           "description": "Spaces for first level indent (when start_indented is set)",
           "type": "integer",
+          "minimum": 1,
           "default": 2
         }
       },
       "additionalProperties": false
     },
     "ul-indent": {
-      "description": "MD007/ul-indent - Unordered list indentation",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "indent": {
-          "description": "Spaces for indent",
-          "type": "integer",
-          "default": 2
-        },
-        "start_indented": {
-          "description": "Whether to indent the first level of the list",
-          "type": "boolean",
-          "default": false
-        },
-        "start_indent": {
-          "description": "Spaces for first level indent (when start_indented is set)",
-          "type": "integer",
-          "default": 2
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD007"
     },
     "MD009": {
       "description": "MD009/no-trailing-spaces - Trailing spaces",
@@ -284,6 +169,7 @@
         "br_spaces": {
           "description": "Spaces for line break",
           "type": "integer",
+          "minimum": 0,
           "default": 2
         },
         "list_item_empty_lines": {
@@ -300,30 +186,7 @@
       "additionalProperties": false
     },
     "no-trailing-spaces": {
-      "description": "MD009/no-trailing-spaces - Trailing spaces",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "br_spaces": {
-          "description": "Spaces for line break",
-          "type": "integer",
-          "default": 2
-        },
-        "list_item_empty_lines": {
-          "description": "Allow spaces for empty lines in list items",
-          "type": "boolean",
-          "default": false
-        },
-        "strict": {
-          "description": "Include unnecessary breaks",
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD009"
     },
     "MD010": {
       "description": "MD010/no-hard-tabs - Hard tabs",
@@ -340,32 +203,15 @@
         },
         "spaces_per_tab": {
           "description": "Number of spaces for each hard tab",
-          "type": "number",
+          "type": "integer",
+          "minimum": 0,
           "default": 1
         }
       },
       "additionalProperties": false
     },
     "no-hard-tabs": {
-      "description": "MD010/no-hard-tabs - Hard tabs",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "code_blocks": {
-          "description": "Include code blocks",
-          "type": "boolean",
-          "default": true
-        },
-        "spaces_per_tab": {
-          "description": "Number of spaces for each hard tab",
-          "type": "number",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD010"
     },
     "MD011": {
       "description": "MD011/no-reversed-links - Reversed link syntax",
@@ -373,9 +219,7 @@
       "default": true
     },
     "no-reversed-links": {
-      "description": "MD011/no-reversed-links - Reversed link syntax",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD011"
     },
     "MD012": {
       "description": "MD012/no-multiple-blanks - Multiple consecutive blank lines",
@@ -388,26 +232,14 @@
         "maximum": {
           "description": "Consecutive blank lines",
           "type": "integer",
+          "minimum": 1,
           "default": 1
         }
       },
       "additionalProperties": false
     },
     "no-multiple-blanks": {
-      "description": "MD012/no-multiple-blanks - Multiple consecutive blank lines",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "maximum": {
-          "description": "Consecutive blank lines",
-          "type": "integer",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD012"
     },
     "MD013": {
       "description": "MD013/line-length - Line length",
@@ -420,16 +252,19 @@
         "line_length": {
           "description": "Number of characters",
           "type": "integer",
+          "minimum": 1,
           "default": 80
         },
         "heading_line_length": {
           "description": "Number of characters for headings",
           "type": "integer",
+          "minimum": 1,
           "default": 80
         },
         "code_block_line_length": {
           "description": "Number of characters for code blocks",
           "type": "integer",
+          "minimum": 1,
           "default": 80
         },
         "code_blocks": {
@@ -466,60 +301,7 @@
       "additionalProperties": false
     },
     "line-length": {
-      "description": "MD013/line-length - Line length",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "line_length": {
-          "description": "Number of characters",
-          "type": "integer",
-          "default": 80
-        },
-        "heading_line_length": {
-          "description": "Number of characters for headings",
-          "type": "integer",
-          "default": 80
-        },
-        "code_block_line_length": {
-          "description": "Number of characters for code blocks",
-          "type": "integer",
-          "default": 80
-        },
-        "code_blocks": {
-          "description": "Include code blocks",
-          "type": "boolean",
-          "default": true
-        },
-        "tables": {
-          "description": "Include tables",
-          "type": "boolean",
-          "default": true
-        },
-        "headings": {
-          "description": "Include headings",
-          "type": "boolean",
-          "default": true
-        },
-        "headers": {
-          "description": "Include headings",
-          "type": "boolean",
-          "default": true
-        },
-        "strict": {
-          "description": "Strict length checking",
-          "type": "boolean",
-          "default": false
-        },
-        "stern": {
-          "description": "Stern length checking",
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD013"
     },
     "MD014": {
       "description": "MD014/commands-show-output - Dollar signs used before commands without showing output",
@@ -527,9 +309,7 @@
       "default": true
     },
     "commands-show-output": {
-      "description": "MD014/commands-show-output - Dollar signs used before commands without showing output",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD014"
     },
     "MD018": {
       "description": "MD018/no-missing-space-atx - No space after hash on atx style heading",
@@ -537,9 +317,7 @@
       "default": true
     },
     "no-missing-space-atx": {
-      "description": "MD018/no-missing-space-atx - No space after hash on atx style heading",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD018"
     },
     "MD019": {
       "description": "MD019/no-multiple-space-atx - Multiple spaces after hash on atx style heading",
@@ -547,9 +325,7 @@
       "default": true
     },
     "no-multiple-space-atx": {
-      "description": "MD019/no-multiple-space-atx - Multiple spaces after hash on atx style heading",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD019"
     },
     "MD020": {
       "description": "MD020/no-missing-space-closed-atx - No space inside hashes on closed atx style heading",
@@ -557,9 +333,7 @@
       "default": true
     },
     "no-missing-space-closed-atx": {
-      "description": "MD020/no-missing-space-closed-atx - No space inside hashes on closed atx style heading",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD020"
     },
     "MD021": {
       "description": "MD021/no-multiple-space-closed-atx - Multiple spaces inside hashes on closed atx style heading",
@@ -567,9 +341,7 @@
       "default": true
     },
     "no-multiple-space-closed-atx": {
-      "description": "MD021/no-multiple-space-closed-atx - Multiple spaces inside hashes on closed atx style heading",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD021"
     },
     "MD022": {
       "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
@@ -582,57 +354,23 @@
         "lines_above": {
           "description": "Blank lines above heading",
           "type": "integer",
+          "minimum": 0,
           "default": 1
         },
         "lines_below": {
           "description": "Blank lines below heading",
           "type": "integer",
+          "minimum": 0,
           "default": 1
         }
       },
       "additionalProperties": false
     },
     "blanks-around-headings": {
-      "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "lines_above": {
-          "description": "Blank lines above heading",
-          "type": "integer",
-          "default": 1
-        },
-        "lines_below": {
-          "description": "Blank lines below heading",
-          "type": "integer",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD022"
     },
     "blanks-around-headers": {
-      "description": "MD022/blanks-around-headings/blanks-around-headers - Headings should be surrounded by blank lines",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "lines_above": {
-          "description": "Blank lines above heading",
-          "type": "integer",
-          "default": 1
-        },
-        "lines_below": {
-          "description": "Blank lines below heading",
-          "type": "integer",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD022"
     },
     "MD023": {
       "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",
@@ -640,14 +378,10 @@
       "default": true
     },
     "heading-start-left": {
-      "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD023"
     },
     "header-start-left": {
-      "description": "MD023/heading-start-left/header-start-left - Headings must start at the beginning of the line",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD023"
     },
     "MD024": {
       "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
@@ -671,46 +405,10 @@
       "additionalProperties": false
     },
     "no-duplicate-heading": {
-      "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "allow_different_nesting": {
-          "description": "Only check sibling headings",
-          "type": "boolean",
-          "default": false
-        },
-        "siblings_only": {
-          "description": "Only check sibling headings",
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD024"
     },
     "no-duplicate-header": {
-      "description": "MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "allow_different_nesting": {
-          "description": "Only check sibling headings",
-          "type": "boolean",
-          "default": false
-        },
-        "siblings_only": {
-          "description": "Only check sibling headings",
-          "type": "boolean",
-          "default": false
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD024"
     },
     "MD025": {
       "description": "MD025/single-title/single-h1 - Multiple top-level headings in the same document",
@@ -723,6 +421,8 @@
         "level": {
           "description": "Heading level",
           "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
           "default": 1
         },
         "front_matter_title": {
@@ -734,46 +434,10 @@
       "additionalProperties": false
     },
     "single-title": {
-      "description": "MD025/single-title/single-h1 - Multiple top-level headings in the same document",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD025"
     },
     "single-h1": {
-      "description": "MD025/single-title/single-h1 - Multiple top-level headings in the same document",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD025"
     },
     "MD026": {
       "description": "MD026/no-trailing-punctuation - Trailing punctuation in heading",
@@ -792,20 +456,7 @@
       "additionalProperties": false
     },
     "no-trailing-punctuation": {
-      "description": "MD026/no-trailing-punctuation - Trailing punctuation in heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "punctuation": {
-          "description": "Punctuation characters",
-          "type": "string",
-          "default": ".,;:!。，；：！"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD026"
     },
     "MD027": {
       "description": "MD027/no-multiple-space-blockquote - Multiple spaces after blockquote symbol",
@@ -813,9 +464,7 @@
       "default": true
     },
     "no-multiple-space-blockquote": {
-      "description": "MD027/no-multiple-space-blockquote - Multiple spaces after blockquote symbol",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD027"
     },
     "MD028": {
       "description": "MD028/no-blanks-blockquote - Blank line inside blockquote",
@@ -823,9 +472,7 @@
       "default": true
     },
     "no-blanks-blockquote": {
-      "description": "MD028/no-blanks-blockquote - Blank line inside blockquote",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD028"
     },
     "MD029": {
       "description": "MD029/ol-prefix - Ordered list item prefix",
@@ -850,26 +497,7 @@
       "additionalProperties": false
     },
     "ol-prefix": {
-      "description": "MD029/ol-prefix - Ordered list item prefix",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "List style",
-          "type": "string",
-          "enum": [
-            "one",
-            "ordered",
-            "one_or_ordered",
-            "zero"
-          ],
-          "default": "one_or_ordered"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD029"
     },
     "MD030": {
       "description": "MD030/list-marker-space - Spaces after list markers",
@@ -882,56 +510,32 @@
         "ul_single": {
           "description": "Spaces for single-line unordered list items",
           "type": "integer",
+          "minimum": 1,
           "default": 1
         },
         "ol_single": {
           "description": "Spaces for single-line ordered list items",
           "type": "integer",
+          "minimum": 1,
           "default": 1
         },
         "ul_multi": {
           "description": "Spaces for multi-line unordered list items",
           "type": "integer",
+          "minimum": 1,
           "default": 1
         },
         "ol_multi": {
           "description": "Spaces for multi-line ordered list items",
           "type": "integer",
+          "minimum": 1,
           "default": 1
         }
       },
       "additionalProperties": false
     },
     "list-marker-space": {
-      "description": "MD030/list-marker-space - Spaces after list markers",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "ul_single": {
-          "description": "Spaces for single-line unordered list items",
-          "type": "integer",
-          "default": 1
-        },
-        "ol_single": {
-          "description": "Spaces for single-line ordered list items",
-          "type": "integer",
-          "default": 1
-        },
-        "ul_multi": {
-          "description": "Spaces for multi-line unordered list items",
-          "type": "integer",
-          "default": 1
-        },
-        "ol_multi": {
-          "description": "Spaces for multi-line ordered list items",
-          "type": "integer",
-          "default": 1
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD030"
     },
     "MD031": {
       "description": "MD031/blanks-around-fences - Fenced code blocks should be surrounded by blank lines",
@@ -950,20 +554,7 @@
       "additionalProperties": false
     },
     "blanks-around-fences": {
-      "description": "MD031/blanks-around-fences - Fenced code blocks should be surrounded by blank lines",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "list_items": {
-          "description": "Include list items",
-          "type": "boolean",
-          "default": true
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD031"
     },
     "MD032": {
       "description": "MD032/blanks-around-lists - Lists should be surrounded by blank lines",
@@ -971,9 +562,7 @@
       "default": true
     },
     "blanks-around-lists": {
-      "description": "MD032/blanks-around-lists - Lists should be surrounded by blank lines",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD032"
     },
     "MD033": {
       "description": "MD033/no-inline-html - Inline HTML",
@@ -995,23 +584,7 @@
       "additionalProperties": false
     },
     "no-inline-html": {
-      "description": "MD033/no-inline-html - Inline HTML",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "allowed_elements": {
-          "description": "Allowed elements",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD033"
     },
     "MD034": {
       "description": "MD034/no-bare-urls - Bare URL used",
@@ -1019,9 +592,7 @@
       "default": true
     },
     "no-bare-urls": {
-      "description": "MD034/no-bare-urls - Bare URL used",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD034"
     },
     "MD035": {
       "description": "MD035/hr-style - Horizontal rule style",
@@ -1040,20 +611,7 @@
       "additionalProperties": false
     },
     "hr-style": {
-      "description": "MD035/hr-style - Horizontal rule style",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Horizontal rule style",
-          "type": "string",
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD035"
     },
     "MD036": {
       "description": "MD036/no-emphasis-as-heading/no-emphasis-as-header - Emphasis used instead of a heading",
@@ -1072,36 +630,10 @@
       "additionalProperties": false
     },
     "no-emphasis-as-heading": {
-      "description": "MD036/no-emphasis-as-heading/no-emphasis-as-header - Emphasis used instead of a heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "punctuation": {
-          "description": "Punctuation characters",
-          "type": "string",
-          "default": ".,;:!?。，；：！？"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD036"
     },
     "no-emphasis-as-header": {
-      "description": "MD036/no-emphasis-as-heading/no-emphasis-as-header - Emphasis used instead of a heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "punctuation": {
-          "description": "Punctuation characters",
-          "type": "string",
-          "default": ".,;:!?。，；：！？"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD036"
     },
     "MD037": {
       "description": "MD037/no-space-in-emphasis - Spaces inside emphasis markers",
@@ -1109,9 +641,7 @@
       "default": true
     },
     "no-space-in-emphasis": {
-      "description": "MD037/no-space-in-emphasis - Spaces inside emphasis markers",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD037"
     },
     "MD038": {
       "description": "MD038/no-space-in-code - Spaces inside code span elements",
@@ -1119,9 +649,7 @@
       "default": true
     },
     "no-space-in-code": {
-      "description": "MD038/no-space-in-code - Spaces inside code span elements",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD038"
     },
     "MD039": {
       "description": "MD039/no-space-in-links - Spaces inside link text",
@@ -1129,9 +657,7 @@
       "default": true
     },
     "no-space-in-links": {
-      "description": "MD039/no-space-in-links - Spaces inside link text",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD039"
     },
     "MD040": {
       "description": "MD040/fenced-code-language - Fenced code blocks should have a language specified",
@@ -1139,9 +665,7 @@
       "default": true
     },
     "fenced-code-language": {
-      "description": "MD040/fenced-code-language - Fenced code blocks should have a language specified",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD040"
     },
     "MD041": {
       "description": "MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading",
@@ -1154,6 +678,8 @@
         "level": {
           "description": "Heading level",
           "type": "integer",
+          "minimum": 1,
+          "maximum": 6,
           "default": 1
         },
         "front_matter_title": {
@@ -1165,46 +691,10 @@
       "additionalProperties": false
     },
     "first-line-heading": {
-      "description": "MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD041"
     },
     "first-line-h1": {
-      "description": "MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD041"
     },
     "MD042": {
       "description": "MD042/no-empty-links - No empty links",
@@ -1212,9 +702,7 @@
       "default": true
     },
     "no-empty-links": {
-      "description": "MD042/no-empty-links - No empty links",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD042"
     },
     "MD043": {
       "description": "MD043/required-headings/required-headers - Required heading structure",
@@ -1228,7 +716,8 @@
           "description": "List of headings",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^(\\*|\\+|#{1,6} .*)$"
           },
           "default": []
         },
@@ -1236,7 +725,8 @@
           "description": "List of headings",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^(\\*|\\+|#{1,6} .*)$"
           },
           "default": []
         }
@@ -1244,58 +734,10 @@
       "additionalProperties": false
     },
     "required-headings": {
-      "description": "MD043/required-headings/required-headers - Required heading structure",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "headings": {
-          "description": "List of headings",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        },
-        "headers": {
-          "description": "List of headings",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD043"
     },
     "required-headers": {
-      "description": "MD043/required-headings/required-headers - Required heading structure",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "headings": {
-          "description": "List of headings",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        },
-        "headers": {
-          "description": "List of headings",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD043"
     },
     "MD044": {
       "description": "MD044/proper-names - Proper names should have the correct capitalization",
@@ -1322,28 +764,7 @@
       "additionalProperties": false
     },
     "proper-names": {
-      "description": "MD044/proper-names - Proper names should have the correct capitalization",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "names": {
-          "description": "List of proper names",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        },
-        "code_blocks": {
-          "description": "Include code blocks",
-          "type": "boolean",
-          "default": true
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD044"
     },
     "MD045": {
       "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
@@ -1351,9 +772,7 @@
       "default": true
     },
     "no-alt-text": {
-      "description": "MD045/no-alt-text - Images should have alternate text (alt text)",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD045"
     },
     "MD046": {
       "description": "MD046/code-block-style - Code block style",
@@ -1377,25 +796,7 @@
       "additionalProperties": false
     },
     "code-block-style": {
-      "description": "MD046/code-block-style - Code block style",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Block style",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "fenced",
-            "indented"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD046"
     },
     "MD047": {
       "description": "MD047/single-trailing-newline - Files should end with a single newline character",
@@ -1403,9 +804,7 @@
       "default": true
     },
     "single-trailing-newline": {
-      "description": "MD047/single-trailing-newline - Files should end with a single newline character",
-      "type": "boolean",
-      "default": true
+      "$ref": "#/properties/MD047"
     },
     "MD048": {
       "description": "MD048/code-fence-style - Code fence style",
@@ -1429,25 +828,7 @@
       "additionalProperties": false
     },
     "code-fence-style": {
-      "description": "MD048/code-fence-style - Code fence style",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Code fence style",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "backtick",
-            "tilde"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD048"
     },
     "MD049": {
       "description": "MD049/emphasis-style - Emphasis style should be consistent",
@@ -1471,25 +852,7 @@
       "additionalProperties": false
     },
     "emphasis-style": {
-      "description": "MD049/emphasis-style - Emphasis style should be consistent",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Emphasis style should be consistent",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "asterisk",
-            "underscore"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD049"
     },
     "MD050": {
       "description": "MD050/strong-style - Strong style should be consistent",
@@ -1513,25 +876,7 @@
       "additionalProperties": false
     },
     "strong-style": {
-      "description": "MD050/strong-style - Strong style should be consistent",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "default": true,
-      "properties": {
-        "style": {
-          "description": "Strong style should be consistent",
-          "type": "string",
-          "enum": [
-            "consistent",
-            "asterisk",
-            "underscore"
-          ],
-          "default": "consistent"
-        }
-      },
-      "additionalProperties": false
+      "$ref": "#/properties/MD050"
     },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
