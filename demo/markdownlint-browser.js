@@ -52,6 +52,9 @@ var emphasisMarkersRe = /[_*]/g;
 // Regular expression for inline links and shortcut reference links
 var linkRe = /(\[(?:[^[\]]|\[[^\]]*\])*\])(\(\S*\)|\[\S*\])?/g;
 module.exports.linkRe = linkRe;
+// Regular expression for empty inline links
+module.exports.emptyLinkRe =
+    /(?:|(?<![^[]))\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\]\((?:|#|<>)\)/;
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 // All punctuation characters (normal and full-width)
@@ -3878,8 +3881,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
-var emptyLinkRe = /\[[^\]]*](?:\((?:#?|(?:<>))\))/;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, emptyLinkRe = _a.emptyLinkRe, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
 module.exports = {
     "names": ["MD042", "no-empty-links"],
     "description": "No empty links",

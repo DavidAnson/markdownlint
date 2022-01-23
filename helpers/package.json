@@ -11,6 +11,9 @@
     "url": "https://github.com/DavidAnson/markdownlint.git"
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
+  "engines": {
+    "node": ">=12"
+  },
   "keywords": [
     "markdownlint",
     "markdownlint-rule"
