@@ -448,8 +448,13 @@ rules.forEach(function forRule(rule) {
     scheme.type = ["boolean", "object"];
     scheme.additionalProperties = false;
   }
-  rule.names.forEach(function forName(name) {
-    schema.properties[name] = scheme;
+  rule.names.forEach(function forName(name, index) {
+    if (index == 0)
+      schema.properties[name] = scheme;
+    else
+    schema.properties[name] = {
+      "$ref": `#/properties/${rule.names[0]}`
+    };
   });
 });
 
