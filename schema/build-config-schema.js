@@ -451,7 +451,7 @@ rules.forEach(function forRule(rule) {
   }
   if (custom) {
     // @ts-ignore
-    scheme.type = [ "boolean", "object" ];
+    scheme.type = ["boolean", "object"];
     scheme.additionalProperties = false;
   }
   rule.names.forEach(function forName(name) {
