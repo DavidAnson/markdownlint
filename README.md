@@ -46,6 +46,7 @@ and test cases came directly from that project.
   * [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
   * [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
 * Tooling
+  * [eslint-plugin-markdownlint](https://github.com/paweldrozd/eslint-plugin-markdownlint)
   * [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
   * [Cake.Markdownlint addin for Cake build automation system](https://github.com/cake-contrib/Cake.Markdownlint)
 * Ruby
