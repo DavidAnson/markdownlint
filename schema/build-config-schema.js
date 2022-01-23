@@ -59,6 +59,7 @@ rules.forEach(function forRule(rule) {
         "level": {
           "description": "Heading level",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         }
       };
@@ -101,6 +102,7 @@ rules.forEach(function forRule(rule) {
         "indent": {
           "description": "Spaces for indent",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 2
         },
         "start_indented": {
@@ -109,9 +111,9 @@ rules.forEach(function forRule(rule) {
           "default": false
         },
         "start_indent": {
-          "description":
-            "Spaces for first level indent (when start_indented is set)",
+          "description": "Spaces for first level indent (when start_indented is set)",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 2
         }
       };
@@ -121,6 +123,7 @@ rules.forEach(function forRule(rule) {
         "br_spaces": {
           "description": "Spaces for line break",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 2
         },
         "list_item_empty_lines": {
@@ -144,7 +147,8 @@ rules.forEach(function forRule(rule) {
         },
         "spaces_per_tab": {
           "description": "Number of spaces for each hard tab",
-          "type": "number",
+          "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         }
       };
@@ -154,6 +158,7 @@ rules.forEach(function forRule(rule) {
         "maximum": {
           "description": "Consecutive blank lines",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         }
       };
@@ -163,16 +168,19 @@ rules.forEach(function forRule(rule) {
         "line_length": {
           "description": "Number of characters",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 80
         },
         "heading_line_length": {
           "description": "Number of characters for headings",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 80
         },
         "code_block_line_length": {
           "description": "Number of characters for code blocks",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 80
         },
         "code_blocks": {
@@ -212,11 +220,13 @@ rules.forEach(function forRule(rule) {
         "lines_above": {
           "description": "Blank lines above heading",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         },
         "lines_below": {
           "description": "Blank lines below heading",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         }
       };
@@ -273,21 +283,25 @@ rules.forEach(function forRule(rule) {
         "ul_single": {
           "description": "Spaces for single-line unordered list items",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         },
         "ol_single": {
           "description": "Spaces for single-line ordered list items",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         },
         "ul_multi": {
           "description": "Spaces for multi-line unordered list items",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         },
         "ol_multi": {
           "description": "Spaces for multi-line ordered list items",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         }
       };
@@ -328,6 +342,7 @@ rules.forEach(function forRule(rule) {
         "level": {
           "description": "Heading level",
           "type": "integer",
+          "exclusiveMinimum": 0,
           "default": 1
         },
         "front_matter_title": {
