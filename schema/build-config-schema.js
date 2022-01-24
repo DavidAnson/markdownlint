@@ -361,7 +361,8 @@ rules.forEach(function forRule(rule) {
           "description": "List of headings",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^(\*|\+|#{1,6})"
           },
           "default": []
         },
