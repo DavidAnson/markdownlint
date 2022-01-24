@@ -460,13 +460,9 @@ rules.forEach(function forRule(rule) {
     scheme.additionalProperties = false;
   }
   rule.names.forEach(function forName(name, index) {
-    if (index === 0) {
-      schema.properties[name] = scheme;
-    } else {
-      schema.properties[name] = {
-        "$ref": `#/properties/${rule.names[0]}`
-      };
-    }
+    schema.properties[name] = index === 0 ? scheme : {
+      "$ref": `#/properties/${rule.names[0]}`
+    };
   });
 });
 
