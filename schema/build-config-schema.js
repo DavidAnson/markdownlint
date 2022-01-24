@@ -60,6 +60,7 @@ rules.forEach(function forRule(rule) {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
+          "maximum": 6,
           "default": 1
         }
       };
@@ -344,6 +345,7 @@ rules.forEach(function forRule(rule) {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
+          "maximum": 6,
           "default": 1
         },
         "front_matter_title": {
