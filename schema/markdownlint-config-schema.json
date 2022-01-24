@@ -43,6 +43,7 @@
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
+          "maximum": 6,
           "default": 1
         }
       },
@@ -421,6 +422,7 @@
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
+          "maximum": 6,
           "default": 1
         },
         "front_matter_title": {
@@ -677,6 +679,7 @@
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
+          "maximum": 6,
           "default": 1
         },
         "front_matter_title": {
@@ -713,7 +716,8 @@
           "description": "List of headings",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^(\\*|\\+|#{1,6} .*)$"
           },
           "default": []
         },
@@ -721,7 +725,8 @@
           "description": "List of headings",
           "type": "array",
           "items": {
-            "type": "string"
+            "type": "string",
+            "pattern": "^(\\*|\\+|#{1,6} .*)$"
           },
           "default": []
         }
