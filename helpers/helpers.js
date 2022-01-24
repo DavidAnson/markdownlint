@@ -27,7 +27,8 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for inline links and shortcut reference links
-const linkRe = /(\[(?:[^[\]]|\[[^\]]*\])*\])(\(\S*\)|\[\S*\])?/g;
+const linkRe =
+  /(?:|(?<![^[]))(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
 module.exports.linkRe = linkRe;
 
 // Regular expression for empty inline links
