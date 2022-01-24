@@ -111,7 +111,8 @@ rules.forEach(function forRule(rule) {
           "default": false
         },
         "start_indent": {
-          "description": "Spaces for first level indent (when start_indented is set)",
+          "description":
+            "Spaces for first level indent (when start_indented is set)",
           "type": "integer",
           "minimum": 1,
           "default": 2
@@ -451,16 +452,17 @@ rules.forEach(function forRule(rule) {
   }
   if (custom) {
     // @ts-ignore
-    scheme.type = ["boolean", "object"];
+    scheme.type = [ "boolean", "object" ];
     scheme.additionalProperties = false;
   }
   rule.names.forEach(function forName(name, index) {
-    if (index == 0)
+    if (index === 0) {
       schema.properties[name] = scheme;
-    else
-    schema.properties[name] = {
-      "$ref": `#/properties/${rule.names[0]}`
-    };
+    } else {
+      schema.properties[name] = {
+        "$ref": `#/properties/${rule.names[0]}`
+      };
+    }
   });
 });
 
