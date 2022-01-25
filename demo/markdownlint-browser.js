@@ -4264,6 +4264,49 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md051.js":
+/*!***********************!*\
+  !*** ../lib/md051.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var pathToFileURL = Object(function webpackMissingModule() { var e = new Error("Cannot find module 'url'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
+var fs = __webpack_require__(/*! fs */ "?ec0a");
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), filterTokens = _a.filterTokens, addError = _a.addError;
+module.exports = {
+    "names": ["MD051", "no-dead-relative-links"],
+    "description": "No dead relative links",
+    "tags": ["links"],
+    "function": function MD051(params, onError) {
+        filterTokens(params, "inline", function (token) {
+            token.children.forEach(function (child) {
+                var lineNumber = child.lineNumber, type = child.type, attrs = child.attrs;
+                if (type === "link_open") {
+                    attrs.forEach(function (attr) {
+                        if (attr[0] === "href") {
+                            var href = attr[1];
+                            var url = new URL(href, pathToFileURL(params.name));
+                            url.hash = "";
+                            var isRelative = href.startsWith("./") ||
+                                href.startsWith("../");
+                            if (isRelative && !fs.existsSync(url.pathname)) {
+                                var detail = "Link \"".concat(href, "\" is dead (path: ").concat(url.pathname, ")");
+                                addError(onError, lineNumber, detail);
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -4320,7 +4363,8 @@ var rules = [
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
     __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
     __webpack_require__(/*! ./md049 */ "../lib/md049.js"),
-    __webpack_require__(/*! ./md050 */ "../lib/md050.js")
+    __webpack_require__(/*! ./md050 */ "../lib/md050.js"),
+    __webpack_require__(/*! ./md051 */ "../lib/md051.js")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();

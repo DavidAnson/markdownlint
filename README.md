@@ -106,6 +106,7 @@ playground for learning and exploring.
 * **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
 * **[MD049](doc/Rules.md#md049)** *emphasis-style* - Emphasis style should be consistent
 * **[MD050](doc/Rules.md#md050)** *strong-style* - Strong style should be consistent
+* **[MD051](doc/Rules.md#md051)** *no-dead-relative-links* - No dead relative links
 
 <!-- markdownlint-restore -->
 
@@ -141,7 +142,7 @@ rules at once.
 * **indentation** - MD005, MD006, MD007, MD027
 * **language** - MD040
 * **line_length** - MD013
-* **links** - MD011, MD034, MD039, MD042
+* **links** - MD011, MD034, MD039, MD042, MD051
 * **ol** - MD029, MD030, MD032
 * **spaces** - MD018, MD019, MD020, MD021, MD023
 * **spelling** - MD044

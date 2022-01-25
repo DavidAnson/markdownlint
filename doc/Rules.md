@@ -1984,3 +1984,18 @@ The configured strong style can be a specific symbol to use ("asterisk",
 "underscore"), or can require that usage be consistent within the document.
 
 Rationale: Consistent formatting makes it easier to understand a document.
+
+## MD051 - No dead relative links
+
+Tags: links
+
+Aliases: no-dead-relative-links
+
+This rule is triggered whenever a relative URL is given
+(starts with `./` or `../`) that doesn't exist in the file system:
+
+```markdown
+[Relative link](./file.md)
+```
+
+To fix this issue, ensure that `./file.md` exists.

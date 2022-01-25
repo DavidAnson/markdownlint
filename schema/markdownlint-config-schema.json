@@ -1533,6 +1533,16 @@
       },
       "additionalProperties": false
     },
+    "MD051": {
+      "description": "MD051/no-dead-relative-links - No dead relative links",
+      "type": "boolean",
+      "default": true
+    },
+    "no-dead-relative-links": {
+      "description": "MD051/no-dead-relative-links - No dead relative links",
+      "type": "boolean",
+      "default": true
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1569,7 +1579,7 @@
       "default": true
     },
     "links": {
-      "description": "links - MD011, MD034, MD039, MD042",
+      "description": "links - MD011, MD034, MD039, MD042, MD051",
       "type": "boolean",
       "default": true
     },
