@@ -4385,6 +4385,58 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md051.js":
+/*!***********************!*\
+  !*** ../lib/md051.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachHeading = _a.forEachHeading, filterTokens = _a.filterTokens;
+/**
+ * Converts a Markdown heading into an HTML fragment
+ * according to the rules used by GitHub.
+ *
+ * @param {string} string The string to convert.
+ * @returns {string} The converted string.
+ */
+function convertHeadingToHTMLFragment(string) {
+    return "#" + string
+        .toLowerCase()
+        .replace(/ /g, "-")
+        .replace(/[^-_a-z0-9]/g, "");
+}
+module.exports = {
+    "names": ["MD051", "valid-link-fragments"],
+    "description": "Link fragments should be valid",
+    "tags": ["links"],
+    "function": function MD051(params, onError) {
+        var validLinkFragments = [];
+        forEachHeading(params, function (_heading, content) {
+            validLinkFragments.push(convertHeadingToHTMLFragment(content));
+        });
+        filterTokens(params, "inline", function (token) {
+            token.children.forEach(function (child) {
+                var lineNumber = child.lineNumber, type = child.type, attrs = child.attrs;
+                if (type === "link_open") {
+                    var href = attrs.find(function (attr) { return attr[0] === "href"; });
+                    if (href !== undefined &&
+                        href[1].startsWith("#") &&
+                        !validLinkFragments.includes(href[1])) {
+                        var detail = "Link Fragment is invalid";
+                        addError(onError, lineNumber, detail, href[1]);
+                    }
+                }
+            });
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -4441,7 +4493,8 @@ var rules = [
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
     __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
     __webpack_require__(/*! ./md049 */ "../lib/md049.js"),
-    __webpack_require__(/*! ./md050 */ "../lib/md050.js")
+    __webpack_require__(/*! ./md050 */ "../lib/md050.js"),
+    __webpack_require__(/*! ./md051 */ "../lib/md051.js")
 ];
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
