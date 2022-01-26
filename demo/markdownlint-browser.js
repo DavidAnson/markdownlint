@@ -4273,31 +4273,44 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var pathToFileURL = Object(function webpackMissingModule() { var e = new Error("Cannot find module 'url'"); e.code = 'MODULE_NOT_FOUND'; throw e; }());
-var fs = __webpack_require__(/*! fs */ "?ec0a");
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), filterTokens = _a.filterTokens, addError = _a.addError;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), filterTokens = _a.filterTokens, addError = _a.addError, forEachHeading = _a.forEachHeading;
+/**
+ * Slugifies strings.
+ *
+ * @param {string} string The string to slugify.
+ * @returns {string} The slugified string.
+ */
+function slugify(string) {
+    return string
+        .toLowerCase()
+        .replace(/[.,/#!$%^&*;:{}[\]=_`~()]/g, "")
+        .split(" ")
+        .join("-");
+}
 module.exports = {
-    "names": ["MD051", "no-dead-relative-links"],
-    "description": "No dead relative links",
+    "names": ["MD051", "no-dead-hash-links-within-document"],
+    "description": "No dead hash links within document",
     "tags": ["links"],
     "function": function MD051(params, onError) {
+        var headings = [];
+        forEachHeading(params, function (_heading, content) {
+            headings.push("#" + slugify(content));
+        });
         filterTokens(params, "inline", function (token) {
             token.children.forEach(function (child) {
                 var lineNumber = child.lineNumber, type = child.type, attrs = child.attrs;
                 if (type === "link_open") {
-                    attrs.forEach(function (attr) {
-                        if (attr[0] === "href") {
-                            var href = attr[1];
-                            var url = new URL(href, pathToFileURL(params.name));
-                            url.hash = "";
-                            var isRelative = href.startsWith("./") ||
-                                href.startsWith("../");
-                            if (isRelative && !fs.existsSync(url.pathname)) {
-                                var detail = "Link \"".concat(href, "\" is dead (path: ").concat(url.pathname, ")");
-                                addError(onError, lineNumber, detail);
-                            }
+                    var href = attrs.find(function (attr) { return attr[0] === "href"; });
+                    if (href !== undefined &&
+                        typeof href[1] === "string" &&
+                        href[1].length >= 2 &&
+                        href[1].startsWith("#")) {
+                        var hasHeading = headings.includes(href[1]);
+                        if (!hasHeading) {
+                            var detail = "Link is dead (no corresponding heading)";
+                            addError(onError, lineNumber, detail, href[1]);
                         }
-                    });
+                    }
                 }
             });
         });

@@ -238,5 +238,5 @@ MD050:
   # Strong style should be consistent
   style: "consistent"
 
-# MD051/no-dead-relative-links - No dead relative links
+# MD051/no-dead-hash-links-within-document - No dead hash links within document
 MD051: true

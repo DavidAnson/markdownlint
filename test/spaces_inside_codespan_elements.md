@@ -78,21 +78,21 @@ Text [link](https://example.com/link`link`link`link) text `code`.
 
 Text [link](https://example.com/link "title`title") text `code`.
 
-Text [link](#link`link) text `code`.
+Text [link](#link`link) text `code`. {MD051}
 
 Text [link] (#link`link) text `code`. {MD038}
 
-Text [link[link](#link`link) text `code`.
+Text [link[link](#link`link) text `code`. {MD051}
 
-Text [link(link](#link`link) text `code`.
+Text [link(link](#link`link) text `code`. {MD051}
 
-Text [link)link](#link`link) text `code`.
+Text [link)link](#link`link) text `code`. {MD051}
 
-Text [link](#link[link`link) text `code`.
+Text [link](#link[linklink) text `code`. {MD051}
 
-Text [link](#link]link`link) text `code`.
+Text [link](#link[linklink) text `code`. {MD051}
 
-Text [link](#link(link`link) text `code`. {MD038}
+Text [link](#link[linklink) text `code`. {MD051}
 
 Text [`link`](xref:custom.link`1) text `code`.
 

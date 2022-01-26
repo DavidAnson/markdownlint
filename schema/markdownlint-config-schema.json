@@ -1534,12 +1534,12 @@
       "additionalProperties": false
     },
     "MD051": {
-      "description": "MD051/no-dead-relative-links - No dead relative links",
+      "description": "MD051/no-dead-hash-links-within-document - No dead hash links within document",
       "type": "boolean",
       "default": true
     },
-    "no-dead-relative-links": {
-      "description": "MD051/no-dead-relative-links - No dead relative links",
+    "no-dead-hash-links-within-document": {
+      "description": "MD051/no-dead-hash-links-within-document - No dead hash links within document",
       "type": "boolean",
       "default": true
     },

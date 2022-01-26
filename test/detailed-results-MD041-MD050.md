@@ -14,7 +14,7 @@ that capitalizes the
 name wrong twice:
 MarkDownLint.
 
-A [normal](link) and an [empty one]() and a [fragment](#one).
+A [normal](link) and an [empty one]().
 
 An image without alternate text ![](image.jpg)
 

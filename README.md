@@ -106,7 +106,7 @@ playground for learning and exploring.
 * **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
 * **[MD049](doc/Rules.md#md049)** *emphasis-style* - Emphasis style should be consistent
 * **[MD050](doc/Rules.md#md050)** *strong-style* - Strong style should be consistent
-* **[MD051](doc/Rules.md#md051)** *no-dead-relative-links* - No dead relative links
+* **[MD051](doc/Rules.md#md051)** *no-dead-hash-links-within-document* - No dead hash links within document
 
 <!-- markdownlint-restore -->
 
