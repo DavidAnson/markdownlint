@@ -1987,6 +1987,8 @@ The configured strong style can be a specific symbol to use ("asterisk",
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
+<a name="md051"></a>
+
 ## MD051 - Link fragments should be valid
 
 Tags: links
