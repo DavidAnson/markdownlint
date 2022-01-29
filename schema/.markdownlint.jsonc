@@ -264,6 +264,6 @@
     "style": "consistent"
   },
 
-  // MD051/no-dead-hash-links-within-document - No dead hash links within document
+  // MD051/valid-link-fragments - Link fragments should be valid
   "MD051": true
 }

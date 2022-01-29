@@ -314,5 +314,31 @@
       "MD050",
       "strong-style"
     ]
+  },
+  {
+    "errorContext": "#",
+    "errorDetail": "Link Fragment is invalid",
+    "errorRange": null,
+    "fixInfo": null,
+    "lineNumber": 5,
+    "ruleDescription": "Link fragments should be valid",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md051",
+    "ruleNames": [
+      "MD051",
+      "valid-link-fragments"
+    ]
+  },
+  {
+    "errorContext": "#one",
+    "errorDetail": "Link Fragment is invalid",
+    "errorRange": null,
+    "fixInfo": null,
+    "lineNumber": 17,
+    "ruleDescription": "Link fragments should be valid",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md051",
+    "ruleNames": [
+      "MD051",
+      "valid-link-fragments"
+    ]
   }
 ]

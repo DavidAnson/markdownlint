@@ -12,17 +12,17 @@
 
 [text]( <> "title" ) {MD042}
 
-[text](#) {MD042}
+[text](#) {MD042} {MD051}
 
-[text]( # ) {MD042}
+[text]( # ) {MD042} {MD051}
 
-[text](# "title") {MD042}
+[text](# "title") {MD042} {MD051}
 
-[text]( # "title" ) {MD042}
+[text]( # "title" ) {MD042} {MD051}
 
-[text][frag] {MD042}
+[text][frag] {MD042} {MD051}
 
-[text][ frag ] {MD042}
+[text][ frag ] {MD042} {MD051}
 
 [frag]: #
 

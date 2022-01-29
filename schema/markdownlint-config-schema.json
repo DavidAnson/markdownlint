@@ -1534,12 +1534,12 @@
       "additionalProperties": false
     },
     "MD051": {
-      "description": "MD051/no-dead-hash-links-within-document - No dead hash links within document",
+      "description": "MD051/valid-link-fragments - Link fragments should be valid",
       "type": "boolean",
       "default": true
     },
-    "no-dead-hash-links-within-document": {
-      "description": "MD051/no-dead-hash-links-within-document - No dead hash links within document",
+    "valid-link-fragments": {
+      "description": "MD051/valid-link-fragments - Link fragments should be valid",
       "type": "boolean",
       "default": true
     },

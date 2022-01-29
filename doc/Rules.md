@@ -1987,19 +1987,23 @@ The configured strong style can be a specific symbol to use ("asterisk",
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
-## MD051 - No dead hash links within document
+## MD051 - Link fragments should be valid
 
 Tags: links
 
-Aliases: no-dead-hash-links-within-document
+Aliases: valid-link-fragments
 
-This rule is triggered whenever a dead hash link is found within the document:
+This rule is triggered if a link fragment does not correspond to an
+heading within the document:
 
 ```markdown
 # Title
 
-[Valid link 1](#invalid-title)
+[Link](#invalid-fragment)
 ```
 
-To fix this issue, ensure that the heading with the slug `invalid-title` exists,
-here you could replace `#invalid-title` by `#title`.
+To fix this issue, ensure that the heading exists,
+here you could replace `#invalid-fragment` by `#title`.
+
+It's not part of the CommonMark specification,
+for example [GitHub turn headings into links](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links).

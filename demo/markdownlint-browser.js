@@ -4273,28 +4273,28 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), filterTokens = _a.filterTokens, addError = _a.addError, forEachHeading = _a.forEachHeading;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachHeading = _a.forEachHeading, filterTokens = _a.filterTokens;
 /**
- * Slugifies strings.
+ * Converts a Markdown heading into an HTML fragment
+ * according to the rules used by GitHub.
  *
- * @param {string} string The string to slugify.
- * @returns {string} The slugified string.
+ * @param {string} string The string to convert.
+ * @returns {string} The converted string.
  */
-function slugify(string) {
-    return string
+function convertHeadingToHTMLFragment(string) {
+    return "#" + string
         .toLowerCase()
-        .replace(/[.,/#!$%^&*;:{}[\]=_`~()]/g, "")
-        .split(" ")
-        .join("-");
+        .replace(/[.,/#?!$%^&*;:{}[\]=`~"'()]/g, "")
+        .replace(/ /g, "-");
 }
 module.exports = {
-    "names": ["MD051", "no-dead-hash-links-within-document"],
-    "description": "No dead hash links within document",
+    "names": ["MD051", "valid-link-fragments"],
+    "description": "Link fragments should be valid",
     "tags": ["links"],
     "function": function MD051(params, onError) {
         var headings = [];
         forEachHeading(params, function (_heading, content) {
-            headings.push("#" + slugify(content));
+            headings.push(convertHeadingToHTMLFragment(content));
         });
         filterTokens(params, "inline", function (token) {
             token.children.forEach(function (child) {
@@ -4302,14 +4302,10 @@ module.exports = {
                 if (type === "link_open") {
                     var href = attrs.find(function (attr) { return attr[0] === "href"; });
                     if (href !== undefined &&
-                        typeof href[1] === "string" &&
-                        href[1].length >= 2 &&
-                        href[1].startsWith("#")) {
-                        var hasHeading = headings.includes(href[1]);
-                        if (!hasHeading) {
-                            var detail = "Link is dead (no corresponding heading)";
-                            addError(onError, lineNumber, detail, href[1]);
-                        }
+                        href[1].startsWith("#") &&
+                        !headings.includes(href[1])) {
+                        var detail = "Link Fragment is invalid";
+                        addError(onError, lineNumber, detail, href[1]);
                     }
                 }
             });
