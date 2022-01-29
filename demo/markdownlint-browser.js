@@ -727,8 +727,8 @@ function applyFix(line, fixInfo, lineEnding) {
 }
 module.exports.applyFix = applyFix;
 // Applies as many fixes as possible to the input lines
-module.exports.applyFixes = function applyFixes(input, errors) {
-    var lineEnding = getPreferredLineEnding(input);
+module.exports.applyFixes = function applyFixes(input, errors, platform) {
+    var lineEnding = getPreferredLineEnding(input, platform);
     var lines = input.split(newLineRe);
     // Normalize fixInfo objects
     var fixInfos = errors
