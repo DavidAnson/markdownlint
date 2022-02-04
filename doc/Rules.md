@@ -1995,7 +1995,7 @@ Tags: links
 
 Aliases: valid-link-fragments
 
-This rule is triggered if a link fragment does not correspond to an
+This rule is triggered if a link fragment does not correspond to a
 heading within the document:
 
 ```markdown

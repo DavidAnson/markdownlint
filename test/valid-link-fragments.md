@@ -12,6 +12,14 @@
 
 [Valid](#valid-heading-with-quotes--and-double-quotes-)
 
+[Valid](#-valid-heading-with-emoji)
+
+[Valid](#valid-heading--with-emoji-2)
+
+[Valid](#valid-closed-atx-heading)
+
+[Valid](#valid-setex-heading)
+
 ### Valid H3 Heading
 
 Text
@@ -21,6 +29,25 @@ Text
 Text
 
 ### Valid Heading With Quotes ' And Double Quotes "
+
+Text
+
+### 🚀 Valid Heading With Emoji
+
+Text
+
+### Valid Heading 👀 With Emoji 2
+
+Text
+
+<!-- markdownlint-disable-next-line MD003 -->
+### Valid Closed ATX Heading ###
+
+Text
+
+<!-- markdownlint-disable-next-line MD003 -->
+Valid Setex Heading
+----
 
 Text
 

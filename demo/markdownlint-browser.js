@@ -4284,17 +4284,17 @@ var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErro
 function convertHeadingToHTMLFragment(string) {
     return "#" + string
         .toLowerCase()
-        .replace(/[.,/#?!$%^&*;:{}[\]=`~"'()]/g, "")
-        .replace(/ /g, "-");
+        .replace(/ /g, "-")
+        .replace(/[^-_a-z0-9]/g, "");
 }
 module.exports = {
     "names": ["MD051", "valid-link-fragments"],
     "description": "Link fragments should be valid",
     "tags": ["links"],
     "function": function MD051(params, onError) {
-        var headings = [];
+        var validLinkFragments = [];
         forEachHeading(params, function (_heading, content) {
-            headings.push(convertHeadingToHTMLFragment(content));
+            validLinkFragments.push(convertHeadingToHTMLFragment(content));
         });
         filterTokens(params, "inline", function (token) {
             token.children.forEach(function (child) {
@@ -4303,7 +4303,7 @@ module.exports = {
                     var href = attrs.find(function (attr) { return attr[0] === "href"; });
                     if (href !== undefined &&
                         href[1].startsWith("#") &&
-                        !headings.includes(href[1])) {
+                        !validLinkFragments.includes(href[1])) {
                         var detail = "Link Fragment is invalid";
                         addError(onError, lineNumber, detail, href[1]);
                     }
