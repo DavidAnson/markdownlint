@@ -114,9 +114,7 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes =
-    [ /^[^:]+\/(unbound|index|prerequisites)\.md: \d+: MD049\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
@@ -144,8 +142,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [ /^[^:]+: \d+: (MD049|MD050)\/.*$\r?\n?/gm ];
-    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+    return lintTestRepo(t, globPatterns, configPath);
   });
 }
 
