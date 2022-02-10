@@ -716,7 +716,7 @@ function normalizeFixInfo(fixInfo, lineNumber) {
  *
  * @param {string} line Line of Markdown content.
  * @param {Object} fixInfo RuleOnErrorFixInfo instance.
- * @param {string} lineEnding Line ending to use.
+ * @param {string} [lineEnding] Line ending to use.
  * @returns {string} Fixed content.
  */
 function applyFix(line, fixInfo, lineEnding) {
@@ -729,9 +729,16 @@ function applyFix(line, fixInfo, lineEnding) {
             line.slice(editIndex + deleteCount);
 }
 module.exports.applyFix = applyFix;
-// Applies as many fixes as possible to the input lines
-module.exports.applyFixes = function applyFixes(input, errors) {
-    var lineEnding = getPreferredLineEnding(input);
+/**
+ * Applies as many fixes as possible to Markdown content.
+ *
+ * @param {string} input Lines of Markdown content.
+ * @param {Object[]} errors RuleOnErrorInfo instances.
+ * @param {string} [platform] Platform identifier (process.platform).
+ * @returns {string} Corrected content.
+ */
+function applyFixes(input, errors, platform) {
+    var lineEnding = getPreferredLineEnding(input, platform);
     var lines = input.split(newLineRe);
     // Normalize fixInfo objects
     var fixInfos = errors
@@ -789,7 +796,8 @@ module.exports.applyFixes = function applyFixes(input, errors) {
     });
     // Return corrected input
     return lines.filter(function (line) { return line !== null; }).join(lineEnding);
-};
+}
+module.exports.applyFixes = applyFixes;
 /**
  * Gets the range and fixInfo values for reporting an error if the expected
  * text is found on the specified line.

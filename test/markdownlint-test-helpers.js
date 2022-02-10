@@ -473,7 +473,7 @@ test("applyFix", (t) => {
 });
 
 test("applyFixes", (t) => {
-  t.plan(30);
+  t.plan(33);
   const testCases = [
     [
       "Hello world.",
@@ -944,9 +944,23 @@ test("applyFixes", (t) => {
   ];
   testCases.forEach((testCase) => {
     const [ input, errors, expected ] = testCase;
+    // @ts-ignore
     const actual = helpers.applyFixes(input, errors);
     t.is(actual, expected, "Incorrect fix applied.");
   });
+  const input = "# Heading";
+  const errors = [
+    {
+      "lineNumber": 1,
+      "fixInfo": {
+        "editColumn": input.length + 1,
+        "insertText": "\n"
+      }
+    }
+  ];
+  t.is(helpers.applyFixes(input, errors, "darwin"), `${input}\n`);
+  t.is(helpers.applyFixes(input, errors, "linux"), `${input}\n`);
+  t.is(helpers.applyFixes(input, errors, "win32"), `${input}\r\n`);
 });
 
 test("deepFreeze", (t) => {
