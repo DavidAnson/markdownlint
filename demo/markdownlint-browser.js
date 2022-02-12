@@ -78,20 +78,44 @@ module.exports.isEmptyString = function isEmptyString(str) {
 module.exports.isObject = function isObject(obj) {
     return (obj !== null) && (typeof obj === "object") && !Array.isArray(obj);
 };
-// Returns true iff the input line is blank (no content)
-// Example: Contains nothing, whitespace, or comment (unclosed start/end okay)
-module.exports.isBlankLine = function isBlankLine(line) {
-    // Call to String.replace follows best practices and is not a security check
-    // False-positive for js/incomplete-multi-character-sanitization
+/**
+ * Returns true iff the input line is blank (contains nothing, whitespace, or
+ * comments (unclosed start/end comments allowed)).
+ *
+ * @param {string} line Input line.
+ * @returns {boolean} True iff line is blank.
+ */
+function isBlankLine(line) {
+    var startComment = "<!--";
+    var endComment = "-->";
+    var removeComments = function (s) {
+        // eslint-disable-next-line no-constant-condition
+        while (true) {
+            var start = s.indexOf(startComment);
+            var end = s.indexOf(endComment);
+            if ((end !== -1) && ((start === -1) || (end < start))) {
+                // Unmatched end comment is first
+                s = s.slice(end + endComment.length);
+            }
+            else if ((start !== -1) && (end !== -1)) {
+                // Start comment is before end comment
+                s = s.slice(0, start) + s.slice(end + endComment.length);
+            }
+            else if ((start !== -1) && (end === -1)) {
+                // Unmatched start comment is last
+                s = s.slice(0, start);
+            }
+            else {
+                // No more comments to remove
+                return s;
+            }
+        }
+    };
     return (!line ||
         !line.trim() ||
-        !line
-            .replace(/<!--.*?-->/g, "")
-            .replace(/<!--.*$/g, "")
-            .replace(/^.*-->/g, "")
-            .replace(/>/g, "")
-            .trim());
-};
+        !removeComments(line).replace(/>/g, "").trim());
+}
+module.exports.isBlankLine = isBlankLine;
 /**
  * Compare function for Array.prototype.sort for ascending order of numbers.
  *
