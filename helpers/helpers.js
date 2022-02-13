@@ -12,11 +12,11 @@ module.exports.frontMatterRe =
   // eslint-disable-next-line max-len
   /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m;
 
-// Regular expression for matching inline disable/enable comments
-const inlineCommentRe =
+// Regular expression for matching the start of inline disable/enable comments
+const inlineCommentStartRe =
   // eslint-disable-next-line max-len
-  /<!--\s*markdownlint-(?:(?:(disable|enable|capture|restore|disable-file|enable-file|disable-next-line)((?:\s+[a-z0-9_-]+)*))|(?:(configure-file)\s+([\s\S]*?)))\s*-->/ig;
-module.exports.inlineCommentRe = inlineCommentRe;
+  /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
+module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
@@ -163,9 +163,9 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
         if (isValid) {
           const inlineCommentIndex = text
             .slice(i, j + htmlCommentEnd.length)
-            .search(inlineCommentRe);
+            .search(inlineCommentStartRe);
           // If not a markdownlint inline directive...
-          if (inlineCommentIndex === -1) {
+          if (inlineCommentIndex !== 0) {
             text =
               text.slice(0, i + htmlCommentBegin.length) +
               content.replace(/[^\r\n]/g, ".") +

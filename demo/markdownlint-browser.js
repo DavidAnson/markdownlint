@@ -38,11 +38,11 @@ module.exports.newLineRe = newLineRe;
 module.exports.frontMatterRe =
     // eslint-disable-next-line max-len
     /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m;
-// Regular expression for matching inline disable/enable comments
-var inlineCommentRe = 
+// Regular expression for matching the start of inline disable/enable comments
+var inlineCommentStartRe = 
 // eslint-disable-next-line max-len
-/<!--\s*markdownlint-(?:(?:(disable|enable|capture|restore|disable-file|enable-file|disable-next-line)((?:\s+[a-z0-9_-]+)*))|(?:(configure-file)\s+([\s\S]*?)))\s*-->/ig;
-module.exports.inlineCommentRe = inlineCommentRe;
+/(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
+module.exports.inlineCommentStartRe = inlineCommentStartRe;
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
@@ -176,9 +176,9 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
                 if (isValid) {
                     var inlineCommentIndex = text
                         .slice(i, j + htmlCommentEnd.length)
-                        .search(inlineCommentRe);
+                        .search(inlineCommentStartRe);
                     // If not a markdownlint inline directive...
-                    if (inlineCommentIndex === -1) {
+                    if (inlineCommentIndex !== 0) {
                         text =
                             text.slice(0, i + htmlCommentBegin.length) +
                                 content.replace(/[^\r\n]/g, ".") +
@@ -1303,9 +1303,14 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
         input.forEach(function (line, lineIndex) {
             if (!noInlineConfig) {
                 var match = null;
-                while ((match = helpers.inlineCommentRe.exec(line))) {
-                    var action = (match[1] || match[3]).toUpperCase();
-                    var parameter = match[2] || match[4];
+                while ((match = helpers.inlineCommentStartRe.exec(line))) {
+                    var action = match[2].toUpperCase();
+                    var startIndex = match.index + match[1].length;
+                    var endIndex = line.indexOf("-->", startIndex);
+                    if (endIndex === -1) {
+                        break;
+                    }
+                    var parameter = line.slice(startIndex, endIndex);
                     forEachMatch(action, parameter, lineIndex + 1);
                 }
             }
@@ -1330,9 +1335,8 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     function applyEnableDisable(action, parameter, state) {
         state = __assign({}, state);
         var enabled = (action.startsWith("ENABLE"));
-        var items = parameter ?
-            parameter.trim().toUpperCase().split(/\s+/) :
-            allRuleNames;
+        var trimmed = parameter && parameter.trim();
+        var items = trimmed ? trimmed.toUpperCase().split(/\s+/) : allRuleNames;
         items.forEach(function (nameUpper) {
             (aliasToRuleNames[nameUpper] || []).forEach(function (ruleName) {
                 state[ruleName] = enabled;
