@@ -52,9 +52,6 @@ var emphasisMarkersRe = /[_*]/g;
 // Regular expression for inline links and shortcut reference links
 var linkRe = /(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
 module.exports.linkRe = linkRe;
-// Regular expression for empty inline links
-module.exports.emptyLinkRe =
-    /\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\]\((?:|#|<>)\)/;
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 // All punctuation characters (normal and full-width)
@@ -3917,7 +3914,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, emptyLinkRe = _a.emptyLinkRe, filterTokens = _a.filterTokens, rangeFromRegExp = _a.rangeFromRegExp;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens;
 module.exports = {
     "names": ["MD042", "no-empty-links"],
     "description": "No empty links",
@@ -3940,7 +3937,14 @@ module.exports = {
                 else if (child.type === "link_close") {
                     inLink = false;
                     if (emptyLink) {
-                        addErrorContext(onError, child.lineNumber, "[" + linkText + "]()", null, null, rangeFromRegExp(child.line, emptyLinkRe));
+                        var context = "[".concat(linkText, "]");
+                        var range = null;
+                        var match = child.line.match(new RegExp("".concat(escapeForRegExp(context), "\\((?:|#|<>)\\)")));
+                        if (match) {
+                            context = match[0];
+                            range = [match.index + 1, match[0].length];
+                        }
+                        addErrorContext(onError, child.lineNumber, context, null, null, range);
                         emptyLink = false;
                     }
                 }

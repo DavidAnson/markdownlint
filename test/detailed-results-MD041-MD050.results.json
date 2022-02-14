@@ -38,7 +38,7 @@
     "ruleDescription": "No empty links",
     "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
     "errorDetail": null,
-    "errorContext": "[empty]()",
+    "errorContext": "[empty](#)",
     "errorRange": [
       4,
       10
@@ -54,7 +54,7 @@
     "ruleDescription": "No empty links",
     "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md042",
     "errorDetail": null,
-    "errorContext": "[empty]()",
+    "errorContext": "[empty](<>)",
     "errorRange": [
       4,
       11
