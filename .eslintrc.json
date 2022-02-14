@@ -53,6 +53,7 @@
     "sourceType": "script"
   },
   "plugins": [
+    "es",
     "jsdoc",
     "node",
     "unicorn"
@@ -104,6 +105,8 @@
     "space-before-function-paren": ["error", "never"],
     "vars-on-top": "off",
     "wrap-regex": "off",
+
+    "es/no-regexp-lookbehind-assertions": "error",
 
     "jsdoc/check-access": "error",
     "jsdoc/check-alignment": "error",

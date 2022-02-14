@@ -28,12 +28,12 @@ const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for inline links and shortcut reference links
 const linkRe =
-  /(?:|(?<![^[]))(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
+  /(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
 module.exports.linkRe = linkRe;
 
 // Regular expression for empty inline links
 module.exports.emptyLinkRe =
-  /(?:|(?<![^[]))\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\]\((?:|#|<>)\)/;
+  /\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\]\((?:|#|<>)\)/;
 
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;

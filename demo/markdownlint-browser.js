@@ -50,11 +50,11 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 var emphasisMarkersRe = /[_*]/g;
 // Regular expression for inline links and shortcut reference links
-var linkRe = /(?:|(?<![^[]))(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
+var linkRe = /(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
 module.exports.linkRe = linkRe;
 // Regular expression for empty inline links
 module.exports.emptyLinkRe =
-    /(?:|(?<![^[]))\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\]\((?:|#|<>)\)/;
+    /\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\]\((?:|#|<>)\)/;
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 // All punctuation characters (normal and full-width)
