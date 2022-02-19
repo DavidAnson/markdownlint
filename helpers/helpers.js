@@ -26,11 +26,6 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 const emphasisMarkersRe = /[_*]/g;
 
-// Regular expression for inline links and shortcut reference links
-const linkRe =
-  /(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
-module.exports.linkRe = linkRe;
-
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 
@@ -649,6 +644,82 @@ module.exports.frontMatterHasTitle =
   };
 
 /**
+ * Calls the provided function for each link.
+ *
+ * @param {string} line Line of Markdown input.
+ * @param {Function} handler Function taking (index, link, text, destination).
+ * @returns {void}
+ */
+function forEachLink(line, handler) {
+  // Helper to find matching close symbol for link text/destination
+  const findClosingSymbol = (index) => {
+    const begin = line[index];
+    const end = (begin === "[") ? "]" : ")";
+    let nesting = 0;
+    let escaping = false;
+    let pointy = false;
+    for (let i = index + 1; i < line.length; i++) {
+      const current = line[i];
+      if (current === "\\") {
+        escaping = !escaping;
+      } else if (!escaping && (current === begin)) {
+        nesting++;
+      } else if (!escaping && (current === end)) {
+        if (nesting > 0) {
+          nesting--;
+        } else if (!pointy) {
+          // Return index after matching close symbol
+          return i + 1;
+        }
+      } else if ((i === index + 1) && (begin === "(") && (current === "<")) {
+        pointy = true;
+      } else if (!escaping && pointy && current === ">") {
+        pointy = false;
+        nesting = 0;
+      } else {
+        escaping = false;
+      }
+    }
+    // No match found
+    return -1;
+  };
+  // Scan line for unescaped "[" character
+  let escaping = false;
+  for (let i = 0; i < line.length; i++) {
+    const current = line[i];
+    if (current === "\\") {
+      escaping = !escaping;
+    } else if (!escaping && (current === "[")) {
+      // Scan for matching close "]" of link text
+      const textEnd = findClosingSymbol(i);
+      if (textEnd !== -1) {
+        if ((line[textEnd] === "(") || (line[textEnd] === "[")) {
+          // Scan for matching close ")" or "]" of link destination
+          const destEnd = findClosingSymbol(textEnd);
+          if (destEnd !== -1) {
+            // Call handler with link text and destination
+            const link = line.slice(i, destEnd);
+            const text = line.slice(i, textEnd);
+            const dest = line.slice(textEnd, destEnd);
+            handler(i, link, text, dest);
+            i = destEnd;
+          }
+        }
+        if (i < textEnd) {
+          // Call handler with link text only
+          const text = line.slice(i, textEnd);
+          handler(i, text, text);
+          i = textEnd;
+        }
+      }
+    } else {
+      escaping = false;
+    }
+  }
+}
+module.exports.forEachLink = forEachLink;
+
+/**
  * Returns a list of emphasis markers in code spans and links.
  *
  * @param {Object} params RuleParams instance.
@@ -660,13 +731,12 @@ function emphasisMarkersInContent(params) {
   // Search links
   lines.forEach((tokenLine, tokenLineIndex) => {
     const inLine = [];
-    let linkMatch = null;
-    while ((linkMatch = linkRe.exec(tokenLine))) {
+    forEachLink(tokenLine, (index, match) => {
       let markerMatch = null;
-      while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
-        inLine.push(linkMatch.index + markerMatch.index);
+      while ((markerMatch = emphasisMarkersRe.exec(match))) {
+        inLine.push(index + markerMatch.index);
       }
-    }
+    });
     byLine[tokenLineIndex] = inLine;
   });
   // Search code spans

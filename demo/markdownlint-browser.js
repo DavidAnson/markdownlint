@@ -49,9 +49,6 @@ module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 var emphasisMarkersRe = /[_*]/g;
-// Regular expression for inline links and shortcut reference links
-var linkRe = /(\[(?:[^[\]]?(?:\[[^[\]]*\])?)*\])(\([^)]*\)|\[[^\]]*\])?/g;
-module.exports.linkRe = linkRe;
 // Regular expression for link reference definition lines
 module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
 // All punctuation characters (normal and full-width)
@@ -631,6 +628,89 @@ module.exports.frontMatterHasTitle =
             frontMatterLines.some(function (line) { return frontMatterTitleRe.test(line); });
     };
 /**
+ * Calls the provided function for each link.
+ *
+ * @param {string} line Line of Markdown input.
+ * @param {Function} handler Function taking (index, link, text, destination).
+ * @returns {void}
+ */
+function forEachLink(line, handler) {
+    // Helper to find matching close symbol for link text/destination
+    var findClosingSymbol = function (index) {
+        var begin = line[index];
+        var end = (begin === "[") ? "]" : ")";
+        var nesting = 0;
+        var escaping = false;
+        var pointy = false;
+        for (var i = index + 1; i < line.length; i++) {
+            var current = line[i];
+            if (current === "\\") {
+                escaping = !escaping;
+            }
+            else if (!escaping && (current === begin)) {
+                nesting++;
+            }
+            else if (!escaping && (current === end)) {
+                if (nesting > 0) {
+                    nesting--;
+                }
+                else if (!pointy) {
+                    // Return index after matching close symbol
+                    return i + 1;
+                }
+            }
+            else if ((i === index + 1) && (begin === "(") && (current === "<")) {
+                pointy = true;
+            }
+            else if (!escaping && pointy && current === ">") {
+                pointy = false;
+                nesting = 0;
+            }
+            else {
+                escaping = false;
+            }
+        }
+        // No match found
+        return -1;
+    };
+    // Scan line for unescaped "[" character
+    var escaping = false;
+    for (var i = 0; i < line.length; i++) {
+        var current = line[i];
+        if (current === "\\") {
+            escaping = !escaping;
+        }
+        else if (!escaping && (current === "[")) {
+            // Scan for matching close "]" of link text
+            var textEnd = findClosingSymbol(i);
+            if (textEnd !== -1) {
+                if ((line[textEnd] === "(") || (line[textEnd] === "[")) {
+                    // Scan for matching close ")" or "]" of link destination
+                    var destEnd = findClosingSymbol(textEnd);
+                    if (destEnd !== -1) {
+                        // Call handler with link text and destination
+                        var link = line.slice(i, destEnd);
+                        var text = line.slice(i, textEnd);
+                        var dest = line.slice(textEnd, destEnd);
+                        handler(i, link, text, dest);
+                        i = destEnd;
+                    }
+                }
+                if (i < textEnd) {
+                    // Call handler with link text only
+                    var text = line.slice(i, textEnd);
+                    handler(i, text, text);
+                    i = textEnd;
+                }
+            }
+        }
+        else {
+            escaping = false;
+        }
+    }
+}
+module.exports.forEachLink = forEachLink;
+/**
  * Returns a list of emphasis markers in code spans and links.
  *
  * @param {Object} params RuleParams instance.
@@ -642,13 +722,12 @@ function emphasisMarkersInContent(params) {
     // Search links
     lines.forEach(function (tokenLine, tokenLineIndex) {
         var inLine = [];
-        var linkMatch = null;
-        while ((linkMatch = linkRe.exec(tokenLine))) {
+        forEachLink(tokenLine, function (index, match) {
             var markerMatch = null;
-            while ((markerMatch = emphasisMarkersRe.exec(linkMatch[0]))) {
-                inLine.push(linkMatch.index + markerMatch.index);
+            while ((markerMatch = emphasisMarkersRe.exec(match))) {
+                inLine.push(index + markerMatch.index);
             }
-        }
+        });
         byLine[tokenLineIndex] = inLine;
     });
     // Search code spans
@@ -4035,7 +4114,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange, linkRe = _a.linkRe, linkReferenceRe = _a.linkReferenceRe;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, forEachLink = _a.forEachLink, overlapsAnyRange = _a.overlapsAnyRange, linkReferenceRe = _a.linkReferenceRe;
 var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
@@ -4057,12 +4136,11 @@ module.exports = {
                 while ((match = bareUrlRe.exec(line)) !== null) {
                     exclusions.push([lineIndex, match.index, match[0].length]);
                 }
-                while ((match = linkRe.exec(line)) !== null) {
-                    var text = match[1], destination = match[2];
+                forEachLink(line, function (index, _, text, destination) {
                     if (destination) {
-                        exclusions.push([lineIndex, match.index + text.length, destination.length]);
+                        exclusions.push([lineIndex, index + text.length, destination.length]);
                     }
-                }
+                });
             }
         });
         if (!includeCodeBlocks) {
