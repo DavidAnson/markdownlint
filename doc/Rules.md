@@ -1313,7 +1313,7 @@ Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
 
 Rationale: Raw HTML is allowed in Markdown, but this rule is included for
 those who want their documents to only include "pure" Markdown, or for those
-who are rendering Markdown documents in something other than HTML.
+who are rendering Markdown documents into something other than HTML.
 
 <a name="md034"></a>
 
