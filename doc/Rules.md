@@ -13,7 +13,7 @@ Tags: headings, headers
 
 Aliases: heading-increment, header-increment
 
-This rule is triggered when you skip heading levels in a markdown document, for
+This rule is triggered when you skip heading levels in a Markdown document, for
 example:
 
 ```markdown
@@ -861,7 +861,7 @@ in changelogs):
 ### Features
 ```
 
-Rationale: Some markdown parsers generate anchors for headings based on the
+Rationale: Some Markdown parsers generate anchors for headings based on the
 heading name; headings with the same content can cause problems with that.
 
 <a name="md025"></a>
@@ -1016,7 +1016,7 @@ blockquote symbol at the beginning of the blank line:
 > This is the same blockquote.
 ```
 
-Rationale: Some markdown parsers will treat two blockquotes separated by one
+Rationale: Some Markdown parsers will treat two blockquotes separated by one
 or more blank lines as the same blockquote, while others will treat them as
 separate blockquotes.
 
@@ -1297,13 +1297,13 @@ Aliases: no-inline-html
 
 Parameters: allowed_elements (array of string; default empty)
 
-This rule is triggered whenever raw HTML is used in a markdown document:
+This rule is triggered whenever raw HTML is used in a Markdown document:
 
 ```markdown
 <h1>Inline HTML heading</h1>
 ```
 
-To fix this, use 'pure' markdown instead of including raw HTML:
+To fix this, use 'pure' Markdown instead of including raw HTML:
 
 ```markdown
 # Markdown heading
@@ -1311,9 +1311,9 @@ To fix this, use 'pure' markdown instead of including raw HTML:
 
 Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
 
-Rationale: Raw HTML is allowed in markdown, but this rule is included for
-those who want their documents to only include "pure" markdown, or for those
-who are rendering markdown documents in something other than HTML.
+Rationale: Raw HTML is allowed in Markdown, but this rule is included for
+those who want their documents to only include "pure" Markdown, or for those
+who are rendering Markdown documents into something other than HTML.
 
 <a name="md034"></a>
 
@@ -1339,7 +1339,7 @@ For more information, see <https://www.example.com/>.
 ```
 
 Note: To use a bare URL without it being converted into a link, enclose it in
-a code block, otherwise in some markdown parsers it *will* be converted:
+a code block, otherwise in some Markdown parsers it *will* be converted:
 
 ```markdown
 `https://www.example.com`
@@ -1429,7 +1429,7 @@ _Another section_
 Consectetur adipiscing elit, sed do eiusmod.
 ```
 
-To fix this, use markdown headings instead of emphasized text to denote
+To fix this, use Markdown headings instead of emphasized text to denote
 sections:
 
 ```markdown
