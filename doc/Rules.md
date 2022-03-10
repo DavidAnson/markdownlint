@@ -331,7 +331,7 @@ Rationale: Indenting by 2 spaces allows the content of a nested list to be in
 line with the start of the content of the parent list when a single space is
 used after the list marker. Indenting by 4 spaces is consistent with code blocks
 and simpler for editors to implement. Additionally, this can be a compatibility
-issue for multi-markdown parsers, which require 4-space indents. More information:
+issue for other Markdown parsers, which require 4-space indents. More information:
 <https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists>
 and <http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting>.
 
@@ -1360,7 +1360,7 @@ The use of quotes around a bare link will *not* trigger this rule, either:
 ```
 
 Rationale: Without angle brackets, the URL isn't converted into a link by many
-markdown parsers.
+Markdown parsers.
 
 <a name="md035"></a>
 

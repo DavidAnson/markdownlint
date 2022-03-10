@@ -11,11 +11,6 @@ assert(/^\d+\.\d+\.\d+$/.test(version));
 function assertConfiguration(config: markdownlint.Configuration) {
   assert(!!config);
   assert.equal(config["line-length"], false);
-  assert.deepEqual(config["no-inline-html"], {
-    "allowed_elements": [
-      "a"
-    ]
-  });
   // config assignment is covered by markdownlint.Options
 }
 

@@ -1,8 +1,16 @@
 {
   "line-length": false,
-  "no-inline-html": {
-    "allowed_elements": [
-      "a"
+  "no-duplicate-heading": false,
+  "proper-names": {
+    "code_blocks": false,
+    "names": [
+      "Cake.Markdownlint",
+      "CommonMark",
+      "JavaScript",
+      "Markdown",
+      "markdown-it",
+      "markdownlint",
+      "Node.js"
     ]
   }
 }

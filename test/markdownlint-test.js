@@ -83,10 +83,7 @@ test.cb("projectFilesNoInlineConfig", (t) => {
       "doc/Prettier.md",
       "helpers/README.md"
     ],
-    "config": {
-      "line-length": { "line_length": 150 },
-      "no-duplicate-heading": false
-    },
+    "config": require("../.markdownlint.json"),
     "customRules": [ require("markdownlint-rule-github-internal-links") ],
     "noInlineConfig": true
   };
@@ -109,7 +106,8 @@ test.cb("projectFilesInlineConfig", (t) => {
   const options = {
     "files": [ "doc/Rules.md" ],
     "config": {
-      "no-inline-html": false
+      "no-inline-html": false,
+      ...require("../.markdownlint.json")
     }
   };
   markdownlint(options, function callback(err, actual) {
