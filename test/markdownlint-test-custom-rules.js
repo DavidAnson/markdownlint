@@ -1195,6 +1195,70 @@ test("customRulesAsyncThrowsInSyncContext", (t) => {
   );
 });
 
+test("customRulesParamsAreStable", (t) => {
+  t.plan(4);
+  const config1 = { "value1": 10 };
+  const config2 = { "value2": 20 };
+  const options = {
+    "config": {
+      "MD010": true,
+      "name1": config1,
+      "MD013": { "line_length": 200 },
+      "name2": config2,
+      "MD033": false
+    },
+    "customRules": [
+      {
+        "names": [ "name1" ],
+        "description": "description1",
+        "tags": [ "tag" ],
+        "asynchronous": true,
+        "function":
+          (params) => {
+            t.deepEqual(
+              params.config,
+              config1,
+              `Unexpected config in sync path: ${params.config}.`
+            );
+            return Promise.resolve().then(() => {
+              t.deepEqual(
+                params.config,
+                config1,
+                `Unexpected config in async path: ${params.config}.`
+              );
+            });
+          }
+      },
+      {
+        "names": [ "name2" ],
+        "description": "description2",
+        "tags": [ "tag" ],
+        "asynchronous": true,
+        "function":
+          (params) => {
+            const { config } = params;
+            t.deepEqual(
+              config,
+              config2,
+              `Unexpected config in sync path: ${config}.`
+            );
+            return Promise.resolve().then(() => {
+              t.deepEqual(
+                config,
+                config2,
+                `Unexpected config in async path: ${config}.`
+              );
+            });
+          }
+      }
+    ],
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
 test("customRulesAsyncReadFiles", (t) => {
   t.plan(3);
   const options = {

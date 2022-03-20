@@ -1498,22 +1498,22 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     var aliasToRuleNames = mapAliasToRuleNames(ruleList);
     var _a = getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames), effectiveConfig = _a.effectiveConfig, enabledRulesPerLineNumber = _a.enabledRulesPerLineNumber;
     // Create parameters for rules
-    var params = {
-        "name": helpers.deepFreeze(name),
-        "tokens": helpers.deepFreeze(tokens),
-        "lines": helpers.deepFreeze(lines),
-        "frontMatterLines": helpers.deepFreeze(frontMatterLines)
-    };
-    cache.lineMetadata(helpers.getLineMetadata(params));
-    cache.flattenedLists(helpers.flattenLists(params.tokens));
-    cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(params, cache.lineMetadata()));
+    var paramsBase = helpers.deepFreeze({
+        name: name,
+        tokens: tokens,
+        lines: lines,
+        frontMatterLines: frontMatterLines
+    });
+    cache.lineMetadata(helpers.getLineMetadata(paramsBase));
+    cache.flattenedLists(helpers.flattenLists(paramsBase.tokens));
+    cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(paramsBase, cache.lineMetadata()));
     // Function to run for each rule
     var results = [];
     // eslint-disable-next-line jsdoc/require-jsdoc
     function forRule(rule) {
         // Configure rule
         var ruleName = rule.names[0].toUpperCase();
-        params.config = effectiveConfig[ruleName];
+        var params = __assign(__assign({}, paramsBase), { "config": effectiveConfig[ruleName] });
         // eslint-disable-next-line jsdoc/require-jsdoc
         function throwError(property) {
             throw new Error("Property '" + property + "' of onError parameter is incorrect.");
