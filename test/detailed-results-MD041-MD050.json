@@ -9,5 +9,6 @@
     "names": [
       "markdownlint"
     ]
-  }
+  },
+  "MD051": false
 }

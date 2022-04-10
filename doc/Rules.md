@@ -56,8 +56,7 @@ Aliases: first-heading-h1, first-header-h1
 Parameters: level (number; default 1)
 
 > Note: *MD002 has been deprecated and is disabled by default.*
-> [MD041/first-line-heading](#md041---first-line-in-a-file-should-be-a-top-level-heading)
-offers an improved implementation.
+> [MD041/first-line-heading](#md041) offers an improved implementation.
 
 This rule is intended to ensure document headings start at the top level and
 is triggered when the first heading in the document isn't an h1 heading:
@@ -784,8 +783,7 @@ The `lines_above` and `lines_below` parameters can be used to specify a differen
 number of blank lines (including 0) above or below each heading.
 
 Note: If `lines_above` or `lines_below` are configured to require more than one
-blank line, [MD012/no-multiple-blanks](#md012---multiple-consecutive-blank-lines)
-should also be customized.
+blank line, [MD012/no-multiple-blanks](#md012) should also be customized.
 
 Rationale: Aside from aesthetic reasons, some parsers, including `kramdown`, will
 not parse headings that don't have a blank line before, and will parse them as
@@ -1993,19 +1991,42 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 Tags: links
 
-Aliases: valid-link-fragments
+Aliases: link-fragments
 
-This rule is triggered if a link fragment does not correspond to a
-heading within the document:
+This rule is triggered when a link fragment does not correspond to a heading
+in the document:
 
 ```markdown
 # Title
 
-[Link](#invalid-fragment)
+[Link](#fragment)
 ```
 
-To fix this issue, ensure that the heading exists,
-here you could replace `#invalid-fragment` by `#title`.
+To fix the issue, change the fragment to reference an existing heading:
 
-It's not part of the CommonMark specification,
-for example [GitHub turn headings into links](https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links).
+```markdown
+[Link](#title)
+```
+
+Alternatively, an HTML `a` tag with an `id` (or a `name`) attribute defines a
+valid anchor:
+
+```markdown
+<a id="fragment"></a>
+```
+
+Some platforms (e.g., [GitHub][github-section-links]) automatically create HTML
+anchors for every heading. This makes it easy to link to different sections in
+a document. These internal links can break over time as headings are renamed.
+
+Note: Creating anchors for headings is not part of the CommonMark specification.
+
+[github-section-links]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links
+
+<!-- markdownlint-configure-file {
+  "no-inline-html": {
+    "allowed_elements": [
+      "a"
+    ]
+  }
+} -->

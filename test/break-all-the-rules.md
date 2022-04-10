@@ -93,4 +93,6 @@ Strong __with__ underscore style
 
 Strong **with** different style {MD050}
 
+[Missing link fragment](#missing) {MD051}
+
 EOF {MD047}

@@ -18,6 +18,9 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
+// Regular expression for matching HTML elements
+module.exports.htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
@@ -419,7 +422,7 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
     } else if (token.type === "heading_close") {
       heading = null;
     } else if ((token.type === "inline") && heading) {
-      handler(heading, token.content);
+      handler(heading, token.content, token);
     }
   });
 };

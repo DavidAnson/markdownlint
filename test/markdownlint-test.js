@@ -105,10 +105,7 @@ test.cb("projectFilesInlineConfig", (t) => {
   t.plan(2);
   const options = {
     "files": [ "doc/Rules.md" ],
-    "config": {
-      "no-inline-html": false,
-      ...require("../.markdownlint.json")
-    }
+    "config": require("../.markdownlint.json")
   };
   markdownlint(options, function callback(err, actual) {
     t.falsy(err);
@@ -491,10 +488,11 @@ test.cb("styleAll", (t) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 96 ],
+        "MD047": [ 98 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
-        "MD050": [ 94 ]
+        "MD050": [ 94 ],
+        "MD051": [ 96 ]
       }
     };
     // @ts-ignore
@@ -536,10 +534,11 @@ test.cb("styleRelaxed", (t) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 96 ],
+        "MD047": [ 98 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
-        "MD050": [ 94 ]
+        "MD050": [ 94 ],
+        "MD051": [ 96 ]
       }
     };
     // @ts-ignore

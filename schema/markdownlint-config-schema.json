@@ -879,14 +879,12 @@
       "$ref": "#/properties/MD050"
     },
     "MD051": {
-      "description": "MD051/valid-link-fragments - Link fragments should be valid",
+      "description": "MD051/link-fragments - Link fragments should be valid",
       "type": "boolean",
       "default": true
     },
-    "valid-link-fragments": {
-      "description": "MD051/valid-link-fragments - Link fragments should be valid",
-      "type": "boolean",
-      "default": true
+    "link-fragments": {
+      "$ref": "#/properties/MD051"
     },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",

@@ -264,6 +264,6 @@
     "style": "consistent"
   },
 
-  // MD051/valid-link-fragments - Link fragments should be valid
+  // MD051/link-fragments - Link fragments should be valid
   "MD051": true
 }

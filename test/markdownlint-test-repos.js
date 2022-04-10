@@ -35,13 +35,69 @@ async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
     readConfigPromise(configPath, [ jsoncParse, yamlParse ])
   ]).then((globbyAndReadConfigResults) => {
     const [ files, config ] = globbyAndReadConfigResults;
-    const options = {
-      files,
-      config
-    };
     // eslint-disable-next-line no-console
     console.log(`${t.title}: Linting ${files.length} files...`);
-    return markdownlintPromise(options).then((results) => {
+    return markdownlintPromise({
+      files,
+      config,
+      "resultVersion": 3
+    // }).then((results) => {
+    //   // Cross-check MD051/link-fragments results with markdown-link-check
+    //   const resultFiles = [];
+    //   const detectedErrors = new Set();
+    //   for (const file of Object.keys(results)) {
+    //     const errors =
+    //       results[file].filter((error) => error.ruleNames[0] === "MD051");
+    //     if (errors.length > 0) {
+    //       resultFiles.push(file);
+    //     }
+    //     for (const error of errors) {
+    //       const fragment = error.errorContext.replace(/^.*\((#.*)\)$/, "$1");
+    //       detectedErrors.add(file + fragment);
+    //     }
+    //   }
+    //   const { readFile } = require("fs").promises;
+    //   const markdownLinkCheck = promisify(require("markdown-link-check"));
+    //   const expectedErrors = new Set();
+    //   return Promise.all(
+    //     resultFiles.map((file) => readFile(file, "utf8")
+    //       // @ts-ignore
+    //       .then((markdown) => markdownLinkCheck(markdown, {
+    //         "ignorePatterns": [
+    //           {
+    //             "pattern": "^[^#]"
+    //           }
+    //         ]
+    //       }))
+    //       .then((mlcResults) => {
+    //         const deadResults =
+    //           mlcResults.filter((result) => result.status === "dead");
+    //         for (const link of deadResults.map((result) => result.link)) {
+    //           expectedErrors.add(file + link);
+    //         }
+    //       })
+    //     )
+    //   ).then(() => {
+    //     const extraErrors = [];
+    //     // @ts-ignore
+    //     for (const detectedError of detectedErrors) {
+    //       if (!expectedErrors.has(detectedError)) {
+    //         extraErrors.push(detectedError);
+    //       }
+    //     }
+    //     t.deepEqual(extraErrors, [], "Extra errors");
+    //     const missingErrors = [];
+    //     // @ts-ignore
+    //     for (const expectedError of expectedErrors) {
+    //       if (!detectedErrors.has(expectedError)) {
+    //         missingErrors.push(expectedError);
+    //       }
+    //     }
+    //     t.deepEqual(missingErrors, [], "Missing errors");
+    //     return results;
+    //   });
+    }).then((results) => {
+      // Fail if any issues were found (that aren't ignored)
       let resultsString = results.toString();
       for (const ignoreRe of (ignoreRes || [])) {
         const lengthBefore = resultsString.length;
@@ -93,7 +149,8 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
     )
   ];
   const configPath = join(rootDir, ".markdownlintrc");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/mochajs/mocha", (t) => {
@@ -107,14 +164,16 @@ test("https://github.com/mochajs/mocha", (t) => {
     join(rootDir, "example/**/*.md")
   ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
@@ -142,7 +201,8 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    return lintTestRepo(t, globPatterns, configPath);
+    const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
 
@@ -152,7 +212,7 @@ if (existsSync(v8v8DevDir)) {
     const rootDir = v8v8DevDir;
     const globPatterns = [ join(rootDir, "src/**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [ /^[^:]+: \d+: MD049\/.*$\r?\n?/gm ];
+    const ignoreRes = [ /^[^:]+: \d+: (MD049|MD051)\/.*$\r?\n?/gm ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }

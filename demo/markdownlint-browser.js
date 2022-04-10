@@ -43,6 +43,8 @@ var inlineCommentStartRe =
 // eslint-disable-next-line max-len
 /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
+// Regular expression for matching HTML elements
+module.exports.htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
@@ -424,7 +426,7 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
             heading = null;
         }
         else if ((token.type === "inline") && heading) {
-            handler(heading, token.content);
+            handler(heading, token.content, token);
         }
     });
 };
@@ -3414,9 +3416,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange, unescapeMarkdown = _a.unescapeMarkdown;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, htmlElementRe = _a.htmlElementRe, overlapsAnyRange = _a.overlapsAnyRange, unescapeMarkdown = _a.unescapeMarkdown;
 var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
-var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
 var linkDestinationRe = /]\(\s*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
 var emailAddressRe = 
@@ -4394,42 +4395,67 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachHeading = _a.forEachHeading, filterTokens = _a.filterTokens;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachLine = _a.forEachLine, forEachHeading = _a.forEachHeading, htmlElementRe = _a.htmlElementRe, overlapsAnyRange = _a.overlapsAnyRange;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
+// Regular expression for identifying HTML anchor names
+var identifierRe = /(?:id|name)\s*=\s*['"]?([^'"\s>]+)/iu;
 /**
- * Converts a Markdown heading into an HTML fragment
- * according to the rules used by GitHub.
+ * Converts a Markdown heading into an HTML fragment according to the rules
+ * used by GitHub.
  *
- * @param {string} string The string to convert.
- * @returns {string} The converted string.
+ * @param {Object} inline Inline token for heading.
+ * @returns {string} Fragment string for heading.
  */
-function convertHeadingToHTMLFragment(string) {
-    return "#" + string
+function convertHeadingToHTMLFragment(inline) {
+    var inlineText = inline.children.map(function (token) { return token.content; }).join("");
+    return "#" + inlineText
         .toLowerCase()
         .replace(/ /g, "-")
         .replace(/[^-_a-z0-9]/g, "");
 }
 module.exports = {
-    "names": ["MD051", "valid-link-fragments"],
+    "names": ["MD051", "link-fragments"],
     "description": "Link fragments should be valid",
     "tags": ["links"],
     "function": function MD051(params, onError) {
-        var validLinkFragments = [];
-        forEachHeading(params, function (_heading, content) {
-            validLinkFragments.push(convertHeadingToHTMLFragment(content));
+        var fragments = new Set();
+        forEachHeading(params, function (heading, content, inline) {
+            fragments.add(convertHeadingToHTMLFragment(inline));
         });
-        filterTokens(params, "inline", function (token) {
-            token.children.forEach(function (child) {
-                var lineNumber = child.lineNumber, type = child.type, attrs = child.attrs;
-                if (type === "link_open") {
-                    var href = attrs.find(function (attr) { return attr[0] === "href"; });
-                    if (href !== undefined &&
-                        href[1].startsWith("#") &&
-                        !validLinkFragments.includes(href[1])) {
-                        var detail = "Link Fragment is invalid";
-                        addError(onError, lineNumber, detail, href[1]);
+        var exclusions = codeBlockAndSpanRanges();
+        forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
+            var match = null;
+            // eslint-disable-next-line no-unmodified-loop-condition
+            while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
+                var tag = match[0], element = match[2];
+                if ((element.toLowerCase() === "a") &&
+                    !overlapsAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
+                    var idMatch = identifierRe.exec(tag);
+                    if (idMatch) {
+                        fragments.add("#".concat(idMatch[1]));
                     }
                 }
-            });
+            }
+        });
+        filterTokens(params, "inline", function (token) {
+            for (var _i = 0, _a = token.children; _i < _a.length; _i++) {
+                var child = _a[_i];
+                var attrs = child.attrs, lineNumber = child.lineNumber, line = child.line, type = child.type;
+                if (type === "link_open") {
+                    var href = attrs.find(function (attr) { return attr[0] === "href"; });
+                    var id = href && href[1];
+                    if (id && (id.length > 1) && (id[0] === "#") && !fragments.has(id)) {
+                        var context = id;
+                        var range = null;
+                        var match = line.match(new RegExp("\\[.*?\\]\\(".concat(escapeForRegExp(context), "\\)")));
+                        if (match) {
+                            context = match[0];
+                            range = [match.index + 1, match[0].length];
+                        }
+                        addError(onError, lineNumber, null, context, range);
+                    }
+                }
+            }
         });
     }
 };
