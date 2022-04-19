@@ -18,6 +18,10 @@
 
 [Valid](#valid-heading--with-emoji-2)
 
+[Valid](#valid-heading-2010-)
+
+[Valid](#valid-heading-2004-%EF%B8%8F)
+
 [Valid](#valid-closed-atx-heading)
 
 [Valid](#valid-setext-heading)
@@ -56,6 +60,14 @@ Text
 
 Text
 
+### Valid Heading 20.10 ❌
+
+Text
+
+### Valid Heading 20.04 ✔️
+
+Text
+
 ### Valid Closed ATX Heading ###
 
 Text
@@ -76,6 +88,8 @@ Text
 [goodref]: #namedlink
 
 ## Invalid Fragments
+
+[Inalid](#valid-heading-2004-) {MD051}
 
 [Invalid](#invalid-fragment) {MD051}
 

@@ -4408,10 +4408,14 @@ var identifierRe = /(?:id|name)\s*=\s*['"]?([^'"\s>]+)/iu;
  */
 function convertHeadingToHTMLFragment(inline) {
     var inlineText = inline.children.map(function (token) { return token.content; }).join("");
-    return "#" + inlineText
+    return "#" + encodeURIComponent(inlineText
         .toLowerCase()
-        .replace(/ /g, "-")
-        .replace(/[^-_a-z0-9]/g, "");
+        // RegExp source with Ruby's \p{Word} expanded into its General Categories
+        // eslint-disable-next-line max-len
+        // https://github.com/gjtorikian/html-pipeline/blob/main/lib/html/pipeline/toc_filter.rb
+        // https://ruby-doc.org/core-3.0.2/Regexp.html
+        .replace(/[^\p{Letter}\p{Mark}\p{Number}\p{Connector_Punctuation}\- ]/gu, "")
+        .replace(/ /gu, "-"));
 }
 module.exports = {
     "names": ["MD051", "link-fragments"],
