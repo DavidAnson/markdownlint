@@ -4395,8 +4395,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachLine = _a.forEachLine, forEachHeading = _a.forEachHeading, htmlElementRe = _a.htmlElementRe, overlapsAnyRange = _a.overlapsAnyRange;
-var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, escapeForRegExp = _a.escapeForRegExp, filterTokens = _a.filterTokens, forEachInlineChild = _a.forEachInlineChild, forEachHeading = _a.forEachHeading, htmlElementRe = _a.htmlElementRe;
 // Regular expression for identifying HTML anchor names
 var identifierRe = /(?:id|name)\s*=\s*['"]?([^'"\s>]+)/iu;
 /**
@@ -4423,42 +4422,39 @@ module.exports = {
     "tags": ["links"],
     "function": function MD051(params, onError) {
         var fragments = new Set();
+        // Process headings
         forEachHeading(params, function (heading, content, inline) {
             fragments.add(convertHeadingToHTMLFragment(inline));
         });
-        var exclusions = codeBlockAndSpanRanges();
-        forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
+        // Process HTML anchors
+        var processHtmlToken = function (token) {
             var match = null;
-            // eslint-disable-next-line no-unmodified-loop-condition
-            while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
+            while ((match = htmlElementRe.exec(token.content)) !== null) {
                 var tag = match[0], element = match[2];
-                if ((element.toLowerCase() === "a") &&
-                    !overlapsAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
+                if (element.toLowerCase() === "a") {
                     var idMatch = identifierRe.exec(tag);
                     if (idMatch) {
                         fragments.add("#".concat(idMatch[1]));
                     }
                 }
             }
-        });
-        filterTokens(params, "inline", function (token) {
-            for (var _i = 0, _a = token.children; _i < _a.length; _i++) {
-                var child = _a[_i];
-                var attrs = child.attrs, lineNumber = child.lineNumber, line = child.line, type = child.type;
-                if (type === "link_open") {
-                    var href = attrs.find(function (attr) { return attr[0] === "href"; });
-                    var id = href && href[1];
-                    if (id && (id.length > 1) && (id[0] === "#") && !fragments.has(id)) {
-                        var context = id;
-                        var range = null;
-                        var match = line.match(new RegExp("\\[.*?\\]\\(".concat(escapeForRegExp(context), "\\)")));
-                        if (match) {
-                            context = match[0];
-                            range = [match.index + 1, match[0].length];
-                        }
-                        addError(onError, lineNumber, null, context, range);
-                    }
+        };
+        filterTokens(params, "html_block", processHtmlToken);
+        forEachInlineChild(params, "html_inline", processHtmlToken);
+        // Process link fragments
+        forEachInlineChild(params, "link_open", function (token) {
+            var attrs = token.attrs, lineNumber = token.lineNumber, line = token.line;
+            var href = attrs.find(function (attr) { return attr[0] === "href"; });
+            var id = href && href[1];
+            if (id && (id.length > 1) && (id[0] === "#") && !fragments.has(id)) {
+                var context = id;
+                var range = null;
+                var match = line.match(new RegExp("\\[.*?\\]\\(".concat(escapeForRegExp(context), "\\)")));
+                if (match) {
+                    context = match[0];
+                    range = [match.index + 1, match[0].length];
                 }
+                addError(onError, lineNumber, null, context, range);
             }
         });
     }
