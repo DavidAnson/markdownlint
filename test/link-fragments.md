@@ -26,6 +26,12 @@
 
 [Valid](#valid-setext-heading)
 
+[Valid](#valid-repeated-heading)
+
+[Valid](#valid-repeated-heading-1)
+
+[Valid](#valid-repeated-heading-2)
+
 [Valid](#namedlink)
 
 [Valid](#idlink)
@@ -77,6 +83,16 @@ Valid Setext Heading
 
 Text
 
+### Valid Repeated Heading
+
+Text
+
+### Valid Repeated Heading
+
+Text
+
+### Valid Repeated Heading
+
 <a name="namedlink"></a>
 
 <a id = idlink></a>
@@ -89,7 +105,9 @@ Text
 
 ## Invalid Fragments
 
-[Inalid](#valid-heading-2004-) {MD051}
+[Invalid](#valid-heading-2004-) {MD051}
+
+[Invalid](#valid-repeated-heading-3) {MD051}
 
 [Invalid](#invalid-fragment) {MD051}
 
@@ -104,5 +122,6 @@ Text
 <!-- markdownlint-configure-file {
   "emphasis-style": false,
   "heading-style": false,
+  "no-duplicate-heading": false,
   "no-inline-html": false
 } -->

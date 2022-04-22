@@ -4421,10 +4421,15 @@ module.exports = {
     "description": "Link fragments should be valid",
     "tags": ["links"],
     "function": function MD051(params, onError) {
-        var fragments = new Set();
+        var fragments = new Map();
         // Process headings
         forEachHeading(params, function (heading, content, inline) {
-            fragments.add(convertHeadingToHTMLFragment(inline));
+            var fragment = convertHeadingToHTMLFragment(inline);
+            var count = fragments.get(fragment) || 0;
+            if (count) {
+                fragments.set("".concat(fragment, "-").concat(count), 0);
+            }
+            fragments.set(fragment, count + 1);
         });
         // Process HTML anchors
         var processHtmlToken = function (token) {
@@ -4434,7 +4439,7 @@ module.exports = {
                 if (element.toLowerCase() === "a") {
                     var idMatch = identifierRe.exec(tag);
                     if (idMatch) {
-                        fragments.add("#".concat(idMatch[1]));
+                        fragments.set("#".concat(idMatch[1]), 0);
                     }
                 }
             }
