@@ -255,7 +255,8 @@ test.cb("resultFormattingV2", (t) => {
     "config": {
       "MD002": true,
       "MD041": false
-    }
+    },
+    "resultVersion": 2
   };
   markdownlint(options, function callback(err, actualResult) {
     t.falsy(err);

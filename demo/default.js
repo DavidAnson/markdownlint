@@ -52,8 +52,7 @@
       "config": {
         "MD013": false
       },
-      "handleRuleFailures": true,
-      "resultVersion": 3
+      "handleRuleFailures": true
     };
     allLintErrors = window.markdownlint.sync(options).content;
     violations.innerHTML = allLintErrors.map(function mapResult(result) {

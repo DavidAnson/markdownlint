@@ -92,7 +92,6 @@ options = {
   "frontMatter": /---/,
   "handleRuleFailures": false,
   "noInlineConfig": false,
-  "resultVersion": 3,
   "markdownItPlugins": [ [ require("markdown-it-sub") ] ]
 };
 

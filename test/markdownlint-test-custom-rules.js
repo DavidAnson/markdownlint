@@ -901,7 +901,8 @@ test.cb("customRulesOnErrorLazy", (t) => {
           "ruleInformation": null,
           "errorDetail": null,
           "errorContext": null,
-          "errorRange": [ 1, 1 ]
+          "errorRange": [ 1, 1 ],
+          "fixInfo": null
         }
       ]
     };
@@ -943,8 +944,7 @@ test.cb("customRulesOnErrorModified", (t) => {
     ],
     "strings": {
       "string": "# Heading\n"
-    },
-    "resultVersion": 3
+    }
   };
   markdownlint(options, function callback(err, actualResult) {
     t.falsy(err);
@@ -1002,7 +1002,8 @@ test.cb("customRulesOnErrorInvalidHandled", (t) => {
           "errorDetail": "This rule threw an exception: " +
             "Property 'lineNumber' of onError parameter is incorrect.",
           "errorContext": null,
-          "errorRange": null
+          "errorRange": null,
+          "fixInfo": null
         }
       ]
     };
@@ -1042,7 +1043,8 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
         "errorDetail": "This rule threw an exception: " +
           "Property 'lineNumber' of onError parameter is incorrect.",
         "errorContext": null,
-        "errorRange": null
+        "errorRange": null,
+        "fixInfo": null
       }
     ]
   };
@@ -1125,7 +1127,8 @@ test.cb("customRulesLintJavaScript", (t) => {
           "ruleInformation": null,
           "errorDetail": "Unexpected var, use let or const instead.",
           "errorContext": "var x = 0;",
-          "errorRange": null
+          "errorRange": null,
+          "fixInfo": null
         },
         {
           "lineNumber": 12,
@@ -1134,7 +1137,8 @@ test.cb("customRulesLintJavaScript", (t) => {
           "ruleInformation": null,
           "errorDetail": "Unexpected console statement.",
           "errorContext": "console.log(x);",
-          "errorRange": null
+          "errorRange": null,
+          "fixInfo": null
         }
       ]
     };
@@ -1160,7 +1164,8 @@ test.cb("customRulesValidateJson", (t) => {
           "ruleInformation": null,
           "errorDetail": "Unexpected end of JSON input",
           "errorContext": null,
-          "errorRange": null
+          "errorRange": null,
+          "fixInfo": null
         }
       ]
     };
@@ -1312,7 +1317,11 @@ test("customRulesAsyncReadFiles", (t) => {
         "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
         "errorDetail": null,
         "errorContext": null,
-        "errorRange": [ 9, 1 ]
+        "errorRange": [ 9, 1 ],
+        "fixInfo": {
+          "editColumn": 10,
+          "insertText": "\n"
+        }
       },
       {
         "lineNumber": 1,
@@ -1321,7 +1330,8 @@ test("customRulesAsyncReadFiles", (t) => {
         "ruleInformation": "https://example.com/asyncRule1",
         "errorDetail": "detail1",
         "errorContext": "context1",
-        "errorRange": [ 2, 3 ]
+        "errorRange": [ 2, 3 ],
+        "fixInfo": null
       },
       {
         "lineNumber": 1,
@@ -1330,7 +1340,8 @@ test("customRulesAsyncReadFiles", (t) => {
         "ruleInformation": null,
         "errorDetail": "detail2",
         "errorContext": "context2",
-        "errorRange": null
+        "errorRange": null,
+        "fixInfo": null
       }
     ]
   };
@@ -1377,7 +1388,8 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "ruleInformation": "https://example.com/asyncRule",
         "errorDetail": null,
         "errorContext": null,
-        "errorRange": null
+        "errorRange": null,
+        "fixInfo": null
       },
       {
         "lineNumber": 1,
@@ -1386,7 +1398,11 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "ruleInformation": `${homepage}/blob/v${version}/doc/Rules.md#md047`,
         "errorDetail": null,
         "errorContext": null,
-        "errorRange": [ 9, 1 ]
+        "errorRange": [ 9, 1 ],
+        "fixInfo": {
+          "editColumn": 10,
+          "insertText": "\n"
+        }
       }
     ]
   };
@@ -1440,7 +1456,8 @@ const stringScenarios = [
         "ruleInformation": null,
         "errorDetail": `This rule threw an exception: ${errorMessage}`,
         "errorContext": null,
-        "errorRange": null
+        "errorRange": null,
+        "fixInfo": null
       }
     ]
   };
@@ -1604,7 +1621,8 @@ const stringScenarios = [
               "ruleInformation": null,
               "errorDetail": `This rule threw an exception: ${errorMessage}`,
               "errorContext": null,
-              "errorRange": null
+              "errorRange": null,
+              "fixInfo": null
             }
           ]
         };

@@ -1808,7 +1808,7 @@ function lintInput(options, synchronous, callback) {
     var handleRuleFailures = !!options.handleRuleFailures;
     var noInlineConfig = !!options.noInlineConfig;
     var resultVersion = (options.resultVersion === undefined) ?
-        2 : options.resultVersion;
+        3 : options.resultVersion;
     var md = markdownIt({ "html": true });
     var markdownItPlugins = options.markdownItPlugins || [];
     markdownItPlugins.forEach(function forPlugin(plugin) {

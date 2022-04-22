@@ -44,8 +44,7 @@ function createTestForFile(file) {
         function lintWithConfig() {
           return markdownlintPromise({
             "files": [ file ],
-            config,
-            "resultVersion": 3
+            config
           });
         })
       .then(
@@ -54,8 +53,7 @@ function createTestForFile(file) {
             Promise.all([
               markdownlintPromise({
                 "files": [ file ],
-                config,
-                "resultVersion": 3
+                config
               }),
               fs.promises.readFile(file, "utf8"),
               fs.promises.readFile(fixedFile, "utf8")
@@ -148,8 +146,7 @@ function createTestForFile(file) {
                   "strings": {
                     "input": corrections
                   },
-                  config,
-                  "resultVersion": 3
+                  config
                 });
               })
             .then(

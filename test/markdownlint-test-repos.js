@@ -39,8 +39,7 @@ async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
     console.log(`${t.title}: Linting ${files.length} files...`);
     return markdownlintPromise({
       files,
-      config,
-      "resultVersion": 3
+      config
     // }).then((results) => {
     //   // Cross-check MD051/link-fragments results with markdown-link-check
     //   const resultFiles = [];

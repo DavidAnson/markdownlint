@@ -522,12 +522,12 @@ as any additional detail or context that is available. *This is deprecated.*
 
 Passing a `resultVersion` of `2` corresponds to a detailed format where each error
 includes information about the line number, rule names, description, as well as any
-additional detail or context that is available. *This is the default.*
+additional detail or context that is available. *This is deprecated.*
 
 Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
 with additional information about how to fix automatically-fixable errors. In this
 mode, all errors that occur on each line are reported (other versions report only
-the first error for each rule).
+the first error for each rule). *This is the default.*
 
 ##### options.markdownItPlugins
 
