@@ -4201,7 +4201,8 @@ module.exports = {
                         var leftMatch = match[1], nameMatch = match[2];
                         var index = match.index + leftMatch.length;
                         var length = nameMatch.length;
-                        if (!overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                        if (!overlapsAnyRange(exclusions, lineIndex, index, length) &&
+                            !names.includes(nameMatch)) {
                             addErrorDetailIf(onError, lineIndex + 1, name, nameMatch, null, null, [index + 1, length], {
                                 "editColumn": index + 1,
                                 "deleteCount": length,

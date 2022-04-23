@@ -79,3 +79,8 @@ code`
 
 `javascript {MD044}
 code`
+
+Text referencing multiplecase name.
+Text referencing MultipleCase name.
+Text referencing MULTIPLECASE name. {MD044}
+Text referencing mULTIPLEcASE name.
