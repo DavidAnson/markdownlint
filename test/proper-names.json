@@ -1,5 +1,6 @@
 {
   "default": true,
+  "MD033": false,
   "MD044": {
     "names": [
       "markdownlint",

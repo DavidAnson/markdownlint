@@ -40,7 +40,7 @@ Code in `javascript` {MD044}
 
 Execute `via the node.js engine` {MD044}
 
-HTML <u>javascript</u> {MD033} {MD044}
+HTML <u>javascript</u> {MD044}
 
 * Use NPM {MD044}
 
@@ -84,3 +84,12 @@ Text referencing multiplecase name.
 Text referencing MultipleCase name.
 Text referencing MULTIPLECASE name. {MD044}
 Text referencing mULTIPLEcASE name.
+
+<img src="img/javascript/image.png" error="{MD044}">
+
+<script type="text/javascript">
+{MD044:90}
+javascript {MD044}
+</script>
+
+<a error="{MD044}" id="javascript"/>

@@ -231,7 +231,9 @@
     // List of proper names
     "names": [],
     // Include code blocks
-    "code_blocks": true
+    "code_blocks": true,
+    // Include HTML elements
+    "html_elements": true
   },
 
   // MD045/no-alt-text - Images should have alternate text (alt text)

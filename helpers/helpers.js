@@ -19,7 +19,8 @@ const inlineCommentStartRe =
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
 // Regular expression for matching HTML elements
-module.exports.htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+module.exports.htmlElementRe = htmlElementRe;
 
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
@@ -598,6 +599,25 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
           }
         }
       );
+    }
+  });
+  return exclusions;
+};
+
+/**
+ * Returns an array of HTML element ranges.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
+ */
+module.exports.htmlElementRanges = (params, lineMetadata) => {
+  const exclusions = [];
+  forEachLine(lineMetadata, (line, lineIndex, inCode) => {
+    let match = null;
+    // eslint-disable-next-line no-unmodified-loop-condition
+    while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
+      exclusions.push([ lineIndex, match.index, match[0].length ]);
     }
   });
   return exclusions;

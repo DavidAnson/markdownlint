@@ -1283,3 +1283,43 @@ test("forEachLink", (t) => {
     t.is(matches.length, 0, "Missing match");
   }
 });
+
+test("htmlElementRanges", (t) => {
+  t.plan(1);
+  const params = {
+    "lines": [
+      "# Heading",
+      "",
+      "Text text text",
+      "text <a id='id'/> text",
+      "text text text",
+      "",
+      "<p>",
+      "Text <em>text</em> text",
+      "</p>",
+      "",
+      "```",
+      "<br/>",
+      "```",
+      "",
+      "Text `<br/>` text",
+      "text <br/> text"
+    ],
+    "tokens": [
+      {
+        "type": "code_block",
+        "map": [ 10, 12 ]
+      }
+    ]
+  };
+  const expected = [
+    [ 3, 5, 12 ],
+    [ 6, 0, 3 ],
+    [ 7, 5, 4 ],
+    [ 14, 6, 5 ],
+    [ 15, 5, 5 ]
+  ];
+  const lineMetadata = helpers.getLineMetadata(params);
+  const actual = helpers.htmlElementRanges(params, lineMetadata);
+  t.deepEqual(actual, expected);
+});

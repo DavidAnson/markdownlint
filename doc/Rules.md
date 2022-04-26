@@ -1752,7 +1752,7 @@ Tags: spelling
 
 Aliases: proper-names
 
-Parameters: names, code_blocks (string array; default `null`, boolean; default `true`)
+Parameters: names, code_blocks, html_elements (string array; default `null`, boolean; default `true`, boolean; default `true`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1771,7 +1771,9 @@ the proper capitalization, specify the desired letter case in the `names` array:
 ```
 
 Set the `code_blocks` parameter to `false` to disable this rule for code blocks
-and spans.
+and spans. Set the `html_elements` parameter to `false` to disable this rule
+for HTML elements and attributes (such as when using a proper name as part of
+a path for `a`/`href` or `img`/`src`).
 
 Rationale: Incorrect capitalization of proper names is usually a mistake.
 

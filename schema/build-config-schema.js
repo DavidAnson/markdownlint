@@ -391,6 +391,11 @@ rules.forEach(function forRule(rule) {
           "description": "Include code blocks",
           "type": "boolean",
           "default": true
+        },
+        "html_elements": {
+          "description": "Include HTML elements",
+          "type": "boolean",
+          "default": true
         }
       };
       break;

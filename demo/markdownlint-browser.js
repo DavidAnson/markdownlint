@@ -44,7 +44,8 @@ var inlineCommentStartRe =
 /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 // Regular expression for matching HTML elements
-module.exports.htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
@@ -599,6 +600,24 @@ module.exports.codeBlockAndSpanRanges = function (params, lineMetadata) {
     return exclusions;
 };
 /**
+ * Returns an array of HTML element ranges.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
+ */
+module.exports.htmlElementRanges = function (params, lineMetadata) {
+    var exclusions = [];
+    forEachLine(lineMetadata, function (line, lineIndex, inCode) {
+        var match = null;
+        // eslint-disable-next-line no-unmodified-loop-condition
+        while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
+            exclusions.push([lineIndex, match.index, match[0].length]);
+        }
+    });
+    return exclusions;
+};
+/**
  * Determines whether the specified range overlaps another range.
  *
  * @param {number[][]} ranges Array of ranges (line, index, length).
@@ -1041,6 +1060,13 @@ module.exports.flattenedLists = function (value) {
     }
     return flattenedLists;
 };
+var htmlElementRanges = null;
+module.exports.htmlElementRanges = function (value) {
+    if (value) {
+        htmlElementRanges = value;
+    }
+    return htmlElementRanges;
+};
 var lineMetadata = null;
 module.exports.lineMetadata = function (value) {
     if (value) {
@@ -1051,6 +1077,7 @@ module.exports.lineMetadata = function (value) {
 module.exports.clear = function () {
     codeBlockAndSpanRanges = null;
     flattenedLists = null;
+    htmlElementRanges = null;
     lineMetadata = null;
 };
 
@@ -1547,9 +1574,11 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         lines: lines,
         frontMatterLines: frontMatterLines
     });
-    cache.lineMetadata(helpers.getLineMetadata(paramsBase));
+    var lineMetadata = helpers.getLineMetadata(paramsBase);
+    cache.lineMetadata(lineMetadata);
+    cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata));
+    cache.htmlElementRanges(helpers.htmlElementRanges(paramsBase, lineMetadata));
     cache.flattenedLists(helpers.flattenLists(paramsBase.tokens));
-    cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(paramsBase, cache.lineMetadata()));
     // Function to run for each rule
     var results = [];
     // eslint-disable-next-line jsdoc/require-jsdoc
@@ -4157,7 +4186,7 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, forEachLink = _a.forEachLink, overlapsAnyRange = _a.overlapsAnyRange, linkReferenceRe = _a.linkReferenceRe;
-var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
+var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, htmlElementRanges = _b.htmlElementRanges, lineMetadata = _b.lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
     "description": "Proper names should have the correct capitalization",
@@ -4168,6 +4197,8 @@ module.exports = {
         names.sort(function (a, b) { return (b.length - a.length) || a.localeCompare(b); });
         var codeBlocks = params.config.code_blocks;
         var includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
+        var htmlElements = params.config.html_elements;
+        var includeHtmlElements = (htmlElements === undefined) ? true : !!htmlElements;
         var exclusions = [];
         forEachLine(lineMetadata(), function (line, lineIndex) {
             if (linkReferenceRe.test(line)) {
@@ -4187,6 +4218,9 @@ module.exports = {
         });
         if (!includeCodeBlocks) {
             exclusions.push.apply(exclusions, codeBlockAndSpanRanges());
+        }
+        if (!includeHtmlElements) {
+            exclusions.push.apply(exclusions, htmlElementRanges());
         }
         var _loop_1 = function (name) {
             var escapedName = escapeForRegExp(name);
