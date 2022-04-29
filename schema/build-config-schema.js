@@ -147,6 +147,14 @@ rules.forEach(function forRule(rule) {
           "type": "boolean",
           "default": true
         },
+        "ignore_code_languages": {
+          "description": "Fenced code languages to ignore",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        },
         "spaces_per_tab": {
           "description": "Number of spaces for each hard tab",
           "type": "integer",

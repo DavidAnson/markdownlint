@@ -396,7 +396,7 @@ Tags: whitespace, hard_tab
 
 Aliases: no-hard-tabs
 
-Parameters: code_blocks, spaces_per_tab (boolean; default true, number; default 1)
+Parameters: code_blocks, ignore_code_languages, spaces_per_tab (boolean; default true, array of string; default empty, number; default 1)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -428,6 +428,12 @@ You have the option to exclude this rule for code blocks and spans. To do so,
 set the `code_blocks` parameter to `false`. Code blocks and spans are included
 by default since handling of tabs by Markdown tools can be inconsistent (e.g.,
 using 4 vs. 8 spaces).
+
+When code blocks are scanned (e.g., by default or if `code_blocks` is `true`),
+the `ignore_code_languages` parameter can be set to a list of languages that
+should be ignored (i.e., hard tabs will be allowed, though not required). This
+makes it easier for documents to include code for languages that require hard
+tabs.
 
 By default, violations of this rule are fixed by replacing the tab with 1 space
 character. To use a different number of spaces, set the `spaces_per_tab`

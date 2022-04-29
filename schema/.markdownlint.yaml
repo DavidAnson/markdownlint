@@ -52,6 +52,8 @@ MD009:
 MD010:
   # Include code blocks
   code_blocks: true
+  # Fenced code languages to ignore
+  ignore_code_languages: []
   # Number of spaces for each hard tab
   spaces_per_tab: 1
 

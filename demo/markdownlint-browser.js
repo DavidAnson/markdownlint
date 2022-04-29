@@ -2550,7 +2550,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, filterTokens = _a.filterTokens, forEachLine = _a.forEachLine, overlapsAnyRange = _a.overlapsAnyRange;
 var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, lineMetadata = _b.lineMetadata;
 var tabRe = /\t+/g;
 module.exports = {
@@ -2560,11 +2560,21 @@ module.exports = {
     "function": function MD010(params, onError) {
         var codeBlocks = params.config.code_blocks;
         var includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
+        var ignoreCodeLanguages = new Set((params.config.ignore_code_languages || [])
+            .map(function (language) { return language.toLowerCase(); }));
         var spacesPerTab = params.config.spaces_per_tab;
         var spaceMultiplier = (spacesPerTab === undefined) ?
             1 :
             Math.max(0, Number(spacesPerTab));
         var exclusions = includeCode ? [] : codeBlockAndSpanRanges();
+        filterTokens(params, "fence", function (token) {
+            var language = token.info.trim().toLowerCase();
+            if (ignoreCodeLanguages.has(language)) {
+                for (var i = token.map[0] + 1; i < token.map[1] - 1; i++) {
+                    exclusions.push([i, 0, params.lines[i].length]);
+                }
+            }
+        });
         forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
             if (includeCode || !inCode) {
                 var match = null;
