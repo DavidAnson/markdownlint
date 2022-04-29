@@ -3613,9 +3613,14 @@ module.exports = {
     "description": "Horizontal rule style",
     "tags": ["hr"],
     "function": function MD035(params, onError) {
-        var style = String(params.config.style || "consistent");
+        var style = String(params.config.style || "consistent").trim();
         filterTokens(params, "hr", function (token) {
-            var lineNumber = token.lineNumber, markup = token.markup;
+            var line = token.line, lineNumber = token.lineNumber;
+            var markup = token.markup;
+            var match = line.match(/[_*\-\s\t]+$/);
+            if (match) {
+                markup = match[0].trim();
+            }
             if (style === "consistent") {
                 style = markup;
             }
