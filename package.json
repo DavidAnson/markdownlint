@@ -45,7 +45,7 @@
     "upgrade": "npx --yes npm-check-updates --upgrade"
   },
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "dependencies": {
     "markdown-it": "12.3.2"
