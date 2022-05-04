@@ -42,4 +42,8 @@ strong **emphasis
 spanning** many
 lines
 
+Inconsistent *double* text *interleaved* text *double* *interleaved* emphasis.
+
+Inconsistent __double__ text __interleaved__ text __double__ __interleaved__ strong emphasis.
+
 Missing newline character

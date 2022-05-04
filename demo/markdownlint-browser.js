@@ -927,28 +927,34 @@ module.exports.applyFixes = applyFixes;
  * @param {number} lineIndex Line index to check.
  * @param {string} search Text to search for.
  * @param {string} replace Text to replace with.
+ * @param {number} [instance] Instance on the line (1-based).
  * @returns {Object} Range and fixInfo wrapper.
  */
-function getRangeAndFixInfoIfFound(lines, lineIndex, search, replace) {
-    var range = null;
-    var fixInfo = null;
-    var searchIndex = lines[lineIndex].indexOf(search);
-    if (searchIndex !== -1) {
-        var column = searchIndex + 1;
-        var length = search.length;
-        range = [column, length];
-        fixInfo = {
-            "editColumn": column,
-            "deleteCount": length,
-            "insertText": replace
+module.exports.getRangeAndFixInfoIfFound =
+    function (lines, lineIndex, search, replace, instance) {
+        if (instance === void 0) { instance = 1; }
+        var range = null;
+        var fixInfo = null;
+        var searchIndex = -1;
+        while (instance > 0) {
+            searchIndex = lines[lineIndex].indexOf(search, searchIndex + 1);
+            instance--;
+        }
+        if (searchIndex !== -1) {
+            var column = searchIndex + 1;
+            var length = search.length;
+            range = [column, length];
+            fixInfo = {
+                "editColumn": column,
+                "deleteCount": length,
+                "insertText": replace
+            };
+        }
+        return {
+            range: range,
+            fixInfo: fixInfo
         };
-    }
-    return {
-        range: range,
-        fixInfo: fixInfo
     };
-}
-module.exports.getRangeAndFixInfoIfFound = getRangeAndFixInfoIfFound;
 /**
  * Gets the next (subsequent) child token if it is of the expected type.
  *
@@ -4411,6 +4417,8 @@ module.exports = {
     "tags": ["emphasis"],
     "function": function MD049(params, onError) {
         var expectedStyle = String(params.config.style || "consistent");
+        var lastLineNumber = -1;
+        var instances = new Map();
         forEachInlineChild(params, "em_open", function (token, parent) {
             var lineNumber = token.lineNumber, markup = token.markup;
             var markupStyle = emphasisOrStrongStyleFor(markup);
@@ -4425,7 +4433,12 @@ module.exports = {
                     var actual = "".concat(markup).concat(content).concat(markup);
                     var expectedMarkup = (expectedStyle === "asterisk") ? "*" : "_";
                     var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
-                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
+                    if (lastLineNumber !== lineNumber) {
+                        lastLineNumber = lineNumber;
+                        instances.clear();
+                    }
+                    instances.set(expected, (instances.get(expected) || 0) + 1);
+                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instances.get(expected));
                 }
                 addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
             }
@@ -4452,6 +4465,8 @@ module.exports = {
     "tags": ["emphasis"],
     "function": function MD050(params, onError) {
         var expectedStyle = String(params.config.style || "consistent");
+        var lastLineNumber = -1;
+        var instances = new Map();
         forEachInlineChild(params, "strong_open", function (token, parent) {
             var lineNumber = token.lineNumber, markup = token.markup;
             var markupStyle = emphasisOrStrongStyleFor(markup);
@@ -4466,7 +4481,12 @@ module.exports = {
                     var actual = "".concat(markup).concat(content).concat(markup);
                     var expectedMarkup = (expectedStyle === "asterisk") ? "**" : "__";
                     var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
-                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected);
+                    if (lastLineNumber !== lineNumber) {
+                        lastLineNumber = lineNumber;
+                        instances.clear();
+                    }
+                    instances.set(expected, (instances.get(expected) || 0) + 1);
+                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instances.get(expected));
                 }
                 addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
             }

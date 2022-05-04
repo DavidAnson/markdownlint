@@ -78,7 +78,7 @@
     "fixInfo": null
   },
   {
-    "lineNumber": 45,
+    "lineNumber": 49,
     "ruleNames": [
       "MD043",
       "required-headings",
@@ -178,7 +178,7 @@
     "fixInfo": null
   },
   {
-    "lineNumber": 45,
+    "lineNumber": 49,
     "ruleNames": [
       "MD047",
       "single-trailing-newline"
@@ -264,6 +264,86 @@
   },
   {
     "errorContext": null,
+    "errorDetail": "Expected: asterisk; Actual: underscore",
+    "errorRange": [
+      14,
+      8
+    ],
+    "fixInfo": {
+      "deleteCount": 8,
+      "editColumn": 14,
+      "insertText": "*double*"
+    },
+    "lineNumber": 45,
+    "ruleDescription": "Emphasis style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md049",
+    "ruleNames": [
+      "MD049",
+      "emphasis-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: asterisk; Actual: underscore",
+    "errorRange": [
+      28,
+      13
+    ],
+    "fixInfo": {
+      "deleteCount": 13,
+      "editColumn": 28,
+      "insertText": "*interleaved*"
+    },
+    "lineNumber": 45,
+    "ruleDescription": "Emphasis style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md049",
+    "ruleNames": [
+      "MD049",
+      "emphasis-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: asterisk; Actual: underscore",
+    "errorRange": [
+      47,
+      8
+    ],
+    "fixInfo": {
+      "deleteCount": 8,
+      "editColumn": 47,
+      "insertText": "*double*"
+    },
+    "lineNumber": 45,
+    "ruleDescription": "Emphasis style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md049",
+    "ruleNames": [
+      "MD049",
+      "emphasis-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: asterisk; Actual: underscore",
+    "errorRange": [
+      56,
+      13
+    ],
+    "fixInfo": {
+      "deleteCount": 13,
+      "editColumn": 56,
+      "insertText": "*interleaved*"
+    },
+    "lineNumber": 45,
+    "ruleDescription": "Emphasis style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md049",
+    "ruleNames": [
+      "MD049",
+      "emphasis-style"
+    ]
+  },
+  {
+    "errorContext": null,
     "errorDetail": "Expected: underscore; Actual: asterisk",
     "errorRange": [
       30,
@@ -308,6 +388,86 @@
     "errorRange": null,
     "fixInfo": null,
     "lineNumber": 41,
+    "ruleDescription": "Strong style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
+    "ruleNames": [
+      "MD050",
+      "strong-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: underscore; Actual: asterisk",
+    "errorRange": [
+      14,
+      10
+    ],
+    "fixInfo": {
+      "deleteCount": 10,
+      "editColumn": 14,
+      "insertText": "__double__"
+    },
+    "lineNumber": 47,
+    "ruleDescription": "Strong style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
+    "ruleNames": [
+      "MD050",
+      "strong-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: underscore; Actual: asterisk",
+    "errorRange": [
+      30,
+      15
+    ],
+    "fixInfo": {
+      "deleteCount": 15,
+      "editColumn": 30,
+      "insertText": "__interleaved__"
+    },
+    "lineNumber": 47,
+    "ruleDescription": "Strong style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
+    "ruleNames": [
+      "MD050",
+      "strong-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: underscore; Actual: asterisk",
+    "errorRange": [
+      51,
+      10
+    ],
+    "fixInfo": {
+      "deleteCount": 10,
+      "editColumn": 51,
+      "insertText": "__double__"
+    },
+    "lineNumber": 47,
+    "ruleDescription": "Strong style should be consistent",
+    "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
+    "ruleNames": [
+      "MD050",
+      "strong-style"
+    ]
+  },
+  {
+    "errorContext": null,
+    "errorDetail": "Expected: underscore; Actual: asterisk",
+    "errorRange": [
+      62,
+      15
+    ],
+    "fixInfo": {
+      "deleteCount": 15,
+      "editColumn": 62,
+      "insertText": "__interleaved__"
+    },
+    "lineNumber": 47,
     "ruleDescription": "Strong style should be consistent",
     "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md050",
     "ruleNames": [

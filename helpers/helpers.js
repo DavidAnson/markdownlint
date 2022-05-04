@@ -950,28 +950,33 @@ module.exports.applyFixes = applyFixes;
  * @param {number} lineIndex Line index to check.
  * @param {string} search Text to search for.
  * @param {string} replace Text to replace with.
+ * @param {number} [instance] Instance on the line (1-based).
  * @returns {Object} Range and fixInfo wrapper.
  */
-function getRangeAndFixInfoIfFound(lines, lineIndex, search, replace) {
-  let range = null;
-  let fixInfo = null;
-  const searchIndex = lines[lineIndex].indexOf(search);
-  if (searchIndex !== -1) {
-    const column = searchIndex + 1;
-    const length = search.length;
-    range = [ column, length ];
-    fixInfo = {
-      "editColumn": column,
-      "deleteCount": length,
-      "insertText": replace
+module.exports.getRangeAndFixInfoIfFound =
+  (lines, lineIndex, search, replace, instance = 1) => {
+    let range = null;
+    let fixInfo = null;
+    let searchIndex = -1;
+    while (instance > 0) {
+      searchIndex = lines[lineIndex].indexOf(search, searchIndex + 1);
+      instance--;
+    }
+    if (searchIndex !== -1) {
+      const column = searchIndex + 1;
+      const length = search.length;
+      range = [ column, length ];
+      fixInfo = {
+        "editColumn": column,
+        "deleteCount": length,
+        "insertText": replace
+      };
+    }
+    return {
+      range,
+      fixInfo
     };
-  }
-  return {
-    range,
-    fixInfo
   };
-}
-module.exports.getRangeAndFixInfoIfFound = getRangeAndFixInfoIfFound;
 
 /**
  * Gets the next (subsequent) child token if it is of the expected type.
