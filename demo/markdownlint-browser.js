@@ -4411,88 +4411,55 @@ module.exports = {
 // @ts-check
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild, getNextChildToken = _a.getNextChildToken, getRangeAndFixInfoIfFound = _a.getRangeAndFixInfoIfFound;
-module.exports = {
-    "names": ["MD049", "emphasis-style"],
-    "description": "Emphasis style should be consistent",
-    "tags": ["emphasis"],
-    "function": function MD049(params, onError) {
-        var expectedStyle = String(params.config.style || "consistent");
-        var lastLineNumber = -1;
-        var instances = new Map();
-        forEachInlineChild(params, "em_open", function (token, parent) {
-            var lineNumber = token.lineNumber, markup = token.markup;
-            var markupStyle = emphasisOrStrongStyleFor(markup);
-            if (expectedStyle === "consistent") {
-                expectedStyle = markupStyle;
-            }
-            if (expectedStyle !== markupStyle) {
-                var rangeAndFixInfo = {};
-                var contentToken = getNextChildToken(parent, token, "text", "em_close");
-                if (contentToken) {
-                    var content = contentToken.content;
-                    var actual = "".concat(markup).concat(content).concat(markup);
-                    var expectedMarkup = (expectedStyle === "asterisk") ? "*" : "_";
-                    var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
-                    if (lastLineNumber !== lineNumber) {
-                        lastLineNumber = lineNumber;
-                        instances.clear();
-                    }
-                    instances.set(expected, (instances.get(expected) || 0) + 1);
-                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instances.get(expected));
+var impl = function (params, onError, tagPrefix, asterisk, underline, style) {
+    var lastLineNumber = -1;
+    var instances = new Map();
+    forEachInlineChild(params, "".concat(tagPrefix, "_open"), function (token, parent) {
+        var lineNumber = token.lineNumber, markup = token.markup;
+        var markupStyle = emphasisOrStrongStyleFor(markup);
+        if (style === "consistent") {
+            style = markupStyle;
+        }
+        if (style !== markupStyle) {
+            var rangeAndFixInfo = {};
+            var contentToken = getNextChildToken(parent, token, "text", "".concat(tagPrefix, "_close"));
+            if (contentToken) {
+                var content = contentToken.content;
+                var actual = "".concat(markup).concat(content).concat(markup);
+                var expectedMarkup = (style === "asterisk") ? asterisk : underline;
+                var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
+                if (lastLineNumber !== lineNumber) {
+                    lastLineNumber = lineNumber;
+                    instances.clear();
                 }
-                addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+                var instance = (instances.get(expected) || 0) + 1;
+                instances.set(expected, instance);
+                rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instance);
             }
-        });
-    }
+            addError(onError, lineNumber, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+        }
+    });
 };
-
-
-/***/ }),
-
-/***/ "../lib/md050.js":
-/*!***********************!*\
-  !*** ../lib/md050.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-// @ts-check
-
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, emphasisOrStrongStyleFor = _a.emphasisOrStrongStyleFor, forEachInlineChild = _a.forEachInlineChild, getNextChildToken = _a.getNextChildToken, getRangeAndFixInfoIfFound = _a.getRangeAndFixInfoIfFound;
-module.exports = {
-    "names": ["MD050", "strong-style"],
-    "description": "Strong style should be consistent",
-    "tags": ["emphasis"],
-    "function": function MD050(params, onError) {
-        var expectedStyle = String(params.config.style || "consistent");
-        var lastLineNumber = -1;
-        var instances = new Map();
-        forEachInlineChild(params, "strong_open", function (token, parent) {
-            var lineNumber = token.lineNumber, markup = token.markup;
-            var markupStyle = emphasisOrStrongStyleFor(markup);
-            if (expectedStyle === "consistent") {
-                expectedStyle = markupStyle;
-            }
-            if (expectedStyle !== markupStyle) {
-                var rangeAndFixInfo = {};
-                var contentToken = getNextChildToken(parent, token, "text", "strong_close");
-                if (contentToken) {
-                    var content = contentToken.content;
-                    var actual = "".concat(markup).concat(content).concat(markup);
-                    var expectedMarkup = (expectedStyle === "asterisk") ? "**" : "__";
-                    var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
-                    if (lastLineNumber !== lineNumber) {
-                        lastLineNumber = lineNumber;
-                        instances.clear();
-                    }
-                    instances.set(expected, (instances.get(expected) || 0) + 1);
-                    rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instances.get(expected));
-                }
-                addError(onError, lineNumber, "Expected: ".concat(expectedStyle, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
-            }
-        });
+module.exports = [
+    {
+        "names": ["MD049", "emphasis-style"],
+        "description": "Emphasis style should be consistent",
+        "tags": ["emphasis"],
+        "function": function MD049(params, onError) {
+            var style = String(params.config.style || "consistent");
+            return impl(params, onError, "em", "*", "_", style);
+        }
+    },
+    {
+        "names": ["MD050", "strong-style"],
+        "description": "Strong style should be consistent",
+        "tags": ["emphasis"],
+        "function": function MD050(params, onError) {
+            var style = String(params.config.style || "consistent");
+            return impl(params, onError, "strong", "**", "__", style);
+        }
     }
-};
+];
 
 
 /***/ }),
@@ -4583,13 +4550,22 @@ module.exports = {
 /*!***********************!*\
   !*** ../lib/rules.js ***!
   \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
 
 "use strict";
 // @ts-check
 
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 var _a = __webpack_require__(/*! ./constants */ "../lib/constants.js"), homepage = _a.homepage, version = _a.version;
-var rules = [
+var rules = __spreadArray(__spreadArray([
     __webpack_require__(/*! ./md001 */ "../lib/md001.js"),
     __webpack_require__(/*! ./md002 */ "../lib/md002.js"),
     __webpack_require__(/*! ./md003 */ "../lib/md003.js"),
@@ -4633,11 +4609,10 @@ var rules = [
     __webpack_require__(/*! ./md045 */ "../lib/md045.js"),
     __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
-    __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
-    __webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"),
-    __webpack_require__(/*! ./md050 */ "../lib/md050.js"),
+    __webpack_require__(/*! ./md048 */ "../lib/md048.js")
+], __webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"), true), [
     __webpack_require__(/*! ./md051 */ "../lib/md051.js")
-];
+], false);
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();
     // eslint-disable-next-line dot-notation
