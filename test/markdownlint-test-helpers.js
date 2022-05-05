@@ -390,6 +390,14 @@ test("forEachInlineCodeSpan", (t) => {
   });
 });
 
+test("getPlatformIdentifier", (t) => {
+  t.plan(4);
+  t.is(helpers.getPlatformIdentifier("custom", process), "custom");
+  t.is(helpers.getPlatformIdentifier("custom", null), "custom");
+  t.is(helpers.getPlatformIdentifier(null, process), process.platform);
+  t.is(helpers.getPlatformIdentifier(null, null), "unknown");
+});
+
 test("getPreferredLineEnding", (t) => {
   t.plan(19);
   const testCases = [

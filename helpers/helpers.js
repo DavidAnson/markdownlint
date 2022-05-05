@@ -790,6 +790,18 @@ function emphasisMarkersInContent(params) {
 module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 
 /**
+ * Gets the platform identifier from a string or process-like object.
+ *
+ * @param {string} platform Platform identifier (process.platform).
+ * @param {Object} process Node.js process object.
+ * @returns {string} Platform identifier.
+ */
+function getPlatformIdentifier(platform, process) {
+  return (platform || (process && process.platform) || "unknown");
+}
+module.exports.getPlatformIdentifier = getPlatformIdentifier;
+
+/**
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
@@ -818,7 +830,10 @@ function getPreferredLineEnding(input, platform) {
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
     preferredLineEnding =
-      ((platform || process.platform) === "win32") ? "\r\n" : "\n";
+      // eslint-disable-next-line node/prefer-global/process
+      (getPlatformIdentifier(platform, require("process")) === "win32") ?
+        "\r\n" :
+        "\n";
   } else if ((lf >= crlf) && (lf >= cr)) {
     preferredLineEnding = "\n";
   } else if (crlf >= cr) {

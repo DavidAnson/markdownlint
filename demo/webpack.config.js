@@ -45,6 +45,7 @@ function config(options) {
       "fallback": {
         "fs": false,
         "path": false,
+        "process": false,
         "util": false
       }
     }
