@@ -790,25 +790,13 @@ function emphasisMarkersInContent(params) {
 module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 
 /**
- * Gets the platform identifier from a string or process-like object.
- *
- * @param {string} platform Platform identifier (process.platform).
- * @param {Object} process Node.js process object.
- * @returns {string} Platform identifier.
- */
-function getPlatformIdentifier(platform, process) {
-  return (platform || (process && process.platform) || "unknown");
-}
-module.exports.getPlatformIdentifier = getPlatformIdentifier;
-
-/**
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
- * @param {string} [platform] Platform identifier (process.platform).
+ * @param {Object} [process] Node.js process object.
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input, platform) {
+function getPreferredLineEnding(input, process) {
   let cr = 0;
   let lf = 0;
   let crlf = 0;
@@ -830,10 +818,7 @@ function getPreferredLineEnding(input, platform) {
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
     preferredLineEnding =
-      // eslint-disable-next-line node/prefer-global/process
-      (getPlatformIdentifier(platform, require("process")) === "win32") ?
-        "\r\n" :
-        "\n";
+      (process && (process.platform === "win32")) ? "\r\n" : "\n";
   } else if ((lf >= crlf) && (lf >= cr)) {
     preferredLineEnding = "\n";
   } else if (crlf >= cr) {
@@ -885,11 +870,11 @@ module.exports.applyFix = applyFix;
  *
  * @param {string} input Lines of Markdown content.
  * @param {Object[]} errors RuleOnErrorInfo instances.
- * @param {string} [platform] Platform identifier (process.platform).
  * @returns {string} Corrected content.
  */
-function applyFixes(input, errors, platform) {
-  const lineEnding = getPreferredLineEnding(input, platform);
+function applyFixes(input, errors) {
+  // eslint-disable-next-line node/prefer-global/process
+  const lineEnding = getPreferredLineEnding(input, require("process"));
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
   let fixInfos = errors

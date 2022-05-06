@@ -2,7 +2,6 @@
 
 "use strict";
 
-const os = require("os");
 const test = require("ava").default;
 const helpers = require("../helpers");
 
@@ -390,18 +389,10 @@ test("forEachInlineCodeSpan", (t) => {
   });
 });
 
-test("getPlatformIdentifier", (t) => {
-  t.plan(4);
-  t.is(helpers.getPlatformIdentifier("custom", process), "custom");
-  t.is(helpers.getPlatformIdentifier("custom", null), "custom");
-  t.is(helpers.getPlatformIdentifier(null, process), process.platform);
-  t.is(helpers.getPlatformIdentifier(null, null), "unknown");
-});
-
 test("getPreferredLineEnding", (t) => {
-  t.plan(19);
+  t.plan(21);
   const testCases = [
-    [ "", os.EOL ],
+    [ "", "\n" ],
     [ "\r", "\r" ],
     [ "\n", "\n" ],
     [ "\r\n", "\r\n" ],
@@ -425,12 +416,22 @@ test("getPreferredLineEnding", (t) => {
     t.is(actual, expected, "Incorrect line ending returned.");
   });
   t.is(
-    helpers.getPreferredLineEnding("", "linux"),
+    helpers.getPreferredLineEnding(""),
+    "\n",
+    "Incorrect line ending for undefined platform"
+  );
+  t.is(
+    helpers.getPreferredLineEnding("", { "platform": "darwin" }),
+    "\n",
+    "Incorrect line ending for darwin"
+  );
+  t.is(
+    helpers.getPreferredLineEnding("", { "platform": "linux" }),
     "\n",
     "Incorrect line ending for linux"
   );
   t.is(
-    helpers.getPreferredLineEnding("", "win32"),
+    helpers.getPreferredLineEnding("", { "platform": "win32" }),
     "\r\n",
     "Incorrect line ending for win32"
   );
@@ -485,7 +486,7 @@ test("applyFix", (t) => {
 });
 
 test("applyFixes", (t) => {
-  t.plan(33);
+  t.plan(30);
   const testCases = [
     [
       "Hello world.",
@@ -960,19 +961,6 @@ test("applyFixes", (t) => {
     const actual = helpers.applyFixes(input, errors);
     t.is(actual, expected, "Incorrect fix applied.");
   });
-  const input = "# Heading";
-  const errors = [
-    {
-      "lineNumber": 1,
-      "fixInfo": {
-        "editColumn": input.length + 1,
-        "insertText": "\n"
-      }
-    }
-  ];
-  t.is(helpers.applyFixes(input, errors, "darwin"), `${input}\n`);
-  t.is(helpers.applyFixes(input, errors, "linux"), `${input}\n`);
-  t.is(helpers.applyFixes(input, errors, "win32"), `${input}\r\n`);
 });
 
 test("deepFreeze", (t) => {
