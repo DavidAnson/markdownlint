@@ -793,10 +793,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
- * @param {Object} [process] Node.js process object.
+ * @param {Object} [os] Node.js "os" module.
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input, process) {
+function getPreferredLineEnding(input, os) {
   let cr = 0;
   let lf = 0;
   let crlf = 0;
@@ -817,8 +817,7 @@ function getPreferredLineEnding(input, process) {
   });
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
-    preferredLineEnding =
-      (process && (process.platform === "win32")) ? "\r\n" : "\n";
+    preferredLineEnding = (os && os.EOL) || "\n";
   } else if ((lf >= crlf) && (lf >= cr)) {
     preferredLineEnding = "\n";
   } else if (crlf >= cr) {
@@ -873,8 +872,7 @@ module.exports.applyFix = applyFix;
  * @returns {string} Corrected content.
  */
 function applyFixes(input, errors) {
-  // eslint-disable-next-line node/prefer-global/process
-  const lineEnding = getPreferredLineEnding(input, require("process"));
+  const lineEnding = getPreferredLineEnding(input, require("os"));
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
   let fixInfos = errors

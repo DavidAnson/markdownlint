@@ -778,10 +778,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
- * @param {Object} [process] Node.js process object.
+ * @param {Object} [os] Node.js "os" module.
  * @returns {string} Preferred line ending.
  */
-function getPreferredLineEnding(input, process) {
+function getPreferredLineEnding(input, os) {
     var cr = 0;
     var lf = 0;
     var crlf = 0;
@@ -802,8 +802,7 @@ function getPreferredLineEnding(input, process) {
     });
     var preferredLineEnding = null;
     if (!cr && !lf && !crlf) {
-        preferredLineEnding =
-            (process && (process.platform === "win32")) ? "\r\n" : "\n";
+        preferredLineEnding = (os && os.EOL) || "\n";
     }
     else if ((lf >= crlf) && (lf >= cr)) {
         preferredLineEnding = "\n";
@@ -858,8 +857,7 @@ module.exports.applyFix = applyFix;
  * @returns {string} Corrected content.
  */
 function applyFixes(input, errors) {
-    // eslint-disable-next-line node/prefer-global/process
-    var lineEnding = getPreferredLineEnding(input, __webpack_require__(/*! process */ "?4c74"));
+    var lineEnding = getPreferredLineEnding(input, __webpack_require__(/*! os */ "?591e"));
     var lines = input.split(newLineRe);
     // Normalize fixInfo objects
     var fixInfos = errors
@@ -1013,10 +1011,10 @@ module.exports = markdownit;
 
 /***/ }),
 
-/***/ "?4c74":
-/*!*************************!*\
-  !*** process (ignored) ***!
-  \*************************/
+/***/ "?591e":
+/*!********************!*\
+  !*** os (ignored) ***!
+  \********************/
 /***/ (() => {
 
 /* (ignored) */

@@ -415,26 +415,10 @@ test("getPreferredLineEnding", (t) => {
     const actual = helpers.getPreferredLineEnding(input);
     t.is(actual, expected, "Incorrect line ending returned.");
   });
-  t.is(
-    helpers.getPreferredLineEnding(""),
-    "\n",
-    "Incorrect line ending for undefined platform"
-  );
-  t.is(
-    helpers.getPreferredLineEnding("", { "platform": "darwin" }),
-    "\n",
-    "Incorrect line ending for darwin"
-  );
-  t.is(
-    helpers.getPreferredLineEnding("", { "platform": "linux" }),
-    "\n",
-    "Incorrect line ending for linux"
-  );
-  t.is(
-    helpers.getPreferredLineEnding("", { "platform": "win32" }),
-    "\r\n",
-    "Incorrect line ending for win32"
-  );
+  t.is(helpers.getPreferredLineEnding("", null), "\n");
+  t.is(helpers.getPreferredLineEnding("", { "EOL": "\n" }), "\n");
+  t.is(helpers.getPreferredLineEnding("", { "EOL": "\r\n" }), "\r\n");
+  t.is(helpers.getPreferredLineEnding("", { "EOL": "custom" }), "custom");
 });
 
 test("applyFix", (t) => {
