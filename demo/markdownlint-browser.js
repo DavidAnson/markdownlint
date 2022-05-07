@@ -3967,7 +3967,7 @@ module.exports = {
             var linkText = "";
             var lineIndex = 0;
             children.forEach(function (child) {
-                var content = child.content, type = child.type;
+                var content = child.content, markup = child.markup, type = child.type;
                 if (type === "link_open") {
                     inLink = true;
                     linkText = "";
@@ -4000,7 +4000,9 @@ module.exports = {
                     lineIndex = 0;
                 }
                 else if (inLink) {
-                    linkText += content;
+                    linkText += type.endsWith("_inline") ?
+                        "".concat(markup).concat(content).concat(markup) :
+                        (content || markup);
                 }
             });
         });
