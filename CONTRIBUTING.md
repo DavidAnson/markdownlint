@@ -28,6 +28,8 @@ When running tests, `test/*.md` files are enumerated, linted, and fail if any vi
 For example, the line `### Heading {MD001}` is expected to trigger the rule `MD001`.
 For cases where the marker text can not be present on the same line, the syntax `{MD###:#}` can be used to include a line number.
 If `some-test.md` needs custom configuration, a `some-test.json` is used to provide a custom `options.config` for that scenario.
+Tests run by `markdownlint-test-scenarios.js` use [AVA's snapshot feature](https://github.com/avajs/ava/blob/main/docs/04-snapshot-testing.md).
+To update snapshots (for example, after modifying a test file), run `npm run update-snapshots` and include the updated files with the pull request.
 
 Lint before sending a pull request by running `npm run lint`.
 There should be no issues.
