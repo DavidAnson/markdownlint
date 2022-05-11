@@ -75,21 +75,14 @@ function createTestForFile(file) {
           errors,
           fixed
         });
-        return {
-          config,
-          fixed
-        };
-      })
-      // Identify missing fixes
-      .then((params) => {
-        const { config, fixed } = params;
+        // Identify missing fixes
         return markdownlint({
           "strings": {
             "input": fixed
           },
           config
-        }).then((results) => {
-          const unfixed = results.input.filter((error) => !!error.fixInfo);
+        }).then((fixedResults) => {
+          const unfixed = fixedResults.input.filter((error) => !!error.fixInfo);
           t.deepEqual(unfixed, [], "Fixable error(s) not fixed.");
         });
       })
