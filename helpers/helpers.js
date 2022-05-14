@@ -590,13 +590,13 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
         tokenLines.join("\n"),
         (code, lineIndex, columnIndex) => {
           const codeLines = code.split(newLineRe);
-          for (const [ i, line ] of codeLines.entries()) {
+          codeLines.forEach((line, i) => {
             exclusions.push([
               token.lineNumber - 1 + lineIndex + i,
               i ? 0 : columnIndex,
               line.length
             ]);
-          }
+          });
         }
       );
     }

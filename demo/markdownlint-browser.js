@@ -586,14 +586,13 @@ module.exports.codeBlockAndSpanRanges = function (params, lineMetadata) {
             var tokenLines = params.lines.slice(token.map[0], token.map[1]);
             forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, columnIndex) {
                 var codeLines = code.split(newLineRe);
-                for (var _i = 0, _a = codeLines.entries(); _i < _a.length; _i++) {
-                    var _b = _a[_i], i = _b[0], line = _b[1];
+                codeLines.forEach(function (line, i) {
                     exclusions.push([
                         token.lineNumber - 1 + lineIndex + i,
                         i ? 0 : columnIndex,
                         line.length
                     ]);
-                }
+                });
             });
         }
     });
