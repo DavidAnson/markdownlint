@@ -3428,7 +3428,7 @@ module.exports = {
 
 var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorContext = _a.addErrorContext, forEachLine = _a.forEachLine, isBlankLine = _a.isBlankLine;
 var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
-var codeFencePrefixRe = /^(.*?)\s*[`~]/;
+var codeFencePrefixRe = /^(.*?)[`~]/;
 module.exports = {
     "names": ["MD031", "blanks-around-fences"],
     "description": "Fenced code blocks should be surrounded by blank lines",
@@ -3446,7 +3446,7 @@ module.exports = {
                 var _a = line.match(codeFencePrefixRe) || [], prefix = _a[1];
                 var fixInfo = (prefix === undefined) ? null : {
                     "lineNumber": i + (onTopFence ? 1 : 2),
-                    "insertText": "".concat(prefix, "\n")
+                    "insertText": "".concat(prefix.replace(/[^>]/g, " ").trim(), "\n")
                 };
                 addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, fixInfo);
             }
