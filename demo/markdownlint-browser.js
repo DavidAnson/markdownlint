@@ -41,7 +41,7 @@ module.exports.frontMatterRe =
 // Regular expression for matching the start of inline disable/enable comments
 var inlineCommentStartRe = 
 // eslint-disable-next-line max-len
-/(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
+/(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/ig;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 // Regular expression for matching HTML elements
 var htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
@@ -1526,9 +1526,11 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
         enabledRulesPerLineNumber.push(enabledRules);
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
-    function disableNextLine(action, parameter, lineNumber) {
-        if (action === "DISABLE-NEXT-LINE") {
-            var nextLineNumber = frontMatterLines.length + lineNumber + 1;
+    function disableLineNextLine(action, parameter, lineNumber) {
+        var disableLine = (action === "DISABLE-LINE");
+        var disableNextLine = (action === "DISABLE-NEXT-LINE");
+        if (disableLine || disableNextLine) {
+            var nextLineNumber = frontMatterLines.length + lineNumber + (disableNextLine ? 1 : 0);
             enabledRulesPerLineNumber[nextLineNumber] =
                 applyEnableDisable(action, parameter, enabledRulesPerLineNumber[nextLineNumber] || {});
         }
@@ -1544,7 +1546,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     capturedRules = enabledRules;
     handleInlineConfig(lines, enableDisableFile);
     handleInlineConfig(lines, captureRestoreEnableDisable, updateLineState);
-    handleInlineConfig(lines, disableNextLine);
+    handleInlineConfig(lines, disableLineNextLine);
     // Return results
     return {
         effectiveConfig: effectiveConfig,

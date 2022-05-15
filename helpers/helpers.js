@@ -15,7 +15,7 @@ module.exports.frontMatterRe =
 // Regular expression for matching the start of inline disable/enable comments
 const inlineCommentStartRe =
   // eslint-disable-next-line max-len
-  /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-next-line|configure-file))(?:\s|-->)/ig;
+  /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/ig;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
 // Regular expression for matching HTML elements

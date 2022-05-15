@@ -88,5 +88,20 @@ hard	tab / space *in * emphasis {MD037} / space `in ` code {MD038}
 <!-- markdownlint-disable-next-line MD038 -->
 hard	tab / space *in * emphasis {MD037} / space `in ` code
 hard	tab / space *in * emphasis {MD037} / space `in ` code {MD038}
+<!--  markdownlint-enable MD010-->
+
+hard	tab {MD010} / space *in * emphasis {MD037} / space `in ` code {MD038}
+hard	tab / space *in * emphasis / space `in ` code <!-- markdownlint-disable-line -->
+hard	tab {MD010} / space *in * emphasis {MD037} / space `in ` code {MD038}
+<!-- markdownlint-disable-line -->hard	tab / space *in * emphasis / space `in ` code
+hard	tab {MD010} / space *in * emphasis {MD037} / space `in ` code {MD038}
+<!-- markdownlint-disable-line MD010 MD038 --> hard	tab / space *in * emphasis {MD037} / space `in ` code
+hard	tab {MD010} / space *in * emphasis {MD037} / space `in ` code {MD038}
+hard	tab / space *in * emphasis {MD037} / space `in ` code <!-- markdownlint-disable-line MD010 --><!-- markdownlint-disable-line MD038 -->
+hard	tab {MD010} / space *in * emphasis {MD037} / space `in ` code {MD038}
+<!--  markdownlint-disable MD010-->
+hard	tab / space *in * emphasis {MD037} / space `in ` code {MD038}
+hard	tab / space *in * emphasis {MD037} / space `in ` code<!-- markdownlint-disable-line MD038 -->
+hard	tab / space *in * emphasis {MD037} / space `in ` code {MD038}
 
 <!-- markdownlint-disable-next-line -->
