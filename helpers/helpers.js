@@ -1021,3 +1021,16 @@ function deepFreeze(obj) {
   return obj;
 }
 module.exports.deepFreeze = deepFreeze;
+
+/**
+ * Expands a path with a tilde to an absolute path.
+ *
+ * @param {string} file Path that may begin with a tilde.
+ * @param {Object} os Node.js "os" module.
+ * @returns {string} Absolute path (or original path).
+ */
+function expandTildePath(file, os) {
+  const homedir = os && os.homedir();
+  return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
+}
+module.exports.expandTildePath = expandTildePath;

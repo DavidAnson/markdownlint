@@ -995,6 +995,18 @@ function deepFreeze(obj) {
     return obj;
 }
 module.exports.deepFreeze = deepFreeze;
+/**
+ * Expands a path with a tilde to an absolute path.
+ *
+ * @param {string} file Path that may begin with a tilde.
+ * @param {Object} os Node.js "os" module.
+ * @returns {string} Absolute path (or original path).
+ */
+function expandTildePath(file, os) {
+    var homedir = os && os.homedir();
+    return homedir ? file.replace(/^~($|\/|\\)/, "".concat(homedir, "$1")) : file;
+}
+module.exports.expandTildePath = expandTildePath;
 
 
 /***/ }),
@@ -1023,6 +1035,16 @@ module.exports = markdownit;
 /***/ "?ec0a":
 /*!********************!*\
   !*** fs (ignored) ***!
+  \********************/
+/***/ (() => {
+
+/* (ignored) */
+
+/***/ }),
+
+/***/ "?a32b":
+/*!********************!*\
+  !*** os (ignored) ***!
   \********************/
 /***/ (() => {
 
@@ -2070,6 +2092,8 @@ function readConfig(file, parsers, fs, callback) {
         fs = __webpack_require__(/*! fs */ "?ec0a");
     }
     // Read file
+    var os = __webpack_require__(/*! os */ "?a32b");
+    file = helpers.expandTildePath(file, os);
     fs.readFile(file, "utf8", function (err, content) {
         if (err) {
             return callback(err);
@@ -2084,7 +2108,7 @@ function readConfig(file, parsers, fs, callback) {
         var configExtends = config.extends;
         if (configExtends) {
             delete config.extends;
-            return resolveConfigExtends(file, configExtends, fs, function (_, resolvedExtends) { return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
+            return resolveConfigExtends(file, helpers.expandTildePath(configExtends, os), fs, function (_, resolvedExtends) { return readConfig(resolvedExtends, parsers, fs, function (errr, extendsConfig) {
                 if (errr) {
                     return callback(errr);
                 }
@@ -2121,6 +2145,8 @@ function readConfigSync(file, parsers, fs) {
         fs = __webpack_require__(/*! fs */ "?ec0a");
     }
     // Read file
+    var os = __webpack_require__(/*! os */ "?a32b");
+    file = helpers.expandTildePath(file, os);
     var content = fs.readFileSync(file, "utf8");
     // Try to parse file
     var _a = parseConfiguration(file, content, parsers), config = _a.config, message = _a.message;
@@ -2131,7 +2157,7 @@ function readConfigSync(file, parsers, fs) {
     var configExtends = config.extends;
     if (configExtends) {
         delete config.extends;
-        var resolvedExtends = resolveConfigExtendsSync(file, configExtends, fs);
+        var resolvedExtends = resolveConfigExtendsSync(file, helpers.expandTildePath(configExtends, os), fs);
         return __assign(__assign({}, readConfigSync(resolvedExtends, parsers, fs)), config);
     }
     return config;

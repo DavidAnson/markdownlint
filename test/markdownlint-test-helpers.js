@@ -2,6 +2,8 @@
 
 "use strict";
 
+const os = require("os");
+const path = require("path");
 const test = require("ava").default;
 const helpers = require("../helpers");
 
@@ -1302,4 +1304,34 @@ test("htmlElementRanges", (t) => {
   const lineMetadata = helpers.getLineMetadata(params);
   const actual = helpers.htmlElementRanges(params, lineMetadata);
   t.deepEqual(actual, expected);
+});
+
+test("expandTildePath", (t) => {
+  t.plan(16);
+  const homedir = os.homedir();
+  t.is(helpers.expandTildePath("", os), "");
+  t.is(helpers.expandTildePath("", null), "");
+  t.is(
+    path.resolve(helpers.expandTildePath("~", os)),
+    homedir
+  );
+  t.is(helpers.expandTildePath("~", null), "~");
+  t.is(helpers.expandTildePath("file", os), "file");
+  t.is(helpers.expandTildePath("file", null), "file");
+  t.is(helpers.expandTildePath("/file", os), "/file");
+  t.is(helpers.expandTildePath("/file", null), "/file");
+  t.is(
+    path.resolve(helpers.expandTildePath("~/file", os)),
+    path.join(homedir, "/file")
+  );
+  t.is(helpers.expandTildePath("~/file", null), "~/file");
+  t.is(helpers.expandTildePath("dir/file", os), "dir/file");
+  t.is(helpers.expandTildePath("dir/file", null), "dir/file");
+  t.is(helpers.expandTildePath("/dir/file", os), "/dir/file");
+  t.is(helpers.expandTildePath("/dir/file", null), "/dir/file");
+  t.is(
+    path.resolve(helpers.expandTildePath("~/dir/file", os)),
+    path.join(homedir, "/dir/file")
+  );
+  t.is(helpers.expandTildePath("~/dir/file", null), "~/dir/file");
 });

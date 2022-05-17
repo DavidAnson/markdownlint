@@ -639,7 +639,8 @@ The `file` is resolved relative to the current working directory. If an `extends
 key is present once read, its value will be resolved as a path relative to `file`
 and loaded recursively. Settings from a file referenced by `extends` are applied
 first, then those of `file` are applied on top (overriding any of the same keys
-appearing in the referenced file).
+appearing in the referenced file). If either the `file` or `extends` path begins
+with the `~` directory, it will act as a placeholder for the home directory.
 
 #### parsers
 

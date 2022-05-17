@@ -2,9 +2,12 @@
 
 "use strict";
 
+const os = require("os");
 const path = require("path");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
+
+const sameFileSystem = (path.relative(os.homedir(), __dirname) !== __dirname);
 
 test.cb("configSingle", (t) => {
   t.plan(2);
@@ -27,6 +30,20 @@ test.cb("configAbsolute", (t) => {
       t.end();
     });
 });
+
+if (sameFileSystem) {
+  test.cb("configTilde", (t) => {
+    t.plan(2);
+    markdownlint.readConfig(
+      `~/${path.relative(os.homedir(), "./test/config/config-child.json")}`,
+      function callback(err, actual) {
+        t.falsy(err);
+        const expected = require("./config/config-child.json");
+        t.deepEqual(actual, expected, "Config object not correct.");
+        t.end();
+      });
+  });
+}
 
 test.cb("configMultiple", (t) => {
   t.plan(2);
@@ -60,9 +77,10 @@ test.cb("configMultipleWithRequireResolve", (t) => {
 });
 
 test.cb("configCustomFileSystem", (t) => {
-  t.plan(5);
-  const file = path.resolve("/dir/file.json");
-  const extended = path.resolve("/dir/extended.json");
+  t.plan(3);
+  const file = "/dir/file.json";
+  const extended = "~/dir/extended.json";
+  const expanded = path.join(os.homedir(), extended.slice(1));
   const fileContent = {
     "extends": extended,
     "default": true,
@@ -74,20 +92,16 @@ test.cb("configCustomFileSystem", (t) => {
   };
   const fsApi = {
     "access": (p, m, cb) => {
-      t.is(p, extended);
+      t.is(p, expanded);
       return (cb || m)();
     },
     "readFile": (p, o, cb) => {
-      switch (p) {
-        case file:
-          t.is(p, file);
-          return cb(null, JSON.stringify(fileContent));
-        case extended:
-          t.is(p, extended);
-          return cb(null, JSON.stringify(extendedContent));
-        default:
-          return t.fail();
+      if (p === file) {
+        return cb(null, JSON.stringify(fileContent));
+      } else if (p === expanded) {
+        return cb(null, JSON.stringify(extendedContent));
       }
+      return t.fail(p);
     }
   };
   markdownlint.readConfig(
@@ -254,6 +268,16 @@ test("configAbsoluteSync", (t) => {
   t.deepEqual(actual, expected, "Config object not correct.");
 });
 
+if (sameFileSystem) {
+  test("configTildeSync", (t) => {
+    t.plan(1);
+    const actual = markdownlint.readConfigSync(
+      `~/${path.relative(os.homedir(), "./test/config/config-child.json")}`);
+    const expected = require("./config/config-child.json");
+    t.deepEqual(actual, expected, "Config object not correct.");
+  });
+}
+
 test("configMultipleSync", (t) => {
   t.plan(1);
   const actual =
@@ -362,9 +386,10 @@ test("configMultipleHybridSync", (t) => {
 });
 
 test("configCustomFileSystemSync", (t) => {
-  t.plan(4);
-  const file = path.resolve("/dir/file.json");
-  const extended = path.resolve("/dir/extended.json");
+  t.plan(2);
+  const file = "/dir/file.json";
+  const extended = "~/dir/extended.json";
+  const expanded = path.join(os.homedir(), extended.slice(1));
   const fileContent = {
     "extends": extended,
     "default": true,
@@ -376,19 +401,15 @@ test("configCustomFileSystemSync", (t) => {
   };
   const fsApi = {
     "accessSync": (p) => {
-      t.is(p, extended);
+      t.is(p, expanded);
     },
     "readFileSync": (p) => {
-      switch (p) {
-        case file:
-          t.is(p, file);
-          return JSON.stringify(fileContent);
-        case extended:
-          t.is(p, extended);
-          return JSON.stringify(extendedContent);
-        default:
-          return t.fail();
+      if (p === file) {
+        return JSON.stringify(fileContent);
+      } else if (p === expanded) {
+        return JSON.stringify(extendedContent);
       }
+      return t.fail(p);
     }
   };
   const actual = markdownlint.readConfigSync(file, null, fsApi);
