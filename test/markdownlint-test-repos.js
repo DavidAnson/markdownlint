@@ -3,8 +3,7 @@
 "use strict";
 
 const { existsSync } = require("fs");
-// eslint-disable-next-line unicorn/import-style
-const { join } = require("path");
+const { join } = require("path").posix;
 const { promisify } = require("util");
 const jsYaml = require("js-yaml");
 const test = require("ava").default;
@@ -131,7 +130,8 @@ test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/mkdocs/mkdocs", (t) => {
@@ -200,7 +200,10 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+    const ignoreRes = [
+      /^[^:]+interoperability-and-integration\.md.*: \d+: MD009\/.*$\r?\n?/gm,
+      /^[^:]+: \d+: MD051\/.*$\r?\n?/gm
+    ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
