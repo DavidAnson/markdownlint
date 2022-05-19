@@ -130,7 +130,8 @@ test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/mkdocs/mkdocs", (t) => {
