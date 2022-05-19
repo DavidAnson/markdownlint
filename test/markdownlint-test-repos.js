@@ -130,8 +130,7 @@ test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/mkdocs/mkdocs", (t) => {
@@ -200,10 +199,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [
-      /^[^:]+interoperability-and-integration\.md.*: \d+: MD009\/.*$\r?\n?/gm,
-      /^[^:]+: \d+: MD051\/.*$\r?\n?/gm
-    ];
+    const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
