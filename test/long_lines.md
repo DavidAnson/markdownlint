@@ -24,7 +24,7 @@ This long line includes a simple [reference][label] link and is long enough to v
 
 [label]: https://example.org "Title for a link reference that is itself long enough to violate the rule"
 
-[Link to broken label][notlabel]
+[Link to broken label][notlabel] {MD052}
 
 [notlabel\]: notlink "Invalid syntax for a link label because the right bracket is backslash-escaped {MD013}"
 

@@ -108,6 +108,8 @@ playground for learning and exploring.
 * **[MD049](doc/Rules.md#md049)** *emphasis-style* - Emphasis style should be consistent
 * **[MD050](doc/Rules.md#md050)** *strong-style* - Strong style should be consistent
 * **[MD051](doc/Rules.md#md051)** *link-fragments* - Link fragments should be valid
+* **[MD052](doc/Rules.md#md052)** *reference-links-images* - Reference links and images should use a label that is defined
+* **[MD053](doc/Rules.md#md053)** *link-image-reference-definitions* - Link and image reference definitions should be needed
 
 <!-- markdownlint-restore -->
 
@@ -139,11 +141,11 @@ rules at once.
   MD023, MD024, MD025, MD026, MD036, MD041, MD043
 * **hr** - MD035
 * **html** - MD033
-* **images** - MD045
+* **images** - MD045, MD052, MD053
 * **indentation** - MD005, MD006, MD007, MD027
 * **language** - MD040
 * **line_length** - MD013
-* **links** - MD011, MD034, MD039, MD042, MD051
+* **links** - MD011, MD034, MD039, MD042, MD051, MD052, MD053
 * **ol** - MD029, MD030, MD032
 * **spaces** - MD018, MD019, MD020, MD021, MD023
 * **spelling** - MD044

@@ -52,8 +52,11 @@ module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 var emphasisMarkersRe = /[_*]/g;
-// Regular expression for link reference definition lines
-module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
+// Regular expression for reference links (full and collapsed but not shortcut)
+var referenceLinkRe = /!?\\?\[((?:\[[^\]]*]|[^\]])*)](?:(?:\[([^\]]*)\])|[^(]|$)/g;
+// Regular expression for link reference definitions
+var linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
+module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
 // All punctuation characters (normal and full-width)
 var allPunctuation = ".,;:!?。，；：！？";
 module.exports.allPunctuation = allPunctuation;
@@ -522,6 +525,30 @@ function forEachInlineCodeSpan(input, handler) {
 }
 module.exports.forEachInlineCodeSpan = forEachInlineCodeSpan;
 /**
+ * Adds ellipsis to the left/right/middle of the specified text.
+ *
+ * @param {string} text Text to ellipsify.
+ * @param {boolean} [start] True iff the start of the text is important.
+ * @param {boolean} [end] True iff the end of the text is important.
+ * @returns {string} Ellipsified text.
+ */
+function ellipsify(text, start, end) {
+    if (text.length <= 30) {
+        // Nothing to do
+    }
+    else if (start && end) {
+        text = text.slice(0, 15) + "..." + text.slice(-15);
+    }
+    else if (end) {
+        text = "..." + text.slice(-30);
+    }
+    else {
+        text = text.slice(0, 30) + "...";
+    }
+    return text;
+}
+module.exports.ellipsify = ellipsify;
+/**
  * Adds a generic error object via the onError callback.
  *
  * @param {Object} onError RuleOnError instance.
@@ -551,18 +578,7 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(onError, lineNumber,
 };
 // Adds an error object with context via the onError callback
 module.exports.addErrorContext = function addErrorContext(onError, lineNumber, context, left, right, range, fixInfo) {
-    if (context.length <= 30) {
-        // Nothing to do
-    }
-    else if (left && right) {
-        context = context.substr(0, 15) + "..." + context.substr(-15);
-    }
-    else if (right) {
-        context = "..." + context.substr(-30);
-    }
-    else {
-        context = context.substr(0, 30) + "...";
-    }
+    context = ellipsify(context, left, right);
     addError(onError, lineNumber, null, context, range, fixInfo);
 };
 /**
@@ -628,6 +644,18 @@ module.exports.htmlElementRanges = function (params, lineMetadata) {
 module.exports.overlapsAnyRange = function (ranges, lineIndex, index, length) { return (!ranges.every(function (span) { return ((lineIndex !== span[0]) ||
     (index + length < span[1]) ||
     (index > span[1] + span[2])); })); };
+/**
+ * Determines whether the specified range is within another range.
+ *
+ * @param {number[][]} ranges Array of ranges (line, index, length).
+ * @param {number} lineIndex Line index to check.
+ * @param {number} index Index to check.
+ * @param {number} length Length to check.
+ * @returns {boolean} True iff the specified range is within.
+ */
+var withinAnyRange = function (ranges, lineIndex, index, length) { return (!ranges.every(function (span) { return ((lineIndex !== span[0]) ||
+    (index < span[1]) ||
+    (index + length > span[1] + span[2])); })); };
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
     var range = null;
@@ -773,6 +801,134 @@ function emphasisMarkersInContent(params) {
     return byLine;
 }
 module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
+/**
+ * Returns an object with information about reference links and images.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {Object} Reference link/image data.
+ */
+function getReferenceLinkImageData(params, lineMetadata) {
+    // Initialize return values
+    var references = new Map();
+    var shortcuts = new Set();
+    var definitions = new Map();
+    var duplicateDefinitions = [];
+    // Define helper functions
+    var normalizeLabel = function (s) { return s.toLowerCase().trim().replace(/\s+/g, " "); };
+    var exclusions = [];
+    var excluded = function (match) { return withinAnyRange(exclusions, 0, match.index, match[0].length); };
+    // Convert input to single-line so multi-line links/images are easier
+    var lineOffsets = [];
+    var currentOffset = 0;
+    var contentLines = [];
+    forEachLine(lineMetadata, function (line, lineIndex, inCode) {
+        lineOffsets[lineIndex] = currentOffset;
+        if (!inCode) {
+            if (line.trim().length === 0) {
+                // Close any unclosed brackets at the end of a block
+                line = "]";
+            }
+            contentLines.push(line);
+            currentOffset += line.length + 1;
+        }
+    });
+    lineOffsets.push(currentOffset);
+    var contentLine = contentLines.join(" ");
+    // Determine single-line exclusions for inline code spans
+    forEachInlineCodeSpan(contentLine, function (code, lineIndex, columnIndex) {
+        exclusions.push([0, columnIndex, code.length]);
+    });
+    // Identify all link/image reference definitions
+    forEachLine(lineMetadata, function (line, lineIndex, inCode) {
+        if (!inCode) {
+            var linkReferenceDefinitionMatch = linkReferenceDefinitionRe.exec(line);
+            if (linkReferenceDefinitionMatch) {
+                var label = normalizeLabel(linkReferenceDefinitionMatch[1]);
+                if (definitions.has(label)) {
+                    duplicateDefinitions.push([label, lineIndex]);
+                }
+                else {
+                    definitions.set(label, lineIndex);
+                }
+                exclusions.push([0, lineOffsets[lineIndex], line.length]);
+            }
+        }
+    });
+    // Identify all link and image references
+    var lineIndex = 0;
+    var pendingContents = [
+        {
+            "content": contentLine,
+            "contentLineIndex": 0,
+            "contentIndex": 0,
+            "topLevel": true
+        }
+    ];
+    var pendingContent = null;
+    while ((pendingContent = pendingContents.shift())) {
+        var content = pendingContent.content, contentLineIndex = pendingContent.contentLineIndex, contentIndex = pendingContent.contentIndex, topLevel = pendingContent.topLevel;
+        var referenceLinkMatch = null;
+        while ((referenceLinkMatch = referenceLinkRe.exec(content)) !== null) {
+            var matchString = referenceLinkMatch[0], matchText = referenceLinkMatch[1], matchLabel = referenceLinkMatch[2];
+            if (!matchString.startsWith("\\") &&
+                !matchString.startsWith("!\\") &&
+                !matchText.endsWith("\\") &&
+                !(matchLabel || "").endsWith("\\") &&
+                (topLevel || matchString.startsWith("!")) &&
+                !excluded(referenceLinkMatch)) {
+                var shortcutLink = (matchLabel === undefined);
+                var collapsedLink = (!shortcutLink && (matchLabel.length === 0));
+                var label = normalizeLabel((shortcutLink || collapsedLink) ? matchText : matchLabel);
+                if (label.length > 0) {
+                    if (shortcutLink) {
+                        // Track, but don't validate due to ambiguity: "text [text] text"
+                        shortcuts.add(label);
+                    }
+                    else {
+                        var referenceindex = referenceLinkMatch.index;
+                        if (topLevel) {
+                            // Calculate line index
+                            while (lineOffsets[lineIndex + 1] <= referenceindex) {
+                                lineIndex++;
+                            }
+                        }
+                        else {
+                            // Use provided line index
+                            lineIndex = contentLineIndex;
+                        }
+                        var referenceIndex = referenceindex +
+                            (topLevel ? -lineOffsets[lineIndex] : contentIndex);
+                        // Track reference and location
+                        var referenceData = references.get(label) || [];
+                        referenceData.push([
+                            lineIndex,
+                            referenceIndex,
+                            matchString.length
+                        ]);
+                        references.set(label, referenceData);
+                        // Check for images embedded in top-level link text
+                        if (!matchString.startsWith("!")) {
+                            pendingContents.push({
+                                "content": matchText,
+                                "contentLineIndex": lineIndex,
+                                "contentIndex": referenceIndex + 1,
+                                "topLevel": false
+                            });
+                        }
+                    }
+                }
+            }
+        }
+    }
+    return {
+        references: references,
+        shortcuts: shortcuts,
+        definitions: definitions,
+        duplicateDefinitions: duplicateDefinitions
+    };
+}
+module.exports.getReferenceLinkImageData = getReferenceLinkImageData;
 /**
  * Gets the most common line ending, falling back to the platform default.
  *
@@ -1109,11 +1265,19 @@ module.exports.lineMetadata = function (value) {
     }
     return lineMetadata;
 };
+var referenceLinkImageData = null;
+module.exports.referenceLinkImageData = function (value) {
+    if (value) {
+        referenceLinkImageData = value;
+    }
+    return referenceLinkImageData;
+};
 module.exports.clear = function () {
     codeBlockAndSpanRanges = null;
     flattenedLists = null;
     htmlElementRanges = null;
     lineMetadata = null;
+    referenceLinkImageData = null;
 };
 
 
@@ -1612,10 +1776,11 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         frontMatterLines: frontMatterLines
     });
     var lineMetadata = helpers.getLineMetadata(paramsBase);
-    cache.lineMetadata(lineMetadata);
     cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata));
-    cache.htmlElementRanges(helpers.htmlElementRanges(paramsBase, lineMetadata));
     cache.flattenedLists(helpers.flattenLists(paramsBase.tokens));
+    cache.htmlElementRanges(helpers.htmlElementRanges(paramsBase, lineMetadata));
+    cache.lineMetadata(lineMetadata);
+    cache.referenceLinkImageData(helpers.getReferenceLinkImageData(paramsBase, lineMetadata));
     // Function to run for each rule
     var results = [];
     // eslint-disable-next-line jsdoc/require-jsdoc
@@ -2723,12 +2888,11 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, filterTokens = _a.filterTokens, forEachHeading = _a.forEachHeading, forEachLine = _a.forEachLine, includesSorted = _a.includesSorted, linkReferenceDefinitionRe = _a.linkReferenceDefinitionRe;
 var lineMetadata = (__webpack_require__(/*! ./cache */ "../lib/cache.js").lineMetadata);
 var longLineRePrefix = "^.{";
 var longLineRePostfixRelaxed = "}.*\\s.*$";
 var longLineRePostfixStrict = "}.+$";
-var labelRe = /^\s*\[.*[^\\]]:/;
 var linkOrImageOnlyLineRe = /^[es]*(lT?L|I)[ES]*$/;
 var sternModeRe = /^([#>\s]*\s)?\S*$/;
 var tokenTypeMap = {
@@ -2795,7 +2959,7 @@ module.exports = {
                 (strict ||
                     (!(stern && sternModeRe.test(line)) &&
                         !includesSorted(linkOnlyLineNumbers, lineNumber) &&
-                        !labelRe.test(line))) &&
+                        !linkReferenceDefinitionRe.test(line))) &&
                 lengthRe.test(line)) {
                 addErrorDetailIf(onError, lineNumber, length, line.length, null, null, [length + 1, line.length - length]);
             }
@@ -4243,7 +4407,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, forEachLink = _a.forEachLink, overlapsAnyRange = _a.overlapsAnyRange, linkReferenceRe = _a.linkReferenceRe;
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addErrorDetailIf = _a.addErrorDetailIf, bareUrlRe = _a.bareUrlRe, escapeForRegExp = _a.escapeForRegExp, forEachLine = _a.forEachLine, forEachLink = _a.forEachLink, overlapsAnyRange = _a.overlapsAnyRange, linkReferenceDefinitionRe = _a.linkReferenceDefinitionRe;
 var _b = __webpack_require__(/*! ./cache */ "../lib/cache.js"), codeBlockAndSpanRanges = _b.codeBlockAndSpanRanges, htmlElementRanges = _b.htmlElementRanges, lineMetadata = _b.lineMetadata;
 module.exports = {
     "names": ["MD044", "proper-names"],
@@ -4259,7 +4423,7 @@ module.exports = {
         var includeHtmlElements = (htmlElements === undefined) ? true : !!htmlElements;
         var exclusions = [];
         forEachLine(lineMetadata(), function (line, lineIndex) {
-            if (linkReferenceRe.test(line)) {
+            if (linkReferenceDefinitionRe.test(line)) {
                 exclusions.push([lineIndex, 0, line.length]);
             }
             else {
@@ -4583,6 +4747,88 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md052.js":
+/*!***********************!*\
+  !*** ../lib/md052.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var addError = (__webpack_require__(/*! ../helpers */ "../helpers/helpers.js").addError);
+var referenceLinkImageData = (__webpack_require__(/*! ./cache */ "../lib/cache.js").referenceLinkImageData);
+module.exports = {
+    "names": ["MD052", "reference-links-images"],
+    "description": "Reference links and images should use a label that is defined",
+    "tags": ["images", "links"],
+    "function": function MD052(params, onError) {
+        var lines = params.lines;
+        var _a = referenceLinkImageData(), references = _a.references, definitions = _a.definitions;
+        // Look for links/images that use an undefined link reference
+        for (var _i = 0, _b = references.entries(); _i < _b.length; _i++) {
+            var reference = _b[_i];
+            var label = reference[0], datas = reference[1];
+            if (!definitions.has(label)) {
+                for (var _c = 0, datas_1 = datas; _c < datas_1.length; _c++) {
+                    var data = datas_1[_c];
+                    var lineIndex = data[0], index = data[1], length = data[2];
+                    // Context will be incomplete if reporting for a multi-line link
+                    var context = lines[lineIndex].slice(index, index + length);
+                    addError(onError, lineIndex + 1, "Missing link or image reference definition: \"".concat(label, "\""), context, [index + 1, context.length]);
+                }
+            }
+        }
+    }
+};
+
+
+/***/ }),
+
+/***/ "../lib/md053.js":
+/*!***********************!*\
+  !*** ../lib/md053.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+var _a = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"), addError = _a.addError, ellipsify = _a.ellipsify, linkReferenceDefinitionRe = _a.linkReferenceDefinitionRe;
+var referenceLinkImageData = (__webpack_require__(/*! ./cache */ "../lib/cache.js").referenceLinkImageData);
+module.exports = {
+    "names": ["MD053", "link-image-reference-definitions"],
+    "description": "Link and image reference definitions should be needed",
+    "tags": ["images", "links"],
+    "function": function MD053(params, onError) {
+        var lines = params.lines;
+        var _a = referenceLinkImageData(), references = _a.references, shortcuts = _a.shortcuts, definitions = _a.definitions, duplicateDefinitions = _a.duplicateDefinitions;
+        var singleLineDefinition = function (line) { return (line.replace(linkReferenceDefinitionRe, "").trim().length > 0); };
+        var deleteFixInfo = {
+            "deleteCount": -1
+        };
+        // Look for unused link references (unreferenced by any link/image)
+        for (var _i = 0, _b = definitions.entries(); _i < _b.length; _i++) {
+            var definition = _b[_i];
+            var label = definition[0], lineIndex = definition[1];
+            if (!references.has(label) && !shortcuts.has(label)) {
+                var line = lines[lineIndex];
+                addError(onError, lineIndex + 1, "Unused link or image reference definition: \"".concat(label, "\""), ellipsify(line), [1, line.length], singleLineDefinition(line) ? deleteFixInfo : 0);
+            }
+        }
+        // Look for duplicate link references (defined more than once)
+        for (var _c = 0, duplicateDefinitions_1 = duplicateDefinitions; _c < duplicateDefinitions_1.length; _c++) {
+            var duplicateDefinition = duplicateDefinitions_1[_c];
+            var label = duplicateDefinition[0], lineIndex = duplicateDefinition[1];
+            var line = lines[lineIndex];
+            addError(onError, lineIndex + 1, "Duplicate link or image reference definition: \"".concat(label, "\""), ellipsify(line), [1, line.length], singleLineDefinition(line) ? deleteFixInfo : 0);
+        }
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -4648,7 +4894,9 @@ var rules = __spreadArray(__spreadArray([
     __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
     __webpack_require__(/*! ./md048 */ "../lib/md048.js")
 ], __webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"), true), [
-    __webpack_require__(/*! ./md051 */ "../lib/md051.js")
+    __webpack_require__(/*! ./md051 */ "../lib/md051.js"),
+    __webpack_require__(/*! ./md052 */ "../lib/md052.js"),
+    __webpack_require__(/*! ./md053 */ "../lib/md053.js")
 ], false);
 rules.forEach(function (rule) {
     var name = rule.names[0].toLowerCase();

@@ -30,8 +30,13 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 const emphasisMarkersRe = /[_*]/g;
 
-// Regular expression for link reference definition lines
-module.exports.linkReferenceRe = /^ {0,3}\[[^\]]+]:\s.*$/;
+// Regular expression for reference links (full and collapsed but not shortcut)
+const referenceLinkRe =
+  /!?\\?\[((?:\[[^\]]*]|[^\]])*)](?:(?:\[([^\]]*)\])|[^(]|$)/g;
+
+// Regular expression for link reference definitions
+const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
+module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
 
 // All punctuation characters (normal and full-width)
 const allPunctuation = ".,;:!?。，；：！？";
@@ -516,6 +521,28 @@ function forEachInlineCodeSpan(input, handler) {
 module.exports.forEachInlineCodeSpan = forEachInlineCodeSpan;
 
 /**
+ * Adds ellipsis to the left/right/middle of the specified text.
+ *
+ * @param {string} text Text to ellipsify.
+ * @param {boolean} [start] True iff the start of the text is important.
+ * @param {boolean} [end] True iff the end of the text is important.
+ * @returns {string} Ellipsified text.
+ */
+function ellipsify(text, start, end) {
+  if (text.length <= 30) {
+    // Nothing to do
+  } else if (start && end) {
+    text = text.slice(0, 15) + "..." + text.slice(-15);
+  } else if (end) {
+    text = "..." + text.slice(-30);
+  } else {
+    text = text.slice(0, 30) + "...";
+  }
+  return text;
+}
+module.exports.ellipsify = ellipsify;
+
+/**
  * Adds a generic error object via the onError callback.
  *
  * @param {Object} onError RuleOnError instance.
@@ -555,15 +582,7 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
 // Adds an error object with context via the onError callback
 module.exports.addErrorContext = function addErrorContext(
   onError, lineNumber, context, left, right, range, fixInfo) {
-  if (context.length <= 30) {
-    // Nothing to do
-  } else if (left && right) {
-    context = context.substr(0, 15) + "..." + context.substr(-15);
-  } else if (right) {
-    context = "..." + context.substr(-30);
-  } else {
-    context = context.substr(0, 30) + "...";
-  }
+  context = ellipsify(context, left, right);
   addError(onError, lineNumber, null, context, range, fixInfo);
 };
 
@@ -637,6 +656,23 @@ module.exports.overlapsAnyRange = (ranges, lineIndex, index, length) => (
     (lineIndex !== span[0]) ||
     (index + length < span[1]) ||
     (index > span[1] + span[2])
+  ))
+);
+
+/**
+ * Determines whether the specified range is within another range.
+ *
+ * @param {number[][]} ranges Array of ranges (line, index, length).
+ * @param {number} lineIndex Line index to check.
+ * @param {number} index Index to check.
+ * @param {number} length Length to check.
+ * @returns {boolean} True iff the specified range is within.
+ */
+const withinAnyRange = (ranges, lineIndex, index, length) => (
+  !ranges.every((span) => (
+    (lineIndex !== span[0]) ||
+    (index < span[1]) ||
+    (index + length > span[1] + span[2])
   ))
 );
 
@@ -788,6 +824,142 @@ function emphasisMarkersInContent(params) {
   return byLine;
 }
 module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
+
+/**
+ * Returns an object with information about reference links and images.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {Object} lineMetadata Line metadata object.
+ * @returns {Object} Reference link/image data.
+ */
+function getReferenceLinkImageData(params, lineMetadata) {
+  // Initialize return values
+  const references = new Map();
+  const shortcuts = new Set();
+  const definitions = new Map();
+  const duplicateDefinitions = [];
+  // Define helper functions
+  const normalizeLabel = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
+  const exclusions = [];
+  const excluded = (match) => withinAnyRange(
+    exclusions, 0, match.index, match[0].length
+  );
+  // Convert input to single-line so multi-line links/images are easier
+  const lineOffsets = [];
+  let currentOffset = 0;
+  const contentLines = [];
+  forEachLine(lineMetadata, (line, lineIndex, inCode) => {
+    lineOffsets[lineIndex] = currentOffset;
+    if (!inCode) {
+      if (line.trim().length === 0) {
+        // Close any unclosed brackets at the end of a block
+        line = "]";
+      }
+      contentLines.push(line);
+      currentOffset += line.length + 1;
+    }
+  });
+  lineOffsets.push(currentOffset);
+  const contentLine = contentLines.join(" ");
+  // Determine single-line exclusions for inline code spans
+  forEachInlineCodeSpan(contentLine, (code, lineIndex, columnIndex) => {
+    exclusions.push([ 0, columnIndex, code.length ]);
+  });
+  // Identify all link/image reference definitions
+  forEachLine(lineMetadata, (line, lineIndex, inCode) => {
+    if (!inCode) {
+      const linkReferenceDefinitionMatch = linkReferenceDefinitionRe.exec(line);
+      if (linkReferenceDefinitionMatch) {
+        const label = normalizeLabel(linkReferenceDefinitionMatch[1]);
+        if (definitions.has(label)) {
+          duplicateDefinitions.push([ label, lineIndex ]);
+        } else {
+          definitions.set(label, lineIndex);
+        }
+        exclusions.push([ 0, lineOffsets[lineIndex], line.length ]);
+      }
+    }
+  });
+  // Identify all link and image references
+  let lineIndex = 0;
+  const pendingContents = [
+    {
+      "content": contentLine,
+      "contentLineIndex": 0,
+      "contentIndex": 0,
+      "topLevel": true
+    }
+  ];
+  let pendingContent = null;
+  while ((pendingContent = pendingContents.shift())) {
+    const { content, contentLineIndex, contentIndex, topLevel } =
+      pendingContent;
+    let referenceLinkMatch = null;
+    while ((referenceLinkMatch = referenceLinkRe.exec(content)) !== null) {
+      const [ matchString, matchText, matchLabel ] = referenceLinkMatch;
+      if (
+        !matchString.startsWith("\\") &&
+        !matchString.startsWith("!\\") &&
+        !matchText.endsWith("\\") &&
+        !(matchLabel || "").endsWith("\\") &&
+        (topLevel || matchString.startsWith("!")) &&
+        !excluded(referenceLinkMatch)
+      ) {
+        const shortcutLink = (matchLabel === undefined);
+        const collapsedLink =
+          (!shortcutLink && (matchLabel.length === 0));
+        const label = normalizeLabel(
+          (shortcutLink || collapsedLink) ? matchText : matchLabel
+        );
+        if (label.length > 0) {
+          if (shortcutLink) {
+            // Track, but don't validate due to ambiguity: "text [text] text"
+            shortcuts.add(label);
+          } else {
+            const referenceindex = referenceLinkMatch.index;
+            if (topLevel) {
+              // Calculate line index
+              while (lineOffsets[lineIndex + 1] <= referenceindex) {
+                lineIndex++;
+              }
+            } else {
+              // Use provided line index
+              lineIndex = contentLineIndex;
+            }
+            const referenceIndex = referenceindex +
+              (topLevel ? -lineOffsets[lineIndex] : contentIndex);
+            // Track reference and location
+            const referenceData = references.get(label) || [];
+            referenceData.push([
+              lineIndex,
+              referenceIndex,
+              matchString.length
+            ]);
+            references.set(label, referenceData);
+            // Check for images embedded in top-level link text
+            if (!matchString.startsWith("!")) {
+              pendingContents.push(
+                {
+                  "content": matchText,
+                  "contentLineIndex": lineIndex,
+                  "contentIndex": referenceIndex + 1,
+                  "topLevel": false
+                }
+              );
+            }
+          }
+        }
+      }
+    }
+  }
+  return {
+    references,
+    shortcuts,
+    definitions,
+    duplicateDefinitions
+  };
+}
+module.exports.getReferenceLinkImageData = getReferenceLinkImageData;
 
 /**
  * Gets the most common line ending, falling back to the platform default.

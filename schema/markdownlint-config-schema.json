@@ -899,6 +899,22 @@
     "link-fragments": {
       "$ref": "#/properties/MD051"
     },
+    "MD052": {
+      "description": "MD052/reference-links-images - Reference links and images should use a label that is defined",
+      "type": "boolean",
+      "default": true
+    },
+    "reference-links-images": {
+      "$ref": "#/properties/MD052"
+    },
+    "MD053": {
+      "description": "MD053/link-image-reference-definitions - Link and image reference definitions should be needed",
+      "type": "boolean",
+      "default": true
+    },
+    "link-image-reference-definitions": {
+      "$ref": "#/properties/MD053"
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -935,7 +951,7 @@
       "default": true
     },
     "links": {
-      "description": "links - MD011, MD034, MD039, MD042, MD051",
+      "description": "links - MD011, MD034, MD039, MD042, MD051, MD052, MD053",
       "type": "boolean",
       "default": true
     },
@@ -1015,7 +1031,7 @@
       "default": true
     },
     "images": {
-      "description": "images - MD045",
+      "description": "images - MD045, MD052, MD053",
       "type": "boolean",
       "default": true
     }

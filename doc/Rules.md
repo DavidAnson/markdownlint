@@ -2031,6 +2031,70 @@ Note: Creating anchors for headings is not part of the CommonMark specification.
 
 [github-section-links]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links
 
+<a name="md052"></a>
+
+## MD052 - Reference links and images should use a label that is defined
+
+Tags: images, links
+
+Aliases: reference-links-images
+
+Links and images in Markdown can provide the link destination or image source
+at the time of use or can define it elsewhere and use a label for reference.
+The reference format is convenient for keeping paragraph text clutter-free
+and makes it easy to reuse the same URL in multiple places.
+
+There are three kinds of reference links and images:
+
+```markdown
+Full: [text][label]
+Collapsed: [label][]
+Shortcut: [label]
+
+Full: ![text][image]
+Collapsed: ![image][]
+Shortcut: ![image]
+
+[label]: https://example.com/label
+[image]: https://example.com/image
+```
+
+A link or image renders correctly when a corresponding label is defined, but
+the text displays with brackets if the label is not present. This rule warns
+of undefined labels for "full" and "collapsed" reference syntax.
+
+> "Shortcut" syntax is ambiguous and a missing label will not generate an
+  error. For example, `[shortcut]` could be a shortcut link or the text
+  "shortcut" in brackets.
+
+<a name="md053"></a>
+
+## MD053 - Link and image reference definitions should be needed
+
+Tags: images, links
+
+Aliases: link-image-reference-definitions
+
+Fixable: Most violations can be fixed by tooling
+
+Links and images in Markdown can provide the link destination or image source
+at the time of use or can define it elsewhere and use a label for reference.
+The reference format is convenient for keeping paragraph text clutter-free
+and makes it easy to reuse the same URL in multiple places.
+
+Because link and image reference definitions are located separately from
+where they are used, there are two scenarios where a definition can be
+unnecessary:
+
+1. If a label is not referenced by any link or image in a document, that
+   definition is unused and can be deleted.
+1. If a label is defined multiple times in a document, the first definition is
+   used and the others can be deleted.
+
+This rule considers a reference definition to be used if any link or image
+reference has the corresponding label. "Full", "collapsed", and "shortcut"
+formats are all supported.
+
 <!-- markdownlint-configure-file {
   "no-inline-html": {
     "allowed_elements": [

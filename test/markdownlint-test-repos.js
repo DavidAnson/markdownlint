@@ -125,12 +125,16 @@ function excludeGlobs(rootDir, ...globs) {
 }
 
 // Run markdownlint the same way the corresponding repositories do
+/* eslint-disable max-len */
 
 test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+    /^test-repos\/eslint-eslint\/docs\/src\/developer-guide\/nodejs-api\.md: \d+: MD053\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
@@ -148,7 +152,19 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
     )
   ];
   const configPath = join(rootDir, ".markdownlintrc");
-  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/about\/release-notes\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/dev-guide\/plugins\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/dev-guide\/themes\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/dev-guide\/translations\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/getting-started\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/configuration\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/customizing-your-theme\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/deploying-your-docs\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/installation\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/writing-your-docs\.md: \d+: MD053\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
@@ -163,7 +179,10 @@ test("https://github.com/mochajs/mocha", (t) => {
     join(rootDir, "example/**/*.md")
   ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+    /^test-repos\/mochajs-mocha\/docs\/index\.md: \d+: MD053\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
@@ -171,7 +190,10 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+    /^test-repos\/pi-hole-docs\/docs\/guides\/dns\/cloudflared\.md: \d+: MD053\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
@@ -182,14 +204,38 @@ test("https://github.com/webhintio/hint", (t) => {
     ...excludeGlobs(rootDir, "**/CHANGELOG.md")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [
+    /test-repos\/webhintio-hint\/packages\/hint-apple-touch-icons\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-axe\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-compat-api\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-compat-api\/docs\/html\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-doctype\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-highest-available-document-mode\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-http-compression\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-meta-viewport\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-minified-js\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-no-p3p\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-performance-budget\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-strict-transport-security\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-x-content-type-options\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/about\/GOVERNANCE.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/contributor-guide\/getting-started\/architecture\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/contributor-guide\/getting-started\/development-environment\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/contributor-guide\/how-to\/hint\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/user-guide\/development-flow-integration\/local-server\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/user-guide\/index\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint\/docs\/user-guide\/troubleshoot\/summary\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/parser-html\/README\.md: \d+: MD053\/.*$\r?\n?/gm
+  ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/webpack/webpack.js.org", (t) => {
   const rootDir = "./test-repos/webpack-webpack-js-org";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^test-repos\/webpack-webpack-js-org\/README\.md: \d+: MD053\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 // Optional repositories (very large)
@@ -200,7 +246,19 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+    const ignoreRes = [
+      /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/core\/diagnostics\/sos-debugging-extension\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/core\/install\/macos\.md: \d+: MD053\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/framework\/data\/adonet\/dataset-datatable-dataview\/diffgrams\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/framework\/tools\/al-exe-assembly-linker\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/framework\/tools\/sos-dll-sos-debugging-extension\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/fsharp\/language-reference\/compiler-options\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/fundamentals\/code-analysis\/quality-rules\/ca2241\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/composite-formatting\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/standard-timespan-format-strings\.md: \d+: MD052\/.*$\r?\n?/gm,
+      /^test-repos\/dotnet-docs\/docs\/standard\/native-interop\/tutorial-comwrappers\.md: \d+: MD053\/.*$\r?\n?/gm
+    ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
@@ -211,7 +269,10 @@ if (existsSync(v8v8DevDir)) {
     const rootDir = v8v8DevDir;
     const globPatterns = [ join(rootDir, "src/**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [ /^[^:]+: \d+: (MD049|MD051)\/.*$\r?\n?/gm ];
+    const ignoreRes = [
+      /^[^:]+: \d+: (MD049|MD051)\/.*$\r?\n?/gm,
+      /^test-repos\/v8-v8-dev\/src\/blog\/oilpan-library\.md: \d+: MD053\/.*$\r?\n?/gm
+    ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
