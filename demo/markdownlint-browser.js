@@ -1237,48 +1237,24 @@ module.exports = markdownit;
 "use strict";
 // @ts-check
 
-var codeBlockAndSpanRanges = null;
-module.exports.codeBlockAndSpanRanges = function (value) {
-    if (value) {
-        codeBlockAndSpanRanges = value;
+var map = new Map();
+module.exports.set = function (keyValuePairs) {
+    for (var _i = 0, _a = Object.entries(keyValuePairs); _i < _a.length; _i++) {
+        var _b = _a[_i], key = _b[0], value = _b[1];
+        map.set(key, value);
     }
-    return codeBlockAndSpanRanges;
 };
-var flattenedLists = null;
-module.exports.flattenedLists = function (value) {
-    if (value) {
-        flattenedLists = value;
-    }
-    return flattenedLists;
-};
-var htmlElementRanges = null;
-module.exports.htmlElementRanges = function (value) {
-    if (value) {
-        htmlElementRanges = value;
-    }
-    return htmlElementRanges;
-};
-var lineMetadata = null;
-module.exports.lineMetadata = function (value) {
-    if (value) {
-        lineMetadata = value;
-    }
-    return lineMetadata;
-};
-var referenceLinkImageData = null;
-module.exports.referenceLinkImageData = function (value) {
-    if (value) {
-        referenceLinkImageData = value;
-    }
-    return referenceLinkImageData;
-};
-module.exports.clear = function () {
-    codeBlockAndSpanRanges = null;
-    flattenedLists = null;
-    htmlElementRanges = null;
-    lineMetadata = null;
-    referenceLinkImageData = null;
-};
+module.exports.clear = function () { return map.clear(); };
+module.exports.codeBlockAndSpanRanges =
+    function () { return map.get("codeBlockAndSpanRanges"); };
+module.exports.flattenedLists =
+    function () { return map.get("flattenedLists"); };
+module.exports.htmlElementRanges =
+    function () { return map.get("htmlElementRanges"); };
+module.exports.lineMetadata =
+    function () { return map.get("lineMetadata"); };
+module.exports.referenceLinkImageData =
+    function () { return map.get("referenceLinkImageData"); };
 
 
 /***/ }),
@@ -1776,11 +1752,17 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
         frontMatterLines: frontMatterLines
     });
     var lineMetadata = helpers.getLineMetadata(paramsBase);
-    cache.codeBlockAndSpanRanges(helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata));
-    cache.flattenedLists(helpers.flattenLists(paramsBase.tokens));
-    cache.htmlElementRanges(helpers.htmlElementRanges(paramsBase, lineMetadata));
-    cache.lineMetadata(lineMetadata);
-    cache.referenceLinkImageData(helpers.getReferenceLinkImageData(paramsBase, lineMetadata));
+    var codeBlockAndSpanRanges = helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
+    var flattenedLists = helpers.flattenLists(paramsBase.tokens);
+    var htmlElementRanges = helpers.htmlElementRanges(paramsBase, lineMetadata);
+    var referenceLinkImageData = helpers.getReferenceLinkImageData(paramsBase, lineMetadata);
+    cache.set({
+        codeBlockAndSpanRanges: codeBlockAndSpanRanges,
+        flattenedLists: flattenedLists,
+        htmlElementRanges: htmlElementRanges,
+        lineMetadata: lineMetadata,
+        referenceLinkImageData: referenceLinkImageData
+    });
     // Function to run for each rule
     var results = [];
     // eslint-disable-next-line jsdoc/require-jsdoc
