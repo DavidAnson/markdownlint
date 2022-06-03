@@ -609,13 +609,13 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
         tokenLines.join("\n"),
         (code, lineIndex, columnIndex) => {
           const codeLines = code.split(newLineRe);
-          codeLines.forEach((line, i) => {
+          for (const [ i, line ] of codeLines.entries()) {
             exclusions.push([
               token.lineNumber - 1 + lineIndex + i,
               i ? 0 : columnIndex,
               line.length
             ]);
-          });
+          }
         }
       );
     }
