@@ -109,8 +109,10 @@ text
 
 Text `code <element> code` text
 
+Text `code <element ` `attribute="value"/> code` text {MD038}
+
 ```lang
-code {MD046:112}
+code {MD046:114}
 
 <element>
 ```

@@ -44,7 +44,7 @@ const inlineCommentStartRe =
 /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/ig;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 // Regular expression for matching HTML elements
-const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
 module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
@@ -633,18 +633,6 @@ module.exports.htmlElementRanges = (params, lineMetadata) => {
     return exclusions;
 };
 /**
- * Determines whether the specified range overlaps another range.
- *
- * @param {number[][]} ranges Array of ranges (line, index, length).
- * @param {number} lineIndex Line index to check.
- * @param {number} index Index to check.
- * @param {number} length Length to check.
- * @returns {boolean} True iff the specified range overlaps.
- */
-module.exports.overlapsAnyRange = (ranges, lineIndex, index, length) => (!ranges.every((span) => ((lineIndex !== span[0]) ||
-    (index + length < span[1]) ||
-    (index > span[1] + span[2]))));
-/**
  * Determines whether the specified range is within another range.
  *
  * @param {number[][]} ranges Array of ranges (line, index, length).
@@ -656,6 +644,7 @@ module.exports.overlapsAnyRange = (ranges, lineIndex, index, length) => (!ranges
 const withinAnyRange = (ranges, lineIndex, index, length) => (!ranges.every((span) => ((lineIndex !== span[0]) ||
     (index < span[1]) ||
     (index + length > span[1] + span[2]))));
+module.exports.withinAnyRange = withinAnyRange;
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
     let range = null;
@@ -2715,7 +2704,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addError, filterTokens, forEachLine, overlapsAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, filterTokens, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const tabRe = /\t+/g;
 module.exports = {
@@ -2747,7 +2736,7 @@ module.exports = {
                     const { index } = match;
                     const column = index + 1;
                     const length = match[0].length;
-                    if (!overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                    if (!withinAnyRange(exclusions, lineIndex, index, length)) {
                         addError(onError, lineIndex + 1, "Column: " + column, null, [column, length], {
                             "editColumn": column,
                             "deleteCount": length,
@@ -2772,7 +2761,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addError, forEachLine, overlapsAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const reversedLinkRe = /(^|[^\\])\(([^)]+)\)\[([^\]^][^\]]*)](?!\()/g;
 module.exports = {
@@ -2790,7 +2779,7 @@ module.exports = {
                     const length = match[0].length - preChar.length;
                     if (!linkText.endsWith("\\") &&
                         !linkDestination.endsWith("\\") &&
-                        !overlapsAnyRange(exclusions, lineIndex, index, length)) {
+                        !withinAnyRange(exclusions, lineIndex, index, length)) {
                         addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length], {
                             "editColumn": index + 1,
                             "deleteCount": length,
@@ -3660,7 +3649,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addError, forEachLine, htmlElementRe, overlapsAnyRange, unescapeMarkdown } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, forEachLine, htmlElementRe, withinAnyRange, unescapeMarkdown } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const linkDestinationRe = /]\(\s*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
@@ -3684,7 +3673,7 @@ module.exports = {
                 if (!allowedElements.includes(element.toLowerCase()) &&
                     !tag.endsWith("\\>") &&
                     !emailAddressRe.test(content) &&
-                    !overlapsAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
+                    !withinAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
                     const prefix = line.substring(0, match.index);
                     if (!linkDestinationRe.test(prefix)) {
                         const unescaped = unescapeMarkdown(prefix + "<", "_");
@@ -4366,7 +4355,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorDetailIf, bareUrlRe, escapeForRegExp, forEachLine, forEachLink, overlapsAnyRange, linkReferenceDefinitionRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf, bareUrlRe, escapeForRegExp, forEachLine, forEachLink, withinAnyRange, linkReferenceDefinitionRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, htmlElementRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 module.exports = {
     "names": ["MD044", "proper-names"],
@@ -4416,7 +4405,7 @@ module.exports = {
                         const [, leftMatch, nameMatch] = match;
                         const index = match.index + leftMatch.length;
                         const length = nameMatch.length;
-                        if (!overlapsAnyRange(exclusions, lineIndex, index, length) &&
+                        if (!withinAnyRange(exclusions, lineIndex, index, length) &&
                             !names.includes(nameMatch)) {
                             addErrorDetailIf(onError, lineIndex + 1, name, nameMatch, null, null, [index + 1, length], {
                                 "editColumn": index + 1,

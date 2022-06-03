@@ -19,7 +19,7 @@ const inlineCommentStartRe =
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
 // Regular expression for matching HTML elements
-const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^>]*)?)\/?>/g;
+const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 
 // Regular expressions for range matching
@@ -643,23 +643,6 @@ module.exports.htmlElementRanges = (params, lineMetadata) => {
 };
 
 /**
- * Determines whether the specified range overlaps another range.
- *
- * @param {number[][]} ranges Array of ranges (line, index, length).
- * @param {number} lineIndex Line index to check.
- * @param {number} index Index to check.
- * @param {number} length Length to check.
- * @returns {boolean} True iff the specified range overlaps.
- */
-module.exports.overlapsAnyRange = (ranges, lineIndex, index, length) => (
-  !ranges.every((span) => (
-    (lineIndex !== span[0]) ||
-    (index + length < span[1]) ||
-    (index > span[1] + span[2])
-  ))
-);
-
-/**
  * Determines whether the specified range is within another range.
  *
  * @param {number[][]} ranges Array of ranges (line, index, length).
@@ -675,6 +658,7 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
     (index + length > span[1] + span[2])
   ))
 );
+module.exports.withinAnyRange = withinAnyRange;
 
 // Returns a range object for a line by applying a RegExp
 module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {

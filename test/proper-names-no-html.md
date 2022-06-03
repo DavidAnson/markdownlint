@@ -18,4 +18,4 @@ javascript {MD044}
 
 <javascript/>
 
-<code>javascript</code>
+<code>javascript</code> {MD044}
