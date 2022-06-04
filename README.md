@@ -315,60 +315,6 @@ Type: `Object`
 Configures the function. All properties are optional, but at least one
 of `files` or `strings` should be set to provide input.
 
-##### options.customRules
-
-Type: `Array` of `Object`
-
-List of custom rules to include with the default rule set for linting.
-
-Each array element should define a rule. Rules are typically exported
-by another package, but can be defined locally. Custom rules are
-identified by the
-[keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule).
-
-Example:
-
-```js
-const extraRules = require("extraRules");
-const options = {
-  "customRules": [ extraRules.one, extraRules.two ]
-};
-```
-
-See [CustomRules.md](doc/CustomRules.md) for details about authoring
-custom rules.
-
-##### options.files
-
-Type: `Array` of `String`
-
-List of files to lint.
-
-Each array element should be a single file (via relative or absolute path);
-[globbing](https://en.wikipedia.org/wiki/Glob_%28programming%29) is the
-caller's responsibility.
-
-Example: `[ "one.md", "dir/two.md" ]`
-
-##### options.strings
-
-Type: `Object` mapping `String` to `String`
-
-Map of identifiers to strings for linting.
-
-When Markdown content is not available as files, it can be passed as
-strings. The keys of the `strings` object are used to identify each
-input value in the `result` summary.
-
-Example:
-
-```json
-{
-  "readme": "# README\n...",
-  "changelog": "# CHANGELOG\n..."
-}
-```
-
 ##### options.config
 
 Type: `Object` mapping `String` to `Boolean | Object`
@@ -460,6 +406,41 @@ const options = {
 };
 ```
 
+##### options.customRules
+
+Type: `Array` of `Object`
+
+List of custom rules to include with the default rule set for linting.
+
+Each array element should define a rule. Rules are typically exported
+by another package, but can be defined locally. Custom rules are
+identified by the
+[keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule).
+
+Example:
+
+```js
+const extraRules = require("extraRules");
+const options = {
+  "customRules": [ extraRules.one, extraRules.two ]
+};
+```
+
+See [CustomRules.md](doc/CustomRules.md) for details about authoring
+custom rules.
+
+##### options.files
+
+Type: `Array` of `String`
+
+List of files to lint.
+
+Each array element should be a single file (via relative or absolute path);
+[globbing](https://en.wikipedia.org/wiki/Glob_%28programming%29) is the
+caller's responsibility.
+
+Example: `[ "one.md", "dir/two.md" ]`
+
 ##### options.frontMatter
 
 Type: `RegExp`
@@ -490,6 +471,16 @@ title: Title
 
 Note: Matches must occur at the start of the file.
 
+##### options.fs
+
+Type: `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+
+In advanced scenarios, it may be desirable to bypass the default file system API.
+If a custom file system implementation is provided, `markdownlint` will use that
+instead of invoking `require("fs")`.
+
+Note: The only methods called are `readFile` and `readFileSync`.
+
 ##### options.handleRuleFailures
 
 Type: `Boolean`
@@ -504,6 +495,20 @@ be handled by the library and the exception message logged as a rule violation.
 This setting can be useful in the presence of (custom) rules that encounter
 unexpected syntax and fail. By enabling this option, the linting process
 is allowed to continue and report any violations that were found.
+
+##### options.markdownItPlugins
+
+Type: `Array` of `Array` of `Function` and plugin parameters
+
+Specifies additional [markdown-it plugins](https://www.npmjs.com/search?q=keywords:markdown-it-plugin)
+to use when parsing input. Plugins can be used to support additional syntax and
+features for advanced scenarios.
+
+Each item in the top-level `Array` should be of the form:
+
+```js
+[ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
+```
 
 ##### options.noInlineConfig
 
@@ -539,29 +544,24 @@ with additional information about how to fix automatically-fixable errors. In th
 mode, all errors that occur on each line are reported (other versions report only
 the first error for each rule). *This is the default.*
 
-##### options.markdownItPlugins
+##### options.strings
 
-Type: `Array` of `Array` of `Function` and plugin parameters
+Type: `Object` mapping `String` to `String`
 
-Specifies additional [markdown-it plugins](https://www.npmjs.com/search?q=keywords:markdown-it-plugin)
-to use when parsing input. Plugins can be used to support additional syntax and
-features for advanced scenarios.
+Map of identifiers to strings for linting.
 
-Each item in the top-level `Array` should be of the form:
+When Markdown content is not available as files, it can be passed as
+strings. The keys of the `strings` object are used to identify each
+input value in the `result` summary.
 
-```js
-[ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
+Example:
+
+```json
+{
+  "readme": "# README\n...",
+  "changelog": "# CHANGELOG\n..."
+}
 ```
-
-##### options.fs
-
-Type: `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
-
-In advanced scenarios, it may be desirable to bypass the default file system API.
-If a custom file system implementation is provided, `markdownlint` will use that
-instead of invoking `require("fs")`.
-
-Note: The only methods called are `readFile` and `readFileSync`.
 
 #### callback
 
