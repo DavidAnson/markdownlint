@@ -155,9 +155,9 @@ test("clearHtmlCommentTextEmbedded", (t) => {
   ];
   const embeddedResult = [
     "text<!--....-->text",
-    "<!-- markdownlint-disable MD010 -->",
+    "<!--............................-->",
     "text<!--....-->text",
-    "text<!-- markdownlint-disable MD010 -->text",
+    "text<!--............................-->text",
     "text<!--....-->text"
   ];
   const actual = helpers.clearHtmlCommentText(embeddedComments.join("\n"));

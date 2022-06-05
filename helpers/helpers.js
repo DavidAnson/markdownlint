@@ -161,16 +161,10 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
            !content.endsWith("-") && !content.includes("--"));
         // If a valid block/inline comment...
         if (isValid) {
-          const inlineCommentIndex = text
-            .slice(i, j + htmlCommentEnd.length)
-            .search(inlineCommentStartRe);
-          // If not a markdownlint inline directive...
-          if (inlineCommentIndex !== 0) {
-            text =
-              text.slice(0, i + htmlCommentBegin.length) +
-              content.replace(/[^\r\n]/g, ".") +
-              text.slice(j);
-          }
+          text =
+            text.slice(0, i + htmlCommentBegin.length) +
+            content.replace(/[^\r\n]/g, ".") +
+            text.slice(j);
         }
       }
     }

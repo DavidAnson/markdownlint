@@ -174,16 +174,10 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
                         !content.endsWith("-") && !content.includes("--"));
                 // If a valid block/inline comment...
                 if (isValid) {
-                    const inlineCommentIndex = text
-                        .slice(i, j + htmlCommentEnd.length)
-                        .search(inlineCommentStartRe);
-                    // If not a markdownlint inline directive...
-                    if (inlineCommentIndex !== 0) {
-                        text =
-                            text.slice(0, i + htmlCommentBegin.length) +
-                                content.replace(/[^\r\n]/g, ".") +
-                                text.slice(j);
-                    }
+                    text =
+                        text.slice(0, i + htmlCommentBegin.length) +
+                            content.replace(/[^\r\n]/g, ".") +
+                            text.slice(j);
                 }
             }
         }
@@ -1701,15 +1695,16 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     content = content.replace(/^\uFEFF/, "");
     // Remove front matter
     const removeFrontMatterResult = removeFrontMatter(content, frontMatter);
-    const frontMatterLines = removeFrontMatterResult.frontMatterLines;
-    // Ignore the content of HTML comments
-    content = helpers.clearHtmlCommentText(removeFrontMatterResult.content);
+    const { frontMatterLines } = removeFrontMatterResult;
+    content = removeFrontMatterResult.content;
+    // Get enabled rules per line (with HTML comments present)
+    const { effectiveConfig, enabledRulesPerLineNumber } = getEnabledRulesPerLineNumber(ruleList, content.split(helpers.newLineRe), frontMatterLines, noInlineConfig, config, mapAliasToRuleNames(ruleList));
+    // Hide the content of HTML comments from rules, etc.
+    content = helpers.clearHtmlCommentText(content);
     // Parse content into tokens and lines
     const tokens = md.parse(content, {});
     const lines = content.split(helpers.newLineRe);
     annotateTokens(tokens, lines);
-    const aliasToRuleNames = mapAliasToRuleNames(ruleList);
-    const { effectiveConfig, enabledRulesPerLineNumber } = getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames);
     // Create parameters for rules
     const paramsBase = helpers.deepFreeze({
         name,
