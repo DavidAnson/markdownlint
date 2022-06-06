@@ -652,6 +652,7 @@ test.cb("readmeHeadings", (t) => {
           "### Linting",
           "#### options",
           "##### options.config",
+          "##### options.configParsers",
           "##### options.customRules",
           "##### options.files",
           "##### options.frontMatter",
@@ -1275,6 +1276,115 @@ test("token-map-spans", (t) => {
     "files": [ "./test/token-map-spans.md" ]
   };
   markdownlint.sync(options);
+});
+
+test("configParsersInvalid", async(t) => {
+  t.plan(1);
+  const options = {
+    "strings": {
+      "content": [
+        "Text",
+        "",
+        "<!-- markdownlint-configure-file",
+        "  \"first-line-heading\": false",
+        "-->",
+        ""
+      ].join("\n")
+    }
+  };
+  const expected = "content: 1: MD041/first-line-heading/first-line-h1 " +
+    "First line in a file should be a top-level heading [Context: \"Text\"]";
+  const actual = await markdownlint.promises.markdownlint(options);
+  t.is(actual.toString(), expected, "Unexpected results.");
+});
+
+test("configParsersJSON", async(t) => {
+  t.plan(1);
+  const options = {
+    "strings": {
+      "content": [
+        "Text",
+        "",
+        "<!-- markdownlint-configure-file",
+        "{",
+        "  \"first-line-heading\": false",
+        "}",
+        "-->",
+        ""
+      ].join("\n")
+    }
+  };
+  const actual = await markdownlint.promises.markdownlint(options);
+  t.is(actual.toString(), "", "Unexpected results.");
+});
+
+test("configParsersJSONC", async(t) => {
+  t.plan(1);
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { "default": stripJsonComments } = await import("strip-json-comments");
+  const options = {
+    "strings": {
+      "content": [
+        "Text",
+        "",
+        "<!-- markdownlint-configure-file",
+        "/* Comment */",
+        "{",
+        "  \"first-line-heading\": false // Comment",
+        "}",
+        "-->",
+        ""
+      ].join("\n")
+    },
+    "configParsers": [ (content) => JSON.parse(stripJsonComments(content)) ]
+  };
+  const actual = await markdownlint.promises.markdownlint(options);
+  t.is(actual.toString(), "", "Unexpected results.");
+});
+
+test("configParsersYAML", async(t) => {
+  t.plan(1);
+  const options = {
+    "strings": {
+      "content": [
+        "Text",
+        "",
+        "<!-- markdownlint-configure-file",
+        "# Comment",
+        "first-line-heading: false",
+        "-->",
+        ""
+      ].join("\n")
+    },
+    "configParsers": [ jsYaml.load ]
+  };
+  const actual = await markdownlint.promises.markdownlint(options);
+  t.is(actual.toString(), "", "Unexpected results.");
+});
+
+test("configParsersTOML", async(t) => {
+  t.plan(1);
+  // eslint-disable-next-line node/no-unsupported-features/es-syntax
+  const { "default": stripJsonComments } = await import("strip-json-comments");
+  const options = {
+    "strings": {
+      "content": [
+        "Text",
+        "",
+        "<!-- markdownlint-configure-file",
+        "# Comment",
+        "first-line-heading = false",
+        "-->",
+        ""
+      ].join("\n")
+    },
+    "configParsers": [
+      (content) => JSON.parse(stripJsonComments(content)),
+      require("toml").parse
+    ]
+  };
+  const actual = await markdownlint.promises.markdownlint(options);
+  t.is(actual.toString(), "", "Unexpected results.");
 });
 
 test("getVersion", (t) => {

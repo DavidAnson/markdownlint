@@ -1561,6 +1561,39 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
     return effectiveConfig;
 }
 /**
+ * Parse the content of a configuration file.
+ *
+ * @param {string} name Name of the configuration file.
+ * @param {string} content Configuration content.
+ * @param {ConfigurationParser[]} parsers Parsing function(s).
+ * @returns {Object} Configuration object and error message.
+ */
+function parseConfiguration(name, content, parsers) {
+    let config = null;
+    let message = "";
+    const errors = [];
+    let index = 0;
+    // Try each parser
+    (parsers || [JSON.parse]).every((parser) => {
+        try {
+            config = parser(content);
+        }
+        catch (error) {
+            errors.push(`Parser ${index++}: ${error.message}`);
+        }
+        return !config;
+    });
+    // Message if unable to parse
+    if (!config) {
+        errors.unshift(`Unable to parse '${name}'`);
+        message = errors.join("; ");
+    }
+    return {
+        config,
+        message
+    };
+}
+/**
  * Create a mapping of enabled rules per line.
  *
  * @param {Rule[]} ruleList List of rules.
@@ -1568,11 +1601,12 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
  * @param {string[]} frontMatterLines List of front matter lines.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
  * @param {Configuration} config Configuration object.
+ * @param {ConfigurationParser[]} configParsers Configuration parsers.
  * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
  * names.
  * @returns {Object} Effective configuration and enabled rules per line number.
  */
-function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, aliasToRuleNames) {
+function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, configParsers, aliasToRuleNames) {
     // Shared variables
     let enabledRules = {};
     let capturedRules = {};
@@ -1603,12 +1637,9 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     // eslint-disable-next-line jsdoc/require-jsdoc
     function configureFile(action, parameter) {
         if (action === "CONFIGURE-FILE") {
-            try {
-                const json = JSON.parse(parameter);
-                config = Object.assign(Object.assign({}, config), json);
-            }
-            catch (_a) {
-                // Ignore parse errors for inline configuration
+            const { "config": parsed } = parseConfiguration("CONFIGURE-FILE", parameter, configParsers);
+            if (parsed) {
+                config = Object.assign(Object.assign({}, config), parsed);
             }
         }
     }
@@ -1683,6 +1714,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {string} content Markdown content.
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
+ * @param {ConfigurationParser[]} configParsers Configuration parsers.
  * @param {RegExp} frontMatter Regular expression for front matter.
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
@@ -1690,7 +1722,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintContent(ruleList, name, content, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback) {
+function lintContent(ruleList, name, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback) {
     // Remove UTF-8 byte order marker (if present)
     content = content.replace(/^\uFEFF/, "");
     // Remove front matter
@@ -1698,7 +1730,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
     const { frontMatterLines } = removeFrontMatterResult;
     content = removeFrontMatterResult.content;
     // Get enabled rules per line (with HTML comments present)
-    const { effectiveConfig, enabledRulesPerLineNumber } = getEnabledRulesPerLineNumber(ruleList, content.split(helpers.newLineRe), frontMatterLines, noInlineConfig, config, mapAliasToRuleNames(ruleList));
+    const { effectiveConfig, enabledRulesPerLineNumber } = getEnabledRulesPerLineNumber(ruleList, content.split(helpers.newLineRe), frontMatterLines, noInlineConfig, config, configParsers, mapAliasToRuleNames(ruleList));
     // Hide the content of HTML comments from rules, etc.
     content = helpers.clearHtmlCommentText(content);
     // Parse content into tokens and lines
@@ -1924,6 +1956,7 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
  * @param {string} file Path of file to lint.
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
+ * @param {ConfigurationParser[]} configParsers Configuration parsers.
  * @param {RegExp} frontMatter Regular expression for front matter.
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
@@ -1933,13 +1966,13 @@ function lintContent(ruleList, name, content, md, config, frontMatter, handleRul
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintFile(ruleList, file, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
+function lintFile(ruleList, file, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
     // eslint-disable-next-line jsdoc/require-jsdoc
     function lintContentWrapper(err, content) {
         if (err) {
             return callback(err);
         }
-        return lintContent(ruleList, file, content, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback);
+        return lintContent(ruleList, file, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback);
     }
     // Make a/synchronous call to read file
     if (synchronous) {
@@ -1977,6 +2010,7 @@ function lintInput(options, synchronous, callback) {
     const strings = options.strings || {};
     const stringsKeys = Object.keys(strings);
     const config = options.config || { "default": true };
+    const configParsers = options.configParsers || null;
     const frontMatter = (options.frontMatter === undefined) ?
         helpers.frontMatterRe : options.frontMatter;
     const handleRuleFailures = !!options.handleRuleFailures;
@@ -2016,13 +2050,13 @@ function lintInput(options, synchronous, callback) {
             // Lint next file
             concurrency++;
             currentItem = files.shift();
-            lintFile(ruleList, currentItem, md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
+            lintFile(ruleList, currentItem, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
         }
         else if (stringsKeys.length > 0) {
             // Lint next string
             concurrency++;
             currentItem = stringsKeys.shift();
-            lintContent(ruleList, currentItem, strings[currentItem] || "", md, config, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
+            lintContent(ruleList, currentItem, strings[currentItem] || "", md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
         }
         else if (concurrency === 0) {
             // Finish
@@ -2086,39 +2120,6 @@ function markdownlintSync(options) {
         results = res;
     });
     return results;
-}
-/**
- * Parse the content of a configuration file.
- *
- * @param {string} name Name of the configuration file.
- * @param {string} content Configuration content.
- * @param {ConfigurationParser[]} parsers Parsing function(s).
- * @returns {Object} Configuration object and error message.
- */
-function parseConfiguration(name, content, parsers) {
-    let config = null;
-    let message = "";
-    const errors = [];
-    let index = 0;
-    // Try each parser
-    (parsers || [JSON.parse]).every((parser) => {
-        try {
-            config = parser(content);
-        }
-        catch (error) {
-            errors.push(`Parser ${index++}: ${error.message}`);
-        }
-        return !config;
-    });
-    // Message if unable to parse
-    if (!config) {
-        errors.unshift(`Unable to parse '${name}'`);
-        message = errors.join("; ");
-    }
-    return {
-        config,
-        message
-    };
 }
 /**
  * Resolve referenced "extends" path in a configuration file

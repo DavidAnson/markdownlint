@@ -15,31 +15,37 @@ declare namespace markdownlint {
  */
 type Options = {
     /**
-     * Files to lint.
-     */
-    files?: string[] | string;
-    /**
-     * Strings to lint.
-     */
-    strings?: {
-        [x: string]: string;
-    };
-    /**
      * Configuration object.
      */
     config?: Configuration;
+    /**
+     * Configuration parsers.
+     */
+    configParsers?: ConfigurationParser[];
     /**
      * Custom rules.
      */
     customRules?: Rule[] | Rule;
     /**
+     * Files to lint.
+     */
+    files?: string[] | string;
+    /**
      * Front matter pattern.
      */
     frontMatter?: RegExp;
     /**
+     * File system implementation.
+     */
+    fs?: any;
+    /**
      * True to catch exceptions.
      */
     handleRuleFailures?: boolean;
+    /**
+     * Additional plugins.
+     */
+    markdownItPlugins?: Plugin[];
     /**
      * True to ignore HTML directives.
      */
@@ -49,13 +55,11 @@ type Options = {
      */
     resultVersion?: number;
     /**
-     * Additional plugins.
+     * Strings to lint.
      */
-    markdownItPlugins?: Plugin[];
-    /**
-     * File system implementation.
-     */
-    fs?: any;
+    strings?: {
+        [x: string]: string;
+    };
 };
 /**
  * Called with the result of the lint function.

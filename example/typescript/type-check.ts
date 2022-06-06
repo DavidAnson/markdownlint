@@ -88,6 +88,7 @@ options = {
       "code_blocks": true
     }
   },
+  "configParsers": [ JSON.parse ],
   "customRules": undefined,
   "frontMatter": /---/,
   "handleRuleFailures": false,

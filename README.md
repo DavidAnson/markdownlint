@@ -263,8 +263,11 @@ or
 -->
 ```
 
-These changes apply to the entire file regardless of where the comment
-is located. Multiple such comments (if present) are applied top-to-bottom.
+These changes apply to the entire file regardless of where the comment is
+located. Multiple such comments (if present) are applied top-to-bottom. By
+default, content of `markdownlint-configure-file` is assumed to be JSON, but
+[`options.configParsers`](#optionsconfigparsers) can be used to support
+alternate formats.
 
 ## API
 
@@ -404,6 +407,24 @@ const options = {
     "line-length": false
   }
 };
+```
+
+##### options.configParsers
+
+Type: *Optional* `Array` of `Function` taking (`String`) and returning `Object`
+
+Array of functions to parse the content of `markdownlint-configure-file` blocks.
+
+As shown in the [Configuration](#configuration) section, inline comments can be
+used to customize the [configuration object](#optionsconfig) for a document. By
+default, the `JSON.parse` built-in is used, but custom parsers can be specified.
+Content is passed to each parser function until one returns a value (vs. throwing
+an exception). As such, strict parsers should come before flexible ones.
+
+For example:
+
+```js
+[ JSON.parse, require("toml").parse, require("js-yaml").load ]
 ```
 
 ##### options.customRules
