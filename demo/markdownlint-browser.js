@@ -395,7 +395,7 @@ module.exports.flattenLists = function flattenLists(tokens) {
         else if (token.type === "blockquote_close") {
             nesting = nestingStack.pop();
         }
-        else if (token.map) {
+        if (token.map) {
             // Track last token with map
             lastWithMap = token;
         }
