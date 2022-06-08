@@ -278,11 +278,11 @@ module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
  * @returns {void}
  */
 function filterTokens(params, type, handler) {
-    params.tokens.forEach(function forToken(token) {
+    for (const token of params.tokens) {
         if (token.type === type) {
             handler(token);
         }
-    });
+    }
 }
 module.exports.filterTokens = filterTokens;
 /**
