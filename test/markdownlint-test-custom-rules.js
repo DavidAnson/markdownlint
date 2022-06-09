@@ -350,7 +350,7 @@ test.cb("customRulesNpmPackage", (t) => {
 
 test("customRulesBadProperty", (t) => {
   t.plan(27);
-  [
+  for (const testCase of [
     {
       "propertyName": "names",
       "propertyValues":
@@ -377,9 +377,9 @@ test("customRulesBadProperty", (t) => {
       "propertyName": "function",
       "propertyValues": [ null, "string", [] ]
     }
-  ].forEach(function forTestCase(testCase) {
+  ]) {
     const { propertyName, propertyValues } = testCase;
-    propertyValues.forEach(function forPropertyValue(propertyValue) {
+    for (const propertyValue of propertyValues) {
       const badRule = { ...customRules.anyBlockquote };
       badRule[propertyName] = propertyValue;
       const options = {
@@ -395,8 +395,8 @@ test("customRulesBadProperty", (t) => {
         },
         "Did not get correct exception for missing property."
       );
-    });
-  });
+    }
+  }
 });
 
 test.cb("customRulesUsedNameName", (t) => {
@@ -639,7 +639,7 @@ test("customRulesOnErrorNullSync", (t) => {
 
 test("customRulesOnErrorBad", (t) => {
   t.plan(21);
-  [
+  for (const testCase of [
     {
       "propertyName": "lineNumber",
       "subPropertyName": null,
@@ -685,9 +685,9 @@ test("customRulesOnErrorBad", (t) => {
       "subPropertyName": "insertText",
       "propertyValues": [ 10, [] ]
     }
-  ].forEach(function forTestCase(testCase) {
+  ]) {
     const { propertyName, subPropertyName, propertyValues } = testCase;
-    propertyValues.forEach(function forPropertyValue(propertyValue) {
+    for (const propertyValue of propertyValues) {
       const badObject = {
         "lineNumber": 1
       };
@@ -725,13 +725,13 @@ test("customRulesOnErrorBad", (t) => {
         },
         "Did not get correct exception for bad object."
       );
-    });
-  });
+    }
+  }
 });
 
 test("customRulesOnErrorInvalid", (t) => {
   t.plan(17);
-  [
+  for (const testCase of [
     {
       "propertyName": "lineNumber",
       "subPropertyName": null,
@@ -757,9 +757,9 @@ test("customRulesOnErrorInvalid", (t) => {
       "subPropertyName": "deleteCount",
       "propertyValues": [ -2, 5 ]
     }
-  ].forEach(function forTestCase(testCase) {
+  ]) {
     const { propertyName, subPropertyName, propertyValues } = testCase;
-    propertyValues.forEach(function forPropertyValue(propertyValue) {
+    for (const propertyValue of propertyValues) {
       const badObject = {
         "lineNumber": 1
       };
@@ -797,13 +797,13 @@ test("customRulesOnErrorInvalid", (t) => {
         },
         "Did not get correct exception for invalid object."
       );
-    });
-  });
+    }
+  }
 });
 
 test("customRulesOnErrorValid", (t) => {
   t.plan(24);
-  [
+  for (const testCase of [
     {
       "propertyName": "lineNumber",
       "subPropertyName": null,
@@ -835,9 +835,9 @@ test("customRulesOnErrorValid", (t) => {
       "propertyValues":
         [ "", "1", "123456", "\n", "\nText", "Text\n", "\nText\n" ]
     }
-  ].forEach(function forTestCase(testCase) {
+  ]) {
     const { propertyName, subPropertyName, propertyValues } = testCase;
-    propertyValues.forEach(function forPropertyValue(propertyValue) {
+    for (const propertyValue of propertyValues) {
       const goodObject = {
         "lineNumber": 1
       };
@@ -864,8 +864,8 @@ test("customRulesOnErrorValid", (t) => {
       };
       markdownlint.sync(options);
       t.truthy(true);
-    });
-  });
+    }
+  }
 });
 
 test.cb("customRulesOnErrorLazy", (t) => {
@@ -1424,7 +1424,7 @@ const stringScenarios = [
   ]
 ];
 
-[
+for (const flavor of [
   [
     "customRulesThrowString",
     () => {
@@ -1437,7 +1437,7 @@ const stringScenarios = [
       throw new Error(errorMessage);
     }
   ]
-].forEach((flavor) => {
+]) {
   const [ name, func ] = flavor;
   const customRule = [
     {
@@ -1461,7 +1461,7 @@ const stringScenarios = [
       }
     ]
   };
-  stringScenarios.forEach((inputs) => {
+  for (const inputs of stringScenarios) {
     const [ subname, files, strings ] = inputs;
 
     test.cb(`${name}${subname}UnhandledAsync`, (t) => {
@@ -1530,10 +1530,10 @@ const stringScenarios = [
       });
       t.deepEqual(actualResult, expectedResult, "Undetected issues.");
     });
-  });
-});
+  }
+}
 
-[
+for (const flavor of [
   [
     "customRulesAsyncExceptionString",
     () => {
@@ -1570,7 +1570,7 @@ const stringScenarios = [
     "customRulesAsyncRejectError",
     () => Promise.reject(new Error(errorMessage))
   ]
-].forEach((flavor) => {
+]) {
   const [ name, func ] = flavor;
   const customRule = {
     "names": [ "name" ],
@@ -1579,7 +1579,7 @@ const stringScenarios = [
     "asynchronous": true,
     "function": func
   };
-  stringScenarios.forEach((inputs) => {
+  for (const inputs of stringScenarios) {
     const [ subname, files, strings ] = inputs;
 
     test.cb(`${name}${subname}Unhandled`, (t) => {
@@ -1630,5 +1630,5 @@ const stringScenarios = [
         t.end();
       });
     });
-  });
-});
+  }
+}

@@ -36,14 +36,14 @@ module.exports = {
           .then((config) => {
             config = cleanJsdocRulesFromEslintConfig(config);
             const results = linter.verify(fence.content, config);
-            results.forEach((result) => {
+            for (const result of results) {
               const lineNumber = fence.lineNumber + result.line;
               onError({
                 "lineNumber": lineNumber,
                 "detail": result.message,
                 "context": params.lines[lineNumber - 1]
               });
-            });
+            }
           });
       }
       return Promise.resolve();

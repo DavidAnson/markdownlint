@@ -433,9 +433,9 @@ test.cb("styleFiles", (t) => {
   t.plan(4);
   fs.readdir("./style", function readdir(err, files) {
     t.falsy(err);
-    files.forEach(function forFile(file) {
+    for (const file of files) {
       t.truthy(require(path.join("../style", file)), "Unable to load/parse.");
-    });
+    }
     t.end();
   });
 });
@@ -847,13 +847,13 @@ test.cb("customFileSystemAsync", (t) => {
 test.cb("readme", (t) => {
   t.plan(125);
   const tagToRules = {};
-  rules.forEach(function forRule(rule) {
-    rule.tags.forEach(function forTag(tag) {
+  for (const rule of rules) {
+    for (const tag of rule.tags) {
       const tagRules = tagToRules[tag] || [];
       tagRules.push(rule.names[0]);
       tagToRules[tag] = tagRules;
-    });
-  });
+    }
+  }
   fs.readFile("README.md", "utf8",
     function readFile(err, contents) {
       t.falsy(err);
@@ -864,7 +864,7 @@ test.cb("readme", (t) => {
       let seenTags = false;
       let inTags = false;
       // @ts-ignore
-      md.parse(contents, {}).forEach(function forToken(token) {
+      for (const token of md.parse(contents, {})) {
         if (
           (token.type === "bullet_list_open") &&
           (token.level === 0)
@@ -909,7 +909,7 @@ test.cb("readme", (t) => {
             delete tagToRules[tag];
           }
         }
-      });
+      }
       const ruleLeft = rulesLeft.shift();
       t.true(!ruleLeft,
         "Missing rule documentation for " +
@@ -943,7 +943,7 @@ test.cb("rules", (t) => {
           "Missing parameters for rule " + r.names + ".");
       };
       // @ts-ignore
-      md.parse(contents, {}).forEach(function forToken(token) {
+      for (const token of md.parse(contents, {})) {
         if ((token.type === "heading_open") && (token.tag === "h2")) {
           inHeading = true;
         } else if (token.type === "heading_close") {
@@ -995,7 +995,7 @@ test.cb("rules", (t) => {
             ruleUsesParams = null;
           }
         }
-      });
+      }
       const ruleLeft = rulesLeft.shift();
       t.true(!ruleLeft,
         "Missing rule documentation for " +
@@ -1013,13 +1013,15 @@ test("validateJsonUsingConfigSchemaStrict", (t) => {
   const jsConfigFileRe = /^jsconfig\.json$/i;
   const wrongTypesFileRe = /wrong-types-in-config-file.json$/i;
   const testDirectory = __dirname;
-  const testFiles = fs.readdirSync(testDirectory);
-  testFiles.filter(function filterFile(file) {
-    return jsonFileRe.test(file) &&
-      !resultsFileRe.test(file) &&
-      !jsConfigFileRe.test(file) &&
-      !wrongTypesFileRe.test(file);
-  }).forEach(function forFile(file) {
+  const testFiles = fs
+    .readdirSync(testDirectory)
+    .filter(function filterFile(file) {
+      return jsonFileRe.test(file) &&
+        !resultsFileRe.test(file) &&
+        !jsConfigFileRe.test(file) &&
+        !wrongTypesFileRe.test(file);
+    });
+  for (const file of testFiles) {
     const data = fs.readFileSync(
       path.join(testDirectory, file),
       "utf8"
@@ -1028,7 +1030,7 @@ test("validateJsonUsingConfigSchemaStrict", (t) => {
       // @ts-ignore
       tv4.validate(JSON.parse(data), configSchemaStrict),
       file + "\n" + JSON.stringify(tv4.error, null, 2));
-  });
+  }
 });
 
 test("validateConfigSchemaAllowsUnknownProperties", (t) => {
@@ -1043,7 +1045,7 @@ test("validateConfigSchemaAllowsUnknownProperties", (t) => {
       }
     }
   ];
-  testCases.forEach((testCase) => {
+  for (const testCase of testCases) {
     t.true(
       // @ts-ignore
       tv4.validate(testCase, configSchema),
@@ -1052,7 +1054,7 @@ test("validateConfigSchemaAllowsUnknownProperties", (t) => {
       // @ts-ignore
       tv4.validate(testCase, configSchemaStrict),
       "Unknown property allowed when strict: " + JSON.stringify(testCase));
-  });
+  }
 });
 
 test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
@@ -1099,20 +1101,23 @@ test("validateConfigExampleJson", async(t) => {
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
   t.plan(147);
-  rules.forEach(function forRule(rule) {
+  for (const rule of rules) {
+    // @ts-ignore
     t.truthy(rule.information);
+    // @ts-ignore
     t.true(Object.getPrototypeOf(rule.information) === URL.prototype);
     const name = rule.names[0].toLowerCase();
     t.is(
+      // @ts-ignore
       rule.information.href,
       `${homepage}/blob/v${version}/doc/Rules.md#${name}`
     );
-  });
+  }
 });
 
 test("someCustomRulesHaveValidUrl", (t) => {
   t.plan(8);
-  customRules.all.forEach(function forRule(rule) {
+  for (const rule of customRules.all) {
     t.true(!rule.information ||
       (Object.getPrototypeOf(rule.information) === URL.prototype));
     if (rule === customRules.anyBlockquote) {
@@ -1126,7 +1131,7 @@ test("someCustomRulesHaveValidUrl", (t) => {
         `${homepage}/blob/main/test/rules/letters-E-X.js`
       );
     }
-  });
+  }
 });
 
 test.cb("markdownItPluginsSingle", (t) => {

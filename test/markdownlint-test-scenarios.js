@@ -36,18 +36,18 @@ function createTestForFile(file) {
       .then((params) => {
         const [ config, content, results ] = params;
         // Canonicalize version number
-        const errors = results[file];
-        errors
-          .filter((error) => !!error.ruleInformation)
-          .forEach((error) => {
-            error.ruleInformation =
+        const errors = results[file]
+          .filter((error) => !!error.ruleInformation);
+        for (const error of errors) {
+          error.ruleInformation =
               error.ruleInformation.replace(/v\d+\.\d+\.\d+/, "v0.0.0");
-          });
+        }
         // Match identified issues by MD### markers
         const marker = /\{(MD\d+)(?::(\d+))?\}/g;
         const lines = content.split(helpers.newLineRe);
         const expected = {};
-        lines.forEach((line, index) => {
+        // @ts-ignore
+        for (const [ index, line ] of lines.entries()) {
           let match = null;
           while ((match = marker.exec(line))) {
             const rule = match[1];
@@ -55,17 +55,17 @@ function createTestForFile(file) {
             const indices = expected[rule] = expected[rule] || [];
             indices.push(match[2] ? Number.parseInt(match[2], 10) : index + 1);
           }
-        });
+        }
         if (Object.keys(expected).length > 0) {
           const actual = {};
-          errors.forEach((error) => {
+          for (const error of errors) {
             const rule = error.ruleNames[0];
             // eslint-disable-next-line no-multi-assign
             const indices = actual[rule] = actual[rule] || [];
             if (indices[indices.length - 1] !== error.lineNumber) {
               indices.push(error.lineNumber);
             }
-          });
+          }
           t.deepEqual(actual, expected, "Too few or too many issues found.");
         }
         // Create snapshot
@@ -91,10 +91,13 @@ function createTestForFile(file) {
   };
 }
 
-require("fs").readdirSync("./test")
-  .filter((file) => /\.md$/.test(file))
+const files = require("fs")
+  .readdirSync("./test")
+  .filter((file) => /\.md$/.test(file));
+for (const file of files) {
   // @ts-ignore
-  .forEach((file) => test(
+  test(
     file,
     createTestForFile(path.join("./test", file))
-  ));
+  );
+}

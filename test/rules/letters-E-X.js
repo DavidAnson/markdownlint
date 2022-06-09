@@ -11,12 +11,12 @@ module.exports = {
   ),
   "tags": [ "test" ],
   "function": function rule(params, onError) {
-    params.tokens.filter(function filterToken(token) {
+    for (const inline of params.tokens.filter(function filterToken(token) {
       return token.type === "inline";
-    }).forEach(function forToken(inline) {
-      inline.children.filter(function filterChild(child) {
+    })) {
+      for (const text of inline.children.filter(function filterChild(child) {
         return child.type === "text";
-      }).forEach(function forChild(text) {
+      })) {
         const index = text.content.toLowerCase().indexOf("ex");
         if (index !== -1) {
           onError({
@@ -24,7 +24,7 @@ module.exports = {
             "context": text.content.substr(index - 1, 4)
           });
         }
-      });
-    });
+      }
+    }
   }
 };

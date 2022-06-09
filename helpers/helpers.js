@@ -328,11 +328,11 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   filterTokens(params, "hr", (token) => {
     lineMetadata[token.map[0]][6] = true;
   });
-  params.tokens.filter(isMathBlock).forEach((token) => {
+  for (const token of params.tokens.filter(isMathBlock)) {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][7] = true;
     }
-  });
+  }
   return lineMetadata;
 };
 
@@ -345,9 +345,9 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
  * @returns {void}
  */
 function forEachLine(lineMetadata, handler) {
-  lineMetadata.forEach(function forMetadata(metadata) {
+  for (const metadata of lineMetadata) {
     handler(...metadata);
-  });
+  }
 }
 module.exports.forEachLine = forEachLine;
 
@@ -359,7 +359,7 @@ module.exports.flattenLists = function flattenLists(tokens) {
   let nesting = 0;
   const nestingStack = [];
   let lastWithMap = { "map": [ 0, 1 ] };
-  tokens.forEach((token) => {
+  for (const token of tokens) {
     if ((token.type === "bullet_list_open") ||
         (token.type === "ordered_list_open")) {
       // Save current context and start a new one
@@ -398,7 +398,7 @@ module.exports.flattenLists = function flattenLists(tokens) {
       // Track last token with map
       lastWithMap = token;
     }
-  });
+  }
   return flattenedLists;
 };
 
@@ -406,18 +406,18 @@ module.exports.flattenLists = function flattenLists(tokens) {
 module.exports.forEachInlineChild =
 function forEachInlineChild(params, type, handler) {
   filterTokens(params, "inline", function forToken(token) {
-    token.children.forEach(function forChild(child) {
+    for (const child of token.children) {
       if (child.type === type) {
         handler(child, token);
       }
-    });
+    }
   });
 };
 
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
   let heading = null;
-  params.tokens.forEach(function forToken(token) {
+  for (const token of params.tokens) {
     if (token.type === "heading_open") {
       heading = token;
     } else if (token.type === "heading_close") {
@@ -425,7 +425,7 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
     } else if ((token.type === "inline") && heading) {
       handler(heading, token.content, token);
     }
-  });
+  }
 };
 
 /**
@@ -767,7 +767,7 @@ function emphasisMarkersInContent(params) {
   const { lines } = params;
   const byLine = new Array(lines.length);
   // Search links
-  lines.forEach((tokenLine, tokenLineIndex) => {
+  for (const [ tokenLineIndex, tokenLine ] of lines.entries()) {
     const inLine = [];
     forEachLink(tokenLine, (index, match) => {
       let markerMatch = null;
@@ -776,7 +776,7 @@ function emphasisMarkersInContent(params) {
       }
     });
     byLine[tokenLineIndex] = inLine;
-  });
+  }
   // Search code spans
   filterTokens(params, "inline", (token) => {
     const { children, lineNumber, map } = token;
@@ -786,7 +786,7 @@ function emphasisMarkersInContent(params) {
         tokenLines.join("\n"),
         (code, lineIndex, column, tickCount) => {
           const codeLines = code.split(newLineRe);
-          codeLines.forEach((codeLine, codeLineIndex) => {
+          for (const [ codeLineIndex, codeLine ] of codeLines.entries()) {
             const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
             const inLine = byLine[byLineIndex];
             const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
@@ -795,7 +795,7 @@ function emphasisMarkersInContent(params) {
               inLine.push(codeLineOffset + match.index);
             }
             byLine[byLineIndex] = inLine;
-          });
+          }
         }
       );
     }
@@ -952,7 +952,7 @@ function getPreferredLineEnding(input, os) {
   let lf = 0;
   let crlf = 0;
   const endings = input.match(newLineRe) || [];
-  endings.forEach((ending) => {
+  for (const ending of endings) {
     // eslint-disable-next-line default-case
     switch (ending) {
       case "\r":
@@ -965,7 +965,7 @@ function getPreferredLineEnding(input, os) {
         crlf++;
         break;
     }
-  });
+  }
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
     preferredLineEnding = (os && os.EOL) || "\n";
@@ -1053,8 +1053,10 @@ function applyFixes(input, errors) {
     return unique;
   });
   // Collapse insert/no-delete and no-insert/delete for same line/column
-  lastFixInfo = {};
-  fixInfos.forEach((fixInfo) => {
+  lastFixInfo = {
+    "lineNumber": -1
+  };
+  for (const fixInfo of fixInfos) {
     if (
       (fixInfo.lineNumber === lastFixInfo.lineNumber) &&
       (fixInfo.editColumn === lastFixInfo.editColumn) &&
@@ -1066,12 +1068,12 @@ function applyFixes(input, errors) {
       lastFixInfo.lineNumber = 0;
     }
     lastFixInfo = fixInfo;
-  });
+  }
   fixInfos = fixInfos.filter((fixInfo) => fixInfo.lineNumber);
   // Apply all (remaining/updated) fixes
   let lastLineIndex = -1;
   let lastEditIndex = -1;
-  fixInfos.forEach((fixInfo) => {
+  for (const fixInfo of fixInfos) {
     const { lineNumber, editColumn, deleteCount } = fixInfo;
     const lineIndex = lineNumber - 1;
     const editIndex = editColumn - 1;
@@ -1085,7 +1087,7 @@ function applyFixes(input, errors) {
     }
     lastLineIndex = lineIndex;
     lastEditIndex = editIndex;
-  });
+  }
   // Return corrected input
   return lines.filter((line) => line !== null).join(lineEnding);
 }

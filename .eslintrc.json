@@ -196,7 +196,6 @@
     "unicorn/consistent-function-scoping": "off",
     "unicorn/filename-case": "off",
     "unicorn/no-array-callback-reference": "off",
-    "unicorn/no-array-for-each": "off",
     "unicorn/no-keyword-prefix": "off",
     "unicorn/no-new-array": "off",
     "unicorn/no-null": "off",

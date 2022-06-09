@@ -17,7 +17,7 @@
     "build-config": "npm run build-config-schema && npm run build-config-example",
     "build-config-example": "node schema/build-config-example.js",
     "build-config-schema": "node schema/build-config-schema.js",
-    "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --resolveJsonModule lib/markdownlint.js && node scripts delete 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
+    "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --module commonjs --resolveJsonModule --target es2015 lib/markdownlint.js && node scripts delete 'lib/{c,md,r}*.d.ts' 'helpers/*.d.ts'",
     "build-demo": "node scripts copy node_modules/markdown-it/dist/markdown-it.min.js demo/markdown-it.min.js && cd demo && webpack --no-stats",
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
     "ci": "npm-run-all --continue-on-error --parallel build-config lint serial-declaration-demo test-cover && git diff --exit-code",

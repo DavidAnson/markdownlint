@@ -219,11 +219,11 @@ bar`
       "_"
     ]
   ];
-  testCases.forEach(function forTestCase(testCase) {
+  for (const testCase of testCases) {
     const [ markdown, expected, replacement ] = testCase;
     const actual = helpers.unescapeMarkdown(markdown, replacement);
     t.is(actual, expected);
-  });
+  }
 });
 
 test("isBlankLine", (t) => {
@@ -253,7 +253,9 @@ test("isBlankLine", (t) => {
     "text --> <!--text--> <!--text--> <!-- text",
     "text --> --> <!--text--> <!--text--> <!-- <!-- text"
   ];
-  blankLines.forEach((line) => t.true(helpers.isBlankLine(line), line || ""));
+  for (const line of blankLines) {
+    t.true(helpers.isBlankLine(line), line || "");
+  }
   const nonBlankLines = [
     "text",
     " text ",
@@ -266,7 +268,9 @@ test("isBlankLine", (t) => {
     "text --> <!--text--> text <!--text--> <!-- text",
     "text --> --> <!--text--> text <!--text--> <!-- <!-- text"
   ];
-  nonBlankLines.forEach((line) => t.true(!helpers.isBlankLine(line), line));
+  for (const line of nonBlankLines) {
+    t.true(!helpers.isBlankLine(line), line);
+  }
 });
 
 test("includesSorted", (t) => {
@@ -280,11 +284,11 @@ test("includesSorted", (t) => {
     [ 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 ],
     [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
   ];
-  inputs.forEach((input) => {
+  for (const input of inputs) {
     for (let i = 0; i <= 21; i++) {
       t.is(helpers.includesSorted(input, i), input.includes(i));
     }
-  });
+  }
 });
 
 test("forEachInlineCodeSpan", (t) => {
@@ -377,7 +381,7 @@ test("forEachInlineCodeSpan", (t) => {
         "expecteds": [ [ "code", 1, 1, 1 ] ]
       }
     ];
-  testCases.forEach((testCase) => {
+  for (const testCase of testCases) {
     const { input, expecteds } = testCase;
     helpers.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
       const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
@@ -388,7 +392,7 @@ test("forEachInlineCodeSpan", (t) => {
       t.is(ticks, expectedTicks, input);
     });
     t.is(expecteds.length, 0, "length");
-  });
+  }
 });
 
 test("getPreferredLineEnding", (t) => {
@@ -412,11 +416,11 @@ test("getPreferredLineEnding", (t) => {
     [ "t\nt\r\nt\nt", "\n" ],
     [ "t\rt\t\rt", "\r" ]
   ];
-  testCases.forEach((testCase) => {
+  for (const testCase of testCases) {
     const [ input, expected ] = testCase;
     const actual = helpers.getPreferredLineEnding(input);
     t.is(actual, expected, "Incorrect line ending returned.");
-  });
+  }
   t.is(helpers.getPreferredLineEnding("", null), "\n");
   t.is(helpers.getPreferredLineEnding("", { "EOL": "\n" }), "\n");
   t.is(helpers.getPreferredLineEnding("", { "EOL": "\r\n" }), "\r\n");
@@ -463,12 +467,12 @@ test("applyFix", (t) => {
       "Hello world.\r\n"
     ]
   ];
-  testCases.forEach((testCase) => {
+  for (const testCase of testCases) {
     const [ line, fixInfo, lineEnding, expected ] = testCase;
     // @ts-ignore
     const actual = helpers.applyFix(line, fixInfo, lineEnding);
     t.is(actual, expected, "Incorrect fix applied.");
-  });
+  }
 });
 
 test("applyFixes", (t) => {
@@ -941,12 +945,12 @@ test("applyFixes", (t) => {
       "Hello world"
     ]
   ];
-  testCases.forEach((testCase) => {
+  for (const testCase of testCases) {
     const [ input, errors, expected ] = testCase;
     // @ts-ignore
     const actual = helpers.applyFixes(input, errors);
     t.is(actual, expected, "Incorrect fix applied.");
-  });
+  }
 });
 
 test("deepFreeze", (t) => {
@@ -962,7 +966,7 @@ test("deepFreeze", (t) => {
     }
   };
   t.is(helpers.deepFreeze(obj), obj, "Did not return object.");
-  [
+  for (const scenario of [
     () => {
       obj.prop = false;
     },
@@ -978,9 +982,9 @@ test("deepFreeze", (t) => {
     () => {
       obj.sub.sub.prop = "zero";
     }
-  ].forEach((scenario) => {
+  ]) {
     t.throws(scenario, null, "Assigned to frozen object.");
-  });
+  }
 });
 
 test("forEachLink", (t) => {

@@ -8,8 +8,10 @@ const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 
 // Simulates typing each test file to validate handling of partial input
-const files = fs.readdirSync("./test");
-files.filter((file) => /\.md$/.test(file)).forEach((file) => {
+const files = fs
+  .readdirSync("./test")
+  .filter((file) => /\.md$/.test(file));
+for (const file of files) {
   const strings = {};
   let content = fs.readFileSync(path.join("./test", file), "utf8");
   while (content) {
@@ -25,4 +27,4 @@ files.filter((file) => /\.md$/.test(file)).forEach((file) => {
     });
     t.pass();
   });
-});
+}

@@ -41,12 +41,12 @@ const schema = {
 const tags = {};
 
 // Add rules
-rules.forEach(function forRule(rule) {
-  rule.tags.forEach(function forTag(tag) {
+for (const rule of rules) {
+  for (const tag of rule.tags) {
     const tagRules = tags[tag] || [];
     tagRules.push(rule.names[0]);
     tags[tag] = tagRules;
-  });
+  }
   const scheme = {
     "description": rule.names.join("/") + " - " + rule.description,
     "type": "boolean",
@@ -472,22 +472,22 @@ rules.forEach(function forRule(rule) {
     scheme.type = [ "boolean", "object" ];
     scheme.additionalProperties = false;
   }
-  rule.names.forEach(function forName(name, index) {
+  for (const [ index, name ] of rule.names.entries()) {
     schema.properties[name] = (index === 0) ? scheme : {
       "$ref": `#/properties/${rule.names[0]}`
     };
-  });
-});
+  }
+}
 
 // Add tags
-Object.keys(tags).forEach(function forTag(tag) {
+for (const [ tag, tagTags ] of Object.entries(tags)) {
   const scheme = {
-    "description": tag + " - " + tags[tag].join(", "),
+    "description": tag + " - " + tagTags.join(", "),
     "type": "boolean",
     "default": true
   };
   schema.properties[tag] = scheme;
-});
+}
 
 // Write schema
 const schemaFile = path.join(__dirname, "markdownlint-config-schema.json");

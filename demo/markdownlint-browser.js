@@ -327,11 +327,11 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
     filterTokens(params, "hr", (token) => {
         lineMetadata[token.map[0]][6] = true;
     });
-    params.tokens.filter(isMathBlock).forEach((token) => {
+    for (const token of params.tokens.filter(isMathBlock)) {
         for (let i = token.map[0]; i < token.map[1]; i++) {
             lineMetadata[i][7] = true;
         }
-    });
+    }
     return lineMetadata;
 };
 /**
@@ -343,9 +343,9 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
  * @returns {void}
  */
 function forEachLine(lineMetadata, handler) {
-    lineMetadata.forEach(function forMetadata(metadata) {
+    for (const metadata of lineMetadata) {
         handler(...metadata);
-    });
+    }
 }
 module.exports.forEachLine = forEachLine;
 // Returns (nested) lists as a flat array (in order)
@@ -356,7 +356,7 @@ module.exports.flattenLists = function flattenLists(tokens) {
     let nesting = 0;
     const nestingStack = [];
     let lastWithMap = { "map": [0, 1] };
-    tokens.forEach((token) => {
+    for (const token of tokens) {
         if ((token.type === "bullet_list_open") ||
             (token.type === "ordered_list_open")) {
             // Save current context and start a new one
@@ -399,24 +399,24 @@ module.exports.flattenLists = function flattenLists(tokens) {
             // Track last token with map
             lastWithMap = token;
         }
-    });
+    }
     return flattenedLists;
 };
 // Calls the provided function for each specified inline child token
 module.exports.forEachInlineChild =
     function forEachInlineChild(params, type, handler) {
         filterTokens(params, "inline", function forToken(token) {
-            token.children.forEach(function forChild(child) {
+            for (const child of token.children) {
                 if (child.type === type) {
                     handler(child, token);
                 }
-            });
+            }
         });
     };
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
     let heading = null;
-    params.tokens.forEach(function forToken(token) {
+    for (const token of params.tokens) {
         if (token.type === "heading_open") {
             heading = token;
         }
@@ -426,7 +426,7 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
         else if ((token.type === "inline") && heading) {
             handler(heading, token.content, token);
         }
-    });
+    }
 };
 /**
  * Calls the provided function for each inline code span's content.
@@ -751,7 +751,7 @@ function emphasisMarkersInContent(params) {
     const { lines } = params;
     const byLine = new Array(lines.length);
     // Search links
-    lines.forEach((tokenLine, tokenLineIndex) => {
+    for (const [tokenLineIndex, tokenLine] of lines.entries()) {
         const inLine = [];
         forEachLink(tokenLine, (index, match) => {
             let markerMatch = null;
@@ -760,7 +760,7 @@ function emphasisMarkersInContent(params) {
             }
         });
         byLine[tokenLineIndex] = inLine;
-    });
+    }
     // Search code spans
     filterTokens(params, "inline", (token) => {
         const { children, lineNumber, map } = token;
@@ -768,7 +768,7 @@ function emphasisMarkersInContent(params) {
             const tokenLines = lines.slice(map[0], map[1]);
             forEachInlineCodeSpan(tokenLines.join("\n"), (code, lineIndex, column, tickCount) => {
                 const codeLines = code.split(newLineRe);
-                codeLines.forEach((codeLine, codeLineIndex) => {
+                for (const [codeLineIndex, codeLine] of codeLines.entries()) {
                     const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
                     const inLine = byLine[byLineIndex];
                     const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
@@ -777,7 +777,7 @@ function emphasisMarkersInContent(params) {
                         inLine.push(codeLineOffset + match.index);
                     }
                     byLine[byLineIndex] = inLine;
-                });
+                }
             });
         }
     });
@@ -924,7 +924,7 @@ function getPreferredLineEnding(input, os) {
     let lf = 0;
     let crlf = 0;
     const endings = input.match(newLineRe) || [];
-    endings.forEach((ending) => {
+    for (const ending of endings) {
         // eslint-disable-next-line default-case
         switch (ending) {
             case "\r":
@@ -937,7 +937,7 @@ function getPreferredLineEnding(input, os) {
                 crlf++;
                 break;
         }
-    });
+    }
     let preferredLineEnding = null;
     if (!cr && !lf && !crlf) {
         preferredLineEnding = (os && os.EOL) || "\n";
@@ -1021,8 +1021,10 @@ function applyFixes(input, errors) {
         return unique;
     });
     // Collapse insert/no-delete and no-insert/delete for same line/column
-    lastFixInfo = {};
-    fixInfos.forEach((fixInfo) => {
+    lastFixInfo = {
+        "lineNumber": -1
+    };
+    for (const fixInfo of fixInfos) {
         if ((fixInfo.lineNumber === lastFixInfo.lineNumber) &&
             (fixInfo.editColumn === lastFixInfo.editColumn) &&
             !fixInfo.insertText &&
@@ -1033,12 +1035,12 @@ function applyFixes(input, errors) {
             lastFixInfo.lineNumber = 0;
         }
         lastFixInfo = fixInfo;
-    });
+    }
     fixInfos = fixInfos.filter((fixInfo) => fixInfo.lineNumber);
     // Apply all (remaining/updated) fixes
     let lastLineIndex = -1;
     let lastEditIndex = -1;
-    fixInfos.forEach((fixInfo) => {
+    for (const fixInfo of fixInfos) {
         const { lineNumber, editColumn, deleteCount } = fixInfo;
         const lineIndex = lineNumber - 1;
         const editIndex = editColumn - 1;
@@ -1050,7 +1052,7 @@ function applyFixes(input, errors) {
         }
         lastLineIndex = lineIndex;
         lastEditIndex = editIndex;
-    });
+    }
     // Return corrected input
     return lines.filter((line) => line !== null).join(lineEnding);
 }
@@ -1289,31 +1291,31 @@ function validateRuleList(ruleList, synchronous) {
         return result;
     }
     const allIds = {};
-    ruleList.forEach(function forRule(rule, index) {
+    for (const [index, rule] of ruleList.entries()) {
         const customIndex = index - rules.length;
-        // eslint-disable-next-line jsdoc/require-jsdoc
+        // eslint-disable-next-line no-inner-declarations, jsdoc/require-jsdoc
         function newError(property) {
             return new Error("Property '" + property + "' of custom rule at index " +
                 customIndex + " is incorrect.");
         }
-        ["names", "tags"].forEach(function forProperty(property) {
+        for (const property of ["names", "tags"]) {
             const value = rule[property];
             if (!result &&
                 (!value || !Array.isArray(value) || (value.length === 0) ||
                     !value.every(helpers.isString) || value.some(helpers.isEmptyString))) {
                 result = newError(property);
             }
-        });
-        [
+        }
+        for (const propertyInfo of [
             ["description", "string"],
             ["function", "function"]
-        ].forEach(function forProperty(propertyInfo) {
+        ]) {
             const property = propertyInfo[0];
             const value = rule[property];
             if (!result && (!value || (typeof value !== propertyInfo[1]))) {
                 result = newError(property);
             }
-        });
+        }
         if (!result &&
             rule.information &&
             (Object.getPrototypeOf(rule.information) !== URL.prototype)) {
@@ -1329,24 +1331,25 @@ function validateRuleList(ruleList, synchronous) {
                 " is asynchronous and can not be used in a synchronous context.");
         }
         if (!result) {
-            rule.names.forEach(function forName(name) {
+            for (const name of rule.names) {
                 const nameUpper = name.toUpperCase();
                 if (!result && (allIds[nameUpper] !== undefined)) {
                     result = new Error("Name '" + name + "' of custom rule at index " +
                         customIndex + " is already used as a name or tag.");
                 }
                 allIds[nameUpper] = true;
-            });
-            rule.tags.forEach(function forTag(tag) {
+            }
+            for (const tag of rule.tags) {
                 const tagUpper = tag.toUpperCase();
                 if (!result && allIds[tagUpper]) {
                     result = new Error("Tag '" + tag + "' of custom rule at index " +
                         customIndex + " is already used as a name.");
                 }
                 allIds[tagUpper] = false;
-            });
+            }
         }
-    });
+    }
+    // @ts-ignore
     return result;
 }
 /**
@@ -1363,10 +1366,10 @@ function newResults(ruleList) {
         const results = [];
         const keys = Object.keys(lintResults);
         keys.sort();
-        keys.forEach(function forFile(file) {
+        for (const file of keys) {
             const fileResults = lintResults[file];
             if (Array.isArray(fileResults)) {
-                fileResults.forEach(function forResult(result) {
+                for (const result of fileResults) {
                     const ruleMoniker = result.ruleNames ?
                         result.ruleNames.join("/") :
                         (result.ruleName + "/" + result.ruleAlias);
@@ -1380,30 +1383,32 @@ function newResults(ruleList) {
                         (result.errorContext ?
                             " [Context: \"" + result.errorContext + "\"]" :
                             ""));
-                });
+                }
             }
             else {
                 if (!ruleNameToRule) {
                     ruleNameToRule = {};
-                    ruleList.forEach(function forRule(rule) {
+                    for (const rule of ruleList) {
                         const ruleName = rule.names[0].toUpperCase();
                         ruleNameToRule[ruleName] = rule;
-                    });
+                    }
                 }
-                Object.keys(fileResults).forEach(function forRule(ruleName) {
+                for (const [ruleName, ruleResults] of Object.entries(fileResults)) {
                     const rule = ruleNameToRule[ruleName.toUpperCase()];
-                    const ruleResults = fileResults[ruleName];
-                    ruleResults.forEach(function forLine(lineNumber) {
+                    for (const lineNumber of ruleResults) {
+                        // @ts-ignore
                         const nameIndex = Math.min(useAlias ? 1 : 0, rule.names.length - 1);
                         const result = file + ": " +
                             lineNumber + ": " +
+                            // @ts-ignore
                             rule.names[nameIndex] + " " +
+                            // @ts-ignore
                             rule.description;
                         results.push(result);
-                    });
-                });
+                    }
+                }
             }
-        });
+        }
         return results.join("\n");
     }
     Object.defineProperty(lintResults, "toString", { "value": toString });
@@ -1445,7 +1450,7 @@ function removeFrontMatter(content, frontMatter) {
  */
 function annotateTokens(tokens, lines) {
     let trMap = null;
-    tokens.forEach(function forToken(token) {
+    for (const token of tokens) {
         // Provide missing maps for table content
         if (token.type === "tr_open") {
             trMap = token.map;
@@ -1475,7 +1480,7 @@ function annotateTokens(tokens, lines) {
             helpers.forEachInlineCodeSpan(token.content, function handleInlineCodeSpan(code) {
                 codeSpanExtraLines.push(code.split(helpers.newLineRe).length - 1);
             });
-            (token.children || []).forEach(function forChild(child) {
+            for (const child of (token.children || [])) {
                 child.lineNumber = lineNumber;
                 child.line = lines[lineNumber - 1];
                 if ((child.type === "softbreak") || (child.type === "hardbreak")) {
@@ -1484,9 +1489,9 @@ function annotateTokens(tokens, lines) {
                 else if (child.type === "code_inline") {
                     lineNumber += codeSpanExtraLines.shift();
                 }
-            });
+            }
         }
-    });
+    }
 }
 /**
  * Map rule names/tags to canonical rule name.
@@ -1497,24 +1502,24 @@ function annotateTokens(tokens, lines) {
 function mapAliasToRuleNames(ruleList) {
     const aliasToRuleNames = {};
     // const tagToRuleNames = {};
-    ruleList.forEach(function forRule(rule) {
+    for (const rule of ruleList) {
         const ruleName = rule.names[0].toUpperCase();
         // The following is useful for updating README.md:
         // console.log(
         //   "* **[" + ruleName + "](doc/Rules.md#" + ruleName.toLowerCase() +
         //    ")** *" + rule.names.slice(1).join("/") + "* - " + rule.description);
-        rule.names.forEach(function forName(name) {
+        for (const name of rule.names) {
             const nameUpper = name.toUpperCase();
             aliasToRuleNames[nameUpper] = [ruleName];
-        });
-        rule.tags.forEach(function forTag(tag) {
+        }
+        for (const tag of rule.tags) {
             const tagUpper = tag.toUpperCase();
             const ruleNames = aliasToRuleNames[tagUpper] || [];
             ruleNames.push(ruleName);
             aliasToRuleNames[tagUpper] = ruleNames;
             // tagToRuleNames[tag] = ruleName;
-        });
-    });
+        }
+    }
     // The following is useful for updating README.md:
     // Object.keys(tagToRuleNames).sort().forEach(function forTag(tag) {
     //   console.log("* **" + tag + "** - " +
@@ -1536,14 +1541,14 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
     const defaultKey = Object.keys(config).filter((key) => key.toUpperCase() === "DEFAULT");
     const ruleDefault = (defaultKey.length === 0) || !!config[defaultKey[0]];
     const effectiveConfig = {};
-    ruleList.forEach((rule) => {
+    for (const rule of ruleList) {
         const ruleName = rule.names[0].toUpperCase();
         effectiveConfig[ruleName] = ruleDefault;
-    });
-    deprecatedRuleNames.forEach((ruleName) => {
+    }
+    for (const ruleName of deprecatedRuleNames) {
         effectiveConfig[ruleName] = false;
-    });
-    Object.keys(config).forEach((key) => {
+    }
+    for (const key of Object.keys(config)) {
         let value = config[key];
         if (value) {
             if (!(value instanceof Object)) {
@@ -1554,10 +1559,10 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
             value = false;
         }
         const keyUpper = key.toUpperCase();
-        (aliasToRuleNames[keyUpper] || []).forEach((ruleName) => {
+        for (const ruleName of (aliasToRuleNames[keyUpper] || [])) {
             effectiveConfig[ruleName] = value;
-        });
-    });
+        }
+    }
     return effectiveConfig;
 }
 /**
@@ -1615,7 +1620,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     // Helper functions
     // eslint-disable-next-line jsdoc/require-jsdoc
     function handleInlineConfig(input, forEachMatch, forEachLine) {
-        input.forEach((line, lineIndex) => {
+        for (const [lineIndex, line] of input.entries()) {
             if (!noInlineConfig) {
                 let match = null;
                 while ((match = helpers.inlineCommentStartRe.exec(line))) {
@@ -1632,7 +1637,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
             if (forEachLine) {
                 forEachLine();
             }
-        });
+        }
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function configureFile(action, parameter) {
@@ -1649,11 +1654,11 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
         const enabled = (action.startsWith("ENABLE"));
         const trimmed = parameter && parameter.trim();
         const items = trimmed ? trimmed.toUpperCase().split(/\s+/) : allRuleNames;
-        items.forEach((nameUpper) => {
-            (aliasToRuleNames[nameUpper] || []).forEach((ruleName) => {
+        for (const nameUpper of items) {
+            for (const ruleName of (aliasToRuleNames[nameUpper] || [])) {
                 state[ruleName] = enabled;
-            });
-        });
+            }
+        }
         return state;
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
@@ -1691,11 +1696,11 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     // Handle inline comments
     handleInlineConfig([lines.join("\n")], configureFile);
     const effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
-    ruleList.forEach((rule) => {
+    for (const rule of ruleList) {
         const ruleName = rule.names[0].toUpperCase();
         allRuleNames.push(ruleName);
         enabledRules[ruleName] = !!effectiveConfig[ruleName];
-    });
+    }
     capturedRules = enabledRules;
     handleInlineConfig(lines, enableDisableFile);
     handleInlineConfig(lines, captureRestoreEnableDisable, updateLineState);
@@ -2019,10 +2024,10 @@ function lintInput(options, synchronous, callback) {
         3 : options.resultVersion;
     const md = markdownIt({ "html": true });
     const markdownItPlugins = options.markdownItPlugins || [];
-    markdownItPlugins.forEach(function forPlugin(plugin) {
+    for (const plugin of markdownItPlugins) {
         // @ts-ignore
         md.use(...plugin);
-    });
+    }
     const fs = options.fs || __webpack_require__(/*! fs */ "?ec0a");
     const results = newResults(ruleList);
     let done = false;
@@ -2429,12 +2434,12 @@ module.exports = {
         const style = String(params.config.style || "consistent");
         let expectedStyle = style;
         const nestingStyles = [];
-        flattenedLists().forEach((list) => {
+        for (const list of flattenedLists()) {
             if (list.unordered) {
                 if (expectedStyle === "consistent") {
                     expectedStyle = unorderedListStyleFor(list.items[0]);
                 }
-                list.items.forEach((item) => {
+                for (const item of list.items) {
                     const itemStyle = unorderedListStyleFor(item);
                     if (style === "sublist") {
                         const nesting = list.nesting;
@@ -2463,9 +2468,9 @@ module.exports = {
                         };
                     }
                     addErrorDetailIf(onError, item.lineNumber, expectedStyle, itemStyle, null, null, range, fixInfo);
-                });
+                }
             }
-        });
+        }
     }
 };
 
@@ -2488,12 +2493,12 @@ module.exports = {
     "description": "Inconsistent indentation for list items at the same level",
     "tags": ["bullet", "ul", "indentation"],
     "function": function MD005(params, onError) {
-        flattenedLists().forEach((list) => {
+        for (const list of flattenedLists()) {
             const expectedIndent = list.indent;
             let expectedEnd = 0;
             let actualEnd = -1;
             let endMatching = false;
-            list.items.forEach((item) => {
+            for (const item of list.items) {
                 const { line, lineNumber } = item;
                 const actualIndent = indentFor(item);
                 let match = null;
@@ -2528,8 +2533,8 @@ module.exports = {
                         }
                     }
                 }
-            });
-        });
+            }
+        }
     }
 };
 
@@ -2552,16 +2557,16 @@ module.exports = {
     "description": "Consider starting bulleted lists at the beginning of the line",
     "tags": ["bullet", "ul", "indentation"],
     "function": function MD006(params, onError) {
-        flattenedLists().forEach((list) => {
+        for (const list of flattenedLists()) {
             if (list.unordered && !list.nesting && (list.indent !== 0)) {
-                list.items.forEach((item) => {
+                for (const item of list.items) {
                     const { lineNumber, line } = item;
                     addErrorDetailIf(onError, lineNumber, 0, list.indent, null, null, rangeFromRegExp(line, listItemMarkerRe), {
                         "deleteCount": line.length - line.trimStart().length
                     });
-                });
+                }
             }
-        });
+        }
     }
 };
 
@@ -2587,9 +2592,9 @@ module.exports = {
         const indent = Number(params.config.indent || 2);
         const startIndented = !!params.config.start_indented;
         const startIndent = Number(params.config.start_indent || indent);
-        flattenedLists().forEach((list) => {
+        for (const list of flattenedLists()) {
             if (list.unordered && list.parentsUnordered) {
-                list.items.forEach((item) => {
+                for (const item of list.items) {
                     const { lineNumber, line } = item;
                     const expectedIndent = (startIndented ? startIndent : 0) +
                         (list.nesting * indent);
@@ -2606,9 +2611,9 @@ module.exports = {
                         "deleteCount": actualIndent,
                         "insertText": "".padEnd(expectedIndent)
                     });
-                });
+                }
             }
-        });
+        }
     }
 };
 
@@ -2879,11 +2884,11 @@ module.exports = {
         const linkOnlyLineNumbers = [];
         filterTokens(params, "inline", (token) => {
             let childTokenTypes = "";
-            token.children.forEach((child) => {
+            for (const child of token.children) {
                 if (child.type !== "text" || child.content !== "") {
                     childTokenTypes += tokenTypeMap[child.type] || "x";
                 }
-            });
+            }
             if (linkOrImageOnlyLineRe.test(childTokenTypes)) {
                 linkOnlyLineNumbers.push(token.lineNumber);
             }
@@ -2930,7 +2935,7 @@ module.exports = {
     "description": "Dollar signs used before commands without showing output",
     "tags": ["code"],
     "function": function MD014(params, onError) {
-        ["code_block", "fence"].forEach((type) => {
+        for (const type of ["code_block", "fence"]) {
             filterTokens(params, type, (token) => {
                 const margin = (token.type === "fence") ? 1 : 0;
                 const dollarInstances = [];
@@ -2951,16 +2956,16 @@ module.exports = {
                     }
                 }
                 if (allDollars) {
-                    dollarInstances.forEach((instance) => {
+                    for (const instance of dollarInstances) {
                         const [i, lineTrim, column, length] = instance;
                         addErrorContext(onError, i + 1, lineTrim, null, null, [column, length], {
                             "editColumn": column,
                             "deleteCount": length
                         });
-                    });
+                    }
                 }
             });
-        });
+        }
     }
 };
 
@@ -3362,7 +3367,7 @@ module.exports = {
     "function": function MD027(params, onError) {
         let blockquoteNesting = 0;
         let listItemNesting = 0;
-        params.tokens.forEach((token) => {
+        for (const token of params.tokens) {
             const { content, lineNumber, type } = token;
             if (type === "blockquote_open") {
                 blockquoteNesting++;
@@ -3392,7 +3397,7 @@ module.exports = {
                     }
                 }
             }
-        });
+        }
     }
 };
 
@@ -3416,7 +3421,7 @@ module.exports = {
     "function": function MD028(params, onError) {
         let prevToken = {};
         let prevLineNumber = null;
-        params.tokens.forEach(function forToken(token) {
+        for (const token of params.tokens) {
             if ((token.type === "blockquote_open") &&
                 (prevToken.type === "blockquote_close")) {
                 for (let lineNumber = prevLineNumber; lineNumber < token.lineNumber; lineNumber++) {
@@ -3427,7 +3432,7 @@ module.exports = {
             if (token.type === "blockquote_open") {
                 prevLineNumber = token.map[1] + 1;
             }
-        });
+        }
     }
 };
 
@@ -3456,7 +3461,8 @@ module.exports = {
     "tags": ["ol"],
     "function": function MD029(params, onError) {
         const style = String(params.config.style || "one_or_ordered");
-        flattenedLists().filter((list) => !list.unordered).forEach((list) => {
+        const filteredLists = flattenedLists().filter((list) => !list.unordered);
+        for (const list of filteredLists) {
             const { items } = list;
             let current = 1;
             let incrementing = false;
@@ -3488,7 +3494,7 @@ module.exports = {
                 current = 1;
             }
             // Validate each list item marker
-            items.forEach((item) => {
+            for (const item of items) {
                 const match = orderedListItemMarkerRe.exec(item.line);
                 if (match) {
                     addErrorDetailIf(onError, item.lineNumber, String(current), match[1], "Style: " + listStyleExamples[listStyle], null, rangeFromRegExp(item.line, listItemMarkerRe));
@@ -3496,8 +3502,8 @@ module.exports = {
                         current++;
                     }
                 }
-            });
-        });
+            }
+        }
     }
 };
 
@@ -3524,13 +3530,13 @@ module.exports = {
         const olSingle = Number(params.config.ol_single || 1);
         const ulMulti = Number(params.config.ul_multi || 1);
         const olMulti = Number(params.config.ol_multi || 1);
-        flattenedLists().forEach((list) => {
+        for (const list of flattenedLists()) {
             const lineCount = list.lastLineIndex - list.open.map[0];
             const allSingle = lineCount === list.items.length;
             const expectedSpaces = list.unordered ?
                 (allSingle ? ulSingle : ulMulti) :
                 (allSingle ? olSingle : olMulti);
-            list.items.forEach((item) => {
+            for (const item of list.items) {
                 const { line, lineNumber } = item;
                 const match = /^[\s>]*\S+(\s*)/.exec(line);
                 const [{ "length": matchLength }, { "length": actualSpaces }] = match;
@@ -3545,8 +3551,8 @@ module.exports = {
                     }
                     addErrorDetailIf(onError, lineNumber, expectedSpaces, actualSpaces, null, null, [1, matchLength], fixInfo);
                 }
-            });
-        });
+            }
+        }
     }
 };
 
@@ -3611,7 +3617,8 @@ module.exports = {
     "tags": ["bullet", "ul", "ol", "blank_lines"],
     "function": function MD032(params, onError) {
         const { lines } = params;
-        flattenedLists().filter((list) => !list.nesting).forEach((list) => {
+        const filteredLists = flattenedLists().filter((list) => !list.nesting);
+        for (const list of filteredLists) {
             const firstIndex = list.open.map[0];
             if (!isBlankLine(lines[firstIndex - 1])) {
                 const line = lines[firstIndex];
@@ -3629,7 +3636,7 @@ module.exports = {
                     "insertText": `${quotePrefix}\n`
                 });
             }
-        });
+        }
     }
 };
 
@@ -3703,7 +3710,7 @@ module.exports = {
     "function": function MD034(params, onError) {
         filterTokens(params, "inline", (token) => {
             let inLink = false;
-            token.children.forEach((child) => {
+            for (const child of token.children) {
                 const { content, line, lineNumber, type } = child;
                 let match = null;
                 if (type === "link_open") {
@@ -3739,7 +3746,7 @@ module.exports = {
                         }
                     }
                 }
-            });
+            }
         });
     }
 };
@@ -3837,9 +3844,9 @@ module.exports = {
             return base;
         }
         let state = base;
-        params.tokens.forEach(function forToken(token) {
+        for (const token of params.tokens) {
             state = state(token);
-        });
+        }
     }
 };
 
@@ -4101,7 +4108,7 @@ module.exports = {
             let inLink = false;
             let linkText = "";
             let lineIndex = 0;
-            children.forEach((child) => {
+            for (const child of children) {
                 const { content, markup, type } = child;
                 if (type === "link_open") {
                     inLink = true;
@@ -4139,7 +4146,7 @@ module.exports = {
                         `${markup}${content}${markup}` :
                         (content || markup);
                 }
-            });
+            }
         });
     }
 };
@@ -4240,15 +4247,15 @@ module.exports = {
             let inLink = false;
             let linkText = "";
             let emptyLink = false;
-            token.children.forEach(function forChild(child) {
+            for (const child of token.children) {
                 if (child.type === "link_open") {
                     inLink = true;
                     linkText = "";
-                    child.attrs.forEach(function forAttr(attr) {
+                    for (const attr of child.attrs) {
                         if (attr[0] === "href" && (!attr[1] || (attr[1] === "#"))) {
                             emptyLink = true;
                         }
-                    });
+                    }
                 }
                 else if (child.type === "link_close") {
                     inLink = false;
@@ -4267,7 +4274,7 @@ module.exports = {
                 else if (inLink) {
                     linkText += child.content;
                 }
-            });
+            }
         });
     }
 };
@@ -4293,9 +4300,9 @@ module.exports = {
         const requiredHeadings = params.config.headings || params.config.headers;
         if (Array.isArray(requiredHeadings)) {
             const levels = {};
-            [1, 2, 3, 4, 5, 6].forEach((level) => {
+            for (const level of [1, 2, 3, 4, 5, 6]) {
                 levels["h" + level] = "######".substr(-level);
-            });
+            }
             let i = 0;
             let matchAny = false;
             let hasError = false;
@@ -4466,15 +4473,14 @@ module.exports = {
     "tags": ["code"],
     "function": function MD046(params, onError) {
         let expectedStyle = String(params.config.style || "consistent");
-        params.tokens
-            .filter((token) => token.type === "code_block" || token.type === "fence")
-            .forEach((token) => {
+        const codeBlocksAndFences = params.tokens.filter((token) => (token.type === "code_block") || (token.type === "fence"));
+        for (const token of codeBlocksAndFences) {
             const { lineNumber, type } = token;
             if (expectedStyle === "consistent") {
                 expectedStyle = tokenTypeToStyle[type];
             }
             addErrorDetailIf(onError, lineNumber, expectedStyle, tokenTypeToStyle[type]);
-        });
+        }
     }
 };
 
@@ -4527,15 +4533,14 @@ module.exports = {
     "function": function MD048(params, onError) {
         const style = String(params.config.style || "consistent");
         let expectedStyle = style;
-        params.tokens
-            .filter((token) => token.type === "fence")
-            .forEach((fenceToken) => {
+        const fenceTokens = params.tokens.filter((token) => token.type === "fence");
+        for (const fenceToken of fenceTokens) {
             const { lineNumber, markup } = fenceToken;
             if (expectedStyle === "consistent") {
                 expectedStyle = fencedCodeBlockStyleFor(markup);
             }
             addErrorDetailIf(onError, lineNumber, expectedStyle, fencedCodeBlockStyleFor(markup));
-        });
+        }
     }
 };
 
@@ -4825,12 +4830,12 @@ const rules = [
     __webpack_require__(/*! ./md052 */ "../lib/md052.js"),
     __webpack_require__(/*! ./md053 */ "../lib/md053.js")
 ];
-rules.forEach((rule) => {
+for (const rule of rules) {
     const name = rule.names[0].toLowerCase();
     // eslint-disable-next-line dot-notation
     rule["information"] =
         new URL(`${homepage}/blob/v${version}/doc/Rules.md#${name}`);
-});
+}
 module.exports = rules;
 
 
