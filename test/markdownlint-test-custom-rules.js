@@ -1200,6 +1200,39 @@ test("customRulesAsyncThrowsInSyncContext", (t) => {
   );
 });
 
+test("customRulesParamsAreFrozen", (t) => {
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function":
+          (params) => {
+            const pending = [ params ];
+            let current = null;
+            while ((current = pending.shift())) {
+              t.true(Object.isFrozen(current) || (current === params));
+              for (const name of Object.getOwnPropertyNames(current)) {
+                const value = current[name];
+                if (value && (typeof value === "object")) {
+                  pending.push(value);
+                }
+              }
+            }
+          }
+      }
+    ],
+    "files": [
+      "CONTRIBUTING.md",
+      "README.md",
+      "doc/CustomRules.md",
+      "doc/Rules.md"
+    ]
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
 test("customRulesParamsAreStable", (t) => {
   t.plan(4);
   const config1 = { "value1": 10 };

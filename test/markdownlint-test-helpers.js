@@ -953,40 +953,6 @@ test("applyFixes", (t) => {
   }
 });
 
-test("deepFreeze", (t) => {
-  t.plan(6);
-  const obj = {
-    "prop": true,
-    "func": () => true,
-    "sub": {
-      "prop": [ 1 ],
-      "sub": {
-        "prop": "one"
-      }
-    }
-  };
-  t.is(helpers.deepFreeze(obj), obj, "Did not return object.");
-  for (const scenario of [
-    () => {
-      obj.prop = false;
-    },
-    () => {
-      obj.func = () => false;
-    },
-    () => {
-      obj.sub.prop = [];
-    },
-    () => {
-      obj.sub.prop[0] = 0;
-    },
-    () => {
-      obj.sub.sub.prop = "zero";
-    }
-  ]) {
-    t.throws(scenario, null, "Assigned to frozen object.");
-  }
-});
-
 test("forEachLink", (t) => {
   t.plan(291);
   const testCases = [

@@ -1154,28 +1154,6 @@ function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
 module.exports.getNextChildToken = getNextChildToken;
 
 /**
- * Calls Object.freeze() on an object and its children.
- *
- * @param {Object} obj Object to deep freeze.
- * @returns {Object} Object passed to the function.
- */
-function deepFreeze(obj) {
-  const pending = [ obj ];
-  let current = null;
-  while ((current = pending.shift())) {
-    Object.freeze(current);
-    for (const name of Object.getOwnPropertyNames(current)) {
-      const value = current[name];
-      if (value && (typeof value === "object")) {
-        pending.push(value);
-      }
-    }
-  }
-  return obj;
-}
-module.exports.deepFreeze = deepFreeze;
-
-/**
  * Expands a path with a tilde to an absolute path.
  *
  * @param {string} file Path that may begin with a tilde.

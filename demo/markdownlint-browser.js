@@ -1114,27 +1114,6 @@ function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
 }
 module.exports.getNextChildToken = getNextChildToken;
 /**
- * Calls Object.freeze() on an object and its children.
- *
- * @param {Object} obj Object to deep freeze.
- * @returns {Object} Object passed to the function.
- */
-function deepFreeze(obj) {
-    const pending = [obj];
-    let current = null;
-    while ((current = pending.shift())) {
-        Object.freeze(current);
-        for (const name of Object.getOwnPropertyNames(current)) {
-            const value = current[name];
-            if (value && (typeof value === "object")) {
-                pending.push(value);
-            }
-        }
-    }
-    return obj;
-}
-module.exports.deepFreeze = deepFreeze;
-/**
  * Expands a path with a tilde to an absolute path.
  *
  * @param {string} file Path that may begin with a tilde.
@@ -1442,13 +1421,37 @@ function removeFrontMatter(content, frontMatter) {
     };
 }
 /**
- * Annotate tokens with line/lineNumber.
+ * Freeze all freeze-able members of a token and its children.
+ *
+ * @param {MarkdownItToken} token A markdown-it token.
+ * @returns {void}
+ */
+function freezeToken(token) {
+    if (token.attrs) {
+        for (const attr of token.attrs) {
+            Object.freeze(attr);
+        }
+        Object.freeze(token.attrs);
+    }
+    if (token.children) {
+        for (const child of token.children) {
+            freezeToken(child);
+        }
+        Object.freeze(token.children);
+    }
+    if (token.map) {
+        Object.freeze(token.map);
+    }
+    Object.freeze(token);
+}
+/**
+ * Annotate tokens with line/lineNumber and freeze them.
  *
  * @param {MarkdownItToken[]} tokens Array of markdown-it tokens.
  * @param {string[]} lines Lines of Markdown content.
  * @returns {void}
  */
-function annotateTokens(tokens, lines) {
+function annotateAndFreezeTokens(tokens, lines) {
     let trMap = null;
     for (const token of tokens) {
         // Provide missing maps for table content
@@ -1474,13 +1477,15 @@ function annotateTokens(tokens, lines) {
             while (token.map[1] && !((lines[token.map[1] - 1] || "").trim())) {
                 token.map[1]--;
             }
-            // Annotate children with lineNumber
+        }
+        // Annotate children with lineNumber
+        if (token.children) {
             let lineNumber = token.lineNumber;
             const codeSpanExtraLines = [];
             helpers.forEachInlineCodeSpan(token.content, function handleInlineCodeSpan(code) {
                 codeSpanExtraLines.push(code.split(helpers.newLineRe).length - 1);
             });
-            for (const child of (token.children || [])) {
+            for (const child of token.children) {
                 child.lineNumber = lineNumber;
                 child.line = lines[lineNumber - 1];
                 if ((child.type === "softbreak") || (child.type === "hardbreak")) {
@@ -1491,7 +1496,9 @@ function annotateTokens(tokens, lines) {
                 }
             }
         }
+        freezeToken(token);
     }
+    Object.freeze(tokens);
 }
 /**
  * Map rule names/tags to canonical rule name.
@@ -1741,14 +1748,14 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
     // Parse content into tokens and lines
     const tokens = md.parse(content, {});
     const lines = content.split(helpers.newLineRe);
-    annotateTokens(tokens, lines);
-    // Create parameters for rules
-    const paramsBase = helpers.deepFreeze({
+    annotateAndFreezeTokens(tokens, lines);
+    // Create (frozen) parameters for rules
+    const paramsBase = {
         name,
         tokens,
-        lines,
-        frontMatterLines
-    });
+        "lines": Object.freeze(lines),
+        "frontMatterLines": Object.freeze(frontMatterLines)
+    };
     const lineMetadata = helpers.getLineMetadata(paramsBase);
     const codeBlockAndSpanRanges = helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
     const flattenedLists = helpers.flattenLists(paramsBase.tokens);
