@@ -1261,7 +1261,7 @@ const dynamicRequire = (typeof require === "undefined") ? __webpack_require__(".
  *
  * @param {Rule[]} ruleList List of rules.
  * @param {boolean} synchronous Whether to execute synchronously.
- * @returns {string} Error message if validation fails.
+ * @returns {Error | null} Error message if validation fails.
  */
 function validateRuleList(ruleList, synchronous) {
     let result = null;
@@ -1328,7 +1328,6 @@ function validateRuleList(ruleList, synchronous) {
             }
         }
     }
-    // @ts-ignore
     return result;
 }
 /**
@@ -1577,7 +1576,7 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
  *
  * @param {string} name Name of the configuration file.
  * @param {string} content Configuration content.
- * @param {ConfigurationParser[]} parsers Parsing function(s).
+ * @param {ConfigurationParser[] | null} [parsers] Parsing function(s).
  * @returns {Object} Configuration object and error message.
  */
 function parseConfiguration(name, content, parsers) {
@@ -1613,7 +1612,7 @@ function parseConfiguration(name, content, parsers) {
  * @param {string[]} frontMatterLines List of front matter lines.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
  * @param {Configuration} config Configuration object.
- * @param {ConfigurationParser[]} configParsers Configuration parsers.
+ * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
  * names.
  * @returns {Object} Effective configuration and enabled rules per line number.
@@ -1726,7 +1725,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {string} content Markdown content.
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
- * @param {ConfigurationParser[]} configParsers Configuration parsers.
+ * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp} frontMatter Regular expression for front matter.
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
@@ -1968,7 +1967,7 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
  * @param {string} file Path of file to lint.
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
- * @param {ConfigurationParser[]} configParsers Configuration parsers.
+ * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp} frontMatter Regular expression for front matter.
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
@@ -2010,7 +2009,8 @@ function lintInput(options, synchronous, callback) {
     const ruleList = rules.concat(options.customRules || []);
     const ruleErr = validateRuleList(ruleList, synchronous);
     if (ruleErr) {
-        return callback(ruleErr);
+        callback(ruleErr);
+        return;
     }
     let files = [];
     if (Array.isArray(options.files)) {
@@ -2064,10 +2064,9 @@ function lintInput(options, synchronous, callback) {
             currentItem = files.shift();
             lintFile(ruleList, currentItem, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
         }
-        else if (stringsKeys.length > 0) {
+        else if ((currentItem = stringsKeys.shift())) {
             // Lint next string
             concurrency++;
-            currentItem = stringsKeys.shift();
             lintContent(ruleList, currentItem, strings[currentItem] || "", md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
         }
         else if (concurrency === 0) {
@@ -2095,7 +2094,6 @@ function lintInput(options, synchronous, callback) {
         lintWorker();
         lintWorker();
     }
-    return null;
 }
 /**
  * Lint specified Markdown files.
@@ -2115,6 +2113,7 @@ const markdownlintPromisify = promisify && promisify(markdownlint);
  * @returns {Promise<LintResults>} Results object.
  */
 function markdownlintPromise(options) {
+    // @ts-ignore
     return markdownlintPromisify(options);
 }
 /**
@@ -2124,13 +2123,14 @@ function markdownlintPromise(options) {
  * @returns {LintResults} Results object.
  */
 function markdownlintSync(options) {
-    let results = null;
+    let results = {};
     lintInput(options, true, function callback(error, res) {
         if (error) {
             throw error;
         }
         results = res;
     });
+    // @ts-ignore
     return results;
 }
 /**
@@ -2140,7 +2140,7 @@ function markdownlintSync(options) {
  * @param {string} configFile Configuration file name.
  * @param {string} referenceId Referenced identifier to resolve.
  * @param {Object} fs File system implementation.
- * @param {ResolveConfigExtendsCallback} [callback] Callback (err, result)
+ * @param {ResolveConfigExtendsCallback} callback Callback (err, result)
  * function.
  * @returns {void}
  */
@@ -2206,6 +2206,7 @@ function readConfig(file, parsers, fs, callback) {
         else {
             // @ts-ignore
             callback = parsers;
+            // @ts-ignore
             parsers = null;
         }
     }
@@ -2217,25 +2218,32 @@ function readConfig(file, parsers, fs, callback) {
     file = helpers.expandTildePath(file, os);
     fs.readFile(file, "utf8", (err, content) => {
         if (err) {
+            // @ts-ignore
             return callback(err);
         }
         // Try to parse file
         // @ts-ignore
         const { config, message } = parseConfiguration(file, content, parsers);
         if (!config) {
+            // @ts-ignore
             return callback(new Error(message));
         }
         // Extend configuration
         const configExtends = config.extends;
         if (configExtends) {
             delete config.extends;
-            return resolveConfigExtends(file, helpers.expandTildePath(configExtends, os), fs, (_, resolvedExtends) => readConfig(resolvedExtends, parsers, fs, (errr, extendsConfig) => {
+            return resolveConfigExtends(file, helpers.expandTildePath(configExtends, os), fs, (_, resolvedExtends) => readConfig(
+            // @ts-ignore
+            resolvedExtends, parsers, fs, (errr, extendsConfig) => {
                 if (errr) {
+                    // @ts-ignore
                     return callback(errr);
                 }
+                // @ts-ignore
                 return callback(null, Object.assign(Object.assign({}, extendsConfig), config));
             }));
         }
+        // @ts-ignore
         return callback(null, config);
     });
 }
