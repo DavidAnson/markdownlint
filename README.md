@@ -43,7 +43,6 @@ and test cases came directly from that project.
 * Editor
   * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
   * [Sublime Text markdownlint for Sublime Text](https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint)
-  * [linter-node-markdownlint extension for Atom](https://atom.io/packages/linter-node-markdownlint)
   * [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
 * Tooling
   * [eslint-plugin-markdownlint for the ESLint analyzer](https://github.com/paweldrozd/eslint-plugin-markdownlint)
