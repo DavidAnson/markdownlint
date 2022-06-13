@@ -32,7 +32,7 @@ const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for reference links (full and collapsed but not shortcut)
 const referenceLinkRe =
-  /!?\\?\[((?:\[[^\]]*]|[^\]])*)](?:(?:\[([^\]]*)\])|[^(]|$)/g;
+  /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|[^(]|$)/g;
 
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
@@ -831,8 +831,8 @@ function getReferenceLinkImageData(params, lineMetadata) {
     lineOffsets[lineIndex] = currentOffset;
     if (!inCode) {
       if (line.trim().length === 0) {
-        // Close any unclosed brackets at the end of a block
-        line = "]";
+        // Allow RegExp to detect the end of a block
+        line = "\0";
       }
       contentLines.push(line);
       currentOffset += line.length + 1;
