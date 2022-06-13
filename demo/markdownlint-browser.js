@@ -393,7 +393,7 @@ module.exports.flattenLists = function flattenLists(tokens) {
             nesting = 0;
         }
         else if (token.type === "blockquote_close") {
-            nesting = nestingStack.pop();
+            nesting = nestingStack.pop() || 0;
         }
         if (token.map) {
             // Track last token with map
@@ -573,7 +573,7 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(onError, lineNumber,
 // Adds an error object with context via the onError callback
 module.exports.addErrorContext = function addErrorContext(onError, lineNumber, context, left, right, range, fixInfo) {
     context = ellipsify(context, left, right);
-    addError(onError, lineNumber, null, context, range, fixInfo);
+    addError(onError, lineNumber, undefined, context, range, fixInfo);
 };
 /**
  * Returns an array of code block and span content ranges.
@@ -975,7 +975,7 @@ function normalizeFixInfo(fixInfo, lineNumber) {
  * @param {string} line Line of Markdown content.
  * @param {Object} fixInfo RuleOnErrorFixInfo instance.
  * @param {string} [lineEnding] Line ending to use.
- * @returns {string} Fixed content.
+ * @returns {string | null} Fixed content.
  */
 function applyFix(line, fixInfo, lineEnding) {
     const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
