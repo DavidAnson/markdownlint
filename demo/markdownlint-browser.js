@@ -4050,14 +4050,15 @@ module.exports = {
 const { addErrorContext, filterTokens, forEachInlineCodeSpan, newLineRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const leftSpaceRe = /^\s([^`]|$)/;
 const rightSpaceRe = /[^`]\s$/;
-const singleLeftRightSpaceRe = /^\s(?:\S.*\S|\S)\s$/;
+const spaceInsideCodeInline = (token) => ((token.type === "code_inline") &&
+    (leftSpaceRe.test(token.content) || rightSpaceRe.test(token.content)));
 module.exports = {
     "names": ["MD038", "no-space-in-code"],
     "description": "Spaces inside code span elements",
     "tags": ["whitespace", "code"],
     "function": function MD038(params, onError) {
         filterTokens(params, "inline", (token) => {
-            if (token.children.some((child) => child.type === "code_inline")) {
+            if (token.children.some(spaceInsideCodeInline)) {
                 const tokenLines = params.lines.slice(token.map[0], token.map[1]);
                 forEachInlineCodeSpan(tokenLines.join("\n"), (code, lineIndex, columnIndex, tickCount) => {
                     let rangeIndex = columnIndex - tickCount;
@@ -4073,8 +4074,7 @@ module.exports = {
                         rangeLineOffset = codeLines.length - 1;
                         fixIndex = 0;
                     }
-                    const allowed = singleLeftRightSpaceRe.test(code);
-                    if ((left || right) && !allowed) {
+                    if (left || right) {
                         const codeLinesRange = codeLines[rangeLineOffset];
                         if (codeLines.length > 1) {
                             rangeLength = codeLinesRange.length + tickCount;
