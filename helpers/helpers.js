@@ -807,11 +807,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {Object} params RuleParams instance.
  * @param {Object} lineMetadata Line metadata object.
  * @returns {Object} Reference link/image data.
  */
-function getReferenceLinkImageData(params, lineMetadata) {
+function getReferenceLinkImageData(lineMetadata) {
   // Initialize return values
   const references = new Map();
   const shortcuts = new Set();
@@ -1083,6 +1082,7 @@ function applyFixes(input, errors) {
       ((editIndex + deleteCount) <=
         (lastEditIndex - ((deleteCount > 0) ? 0 : 1)))
     ) {
+      // @ts-ignore
       lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
     }
     lastLineIndex = lineIndex;

@@ -787,11 +787,10 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {Object} params RuleParams instance.
  * @param {Object} lineMetadata Line metadata object.
  * @returns {Object} Reference link/image data.
  */
-function getReferenceLinkImageData(params, lineMetadata) {
+function getReferenceLinkImageData(lineMetadata) {
     // Initialize return values
     const references = new Map();
     const shortcuts = new Set();
@@ -1048,6 +1047,7 @@ function applyFixes(input, errors) {
             (deleteCount === -1) ||
             ((editIndex + deleteCount) <=
                 (lastEditIndex - ((deleteCount > 0) ? 0 : 1)))) {
+            // @ts-ignore
             lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
         }
         lastLineIndex = lineIndex;
@@ -1759,7 +1759,7 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
     const codeBlockAndSpanRanges = helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
     const flattenedLists = helpers.flattenLists(paramsBase.tokens);
     const htmlElementRanges = helpers.htmlElementRanges(paramsBase, lineMetadata);
-    const referenceLinkImageData = helpers.getReferenceLinkImageData(paramsBase, lineMetadata);
+    const referenceLinkImageData = helpers.getReferenceLinkImageData(lineMetadata);
     cache.set({
         codeBlockAndSpanRanges,
         flattenedLists,
