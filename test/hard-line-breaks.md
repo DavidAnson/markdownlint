@@ -53,6 +53,15 @@ Text text
 text text
 text  
 
+Text text
+text `code
+span` text  
+
+Text text
+text `code  
+span code  
+span` text  
+
 {MD009:9}
 {MD009:24}
 {MD009:32}
@@ -62,3 +71,7 @@ text
 {MD009:43}
 {MD009:48}
 {MD009:54}
+{MD009:58}
+{MD009:61}
+{MD009:62}
+{MD009:63}

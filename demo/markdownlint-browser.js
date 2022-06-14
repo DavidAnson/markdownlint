@@ -2678,7 +2678,7 @@ module.exports = {
                     const tokenLines = params.lines.slice(token.map[0], token.map[1]);
                     forEachInlineCodeSpan(tokenLines.join("\n"), (code, lineIndex) => {
                         const codeLineCount = code.split(newLineRe).length;
-                        for (let i = 0; i < codeLineCount; i++) {
+                        for (let i = 0; i < codeLineCount - 1; i++) {
                             codeInlineLineNumbers.push(token.lineNumber + lineIndex + i);
                         }
                     });
@@ -2699,7 +2699,7 @@ module.exports = {
                             includesSorted(codeInlineLineNumbers, lineNumber))))) {
                 const column = line.length - trailingSpaces + 1;
                 addError(onError, lineNumber, "Expected: " + (expected === 0 ? "" : "0 or ") +
-                    expected + "; Actual: " + trailingSpaces, null, [column, trailingSpaces], {
+                    expected + "; Actual: " + trailingSpaces, undefined, [column, trailingSpaces], {
                     "editColumn": column,
                     "deleteCount": trailingSpaces
                 });
