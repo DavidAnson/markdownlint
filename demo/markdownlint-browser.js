@@ -2644,7 +2644,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addError, filterTokens, forEachInlineCodeSpan, forEachLine, includesSorted, newLineRe, numericSortAscending } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, filterTokens, forEachLine, includesSorted, numericSortAscending } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 module.exports = {
     "names": ["MD009", "no-trailing-spaces"],
@@ -2672,15 +2672,24 @@ module.exports = {
                     paragraphLineNumbers.push(i + 1);
                 }
             });
+            const addLineNumberRange = (start, end) => {
+                for (let i = start; i < end; i++) {
+                    codeInlineLineNumbers.push(i);
+                }
+            };
             filterTokens(params, "inline", (token) => {
-                if (token.children.some((child) => child.type === "code_inline")) {
-                    const tokenLines = params.lines.slice(token.map[0], token.map[1]);
-                    forEachInlineCodeSpan(tokenLines.join("\n"), (code, lineIndex) => {
-                        const codeLineCount = code.split(newLineRe).length;
-                        for (let i = 0; i < codeLineCount - 1; i++) {
-                            codeInlineLineNumbers.push(token.lineNumber + lineIndex + i);
-                        }
-                    });
+                let start = 0;
+                for (const child of token.children) {
+                    if (start > 0) {
+                        addLineNumberRange(start, child.lineNumber);
+                        start = 0;
+                    }
+                    if (child.type === "code_inline") {
+                        start = child.lineNumber;
+                    }
+                }
+                if (start > 0) {
+                    addLineNumberRange(start, token.map[1]);
                 }
             });
         }
