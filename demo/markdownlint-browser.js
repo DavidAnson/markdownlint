@@ -2672,7 +2672,6 @@ module.exports = {
                     paragraphLineNumbers.push(i + 1);
                 }
             });
-            paragraphLineNumbers.sort(numericSortAscending);
             filterTokens(params, "inline", (token) => {
                 if (token.children.some((child) => child.type === "code_inline")) {
                     const tokenLines = params.lines.slice(token.map[0], token.map[1]);
@@ -2684,7 +2683,6 @@ module.exports = {
                     });
                 }
             });
-            codeInlineLineNumbers.sort(numericSortAscending);
         }
         const expected = (brSpaces < 2) ? 0 : brSpaces;
         forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
