@@ -1479,11 +1479,13 @@ function annotateAndFreezeTokens(tokens, lines) {
         }
         // Annotate children with lineNumber
         if (token.children) {
-            let lineNumber = token.lineNumber;
             const codeSpanExtraLines = [];
-            helpers.forEachInlineCodeSpan(token.content, function handleInlineCodeSpan(code) {
-                codeSpanExtraLines.push(code.split(helpers.newLineRe).length - 1);
-            });
+            if (token.children.some((child) => child.type === "code_inline")) {
+                helpers.forEachInlineCodeSpan(token.content, (code) => {
+                    codeSpanExtraLines.push(code.split(helpers.newLineRe).length - 1);
+                });
+            }
+            let lineNumber = token.lineNumber;
             for (const child of token.children) {
                 child.lineNumber = lineNumber;
                 child.line = lines[lineNumber - 1];
