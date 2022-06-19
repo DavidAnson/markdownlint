@@ -391,7 +391,7 @@ test("forEachInlineCodeSpan", (t) => {
       t.is(column, expectedColumn, input);
       t.is(ticks, expectedTicks, input);
     });
-    t.is(expecteds.length, 0, "length");
+    t.is(expecteds.shift(), undefined, input);
   }
 });
 

@@ -437,65 +437,44 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
  * @returns {void}
  */
 function forEachInlineCodeSpan(input, handler) {
-  let currentLine = 0;
-  let currentColumn = 0;
-  let index = 0;
-  while (index < input.length) {
-    let startIndex = -1;
-    let startLine = -1;
-    let startColumn = -1;
-    let tickCount = 0;
-    let currentTicks = 0;
-    // Deliberate <= so trailing 0 completes the last span (ex: "text `code`")
-    // False-positive for js/index-out-of-bounds
-    for (; index <= input.length; index++) {
-      const char = input[index];
-      // Parse backtick open/close
-      if (char === "`") {
-        // Count backticks at start or end of code span
-        currentTicks++;
-        if ((startIndex === -1) || (startColumn === -1)) {
-          startIndex = index + 1;
-        }
-      } else {
-        if ((startIndex >= 0) &&
-          (startColumn >= 0) &&
-          (tickCount === currentTicks)) {
-          // Found end backticks; invoke callback for code span
+  const backtickRe = /`+/g;
+  let match = null;
+  const backticksLengthAndIndex = [];
+  while ((match = backtickRe.exec(input)) !== null) {
+    backticksLengthAndIndex.push([ match[0].length, match.index ]);
+  }
+  const newLinesIndex = [];
+  while ((match = newLineRe.exec(input)) !== null) {
+    newLinesIndex.push(match.index);
+  }
+  let lineIndex = 0;
+  let lineStartIndex = 0;
+  let k = 0;
+  for (let i = 0; i < backticksLengthAndIndex.length - 1; i++) {
+    const [ startLength, startIndex ] = backticksLengthAndIndex[i];
+    if ((startIndex === 0) || (input[startIndex - 1] !== "\\")) {
+      for (let j = i + 1; j < backticksLengthAndIndex.length; j++) {
+        const [ endLength, endIndex ] = backticksLengthAndIndex[j];
+        if (startLength === endLength) {
+          for (; k < newLinesIndex.length; k++) {
+            const newLineIndex = newLinesIndex[k];
+            if (startIndex < newLineIndex) {
+              break;
+            }
+            lineIndex++;
+            lineStartIndex = newLineIndex + 1;
+          }
+          const columnIndex = startIndex - lineStartIndex + startLength;
           handler(
-            input.substring(startIndex, index - currentTicks),
-            startLine, startColumn, tickCount);
-          startIndex = -1;
-          startColumn = -1;
-        } else if ((startIndex >= 0) && (startColumn === -1)) {
-          // Found start backticks
-          tickCount = currentTicks;
-          startLine = currentLine;
-          startColumn = currentColumn;
+            input.slice(startIndex + startLength, endIndex),
+            lineIndex,
+            columnIndex,
+            startLength
+          );
+          i = j;
+          break;
         }
-        // Not in backticks
-        currentTicks = 0;
       }
-      if (char === "\n") {
-        // On next line
-        currentLine++;
-        currentColumn = 0;
-      } else if ((char === "\\") &&
-        ((startIndex === -1) || (startColumn === -1)) &&
-        (input[index + 1] !== "\n")) {
-        // Escape character outside code, skip next
-        index++;
-        currentColumn += 2;
-      } else {
-        // On next column
-        currentColumn++;
-      }
-    }
-    if (startIndex >= 0) {
-      // Restart loop after unmatched start backticks (ex: "`text``code``")
-      index = startIndex;
-      currentLine = startLine;
-      currentColumn = startColumn;
     }
   }
 }
