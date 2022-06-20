@@ -350,7 +350,7 @@ type FixInfo = {
 };
 /**
  * Configuration object for linting rules. For a detailed schema, see
- * {@link ../schema/markdownlint-config-schema.json}.
+ * {@link  ../schema/markdownlint-config-schema.json}.
  */
 type Configuration = {
     [x: string]: RuleConfiguration;

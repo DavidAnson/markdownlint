@@ -1024,6 +1024,7 @@ test("validateJsonUsingConfigSchemaStrict", (t) => {
   for (const file of testFiles) {
     const data = fs.readFileSync(
       path.join(testDirectory, file),
+      // eslint-disable-next-line unicorn/prefer-json-parse-buffer
       "utf8"
     );
     t.true(
