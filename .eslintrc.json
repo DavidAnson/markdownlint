@@ -39,7 +39,6 @@
         "example/*.js"
       ],
       "rules": {
-        "node/no-missing-require": "off",
         "node/no-extraneous-require": "off",
         "no-console": "off",
         "no-invalid-this": "off",
@@ -156,7 +155,7 @@
     "node/no-extraneous-import": "error",
     "node/no-extraneous-require": "error",
     "node/no-missing-import": "error",
-    "node/no-missing-require": "error",
+    "node/no-missing-require": "off",
     "node/no-new-require": "error",
     "node/no-path-concat": "error",
     "node/no-process-exit": "error",
