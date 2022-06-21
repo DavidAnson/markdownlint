@@ -8,7 +8,7 @@ const markdownlint = require("../lib/markdownlint");
 const customRules = require("./rules/rules.js");
 const { homepage, version } = require("../package.json");
 
-test.cb("customRulesV0", (t) => {
+test("customRulesV0", (t) => new Promise((resolve) => {
   t.plan(4);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
@@ -69,11 +69,11 @@ test.cb("customRulesV0", (t) => {
       "./test/custom-rules.md: 7: letter-E-letter-X" +
       " Rule that reports an error for lines with the letters 'EX'";
     t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesV1", (t) => {
+test("customRulesV1", (t) => new Promise((resolve) => {
   t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
@@ -186,11 +186,11 @@ test.cb("customRulesV1", (t) => {
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesV2", (t) => {
+test("customRulesV2", (t) => new Promise((resolve) => {
   t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
@@ -294,11 +294,11 @@ test.cb("customRulesV2", (t) => {
       " Rule that reports an error for lines with the letters 'EX'" +
       " [Context: \"text\"]";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesConfig", (t) => {
+test("customRulesConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   const customRulesMd = "./test/custom-rules.md";
   const options = {
@@ -323,11 +323,11 @@ test.cb("customRulesConfig", (t) => {
       "letters-E-X": [ 7 ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesNpmPackage", (t) => {
+test("customRulesNpmPackage", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "customRules": [ require("./rules/npm") ],
@@ -344,9 +344,9 @@ test.cb("customRulesNpmPackage", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customRulesBadProperty", (t) => {
   t.plan(27);
@@ -399,7 +399,7 @@ test("customRulesBadProperty", (t) => {
   }
 });
 
-test.cb("customRulesUsedNameName", (t) => {
+test("customRulesUsedNameName", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -418,11 +418,11 @@ test.cb("customRulesUsedNameName", (t) => {
         "already used as a name or tag.",
       "Incorrect message for duplicate name.");
     t.true(!result, "Got result for duplicate name.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesUsedNameTag", (t) => {
+test("customRulesUsedNameTag", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -440,11 +440,11 @@ test.cb("customRulesUsedNameTag", (t) => {
       "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
       "Incorrect message for duplicate name.");
     t.true(!result, "Got result for duplicate name.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesUsedTagName", (t) => {
+test("customRulesUsedTagName", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -469,11 +469,11 @@ test.cb("customRulesUsedTagName", (t) => {
         "already used as a name.",
       "Incorrect message for duplicate name.");
     t.true(!result, "Got result for duplicate tag.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesThrowForFile", (t) => {
+test("customRulesThrowForFile", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
@@ -494,9 +494,9 @@ test.cb("customRulesThrowForFile", (t) => {
     t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
     t.true(!result, "Got result for function thrown.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customRulesThrowForFileSync", (t) => {
   t.plan(1);
@@ -524,7 +524,7 @@ test("customRulesThrowForFileSync", (t) => {
   );
 });
 
-test.cb("customRulesThrowForString", (t) => {
+test("customRulesThrowForString", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
@@ -547,9 +547,9 @@ test.cb("customRulesThrowForString", (t) => {
     t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
     t.true(!result, "Got result for function thrown.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customRulesThrowForStringSync", (t) => {
   t.plan(1);
@@ -579,7 +579,7 @@ test("customRulesThrowForStringSync", (t) => {
   );
 });
 
-test.cb("customRulesOnErrorNull", (t) => {
+test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
     "customRules": [
@@ -605,9 +605,9 @@ test.cb("customRulesOnErrorNull", (t) => {
       "Did not get correct exception for null object."
     );
     t.true(!result, "Got result for function thrown.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customRulesOnErrorNullSync", (t) => {
   t.plan(1);
@@ -868,7 +868,7 @@ test("customRulesOnErrorValid", (t) => {
   }
 });
 
-test.cb("customRulesOnErrorLazy", (t) => {
+test("customRulesOnErrorLazy", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "customRules": [
@@ -907,11 +907,11 @@ test.cb("customRulesOnErrorLazy", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesOnErrorModified", (t) => {
+test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
   t.plan(2);
   const errorObject = {
     "lineNumber": 1,
@@ -967,11 +967,11 @@ test.cb("customRulesOnErrorModified", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesOnErrorInvalidHandled", (t) => {
+test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "customRules": [
@@ -1008,9 +1008,9 @@ test.cb("customRulesOnErrorInvalidHandled", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customRulesOnErrorInvalidHandledSync", (t) => {
   t.plan(1);
@@ -1051,7 +1051,7 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
 });
 
-test.cb("customRulesFileName", (t) => {
+test("customRulesFileName", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "customRules": [
@@ -1068,11 +1068,11 @@ test.cb("customRulesFileName", (t) => {
   };
   markdownlint(options, function callback(err) {
     t.falsy(err);
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesStringName", (t) => {
+test("customRulesStringName", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "customRules": [
@@ -1091,11 +1091,11 @@ test.cb("customRulesStringName", (t) => {
   };
   markdownlint(options, function callback(err) {
     t.falsy(err);
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesDoc", (t) => {
+test("customRulesDoc", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "files": "./doc/CustomRules.md",
@@ -1106,11 +1106,11 @@ test.cb("customRulesDoc", (t) => {
     t.falsy(err);
     const expected = { "./doc/CustomRules.md": [] };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesLintJavaScript", (t) => {
+test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "customRules": customRules.lintJavaScript,
@@ -1143,11 +1143,11 @@ test.cb("customRulesLintJavaScript", (t) => {
       ]
     };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customRulesValidateJson", (t) => {
+test("customRulesValidateJson", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "customRules": customRules.validateJson,
@@ -1170,9 +1170,9 @@ test.cb("customRulesValidateJson", (t) => {
       ]
     };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customRulesAsyncThrowsInSyncContext", (t) => {
   t.plan(1);
@@ -1497,7 +1497,7 @@ for (const flavor of [
   for (const inputs of stringScenarios) {
     const [ subname, files, strings ] = inputs;
 
-    test.cb(`${name}${subname}UnhandledAsync`, (t) => {
+    test(`${name}${subname}UnhandledAsync`, (t) => new Promise((resolve) => {
       t.plan(4);
       markdownlint({
         // @ts-ignore
@@ -1511,11 +1511,11 @@ for (const flavor of [
         t.true(err instanceof Error, "Error not instance of Error.");
         t.is(err.message, errorMessage, "Incorrect message for exception.");
         t.true(!result, "Got result for exception.");
-        t.end();
+        resolve();
       });
-    });
+    }));
 
-    test.cb(`${name}${subname}HandledAsync`, (t) => {
+    test(`${name}${subname}HandledAsync`, (t) => new Promise((resolve) => {
       t.plan(2);
       markdownlint({
         // @ts-ignore
@@ -1528,9 +1528,9 @@ for (const flavor of [
       }, function callback(err, actualResult) {
         t.falsy(err);
         t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-        t.end();
+        resolve();
       });
-    });
+    }));
 
     test(`${name}${subname}UnhandledSync`, (t) => {
       t.plan(1);
@@ -1615,7 +1615,7 @@ for (const flavor of [
   for (const inputs of stringScenarios) {
     const [ subname, files, strings ] = inputs;
 
-    test.cb(`${name}${subname}Unhandled`, (t) => {
+    test(`${name}${subname}Unhandled`, (t) => new Promise((resolve) => {
       t.plan(4);
       markdownlint({
         // @ts-ignore
@@ -1629,11 +1629,11 @@ for (const flavor of [
         t.true(err instanceof Error, "Error not instance of Error.");
         t.is(err.message, errorMessage, "Incorrect message for rejection.");
         t.true(!result, "Got result for rejection.");
-        t.end();
+        resolve();
       });
-    });
+    }));
 
-    test.cb(`${name}${subname}Handled`, (t) => {
+    test(`${name}${subname}Handled`, (t) => new Promise((resolve) => {
       t.plan(2);
       markdownlint({
         // @ts-ignore
@@ -1660,8 +1660,8 @@ for (const flavor of [
           ]
         };
         t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-        t.end();
+        resolve();
       });
-    });
+    }));
   }
 }

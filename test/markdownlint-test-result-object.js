@@ -8,7 +8,7 @@ const markdownlint = require("../lib/markdownlint");
 const homepage = packageJson.homepage;
 const version = packageJson.version;
 
-test.cb("resultObjectToStringNotEnumerable", (t) => {
+test("resultObjectToStringNotEnumerable", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -21,11 +21,11 @@ test.cb("resultObjectToStringNotEnumerable", (t) => {
     for (const property in result) {
       t.not(property, "toString", "Function should not enumerate.");
     }
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("resultFormattingV0", (t) => {
+test("resultFormattingV0", (t) => new Promise((resolve) => {
   t.plan(4);
   const options = {
     "files": [
@@ -79,9 +79,9 @@ test.cb("resultFormattingV0", (t) => {
       "./test/first_heading_bad_atx.md: 1: first-heading-h1" +
       " First heading should be a top-level heading";
     t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("resultFormattingSyncV0", (t) => {
   t.plan(3);
@@ -138,7 +138,7 @@ test("resultFormattingSyncV0", (t) => {
   t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
 });
 
-test.cb("resultFormattingV1", (t) => {
+test("resultFormattingV1", (t) => new Promise((resolve) => {
   t.plan(3);
   const options = {
     "strings": {
@@ -237,11 +237,11 @@ test.cb("resultFormattingV1", (t) => {
       " Multiple spaces inside hashes on closed atx style heading" +
       " [Context: \"#  Multiple spa...tyle heading  #\"]";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("resultFormattingV2", (t) => {
+test("resultFormattingV2", (t) => new Promise((resolve) => {
   t.plan(3);
   const options = {
     "strings": {
@@ -335,11 +335,11 @@ test.cb("resultFormattingV2", (t) => {
       " Multiple spaces inside hashes on closed atx style heading" +
       " [Context: \"#  Multiple spa...tyle heading  #\"]";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("resultFormattingV3", (t) => {
+test("resultFormattingV3", (t) => new Promise((resolve) => {
   t.plan(3);
   const options = {
     "strings": {
@@ -439,11 +439,11 @@ test.cb("resultFormattingV3", (t) => {
       "input: 4: MD047/single-trailing-newline" +
       " Files should end with a single newline character";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("onePerLineResultVersion0", (t) => {
+test("onePerLineResultVersion0", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -460,11 +460,11 @@ test.cb("onePerLineResultVersion0", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("onePerLineResultVersion1", (t) => {
+test("onePerLineResultVersion1", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -491,11 +491,11 @@ test.cb("onePerLineResultVersion1", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("onePerLineResultVersion2", (t) => {
+test("onePerLineResultVersion2", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -520,11 +520,11 @@ test.cb("onePerLineResultVersion2", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("manyPerLineResultVersion3", (t) => {
+test("manyPerLineResultVersion3", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -569,11 +569,11 @@ test.cb("manyPerLineResultVersion3", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("frontMatterResultVersion3", (t) => {
+test("frontMatterResultVersion3", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -603,6 +603,6 @@ test.cb("frontMatterResultVersion3", (t) => {
       ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));

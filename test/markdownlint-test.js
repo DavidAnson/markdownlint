@@ -30,7 +30,7 @@ const configSchemaStrict = {
   "additionalProperties": false
 };
 
-test.cb("simpleAsync", (t) => {
+test("simpleAsync", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -42,9 +42,9 @@ test.cb("simpleAsync", (t) => {
   markdownlint(options, (err, actual) => {
     t.falsy(err);
     t.is(actual.toString(), expected, "Unexpected results.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("simpleSync", (t) => {
   t.plan(1);
@@ -73,7 +73,7 @@ test("simplePromise", (t) => {
   });
 });
 
-test.cb("projectFilesNoInlineConfig", (t) => {
+test("projectFilesNoInlineConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -97,11 +97,11 @@ test.cb("projectFilesNoInlineConfig", (t) => {
       "helpers/README.md": []
     };
     t.deepEqual(actual, expected, "Issue(s) with project files.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("projectFilesInlineConfig", (t) => {
+test("projectFilesInlineConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [ "doc/Rules.md" ],
@@ -113,11 +113,11 @@ test.cb("projectFilesInlineConfig", (t) => {
       "doc/Rules.md": []
     };
     t.deepEqual(actual, expected, "Issue(s) with project files.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("stringInputLineEndings", (t) => {
+test("stringInputLineEndings", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -141,11 +141,11 @@ test.cb("stringInputLineEndings", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("inputOnlyNewline", (t) => {
+test("inputOnlyNewline", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "strings": {
@@ -165,11 +165,11 @@ test.cb("inputOnlyNewline", (t) => {
       "crlf": []
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("defaultTrue", (t) => {
+test("defaultTrue", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -195,11 +195,11 @@ test.cb("defaultTrue", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("defaultFalse", (t) => {
+test("defaultFalse", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -219,11 +219,11 @@ test.cb("defaultFalse", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("defaultUndefined", (t) => {
+test("defaultUndefined", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -247,11 +247,11 @@ test.cb("defaultUndefined", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("disableRules", (t) => {
+test("disableRules", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -276,11 +276,11 @@ test.cb("disableRules", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("enableRules", (t) => {
+test("enableRules", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -307,11 +307,11 @@ test.cb("enableRules", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("enableRulesMixedCase", (t) => {
+test("enableRulesMixedCase", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -338,11 +338,11 @@ test.cb("enableRulesMixedCase", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("disableTag", (t) => {
+test("disableTag", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -367,11 +367,11 @@ test.cb("disableTag", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("enableTag", (t) => {
+test("enableTag", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -396,11 +396,11 @@ test.cb("enableTag", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("enableTagMixedCase", (t) => {
+test("enableTagMixedCase", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
@@ -425,22 +425,22 @@ test.cb("enableTagMixedCase", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("styleFiles", (t) => {
+test("styleFiles", (t) => new Promise((resolve) => {
   t.plan(4);
   fs.readdir("./style", function readdir(err, files) {
     t.falsy(err);
     for (const file of files) {
       t.truthy(require(path.join("../style", file)), "Unable to load/parse.");
     }
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("styleAll", (t) => {
+test("styleAll", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
@@ -499,11 +499,11 @@ test.cb("styleAll", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("styleRelaxed", (t) => {
+test("styleRelaxed", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
@@ -547,11 +547,11 @@ test.cb("styleRelaxed", (t) => {
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("nullFrontMatter", (t) => {
+test("nullFrontMatter", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -570,11 +570,11 @@ test.cb("nullFrontMatter", (t) => {
     };
     // @ts-ignore
     t.deepEqual(result, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("customFrontMatter", (t) => {
+test("customFrontMatter", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -591,11 +591,11 @@ test.cb("customFrontMatter", (t) => {
       "content": []
     };
     t.deepEqual(result, expectedResult, "Did not get empty results.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("noInlineConfig", (t) => {
+test("noInlineConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -624,11 +624,11 @@ test.cb("noInlineConfig", (t) => {
     };
     // @ts-ignore
     t.deepEqual(result, expectedResult, "Undetected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("readmeHeadings", (t) => {
+test("readmeHeadings", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "files": "README.md",
@@ -682,11 +682,11 @@ test.cb("readmeHeadings", (t) => {
     t.falsy(err);
     const expected = { "README.md": [] };
     t.deepEqual(result, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("filesArrayNotModified", (t) => {
+test("filesArrayNotModified", (t) => new Promise((resolve) => {
   t.plan(2);
   const files = [
     "./test/atx_heading_spacing.md",
@@ -696,11 +696,11 @@ test.cb("filesArrayNotModified", (t) => {
   markdownlint({ "files": files }, function callback(err) {
     t.falsy(err);
     t.deepEqual(files, expectedFiles, "Files modified.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("filesArrayAsString", (t) => {
+test("filesArrayAsString", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "files": "README.md",
@@ -713,11 +713,11 @@ test.cb("filesArrayAsString", (t) => {
     t.falsy(err);
     const expected = { "README.md": [] };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("missingOptions", (t) => {
+test("missingOptions", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint(null, function callback(err, result) {
     t.falsy(err);
@@ -726,18 +726,18 @@ test.cb("missingOptions", (t) => {
       {},
       "Did not get empty result for missing options."
     );
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("missingFilesAndStrings", (t) => {
+test("missingFilesAndStrings", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({}, function callback(err, result) {
     t.falsy(err);
     t.truthy(result, "Did not get result for missing files/strings.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("missingCallback", (t) => {
   t.plan(0);
@@ -745,7 +745,7 @@ test("missingCallback", (t) => {
   markdownlint();
 });
 
-test.cb("badFile", (t) => {
+test("badFile", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
     "files": [ "./badFile" ]
@@ -755,9 +755,9 @@ test.cb("badFile", (t) => {
     // @ts-ignore
     t.is(err.code, "ENOENT", "Error code for bad file not ENOENT.");
     t.true(!result, "Got result for bad file.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("badFileSync", (t) => {
   t.plan(1);
@@ -774,7 +774,7 @@ test("badFileSync", (t) => {
   );
 });
 
-test.cb("badFilePromise", (t) => {
+test("badFilePromise", (t) => new Promise((resolve) => {
   t.plan(3);
   markdownlint.promises.markdownlint({
     "files": [ "./badFile" ]
@@ -784,12 +784,12 @@ test.cb("badFilePromise", (t) => {
       t.truthy(error, "Did not get an error for bad file.");
       t.true(error instanceof Error, "Error not instance of Error.");
       t.is(error.code, "ENOENT", "Error code for bad file not ENOENT.");
-      t.end();
+      resolve();
     }
   );
-});
+}));
 
-test.cb("missingStringValue", (t) => {
+test("missingStringValue", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -805,9 +805,9 @@ test.cb("missingStringValue", (t) => {
       "empty": []
     };
     t.deepEqual(result, expectedResult, "Did not get empty results.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("customFileSystemSync", (t) => {
   t.plan(2);
@@ -825,7 +825,7 @@ test("customFileSystemSync", (t) => {
   t.deepEqual(result[file].length, 1, "Did not report violations.");
 });
 
-test.cb("customFileSystemAsync", (t) => {
+test("customFileSystemAsync", (t) => new Promise((resolve) => {
   t.plan(3);
   const file = "/dir/file.md";
   const fsApi = {
@@ -840,11 +840,11 @@ test.cb("customFileSystemAsync", (t) => {
   }, function callback(err, result) {
     t.falsy(err);
     t.deepEqual(result[file].length, 1, "Did not report violations.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("readme", (t) => {
+test("readme", (t) => new Promise((resolve) => {
   t.plan(125);
   const tagToRules = {};
   for (const rule of rules) {
@@ -916,11 +916,11 @@ test.cb("readme", (t) => {
           (ruleLeft || "[NO RULE]").toString() + ".");
       const tagLeft = Object.keys(tagToRules).shift();
       t.true(!tagLeft, "Undocumented tag " + tagLeft + ".");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("rules", (t) => {
+test("rules", (t) => new Promise((resolve) => {
   t.plan(373);
   fs.readFile("doc/Rules.md", "utf8",
     (err, contents) => {
@@ -1003,9 +1003,9 @@ test.cb("rules", (t) => {
       if (rule) {
         testTagsAliasesParams(rule);
       }
-      t.end();
+      resolve();
     });
-});
+}));
 
 test("validateJsonUsingConfigSchemaStrict", (t) => {
   const jsonFileRe = /\.json$/i;
@@ -1135,7 +1135,7 @@ test("someCustomRulesHaveValidUrl", (t) => {
   }
 });
 
-test.cb("markdownItPluginsSingle", (t) => {
+test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -1155,11 +1155,11 @@ test.cb("markdownItPluginsSingle", (t) => {
     t.falsy(err);
     const expected = { "string": [] };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("markdownItPluginsMultiple", (t) => {
+test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
     "strings": {
@@ -1175,11 +1175,11 @@ test.cb("markdownItPluginsMultiple", (t) => {
     t.falsy(err);
     const expected = { "string": [] };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("markdownItPluginsMathjax", (t) => {
+test("markdownItPluginsMathjax", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -1199,11 +1199,11 @@ test.cb("markdownItPluginsMathjax", (t) => {
     t.falsy(err);
     const expected = { "string": [] };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("markdownItPluginsMathjaxIssue166", (t) => {
+test("markdownItPluginsMathjaxIssue166", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -1227,11 +1227,11 @@ $$\n`
     };
     // @ts-ignore
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
-test.cb("texmath test files with texmath plugin", (t) => {
+test("texmath test files with texmath plugin", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "files": [
@@ -1246,9 +1246,9 @@ test.cb("texmath test files with texmath plugin", (t) => {
       "./test/texmath-content-violating-md037.md": []
     };
     t.deepEqual(actual, expected, "Unexpected issues.");
-    t.end();
+    resolve();
   });
-});
+}));
 
 test("token-map-spans", (t) => {
   t.plan(38);

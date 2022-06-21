@@ -9,30 +9,30 @@ const markdownlint = require("../lib/markdownlint");
 
 const sameFileSystem = (path.relative(os.homedir(), __dirname) !== __dirname);
 
-test.cb("configSingle", (t) => {
+test("configSingle", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig("./test/config/config-child.json",
     function callback(err, actual) {
       t.falsy(err);
       const expected = require("./config/config-child.json");
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configAbsolute", (t) => {
+test("configAbsolute", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig(path.join(__dirname, "config", "config-child.json"),
     function callback(err, actual) {
       t.falsy(err);
       const expected = require("./config/config-child.json");
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
 if (sameFileSystem) {
-  test.cb("configTilde", (t) => {
+  test("configTilde", (t) => new Promise((resolve) => {
     t.plan(2);
     markdownlint.readConfig(
       `~/${path.relative(os.homedir(), "./test/config/config-child.json")}`,
@@ -40,12 +40,12 @@ if (sameFileSystem) {
         t.falsy(err);
         const expected = require("./config/config-child.json");
         t.deepEqual(actual, expected, "Config object not correct.");
-        t.end();
+        resolve();
       });
-  });
+  }));
 }
 
-test.cb("configMultiple", (t) => {
+test("configMultiple", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig("./test/config/config-grandparent.json",
     function callback(err, actual) {
@@ -57,11 +57,11 @@ test.cb("configMultiple", (t) => {
       };
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configMultipleWithRequireResolve", (t) => {
+test("configMultipleWithRequireResolve", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig("./test/config/config-packageparent.json",
     function callback(err, actual) {
@@ -72,11 +72,11 @@ test.cb("configMultipleWithRequireResolve", (t) => {
       };
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configCustomFileSystem", (t) => {
+test("configCustomFileSystem", (t) => new Promise((resolve) => {
   t.plan(3);
   const file = "/dir/file.json";
   const extended = "~/dir/extended.json";
@@ -116,11 +116,11 @@ test.cb("configCustomFileSystem", (t) => {
       };
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadFile", (t) => {
+test("configBadFile", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint.readConfig("./test/config/config-badfile.json",
     function callback(err, result) {
@@ -129,11 +129,11 @@ test.cb("configBadFile", (t) => {
       // @ts-ignore
       t.is(err.code, "ENOENT", "Error code for bad file not ENOENT.");
       t.true(!result, "Got result for bad file.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadChildFile", (t) => {
+test("configBadChildFile", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint.readConfig("./test/config/config-badchildfile.json",
     function callback(err, result) {
@@ -143,11 +143,11 @@ test.cb("configBadChildFile", (t) => {
       t.is(err.code, "ENOENT",
         "Error code for bad child file not ENOENT.");
       t.true(!result, "Got result for bad child file.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadChildPackage", (t) => {
+test("configBadChildPackage", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint.readConfig("./test/config/config-badchildpackage.json",
     function callback(err, result) {
@@ -157,33 +157,33 @@ test.cb("configBadChildPackage", (t) => {
       t.is(err.code, "ENOENT",
         "Error code for bad child package not ENOENT.");
       t.true(!result, "Got result for bad child package.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadJson", (t) => {
+test("configBadJson", (t) => new Promise((resolve) => {
   t.plan(3);
   markdownlint.readConfig("./test/config/config-badjson.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad JSON.");
       t.true(err instanceof Error, "Error not instance of Error.");
       t.true(!result, "Got result for bad JSON.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadChildJson", (t) => {
+test("configBadChildJson", (t) => new Promise((resolve) => {
   t.plan(3);
   markdownlint.readConfig("./test/config/config-badchildjson.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad child JSON.");
       t.true(err instanceof Error, "Error not instance of Error.");
       t.true(!result, "Got result for bad child JSON.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configSingleYaml", (t) => {
+test("configSingleYaml", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig(
     "./test/config/config-child.yaml",
@@ -193,11 +193,11 @@ test.cb("configSingleYaml", (t) => {
       t.falsy(err);
       const expected = require("./config/config-child.json");
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configMultipleYaml", (t) => {
+test("configMultipleYaml", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig(
     "./test/config/config-grandparent.yaml",
@@ -212,11 +212,11 @@ test.cb("configMultipleYaml", (t) => {
       };
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configMultipleHybrid", (t) => {
+test("configMultipleHybrid", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.readConfig(
     "./test/config/config-grandparent-hybrid.yaml",
@@ -231,11 +231,11 @@ test.cb("configMultipleHybrid", (t) => {
       };
       delete expected.extends;
       t.like(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadHybrid", (t) => {
+test("configBadHybrid", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint.readConfig(
     "./test/config/config-badcontent.txt",
@@ -249,9 +249,9 @@ test.cb("configBadHybrid", (t) => {
         /^Unable to parse '[^']*'; Parser \d+: Unexpected token \S+ in JSON at position \d+;/
       ), "Error message unexpected.");
       t.true(!result, "Got result for bad child JSON.");
-      t.end();
+      resolve();
     });
-});
+}));
 
 test("configSingleSync", (t) => {
   t.plan(1);
@@ -438,17 +438,17 @@ test("configBadHybridSync", (t) => {
   );
 });
 
-test.cb("configSinglePromise", (t) => {
+test("configSinglePromise", (t) => new Promise((resolve) => {
   t.plan(1);
   markdownlint.promises.readConfig("./test/config/config-child.json")
     .then((actual) => {
       const expected = require("./config/config-child.json");
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configCustomFileSystemPromise", (t) => {
+test("configCustomFileSystemPromise", (t) => new Promise((resolve) => {
   t.plan(4);
   const file = path.resolve("/dir/file.json");
   const extended = path.resolve("/dir/extended.json");
@@ -487,11 +487,11 @@ test.cb("configCustomFileSystemPromise", (t) => {
       };
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
-      t.end();
+      resolve();
     });
-});
+}));
 
-test.cb("configBadFilePromise", (t) => {
+test("configBadFilePromise", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint.promises.readConfig("./test/config/config-badfile.json")
     .then(
@@ -499,7 +499,7 @@ test.cb("configBadFilePromise", (t) => {
       (error) => {
         t.truthy(error, "Did not get an error for bad JSON.");
         t.true(error instanceof Error, "Error not instance of Error.");
-        t.end();
+        resolve();
       }
     );
-});
+}));
