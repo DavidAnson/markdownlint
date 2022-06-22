@@ -1012,6 +1012,13 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            MD007/MD010/MD032/MD033/MD035/MD037/MD039, support asynchronous custom rules,
            improve performance, improve CI process, reduce dependencies, update dependencies.
   * 0.25.1 - Update dependencies for CVE-2022-21670.
+* 0.26.0 - Add MD051/MD052/MD053 for validating link fragments & reference links/images &
+           link/image reference definitions (MD053 is auto-fixable), improve
+           MD010/MD031/MD035/MD039/MD042/MD044/MD049/MD050, add `markdownlint-disable-line`
+           inline comment, support `~` paths in `readConfig/Sync`, add `configParsers` option,
+           remove support for end-of-life Node version 12, default `resultVersion` to 3, update
+           browser script to use ES2015, simplify JSON schema, address remaining CodeQL issues,
+           improve performance, update dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
