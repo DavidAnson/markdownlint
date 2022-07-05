@@ -3,8 +3,12 @@
   "version": "0.26.0",
   "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
   "type": "commonjs",
-  "main": "lib/markdownlint.js",
-  "types": "lib/markdownlint.d.ts",
+  "main": "./lib/markdownlint.js",
+  "exports": {
+    ".": "./lib/markdownlint.js",
+    "./helpers": "./helpers/helpers.js"
+  },
+  "types": "./lib/markdownlint.d.ts",
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
