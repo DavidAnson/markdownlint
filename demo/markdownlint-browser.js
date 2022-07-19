@@ -4610,7 +4610,10 @@ const identifierRe = /(?:id|name)\s*=\s*['"]?([^'"\s>]+)/iu;
  * @returns {string} Fragment string for heading.
  */
 function convertHeadingToHTMLFragment(inline) {
-    const inlineText = inline.children.map((token) => token.content).join("");
+    const inlineText = inline.children
+        .filter((token) => token.type !== "html_inline")
+        .map((token) => token.content)
+        .join("");
     return "#" + encodeURIComponent(inlineText
         .toLowerCase()
         // RegExp source with Ruby's \p{Word} expanded into its General Categories
@@ -4663,7 +4666,7 @@ module.exports = {
                     context = match[0];
                     range = [match.index + 1, match[0].length];
                 }
-                addError(onError, lineNumber, null, context, range);
+                addError(onError, lineNumber, undefined, context, range);
             }
         });
     }

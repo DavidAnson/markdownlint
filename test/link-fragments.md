@@ -32,6 +32,12 @@
 
 [Valid](#valid-repeated-heading-2)
 
+[Valid](#valid-heading-with-trailing-space-)
+
+[Valid](#valid-heading-with-two-trailing-spaces--)
+
+[Valid](#valid-heading-with-embedded--comment)
+
 [Valid](#namedlink)
 
 [Valid](#idlink)
@@ -92,6 +98,12 @@ Text
 Text
 
 ### Valid Repeated Heading
+
+### Valid Heading With Trailing Space <!-- comment -->
+
+### Valid Heading With Two Trailing Spaces  <!-- comment -->
+
+### Valid Heading With Embedded <!-- comment --> Comment
 
 <a name="namedlink"></a>
 
