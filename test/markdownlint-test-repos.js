@@ -234,8 +234,7 @@ test("https://github.com/webpack/webpack.js.org", (t) => {
   const rootDir = "./test-repos/webpack-webpack-js-org";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [ /^test-repos\/webpack-webpack-js-org\/README\.md: \d+: MD053\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 // Optional repositories (very large)
@@ -246,20 +245,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [
-      /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/core\/diagnostics\/sos-debugging-extension\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/core\/install\/macos\.md: \d+: MD053\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/framework\/data\/adonet\/dataset-datatable-dataview\/diffgrams\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/framework\/tools\/al-exe-assembly-linker\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/framework\/tools\/sos-dll-sos-debugging-extension\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/fsharp\/language-reference\/compiler-options\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/fundamentals\/code-analysis\/quality-rules\/ca2241\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/composite-formatting\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/standard-timespan-format-strings\.md: \d+: MD052\/.*$\r?\n?/gm,
-      /^test-repos\/dotnet-docs\/docs\/standard\/native-interop\/tutorial-comwrappers\.md: \d+: MD053\/.*$\r?\n?/gm
-    ];
-    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+    return lintTestRepo(t, globPatterns, configPath);
   });
 }
 
