@@ -38,6 +38,12 @@
 
 [Valid](#valid-heading-with-embedded--comment)
 
+[Valid](#the-best-headin-for-testin-quotes)
+
+[Valid](#valid-heading-about-lh%C3%B4pitals-rule)
+
+[Valid](#en-t%C3%AAte-valide-dans-fran%C3%A7ais-pour-v%C3%A9rification)
+
 [Valid](#namedlink)
 
 [Valid](#idlink)
@@ -104,6 +110,12 @@ Text
 ### Valid Heading With Two Trailing Spaces  <!-- comment -->
 
 ### Valid Heading With Embedded <!-- comment --> Comment
+
+### The "Best" Headin' for Testin' Quotes
+
+### Valid Heading About L'Hôpital's Rule
+
+### En-tête Valide Dans Français Pour Vérification
 
 <a name="namedlink"></a>
 
