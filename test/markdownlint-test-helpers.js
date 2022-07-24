@@ -471,7 +471,7 @@ test("applyFix", (t) => {
     const [ line, fixInfo, lineEnding, expected ] = testCase;
     // @ts-ignore
     const actual = helpers.applyFix(line, fixInfo, lineEnding);
-    t.is(actual, expected, "Incorrect fix applied.");
+    t.is(actual, String(expected), "Incorrect fix applied.");
   }
 });
 
@@ -949,7 +949,7 @@ test("applyFixes", (t) => {
     const [ input, errors, expected ] = testCase;
     // @ts-ignore
     const actual = helpers.applyFixes(input, errors);
-    t.is(actual, expected, "Incorrect fix applied.");
+    t.is(actual, String(expected), "Incorrect fix applied.");
   }
 });
 
@@ -1277,9 +1277,10 @@ test("htmlElementRanges", (t) => {
 });
 
 test("expandTildePath", (t) => {
-  t.plan(16);
+  t.plan(17);
   const homedir = os.homedir();
   t.is(helpers.expandTildePath("", os), "");
+  t.is(helpers.expandTildePath("", {}), "");
   t.is(helpers.expandTildePath("", null), "");
   t.is(
     path.resolve(helpers.expandTildePath("~", os)),

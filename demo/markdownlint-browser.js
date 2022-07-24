@@ -1077,7 +1077,7 @@ module.exports.getNextChildToken = getNextChildToken;
  * @returns {string} Absolute path (or original path).
  */
 function expandTildePath(file, os) {
-    const homedir = os && os.homedir();
+    const homedir = os && os.homedir && os.homedir();
     return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
 }
 module.exports.expandTildePath = expandTildePath;
