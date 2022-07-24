@@ -1019,6 +1019,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            remove support for end-of-life Node version 12, default `resultVersion` to 3, update
            browser script to use ES2015, simplify JSON schema, address remaining CodeQL issues,
            improve performance, update dependencies.
+  * 0.26.1 - Improve MD051.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint

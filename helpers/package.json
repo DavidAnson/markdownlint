@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-rule-helpers",
-  "version": "0.17.0",
+  "version": "0.17.1",
   "description": "A collection of markdownlint helper functions for custom rules",
   "main": "./helpers.js",
   "exports": "./helpers.js",
