@@ -52,6 +52,10 @@
 
 [Valid](#HREFandID)
 
+[Valid](#id-for-other-element)
+
+[Valid](#id-after-name)
+
 [Valid][goodref]
 
 ### Valid H3 Heading
@@ -125,6 +129,14 @@ Text
 
 <A href="https://example.com" id="HREFandID">Text</A>
 
+<p id="id-for-other-element"></p>
+
+<p name="name-for-other-element"></p>
+
+<input name="name-should-be-ignored" id="id-after-name">
+
+<a data-id="not-an-id-should-be-ignored">
+
 [goodref]: #namedlink
 
 ## Invalid Fragments
@@ -138,6 +150,12 @@ Text
 [Invalid](#myname) {MD051}
 
 [Invalid](#hrefandid) {MD051}
+
+[Invalid](#name-for-other-element) {MD051}
+
+[Invalid](#name-should-be-ignored) {MD051}
+
+[Invalid](#not-an-id-should-be-ignored) {MD051}
 
 [Invalid][badref] {MD051}
 
