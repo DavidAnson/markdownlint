@@ -48,6 +48,7 @@ and test cases came directly from that project.
   * [eslint-plugin-markdownlint for the ESLint analyzer](https://github.com/paweldrozd/eslint-plugin-markdownlint)
   * [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
   * [Cake.Markdownlint addin for Cake build automation system](https://github.com/cake-contrib/Cake.Markdownlint)
+  * [Lombiq Node.js Extensions for MSBuild (.NET builds)](https://github.com/Lombiq/NodeJs-Extensions)
 * Ruby
   * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
 
