@@ -30,9 +30,9 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 const emphasisMarkersRe = /[_*]/g;
 
-// Regular expression for reference links (full and collapsed but not shortcut)
+// Regular expression for reference links (full, collapsed, and shortcut)
 const referenceLinkRe =
-  /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|[^(]|$)/g;
+  /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
 
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
@@ -785,7 +785,7 @@ function getReferenceLinkImageData(lineMetadata) {
   const normalizeLabel = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
   const exclusions = [];
   const excluded = (match) => withinAnyRange(
-    exclusions, 0, match.index, match[0].length
+    exclusions, 0, match.index, match[0].length - (match[3] || "").length
   );
   // Convert input to single-line so multi-line links/images are easier
   const lineOffsets = [];
@@ -845,8 +845,7 @@ function getReferenceLinkImageData(lineMetadata) {
         !matchString.startsWith("!\\") &&
         !matchText.endsWith("\\") &&
         !(matchLabel || "").endsWith("\\") &&
-        (topLevel || matchString.startsWith("!")) &&
-        !excluded(referenceLinkMatch)
+        !(topLevel && excluded(referenceLinkMatch))
       ) {
         const shortcutLink = (matchLabel === undefined);
         const collapsedLink =
@@ -855,22 +854,22 @@ function getReferenceLinkImageData(lineMetadata) {
           (shortcutLink || collapsedLink) ? matchText : matchLabel
         );
         if (label.length > 0) {
+          const referenceindex = referenceLinkMatch.index;
+          if (topLevel) {
+            // Calculate line index
+            while (lineOffsets[lineIndex + 1] <= referenceindex) {
+              lineIndex++;
+            }
+          } else {
+            // Use provided line index
+            lineIndex = contentLineIndex;
+          }
+          const referenceIndex = referenceindex +
+            (topLevel ? -lineOffsets[lineIndex] : contentIndex);
           if (shortcutLink) {
-            // Track, but don't validate due to ambiguity: "text [text] text"
+            // Track separately due to ambiguity in "text [text] text"
             shortcuts.add(label);
           } else {
-            const referenceindex = referenceLinkMatch.index;
-            if (topLevel) {
-              // Calculate line index
-              while (lineOffsets[lineIndex + 1] <= referenceindex) {
-                lineIndex++;
-              }
-            } else {
-              // Use provided line index
-              lineIndex = contentLineIndex;
-            }
-            const referenceIndex = referenceindex +
-              (topLevel ? -lineOffsets[lineIndex] : contentIndex);
             // Track reference and location
             const referenceData = references.get(label) || [];
             referenceData.push([
@@ -879,17 +878,15 @@ function getReferenceLinkImageData(lineMetadata) {
               matchString.length
             ]);
             references.set(label, referenceData);
-            // Check for images embedded in top-level link text
-            if (!matchString.startsWith("!")) {
-              pendingContents.push(
-                {
-                  "content": matchText,
-                  "contentLineIndex": lineIndex,
-                  "contentIndex": referenceIndex + 1,
-                  "topLevel": false
-                }
-              );
-            }
+          }
+          // Check for links embedded in brackets
+          if (!matchString.startsWith("!")) {
+            pendingContents.push({
+              "content": matchText,
+              "contentLineIndex": lineIndex,
+              "contentIndex": referenceIndex + 1,
+              "topLevel": false
+            });
           }
         }
       }

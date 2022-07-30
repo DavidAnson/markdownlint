@@ -46,6 +46,10 @@ Use of multi-line label: [multi-line-label][]
 
 Standard link: [text](https://example.com/standard)
 
+Wrapped in brackets: [[text][unique0]] [[unique1][]] [[unique2]]
+
+[Embedded [text][unique3] in [unique4][] brackets [unique5]]
+
 ## Invalid Links
 
 Missing label: [text][missing] {MD052}
@@ -61,7 +65,17 @@ Space: [text] [wrong]
 
 Empty: [text][ ]
 
+Code span: `[wrong]`
+
+Code span: `[wrong][]`
+
 Code span: `[text][wrong]`
+
+Code span: `[[wrong]]`
+
+Code span: `[[wrong][]]`
+
+Code span: `[[text][wrong]]`
 
 Escaped left text: \[text][wrong]
 
@@ -80,6 +94,10 @@ Collapsed style: ![image][]
 Shortcut style: ![image]
 
 Image in link: [![text][image]][label] [![image][]][label] [![image]][label]
+
+Wrapped in brackets: [![text][unique6]]
+
+Embedded [in ![text][unique7] brackets]
 
 ## Invalid Images
 
@@ -119,6 +137,14 @@ Missing[^2]
 [colon]: https://example.com/colon
 [multi-line-label]:
 https://example.com/multi-line-label
+[unique0]: https://example.com/unique0
+[unique1]: https://example.com/unique1
+[unique2]: https://example.com/unique2
+[unique3]: https://example.com/unique3
+[unique4]: https://example.com/unique4
+[unique5]: https://example.com/unique5
+[unique6]: https://example.com/unique6
+[unique7]: https://example.com/unique7
 
 ## Invalid Labels
 
