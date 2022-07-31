@@ -3841,8 +3841,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorContext, emphasisMarkersInContent, forEachLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, emphasisMarkersInContent, forEachLine, isBlankLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { htmlElementRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
 const embeddedUnderscoreRe = /([A-Za-z0-9])_([A-Za-z0-9])/g;
 const asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
@@ -3854,6 +3854,7 @@ module.exports = {
     "description": "Spaces inside emphasis markers",
     "tags": ["whitespace", "emphasis"],
     "function": function MD037(params, onError) {
+        const exclusions = htmlElementRanges();
         // eslint-disable-next-line init-declarations
         let effectiveEmphasisLength, emphasisIndex, emphasisKind, emphasisLength, pendingError = null;
         // eslint-disable-next-line jsdoc/require-jsdoc
@@ -3881,25 +3882,27 @@ module.exports = {
                 // Report the violation
                 const contextStart = emphasisIndex - emphasisLength;
                 const contextEnd = matchIndex + contextLength;
-                const context = line.substring(contextStart, contextEnd);
                 const column = contextStart + 1;
                 const length = contextEnd - contextStart;
-                const leftMarker = line.substring(contextStart, emphasisIndex);
-                const rightMarker = match ? (match[2] || match[3]) : "";
-                const fixedText = `${leftMarker}${content.trim()}${rightMarker}`;
-                return [
-                    onError,
-                    lineIndex + 1,
-                    context,
-                    leftSpace,
-                    rightSpace,
-                    [column, length],
-                    {
-                        "editColumn": column,
-                        "deleteCount": length,
-                        "insertText": fixedText
-                    }
-                ];
+                if (!withinAnyRange(exclusions, lineIndex, column, length)) {
+                    const context = line.substring(contextStart, contextEnd);
+                    const leftMarker = line.substring(contextStart, emphasisIndex);
+                    const rightMarker = match ? (match[2] || match[3]) : "";
+                    const fixedText = `${leftMarker}${content.trim()}${rightMarker}`;
+                    return [
+                        onError,
+                        lineIndex + 1,
+                        context,
+                        leftSpace,
+                        rightSpace,
+                        [column, length],
+                        {
+                            "editColumn": column,
+                            "deleteCount": length,
+                            "insertText": fixedText
+                        }
+                    ];
+                }
             }
             return null;
         }

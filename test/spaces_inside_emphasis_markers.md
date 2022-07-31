@@ -357,3 +357,15 @@ some_snake_case_function() is _called_
 _~/.ssh/id_rsa_ and _emphasis_
 
 Partial *em*phasis of a *wo*rd.
+
+Emphasis <b>inside * HTML * content</b> {MD033} {MD037}
+
+<p> {MD033}
+Emphasis inside * HTML * content {MD037}
+</p>
+
+Emphasis <p data="inside * attribute * content"></p> {MD033}
+
+Emphasis <img alt="inside * attribute * content"/> {MD033}
+
+Emphasis <p data="* attribute *">* HTML *</p> {MD033} {MD037}
