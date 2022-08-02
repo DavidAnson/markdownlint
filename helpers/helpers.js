@@ -30,6 +30,10 @@ module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 const emphasisMarkersRe = /[_*]/g;
 
+// Regular expression for blockquote prefixes
+const blockquotePrefixRe = /^[>\s]*/;
+module.exports.blockquotePrefixRe = blockquotePrefixRe;
+
 // Regular expression for reference links (full, collapsed, and shortcut)
 const referenceLinkRe =
   /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
@@ -794,6 +798,7 @@ function getReferenceLinkImageData(lineMetadata) {
   forEachLine(lineMetadata, (line, lineIndex, inCode) => {
     lineOffsets[lineIndex] = currentOffset;
     if (!inCode) {
+      line = line.replace(blockquotePrefixRe, "");
       if (line.trim().length === 0) {
         // Allow RegExp to detect the end of a block
         line = "\0";

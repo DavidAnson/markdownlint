@@ -34,6 +34,21 @@ line collapsed label][]
 Multi-line shortcut label: [multi line
 shortcut label]
 
+> Multi-line full text: [multi
+> line][blockquote multi line full text]
+>
+> Multi-line full label: [text][blockquote multi
+> line full label]
+>
+> Multi-line collapsed label: [blockquote multi
+> line collapsed label][]
+>
+> Multi-line shortcut label: [blockquote multi line
+> shortcut label]
+>
+> > Multi-line shortcut label: [blockquote blockquote
+> > multi line shortcut label]
+
 Dedicated line:
 [text][label]
 
@@ -134,6 +149,11 @@ Missing[^2]
 [multi line full label]: https://example.com/multi-line-full-label
 [multi line collapsed label]: https://example.com/multi-line-collapsed-label
 [multi line shortcut label]: https://example.com/multi-line-shortcut-label
+[blockquote multi line full text]: https://example.com/blockquote-multi-line-full-text
+[blockquote multi line full label]: https://example.com/blockquote-multi-line-full-label
+[blockquote multi line collapsed label]: https://example.com/blockquote-multi-line-collapsed-label
+[blockquote multi line shortcut label]: https://example.com/blockquote-multi-line-shortcut-label
+[blockquote blockquote multi line shortcut label]: https://example.com/blockquote-blockquote-multi-line-shortcut-label
 [colon]: https://example.com/colon
 [multi-line-label]:
 https://example.com/multi-line-label

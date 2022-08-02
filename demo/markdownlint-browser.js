@@ -52,6 +52,9 @@ module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
 const emphasisMarkersRe = /[_*]/g;
+// Regular expression for blockquote prefixes
+const blockquotePrefixRe = /^[>\s]*/;
+module.exports.blockquotePrefixRe = blockquotePrefixRe;
 // Regular expression for reference links (full, collapsed, and shortcut)
 const referenceLinkRe = /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
 // Regular expression for link reference definitions
@@ -763,6 +766,7 @@ function getReferenceLinkImageData(lineMetadata) {
     forEachLine(lineMetadata, (line, lineIndex, inCode) => {
         lineOffsets[lineIndex] = currentOffset;
         if (!inCode) {
+            line = line.replace(blockquotePrefixRe, "");
             if (line.trim().length === 0) {
                 // Allow RegExp to detect the end of a block
                 line = "\0";
@@ -3582,9 +3586,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const quotePrefixRe = /^[>\s]*/;
 module.exports = {
     "names": ["MD032", "blanks-around-lists"],
     "description": "Lists should be surrounded by blank lines",
@@ -3596,7 +3599,7 @@ module.exports = {
             const firstIndex = list.open.map[0];
             if (!isBlankLine(lines[firstIndex - 1])) {
                 const line = lines[firstIndex];
-                const quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
+                const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, firstIndex + 1, line.trim(), null, null, null, {
                     "insertText": `${quotePrefix}\n`
                 });
@@ -3604,7 +3607,7 @@ module.exports = {
             const lastIndex = list.lastLineIndex - 1;
             if (!isBlankLine(lines[lastIndex + 1])) {
                 const line = lines[lastIndex];
-                const quotePrefix = line.match(quotePrefixRe)[0].trimEnd();
+                const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
                 addErrorContext(onError, lastIndex + 1, line.trim(), null, null, null, {
                     "lineNumber": lastIndex + 2,
                     "insertText": `${quotePrefix}\n`
