@@ -909,8 +909,24 @@
     },
     "MD053": {
       "description": "MD053/link-image-reference-definitions - Link and image reference definitions should be needed",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "ignored_definitions": {
+          "description": "Ignored definitions",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "//"
+          ]
+        }
+      },
+      "additionalProperties": false
     },
     "link-image-reference-definitions": {
       "$ref": "#/properties/MD053"

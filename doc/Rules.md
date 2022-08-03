@@ -1315,7 +1315,7 @@ To fix this, use 'pure' Markdown instead of including raw HTML:
 # Markdown heading
 ```
 
-Note: To allow specific HTML elements, use the 'allowed_elements' parameter.
+Note: To allow specific HTML elements, use the `allowed_elements` parameter.
 
 Rationale: Raw HTML is allowed in Markdown, but this rule is included for
 those who want their documents to only include "pure" Markdown, or for those
@@ -2075,6 +2075,8 @@ Tags: images, links
 
 Aliases: link-image-reference-definitions
 
+Parameters: ignored_definitions (array of string; default [ "//" ])
+
 Fixable: Most violations can be fixed by tooling
 
 Links and images in Markdown can provide the link destination or image source
@@ -2092,8 +2094,17 @@ unnecessary:
    used and the others can be deleted.
 
 This rule considers a reference definition to be used if any link or image
-reference has the corresponding label. "Full", "collapsed", and "shortcut"
+reference has the corresponding label. The "full", "collapsed", and "shortcut"
 formats are all supported.
+
+If there are reference definitions that are deliberately unreferenced, they can
+be ignored by setting the `ignored_definitions` parameter. The default value of
+this parameter ignores the following convention for adding non-HTML comments to
+Markdown:
+
+```md
+[//]: # (This behaves like a comment)
+```
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {

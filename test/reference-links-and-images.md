@@ -166,6 +166,12 @@ https://example.com/multi-line-label
 [unique6]: https://example.com/unique6
 [unique7]: https://example.com/unique7
 
+## Ignored Labels
+
+[//]: # (This is a technique for putting comments in Markdown)
+
+[//]: <> (Here is another variant)
+
 ## Invalid Labels
 
 Duplicate:

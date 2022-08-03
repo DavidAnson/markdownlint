@@ -463,6 +463,18 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD053":
+      scheme.properties = {
+        "ignored_definitions": {
+          "description": "Ignored definitions",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [ "//" ]
+        }
+      };
+      break;
     default:
       custom = false;
       break;
