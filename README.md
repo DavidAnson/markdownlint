@@ -1021,6 +1021,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
            browser script to use ES2015, simplify JSON schema, address remaining CodeQL issues,
            improve performance, update dependencies.
   * 0.26.1 - Improve MD051.
+  * 0.26.2 - Improve MD037/MD051/MD053.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
