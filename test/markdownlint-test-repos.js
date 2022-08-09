@@ -148,24 +148,13 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
       rootDir,
       "docs/CNAME",
       "docs/**/*.css",
-      "docs/**/*.png"
+      "docs/**/*.png",
+      "docs/**/*.py",
+      "docs/**/*.svg"
     )
   ];
   const configPath = join(rootDir, ".markdownlintrc");
-  const ignoreRes = [
-    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/about\/release-notes\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/dev-guide\/plugins\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/dev-guide\/themes\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/dev-guide\/translations\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/getting-started\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/configuration\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/customizing-your-theme\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/deploying-your-docs\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/installation\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /^test-repos\/mkdocs-mkdocs\/docs\/user-guide\/writing-your-docs\.md: \d+: MD053\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/mochajs/mocha", (t) => {
