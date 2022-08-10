@@ -917,7 +917,7 @@ serves as the title for the document. If this convention is in use, then there
 can not be more than one title for the document, and the entire document
 should be contained within this heading.
 
-<a name="md026"></a>
+`".,;:"` to allow headings that end with an exclamation point. `?` is
 
 ## MD026 - Trailing punctuation in heading
 
