@@ -234,9 +234,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [
-      /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/composite-formatting\.md: \d+: MD038\/.*$\r?\n?/gm
-    ];
+    const ignoreRes = [ /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/composite-formatting\.md: \d+: MD038\/.*$\r?\n?/gm ];
     return lintTestRepo(t, globPatterns, configPath, ignoreRes);
   });
 }
