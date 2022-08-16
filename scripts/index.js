@@ -2,7 +2,7 @@
 
 "use strict";
 
-const fs = require("fs").promises;
+const fs = require("node:fs").promises;
 
 const [ command, ...args ] = process.argv.slice(2);
 

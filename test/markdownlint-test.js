@@ -2,8 +2,8 @@
 
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const jsYaml = require("js-yaml");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");

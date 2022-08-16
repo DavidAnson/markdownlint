@@ -989,7 +989,7 @@ module.exports.applyFix = applyFix;
  * @returns {string} Corrected content.
  */
 function applyFixes(input, errors) {
-  const lineEnding = getPreferredLineEnding(input, require("os"));
+  const lineEnding = getPreferredLineEnding(input, require("node:os"));
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
   let fixInfos = errors
