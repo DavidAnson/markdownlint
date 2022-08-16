@@ -953,7 +953,7 @@ module.exports.applyFix = applyFix;
  * @returns {string} Corrected content.
  */
 function applyFixes(input, errors) {
-    const lineEnding = getPreferredLineEnding(input, __webpack_require__(/*! os */ "?591e"));
+    const lineEnding = getPreferredLineEnding(input, __webpack_require__(/*! node:os */ "?0176"));
     const lines = input.split(newLineRe);
     // Normalize fixInfo objects
     let fixInfos = errors
@@ -1099,50 +1099,50 @@ module.exports = markdownit;
 
 /***/ }),
 
-/***/ "?591e":
-/*!********************!*\
-  !*** os (ignored) ***!
-  \********************/
+/***/ "?0176":
+/*!*************************!*\
+  !*** node:os (ignored) ***!
+  \*************************/
 /***/ (() => {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ "?ec0a":
-/*!********************!*\
-  !*** fs (ignored) ***!
-  \********************/
+/***/ "?d0ee":
+/*!*************************!*\
+  !*** node:fs (ignored) ***!
+  \*************************/
 /***/ (() => {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ "?a32b":
-/*!********************!*\
-  !*** os (ignored) ***!
-  \********************/
+/***/ "?e6c4":
+/*!*************************!*\
+  !*** node:os (ignored) ***!
+  \*************************/
 /***/ (() => {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ "?b85c":
-/*!**********************!*\
-  !*** path (ignored) ***!
-  \**********************/
+/***/ "?9a52":
+/*!***************************!*\
+  !*** node:path (ignored) ***!
+  \***************************/
 /***/ (() => {
 
 /* (ignored) */
 
 /***/ }),
 
-/***/ "?96a2":
-/*!**********************!*\
-  !*** util (ignored) ***!
-  \**********************/
+/***/ "?39e5":
+/*!***************************!*\
+  !*** node:util (ignored) ***!
+  \***************************/
 /***/ (() => {
 
 /* (ignored) */
@@ -1204,8 +1204,8 @@ module.exports.version = "0.26.2";
 "use strict";
 // @ts-check
 
-const path = __webpack_require__(/*! path */ "?b85c");
-const { promisify } = __webpack_require__(/*! util */ "?96a2");
+const path = __webpack_require__(/*! node:path */ "?9a52");
+const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
 const markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
 const { deprecatedRuleNames } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
@@ -1991,7 +1991,7 @@ function lintInput(options, synchronous, callback) {
         // @ts-ignore
         md.use(...plugin);
     }
-    const fs = options.fs || __webpack_require__(/*! fs */ "?ec0a");
+    const fs = options.fs || __webpack_require__(/*! node:fs */ "?d0ee");
     const results = newResults(ruleList);
     let done = false;
     let concurrency = 0;
@@ -2167,10 +2167,10 @@ function readConfig(file, parsers, fs, callback) {
         }
     }
     if (!fs) {
-        fs = __webpack_require__(/*! fs */ "?ec0a");
+        fs = __webpack_require__(/*! node:fs */ "?d0ee");
     }
     // Read file
-    const os = __webpack_require__(/*! os */ "?a32b");
+    const os = __webpack_require__(/*! node:os */ "?e6c4");
     file = helpers.expandTildePath(file, os);
     fs.readFile(file, "utf8", (err, content) => {
         if (err) {
@@ -2227,10 +2227,10 @@ function readConfigPromise(file, parsers, fs) {
  */
 function readConfigSync(file, parsers, fs) {
     if (!fs) {
-        fs = __webpack_require__(/*! fs */ "?ec0a");
+        fs = __webpack_require__(/*! node:fs */ "?d0ee");
     }
     // Read file
-    const os = __webpack_require__(/*! os */ "?a32b");
+    const os = __webpack_require__(/*! node:os */ "?e6c4");
     file = helpers.expandTildePath(file, os);
     const content = fs.readFileSync(file, "utf8");
     // Try to parse file

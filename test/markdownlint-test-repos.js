@@ -2,9 +2,9 @@
 
 "use strict";
 
-const { existsSync } = require("fs");
-const { join } = require("path").posix;
-const { promisify } = require("util");
+const { existsSync } = require("node:fs");
+const { join } = require("node:path").posix;
+const { promisify } = require("node:util");
 const jsYaml = require("js-yaml");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");

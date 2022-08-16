@@ -3,6 +3,7 @@
 "use strict";
 
 const webpack = require("webpack");
+const nodeModulePrefixRe = /^node:/u;
 
 function config(options) {
   const { entry, filename, mode, packageJson } = options;
@@ -37,6 +38,13 @@ function config(options) {
       "path": __dirname
     },
     "plugins": [
+      new webpack.NormalModuleReplacementPlugin(
+        nodeModulePrefixRe,
+        (resource) => {
+          const module = resource.request.replace(nodeModulePrefixRe, "");
+          resource.request = module;
+        }
+      ),
       new webpack.BannerPlugin({
         "banner": `${name} ${version} ${homepage} @license ${license}`
       })

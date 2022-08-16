@@ -2,8 +2,8 @@
 
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const configSchema = require("./markdownlint-config-schema.json");
 
 const configExample = {};
