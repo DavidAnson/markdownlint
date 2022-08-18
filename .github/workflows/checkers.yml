@@ -1,4 +1,4 @@
-name: SpellCheck
+name: Checkers
 
 on:
   pull_request:
@@ -8,6 +8,16 @@ on:
   workflow_dispatch:
 
 jobs:
+
+  linkcheck:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - uses: JustinBeckwith/linkinator-action@v1.10.2
+      with:
+        linksToSkip: '^https://github.com/.*/search\?q= ^https://opensource.org/'
+        paths: '*.md doc/*.md helpers/*.md'
+
   spellcheck:
     runs-on: ubuntu-latest
     steps:
