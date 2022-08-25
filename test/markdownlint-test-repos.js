@@ -179,8 +179,7 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [ /^test-repos\/pi-hole-docs\/docs\/guides\/dns\/cloudflared\.md: \d+: MD053\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
