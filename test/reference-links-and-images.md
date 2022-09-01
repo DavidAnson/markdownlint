@@ -102,17 +102,19 @@ Escaped right label: [text][wrong\]
 
 ## Valid Images
 
-Full style: ![text][image]
+Full style: ![text][image0]
 
-Collapsed style: ![image][]
+Collapsed style: ![image1][]
 
-Shortcut style: ![image]
+Shortcut style: ![image2]
 
-Image in link: [![text][image]][label] [![image][]][label] [![image]][label]
+Image in link: [![text][image3]](link) [![image4][]](link) [![image5]](link)
 
-Wrapped in brackets: [![text][unique6]]
+Image in shortcut link: [![text][image6]][unique6] [![image7][]][unique7] [![image8]][unique8]
 
-Embedded [in ![text][unique7] brackets]
+Wrapped in brackets: [![text][unique9]]
+
+Embedded [in ![text][unique10] brackets]
 
 ## Invalid Images
 
@@ -143,6 +145,15 @@ Missing[^2]
 [label]: https://example.com/label
 [ label with  spaces ]: https://example.com/label-with-spaces
 [image]:https://example.com/image
+[image0]: https://example.com/image0
+[image1]: https://example.com/image1
+[image2]: https://example.com/image2
+[image3]: https://example.com/image3
+[image4]: https://example.com/image4
+[image5]: https://example.com/image5
+[image6]: https://example.com/image6
+[image7]: https://example.com/image7
+[image8]: https://example.com/image8
 [`code`]: https://example.com/code
 [^1]: https://example.com/footnote
 [multi line full text]: https://example.com/multi-line-full-text
@@ -165,6 +176,9 @@ https://example.com/multi-line-label
 [unique5]: https://example.com/unique5
 [unique6]: https://example.com/unique6
 [unique7]: https://example.com/unique7
+[unique8]: https://example.com/unique8
+[unique9]: https://example.com/unique9
+[unique10]: https://example.com/unique10
 
 ## Ignored Labels
 

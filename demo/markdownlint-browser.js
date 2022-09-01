@@ -56,7 +56,7 @@ const emphasisMarkersRe = /[_*]/g;
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
 // Regular expression for reference links (full, collapsed, and shortcut)
-const referenceLinkRe = /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
+const referenceLinkRe = /!?\\?\[((?:\[[^\]\0]*]|[^[\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
