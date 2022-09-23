@@ -258,7 +258,8 @@ for (const rule of rules) {
     case "MD026":
       scheme.properties = {
         "punctuation": {
-          "description": "Punctuation characters",
+          "description":
+            "Punctuation characters not allowed at end of headings",
           "type": "string",
           "default": ".,;:!。，；：！"
         }
