@@ -456,7 +456,7 @@
       "default": true,
       "properties": {
         "punctuation": {
-          "description": "Punctuation characters",
+          "description": "Punctuation characters not allowed at end of headings",
           "type": "string",
           "default": ".,;:!。，；：！"
         }
