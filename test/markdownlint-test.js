@@ -430,7 +430,7 @@ test("enableTagMixedCase", (t) => new Promise((resolve) => {
 }));
 
 test("styleFiles", (t) => new Promise((resolve) => {
-  t.plan(4);
+  t.plan(5);
   fs.readdir("./style", function readdir(err, files) {
     t.falsy(err);
     for (const file of files) {
