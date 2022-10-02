@@ -1,8 +1,12 @@
 # Using markdownlint with Prettier
 
-[`Prettier`](https://prettier.io) is a popular code formatter. For the most part,
-it works seamlessly with `markdownlint`. Special situations are documented
-below.
+[`Prettier`](https://prettier.io) is a popular code formatter.
+For the most part, Prettier works seamlessly with `markdownlint`.
+
+You can extend the `markdownlint/style/prettier.json` style to disable all
+markdownlint rules that overlap with Prettier.
+
+Special situations when not extending `prettier.json` are documented below.
 
 ## List item indentation
 

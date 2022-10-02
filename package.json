@@ -9,6 +9,7 @@
     "./helpers": "./helpers/helpers.js",
     "./style/all": "./style/all.json",
     "./style/cirosantilli": "./style/cirosantilli.json",
+    "./style/prettier": "./style/prettier.json",
     "./style/relaxed": "./style/relaxed.json"
   },
   "types": "./lib/markdownlint.d.ts",
