@@ -2,7 +2,7 @@
 
 "use strict";
 
-const fs = require("fs").promises;
+const fs = require("node:fs").promises;
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 const customRules = require("./rules/rules.js");

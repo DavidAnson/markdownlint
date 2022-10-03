@@ -2,8 +2,8 @@
 
 "use strict";
 
-const os = require("os");
-const path = require("path");
+const os = require("node:os");
+const path = require("node:path");
 const test = require("ava").default;
 const helpers = require("../helpers");
 

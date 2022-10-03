@@ -36,7 +36,7 @@ module.exports.blockquotePrefixRe = blockquotePrefixRe;
 
 // Regular expression for reference links (full, collapsed, and shortcut)
 const referenceLinkRe =
-  /!?\\?\[((?:\[[^\]\0]*]|[^\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
+  /!?\\?\[((?:\[[^\]\0]*]|[^[\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
 
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
@@ -989,7 +989,7 @@ module.exports.applyFix = applyFix;
  * @returns {string} Corrected content.
  */
 function applyFixes(input, errors) {
-  const lineEnding = getPreferredLineEnding(input, require("os"));
+  const lineEnding = getPreferredLineEnding(input, require("node:os"));
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
   let fixInfos = errors

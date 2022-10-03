@@ -2,9 +2,9 @@
 
 "use strict";
 
-const { existsSync } = require("fs");
-const { join } = require("path").posix;
-const { promisify } = require("util");
+const { existsSync } = require("node:fs");
+const { join } = require("node:path").posix;
+const { promisify } = require("node:util");
 const jsYaml = require("js-yaml");
 const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
@@ -179,11 +179,7 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [
-    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
-    /^test-repos\/pi-hole-docs\/docs\/guides\/dns\/cloudflared\.md: \d+: MD053\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
@@ -234,8 +230,7 @@ if (existsSync(dotnetDocsDir)) {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [ /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/composite-formatting\.md: \d+: MD038\/.*$\r?\n?/gm ];
-    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+    return lintTestRepo(t, globPatterns, configPath);
   });
 }
 

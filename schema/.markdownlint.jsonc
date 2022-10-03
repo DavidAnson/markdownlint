@@ -139,7 +139,7 @@
 
   // MD026/no-trailing-punctuation - Trailing punctuation in heading
   "MD026": {
-    // Punctuation characters
+    // Punctuation characters not allowed at end of headings
     "punctuation": ".,;:!。，；：！"
   },
 

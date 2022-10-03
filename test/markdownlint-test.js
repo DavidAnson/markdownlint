@@ -2,8 +2,8 @@
 
 "use strict";
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 const jsYaml = require("js-yaml");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
@@ -12,7 +12,8 @@ const pluginSup = require("markdown-it-sup");
 const pluginTexMath = require("markdown-it-texmath");
 const test = require("ava").default;
 const tv4 = require("tv4");
-const { homepage, version } = require("../package.json");
+const { "exports": packageExports, homepage, version } =
+  require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const constants = require("../lib/constants");
 const rules = require("../lib/rules");
@@ -430,11 +431,14 @@ test("enableTagMixedCase", (t) => new Promise((resolve) => {
 }));
 
 test("styleFiles", (t) => new Promise((resolve) => {
-  t.plan(5);
+  t.plan(8);
   fs.readdir("./style", function readdir(err, files) {
     t.falsy(err);
     for (const file of files) {
       t.truthy(require(path.join("../style", file)), "Unable to load/parse.");
+      const exportValue = `./style/${file}`;
+      const exportKey = exportValue.replace(/\.json$/, "");
+      t.is(packageExports[exportKey], exportValue);
     }
     resolve();
   });
@@ -1402,6 +1406,8 @@ test("getVersion", (t) => {
 
 test("constants", (t) => {
   t.plan(2);
+  // @ts-ignore
   t.is(constants.homepage, homepage);
+  // @ts-ignore
   t.is(constants.version, version);
 });

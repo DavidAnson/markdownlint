@@ -127,7 +127,7 @@ MD025:
 
 # MD026/no-trailing-punctuation - Trailing punctuation in heading
 MD026:
-  # Punctuation characters
+  # Punctuation characters not allowed at end of headings
   punctuation: ".,;:!。，；：！"
 
 # MD027/no-multiple-space-blockquote - Multiple spaces after blockquote symbol

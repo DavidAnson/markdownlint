@@ -354,13 +354,21 @@ configuration object with all properties set to the default value.
 Sets of rules (known as a "style") can be stored separately and loaded
 as [JSON](https://en.wikipedia.org/wiki/JSON).
 
-Example:
+Example of referencing a built-in style from JavaScript:
 
 ```js
 const options = {
   "files": [ "..." ],
   "config": require("style/relaxed.json")
 };
+```
+
+Example doing so from `.markdownlint.json` via `extends` (more on this below):
+
+```json
+{
+  "extends": "markdownlint/style/relaxed"
+}
 ```
 
 See the [style](style) directory for more samples.
