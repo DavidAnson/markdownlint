@@ -205,7 +205,8 @@
     "unicorn/prefer-string-replace-all": "off",
     "unicorn/prefer-string-slice": "off",
     "unicorn/prefer-switch": "off",
-    "unicorn/prevent-abbreviations": "off"
+    "unicorn/prevent-abbreviations": "off",
+    "unicorn/switch-case-braces": ["error", "avoid"]
   },
   "settings": {
     "jsdoc": {
