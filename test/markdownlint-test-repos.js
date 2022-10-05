@@ -26,7 +26,10 @@ async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
   const { globby } = await import("globby");
   // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { "default": stripJsonComments } = await import("strip-json-comments");
-  const jsoncParse = (json) => JSON.parse(stripJsonComments(json));
+  const jsoncParse = (json) => {
+    const config = JSON.parse(stripJsonComments(json));
+    return config.config || config;
+  };
   const yamlParse = (yaml) => jsYaml.load(yaml);
   return Promise.all([
     globby(globPatterns),
@@ -226,7 +229,7 @@ if (existsSync(dotnetDocsDir)) {
   test("https://github.com/dotnet/docs", (t) => {
     const rootDir = dotnetDocsDir;
     const globPatterns = [ join(rootDir, "**/*.md") ];
-    const configPath = join(rootDir, ".markdownlint.json");
+    const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
     return lintTestRepo(t, globPatterns, configPath);
   });
 }
