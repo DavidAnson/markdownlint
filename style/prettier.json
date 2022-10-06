@@ -1,5 +1,6 @@
 {
   "comment": "Disables rules that may conflict with Prettier",
+
   "blanks-around-fences": false,
   "blanks-around-headings": false,
   "blanks-around-lists": false,
