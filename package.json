@@ -66,7 +66,7 @@
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-jsdoc": "39.3.6",
     "eslint-plugin-node": "11.1.0",
-    "eslint-plugin-unicorn": "44.0.1",
+    "eslint-plugin-unicorn": "44.0.2",
     "globby": "13.1.2",
     "js-yaml": "4.1.0",
     "markdown-it-for-inline": "0.1.1",
