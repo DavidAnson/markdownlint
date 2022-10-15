@@ -2,9 +2,9 @@
 
 Text
 
-<em>Block block</em>
+<em>Block block {MD033}</em>
 
-Text <em>inline inline</em> text
+Text <em>inline inline {MD033}</em> text
 
 Text
 
@@ -15,50 +15,50 @@ Text <strong>inline inline</strong> text
 Text
 
 <p>
-Block
-block <em>block</em> block
+Block  {MD033:17}
+block <em>block {MD033}</em> block
 block
 block <strong>block</strong> block
 block
-block <em>block</em> block <strong>block</strong> block
-block <strong>block</strong> block <em>block</em> block
+block <em>block</em> block <strong>block</strong> block {MD033}
+block <strong>block</strong> block <em>block</em> block {MD033}
 </p>
 
 Text
 
-<strong><em>Block</em> block</strong>
+<strong><em>Block</em> block {MD033}</strong>
 
-Text <strong><em>inline</em> inline</strong> text
-
-Text
-
-<em><strong>Block</strong> block</em>
-
-Text <em><strong>inline</strong> inline</em> text
+Text <strong><em>inline</em> inline {MD033}</strong> text
 
 Text
 
-Text <em>inline</em> text <strong>inline</strong> text <em>inline</em> text
+<em><strong>Block</strong> block {MD033}</em>
 
-Text <strong>inline</strong> text <em>inline</em> text <strong>inline</strong> text
+Text <em><strong>inline</strong> inline {MD033}</em> text
+
+Text
+
+Text <em>inline</em> text <strong>inline</strong> text <em>inline</em> text {MD033}
+
+Text <strong>inline</strong> text <em>inline</em> text <strong>inline</strong> {MD033}
 
 Text
 
 \<not>Block block\</not>
 
-\\<problem>Block block\\</problem>
+\\<problem>Block block {MD033}\\</problem>
 
 <not\>Block block</not\>
 
 Text \<not>inline inline\</not> text
 
-Text \\<problem>inline inline\\</problem> text
+Text \\<problem>inline inline {MD033}\\</problem> text
 
 Text <not\>inline inline</not\> text
 
 Text
 
-> Text <em>inline inline</em> text
+> Text <em>inline inline {MD033}</em> text
 > text <strong>inline inline</strong> text
 
 Text
@@ -81,14 +81,14 @@ Text ``<em>`` text
 
 Text `<em>` text ``<em>`` text ```<em>``` text
 
-Text `<em>` text <em>inline</em> text
+Text `<em>` text <em>inline {MD033}</em> text
 
 Text ``text <em> text`` text
 
 Text
 
-Text <a href="#anchor">inline</a> text
-text <img src="src.png"/> text
+Text <a href="#anchor">inline {MD033}</a> text
+text <img src="src.png"/> text {MD033}
 
 Text
 
@@ -98,7 +98,7 @@ Another email autolink: <first+last@ex.exa-mple.com>.
 
 Text
 
-<foo-bar-baz> is an HTML element.
+<foo-bar-baz> is an HTML element. {MD033}
 
 But <foo.bar.baz> is not an autolink or HTML element.
 And neither is <foo_bar>.

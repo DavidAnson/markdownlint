@@ -51,5 +51,3 @@
   ```
 
 - item
-
-Placeholder issue {MD047}

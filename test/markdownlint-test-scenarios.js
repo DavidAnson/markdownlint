@@ -56,18 +56,16 @@ function createTestForFile(file) {
             indices.push(match[2] ? Number.parseInt(match[2], 10) : index + 1);
           }
         }
-        if (Object.keys(expected).length > 0) {
-          const actual = {};
-          for (const error of errors) {
-            const rule = error.ruleNames[0];
-            // eslint-disable-next-line no-multi-assign
-            const indices = actual[rule] = actual[rule] || [];
-            if (indices[indices.length - 1] !== error.lineNumber) {
-              indices.push(error.lineNumber);
-            }
+        const actual = {};
+        for (const error of errors) {
+          const rule = error.ruleNames[0];
+          // eslint-disable-next-line no-multi-assign
+          const indices = actual[rule] = actual[rule] || [];
+          if (indices[indices.length - 1] !== error.lineNumber) {
+            indices.push(error.lineNumber);
           }
-          t.deepEqual(actual, expected, "Too few or too many issues found.");
         }
+        t.deepEqual(actual, expected, "Too few or too many issues found.");
         // Create snapshot
         const fixed = helpers.applyFixes(content, errors)
           .replace(/\r\n/g, "\n");

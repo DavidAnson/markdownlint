@@ -1,33 +1,33 @@
 # Detailed Results Proper Names
 
-Text Markdownlint text.
+Text Markdownlint text. {MD044}
 
-Text node.JS text.
+Text node.JS text. {MD044}
 
-Text .net text.
+Text .net text. {MD044}
 
-Text example.net text.
+Text example.net text. {MD044}
 
-Text "Markdownlint" text.
+Text "Markdownlint" text. {MD044}
 
-Text "node.JS" text.
+Text "node.JS" text. {MD044}
 
-Text ".net" text.
+Text ".net" text. {MD044}
 
-Text "example.net" text.
+Text "example.net" text. {MD044}
 
-Text **Markdownlint** text.
+Text **Markdownlint** text. {MD044}
 
-Text **node.JS** text.
+Text **node.JS** text. {MD044}
 
-Text **.net** text.
+Text **.net** text. {MD044}
 
-Text **example.net** text.
+Text **example.net** text. {MD044}
 
-Markdownlint
+Markdownlint {MD044}
 
-node.JS
+node.JS {MD044}
 
-.net
+.net {MD044}
 
-example.net
+example.net {MD044}

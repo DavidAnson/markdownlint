@@ -5,7 +5,7 @@
 
 
 Text
-## Banana
+## Banana {MD022}
 
 Text
 ## Cherry
@@ -18,7 +18,7 @@ Text
 Text
 
 ---
-Elderberry
-----------
+Elderberry {MD022}
+------------------
 Text
 ## Fig

@@ -1,3 +1,3 @@
-													text
-text		 and text 2
-texts with trailing spaces			
+													text {MD010}
+text		 and text 2 {MD010}
+texts with trailing spaces{MD010}			
