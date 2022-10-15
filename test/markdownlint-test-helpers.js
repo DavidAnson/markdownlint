@@ -57,17 +57,17 @@ test("clearHtmlCommentTextValid", (t) => {
     "<!-->",
     "<!--->",
     "<!---->",
-    "<!--.........-->",
-    " <!--.........-->",
-    "  <!--.........-->",
-    "<!--......-->",
+    "<!-- ....... -->",
+    " <!-- ....... -->",
+    "  <!-- ....... -->",
+    "<!-- .... -->",
     "<!--....-->",
-    "<!--.-->",
-    "<!--....-->",
+    "<!-- -->",
+    "<!-- .. -->",
     "<!---->",
     "<!--.....-->",
     "<!--.........-->",
-    "<!--..-->",
+    "<!--. -->",
     "<!--",
     "-->",
     "<!--",
@@ -79,7 +79,7 @@ test("clearHtmlCommentTextValid", (t) => {
     "-->",
     "<!--",
     "",
-    "......",
+    " .....",
     "",
     "-->",
     "<!--....",
@@ -93,7 +93,7 @@ test("clearHtmlCommentTextValid", (t) => {
     "-->text",
     "<!--....--><!--....-->",
     "text<!--....-->text<!--....-->text",
-    "text<!--..............-->text",
+    "text<!--.... . .... ..-->text",
     "<!--",
     "text"
   ];
@@ -118,7 +118,7 @@ test("clearHtmlCommentTextInvalid", (t) => {
     "<!--->-->",
     "<!--->t-->",
     "<!---->t-->",
-    "    <!-- indented code block -->"
+    "    <!-- ........ .... ..... -->"
   ];
   const actual = helpers.clearHtmlCommentText(invalidComments.join("\n"));
   const expected = invalidComments.join("\n");
@@ -134,8 +134,8 @@ test("clearHtmlCommentTextNonGreedy", (t) => {
     "<!----> -->"
   ];
   const nonGreedyResult = [
-    "<!--......--> -->",
-    "<!--......--> -->",
+    "<!-- .... --> -->",
+    "<!--..... --> -->",
     "<!--.--> -->",
     "<!----> -->"
   ];
@@ -155,9 +155,9 @@ test("clearHtmlCommentTextEmbedded", (t) => {
   ];
   const embeddedResult = [
     "text<!--....-->text",
-    "<!--............................-->",
+    "<!-- .................... ..... -->",
     "text<!--....-->text",
-    "text<!--............................-->text",
+    "text<!-- .................... ..... -->text",
     "text<!--....-->text"
   ];
   const actual = helpers.clearHtmlCommentText(embeddedComments.join("\n"));

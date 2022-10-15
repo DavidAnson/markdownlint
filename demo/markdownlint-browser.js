@@ -154,6 +154,12 @@ module.exports.includesSorted = function includesSorted(array, element) {
 // https://spec.commonmark.org/0.29/#html-comment
 const htmlCommentBegin = "<!--";
 const htmlCommentEnd = "-->";
+const safeCommentCharacter = ".";
+const startsWithPipeRe = /^ *\|/;
+const notCrLfRe = /[^\r\n]/g;
+const notSpaceCrLfRe = /[^ \r\n]/g;
+const trailingSpaceRe = / +[\r\n]/g;
+const replaceTrailingSpace = (s) => s.replace(notCrLfRe, safeCommentCharacter);
 module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
     let i = 0;
     while ((i = text.indexOf(htmlCommentBegin, i)) !== -1) {
@@ -164,24 +170,27 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
         }
         // If the comment has content...
         if (j > i + htmlCommentBegin.length) {
-            let k = i - 1;
-            while (text[k] === " ") {
-                k--;
-            }
-            // If comment is not within an indented code block...
-            if (k >= i - 4) {
-                const content = text.slice(i + htmlCommentBegin.length, j);
-                const isBlock = (k < 0) || (text[k] === "\n");
-                const isValid = isBlock ||
-                    (!content.startsWith(">") && !content.startsWith("->") &&
-                        !content.endsWith("-") && !content.includes("--"));
-                // If a valid block/inline comment...
-                if (isValid) {
-                    text =
-                        text.slice(0, i + htmlCommentBegin.length) +
-                            content.replace(/[^\r\n]/g, ".") +
-                            text.slice(j);
-                }
+            const content = text.slice(i + htmlCommentBegin.length, j);
+            const lastLf = text.lastIndexOf("\n", i) + 1;
+            const preText = text.slice(lastLf, i);
+            const isBlock = preText.trim().length === 0;
+            const couldBeTable = startsWithPipeRe.test(preText);
+            const spansTableCells = couldBeTable && content.includes("\n");
+            const isValid = isBlock ||
+                !(spansTableCells ||
+                    content.startsWith(">") ||
+                    content.startsWith("->") ||
+                    content.endsWith("-") ||
+                    content.includes("--"));
+            // If a valid block/inline comment...
+            if (isValid) {
+                const clearedContent = content
+                    .replace(notSpaceCrLfRe, safeCommentCharacter)
+                    .replace(trailingSpaceRe, replaceTrailingSpace);
+                text =
+                    text.slice(0, i + htmlCommentBegin.length) +
+                        clearedContent +
+                        text.slice(j);
             }
         }
         i = j + htmlCommentEnd.length;
