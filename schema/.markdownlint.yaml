@@ -188,7 +188,9 @@ MD038: true
 MD039: true
 
 # MD040/fenced-code-language - Fenced code blocks should have a language specified
-MD040: true
+MD040:
+  # List of languages
+  allow_list: null
 
 # MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading
 MD041:
