@@ -921,7 +921,7 @@ test("readme", (t) => new Promise((resolve) => {
 }));
 
 test("rules", (t) => new Promise((resolve) => {
-  t.plan(374);
+  t.plan(375);
   fs.readFile("doc/Rules.md", "utf8",
     (err, contents) => {
       t.falsy(err);
