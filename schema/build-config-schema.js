@@ -351,14 +351,11 @@ for (const rule of rules) {
       scheme.properties = {
         "allowed_languages": {
           "description": "List of languages",
-          "type": [
-            "array",
-            "null"
-          ],
+          "type": "array",
           "items": {
             "type": "string"
           },
-          "default": null
+          "default": []
         }
       };
       break;
