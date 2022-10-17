@@ -1,5 +1,0 @@
-{
-  "default": true,
-  "MD040": {
-    "allow_list": ["js", "scss"]
-  }}

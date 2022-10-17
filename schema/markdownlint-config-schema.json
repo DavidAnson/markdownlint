@@ -675,7 +675,7 @@
       ],
       "default": true,
       "properties": {
-        "allow_list": {
+        "allowed_languages": {
           "description": "List of languages",
           "type": [
             "array",

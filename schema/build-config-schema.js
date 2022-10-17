@@ -349,7 +349,7 @@ for (const rule of rules) {
       break;
     case "MD040":
       scheme.properties = {
-        "allow_list": {
+        "allowed_languages": {
           "description": "List of languages",
           "type": [
             "array",
