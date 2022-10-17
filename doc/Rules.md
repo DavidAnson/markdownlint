@@ -1571,7 +1571,7 @@ Tags: code, language
 
 Aliases: fenced-code-language
 
-Parameters: allowed_languages (array of string; default `[]`)
+Parameters: allowed_languages (array of string; default [])
 
 This rule is triggered when fenced code blocks are used, but a language isn't
 specified:
