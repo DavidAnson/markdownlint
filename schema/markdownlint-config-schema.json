@@ -669,8 +669,22 @@
     },
     "MD040": {
       "description": "MD040/fenced-code-language - Fenced code blocks should have a language specified",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "allowed_languages": {
+          "description": "List of languages",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      },
+      "additionalProperties": false
     },
     "fenced-code-language": {
       "$ref": "#/properties/MD040"

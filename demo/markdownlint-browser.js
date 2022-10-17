@@ -4152,15 +4152,24 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 module.exports = {
     "names": ["MD040", "fenced-code-language"],
     "description": "Fenced code blocks should have a language specified",
     "tags": ["code", "language"],
     "function": function MD040(params, onError) {
+        let allowed = params.config.allowed_languages;
+        allowed = Array.isArray(allowed) ?
+            allowed.map((lang) => lang.toLowerCase()) :
+            [];
         filterTokens(params, "fence", function forToken(token) {
-            if (!token.info.trim()) {
+            const lang = token.info.trim();
+            if (lang === "") {
                 addErrorContext(onError, token.lineNumber, token.line);
+            }
+            else if (allowed.length > 0 &&
+                !allowed.includes(lang.toLowerCase())) {
+                addError(onError, token.lineNumber, `"${lang}" is not allowed`);
             }
         });
     }

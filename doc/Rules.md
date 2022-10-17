@@ -1571,6 +1571,8 @@ Tags: code, language
 
 Aliases: fenced-code-language
 
+Parameters: allowed_languages (array of string; default [])
+
 This rule is triggered when fenced code blocks are used, but a language isn't
 specified:
 
@@ -1597,6 +1599,9 @@ To display a code block without syntax highlighting, use:
 Plain text in a code block
 ```
 ````
+
+You can configure the `allowed_languages` parameter to specify a list of
+languages code blocks could use. The default value is `[]` which means any language specifier is valid.
 
 Rationale: Specifying a language improves content rendering by using the
 correct syntax highlighting for code. More information:

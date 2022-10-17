@@ -347,6 +347,18 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD040":
+      scheme.properties = {
+        "allowed_languages": {
+          "description": "List of languages",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      };
+      break;
     case "MD025":
     case "MD041":
       scheme.properties = {
