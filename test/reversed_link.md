@@ -72,6 +72,18 @@ text [link](destination)[link](destination)[link](destination) text
 
 text (reversed)[link] text (reversed)[link] text {MD011}
 
+## Nested Parens
+
+Text (text `func()[index]`) text
+
+Text (text(reversed)[link] text {MD011}
+
+## Empty Content
+
+Text ()[text] text
+
+Text (text()[text] text
+
 <!-- markdownlint-configure-file {
   "code-block-style": false,
   "line-length": false,
