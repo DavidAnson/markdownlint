@@ -2751,7 +2751,7 @@ module.exports = {
 
 const { addError, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const reversedLinkRe = /(^|[^\\])\(([^)]+)\)\[([^\]^][^\]]*)](?!\()/g;
+const reversedLinkRe = /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)](?!\()/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
     "description": "Reversed link syntax",
@@ -2768,7 +2768,7 @@ module.exports = {
                     if (!linkText.endsWith("\\") &&
                         !linkDestination.endsWith("\\") &&
                         !withinAnyRange(exclusions, lineIndex, index, length)) {
-                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), null, [index + 1, length], {
+                        addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), undefined, [index + 1, length], {
                             "editColumn": index + 1,
                             "deleteCount": length,
                             "insertText": `[${linkText}](${linkDestination})`
