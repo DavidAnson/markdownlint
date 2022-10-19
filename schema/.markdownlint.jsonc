@@ -228,7 +228,9 @@
     // List of headings
     "headings": [],
     // List of headings
-    "headers": []
+    "headers": [],
+    // Match case of headings
+    "match_case": false
   },
 
   // MD044/proper-names - Proper names should have the correct capitalization

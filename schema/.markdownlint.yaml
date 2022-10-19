@@ -208,6 +208,8 @@ MD043:
   headings: []
   # List of headings
   headers: []
+  # Match case of headings
+  match_case: false
 
 # MD044/proper-names - Proper names should have the correct capitalization
 MD044:

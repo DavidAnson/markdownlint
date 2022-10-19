@@ -1696,7 +1696,7 @@ Tags: headings, headers
 
 Aliases: required-headings, required-headers
 
-Parameters: headings, headers (array of string; default `null` for disabled)
+Parameters: headings, headers, match_case (array of string; default `null` for disabled, boolean; default false)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 

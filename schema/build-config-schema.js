@@ -395,6 +395,11 @@ for (const rule of rules) {
             "pattern": "^(\\*|\\+|#{1,6} .*)$"
           },
           "default": []
+        },
+        "match_case": {
+          "description": "Match case of headings",
+          "type": "boolean",
+          "default": false
         }
       };
       break;
