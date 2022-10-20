@@ -228,3 +228,11 @@ Not flagged due to ambiguity: [ignored]
 Unmatched [ in text
 
 Hidden reference: [hidden][] {MD052}
+
+## Link references inside reference definitions
+
+Text with a [^footnote] in it
+
+[^footnote]: Footnote with an [embedded-reference][] in it
+
+[embedded-reference]: https://example.com/embedded-reference

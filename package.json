@@ -69,6 +69,7 @@
     "eslint-plugin-unicorn": "44.0.2",
     "globby": "13.1.2",
     "js-yaml": "4.1.0",
+    "markdown-it-footnote": "3.0.3",
     "markdown-it-for-inline": "0.1.1",
     "markdown-it-sub": "1.0.0",
     "markdown-it-sup": "1.0.0",

@@ -836,7 +836,8 @@ function getReferenceLinkImageData(lineMetadata) {
         } else {
           definitions.set(label, lineIndex);
         }
-        exclusions.push([ 0, lineOffsets[lineIndex], line.length ]);
+        const labelLength = linkReferenceDefinitionMatch[0].length;
+        exclusions.push([ 0, lineOffsets[lineIndex], labelLength ]);
       }
     }
   });
