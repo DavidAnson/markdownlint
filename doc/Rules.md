@@ -1696,7 +1696,7 @@ Tags: headings, headers
 
 Aliases: required-headings, required-headers
 
-Parameters: headings, headers (array of string; default `null` for disabled)
+Parameters: headings, headers, match_case (array of string; default `null` for disabled, boolean; default false)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -1751,6 +1751,10 @@ problematic heading (otherwise, it outputs the last line number of the file).
 
 Note that while the `headings` parameter uses the "## Text" ATX heading style for
 simplicity, a file may use any supported heading style.
+
+By default, the case of headings in the document is not required to match that of
+`headings`. To require that case match exactly, set the `match_case` parameter to
+`true`.
 
 Rationale: Projects may wish to enforce a consistent document structure across
 a set of similar content.
