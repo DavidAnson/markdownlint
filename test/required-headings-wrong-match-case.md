@@ -1,9 +1,11 @@
 # Title
 
-## first heading {MD043}
+## First Heading
 
-## Second Heading
+## SECOND HEADING
+
+{MD043:5}
 
 ### Random heading
 
-## THIRD HEADING {MD043}
+## Third Heading
