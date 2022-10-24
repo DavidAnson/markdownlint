@@ -60,7 +60,7 @@
     "markdown-it": "13.0.1"
   },
   "devDependencies": {
-    "ava": "4.3.3",
+    "ava": "5.0.1",
     "c8": "7.12.0",
     "eslint": "8.25.0",
     "eslint-plugin-es": "4.1.0",
