@@ -62,7 +62,7 @@
   "devDependencies": {
     "ava": "4.3.3",
     "c8": "7.12.0",
-    "eslint": "8.25.0",
+    "eslint": "8.26.0",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-jsdoc": "39.3.14",
     "eslint-plugin-node": "11.1.0",
