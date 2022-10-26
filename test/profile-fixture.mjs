@@ -12,7 +12,9 @@ const strings = {
 
 const start = new Date();
 for (let i = 0; i < 250; i++) {
-  await markdownlint({strings});
+  // eslint-disable-next-line no-await-in-loop
+  await markdownlint({ strings });
 }
 const end = new Date();
+// eslint-disable-next-line no-console
 console.log(`Elapsed: ${end - start}`);

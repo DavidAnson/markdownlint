@@ -1081,7 +1081,6 @@ test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
 
 test("validateConfigExampleJson", async(t) => {
   t.plan(2);
-  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { "default": stripJsonComments } = await import("strip-json-comments");
   // Validate JSONC
   const fileJson = ".markdownlint.jsonc";
@@ -1357,7 +1356,6 @@ test("configParsersJSON", async(t) => {
 
 test("configParsersJSONC", async(t) => {
   t.plan(1);
-  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { "default": stripJsonComments } = await import("strip-json-comments");
   const options = {
     "strings": {
@@ -1401,7 +1399,6 @@ test("configParsersYAML", async(t) => {
 
 test("configParsersTOML", async(t) => {
   t.plan(1);
-  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { "default": stripJsonComments } = await import("strip-json-comments");
   const options = {
     "strings": {

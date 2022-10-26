@@ -12,7 +12,6 @@ const [ command, ...args ] = process.argv.slice(2);
     const [ src, dest ] = args;
     await fs.copyFile(src, dest);
   } else if (command === "delete") {
-    // eslint-disable-next-line node/no-unsupported-features/es-syntax
     const { globby } = await import("globby");
     await Promise.all(
       args.flatMap(

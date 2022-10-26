@@ -10,8 +10,8 @@ module.exports = {
   "tags": [ "test", "validate", "json" ],
   "asynchronous": true,
   "function": async(params, onError) => {
-    // eslint-disable-next-line max-len, node/no-unsupported-features/es-syntax
-    const { "default": stripJsonComments } = await import("strip-json-comments");
+    const { "default": stripJsonComments } =
+      await import("strip-json-comments");
     filterTokens(params, "fence", (fence) => {
       if (/jsonc?/i.test(fence.info)) {
         try {

@@ -6,6 +6,7 @@
   "extends": [
     "eslint:all",
     "plugin:jsdoc/recommended",
+    "plugin:n/recommended",
     "plugin:unicorn/all"
   ],
   "ignorePatterns": [
@@ -39,11 +40,21 @@
         "example/*.js"
       ],
       "rules": {
-        "node/no-extraneous-require": "off",
+        "n/no-extraneous-require": "off",
+        "n/no-missing-require": "off",
         "no-console": "off",
         "no-invalid-this": "off",
         "no-shadow": "off",
         "object-property-newline": "off"
+      }
+    },
+    {
+      "files": [
+        "**/*.mjs"
+      ],
+      "parserOptions": {
+        "ecmaVersion": 2022,
+        "sourceType": "module"
       }
     }
   ],
@@ -54,7 +65,7 @@
   "plugins": [
     "es",
     "jsdoc",
-    "node",
+    "n",
     "unicorn"
   ],
   "reportUnusedDisableDirectives": true,
@@ -101,6 +112,7 @@
     "prefer-named-capture-group": "off",
     "prefer-template": "off",
     "require-unicode-regexp": "off",
+    "sort-imports": "off",
     "sort-keys": "off",
     "space-before-function-paren": ["error", "never"],
     "vars-on-top": "off",
@@ -150,47 +162,43 @@
     "jsdoc/tag-lines": "error",
     "jsdoc/valid-types": "error",
 
-    "node/handle-callback-err": "error",
-    "node/no-callback-literal": "error",
-    "node/no-exports-assign": "error",
-    "node/no-extraneous-import": "error",
-    "node/no-extraneous-require": "error",
-    "node/no-missing-import": "error",
-    "node/no-missing-require": "off",
-    "node/no-new-require": "error",
-    "node/no-path-concat": "error",
-    "node/no-process-exit": "error",
-    "node/no-unpublished-bin": "error",
-    "node/no-unpublished-import": "error",
-    "node/no-unpublished-require": "error",
-    "node/no-unsupported-features/es-builtins": "error",
-    "node/no-unsupported-features/es-syntax": "error",
-    "node/no-unsupported-features/node-builtins": ["error", {
-      "ignores": [
-        "fs.promises"
-      ]
-    }],
-    "node/process-exit-as-throw": "error",
-    "node/shebang": "error",
-    "node/no-deprecated-api": "error",
-    "node/callback-return": "error",
-    "node/exports-style": "error",
-    "node/file-extension-in-import": "error",
-    "node/global-require": "off",
-    "node/no-mixed-requires": "error",
-    "node/no-process-env": "error",
-    "node/no-restricted-import": "error",
-    "node/no-restricted-require": "error",
-    "node/no-sync": "off",
-    "node/prefer-global/buffer": "error",
-    "node/prefer-global/console": "error",
-    "node/prefer-global/process": "error",
-    "node/prefer-global/text-decoder": "error",
-    "node/prefer-global/text-encoder": "error",
-    "node/prefer-global/url-search-params": "error",
-    "node/prefer-global/url": "error",
-    "node/prefer-promises/dns": "error",
-    "node/prefer-promises/fs": "off",
+    "n/handle-callback-err": "error",
+    "n/no-callback-literal": "error",
+    "n/no-exports-assign": "error",
+    "n/no-extraneous-import": "error",
+    "n/no-extraneous-require": "error",
+    "n/no-missing-import": "error",
+    "n/no-missing-require": "error",
+    "n/no-new-require": "error",
+    "n/no-path-concat": "error",
+    "n/no-process-exit": "error",
+    "n/no-unpublished-bin": "error",
+    "n/no-unpublished-import": "error",
+    "n/no-unpublished-require": "error",
+    "n/no-unsupported-features/es-builtins": "error",
+    "n/no-unsupported-features/es-syntax": "error",
+    "n/no-unsupported-features/node-builtins": "error",
+    "n/process-exit-as-throw": "error",
+    "n/shebang": "error",
+    "n/no-deprecated-api": "error",
+    "n/callback-return": "error",
+    "n/exports-style": "error",
+    "n/file-extension-in-import": "error",
+    "n/global-require": "off",
+    "n/no-mixed-requires": "error",
+    "n/no-process-env": "error",
+    "n/no-restricted-import": "error",
+    "n/no-restricted-require": "error",
+    "n/no-sync": "off",
+    "n/prefer-global/buffer": "error",
+    "n/prefer-global/console": "error",
+    "n/prefer-global/process": "error",
+    "n/prefer-global/text-decoder": "error",
+    "n/prefer-global/text-encoder": "error",
+    "n/prefer-global/url-search-params": "error",
+    "n/prefer-global/url": "error",
+    "n/prefer-promises/dns": "error",
+    "n/prefer-promises/fs": "error",
 
     "unicorn/better-regex": "off",
     "unicorn/consistent-function-scoping": "off",

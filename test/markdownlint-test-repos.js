@@ -22,9 +22,7 @@ const readConfigPromise = promisify(markdownlint.readConfig);
  */
 async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
   t.plan(1);
-  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { globby } = await import("globby");
-  // eslint-disable-next-line node/no-unsupported-features/es-syntax
   const { "default": stripJsonComments } = await import("strip-json-comments");
   const jsoncParse = (json) => {
     const config = JSON.parse(stripJsonComments(json));
