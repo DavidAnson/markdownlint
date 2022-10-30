@@ -126,33 +126,33 @@ See [Rules.md](doc/Rules.md) for more details.
 Tags group related rules and can be used to enable/disable multiple
 rules at once.
 
-* **accessibility** - MD045
-* **atx** - MD018, MD019
-* **atx_closed** - MD020, MD021
-* **blank_lines** - MD012, MD022, MD031, MD032, MD047
-* **blockquote** - MD027, MD028
-* **bullet** - MD004, MD005, MD006, MD007, MD032
-* **code** - MD014, MD031, MD038, MD040, MD046, MD048
-* **emphasis** - MD036, MD037, MD049, MD050
-* **hard_tab** - MD010
-* **headers** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022,
-  MD023, MD024, MD025, MD026, MD036, MD041, MD043
-* **headings** - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022,
-  MD023, MD024, MD025, MD026, MD036, MD041, MD043
-* **hr** - MD035
-* **html** - MD033
-* **images** - MD045, MD052, MD053
-* **indentation** - MD005, MD006, MD007, MD027
-* **language** - MD040
-* **line_length** - MD013
-* **links** - MD011, MD034, MD039, MD042, MD051, MD052, MD053
-* **ol** - MD029, MD030, MD032
-* **spaces** - MD018, MD019, MD020, MD021, MD023
-* **spelling** - MD044
-* **ul** - MD004, MD005, MD006, MD007, MD030, MD032
-* **url** - MD034
-* **whitespace** - MD009, MD010, MD012, MD027, MD028, MD030, MD037,
-  MD038, MD039
+* **`accessibility`** - `MD045`
+* **`atx`** - `MD018`, `MD019`
+* **`atx_closed`** - `MD020`, `MD021`
+* **`blank_lines`** - `MD012`, `MD022`, `MD031`, `MD032`, `MD047`
+* **`blockquote`** - `MD027`, `MD028`
+* **`bullet`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD032`
+* **`code`** - `MD014`, `MD031`, `MD038`, `MD040`, `MD046`, `MD048`
+* **`emphasis`** - `MD036`, `MD037`, `MD049`, `MD050`
+* **`hard_tab`** - `MD010`
+* **`headers`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
+  `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
+* **`headings`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
+  `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
+* **`hr`** - `MD035`
+* **`html`** - `MD033`
+* **`images`** - `MD045`, `MD052`, `MD053`
+* **`indentation`** - `MD005`, `MD006`, `MD007`, `MD027`
+* **`language`** - `MD040`
+* **`line_length`** - `MD013`
+* **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`
+* **`ol`** - `MD029`, `MD030`, `MD032`
+* **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
+* **`spelling`** - `MD044`
+* **`ul`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD030`, `MD032`
+* **`url`** - `MD034`
+* **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`, `MD037`,
+  `MD038`, `MD039`
 
 ## Configuration
 

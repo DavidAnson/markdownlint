@@ -912,7 +912,7 @@ test("readme", (t) => new Promise((resolve) => {
             }
           } else if (inTags) {
             const parts =
-              token.content.replace(/\*\*/g, "").split(/ - |, |,\n/);
+              token.content.replace(/[`*]/g, "").split(/ - |, |,\n/);
             const tag = parts.shift();
             t.deepEqual(parts, tagToRules[tag] || [],
               "Rule mismatch for tag " + tag + ".");

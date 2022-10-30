@@ -7,11 +7,11 @@ deprecated, but still provided for backward-compatibility.
 
 <a name="md001"></a>
 
-## MD001 - Heading levels should only increment by one level at a time
+## `MD001` - Heading levels should only increment by one level at a time
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: header-increment, heading-increment
+Aliases: `header-increment`, `heading-increment`
 
 This rule is triggered when you skip heading levels in a Markdown document, for
 example:
@@ -47,13 +47,13 @@ when skipped - especially for accessibility scenarios. More information:
 
 <a name="md002"></a>
 
-## ~~MD002 - First heading should be a top-level heading~~
+## ~~`MD002` - First heading should be a top-level heading~~
 
 > This rule is deprecated and provided for backward-compatibility
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: first-header-h1, first-heading-h1
+Aliases: `first-header-h1`, `first-heading-h1`
 
 Parameters:
 
@@ -87,11 +87,11 @@ information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 <a name="md003"></a>
 
-## MD003 - Heading style
+## `MD003` - Heading style
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: header-style, heading-style
+Aliases: `header-style`, `heading-style`
 
 Parameters:
 
@@ -138,11 +138,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md004"></a>
 
-## MD004 - Unordered list style
+## `MD004` - Unordered list style
 
-Tags: bullet, ul
+Tags: `bullet`, `ul`
 
-Aliases: ul-style
+Aliases: `ul-style`
 
 Parameters:
 
@@ -189,11 +189,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md005"></a>
 
-## MD005 - Inconsistent indentation for list items at the same level
+## `MD005` - Inconsistent indentation for list items at the same level
 
-Tags: bullet, indentation, ul
+Tags: `bullet`, `indentation`, `ul`
 
-Aliases: list-indent
+Aliases: `list-indent`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -245,13 +245,13 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 <a name="md006"></a>
 
-## ~~MD006 - Consider starting bulleted lists at the beginning of the line~~
+## ~~`MD006` - Consider starting bulleted lists at the beginning of the line~~
 
 > This rule is deprecated and provided for backward-compatibility
 
-Tags: bullet, indentation, ul
+Tags: `bullet`, `indentation`, `ul`
 
-Aliases: ul-start-left
+Aliases: `ul-start-left`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -294,11 +294,11 @@ characters if you use 4 space tabs, or 1 character if you use 2 space tabs).
 
 <a name="md007"></a>
 
-## MD007 - Unordered list indentation
+## `MD007` - Unordered list indentation
 
-Tags: bullet, indentation, ul
+Tags: `bullet`, `indentation`, `ul`
 
-Aliases: ul-indent
+Aliases: `ul-indent`
 
 Parameters:
 
@@ -347,11 +347,11 @@ Note: See [Prettier.md](Prettier.md) for compatibility information.
 
 <a name="md009"></a>
 
-## MD009 - Trailing spaces
+## `MD009` - Trailing spaces
 
-Tags: whitespace
+Tags: `whitespace`
 
-Aliases: no-trailing-spaces
+Aliases: `no-trailing-spaces`
 
 Parameters:
 
@@ -398,11 +398,11 @@ has no purpose and does not affect the rendering of content.
 
 <a name="md010"></a>
 
-## MD010 - Hard tabs
+## `MD010` - Hard tabs
 
-Tags: hard_tab, whitespace
+Tags: `hard_tab`, `whitespace`
 
-Aliases: no-hard-tabs
+Aliases: `no-hard-tabs`
 
 Parameters:
 
@@ -456,11 +456,11 @@ can be harder to work with than spaces.
 
 <a name="md011"></a>
 
-## MD011 - Reversed link syntax
+## `MD011` - Reversed link syntax
 
-Tags: links
+Tags: `links`
 
-Aliases: no-reversed-links
+Aliases: `no-reversed-links`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -489,11 +489,11 @@ Rationale: Reversed links are not rendered as usable links.
 
 <a name="md012"></a>
 
-## MD012 - Multiple consecutive blank lines
+## `MD012` - Multiple consecutive blank lines
 
-Tags: blank_lines, whitespace
+Tags: `blank_lines`, `whitespace`
 
-Aliases: no-multiple-blanks
+Aliases: `no-multiple-blanks`
 
 Parameters:
 
@@ -530,11 +530,11 @@ affect the rendering of content.
 
 <a name="md013"></a>
 
-## MD013 - Line length
+## `MD013` - Line length
 
-Tags: line_length
+Tags: `line_length`
 
-Aliases: line-length
+Aliases: `line-length`
 
 Parameters:
 
@@ -587,11 +587,11 @@ More information: <https://cirosantilli.com/markdown-style-guide#line-wrapping>.
 
 <a name="md014"></a>
 
-## MD014 - Dollar signs used before commands without showing output
+## `MD014` - Dollar signs used before commands without showing output
 
-Tags: code
+Tags: `code`
 
-Aliases: commands-show-output
+Aliases: `commands-show-output`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -644,11 +644,11 @@ for more information.
 
 <a name="md018"></a>
 
-## MD018 - No space after hash on atx style heading
+## `MD018` - No space after hash on atx style heading
 
-Tags: atx, headers, headings, spaces
+Tags: `atx`, `headers`, `headings`, `spaces`
 
-Aliases: no-missing-space-atx
+Aliases: `no-missing-space-atx`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -674,11 +674,11 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 <a name="md019"></a>
 
-## MD019 - Multiple spaces after hash on atx style heading
+## `MD019` - Multiple spaces after hash on atx style heading
 
-Tags: atx, headers, headings, spaces
+Tags: `atx`, `headers`, `headings`, `spaces`
 
-Aliases: no-multiple-space-atx
+Aliases: `no-multiple-space-atx`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -705,11 +705,11 @@ content.
 
 <a name="md020"></a>
 
-## MD020 - No space inside hashes on closed atx style heading
+## `MD020` - No space inside hashes on closed atx style heading
 
-Tags: atx_closed, headers, headings, spaces
+Tags: `atx_closed`, `headers`, `headings`, `spaces`
 
-Aliases: no-missing-space-closed-atx
+Aliases: `no-missing-space-closed-atx`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -737,11 +737,11 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 <a name="md021"></a>
 
-## MD021 - Multiple spaces inside hashes on closed atx style heading
+## `MD021` - Multiple spaces inside hashes on closed atx style heading
 
-Tags: atx_closed, headers, headings, spaces
+Tags: `atx_closed`, `headers`, `headings`, `spaces`
 
-Aliases: no-multiple-space-closed-atx
+Aliases: `no-multiple-space-closed-atx`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -771,11 +771,11 @@ content.
 
 <a name="md022"></a>
 
-## MD022 - Headings should be surrounded by blank lines
+## `MD022` - Headings should be surrounded by blank lines
 
-Tags: blank_lines, headers, headings
+Tags: `blank_lines`, `headers`, `headings`
 
-Aliases: blanks-around-headers, blanks-around-headings
+Aliases: `blanks-around-headers`, `blanks-around-headings`
 
 Parameters:
 
@@ -820,11 +820,11 @@ regular text.
 
 <a name="md023"></a>
 
-## MD023 - Headings must start at the beginning of the line
+## `MD023` - Headings must start at the beginning of the line
 
-Tags: headers, headings, spaces
+Tags: `headers`, `headings`, `spaces`
 
-Aliases: header-start-left, heading-start-left
+Aliases: `header-start-left`, `heading-start-left`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -849,11 +849,11 @@ parsed as headings, and will instead appear as regular text.
 
 <a name="md024"></a>
 
-## MD024 - Multiple headings with the same content
+## `MD024` - Multiple headings with the same content
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: no-duplicate-header, no-duplicate-heading
+Aliases: `no-duplicate-header`, `no-duplicate-heading`
 
 Parameters:
 
@@ -898,11 +898,11 @@ heading name; headings with the same content can cause problems with that.
 
 <a name="md025"></a>
 
-## MD025 - Multiple top-level headings in the same document
+## `MD025` - Multiple top-level headings in the same document
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: single-h1, single-title
+Aliases: `single-h1`, `single-title`
 
 Parameters:
 
@@ -948,11 +948,11 @@ should be contained within this heading.
 
 <a name="md026"></a>
 
-## MD026 - Trailing punctuation in heading
+## `MD026` - Trailing punctuation in heading
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: no-trailing-punctuation
+Aliases: `no-trailing-punctuation`
 
 Parameters:
 
@@ -989,11 +989,11 @@ Rationale: Headings are not meant to be full sentences. More information:
 
 <a name="md027"></a>
 
-## MD027 - Multiple spaces after blockquote symbol
+## `MD027` - Multiple spaces after blockquote symbol
 
-Tags: blockquote, indentation, whitespace
+Tags: `blockquote`, `indentation`, `whitespace`
 
-Aliases: no-multiple-space-blockquote
+Aliases: `no-multiple-space-blockquote`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1016,11 +1016,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md028"></a>
 
-## MD028 - Blank line inside blockquote
+## `MD028` - Blank line inside blockquote
 
-Tags: blockquote, whitespace
+Tags: `blockquote`, `whitespace`
 
-Aliases: no-blanks-blockquote
+Aliases: `no-blanks-blockquote`
 
 This rule is triggered when two blockquote blocks are separated by nothing
 except for a blank line:
@@ -1059,11 +1059,11 @@ separate blockquotes.
 
 <a name="md029"></a>
 
-## MD029 - Ordered list item prefix
+## `MD029` - Ordered list item prefix
 
-Tags: ol
+Tags: `ol`
 
-Aliases: ol-prefix
+Aliases: `ol-prefix`
 
 Parameters:
 
@@ -1159,11 +1159,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md030"></a>
 
-## MD030 - Spaces after list markers
+## `MD030` - Spaces after list markers
 
-Tags: ol, ul, whitespace
+Tags: `ol`, `ul`, `whitespace`
 
-Aliases: list-marker-space
+Aliases: `list-marker-space`
 
 Parameters:
 
@@ -1241,11 +1241,11 @@ Note: See [Prettier.md](Prettier.md) for compatibility information.
 
 <a name="md031"></a>
 
-## MD031 - Fenced code blocks should be surrounded by blank lines
+## `MD031` - Fenced code blocks should be surrounded by blank lines
 
-Tags: blank_lines, code
+Tags: `blank_lines`, `code`
 
-Aliases: blanks-around-fences
+Aliases: `blanks-around-fences`
 
 Parameters:
 
@@ -1294,11 +1294,11 @@ not parse fenced code blocks that don't have blank lines before and after them.
 
 <a name="md032"></a>
 
-## MD032 - Lists should be surrounded by blank lines
+## `MD032` - Lists should be surrounded by blank lines
 
-Tags: blank_lines, bullet, ol, ul
+Tags: `blank_lines`, `bullet`, `ol`, `ul`
 
-Aliases: blanks-around-lists
+Aliases: `blanks-around-lists`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1335,11 +1335,11 @@ not parse lists that don't have blank lines before and after them.
 
 <a name="md033"></a>
 
-## MD033 - Inline HTML
+## `MD033` - Inline HTML
 
-Tags: html
+Tags: `html`
 
-Aliases: no-inline-html
+Aliases: `no-inline-html`
 
 Parameters:
 
@@ -1365,11 +1365,11 @@ who are rendering Markdown documents into something other than HTML.
 
 <a name="md034"></a>
 
-## MD034 - Bare URL used
+## `MD034` - Bare URL used
 
-Tags: links, url
+Tags: `links`, `url`
 
-Aliases: no-bare-urls
+Aliases: `no-bare-urls`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1412,11 +1412,11 @@ Markdown parsers.
 
 <a name="md035"></a>
 
-## MD035 - Horizontal rule style
+## `MD035` - Horizontal rule style
 
-Tags: hr
+Tags: `hr`
 
-Aliases: hr-style
+Aliases: `hr-style`
 
 Parameters:
 
@@ -1457,11 +1457,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md036"></a>
 
-## MD036 - Emphasis used instead of a heading
+## `MD036` - Emphasis used instead of a heading
 
-Tags: emphasis, headers, headings
+Tags: `emphasis`, `headers`, `headings`
 
-Aliases: no-emphasis-as-header, no-emphasis-as-heading
+Aliases: `no-emphasis-as-header`, `no-emphasis-as-heading`
 
 Parameters:
 
@@ -1505,11 +1505,11 @@ the structure of a document. More information:
 
 <a name="md037"></a>
 
-## MD037 - Spaces inside emphasis markers
+## `MD037` - Spaces inside emphasis markers
 
-Tags: emphasis, whitespace
+Tags: `emphasis`, `whitespace`
 
-Aliases: no-space-in-emphasis
+Aliases: `no-space-in-emphasis`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1545,11 +1545,11 @@ intended by the author.
 
 <a name="md038"></a>
 
-## MD038 - Spaces inside code span elements
+## `MD038` - Spaces inside code span elements
 
-Tags: code, whitespace
+Tags: `code`, `whitespace`
 
-Aliases: no-space-in-code
+Aliases: `no-space-in-code`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1586,11 +1586,11 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 <a name="md039"></a>
 
-## MD039 - Spaces inside link text
+## `MD039` - Spaces inside link text
 
-Tags: links, whitespace
+Tags: `links`, `whitespace`
 
-Aliases: no-space-in-links
+Aliases: `no-space-in-links`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1610,11 +1610,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md040"></a>
 
-## MD040 - Fenced code blocks should have a language specified
+## `MD040` - Fenced code blocks should have a language specified
 
-Tags: code, language
+Tags: `code`, `language`
 
-Aliases: fenced-code-language
+Aliases: `fenced-code-language`
 
 Parameters:
 
@@ -1657,11 +1657,11 @@ correct syntax highlighting for code. More information:
 
 <a name="md041"></a>
 
-## MD041 - First line in a file should be a top-level heading
+## `MD041` - First line in a file should be a top-level heading
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: first-line-h1, first-line-heading
+Aliases: `first-line-h1`, `first-line-heading`
 
 Parameters:
 
@@ -1707,11 +1707,11 @@ information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 <a name="md042"></a>
 
-## MD042 - No empty links
+## `MD042` - No empty links
 
-Tags: links
+Tags: `links`
 
-Aliases: no-empty-links
+Aliases: `no-empty-links`
 
 This rule is triggered when an empty link is encountered:
 
@@ -1741,11 +1741,11 @@ Rationale: Empty links do not lead anywhere and therefore don't function as link
 
 <a name="md043"></a>
 
-## MD043 - Required heading structure
+## `MD043` - Required heading structure
 
-Tags: headers, headings
+Tags: `headers`, `headings`
 
-Aliases: required-headers, required-headings
+Aliases: `required-headers`, `required-headings`
 
 Parameters:
 
@@ -1816,11 +1816,11 @@ a set of similar content.
 
 <a name="md044"></a>
 
-## MD044 - Proper names should have the correct capitalization
+## `MD044` - Proper names should have the correct capitalization
 
-Tags: spelling
+Tags: `spelling`
 
-Aliases: proper-names
+Aliases: `proper-names`
 
 Parameters:
 
@@ -1853,11 +1853,11 @@ Rationale: Incorrect capitalization of proper names is usually a mistake.
 
 <a name="md045"></a>
 
-## MD045 - Images should have alternate text (alt text)
+## `MD045` - Images should have alternate text (alt text)
 
-Tags: accessibility, images
+Tags: `accessibility`, `images`
 
-Aliases: no-alt-text
+Aliases: `no-alt-text`
 
 This rule is triggered when an image is missing alternate text (alt text) information.
 
@@ -1886,11 +1886,11 @@ content of an image for people who may not be able to see it.
 
 <a name="md046"></a>
 
-## MD046 - Code block style
+## `MD046` - Code block style
 
-Tags: code
+Tags: `code`
 
-Aliases: code-block-style
+Aliases: `code-block-style`
 
 Parameters:
 
@@ -1927,11 +1927,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md047"></a>
 
-## MD047 - Files should end with a single newline character
+## `MD047` - Files should end with a single newline character
 
-Tags: blank_lines
+Tags: `blank_lines`
 
-Aliases: single-trailing-newline
+Aliases: `single-trailing-newline`
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1960,11 +1960,11 @@ More information: <https://unix.stackexchange.com/questions/18743/whats-the-poin
 
 <a name="md048"></a>
 
-## MD048 - Code fence style
+## `MD048` - Code fence style
 
-Tags: code
+Tags: `code`
 
-Aliases: code-fence-style
+Aliases: `code-fence-style`
 
 Parameters:
 
@@ -2003,11 +2003,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md049"></a>
 
-## MD049 - Emphasis style should be consistent
+## `MD049` - Emphasis style should be consistent
 
-Tags: emphasis
+Tags: `emphasis`
 
-Aliases: emphasis-style
+Aliases: `emphasis-style`
 
 Parameters:
 
@@ -2037,11 +2037,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md050"></a>
 
-## MD050 - Strong style should be consistent
+## `MD050` - Strong style should be consistent
 
-Tags: emphasis
+Tags: `emphasis`
 
-Aliases: strong-style
+Aliases: `strong-style`
 
 Parameters:
 
@@ -2071,11 +2071,11 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md051"></a>
 
-## MD051 - Link fragments should be valid
+## `MD051` - Link fragments should be valid
 
-Tags: links
+Tags: `links`
 
-Aliases: link-fragments
+Aliases: `link-fragments`
 
 This rule is triggered when a link fragment does not correspond to a heading
 in the document:
@@ -2109,11 +2109,11 @@ Note: Creating anchors for headings is not part of the CommonMark specification.
 
 <a name="md052"></a>
 
-## MD052 - Reference links and images should use a label that is defined
+## `MD052` - Reference links and images should use a label that is defined
 
-Tags: images, links
+Tags: `images`, `links`
 
-Aliases: reference-links-images
+Aliases: `reference-links-images`
 
 Links and images in Markdown can provide the link destination or image source
 at the time of use or can define it elsewhere and use a label for reference.
@@ -2145,11 +2145,11 @@ of undefined labels for "full" and "collapsed" reference syntax.
 
 <a name="md053"></a>
 
-## MD053 - Link and image reference definitions should be needed
+## `MD053` - Link and image reference definitions should be needed
 
-Tags: images, links
+Tags: `images`, `links`
 
-Aliases: link-image-reference-definitions
+Aliases: `link-image-reference-definitions`
 
 Parameters:
 

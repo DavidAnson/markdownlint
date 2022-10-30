@@ -5,6 +5,7 @@ import { newLineRe } from "../helpers/helpers.js";
 import { deprecatedRuleNames, fixableRuleNames } from "../lib/constants.js";
 
 const pathFor = (relativePath) => new URL(relativePath, import.meta.url);
+const inCode = (items) => items.map((item) => `\`${item}\``);
 const sortedComma = (items) => items.sort().join(", ");
 const linesFrom = (text) => text.split(newLineRe);
 
@@ -28,7 +29,7 @@ for (const rule of rules) {
   );
   const section = [];
   section.push(
-    `## ${decorator}${name} - ${rule.description}${decorator}`,
+    `## ${decorator}\`${name}\` - ${rule.description}${decorator}`,
     ""
   );
   if (deprecated) {
@@ -38,9 +39,9 @@ for (const rule of rules) {
     );
   }
   section.push(
-    `Tags: ${sortedComma(rule.tags)}`,
+    `Tags: ${sortedComma(inCode(rule.tags))}`,
     "",
-    `Aliases: ${sortedComma(rule.names.slice(1))}`,
+    `Aliases: ${sortedComma(inCode(rule.names.slice(1)))}`,
     ""
   );
   const ruleData = schema.properties[name];
