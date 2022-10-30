@@ -115,7 +115,7 @@ playground for learning and exploring.
 
 See [Rules.md](doc/Rules.md) for more details.
 
-~~Struck through~~ rules are deprecated, and provided for backward-compatibility.
+~~Struck through~~ rules are deprecated and provided for backward-compatibility.
 
 > All rules with `heading` as part of their name are also available as
 > `header` aliases (e.g. `heading-increment` is also available as `header-increment`).

@@ -7,6 +7,7 @@ const path = require("node:path");
 const test = require("ava").default;
 const { markdownlint } = require("../lib/markdownlint").promises;
 const helpers = require("../helpers");
+const constants = require("../lib/constants");
 
 /**
  * Create a test function for the specified test file.
@@ -64,6 +65,10 @@ function createTestForFile(file) {
           if (indices[indices.length - 1] !== error.lineNumber) {
             indices.push(error.lineNumber);
           }
+          t.true(
+            !error.fixInfo || constants.fixableRuleNames.includes(rule),
+            `Fixable rule ${rule} is not tagged as such.`
+          );
         }
         t.deepEqual(actual, expected, "Too few or too many issues found.");
         // Create snapshot

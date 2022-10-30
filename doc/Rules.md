@@ -9,9 +9,9 @@ deprecated, but still provided for backward-compatibility.
 
 ## MD001 - Heading levels should only increment by one level at a time
 
-Tags: headings, headers
+Tags: headers, headings
 
-Aliases: heading-increment, header-increment
+Aliases: header-increment, heading-increment
 
 This rule is triggered when you skip heading levels in a Markdown document, for
 example:
@@ -49,14 +49,18 @@ when skipped - especially for accessibility scenarios. More information:
 
 ## ~~MD002 - First heading should be a top-level heading~~
 
-Tags: headings, headers
+> This rule is deprecated and provided for backward-compatibility
 
-Aliases: first-heading-h1, first-header-h1
+Tags: headers, headings
 
-Parameters: level (number; default 1)
+Aliases: first-header-h1, first-heading-h1
+
+Parameters:
+
+* `level`: Heading level (`integer`, default `1`)
 
 > Note: *MD002 has been deprecated and is disabled by default.*
-> [MD041/first-line-heading](#md041) offers an improved implementation.
+> [MD041/first-line-heading](md041.md) offers an improved implementation.
 
 This rule is intended to ensure document headings start at the top level and
 is triggered when the first heading in the document isn't an h1 heading:
@@ -85,12 +89,13 @@ information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 ## MD003 - Heading style
 
-Tags: headings, headers
+Tags: headers, headings
 
-Aliases: heading-style, header-style
+Aliases: header-style, heading-style
 
-Parameters: style ("consistent", "atx", "atx_closed", "setext",
-"setext_with_atx", "setext_with_atx_closed"; default "consistent")
+Parameters:
+
+* `style`: Heading style (`string`, default `consistent`, values `atx`/`atx_closed`/`consistent`/`setext`/`setext_with_atx`/`setext_with_atx_closed`)
 
 This rule is triggered when different heading styles (atx, setext, and 'closed'
 atx) are used in the same document:
@@ -139,8 +144,9 @@ Tags: bullet, ul
 
 Aliases: ul-style
 
-Parameters: style ("consistent", "asterisk", "plus", "dash", "sublist"; default
-"consistent")
+Parameters:
+
+* `style`: List style (`string`, default `consistent`, values `asterisk`/`consistent`/`dash`/`plus`/`sublist`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -185,7 +191,7 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 ## MD005 - Inconsistent indentation for list items at the same level
 
-Tags: bullet, ul, indentation
+Tags: bullet, indentation, ul
 
 Aliases: list-indent
 
@@ -241,7 +247,9 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 ## ~~MD006 - Consider starting bulleted lists at the beginning of the line~~
 
-Tags: bullet, ul, indentation
+> This rule is deprecated and provided for backward-compatibility
+
+Tags: bullet, indentation, ul
 
 Aliases: ul-start-left
 
@@ -288,15 +296,15 @@ characters if you use 4 space tabs, or 1 character if you use 2 space tabs).
 
 ## MD007 - Unordered list indentation
 
-Tags: bullet, ul, indentation
+Tags: bullet, indentation, ul
 
 Aliases: ul-indent
 
-<!-- markdownlint-disable line-length -->
+Parameters:
 
-Parameters: indent, start_indented, start_indent (number; default 2, boolean; default false, number; defaults to indent)
-
-<!-- markdownlint-restore -->
+* `indent`: Spaces for indent (`integer`, default `2`)
+* `start_indent`: Spaces for first level indent (when start_indented is set) (`integer`, default `2`)
+* `start_indented`: Whether to indent the first level of the list (`boolean`, default `false`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -345,11 +353,11 @@ Tags: whitespace
 
 Aliases: no-trailing-spaces
 
-<!-- markdownlint-disable line-length -->
+Parameters:
 
-Parameters: br_spaces, list_item_empty_lines, strict (number; default 2, boolean; default false, boolean; default false)
-
-<!-- markdownlint-restore -->
+* `br_spaces`: Spaces for line break (`integer`, default `2`)
+* `list_item_empty_lines`: Allow spaces for empty lines in list items (`boolean`, default `false`)
+* `strict`: Include unnecessary breaks (`boolean`, default `false`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -392,11 +400,15 @@ has no purpose and does not affect the rendering of content.
 
 ## MD010 - Hard tabs
 
-Tags: whitespace, hard_tab
+Tags: hard_tab, whitespace
 
 Aliases: no-hard-tabs
 
-Parameters: code_blocks, ignore_code_languages, spaces_per_tab (boolean; default true, array of string; default empty, number; default 1)
+Parameters:
+
+* `code_blocks`: Include code blocks (`boolean`, default `true`)
+* `ignore_code_languages`: Fenced code languages to ignore (`string[]`, default `[]`)
+* `spaces_per_tab`: Number of spaces for each hard tab (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -479,11 +491,13 @@ Rationale: Reversed links are not rendered as usable links.
 
 ## MD012 - Multiple consecutive blank lines
 
-Tags: whitespace, blank_lines
+Tags: blank_lines, whitespace
 
 Aliases: no-multiple-blanks
 
-Parameters: maximum (number; default 1)
+Parameters:
+
+* `maximum`: Consecutive blank lines (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -522,11 +536,17 @@ Tags: line_length
 
 Aliases: line-length
 
-<!-- markdownlint-disable line-length -->
+Parameters:
 
-Parameters: line_length, heading_line_length, code_block_line_length, code_blocks, tables, headings, headers, strict, stern (number; default 80 for *_length, boolean; default true (except strict/stern which default false))
-
-<!-- markdownlint-restore -->
+* `code_block_line_length`: Number of characters for code blocks (`integer`, default `80`)
+* `code_blocks`: Include code blocks (`boolean`, default `true`)
+* `headers`: Include headings (`boolean`, default `true`)
+* `heading_line_length`: Number of characters for headings (`integer`, default `80`)
+* `headings`: Include headings (`boolean`, default `true`)
+* `line_length`: Number of characters (`integer`, default `80`)
+* `stern`: Stern length checking (`boolean`, default `false`)
+* `strict`: Strict length checking (`boolean`, default `false`)
+* `tables`: Include tables (`boolean`, default `true`)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -626,7 +646,7 @@ for more information.
 
 ## MD018 - No space after hash on atx style heading
 
-Tags: headings, headers, atx, spaces
+Tags: atx, headers, headings, spaces
 
 Aliases: no-missing-space-atx
 
@@ -656,7 +676,7 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 ## MD019 - Multiple spaces after hash on atx style heading
 
-Tags: headings, headers, atx, spaces
+Tags: atx, headers, headings, spaces
 
 Aliases: no-multiple-space-atx
 
@@ -687,7 +707,7 @@ content.
 
 ## MD020 - No space inside hashes on closed atx style heading
 
-Tags: headings, headers, atx_closed, spaces
+Tags: atx_closed, headers, headings, spaces
 
 Aliases: no-missing-space-closed-atx
 
@@ -719,7 +739,7 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 ## MD021 - Multiple spaces inside hashes on closed atx style heading
 
-Tags: headings, headers, atx_closed, spaces
+Tags: atx_closed, headers, headings, spaces
 
 Aliases: no-multiple-space-closed-atx
 
@@ -753,11 +773,14 @@ content.
 
 ## MD022 - Headings should be surrounded by blank lines
 
-Tags: headings, headers, blank_lines
+Tags: blank_lines, headers, headings
 
-Aliases: blanks-around-headings, blanks-around-headers
+Aliases: blanks-around-headers, blanks-around-headings
 
-Parameters: lines_above, lines_below (number; default 1)
+Parameters:
+
+* `lines_above`: Blank lines above heading (`integer`, default `1`)
+* `lines_below`: Blank lines below heading (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -789,7 +812,7 @@ The `lines_above` and `lines_below` parameters can be used to specify a differen
 number of blank lines (including 0) above or below each heading.
 
 Note: If `lines_above` or `lines_below` are configured to require more than one
-blank line, [MD012/no-multiple-blanks](#md012) should also be customized.
+blank line, [MD012/no-multiple-blanks](md012.md) should also be customized.
 
 Rationale: Aside from aesthetic reasons, some parsers, including `kramdown`, will
 not parse headings that don't have a blank line before, and will parse them as
@@ -799,9 +822,9 @@ regular text.
 
 ## MD023 - Headings must start at the beginning of the line
 
-Tags: headings, headers, spaces
+Tags: headers, headings, spaces
 
-Aliases: heading-start-left, header-start-left
+Aliases: header-start-left, heading-start-left
 
 Fixable: Most violations can be fixed by tooling
 
@@ -828,11 +851,14 @@ parsed as headings, and will instead appear as regular text.
 
 ## MD024 - Multiple headings with the same content
 
-Tags: headings, headers
+Tags: headers, headings
 
-Aliases: no-duplicate-heading, no-duplicate-header
+Aliases: no-duplicate-header, no-duplicate-heading
 
-Parameters: siblings_only, allow_different_nesting (boolean; default `false`)
+Parameters:
+
+* `allow_different_nesting`: Only check sibling headings (`boolean`, default `false`)
+* `siblings_only`: Only check sibling headings (`boolean`, default `false`)
 
 This rule is triggered if there are multiple headings in the document that have
 the same text:
@@ -874,11 +900,14 @@ heading name; headings with the same content can cause problems with that.
 
 ## MD025 - Multiple top-level headings in the same document
 
-Tags: headings, headers
+Tags: headers, headings
 
-Aliases: single-title, single-h1
+Aliases: single-h1, single-title
 
-Parameters: level, front_matter_title (number; default 1, string; default "^\s*"?title"?\s*[:=]")
+Parameters:
+
+* `front_matter_title`: RegExp for matching title in front matter (`string`, default `^\s*title\s*[:=]`)
+* `level`: Heading level (`integer`, default `1`)
 
 This rule is triggered when a top-level heading is in use (the first line of
 the file is an h1 heading), and more than one h1 heading is in use in the
@@ -921,11 +950,13 @@ should be contained within this heading.
 
 ## MD026 - Trailing punctuation in heading
 
-Tags: headings, headers
+Tags: headers, headings
 
 Aliases: no-trailing-punctuation
 
-Parameters: punctuation (string; default ".,;:!。，；：！")
+Parameters:
+
+* `punctuation`: Punctuation characters not allowed at end of headings (`string`, default `.,;:!。，；：！`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -960,7 +991,7 @@ Rationale: Headings are not meant to be full sentences. More information:
 
 ## MD027 - Multiple spaces after blockquote symbol
 
-Tags: blockquote, whitespace, indentation
+Tags: blockquote, indentation, whitespace
 
 Aliases: no-multiple-space-blockquote
 
@@ -1034,7 +1065,9 @@ Tags: ol
 
 Aliases: ol-prefix
 
-Parameters: style ("one", "ordered", "one_or_ordered", "zero"; default "one_or_ordered")
+Parameters:
+
+* `style`: List style (`string`, default `one_or_ordered`, values `one`/`one_or_ordered`/`ordered`/`zero`)
 
 This rule is triggered for ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
@@ -1132,7 +1165,12 @@ Tags: ol, ul, whitespace
 
 Aliases: list-marker-space
 
-Parameters: ul_single, ol_single, ul_multi, ol_multi (number; default 1)
+Parameters:
+
+* `ol_multi`: Spaces for multi-line ordered list items (`integer`, default `1`)
+* `ol_single`: Spaces for single-line ordered list items (`integer`, default `1`)
+* `ul_multi`: Spaces for multi-line unordered list items (`integer`, default `1`)
+* `ul_single`: Spaces for single-line unordered list items (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1205,11 +1243,13 @@ Note: See [Prettier.md](Prettier.md) for compatibility information.
 
 ## MD031 - Fenced code blocks should be surrounded by blank lines
 
-Tags: code, blank_lines
+Tags: blank_lines, code
 
 Aliases: blanks-around-fences
 
-Parameters: list_items (boolean; default true)
+Parameters:
+
+* `list_items`: Include list items (`boolean`, default `true`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1256,7 +1296,7 @@ not parse fenced code blocks that don't have blank lines before and after them.
 
 ## MD032 - Lists should be surrounded by blank lines
 
-Tags: bullet, ul, ol, blank_lines
+Tags: blank_lines, bullet, ol, ul
 
 Aliases: blanks-around-lists
 
@@ -1301,7 +1341,9 @@ Tags: html
 
 Aliases: no-inline-html
 
-Parameters: allowed_elements (array of string; default empty)
+Parameters:
+
+* `allowed_elements`: Allowed elements (`string[]`, default `[]`)
 
 This rule is triggered whenever raw HTML is used in a Markdown document:
 
@@ -1376,8 +1418,9 @@ Tags: hr
 
 Aliases: hr-style
 
-Parameters: style ("consistent", "---", "***", "___", or other string specifying
-the horizontal rule; default "consistent")
+Parameters:
+
+* `style`: Horizontal rule style (`string`, default `consistent`)
 
 This rule is triggered when inconsistent styles of horizontal rules are used
 in the document:
@@ -1416,11 +1459,13 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 ## MD036 - Emphasis used instead of a heading
 
-Tags: headings, headers, emphasis
+Tags: emphasis, headers, headings
 
-Aliases: no-emphasis-as-heading, no-emphasis-as-header
+Aliases: no-emphasis-as-header, no-emphasis-as-heading
 
-Parameters: punctuation (string; default ".,;:!?。，；：！？")
+Parameters:
+
+* `punctuation`: Punctuation characters (`string`, default `.,;:!?。，；：！？`)
 
 This check looks for instances where emphasized (i.e. bold or italic) text is
 used to separate sections, where a heading should be used instead:
@@ -1462,7 +1507,7 @@ the structure of a document. More information:
 
 ## MD037 - Spaces inside emphasis markers
 
-Tags: whitespace, emphasis
+Tags: emphasis, whitespace
 
 Aliases: no-space-in-emphasis
 
@@ -1502,7 +1547,7 @@ intended by the author.
 
 ## MD038 - Spaces inside code span elements
 
-Tags: whitespace, code
+Tags: code, whitespace
 
 Aliases: no-space-in-code
 
@@ -1543,7 +1588,7 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 ## MD039 - Spaces inside link text
 
-Tags: whitespace, links
+Tags: links, whitespace
 
 Aliases: no-space-in-links
 
@@ -1571,7 +1616,9 @@ Tags: code, language
 
 Aliases: fenced-code-language
 
-Parameters: allowed_languages (array of string; default [])
+Parameters:
+
+* `allowed_languages`: List of languages (`string[]`, default `[]`)
 
 This rule is triggered when fenced code blocks are used, but a language isn't
 specified:
@@ -1601,7 +1648,8 @@ Plain text in a code block
 ````
 
 You can configure the `allowed_languages` parameter to specify a list of
-languages code blocks could use. The default value is `[]` which means any language specifier is valid.
+languages code blocks could use. The default value is `[]` which means any
+language specifier is valid.
 
 Rationale: Specifying a language improves content rendering by using the
 correct syntax highlighting for code. More information:
@@ -1611,11 +1659,14 @@ correct syntax highlighting for code. More information:
 
 ## MD041 - First line in a file should be a top-level heading
 
-Tags: headings, headers
+Tags: headers, headings
 
-Aliases: first-line-heading, first-line-h1
+Aliases: first-line-h1, first-line-heading
 
-Parameters: level, front_matter_title (number; default 1, string; default "^\s*"?title"?\s*[:=]")
+Parameters:
+
+* `front_matter_title`: RegExp for matching title in front matter (`string`, default `^\s*title\s*[:=]`)
+* `level`: Heading level (`integer`, default `1`)
 
 This rule is intended to ensure documents have a title and is triggered when
 the first line in the file isn't a top-level (h1) heading:
@@ -1692,11 +1743,15 @@ Rationale: Empty links do not lead anywhere and therefore don't function as link
 
 ## MD043 - Required heading structure
 
-Tags: headings, headers
+Tags: headers, headings
 
-Aliases: required-headings, required-headers
+Aliases: required-headers, required-headings
 
-Parameters: headings, headers, match_case (array of string; default `null` for disabled, boolean; default false)
+Parameters:
+
+* `headers`: List of headings (`string[]`, default `[]`)
+* `headings`: List of headings (`string[]`, default `[]`)
+* `match_case`: Match case of headings (`boolean`, default `false`)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -1767,7 +1822,11 @@ Tags: spelling
 
 Aliases: proper-names
 
-Parameters: names, code_blocks, html_elements (string array; default `null`, boolean; default `true`, boolean; default `true`)
+Parameters:
+
+* `code_blocks`: Include code blocks (`boolean`, default `true`)
+* `html_elements`: Include HTML elements (`boolean`, default `true`)
+* `names`: List of proper names (`string[]`, default `[]`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1833,7 +1892,9 @@ Tags: code
 
 Aliases: code-block-style
 
-Parameters: style ("consistent", "fenced", "indented"; default "consistent")
+Parameters:
+
+* `style`: Block style (`string`, default `consistent`, values `consistent`/`fenced`/`indented`)
 
 This rule is triggered when unwanted or different code block styles are used in
 the same document.
@@ -1905,7 +1966,9 @@ Tags: code
 
 Aliases: code-fence-style
 
-Parameters: style ("consistent", "tilde", "backtick"; default "consistent")
+Parameters:
+
+* `style`: Code fence style (`string`, default `consistent`, values `backtick`/`consistent`/`tilde`)
 
 This rule is triggered when the symbols used in the document for fenced code
 blocks do not match the configured code fence style:
@@ -1946,7 +2009,9 @@ Tags: emphasis
 
 Aliases: emphasis-style
 
-Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+Parameters:
+
+* `style`: Emphasis style should be consistent (`string`, default `consistent`, values `asterisk`/`consistent`/`underscore`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1978,7 +2043,9 @@ Tags: emphasis
 
 Aliases: strong-style
 
-Parameters: style ("consistent", "asterisk", "underscore"; default "consistent")
+Parameters:
+
+* `style`: Strong style should be consistent (`string`, default `consistent`, values `asterisk`/`consistent`/`underscore`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -2084,7 +2151,9 @@ Tags: images, links
 
 Aliases: link-image-reference-definitions
 
-Parameters: ignored_definitions (array of string; default [ "//" ])
+Parameters:
+
+* `ignored_definitions`: Ignored definitions (`string[]`, default `["//"]`)
 
 Fixable: Most violations can be fixed by tooling
 

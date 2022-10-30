@@ -105,18 +105,23 @@ test("projectFilesNoInlineConfig", (t) => new Promise((resolve) => {
 
 test("projectFilesInlineConfig", (t) => new Promise((resolve) => {
   t.plan(2);
-  const options = {
-    "files": [ "doc/Rules.md" ],
-    "config": require("../.markdownlint.json")
-  };
-  markdownlint(options, function callback(err, actual) {
-    t.falsy(err);
-    const expected = {
-      "doc/Rules.md": []
-    };
-    t.deepEqual(actual, expected, "Issue(s) with project files.");
-    resolve();
-  });
+  import("globby")
+    .then((module) => module.globby("doc/*.md"))
+    .then((files) => {
+      const options = {
+        files,
+        "config": require("../.markdownlint.json")
+      };
+      markdownlint(options, function callback(err, actual) {
+        t.falsy(err);
+        const expected = {};
+        for (const file of files) {
+          expected[file] = [];
+        }
+        t.deepEqual(actual, expected, "Issue(s) with project files.");
+        resolve();
+      });
+    });
 }));
 
 test("stringInputLineEndings", (t) => new Promise((resolve) => {
@@ -921,93 +926,6 @@ test("readme", (t) => new Promise((resolve) => {
           (ruleLeft || "[NO RULE]").toString() + ".");
       const tagLeft = Object.keys(tagToRules).shift();
       t.true(!tagLeft, "Undocumented tag " + tagLeft + ".");
-      resolve();
-    });
-}));
-
-test("rules", (t) => new Promise((resolve) => {
-  t.plan(375);
-  fs.readFile("doc/Rules.md", "utf8",
-    (err, contents) => {
-      t.falsy(err);
-      const rulesLeft = [ ...rules ];
-      let inHeading = false;
-      let rule = null;
-      let ruleHasTags = true;
-      let ruleHasAliases = true;
-      let ruleUsesParams = null;
-      const tagAliasParameterRe = /, |: | /;
-      const testTagsAliasesParams = (r) => {
-        // eslint-disable-next-line unicorn/prefer-default-parameters
-        r = r || "[NO RULE]";
-        t.true(ruleHasTags,
-          "Missing tags for rule " + r.names + ".");
-        t.true(ruleHasAliases,
-          "Missing aliases for rule " + r.names + ".");
-        t.true(!ruleUsesParams,
-          "Missing parameters for rule " + r.names + ".");
-      };
-      // @ts-ignore
-      for (const token of md.parse(contents, {})) {
-        if ((token.type === "heading_open") && (token.tag === "h2")) {
-          inHeading = true;
-        } else if (token.type === "heading_close") {
-          inHeading = false;
-        } else if (token.type === "inline") {
-          if (inHeading) {
-            testTagsAliasesParams(rule);
-            rule = rulesLeft.shift();
-            ruleHasTags = false;
-            ruleHasAliases = false;
-            t.truthy(rule,
-              "Missing rule implementation for " + token.content + ".");
-            const ruleName = rule.names[0];
-            let headingContent = ruleName + " - " + rule.description;
-            if (deprecatedRuleNames.has(ruleName)) {
-              headingContent = "~~" + headingContent + "~~";
-            }
-            t.is(token.content,
-              headingContent,
-              "Rule mismatch.");
-            ruleUsesParams = rule.function.toString()
-              .match(/params\.config\.[_a-z]*/gi);
-            if (ruleUsesParams) {
-              ruleUsesParams = ruleUsesParams.map(function forUse(use) {
-                return use.split(".").pop();
-              });
-              ruleUsesParams.sort();
-            }
-          } else if (token.content.startsWith("Tags: ") && rule) {
-            t.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
-              rule.tags, "Tag mismatch for rule " + rule.names + ".");
-            ruleHasTags = true;
-          } else if (token.content.startsWith("Aliases: ") && rule) {
-            t.deepEqual(token.content.split(tagAliasParameterRe).slice(1),
-              rule.names.slice(1),
-              "Alias mismatch for rule " + rule.names + ".");
-            ruleHasAliases = true;
-          } else if (token.content.startsWith("Parameters: ") && rule) {
-            let inDetails = false;
-            const parameters = token.content.split(tagAliasParameterRe)
-              .slice(1)
-              .filter(function forPart(part) {
-                inDetails = inDetails || (part[0] === "(");
-                return !inDetails;
-              });
-            parameters.sort();
-            t.deepEqual(parameters, ruleUsesParams,
-              "Missing parameter for rule " + rule.names);
-            ruleUsesParams = null;
-          }
-        }
-      }
-      const ruleLeft = rulesLeft.shift();
-      t.true(!ruleLeft,
-        "Missing rule documentation for " +
-          (ruleLeft || { "names": "[NO RULE]" }).names + ".");
-      if (rule) {
-        testTagsAliasesParams(rule);
-      }
       resolve();
     });
 }));
