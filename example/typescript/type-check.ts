@@ -25,7 +25,7 @@ function assertLintResults(results: markdownlint.LintResults) {
   assert.equal(results["string"][0].lineNumber, 1);
   assert.deepEqual(results["string"][0].ruleNames, [ "MD047", "single-trailing-newline" ]);
   assert.equal(results["string"][0].ruleDescription, "Files should end with a single newline character");
-  assert.equal(results["string"][0].ruleInformation.replace(/v\d+\.\d+\.\d+/, "v0.0.0"), "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md047");
+  assert.equal(results["string"][0].ruleInformation.replace(/v\d+\.\d+\.\d+/, "v0.0.0"), "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md047.md");
   assert.equal(results["string"][0].errorDetail, null);
   assert.equal(results["string"][0].errorContext, null);
   assert.deepEqual(results["string"][0].errorRange, [ 9, 1 ]);

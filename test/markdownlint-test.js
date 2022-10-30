@@ -902,8 +902,8 @@ test("readme", (t) => new Promise((resolve) => {
             if (rule) {
               const ruleName = rule.names[0];
               const ruleAliases = rule.names.slice(1);
-              let expected = "**[" + ruleName + "](doc/Rules.md#" +
-                ruleName.toLowerCase() + ")** *" +
+              let expected = "**[" + ruleName + "](doc/" +
+                ruleName.toLowerCase() + ".md)** *" +
                 ruleAliases.join("/") + "* - " + rule.description;
               if (deprecatedRuleNames.has(ruleName)) {
                 expected = "~~" + expected + "~~";
@@ -1033,7 +1033,7 @@ test("allBuiltInRulesHaveValidUrl", (t) => {
     t.is(
       // @ts-ignore
       rule.information.href,
-      `${homepage}/blob/v${version}/doc/Rules.md#${name}`
+      `${homepage}/blob/v${version}/doc/${name}.md`
     );
   }
 });

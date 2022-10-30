@@ -61,55 +61,55 @@ playground for learning and exploring.
 
 <!-- markdownlint-disable line-length -->
 
-* **[MD001](doc/Rules.md#md001)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
-* ~~**[MD002](doc/Rules.md#md002)** *first-heading-h1/first-header-h1* - First heading should be a top-level heading~~
-* **[MD003](doc/Rules.md#md003)** *heading-style/header-style* - Heading style
-* **[MD004](doc/Rules.md#md004)** *ul-style* - Unordered list style
-* **[MD005](doc/Rules.md#md005)** *list-indent* - Inconsistent indentation for list items at the same level
-* ~~**[MD006](doc/Rules.md#md006)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line~~
-* **[MD007](doc/Rules.md#md007)** *ul-indent* - Unordered list indentation
-* **[MD009](doc/Rules.md#md009)** *no-trailing-spaces* - Trailing spaces
-* **[MD010](doc/Rules.md#md010)** *no-hard-tabs* - Hard tabs
-* **[MD011](doc/Rules.md#md011)** *no-reversed-links* - Reversed link syntax
-* **[MD012](doc/Rules.md#md012)** *no-multiple-blanks* - Multiple consecutive blank lines
-* **[MD013](doc/Rules.md#md013)** *line-length* - Line length
-* **[MD014](doc/Rules.md#md014)** *commands-show-output* - Dollar signs used before commands without showing output
-* **[MD018](doc/Rules.md#md018)** *no-missing-space-atx* - No space after hash on atx style heading
-* **[MD019](doc/Rules.md#md019)** *no-multiple-space-atx* - Multiple spaces after hash on atx style heading
-* **[MD020](doc/Rules.md#md020)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style heading
-* **[MD021](doc/Rules.md#md021)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style heading
-* **[MD022](doc/Rules.md#md022)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
-* **[MD023](doc/Rules.md#md023)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
-* **[MD024](doc/Rules.md#md024)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
-* **[MD025](doc/Rules.md#md025)** *single-title/single-h1* - Multiple top-level headings in the same document
-* **[MD026](doc/Rules.md#md026)** *no-trailing-punctuation* - Trailing punctuation in heading
-* **[MD027](doc/Rules.md#md027)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
-* **[MD028](doc/Rules.md#md028)** *no-blanks-blockquote* - Blank line inside blockquote
-* **[MD029](doc/Rules.md#md029)** *ol-prefix* - Ordered list item prefix
-* **[MD030](doc/Rules.md#md030)** *list-marker-space* - Spaces after list markers
-* **[MD031](doc/Rules.md#md031)** *blanks-around-fences* - Fenced code blocks should be surrounded by blank lines
-* **[MD032](doc/Rules.md#md032)** *blanks-around-lists* - Lists should be surrounded by blank lines
-* **[MD033](doc/Rules.md#md033)** *no-inline-html* - Inline HTML
-* **[MD034](doc/Rules.md#md034)** *no-bare-urls* - Bare URL used
-* **[MD035](doc/Rules.md#md035)** *hr-style* - Horizontal rule style
-* **[MD036](doc/Rules.md#md036)** *no-emphasis-as-heading/no-emphasis-as-header* - Emphasis used instead of a heading
-* **[MD037](doc/Rules.md#md037)** *no-space-in-emphasis* - Spaces inside emphasis markers
-* **[MD038](doc/Rules.md#md038)** *no-space-in-code* - Spaces inside code span elements
-* **[MD039](doc/Rules.md#md039)** *no-space-in-links* - Spaces inside link text
-* **[MD040](doc/Rules.md#md040)** *fenced-code-language* - Fenced code blocks should have a language specified
-* **[MD041](doc/Rules.md#md041)** *first-line-heading/first-line-h1* - First line in a file should be a top-level heading
-* **[MD042](doc/Rules.md#md042)** *no-empty-links* - No empty links
-* **[MD043](doc/Rules.md#md043)** *required-headings/required-headers* - Required heading structure
-* **[MD044](doc/Rules.md#md044)** *proper-names* - Proper names should have the correct capitalization
-* **[MD045](doc/Rules.md#md045)** *no-alt-text* - Images should have alternate text (alt text)
-* **[MD046](doc/Rules.md#md046)** *code-block-style* - Code block style
-* **[MD047](doc/Rules.md#md047)** *single-trailing-newline* - Files should end with a single newline character
-* **[MD048](doc/Rules.md#md048)** *code-fence-style* - Code fence style
-* **[MD049](doc/Rules.md#md049)** *emphasis-style* - Emphasis style should be consistent
-* **[MD050](doc/Rules.md#md050)** *strong-style* - Strong style should be consistent
-* **[MD051](doc/Rules.md#md051)** *link-fragments* - Link fragments should be valid
-* **[MD052](doc/Rules.md#md052)** *reference-links-images* - Reference links and images should use a label that is defined
-* **[MD053](doc/Rules.md#md053)** *link-image-reference-definitions* - Link and image reference definitions should be needed
+* **[MD001](doc/md001.md)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
+* ~~**[MD002](doc/md002.md)** *first-heading-h1/first-header-h1* - First heading should be a top-level heading~~
+* **[MD003](doc/md003.md)** *heading-style/header-style* - Heading style
+* **[MD004](doc/md004.md)** *ul-style* - Unordered list style
+* **[MD005](doc/md005.md)** *list-indent* - Inconsistent indentation for list items at the same level
+* ~~**[MD006](doc/md006.md)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line~~
+* **[MD007](doc/md007.md)** *ul-indent* - Unordered list indentation
+* **[MD009](doc/md009.md)** *no-trailing-spaces* - Trailing spaces
+* **[MD010](doc/md010.md)** *no-hard-tabs* - Hard tabs
+* **[MD011](doc/md011.md)** *no-reversed-links* - Reversed link syntax
+* **[MD012](doc/md012.md)** *no-multiple-blanks* - Multiple consecutive blank lines
+* **[MD013](doc/md013.md)** *line-length* - Line length
+* **[MD014](doc/md014.md)** *commands-show-output* - Dollar signs used before commands without showing output
+* **[MD018](doc/md018.md)** *no-missing-space-atx* - No space after hash on atx style heading
+* **[MD019](doc/md019.md)** *no-multiple-space-atx* - Multiple spaces after hash on atx style heading
+* **[MD020](doc/md020.md)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style heading
+* **[MD021](doc/md021.md)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style heading
+* **[MD022](doc/md022.md)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
+* **[MD023](doc/md023.md)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
+* **[MD024](doc/md024.md)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
+* **[MD025](doc/md025.md)** *single-title/single-h1* - Multiple top-level headings in the same document
+* **[MD026](doc/md026.md)** *no-trailing-punctuation* - Trailing punctuation in heading
+* **[MD027](doc/md027.md)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
+* **[MD028](doc/md028.md)** *no-blanks-blockquote* - Blank line inside blockquote
+* **[MD029](doc/md029.md)** *ol-prefix* - Ordered list item prefix
+* **[MD030](doc/md030.md)** *list-marker-space* - Spaces after list markers
+* **[MD031](doc/md031.md)** *blanks-around-fences* - Fenced code blocks should be surrounded by blank lines
+* **[MD032](doc/md032.md)** *blanks-around-lists* - Lists should be surrounded by blank lines
+* **[MD033](doc/md033.md)** *no-inline-html* - Inline HTML
+* **[MD034](doc/md034.md)** *no-bare-urls* - Bare URL used
+* **[MD035](doc/md035.md)** *hr-style* - Horizontal rule style
+* **[MD036](doc/md036.md)** *no-emphasis-as-heading/no-emphasis-as-header* - Emphasis used instead of a heading
+* **[MD037](doc/md037.md)** *no-space-in-emphasis* - Spaces inside emphasis markers
+* **[MD038](doc/md038.md)** *no-space-in-code* - Spaces inside code span elements
+* **[MD039](doc/md039.md)** *no-space-in-links* - Spaces inside link text
+* **[MD040](doc/md040.md)** *fenced-code-language* - Fenced code blocks should have a language specified
+* **[MD041](doc/md041.md)** *first-line-heading/first-line-h1* - First line in a file should be a top-level heading
+* **[MD042](doc/md042.md)** *no-empty-links* - No empty links
+* **[MD043](doc/md043.md)** *required-headings/required-headers* - Required heading structure
+* **[MD044](doc/md044.md)** *proper-names* - Proper names should have the correct capitalization
+* **[MD045](doc/md045.md)** *no-alt-text* - Images should have alternate text (alt text)
+* **[MD046](doc/md046.md)** *code-block-style* - Code block style
+* **[MD047](doc/md047.md)** *single-trailing-newline* - Files should end with a single newline character
+* **[MD048](doc/md048.md)** *code-fence-style* - Code fence style
+* **[MD049](doc/md049.md)** *emphasis-style* - Emphasis style should be consistent
+* **[MD050](doc/md050.md)** *strong-style* - Strong style should be consistent
+* **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
+* **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
+* **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
 
 <!-- markdownlint-restore -->
 
@@ -772,28 +772,28 @@ Output:
     { "lineNumber": 3,
       "ruleNames": [ "MD010", "no-hard-tabs" ],
       "ruleDescription": "Hard tabs",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md010",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md010.md",
       "errorDetail": "Column: 17",
       "errorContext": null,
       "errorRange": [ 17, 1 ] },
     { "lineNumber": 1,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md018",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md018.md",
       "errorDetail": null,
       "errorContext": "#bad.md",
       "errorRange": [ 1, 2 ] },
     { "lineNumber": 3,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md018",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md018.md",
       "errorDetail": null,
       "errorContext": "#This file fails\tsome rules.",
       "errorRange": [ 1, 2 ] },
     { "lineNumber": 1,
       "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
       "ruleDescription": "First line in a file should be a top-level heading",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/Rules.md#md041",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md041.md",
       "errorDetail": null,
       "errorContext": "#bad.md",
       "errorRange": null }
