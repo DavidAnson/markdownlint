@@ -56,7 +56,7 @@
     "upgrade": "npx --yes npm-check-updates --upgrade"
   },
   "engines": {
-    "node": ">=14"
+    "node": ">=14.18.0"
   },
   "dependencies": {
     "markdown-it": "13.0.1"
