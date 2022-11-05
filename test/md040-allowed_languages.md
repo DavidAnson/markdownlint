@@ -12,6 +12,18 @@ Code block with `css` not in allowed_languages:
 body {}  {MD040:11}
 ```
 
+Code block with `MD` (uppercase) not in allowed_languages:
+
+```MD
+hello md {MD040:17}
+```
+
+Code block with `ts` (lowercase) not in allowed_languages:
+
+```ts
+let foo = "bar"; {MD040:23}
+```
+
 Code block with `js` in allowed_languages:
 
 ```js
@@ -28,15 +40,15 @@ body {
 }
 ```
 
-Code block with `md` in allowed_languages:
+Code block with `md` (lowercase) in allowed_languages:
 
-```MD
+```md
 hello md
 ```
 
-Code block with `TS` in allowed_languages:
+Code block with `TS` (uppercase) in allowed_languages:
 
-```ts
+```TS
 body {
   h1 {
     color: red;
