@@ -4167,16 +4167,13 @@ module.exports = {
     "tags": ["code", "language"],
     "function": function MD040(params, onError) {
         let allowed = params.config.allowed_languages;
-        allowed = Array.isArray(allowed) ?
-            allowed.map((lang) => lang.toLowerCase()) :
-            [];
+        allowed = Array.isArray(allowed) ? allowed : [];
         filterTokens(params, "fence", function forToken(token) {
-            const lang = token.info.trim();
-            if (lang === "") {
+            const lang = token.info;
+            if (lang.trim() === "") {
                 addErrorContext(onError, token.lineNumber, token.line);
             }
-            else if (allowed.length > 0 &&
-                !allowed.includes(lang.toLowerCase())) {
+            else if ((allowed.length > 0) && !allowed.includes(lang)) {
                 addError(onError, token.lineNumber, `"${lang}" is not allowed`);
             }
         });

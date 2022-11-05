@@ -24,6 +24,12 @@ Code block with `ts` (lowercase) not in allowed_languages:
 let foo = "bar"; {MD040:23}
 ```
 
+Code block with ` js` (prefixed by a space) not in allowed_languages: {MD038}
+
+``` js
+import "foo"; {MD040:29}
+```
+
 Code block with `js` in allowed_languages:
 
 ```js
