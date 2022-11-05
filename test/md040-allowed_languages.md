@@ -30,6 +30,12 @@ Code block with `js` in allowed_languages:
 console.log('markdownlint')
 ```
 
+Code block with `js foo` allowed_languages:
+
+```js foo
+console.log('bar')
+```
+
 Code block with ` scss` (prefixed by a space) in allowed_languages: {MD038}
 
 ``` scss
