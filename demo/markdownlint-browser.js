@@ -4169,8 +4169,8 @@ module.exports = {
         let allowed = params.config.allowed_languages;
         allowed = Array.isArray(allowed) ? allowed : [];
         filterTokens(params, "fence", function forToken(token) {
-            const lang = token.info;
-            if (lang.trim() === "") {
+            const lang = token.info.trim();
+            if (lang === "") {
                 addErrorContext(onError, token.lineNumber, token.line);
             }
             else if ((allowed.length > 0) && !allowed.includes(lang)) {
