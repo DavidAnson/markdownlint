@@ -95,7 +95,9 @@ Aliases: `header-style`, `heading-style`
 
 Parameters:
 
-* `style`: Heading style (`string`, default `consistent`, values `atx`/`atx_closed`/`consistent`/`setext`/`setext_with_atx`/`setext_with_atx_closed`)
+* `style`: Heading style (`string`, default `consistent`, values `atx` /
+  `atx_closed` / `consistent` / `setext` / `setext_with_atx` /
+  `setext_with_atx_closed`)
 
 This rule is triggered when different heading styles (atx, setext, and 'closed'
 atx) are used in the same document:
@@ -146,7 +148,8 @@ Aliases: `ul-style`
 
 Parameters:
 
-* `style`: List style (`string`, default `consistent`, values `asterisk`/`consistent`/`dash`/`plus`/`sublist`)
+* `style`: List style (`string`, default `consistent`, values `asterisk` /
+  `consistent` / `dash` / `plus` / `sublist`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -168,13 +171,13 @@ document:
 * Item 3
 ```
 
-The configured list style can be a specific symbol to use (asterisk, plus, dash),
-to ensure that all list styling is consistent, or to ensure that each
+The configured list style can be a specific symbol to use (asterisk, plus,
+dash), to ensure that all list styling is consistent, or to ensure that each
 sublist has a consistent symbol that differs from its parent list.
 
-For example, the following is valid for the `sublist` style because the outer-most
-indent uses asterisk, the middle indent uses plus, and the inner-most indent uses
-dash:
+For example, the following is valid for the `sublist` style because the
+outer-most indent uses asterisk, the middle indent uses plus, and the inner-most
+indent uses dash:
 
 ```markdown
 * Item 1
@@ -303,8 +306,10 @@ Aliases: `ul-indent`
 Parameters:
 
 * `indent`: Spaces for indent (`integer`, default `2`)
-* `start_indent`: Spaces for first level indent (when start_indented is set) (`integer`, default `2`)
-* `start_indented`: Whether to indent the first level of the list (`boolean`, default `false`)
+* `start_indent`: Spaces for first level indent (when start_indented is set)
+  (`integer`, default `2`)
+* `start_indented`: Whether to indent the first level of the list (`boolean`,
+  default `false`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -331,19 +336,22 @@ rule).
 
 The `start_indented` parameter allows the first level of lists to be indented by
 the configured number of spaces rather than starting at zero (the inverse of
-MD006). The `start_indent` parameter allows the first level of lists to be indented
-by a different number of spaces than the rest (ignored when `start_indented` is not
-set).
+MD006). The `start_indent` parameter allows the first level of lists to be
+indented by a different number of spaces than the rest (ignored when
+`start_indented` is not set).
 
 Rationale: Indenting by 2 spaces allows the content of a nested list to be in
 line with the start of the content of the parent list when a single space is
 used after the list marker. Indenting by 4 spaces is consistent with code blocks
 and simpler for editors to implement. Additionally, this can be a compatibility
-issue for other Markdown parsers, which require 4-space indents. More information:
-<https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists>
-and <http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting>.
+issue for other Markdown parsers, which require 4-space indents. More
+information: [Markdown Style Guide][markdown-style-guide] and [Marked app\
+support][marked-app-support].
 
 Note: See [Prettier.md](Prettier.md) for compatibility information.
+
+[markdown-style-guide]: https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists
+[marked-app-support]: http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting
 
 <a name="md009"></a>
 
@@ -356,13 +364,14 @@ Aliases: `no-trailing-spaces`
 Parameters:
 
 * `br_spaces`: Spaces for line break (`integer`, default `2`)
-* `list_item_empty_lines`: Allow spaces for empty lines in list items (`boolean`, default `false`)
+* `list_item_empty_lines`: Allow spaces for empty lines in list items
+  (`boolean`, default `false`)
 * `strict`: Include unnecessary breaks (`boolean`, default `false`)
 
 Fixable: Most violations can be fixed by tooling
 
-This rule is triggered on any lines that end with unexpected whitespace. To fix this,
-remove the trailing space from the end of the line.
+This rule is triggered on any lines that end with unexpected whitespace. To fix
+this, remove the trailing space from the end of the line.
 
 Note: Trailing space is allowed in indented and fenced code blocks because some
 languages require it.
@@ -371,12 +380,14 @@ The `br_spaces` parameter allows an exception to this rule for a specific number
 of trailing spaces, typically used to insert an explicit line break. The default
 value allows 2 spaces to indicate a hard break (\<br> element).
 
-Note: You must set `br_spaces` to a value >= 2 for this parameter to take effect.
-Setting `br_spaces` to 1 behaves the same as 0, disallowing any trailing spaces.
+Note: You must set `br_spaces` to a value >= 2 for this parameter to take
+effect. Setting `br_spaces` to 1 behaves the same as 0, disallowing any trailing
+spaces.
 
-By default, this rule will not trigger when the allowed number of spaces is used,
-even when it doesn't create a hard break (for example, at the end of a paragraph).
-To report such instances as well, set the `strict` parameter to `true`.
+By default, this rule will not trigger when the allowed number of spaces is
+used, even when it doesn't create a hard break (for example, at the end of a
+paragraph). To report such instances as well, set the `strict` parameter to
+`true`.
 
 ```markdown
 Text text text
@@ -407,7 +418,8 @@ Aliases: `no-hard-tabs`
 Parameters:
 
 * `code_blocks`: Include code blocks (`boolean`, default `true`)
-* `ignore_code_languages`: Fenced code languages to ignore (`string[]`, default `[]`)
+* `ignore_code_languages`: Fenced code languages to ignore (`string[]`, default
+  `[]`)
 * `spaces_per_tab`: Number of spaces for each hard tab (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
@@ -538,10 +550,12 @@ Aliases: `line-length`
 
 Parameters:
 
-* `code_block_line_length`: Number of characters for code blocks (`integer`, default `80`)
+* `code_block_line_length`: Number of characters for code blocks (`integer`,
+  default `80`)
 * `code_blocks`: Include code blocks (`boolean`, default `true`)
 * `headers`: Include headings (`boolean`, default `true`)
-* `heading_line_length`: Number of characters for headings (`integer`, default `80`)
+* `heading_line_length`: Number of characters for headings (`integer`, default
+  `80`)
 * `headings`: Include headings (`boolean`, default `true`)
 * `line_length`: Number of characters (`integer`, default `80`)
 * `stern`: Stern length checking (`boolean`, default `false`)
@@ -812,15 +826,15 @@ Some more text
 ## Heading 2
 ```
 
-The `lines_above` and `lines_below` parameters can be used to specify a different
-number of blank lines (including 0) above or below each heading.
+The `lines_above` and `lines_below` parameters can be used to specify a
+different number of blank lines (including 0) above or below each heading.
 
 Note: If `lines_above` or `lines_below` are configured to require more than one
 blank line, [MD012/no-multiple-blanks](md012.md) should also be customized.
 
-Rationale: Aside from aesthetic reasons, some parsers, including `kramdown`, will
-not parse headings that don't have a blank line before, and will parse them as
-regular text.
+Rationale: Aside from aesthetic reasons, some parsers, including `kramdown`,
+will not parse headings that don't have a blank line before, and will parse them
+as regular text.
 
 <a name="md023"></a>
 
@@ -861,7 +875,8 @@ Aliases: `no-duplicate-header`, `no-duplicate-heading`
 
 Parameters:
 
-* `allow_different_nesting`: Only check sibling headings (`boolean`, default `false`)
+* `allow_different_nesting`: Only check sibling headings (`boolean`, default
+  `false`)
 * `siblings_only`: Only check sibling headings (`boolean`, default `false`)
 
 This rule is triggered if there are multiple headings in the document that have
@@ -910,7 +925,8 @@ Aliases: `single-h1`, `single-title`
 
 Parameters:
 
-* `front_matter_title`: RegExp for matching title in front matter (`string`, default `^\s*title\s*[:=]`)
+* `front_matter_title`: RegExp for matching title in front matter (`string`,
+  default `^\s*title\s*[:=]`)
 * `level`: Heading level (`integer`, default `1`)
 
 This rule is triggered when a top-level heading is in use (the first line of
@@ -938,17 +954,18 @@ lower-level headings (h2, h3, etc.):
 Note: The `level` parameter can be used to change the top-level (ex: to h2) in
 cases where an h1 is added externally.
 
-If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and contains
-a `title` property (commonly used with blog posts), this rule treats that as a top
-level heading and will report a violation for any subsequent top-level headings.
-To use a different property name in the front matter, specify the text of a regular
-expression via the `front_matter_title` parameter. To disable the use of front
-matter by this rule, specify `""` for `front_matter_title`.
+If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and
+contains a `title` property (commonly used with blog posts), this rule treats
+that as a top level heading and will report a violation for any subsequent
+top-level headings. To use a different property name in the front matter,
+specify the text of a regular expression via the `front_matter_title` parameter.
+To disable the use of front matter by this rule, specify `""` for
+`front_matter_title`.
 
 Rationale: A top-level heading is an h1 on the first line of the file, and
 serves as the title for the document. If this convention is in use, then there
-can not be more than one title for the document, and the entire document
-should be contained within this heading.
+can not be more than one title for the document, and the entire document should
+be contained within this heading.
 
 <a name="md026"></a>
 
@@ -960,7 +977,8 @@ Aliases: `no-trailing-punctuation`
 
 Parameters:
 
-* `punctuation`: Punctuation characters not allowed at end of headings (`string`, default `.,;:!。，；：！`)
+* `punctuation`: Punctuation characters not allowed at end of headings
+  (`string`, default `.,;:!。，；：！`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -980,16 +998,18 @@ To fix this, remove the trailing punctuation:
 Note: The `punctuation` parameter can be used to specify what characters count
 as punctuation at the end of a heading. For example, you can change it to
 `".,;:"` to allow headings that end with an exclamation point. `?` is
-allowed by default because of how common it is in headings of FAQ-style documents.
-Setting the `punctuation` parameter to `""` allows all characters - and is
-equivalent to disabling the rule.
+allowed by default because of how common it is in headings of FAQ-style
+documents. Setting the `punctuation` parameter to `""` allows all characters -
+and is equivalent to disabling the rule.
 
-Note: The trailing semicolon of
-[HTML entity references](https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references)
+Note: The trailing semicolon of [HTML entity references][html-entity-references]
 like `&copy;`, `&#169;`, and `&#x000A9;` is ignored by this rule.
 
 Rationale: Headings are not meant to be full sentences. More information:
-<https://cirosantilli.com/markdown-style-guide#punctuation-at-the-end-of-headers>
+[Punctuation at the end of headers][end-punctuation].
+
+[end-punctuation]: https://cirosantilli.com/markdown-style-guide#punctuation-at-the-end-of-headers
+[html-entity-references]: https://en.wikipedia.org/wiki/List_of_XML_and_HTML_character_entity_references
 
 <a name="md027"></a>
 
@@ -1071,7 +1091,8 @@ Aliases: `ol-prefix`
 
 Parameters:
 
-* `style`: List style (`string`, default `one_or_ordered`, values `one`/`one_or_ordered`/`ordered`/`zero`)
+* `style`: List style (`string`, default `one_or_ordered`, values `one` /
+  `one_or_ordered` / `ordered` / `zero`)
 
 This rule is triggered for ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
@@ -1172,9 +1193,12 @@ Aliases: `list-marker-space`
 Parameters:
 
 * `ol_multi`: Spaces for multi-line ordered list items (`integer`, default `1`)
-* `ol_single`: Spaces for single-line ordered list items (`integer`, default `1`)
-* `ul_multi`: Spaces for multi-line unordered list items (`integer`, default `1`)
-* `ul_single`: Spaces for single-line unordered list items (`integer`, default `1`)
+* `ol_single`: Spaces for single-line ordered list items (`integer`, default
+  `1`)
+* `ul_multi`: Spaces for multi-line unordered list items (`integer`, default
+  `1`)
+* `ul_single`: Spaces for single-line unordered list items (`integer`, default
+  `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1579,8 +1603,8 @@ automatically trimmed (to allow for embedded backticks):
 `` `backticks` ``
 ```
 
-Note: A single leading or trailing space is allowed if used to separate code span
-markers from an embedded backtick:
+Note: A single leading or trailing space is allowed if used to separate code
+span markers from an embedded backtick:
 
 ```markdown
 `` ` embedded backtick``
@@ -1677,7 +1701,8 @@ Aliases: `first-line-h1`, `first-line-heading`
 
 Parameters:
 
-* `front_matter_title`: RegExp for matching title in front matter (`string`, default `^\s*title\s*[:=]`)
+* `front_matter_title`: RegExp for matching title in front matter (`string`,
+  default `^\s*title\s*[:=]`)
 * `level`: Heading level (`integer`, default `1`)
 
 This rule is intended to ensure documents have a title and is triggered when
@@ -1705,14 +1730,15 @@ permitted by this rule. For example:
 This is a file with a top-level HTML heading
 ```
 
-Note: The `level` parameter can be used to change the top-level (ex: to h2) in cases
-where an h1 is added externally.
+Note: The `level` parameter can be used to change the top-level (ex: to h2) in
+cases where an h1 is added externally.
 
 If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and
 contains a `title` property (commonly used with blog posts), this rule will not
 report a violation. To use a different property name in the front matter,
 specify the text of a regular expression via the `front_matter_title` parameter.
-To disable the use of front matter by this rule, specify `""` for `front_matter_title`.
+To disable the use of front matter by this rule, specify `""` for
+`front_matter_title`.
 
 Rationale: The top-level heading often acts as the title of a document. More
 information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
@@ -1749,7 +1775,8 @@ But non-empty fragments will not:
 [a valid fragment](#fragment)
 ```
 
-Rationale: Empty links do not lead anywhere and therefore don't function as links.
+Rationale: Empty links do not lead anywhere and therefore don't function as
+links.
 
 <a name="md043"></a>
 
@@ -1816,12 +1843,12 @@ special value `"+"` meaning "one or more unspecified headings" and set the
 When an error is detected, this rule outputs the line number of the first
 problematic heading (otherwise, it outputs the last line number of the file).
 
-Note that while the `headings` parameter uses the "## Text" ATX heading style for
-simplicity, a file may use any supported heading style.
+Note that while the `headings` parameter uses the "## Text" ATX heading style
+for simplicity, a file may use any supported heading style.
 
-By default, the case of headings in the document is not required to match that of
-`headings`. To require that case match exactly, set the `match_case` parameter to
-`true`.
+By default, the case of headings in the document is not required to match that
+of `headings`. To require that case match exactly, set the `match_case`
+parameter to `true`.
 
 Rationale: Projects may wish to enforce a consistent document structure across
 a set of similar content.
@@ -1847,8 +1874,9 @@ the specified capitalization. It can be used to enforce a standard letter case
 for the names of projects and products.
 
 For example, the language "JavaScript" is usually written with both the 'J' and
-'S' capitalized - though sometimes the 's' or 'j' appear in lower-case. To enforce
-the proper capitalization, specify the desired letter case in the `names` array:
+'S' capitalized - though sometimes the 's' or 'j' appear in lower-case. To
+enforce the proper capitalization, specify the desired letter case in the
+`names` array:
 
 ```json
 [
@@ -1871,7 +1899,8 @@ Tags: `accessibility`, `images`
 
 Aliases: `no-alt-text`
 
-This rule is triggered when an image is missing alternate text (alt text) information.
+This rule is triggered when an image is missing alternate text (alt text)
+information.
 
 Alternate text is commonly specified inline as:
 
@@ -1889,12 +1918,15 @@ Or with reference syntax as:
 [ref]: image.jpg "Optional title"
 ```
 
-Guidance for writing alternate text is available from the [W3C](https://www.w3.org/WAI/alt/),
-[Wikipedia](https://en.wikipedia.org/wiki/Alt_attribute), and
-[other locations](https://www.phase2technology.com/blog/no-more-excuses).
+Guidance for writing alternate text is available from the [W3C][w3c],
+[Wikipedia][wikipedia], and [other locations][phase2technology].
 
 Rationale: Alternate text is important for accessibility and describes the
 content of an image for people who may not be able to see it.
+
+[phase2technology]: https://www.phase2technology.com/blog/no-more-excuses
+[w3c]: https://www.w3.org/WAI/alt/
+[wikipedia]: https://en.wikipedia.org/wiki/Alt_attribute
 
 <a name="md046"></a>
 
@@ -1906,12 +1938,14 @@ Aliases: `code-block-style`
 
 Parameters:
 
-* `style`: Block style (`string`, default `consistent`, values `consistent`/`fenced`/`indented`)
+* `style`: Block style (`string`, default `consistent`, values `consistent` /
+  `fenced` / `indented`)
 
 This rule is triggered when unwanted or different code block styles are used in
 the same document.
 
-In the default configuration this rule reports a violation for the following document:
+In the default configuration this rule reports a violation for the following
+document:
 
 <!-- markdownlint-disable code-block-style -->
 
@@ -1968,7 +2002,11 @@ This file ends with a newline.
 ```
 
 Rationale: Some programs have trouble with files that do not end with a newline.
-More information: <https://unix.stackexchange.com/questions/18743/whats-the-point-in-adding-a-new-line-to-the-end-of-a-file>.
+
+More information: [What's the point in adding a new line to the end of a
+file?][stack-exchange]
+
+[stack-exchange]: https://unix.stackexchange.com/questions/18743/whats-the-point-in-adding-a-new-line-to-the-end-of-a-file
 
 <a name="md048"></a>
 
@@ -1980,7 +2018,8 @@ Aliases: `code-fence-style`
 
 Parameters:
 
-* `style`: Code fence style (`string`, default `consistent`, values `backtick`/`consistent`/`tilde`)
+* `style`: Code fence style (`string`, default `consistent`, values `backtick`
+  / `consistent` / `tilde`)
 
 This rule is triggered when the symbols used in the document for fenced code
 blocks do not match the configured code fence style:
@@ -2023,7 +2062,8 @@ Aliases: `emphasis-style`
 
 Parameters:
 
-* `style`: Emphasis style should be consistent (`string`, default `consistent`, values `asterisk`/`consistent`/`underscore`)
+* `style`: Emphasis style should be consistent (`string`, default `consistent`,
+  values `asterisk` / `consistent` / `underscore`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -2057,7 +2097,8 @@ Aliases: `strong-style`
 
 Parameters:
 
-* `style`: Strong style should be consistent (`string`, default `consistent`, values `asterisk`/`consistent`/`underscore`)
+* `style`: Strong style should be consistent (`string`, default `consistent`,
+  values `asterisk` / `consistent` / `underscore`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -2118,16 +2159,16 @@ define a fragment:
 An `a` tag can be useful in scenarios where a heading is not appropriate or for
 control over the text of the fragment identifier.
 
-Rationale: [GitHub section links][github-section-links] are created automatically
-for every heading when Markdown content is displayed on GitHub. This makes it
-easy to link directly to different sections within a document. However, section
-links change if headings are renamed or removed. This rule helps identify broken
-section links within a document.
+Rationale: [GitHub section links][github-section-links] are created
+automatically for every heading when Markdown content is displayed on GitHub.
+This makes it easy to link directly to different sections within a document.
+However, section links change if headings are renamed or removed. This rule
+helps identify broken section links within a document.
 
 Section links are **not** part of the CommonMark specification. This rule
 enforces the [GitHub heading algorithm][github-heading-algorithm] which is:
-convert heading to lowercase, remove punctuation, convert spaces to dashes, append
-an incrementing integer as needed for uniqueness.
+convert heading to lowercase, remove punctuation, convert spaces to dashes,
+append an incrementing integer as needed for uniqueness.
 
 [github-section-links]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links
 [github-heading-algorithm]: https://github.com/gjtorikian/html-pipeline/blob/main/lib/html/pipeline/toc_filter.rb

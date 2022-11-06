@@ -33,24 +33,40 @@ and test cases came directly from that project.
 ### Related
 
 * CLI
-  * [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
-    command-line interface for Node.js ([works with pre-commit](https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit))
-  * [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2)
-    command-line interface for Node.js ([works with pre-commit](https://github.com/DavidAnson/markdownlint-cli2#pre-commit))
+  * [markdownlint-cli][markdownlint-cli] command-line interface for Node.js
+    ([works with pre-commit][markdownlint-cli-precommit])
+  * [markdownlint-cli2][markdownlint-cli2] command-line interface for Node.js
+    ([works with pre-commit][markdownlint-cli2-precommit])
 * GitHub
-  * [GitHub Super-Linter Action](https://github.com/github/super-linter)
-  * [GitHub Actions problem matcher for markdownlint-cli](https://github.com/xt0rted/markdownlint-problem-matcher)
+  * [GitHub Super-Linter Action][super-linter]
+  * [GitHub Actions problem matcher for
+    markdownlint-cli][markdownlint-problem-matcher]
 * Editor
-  * [vscode-markdownlint extension for VS Code](https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint)
-  * [Sublime Text markdownlint for Sublime Text](https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint)
-  * [coc-markdownlint extension for Vim/Neovim](https://github.com/fannheyward/coc-markdownlint)
+  * [vscode-markdownlint extension for VS Code][vscode-markdownlint]
+  * [Sublime Text markdownlint for Sublime Text][sublimelinter]
+  * [coc-markdownlint extension for Vim/Neovim][coc]
 * Tooling
-  * [eslint-plugin-markdownlint for the ESLint analyzer](https://github.com/paweldrozd/eslint-plugin-markdownlint)
-  * [grunt-markdownlint for the Grunt task runner](https://github.com/sagiegurari/grunt-markdownlint)
-  * [Cake.Markdownlint addin for Cake build automation system](https://github.com/cake-contrib/Cake.Markdownlint)
-  * [Lombiq Node.js Extensions for MSBuild (.NET builds)](https://github.com/Lombiq/NodeJs-Extensions)
+  * [eslint-plugin-markdownlint for the ESLint analyzer][eslint-plugin]
+  * [grunt-markdownlint for the Grunt task runner][grunt-markdownlint]
+  * [Cake.Markdownlint addin for Cake build automation system][cake]
+  * [Lombiq Node.js Extensions for MSBuild (.NET builds)][nodejs-extensions]
 * Ruby
-  * [markdownlint/mdl gem for Ruby](https://rubygems.org/gems/mdl)
+  * [markdownlint/mdl gem for Ruby][rubygems-mdl]
+
+[cake]: https://github.com/cake-contrib/Cake.Markdownlint
+[coc]: https://github.com/fannheyward/coc-markdownlint
+[eslint-plugin]: https://github.com/paweldrozd/eslint-plugin-markdownlint
+[grunt-markdownlint]: https://github.com/sagiegurari/grunt-markdownlint
+[markdownlint-cli]: https://github.com/igorshubovych/markdownlint-cli
+[markdownlint-cli-precommit]: https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit
+[markdownlint-cli2]: https://github.com/DavidAnson/markdownlint-cli2
+[markdownlint-cli2-precommit]: https://github.com/DavidAnson/markdownlint-cli2#pre-commit
+[markdownlint-problem-matcher]: https://github.com/xt0rted/markdownlint-problem-matcher
+[nodejs-extensions]: https://github.com/Lombiq/NodeJs-Extensions
+[rubygems-mdl]: https://rubygems.org/gems/mdl
+[sublimelinter]: https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint
+[super-linter]: https://github.com/github/super-linter
+[vscode-markdownlint]: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
 
 ## Demonstration
 
@@ -117,8 +133,8 @@ See [Rules.md](doc/Rules.md) for more details.
 
 ~~Struck through~~ rules are deprecated and provided for backward-compatibility.
 
-> All rules with `heading` as part of their name are also available as
-> `header` aliases (e.g. `heading-increment` is also available as `header-increment`).
+> All rules with `heading` as part of their name are also available as `header`
+> aliases (e.g. `heading-increment` is also available as `header-increment`).
 > The use of `header` is deprecated and provided for backward-compatibility.
 
 ## Tags
@@ -137,8 +153,9 @@ rules at once.
 * **`hard_tab`** - `MD010`
 * **`headers`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
   `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
-* **`headings`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
-  `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
+* **`headings`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`,
+  `MD021`, `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`,
+  `MD043`
 * **`hr`** - `MD035`
 * **`html`** - `MD033`
 * **`images`** - `MD045`, `MD052`, `MD053`
@@ -151,8 +168,8 @@ rules at once.
 * **`spelling`** - `MD044`
 * **`ul`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD030`, `MD032`
 * **`url`** - `MD034`
-* **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`, `MD037`,
-  `MD038`, `MD039`
+* **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
+  `MD037`, `MD038`, `MD039`
 
 ## Configuration
 
@@ -186,20 +203,20 @@ For example:
 
 ```markdown
 <!-- markdownlint-disable-next-line no-space-in-emphasis -->
-deliberate space * in * emphasis
+space * in * emphasis
 ```
 
 Or:
 
 ```markdown
-deliberate space * in * emphasis <!-- markdownlint-disable-line no-space-in-emphasis -->
+space * in * emphasis <!-- markdownlint-disable-line no-space-in-emphasis -->
 ```
 
 Or:
 
 ```markdown
 <!-- markdownlint-disable no-space-in-emphasis -->
-deliberate space * in * emphasis
+space * in * emphasis
 <!-- markdownlint-enable no-space-in-emphasis -->
 ```
 
@@ -247,7 +264,7 @@ more rules for a file, the following more advanced syntax is supported:
 For example:
 
 ```markdown
-<!-- markdownlint-configure-file { "MD013": { "code_blocks": false } } -->
+<!-- markdownlint-configure-file { "hr-style": { "style": "---" } } -->
 ```
 
 or
@@ -426,8 +443,9 @@ Array of functions to parse the content of `markdownlint-configure-file` blocks.
 As shown in the [Configuration](#configuration) section, inline comments can be
 used to customize the [configuration object](#optionsconfig) for a document. By
 default, the `JSON.parse` built-in is used, but custom parsers can be specified.
-Content is passed to each parser function until one returns a value (vs. throwing
-an exception). As such, strict parsers should come before flexible ones.
+Content is passed to each parser function until one returns a value (vs.
+throwing an exception). As such, strict parsers should come before flexible
+ones.
 
 For example:
 
@@ -443,8 +461,9 @@ List of custom rules to include with the default rule set for linting.
 
 Each array element should define a rule. Rules are typically exported
 by another package, but can be defined locally. Custom rules are
-identified by the
-[keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule).
+identified by the [keyword `markdownlint-rule` on npm][markdownlint-rule].
+
+[markdownlint-rule]: https://www.npmjs.com/search?q=keywords:markdownlint-rule
 
 Example:
 
@@ -483,9 +502,13 @@ specify a custom `RegExp` or use the value `null` to disable the feature.
 
 The default value:
 
+<!-- markdownlint-disable line-length -->
+
 ```js
 /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m
 ```
+
+<!-- markdownlint-restore -->
 
 Ignores [YAML](https://en.wikipedia.org/wiki/YAML),
 [TOML](https://en.wikipedia.org/wiki/TOML), and
@@ -502,13 +525,15 @@ Note: Matches must occur at the start of the file.
 
 ##### options.fs
 
-Type: `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+Type: `Object` implementing the [file system API][node-fs-api]
 
-In advanced scenarios, it may be desirable to bypass the default file system API.
-If a custom file system implementation is provided, `markdownlint` will use that
-instead of invoking `require("fs")`.
+In advanced scenarios, it may be desirable to bypass the default file system
+API. If a custom file system implementation is provided, `markdownlint` will use
+that instead of invoking `require("fs")`.
 
 Note: The only methods called are `readFile` and `readFileSync`.
+
+[node-fs-api]: https://nodejs.org/api/fs.html
 
 ##### options.handleRuleFailures
 
@@ -529,9 +554,11 @@ is allowed to continue and report any violations that were found.
 
 Type: `Array` of `Array` of `Function` and plugin parameters
 
-Specifies additional [markdown-it plugins](https://www.npmjs.com/search?q=keywords:markdown-it-plugin)
-to use when parsing input. Plugins can be used to support additional syntax and
-features for advanced scenarios.
+Specifies additional [markdown-it plugins][markdown-it-plugin] to use when
+parsing input. Plugins can be used to support additional syntax and features for
+advanced scenarios.
+
+[markdown-it-plugin]: https://www.npmjs.com/search?q=keywords:markdown-it-plugin
 
 Each item in the top-level `Array` should be of the form:
 
@@ -543,7 +570,7 @@ Each item in the top-level `Array` should be of the form:
 
 Type: `Boolean`
 
-Disables the use of HTML comments like `<!-- markdownlint-disable -->` to toggle
+Disables the use of HTML comments like `<!-- markdownlint-enable -->` to toggle
 rules within the body of Markdown content.
 
 By default, properly-formatted inline comments can be used to create exceptions
@@ -554,24 +581,27 @@ comments.
 
 Type: `Number`
 
-Specifies which version of the `result` object to return (see the "Usage" section
-below for examples).
+Specifies which version of the `result` object to return (see the "Usage"
+section below for examples).
 
-Passing a `resultVersion` of `0` corresponds to the original, simple format where
-each error is identified by rule name and line number. *This is deprecated.*
+Passing a `resultVersion` of `0` corresponds to the original, simple format
+where each error is identified by rule name and line number. *This is
+deprecated.*
 
-Passing a `resultVersion` of `1` corresponds to a detailed format where each error
-includes information about the line number, rule name, alias, description, as well
-as any additional detail or context that is available. *This is deprecated.*
+Passing a `resultVersion` of `1` corresponds to a detailed format where each
+error includes information about the line number, rule name, alias, description,
+as well as any additional detail or context that is available. *This is
+deprecated.*
 
-Passing a `resultVersion` of `2` corresponds to a detailed format where each error
-includes information about the line number, rule names, description, as well as any
-additional detail or context that is available. *This is deprecated.*
+Passing a `resultVersion` of `2` corresponds to a detailed format where each
+error includes information about the line number, rule names, description, as
+well as any additional detail or context that is available. *This is
+deprecated.*
 
 Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
-with additional information about how to fix automatically-fixable errors. In this
-mode, all errors that occur on each line are reported (other versions report only
-the first error for each rule). *This is the default.*
+with additional information about how to fix automatically-fixable errors. In
+this mode, all errors that occur on each line are reported (other versions
+report only the first error for each rule). *This is the default.*
 
 ##### options.strings
 
@@ -613,8 +643,9 @@ for readability and easy reuse. The `readConfig` and `readConfigSync` functions
 load configuration settings and support the `extends` keyword for referencing
 other files (see above).
 
-By default, configuration files are parsed as JSON (and named `.markdownlint.json`).
-Custom parsers can be provided to handle other formats like JSONC, YAML, and TOML.
+By default, configuration files are parsed as JSON (and named
+`.markdownlint.json`). Custom parsers can be provided to handle other formats
+like JSONC, YAML, and TOML.
 
 Asynchronous API:
 
@@ -623,7 +654,7 @@ Asynchronous API:
  * Read specified configuration file.
  *
  * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing function(s).
+ * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing function.
  * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
@@ -666,12 +697,13 @@ Type: `String`
 
 Location of configuration file to read.
 
-The `file` is resolved relative to the current working directory. If an `extends`
-key is present once read, its value will be resolved as a path relative to `file`
-and loaded recursively. Settings from a file referenced by `extends` are applied
-first, then those of `file` are applied on top (overriding any of the same keys
-appearing in the referenced file). If either the `file` or `extends` path begins
-with the `~` directory, it will act as a placeholder for the home directory.
+The `file` is resolved relative to the current working directory. If an
+`extends` key is present once read, its value will be resolved as a path
+relative to `file` and loaded recursively. Settings from a file referenced by
+`extends` are applied first, then those of `file` are applied on top (overriding
+any of the same keys appearing in the referenced file). If either the `file` or
+`extends` path begins with the `~` directory, it will act as a placeholder for
+the home directory.
 
 #### parsers
 
@@ -679,9 +711,9 @@ Type: *Optional* `Array` of `Function` taking (`String`) and returning `Object`
 
 Array of functions to parse configuration files.
 
-The contents of a configuration file are passed to each parser function until one
-of them returns a value (vs. throwing an exception). Consequently, strict parsers
-should come before flexible parsers.
+The contents of a configuration file are passed to each parser function until
+one of them returns a value (vs. throwing an exception). Consequently, strict
+parsers should come before flexible parsers.
 
 For example:
 
@@ -691,13 +723,16 @@ For example:
 
 #### fs
 
-Type: *Optional* `Object` implementing the [file system API](https://nodejs.org/api/fs.html)
+Type: *Optional* `Object` implementing the [file system API][file-system-api]
 
-In advanced scenarios, it may be desirable to bypass the default file system API.
-If a custom file system implementation is provided, `markdownlint` will use that
-instead of invoking `require("fs")`.
+[file-system-api]: https://nodejs.org/api/fs.html
 
-Note: The only methods called are `readFile`, `readFileSync`, `access`, and `accessSync`.
+In advanced scenarios, it may be desirable to bypass the default file system
+API. If a custom file system implementation is provided, `markdownlint` will use
+that instead of invoking `require("fs")`.
+
+Note: The only methods called are `readFile`, `readFileSync`, `access`, and
+`accessSync`.
 
 #### callback
 
@@ -735,6 +770,8 @@ markdownlint(options, function callback(err, result) {
 
 Output:
 
+<!-- markdownlint-disable line-length -->
+
 ```text
 bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
 bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.string"]
@@ -745,6 +782,8 @@ bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 ```
+
+<!-- markdownlint-restore -->
 
 Or invoke `markdownlint.sync` for a synchronous call:
 
@@ -764,6 +803,8 @@ markdownlint(options, function callback(err, result) {
 ```
 
 Output:
+
+<!-- markdownlint-disable line-length -->
 
 ```json
 {
@@ -801,7 +842,10 @@ Output:
 }
 ```
 
-Integration with the [gulp](https://gulpjs.com/) build system is straightforward:
+<!-- markdownlint-restore -->
+
+Integration with the [gulp](https://gulpjs.com/) build system is
+straightforward:
 
 ```js
 const gulp = require("gulp");
@@ -826,6 +870,8 @@ gulp.task("markdownlint", function task() {
 
 Output:
 
+<!-- markdownlint-disable line-length -->
+
 ```text
 [00:00:00] Starting 'markdownlint'...
 bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
@@ -834,6 +880,8 @@ bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 [00:00:00] Finished 'markdownlint' after 10 ms
 ```
+
+<!-- markdownlint-restore -->
 
 Integration with the [Grunt](https://gruntjs.com/) build system is similar:
 
@@ -866,6 +914,8 @@ module.exports = function wrapper(grunt) {
 
 Output:
 
+<!-- markdownlint-disable line-length -->
+
 ```text
 Running "markdownlint:example" (markdownlint) task
 Warning:
@@ -875,6 +925,8 @@ bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
  Use --force to continue.
 ```
+
+<!-- markdownlint-restore -->
 
 ## Browser
 
@@ -909,23 +961,58 @@ const results = window.markdownlint.sync(options).toString();
 For ideas how to integrate `markdownlint` into your workflow, refer to the
 following projects or one of the tools in the [Related section](#related):
 
-* [.NET Documentation](https://docs.microsoft.com/en-us/dotnet/) ([Search repository](https://github.com/dotnet/docs/search?q=markdownlint))
-* [ally.js](https://allyjs.io/) ([Search repository](https://github.com/medialize/ally.js/search?q=markdownlint))
-* [Boostnote](https://boostnote.io/) ([Search repository](https://github.com/BoostIO/Boostnote/search?q=markdownlint))
-* [CodiMD](https://github.com/hackmdio/codimd) ([Search repository](https://github.com/hackmdio/codimd/search?q=markdownlint))
-* [ESLint](https://eslint.org/) ([Search repository](https://github.com/eslint/eslint/search?q=markdownlint))
-* [Garden React Components](https://zendeskgarden.github.io/react-components/) ([Search repository](https://github.com/zendeskgarden/react-components/search?q=markdownlint))
-* [MDN Web Docs](https://developer.mozilla.org/) ([Search repository](https://github.com/mdn/content/search?q=markdownlint))
-* [MkDocs](https://www.mkdocs.org/) ([Search repository](https://github.com/mkdocs/mkdocs/search?q=markdownlint))
-* [Mocha](https://mochajs.org/) ([Search repository](https://github.com/mochajs/mocha/search?q=markdownlint))
-* [Pi-hole documentation](https://docs.pi-hole.net) ([Search repository](https://github.com/pi-hole/docs/search?q=markdownlint))
-* [Reactable](https://glittershark.github.io/reactable/) ([Search repository](https://github.com/glittershark/reactable/search?q=markdownlint))
-* [Sinon.JS](https://sinonjs.org/) ([Search repository](https://github.com/sinonjs/sinon/search?q=markdownlint))
-* [TestCafe](https://devexpress.github.io/testcafe/) ([Search repository](https://github.com/DevExpress/testcafe/search?q=markdownlint))
-* [V8](https://v8.dev/) ([Search repository](https://github.com/v8/v8.dev/search?q=markdownlint))
-* [webhint](https://webhint.io/) ([Search repository](https://github.com/webhintio/hint/search?q=markdownlint))
-* [webpack](https://webpack.js.org/) ([Search repository](https://github.com/webpack/webpack.js.org/search?q=markdownlint))
-* [WordPress](https://wordpress.org/gutenberg/) ([Search repository](https://github.com/WordPress/gutenberg/search?q=markdownlint))
+* [.NET Documentation][dot-net-doc] ([Search repository][dot-net-doc-search])
+* [ally.js][ally-js] ([Search repository][ally-js-search])
+* [Boostnote][boostnote] ([Search repository][boostnote-search])
+* [CodiMD][codimd] ([Search repository][codimd-search])
+* [ESLint][eslint] ([Search repository][eslint-search])
+* [Garden React Components][garden] ([Search repository][garden-search])
+* [MDN Web Docs][mdn] ([Search repository][mdn-search])
+* [MkDocs][mkdocs] ([Search repository][mkdocs-search])
+* [Mocha][mocha] ([Search repository][mocha-search])
+* [Pi-hole documentation][pi-hole] ([Search repository][pi-hole-search])
+* [Reactable][reactable] ([Search repository][reactable-search])
+* [Sinon.JS][sinon-js] ([Search repository][sinon-js-search])
+* [TestCafe][testcafe] ([Search repository][testcafe-search])
+* [V8][v8] ([Search repository][v8-search])
+* [webhint][webhint] ([Search repository][webhint-search])
+* [webpack][webpack] ([Search repository][webpack-search])
+* [WordPress][wordpress] ([Search repository][wordpress-search])
+
+[ally-js]: https://allyjs.io/
+[ally-js-search]: https://github.com/medialize/ally.js/search?q=markdownlint
+[boostnote]: https://boostnote.io/
+[boostnote-search]: https://github.com/BoostIO/Boostnote/search?q=markdownlint
+[codimd]: https://github.com/hackmdio/codimd
+[codimd-search]: https://github.com/hackmdio/codimd/search?q=markdownlint
+[dot-net-doc]: https://docs.microsoft.com/en-us/dotnet/
+[dot-net-doc-search]: https://github.com/dotnet/docs/search?q=markdownlint
+[eslint]: https://eslint.org/
+[eslint-search]: https://github.com/eslint/eslint/search?q=markdownlint
+[garden]: https://zendeskgarden.github.io/react-components/
+[garden-search]: https://github.com/zendeskgarden/react-components/search?q=markdownlint
+[mdn]: https://developer.mozilla.org/
+[mdn-search]: https://github.com/mdn/content/search?q=markdownlint
+[mkdocs]: https://www.mkdocs.org/
+[mkdocs-search]: https://github.com/mkdocs/mkdocs/search?q=markdownlint
+[mocha]: https://mochajs.org/
+[mocha-search]: https://github.com/mochajs/mocha/search?q=markdownlint
+[pi-hole]: https://docs.pi-hole.net
+[pi-hole-search]: https://github.com/pi-hole/docs/search?q=markdownlint
+[reactable]: https://glittershark.github.io/reactable/
+[reactable-search]: https://github.com/glittershark/reactable/search?q=markdownlint
+[sinon-js]: https://sinonjs.org/
+[sinon-js-search]: https://github.com/sinonjs/sinon/search?q=markdownlint
+[testcafe]: https://devexpress.github.io/testcafe/
+[testcafe-search]: https://github.com/DevExpress/testcafe/search?q=markdownlint
+[v8]: https://v8.dev/
+[v8-search]: https://github.com/v8/v8.dev/search?q=markdownlint
+[webhint]: https://webhint.io/
+[webhint-search]: https://github.com/webhintio/hint/search?q=markdownlint
+[webpack]: https://webpack.js.org/
+[webpack-search]: https://github.com/webpack/webpack.js.org/search?q=markdownlint
+[wordpress]: https://wordpress.org/gutenberg/
+[wordpress-search]: https://github.com/WordPress/gutenberg/search?q=markdownlint
 
 ## Contributing
 
@@ -937,97 +1024,120 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 * 0.0.2 - Improve documentation, tests, and code.
 * 0.0.3 - Add synchronous API, improve documentation and code.
 * 0.0.4 - Add tests MD033-MD040, update dependencies.
-* 0.0.5 - Add `strings` option to enable file-less scenarios, add in-browser demo.
+* 0.0.5 - Add `strings` option to enable file-less scenarios, add in-browser
+          demo.
 * 0.0.6 - Improve performance, simplify in-browser, update dependencies.
 * 0.0.7 - Add MD041, improve MD003, ignore front matter, update dependencies.
-* 0.0.8 - Support disabling/enabling rules inline, improve code fence, dependencies.
+* 0.0.8 - Support disabling/enabling rules inline, improve code fence,
+          dependencies.
 * 0.1.0 - Add aliases, exceptions for MD033, exclusions for MD013, dependencies.
   * 0.1.1 - Fix bug handling HTML in tables, reference markdownlint-cli.
-* 0.2.0 - Add MD042/MD043, enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041, dependencies.
-* 0.3.0 - More detailed error reporting with `resultVersion`, enhance MD010/MD012/MD036,
-          fixes for MD027/MD029/MD030, include JSON schema, dependencies.
+* 0.2.0 - Add MD042/MD043, enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041,
+          dependencies.
+* 0.3.0 - More detailed error reporting with `resultVersion`, enhance
+          MD010/MD012/MD036, fixes for MD027/MD029/MD030, include JSON schema,
+          dependencies.
   * 0.3.1 - Fix regressions in MD032/MD038, update dependencies.
-* 0.4.0 - Add MD044, enhance MD013/MD032/MD041/MD042/MD043, fix for MD038, dependencies.
-  * 0.4.1 - Fixes for MD038/front matter, improvements to MD044, update dependencies.
-* 0.5.0 - Add shareable configuration, `noInlineConfig` option, README links, fix MD030,
-          improve MD009/MD041, update dependencies.
-* 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments, TOML
-          front matter, fixes for MD044, update dependencies.
+* 0.4.0 - Add MD044, enhance MD013/MD032/MD041/MD042/MD043, fix for MD038,
+          dependencies.
+  * 0.4.1 - Fixes for MD038/front matter, improvements to MD044, update
+            dependencies.
+* 0.5.0 - Add shareable configuration, `noInlineConfig` option, README links,
+          fix MD030, improve MD009/MD041, update dependencies.
+* 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments,
+          TOML front matter, fixes for MD044, update dependencies.
   * 0.6.1 - Update `markdown-it` versioning, exclude demo/test from publishing.
-  * 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update dependencies.
+  * 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update
+            dependencies.
   * 0.6.3 - Improve highlighting for MD020.
   * 0.6.4 - Improve MD029/MD042, update dependencies.
-* 0.7.0 - `resultVersion` defaults to 2 (breaking change), add MD045, improve MD029,
-          remove trimLeft/trimRight, split rules, refactor, update dependencies.
-* 0.8.0 - Add support for using and authoring custom rules, improve MD004/MD007/MD013,
-          add `engines` to `package.json`, refactor, update dependencies.
-  * 0.8.1 - Update item loop to be iterative, improve MD014, update dependencies.
-* 0.9.0 - Remove support for end-of-life Node versions 0.10/0.12/4, change "header" to
-          "heading" per spec (non-breaking), improve MD003/MD009/MD041, handle uncommon
-          line-break characters, refactor for ES6, update dependencies.
-* 0.10.0 - Add support for non-JSON configuration files, pass file/string name to custom
-           rules, update dependencies.
-* 0.11.0 - Improve MD005/MD024/MD029/MD038, improve custom rule example, add CONTRIBUTING.md,
-           update dependencies.
-* 0.12.0 - Add `information` link for custom rules, `markdownItPlugins` for extensibility,
-           improve MD023/MD032/MD038, update dependencies.
-* 0.13.0 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041/, deprecate MD002,
-           improve pandoc YAML support, update dependencies.
-* 0.14.0 - Remove support for end-of-life Node version 6, introduce `markdownlint-rule-helpers`,
-           add MD046/MD047, improve MD033/MD034/MD039, improve custom rule validation and
-           in-browser demo, update dependencies.
+* 0.7.0 - `resultVersion` defaults to 2 (breaking change), add MD045, improve
+          MD029, remove trimLeft/trimRight, split rules, refactor, update
+          dependencies.
+* 0.8.0 - Add support for using and authoring custom rules, improve
+          MD004/MD007/MD013, add `engines` to `package.json`, refactor, update
+          dependencies.
+  * 0.8.1 - Update item loop to be iterative, improve MD014, update
+            dependencies.
+* 0.9.0 - Remove support for end-of-life Node versions 0.10/0.12/4, change
+          "header" to "heading" per spec (non-breaking), improve
+          MD003/MD009/MD041, handle uncommon line-break characters, refactor for
+          ES6, update dependencies.
+* 0.10.0 - Add support for non-JSON configuration files, pass file/string name
+           to custom rules, update dependencies.
+* 0.11.0 - Improve MD005/MD024/MD029/MD038, improve custom rule example, add
+           CONTRIBUTING.md, update dependencies.
+* 0.12.0 - Add `information` link for custom rules, `markdownItPlugins` for
+           extensibility, improve MD023/MD032/MD038, update dependencies.
+* 0.13.0 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041/, deprecate
+           MD002, improve pandoc YAML support, update dependencies.
+* 0.14.0 - Remove support for end-of-life Node version 6, introduce
+           `markdownlint-rule-helpers`, add MD046/MD047, improve
+           MD033/MD034/MD039, improve custom rule validation and in-browser
+           demo, update dependencies.
   * 0.14.1 - Improve MD033.
   * 0.14.2 - Improve MD047, add `handleRuleFailures` option.
-* 0.15.0 - Add `markdownlint-capture`/`markdownlint-restore` inline comments, improve
-           MD009/MD013/MD026/MD033/MD036, update dependencies.
-* 0.16.0 - Add custom rule sample for linting code, improve MD026/MD031/MD033/MD038,
-           update dependencies.
-* 0.17.0 - Add `resultVersion` 3 to support fix information for default and custom rules,
-           add fix information for 24 rules, update newline handling to match latest
-           CommonMark specification, improve MD014/MD037/MD039, update dependencies.
+* 0.15.0 - Add `markdownlint-capture`/`markdownlint-restore` inline comments,
+           improve MD009/MD013/MD026/MD033/MD036, update dependencies.
+* 0.16.0 - Add custom rule sample for linting code, improve
+           MD026/MD031/MD033/MD038, update dependencies.
+* 0.17.0 - Add `resultVersion` 3 to support fix information for default and
+           custom rules, add fix information for 24 rules, update newline
+           handling to match latest CommonMark specification, improve
+           MD014/MD037/MD039, update dependencies.
   * 0.17.1 - Fix handling of front matter by fix information.
   * 0.17.2 - Improve MD020/MD033/MD044.
-* 0.18.0 - Add MD048/code-fence-style, add fix information for MD007/ul-indent, add
-           `markdownlint-disable-file`/`markdownlint-enable-file` inline comments, add
-           type declaration file (.d.ts) for TypeScript dependents, update schema, improve
-           MD006/MD007/MD009/MD013/MD030, update dependencies.
-* 0.19.0 - Remove support for end-of-life Node version 8, add fix information for
-           MD005/list-indent, improve MD007/MD013/MD014, deprecate MD006/ul-start-left, add
-           rationale for every rule, update test runner and code coverage, add more JSDoc
-           comments, update dependencies.
+* 0.18.0 - Add MD048/code-fence-style, add fix information for MD007/ul-indent,
+           add `markdownlint-disable-file`/`markdownlint-enable-file` inline
+           comments, add type declaration file (.d.ts) for TypeScript
+           dependents, update schema, improve MD006/MD007/MD009/MD013/MD030,
+           update dependencies.
+* 0.19.0 - Remove support for end-of-life Node version 8, add fix information
+           for MD005/list-indent, improve MD007/MD013/MD014, deprecate
+           MD006/ul-start-left, add rationale for every rule, update test runner
+           and code coverage, add more JSDoc comments, update dependencies.
 * 0.20.0 - Add `markdownlint-configure-file` inline comment, reimplement MD037,
-           improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD038/MD039, improve HTML
-           comment handling, update dependencies.
+           improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD038/MD039,
+           improve HTML comment handling, update dependencies.
   * 0.20.1 - Fix regression in MD037.
   * 0.20.2 - Fix regression in MD037, improve MD038.
-  * 0.20.3 - Fix regression in MD037, improve MD044, add automatic regression testing.
-  * 0.20.4 - Fix regression in MD037, improve MD034/MD044, improve documentation.
-* 0.21.0 - Lint concurrently for better performance (async only), add Promise-based APIs,
-           update TypeScript declaration file, hide `toString` on `LintResults`, add ability
-           to fix in browser demo, allow custom rules in `.markdownlint.json` schema, improve
+  * 0.20.3 - Fix regression in MD037, improve MD044, add automatic regression
+             testing.
+  * 0.20.4 - Fix regression in MD037, improve MD034/MD044, improve
+             documentation.
+* 0.21.0 - Lint concurrently for better performance (async only), add
+           Promise-based APIs, update TypeScript declaration file, hide
+           `toString` on `LintResults`, add ability to fix in browser demo,
+           allow custom rules in `.markdownlint.json` schema, improve
            MD042/MD044, improve documentation, update dependencies.
   * 0.21.1 - Improve MD011/MD031, export `getVersion` API.
-* 0.22.0 - Allow `extends` in config to reference installed packages by name, add
-           `markdownlint-disable-next-line` inline comment, support JSON front matter, improve
-           MD009/MD026/MD028/MD043, update dependencies (including `markdown-it` to v12).
-* 0.23.0 - Add comprehensive example `.markdownlint.jsonc`/`.markdownlint.yaml` files, add fix
-           information for MD004/ul-style, improve MD018/MD019/MD020/MD021/MD037/MD041, improve
-           HTML comment handling, update test runner and test suite, update dependencies.
-  * 0.23.1 - Work around lack of webpack support for dynamic calls to `require` (`.resolve`).
-* 0.24.0 - Remove support for end-of-life Node version 10, add support for custom file system
-           module, improve MD010/MD011/MD037/MD043/MD044, improve TypeScript declaration file
-           and JSON schema, update dependencies.
-* 0.25.0 - Add MD049/MD050 for consistent emphasis/strong style (both auto-fixable), improve
-           MD007/MD010/MD032/MD033/MD035/MD037/MD039, support asynchronous custom rules,
-           improve performance, improve CI process, reduce dependencies, update dependencies.
+* 0.22.0 - Allow `extends` in config to reference installed packages by name,
+           add `markdownlint-disable-next-line` inline comment, support JSON
+           front matter, improve MD009/MD026/MD028/MD043, update dependencies
+           (including `markdown-it` to v12).
+* 0.23.0 - Add comprehensive example `.markdownlint.jsonc`/`.markdownlint.yaml`
+           files, add fix information for MD004/ul-style, improve
+           MD018/MD019/MD020/MD021/MD037/MD041, improve HTML comment handling,
+           update test runner and test suite, update dependencies.
+  * 0.23.1 - Work around lack of webpack support for dynamic calls to
+             `require`(`.resolve`).
+* 0.24.0 - Remove support for end-of-life Node version 10, add support for
+           custom file system module, improve MD010/MD011/MD037/MD043/MD044,
+           improve TypeScript declaration file and JSON schema, update
+           dependencies.
+* 0.25.0 - Add MD049/MD050 for consistent emphasis/strong style (both
+           auto-fixable), improve MD007/MD010/MD032/MD033/MD035/MD037/MD039,
+           support asynchronous custom rules, improve performance, improve CI
+           process, reduce dependencies, update dependencies.
   * 0.25.1 - Update dependencies for CVE-2022-21670.
-* 0.26.0 - Add MD051/MD052/MD053 for validating link fragments & reference links/images &
-           link/image reference definitions (MD053 is auto-fixable), improve
-           MD010/MD031/MD035/MD039/MD042/MD044/MD049/MD050, add `markdownlint-disable-line`
-           inline comment, support `~` paths in `readConfig/Sync`, add `configParsers` option,
-           remove support for end-of-life Node version 12, default `resultVersion` to 3, update
-           browser script to use ES2015, simplify JSON schema, address remaining CodeQL issues,
-           improve performance, update dependencies.
+* 0.26.0 - Add MD051/MD052/MD053 for validating link fragments & reference
+           links/images & link/image reference definitions (MD053 auto-fixable),
+           improve MD010/MD031/MD035/MD039/MD042/MD044/MD049/MD050, add
+           `markdownlint-disable-line` inline comment, support `~` paths in
+           `readConfig/Sync`, add `configParsers` option, remove support for
+           end-of-life Node version 12, default `resultVersion` to 3, update
+           browser script to use ES2015, simplify JSON schema, address remaining
+           CodeQL issues, improve performance, update dependencies.
   * 0.26.1 - Improve MD051.
   * 0.26.2 - Improve MD037/MD051/MD053.
 

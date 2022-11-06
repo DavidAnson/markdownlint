@@ -1,16 +1,18 @@
 # Custom Rules
 
-In addition to its built-in rules, `markdownlint` lets you enhance the linting experience by passing a list of custom rules using the
-[`options.customRules` property](../README.md#optionscustomrules).
-Custom rules can do everything the built-in rules can and are defined inline or imported from another package
-([keyword `markdownlint-rule` on npm](https://www.npmjs.com/search?q=keywords:markdownlint-rule)).
-Custom rules can be disabled, enabled, and customized using the same syntax as built-in rules.
+In addition to its built-in rules, `markdownlint` lets you enhance the linting
+experience by passing a list of custom rules using the [`options.customRules`
+property][options-custom-rules]. Custom rules can do everything the built-in
+rules can and are defined inline or imported from another package ([keyword
+`markdownlint-rule` on npm][markdownlint-rule]). Custom rules can be disabled,
+enabled, and customized using the same syntax as built-in rules.
 
 ## Authoring
 
-Rules are defined by a name (or multiple names), a description, an optional link to more information, one or more tags, and a function that implements
-the rule's behavior.
-That function is called once for each file/string input and is passed the parsed input and a function to log any violations.
+Rules are defined by a name (or multiple names), a description, an optional link
+to more information, one or more tags, and a function that implements the rule's
+behavior. That function is called once for each file/string input and is passed
+the parsed input and a function to log any violations.
 
 A simple rule implementation looks like:
 
@@ -35,62 +37,87 @@ module.exports = {
 };
 ```
 
-A rule is implemented as an `Object` with one optional and four required properties:
+A rule is implemented as an `Object` with one optional and four required
+properties:
 
-- `names` is a required `Array` of `String` values that identify the rule in output messages and config.
-- `description` is a required `String` value that describes the rule in output messages.
-- `information` is an optional (absolute) `URL` of a link to more information about the rule.
-- `tags` is a required `Array` of `String` values that groups related rules for easier customization.
-- `asynchronous` is an optional `Boolean` value that indicates whether the rule returns a `Promise` and runs asynchronously.
-- `function` is a required `Function` that implements the rule and is passed two parameters:
-  - `params` is an `Object` with properties that describe the content being analyzed:
+- `names` is a required `Array` of `String` values that identify the rule in
+  output messages and config.
+- `description` is a required `String` value that describes the rule in output
+  messages.
+- `information` is an optional (absolute) `URL` of a link to more information
+  about the rule.
+- `tags` is a required `Array` of `String` values that groups related rules for
+  easier customization.
+- `asynchronous` is an optional `Boolean` value that indicates whether the rule
+  returns a `Promise` and runs asynchronously.
+- `function` is a required `Function` that implements the rule and is passed two
+  parameters:
+  - `params` is an `Object` with properties that describe the content being
+    analyzed:
     - `name` is a `String` that identifies the input file/string.
-    - `tokens` is an `Array` of [`markdown-it` `Token` objects](https://markdown-it.github.io/markdown-it/#Token)
-       with added `line` and `lineNumber` properties.
-    - `lines` is an `Array` of `String` values corresponding to the lines of the input file/string.
-    - `frontMatterLines` is an `Array` of `String` values corresponding to any front matter (not present in `lines`).
-    - `config` is an `Object` corresponding to the rule's entry in `options.config` (if present).
-  - `onError` is a function that takes a single `Object` parameter with one required and four optional properties:
-    - `lineNumber` is a required `Number` specifying the 1-based line number of the error.
-    - `detail` is an optional `String` with information about what caused the error.
-    - `context` is an optional `String` with relevant text surrounding the error location.
-    - `range` is an optional `Array` with two `Number` values identifying the 1-based column and length of the error.
-    - `fixInfo` is an optional `Object` with information about how to fix the error (all properties are optional, but
-      at least one of `deleteCount` and `insertText` should be present; when applying a fix, the delete should be
+    - `tokens` is an `Array` of [`markdown-it` `Token`s][markdown-it-token] with
+      added `line` and `lineNumber` properties.
+    - `lines` is an `Array` of `String` values corresponding to the lines of the
+      input file/string.
+    - `frontMatterLines` is an `Array` of `String` values corresponding to any
+      front matter (not present in `lines`).
+    - `config` is an `Object` corresponding to the rule's entry in
+      `options.config` (if present).
+  - `onError` is a function that takes a single `Object` parameter with one
+    required and four optional properties:
+    - `lineNumber` is a required `Number` specifying the 1-based line number of
+      the error.
+    - `detail` is an optional `String` with information about what caused the
+      error.
+    - `context` is an optional `String` with relevant text surrounding the error
+      location.
+    - `range` is an optional `Array` with two `Number` values identifying the
+      1-based column and length of the error.
+    - `fixInfo` is an optional `Object` with information about how to fix the
+      error (all properties are optional, but at least one of `deleteCount` and
+      `insertText` should be present; when applying a fix, the delete should be
       performed before the insert):
-      - `lineNumber` is an optional `Number` specifying the 1-based line number of the edit.
-      - `editColumn` is an optional `Number` specifying the 1-based column number of the edit.
-      - `deleteCount` is an optional `Number` specifying the number of characters to delete (the value `-1` is used to delete the line).
-      - `insertText` is an optional `String` specifying the text to insert. `\n` is the platform-independent way to add
-        a line break; line breaks should be added at the beginning of a line instead of at the end).
+      - `lineNumber` is an optional `Number` specifying the 1-based line number
+        of the edit.
+      - `editColumn` is an optional `Number` specifying the 1-based column
+        number of the edit.
+      - `deleteCount` is an optional `Number` specifying the number of
+        characters to delete (the value `-1` is used to delete the line).
+      - `insertText` is an optional `String` specifying the text to insert. `\n`
+        is the platform-independent way to add a line break; line breaks should
+        be added at the beginning of a line instead of at the end).
 
-The collection of helper functions shared by the built-in rules is available for use by custom rules in the
-[markdownlint-rule-helpers package](https://www.npmjs.com/package/markdownlint-rule-helpers).
+The collection of helper functions shared by the built-in rules is available for
+use by custom rules in the [markdownlint-rule-helpers package][rule-helpers].
 
 ### Asynchronous Rules
 
-If a rule needs to perform asynchronous operations (such as fetching a network resource), it can specify the value `true` for its `asynchronous` property.
-Asynchronous rules should return a `Promise` from their `function` implementation that is resolved when the rule completes.
-(The value passed to `resolve(...)` is ignored.)
-Linting violations from asynchronous rules are reported via the `onError` function just like for synchronous rules.
+If a rule needs to perform asynchronous operations (such as fetching a network
+resource), it can specify the value `true` for its `asynchronous` property.
+Asynchronous rules should return a `Promise` from their `function`
+implementation that is resolved when the rule completes. (The value passed to
+`resolve(...)` is ignored.) Linting violations from asynchronous rules are
+reported via the `onError` function just like for synchronous rules.
 
-**Note**: Asynchronous rules cannot be referenced in a synchronous calling context (i.e., `markdownlint.sync(...)`).
-Attempting to do so throws an exception.
+**Note**: Asynchronous rules cannot be referenced in a synchronous calling
+context (i.e., `markdownlint.sync(...)`). Attempting to do so throws an
+exception.
 
 ## Examples
 
-- [Simple rules used by the project's test cases](../test/rules)
-- [Code for all `markdownlint` built-in rules](../lib)
-- [Package configuration for publishing to npm](../test/rules/npm)
+- [Simple rules used by the project's test cases][test-rules]
+- [Code for all `markdownlint` built-in rules][lib]
+- [Package configuration for publishing to npm][test-rules-npm]
   - Packages should export a single rule object or an `Array` of rule objects
-- [Custom rules from the Microsoft/vscode-docs-authoring repository](https://github.com/microsoft/vscode-docs-authoring/tree/main/packages/docs-linting/markdownlint-custom-rules)
-- [Custom rules from the axibase/docs-util repository](https://github.com/axibase/docs-util/tree/master/linting-rules)
-- [Custom rules from the webhintio/hint repository](https://github.com/webhintio/hint/blob/main/scripts/lint-markdown.js)
+- [Custom rules from the Microsoft/vscode-docs-authoring
+  repository][vscode-docs-authoring]
+- [Custom rules from the axibase/docs-util repository][docs-util]
+- [Custom rules from the webhintio/hint repository][hint]
 
 ## References
 
-- [CommonMark documentation and specification](https://commonmark.org/)
-- [`markdown-it` Markdown parser project page](https://github.com/markdown-it/markdown-it)
+- [CommonMark documentation and specification][commonmark]
+- [`markdown-it` Markdown parser project page][markdown-it]
 
 ## Params
 
@@ -324,3 +351,16 @@ Yields the `params` object:
   }
 }
 ```
+
+[commonmark]: https://commonmark.org/
+[docs-util]: https://github.com/axibase/docs-util/tree/master/linting-rules
+[hint]: https://github.com/webhintio/hint/blob/main/scripts/lint-markdown.js
+[lib]: ../lib
+[markdown-it]: https://github.com/markdown-it/markdown-it
+[markdown-it-token]: https://markdown-it.github.io/markdown-it/#Token
+[markdownlint-rule]: https://www.npmjs.com/search?q=keywords:markdownlint-rule
+[rule-helpers]: https://www.npmjs.com/package/markdownlint-rule-helpers
+[options-custom-rules]: ../README.md#optionscustomrules
+[test-rules]: ../test/rules
+[test-rules-npm]: ../test/rules/npm
+[vscode-docs-authoring]: https://github.com/microsoft/vscode-docs-authoring/tree/main/packages/docs-linting/markdownlint-custom-rules

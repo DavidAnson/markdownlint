@@ -10,7 +10,7 @@ assert(/^\d+\.\d+\.\d+$/.test(version));
 
 function assertConfiguration(config: markdownlint.Configuration) {
   assert(!!config);
-  assert.equal(config["line-length"], false);
+  assert.deepEqual(config["line-length"], { "strict": true });
   // config assignment is covered by markdownlint.Options
 }
 

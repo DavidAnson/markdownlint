@@ -1,3 +1,6 @@
 {
+  "extends": "../.markdownlint.json",
+
+  // Headings are added by the "build-docs" script (build-rules.mjs)
   "first-line-heading": false
 }

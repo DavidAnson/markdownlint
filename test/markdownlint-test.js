@@ -79,7 +79,6 @@ test("projectFilesNoInlineConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
     "files": [
-      "README.md",
       "CONTRIBUTING.md",
       "doc/CustomRules.md",
       "doc/Prettier.md",
@@ -92,7 +91,6 @@ test("projectFilesNoInlineConfig", (t) => new Promise((resolve) => {
   markdownlint(options, function callback(err, actual) {
     t.falsy(err);
     const expected = {
-      "README.md": [],
       "CONTRIBUTING.md": [],
       "doc/CustomRules.md": [],
       "doc/Prettier.md": [],

@@ -1,5 +1,7 @@
 {
-  "line-length": false,
+  "line-length": {
+    "strict": true
+  },
   "no-duplicate-heading": {
     "siblings_only": true
   },

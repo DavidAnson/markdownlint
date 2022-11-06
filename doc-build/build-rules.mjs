@@ -4,10 +4,26 @@ import { default as rules } from "../lib/rules.js";
 import { newLineRe } from "../helpers/helpers.js";
 import { deprecatedRuleNames, fixableRuleNames } from "../lib/constants.js";
 
+const maxLineLength = 80;
+
 const pathFor = (relativePath) => new URL(relativePath, import.meta.url);
 const inCode = (items) => items.map((item) => `\`${item}\``);
 const sortedComma = (items) => items.sort().join(", ");
 const linesFrom = (text) => text.split(newLineRe);
+const wrapListItem = (line) => {
+  const wrappedLines = [];
+  let remainingLine = line;
+  while (remainingLine.length > maxLineLength) {
+    let index = maxLineLength - 1;
+    while (remainingLine[index] !== " ") {
+      index--;
+    }
+    wrappedLines.push(remainingLine.slice(0, index + 1).trimEnd());
+    remainingLine = "  " + remainingLine.slice(index + 1).trimStart();
+  }
+  wrappedLines.push(remainingLine);
+  return wrappedLines;
+};
 
 // import { default as schema } from "file.json" assert { type: "json" };
 const importJson =
@@ -48,24 +64,27 @@ for (const rule of rules) {
   if (ruleData.properties) {
     section.push(
       "Parameters:",
-      "",
-      ...Object.keys(ruleData.properties).sort().map((property) => {
-        const propData = ruleData.properties[property];
-        const propType = (propData.type === "array") ?
-          `${propData.items.type}[]` :
-          propData.type;
-        const defaultValue = Array.isArray(propData.default) ?
-          JSON.stringify(propData.default) :
-          propData.default;
-        const allValues = propData.enum?.sort();
-        return `* \`${property}\`: ${propData.description} (` +
-          `\`${propType}\`, default \`${defaultValue}\`` +
-          (propData.enum ?
-            `, values ${allValues.map((value) => `\`${value}\``).join("/")}` :
-            ""
-          ) +
-          ")";
-      }),
+      ""
+    );
+    for (const property of Object.keys(ruleData.properties).sort()) {
+      const propData = ruleData.properties[property];
+      const propType = (propData.type === "array") ?
+        `${propData.items.type}[]` :
+        propData.type;
+      const defaultValue = Array.isArray(propData.default) ?
+        JSON.stringify(propData.default) :
+        propData.default;
+      const allValues = propData.enum?.sort();
+      const listItem = `* \`${property}\`: ${propData.description} (` +
+        `\`${propType}\`, default \`${defaultValue}\`` +
+        (propData.enum ?
+          `, values ${allValues.map((value) => `\`${value}\``).join(" / ")}` :
+          ""
+        ) +
+        ")";
+      section.push(...wrapListItem(listItem));
+    }
+    section.push(
       ""
     );
   }
