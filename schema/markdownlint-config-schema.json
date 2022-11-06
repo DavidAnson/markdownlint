@@ -682,6 +682,11 @@
             "type": "string"
           },
           "default": []
+        },
+        "extra": {
+          "description": "Accept extra data",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false

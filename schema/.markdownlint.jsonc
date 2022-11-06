@@ -209,7 +209,9 @@
   // MD040/fenced-code-language - Fenced code blocks should have a language specified
   "MD040": {
     // List of languages
-    "allowed_languages": []
+    "allowed_languages": [],
+    // Accept extra data
+    "extra": true
   },
 
   // MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading

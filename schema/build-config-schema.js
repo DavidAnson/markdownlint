@@ -356,6 +356,11 @@ for (const rule of rules) {
             "type": "string"
           },
           "default": []
+        },
+        "extra": {
+          "description": "Accept extra data",
+          "type": "boolean",
+          "default": true
         }
       };
       break;
