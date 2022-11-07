@@ -1,9 +1,9 @@
-# md040-extra.md
+# md040-language_only.md
 
 Fence code block information with leading whitespaces:
 
 ```  html
-<h1>markdownlint</h1>  {MD040:5}
+<h1>markdownlint</h1> {MD040:5}
 ```
 
 Fence code block information with trailing whitespace:

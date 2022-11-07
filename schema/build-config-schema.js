@@ -357,10 +357,10 @@ for (const rule of rules) {
           },
           "default": []
         },
-        "extra": {
-          "description": "Accept extra data",
+        "language_only": {
+          "description": "Accept language only",
           "type": "boolean",
-          "default": true
+          "default": false
         }
       };
       break;

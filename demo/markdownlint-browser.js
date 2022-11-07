@@ -4168,8 +4168,7 @@ module.exports = {
     "function": function MD040(params, onError) {
         let allowed = params.config.allowed_languages;
         allowed = Array.isArray(allowed) ? allowed : [];
-        let extra = params.config.extra;
-        extra = (extra === undefined) ? true : !!extra;
+        const only = !!params.config.language_only;
         filterTokens(params, "fence", function forToken(token) {
             const lang = token.info.trim().split(/\s+/u).shift();
             if (lang === "") {
@@ -4178,8 +4177,8 @@ module.exports = {
             else if ((allowed.length > 0) && !allowed.includes(lang)) {
                 addError(onError, token.lineNumber, `"${lang}" is not allowed`);
             }
-            if (!extra && token.info !== lang) {
-                addError(onError, token.lineNumber, `"${token.info}" contains extra info`);
+            if (only && (token.info !== lang)) {
+                addError(onError, token.lineNumber, `"${token.info}" doesn't only contain the language`);
             }
         });
     }
