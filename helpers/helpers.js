@@ -797,6 +797,7 @@ function getReferenceLinkImageData(lineMetadata) {
   const shortcuts = new Set();
   const definitions = new Map();
   const duplicateDefinitions = [];
+  const definitionLineIndices = [];
   // Define helper functions
   const normalizeLabel = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
   const exclusions = [];
@@ -838,6 +839,11 @@ function getReferenceLinkImageData(lineMetadata) {
         }
         const labelLength = linkReferenceDefinitionMatch[0].length;
         exclusions.push([ 0, lineOffsets[lineIndex], labelLength ]);
+        const hasDefinition = line.slice(labelLength).trim().length > 0;
+        definitionLineIndices.push(lineIndex);
+        if (!hasDefinition) {
+          definitionLineIndices.push(lineIndex + 1);
+        }
       }
     }
   });
@@ -914,7 +920,8 @@ function getReferenceLinkImageData(lineMetadata) {
     references,
     shortcuts,
     definitions,
-    duplicateDefinitions
+    duplicateDefinitions,
+    definitionLineIndices
   };
 }
 module.exports.getReferenceLinkImageData = getReferenceLinkImageData;
