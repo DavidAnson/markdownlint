@@ -191,7 +191,7 @@ MD039: true
 MD040:
   # List of languages
   allowed_languages: []
-  # Accept language only
+  # Require language only
   language_only: false
 
 # MD041/first-line-heading/first-line-h1 - First line in a file should be a top-level heading

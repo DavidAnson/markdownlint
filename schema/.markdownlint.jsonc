@@ -210,7 +210,7 @@
   "MD040": {
     // List of languages
     "allowed_languages": [],
-    // Accept language only
+    // Require language only
     "language_only": false
   },
 

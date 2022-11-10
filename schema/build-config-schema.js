@@ -358,7 +358,7 @@ for (const rule of rules) {
           "default": []
         },
         "language_only": {
-          "description": "Accept language only",
+          "description": "Require language only",
           "type": "boolean",
           "default": false
         }
