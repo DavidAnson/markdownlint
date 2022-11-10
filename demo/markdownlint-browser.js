@@ -764,6 +764,7 @@ function getReferenceLinkImageData(lineMetadata) {
     const shortcuts = new Set();
     const definitions = new Map();
     const duplicateDefinitions = [];
+    const definitionLineIndices = [];
     // Define helper functions
     const normalizeLabel = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
     const exclusions = [];
@@ -804,6 +805,11 @@ function getReferenceLinkImageData(lineMetadata) {
                 }
                 const labelLength = linkReferenceDefinitionMatch[0].length;
                 exclusions.push([0, lineOffsets[lineIndex], labelLength]);
+                const hasDefinition = line.slice(labelLength).trim().length > 0;
+                definitionLineIndices.push(lineIndex);
+                if (!hasDefinition) {
+                    definitionLineIndices.push(lineIndex + 1);
+                }
             }
         }
     });
@@ -876,7 +882,8 @@ function getReferenceLinkImageData(lineMetadata) {
         references,
         shortcuts,
         definitions,
-        duplicateDefinitions
+        duplicateDefinitions,
+        definitionLineIndices
     };
 }
 module.exports.getReferenceLinkImageData = getReferenceLinkImageData;
@@ -2832,8 +2839,8 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorDetailIf, filterTokens, forEachHeading, forEachLine, includesSorted, linkReferenceDefinitionRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf, filterTokens, forEachHeading, forEachLine, includesSorted } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const longLineRePrefix = "^.{";
 const longLineRePostfixRelaxed = "}.*\\s.*$";
 const longLineRePostfixStrict = "}.+$";
@@ -2888,6 +2895,7 @@ module.exports = {
                 linkOnlyLineNumbers.push(token.lineNumber);
             }
         });
+        const { definitionLineIndices } = referenceLinkImageData();
         forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence, inTable) => {
             const lineNumber = lineIndex + 1;
             const isHeading = includesSorted(headingLineNumbers, lineNumber);
@@ -2900,10 +2908,10 @@ module.exports = {
             if ((includeCodeBlocks || !inCode) &&
                 (includeTables || !inTable) &&
                 (includeHeadings || !isHeading) &&
+                !includesSorted(definitionLineIndices, lineIndex) &&
                 (strict ||
                     (!(stern && sternModeRe.test(line)) &&
-                        !includesSorted(linkOnlyLineNumbers, lineNumber) &&
-                        !linkReferenceDefinitionRe.test(line))) &&
+                        !includesSorted(linkOnlyLineNumbers, lineNumber))) &&
                 lengthRe.test(line)) {
                 addErrorDetailIf(onError, lineNumber, length, line.length, null, null, [length + 1, line.length - length]);
             }
