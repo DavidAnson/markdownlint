@@ -356,6 +356,11 @@ for (const rule of rules) {
             "type": "string"
           },
           "default": []
+        },
+        "language_only": {
+          "description": "Require language only",
+          "type": "boolean",
+          "default": false
         }
       };
       break;

@@ -1,0 +1,6 @@
+{
+  "MD040": {
+    "allowed_languages": ["html", "css"],
+    "language_only": true
+  }
+}
