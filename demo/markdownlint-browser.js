@@ -3705,6 +3705,8 @@ module.exports = {
 // @ts-check
 
 const { addErrorContext, bareUrlRe, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const htmlLinkOpenRe = /^<a[\s>]/i;
+const htmlLinkCloseRe = /^<\/a[\s>]/i;
 module.exports = {
     "names": ["MD034", "no-bare-urls"],
     "description": "Bare URL used",
@@ -3712,6 +3714,7 @@ module.exports = {
     "function": function MD034(params, onError) {
         filterTokens(params, "inline", (token) => {
             let inLink = false;
+            let inInline = false;
             for (const child of token.children) {
                 const { content, line, lineNumber, type } = child;
                 let match = null;
@@ -3721,14 +3724,19 @@ module.exports = {
                 else if (type === "link_close") {
                     inLink = false;
                 }
-                else if ((type === "text") && !inLink) {
+                else if ((type === "html_inline") && htmlLinkOpenRe.test(content)) {
+                    inInline = true;
+                }
+                else if ((type === "html_inline") && htmlLinkCloseRe.test(content)) {
+                    inInline = false;
+                }
+                else if ((type === "text") && !inLink && !inInline) {
                     while ((match = bareUrlRe.exec(content)) !== null) {
                         const [bareUrl] = match;
                         const matchIndex = match.index;
                         const bareUrlLength = bareUrl.length;
-                        // Allow "[https://example.com]" to avoid conflicts with
-                        // MD011/no-reversed-links; allow quoting as another way
-                        // of deliberately including a bare URL
+                        // Allow "[LINK]" to avoid conflicts with MD011/no-reversed-links
+                        // Allow quoting as a way of deliberately including a bare URL
                         const leftChar = content[matchIndex - 1];
                         const rightChar = content[matchIndex + bareUrlLength];
                         if (!((leftChar === "[") && (rightChar === "]")) &&
