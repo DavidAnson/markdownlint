@@ -57,7 +57,7 @@ Aliases: `first-header-h1`, `first-heading-h1`
 
 Parameters:
 
-* `level`: Heading level (`integer`, default `1`)
+- `level`: Heading level (`integer`, default `1`)
 
 > Note: *MD002 has been deprecated and is disabled by default.*
 > [MD041/first-line-heading](md041.md) offers an improved implementation.
@@ -95,7 +95,7 @@ Aliases: `header-style`, `heading-style`
 
 Parameters:
 
-* `style`: Heading style (`string`, default `consistent`, values `atx` /
+- `style`: Heading style (`string`, default `consistent`, values `atx` /
   `atx_closed` / `consistent` / `setext` / `setext_with_atx` /
   `setext_with_atx_closed`)
 
@@ -148,7 +148,7 @@ Aliases: `ul-style`
 
 Parameters:
 
-* `style`: List style (`string`, default `consistent`, values `asterisk` /
+- `style`: List style (`string`, default `consistent`, values `asterisk` /
   `consistent` / `dash` / `plus` / `sublist`)
 
 Fixable: Most violations can be fixed by tooling
@@ -305,10 +305,10 @@ Aliases: `ul-indent`
 
 Parameters:
 
-* `indent`: Spaces for indent (`integer`, default `2`)
-* `start_indent`: Spaces for first level indent (when start_indented is set)
+- `indent`: Spaces for indent (`integer`, default `2`)
+- `start_indent`: Spaces for first level indent (when start_indented is set)
   (`integer`, default `2`)
-* `start_indented`: Whether to indent the first level of the list (`boolean`,
+- `start_indented`: Whether to indent the first level of the list (`boolean`,
   default `false`)
 
 Fixable: Most violations can be fixed by tooling
@@ -363,10 +363,10 @@ Aliases: `no-trailing-spaces`
 
 Parameters:
 
-* `br_spaces`: Spaces for line break (`integer`, default `2`)
-* `list_item_empty_lines`: Allow spaces for empty lines in list items
+- `br_spaces`: Spaces for line break (`integer`, default `2`)
+- `list_item_empty_lines`: Allow spaces for empty lines in list items
   (`boolean`, default `false`)
-* `strict`: Include unnecessary breaks (`boolean`, default `false`)
+- `strict`: Include unnecessary breaks (`boolean`, default `false`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -417,10 +417,10 @@ Aliases: `no-hard-tabs`
 
 Parameters:
 
-* `code_blocks`: Include code blocks (`boolean`, default `true`)
-* `ignore_code_languages`: Fenced code languages to ignore (`string[]`, default
+- `code_blocks`: Include code blocks (`boolean`, default `true`)
+- `ignore_code_languages`: Fenced code languages to ignore (`string[]`, default
   `[]`)
-* `spaces_per_tab`: Number of spaces for each hard tab (`integer`, default `1`)
+- `spaces_per_tab`: Number of spaces for each hard tab (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -509,7 +509,7 @@ Aliases: `no-multiple-blanks`
 
 Parameters:
 
-* `maximum`: Consecutive blank lines (`integer`, default `1`)
+- `maximum`: Consecutive blank lines (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -550,17 +550,17 @@ Aliases: `line-length`
 
 Parameters:
 
-* `code_block_line_length`: Number of characters for code blocks (`integer`,
+- `code_block_line_length`: Number of characters for code blocks (`integer`,
   default `80`)
-* `code_blocks`: Include code blocks (`boolean`, default `true`)
-* `headers`: Include headings (`boolean`, default `true`)
-* `heading_line_length`: Number of characters for headings (`integer`, default
+- `code_blocks`: Include code blocks (`boolean`, default `true`)
+- `headers`: Include headings (`boolean`, default `true`)
+- `heading_line_length`: Number of characters for headings (`integer`, default
   `80`)
-* `headings`: Include headings (`boolean`, default `true`)
-* `line_length`: Number of characters (`integer`, default `80`)
-* `stern`: Stern length checking (`boolean`, default `false`)
-* `strict`: Strict length checking (`boolean`, default `false`)
-* `tables`: Include tables (`boolean`, default `true`)
+- `headings`: Include headings (`boolean`, default `true`)
+- `line_length`: Number of characters (`integer`, default `80`)
+- `stern`: Stern length checking (`boolean`, default `false`)
+- `strict`: Strict length checking (`boolean`, default `false`)
+- `tables`: Include tables (`boolean`, default `true`)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -797,8 +797,8 @@ Aliases: `blanks-around-headers`, `blanks-around-headings`
 
 Parameters:
 
-* `lines_above`: Blank lines above heading (`integer`, default `1`)
-* `lines_below`: Blank lines below heading (`integer`, default `1`)
+- `lines_above`: Blank lines above heading (`integer`, default `1`)
+- `lines_below`: Blank lines below heading (`integer`, default `1`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -875,9 +875,9 @@ Aliases: `no-duplicate-header`, `no-duplicate-heading`
 
 Parameters:
 
-* `allow_different_nesting`: Only check sibling headings (`boolean`, default
+- `allow_different_nesting`: Only check sibling headings (`boolean`, default
   `false`)
-* `siblings_only`: Only check sibling headings (`boolean`, default `false`)
+- `siblings_only`: Only check sibling headings (`boolean`, default `false`)
 
 This rule is triggered if there are multiple headings in the document that have
 the same text:
@@ -925,9 +925,9 @@ Aliases: `single-h1`, `single-title`
 
 Parameters:
 
-* `front_matter_title`: RegExp for matching title in front matter (`string`,
+- `front_matter_title`: RegExp for matching title in front matter (`string`,
   default `^\s*title\s*[:=]`)
-* `level`: Heading level (`integer`, default `1`)
+- `level`: Heading level (`integer`, default `1`)
 
 This rule is triggered when a top-level heading is in use (the first line of
 the file is an h1 heading), and more than one h1 heading is in use in the
@@ -977,7 +977,7 @@ Aliases: `no-trailing-punctuation`
 
 Parameters:
 
-* `punctuation`: Punctuation characters not allowed at end of headings
+- `punctuation`: Punctuation characters not allowed at end of headings
   (`string`, default `.,;:!。，；：！`)
 
 Fixable: Most violations can be fixed by tooling
@@ -1091,7 +1091,7 @@ Aliases: `ol-prefix`
 
 Parameters:
 
-* `style`: List style (`string`, default `one_or_ordered`, values `one` /
+- `style`: List style (`string`, default `one_or_ordered`, values `one` /
   `one_or_ordered` / `ordered` / `zero`)
 
 This rule is triggered for ordered lists that do not either start with '1.' or
@@ -1192,12 +1192,12 @@ Aliases: `list-marker-space`
 
 Parameters:
 
-* `ol_multi`: Spaces for multi-line ordered list items (`integer`, default `1`)
-* `ol_single`: Spaces for single-line ordered list items (`integer`, default
+- `ol_multi`: Spaces for multi-line ordered list items (`integer`, default `1`)
+- `ol_single`: Spaces for single-line ordered list items (`integer`, default
   `1`)
-* `ul_multi`: Spaces for multi-line unordered list items (`integer`, default
+- `ul_multi`: Spaces for multi-line unordered list items (`integer`, default
   `1`)
-* `ul_single`: Spaces for single-line unordered list items (`integer`, default
+- `ul_single`: Spaces for single-line unordered list items (`integer`, default
   `1`)
 
 Fixable: Most violations can be fixed by tooling
@@ -1277,7 +1277,7 @@ Aliases: `blanks-around-fences`
 
 Parameters:
 
-* `list_items`: Include list items (`boolean`, default `true`)
+- `list_items`: Include list items (`boolean`, default `true`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1371,7 +1371,7 @@ Aliases: `no-inline-html`
 
 Parameters:
 
-* `allowed_elements`: Allowed elements (`string[]`, default `[]`)
+- `allowed_elements`: Allowed elements (`string[]`, default `[]`)
 
 This rule is triggered whenever raw HTML is used in a Markdown document:
 
@@ -1448,7 +1448,7 @@ Aliases: `hr-style`
 
 Parameters:
 
-* `style`: Horizontal rule style (`string`, default `consistent`)
+- `style`: Horizontal rule style (`string`, default `consistent`)
 
 This rule is triggered when inconsistent styles of horizontal rules are used
 in the document:
@@ -1493,7 +1493,7 @@ Aliases: `no-emphasis-as-header`, `no-emphasis-as-heading`
 
 Parameters:
 
-* `punctuation`: Punctuation characters (`string`, default `.,;:!?。，；：！？`)
+- `punctuation`: Punctuation characters (`string`, default `.,;:!?。，；：！？`)
 
 This check looks for instances where emphasized (i.e. bold or italic) text is
 used to separate sections, where a heading should be used instead:
@@ -1646,8 +1646,8 @@ Aliases: `fenced-code-language`
 
 Parameters:
 
-* `allowed_languages`: List of languages (`string[]`, default `[]`)
-* `language_only`: Require language only (`boolean`, default `false`)
+- `allowed_languages`: List of languages (`string[]`, default `[]`)
+- `language_only`: Require language only (`boolean`, default `false`)
 
 This rule is triggered when fenced code blocks are used, but a language isn't
 specified:
@@ -1701,9 +1701,9 @@ Aliases: `first-line-h1`, `first-line-heading`
 
 Parameters:
 
-* `front_matter_title`: RegExp for matching title in front matter (`string`,
+- `front_matter_title`: RegExp for matching title in front matter (`string`,
   default `^\s*title\s*[:=]`)
-* `level`: Heading level (`integer`, default `1`)
+- `level`: Heading level (`integer`, default `1`)
 
 This rule is intended to ensure documents have a title and is triggered when
 the first line in the file isn't a top-level (h1) heading:
@@ -1788,9 +1788,9 @@ Aliases: `required-headers`, `required-headings`
 
 Parameters:
 
-* `headers`: List of headings (`string[]`, default `[]`)
-* `headings`: List of headings (`string[]`, default `[]`)
-* `match_case`: Match case of headings (`boolean`, default `false`)
+- `headers`: List of headings (`string[]`, default `[]`)
+- `headings`: List of headings (`string[]`, default `[]`)
+- `match_case`: Match case of headings (`boolean`, default `false`)
 
 > If `headings` is not provided, `headers` (deprecated) will be used.
 
@@ -1863,9 +1863,9 @@ Aliases: `proper-names`
 
 Parameters:
 
-* `code_blocks`: Include code blocks (`boolean`, default `true`)
-* `html_elements`: Include HTML elements (`boolean`, default `true`)
-* `names`: List of proper names (`string[]`, default `[]`)
+- `code_blocks`: Include code blocks (`boolean`, default `true`)
+- `html_elements`: Include HTML elements (`boolean`, default `true`)
+- `names`: List of proper names (`string[]`, default `[]`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -1938,7 +1938,7 @@ Aliases: `code-block-style`
 
 Parameters:
 
-* `style`: Block style (`string`, default `consistent`, values `consistent` /
+- `style`: Block style (`string`, default `consistent`, values `consistent` /
   `fenced` / `indented`)
 
 This rule is triggered when unwanted or different code block styles are used in
@@ -2018,7 +2018,7 @@ Aliases: `code-fence-style`
 
 Parameters:
 
-* `style`: Code fence style (`string`, default `consistent`, values `backtick`
+- `style`: Code fence style (`string`, default `consistent`, values `backtick`
   / `consistent` / `tilde`)
 
 This rule is triggered when the symbols used in the document for fenced code
@@ -2062,7 +2062,7 @@ Aliases: `emphasis-style`
 
 Parameters:
 
-* `style`: Emphasis style should be consistent (`string`, default `consistent`,
+- `style`: Emphasis style should be consistent (`string`, default `consistent`,
   values `asterisk` / `consistent` / `underscore`)
 
 Fixable: Most violations can be fixed by tooling
@@ -2097,7 +2097,7 @@ Aliases: `strong-style`
 
 Parameters:
 
-* `style`: Strong style should be consistent (`string`, default `consistent`,
+- `style`: Strong style should be consistent (`string`, default `consistent`,
   values `asterisk` / `consistent` / `underscore`)
 
 Fixable: Most violations can be fixed by tooling
@@ -2219,7 +2219,7 @@ Aliases: `link-image-reference-definitions`
 
 Parameters:
 
-* `ignored_definitions`: Ignored definitions (`string[]`, default `["//"]`)
+- `ignored_definitions`: Ignored definitions (`string[]`, default `["//"]`)
 
 Fixable: Most violations can be fixed by tooling
 
@@ -2234,7 +2234,7 @@ unnecessary:
 
 1. If a label is not referenced by any link or image in a document, that
    definition is unused and can be deleted.
-1. If a label is defined multiple times in a document, the first definition is
+2. If a label is defined multiple times in a document, the first definition is
    used and the others can be deleted.
 
 This rule considers a reference definition to be used if any link or image
@@ -2246,7 +2246,7 @@ be ignored by setting the `ignored_definitions` parameter. The default value of
 this parameter ignores the following convention for adding non-HTML comments to
 Markdown:
 
-```md
+```markdown
 [//]: # (This behaves like a comment)
 ```
 

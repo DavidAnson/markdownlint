@@ -1,9 +1,35 @@
 {
+  "code-block-style": {
+    "style": "fenced"
+  },
+  "code-fence-style": {
+    "style": "backtick"
+  },
+  "emphasis-style": {
+    "style": "asterisk"
+  },
+  "fenced-code-language": {
+    "allowed_languages": [
+      "javascript",
+      "json",
+      "markdown"
+    ],
+    "language_only": true
+  },
+  "heading-style": {
+    "style": "atx"
+  },
+  "hr-style": {
+    "style": "---"
+  },
   "line-length": {
     "strict": true
   },
   "no-duplicate-heading": {
     "siblings_only": true
+  },
+  "ol-prefix": {
+    "style": "ordered"
   },
   "proper-names": {
     "code_blocks": false,
@@ -16,5 +42,11 @@
       "markdownlint",
       "Node.js"
     ]
+  },
+  "strong-style": {
+    "style": "asterisk"
+  },
+  "ul-style": {
+    "style": "dash"
   }
 }

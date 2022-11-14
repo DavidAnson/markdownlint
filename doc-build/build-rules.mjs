@@ -75,7 +75,7 @@ for (const rule of rules) {
         JSON.stringify(propData.default) :
         propData.default;
       const allValues = propData.enum?.sort();
-      const listItem = `* \`${property}\`: ${propData.description} (` +
+      const listItem = `- \`${property}\`: ${propData.description} (` +
         `\`${propType}\`, default \`${defaultValue}\`` +
         (propData.enum ?
           `, values ${allValues.map((value) => `\`${value}\``).join(" / ")}` :

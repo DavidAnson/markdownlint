@@ -16,7 +16,7 @@ the parsed input and a function to log any violations.
 
 A simple rule implementation looks like:
 
-```js
+```javascript
 module.exports = {
   "names": [ "any-blockquote" ],
   "description": "Rule that reports an error for any blockquote",
