@@ -21,7 +21,8 @@ to `4`, the following `markdownlint` configuration can be used:
   },
   "MD030": {
     "ul_single": 3,
-    "ul_multi": 3
+    "ul_multi": 3,
+    "ol_multi": 2
   }
 }
 ```
