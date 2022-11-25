@@ -66,7 +66,7 @@
     "c8": "7.12.0",
     "eslint": "8.28.0",
     "eslint-plugin-es": "4.1.0",
-    "eslint-plugin-jsdoc": "39.6.2",
+    "eslint-plugin-jsdoc": "39.6.4",
     "eslint-plugin-n": "15.5.1",
     "eslint-plugin-unicorn": "45.0.0",
     "globby": "13.1.2",
