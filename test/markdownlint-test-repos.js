@@ -238,10 +238,6 @@ if (existsSync(v8v8DevDir)) {
     const rootDir = v8v8DevDir;
     const globPatterns = [ join(rootDir, "src/**/*.md") ];
     const configPath = join(rootDir, ".markdownlint.json");
-    const ignoreRes = [
-      /^[^:]+: \d+: (MD049|MD051)\/.*$\r?\n?/gm,
-      /^test-repos\/v8-v8-dev\/src\/blog\/oilpan-library\.md: \d+: MD053\/.*$\r?\n?/gm
-    ];
-    return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+    return lintTestRepo(t, globPatterns, configPath);
   });
 }
