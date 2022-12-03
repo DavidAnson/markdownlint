@@ -17,7 +17,9 @@ change from release to release. There are brief descriptive comments above each
 function, but no [JSDoc][jsdoc] annotations. That said, some of what's here will
 be useful to custom rule authors and may avoid duplicating code.
 
-## Example
+## Examples
+
+### Using Helpers from a Custom Rule
 
 ```javascript
 const { forEachLine, getLineMetadata } = require("markdownlint-rule-helpers");
@@ -39,6 +41,18 @@ module.exports = {
     });
   }
 };
+```
+
+### Applying Recommended Fixes
+
+```javascript
+const { "sync": markdownlintSync } = require("markdownlint");
+const markdownlintRuleHelpers = require("markdownlint-rule-helpers");
+
+function fixMarkdownlintViolations(content) {
+  const fixResults = markdownlintSync({ strings: { content } });
+  return markdownlintRuleHelpers.applyFixes(content, fixResults.content);
+}
 ```
 
 See also: [`markdownlint` built-in rule implementations][lib].
