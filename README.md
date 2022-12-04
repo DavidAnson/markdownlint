@@ -930,7 +930,8 @@ bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be
 
 ### Fixing
 
-Rules that can be fixed automatically include a `fixInfo` property which is outlined in the [documentation for custom rules](./doc/CustomRules.md). To apply those fixes more easily, the `applyFixes` method in [markdownlint-rule-helpers](./helpers/README.md#applying-recommended-fixes) may be used.
+Rules that can be fixed automatically include a `fixInfo` property which is outlined in the [documentation for custom rules](./doc/CustomRules.md).
+To apply those fixes more easily, the `applyFixes` method in [markdownlint-rule-helpers](./helpers/README.md#applying-recommended-fixes) may be used.
 
 ## Browser
 
