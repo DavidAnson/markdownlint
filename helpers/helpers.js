@@ -23,7 +23,8 @@ const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 
 // Regular expressions for range matching
-module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
+module.exports.bareUrlRe =
+  /(?:http|ftp)s?:\/\/[^\s\]<>"'`]*(?:\/|[^\s\]<>"'`\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 
@@ -418,17 +419,22 @@ module.exports.flattenLists = function flattenLists(tokens) {
   return flattenedLists;
 };
 
-// Calls the provided function for each specified inline child token
-module.exports.forEachInlineChild =
+/**
+ * Calls the provided function for each specified inline child token.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {string} type Token type identifier.
+ * @param {Function} handler Callback function.
+ * @returns {void}
+ */
 function forEachInlineChild(params, type, handler) {
-  filterTokens(params, "inline", function forToken(token) {
-    for (const child of token.children) {
-      if (child.type === type) {
-        handler(child, token);
-      }
+  filterTokens(params, "inline", (token) => {
+    for (const child of token.children.filter((c) => c.type === type)) {
+      handler(child, token);
     }
   });
-};
+}
+module.exports.forEachInlineChild = forEachInlineChild;
 
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
@@ -608,6 +614,7 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
  */
 module.exports.htmlElementRanges = (params, lineMetadata) => {
   const exclusions = [];
+  // Match with htmlElementRe
   forEachLine(lineMetadata, (line, lineIndex, inCode) => {
     let match = null;
     // eslint-disable-next-line no-unmodified-loop-condition
@@ -615,6 +622,31 @@ module.exports.htmlElementRanges = (params, lineMetadata) => {
       exclusions.push([ lineIndex, match.index, match[0].length ]);
     }
   });
+  // Match with html_inline
+  forEachInlineChild(params, "html_inline", (token, parent) => {
+    const parentContent = parent.content;
+    let tokenContent = token.content;
+    const parentIndex = parentContent.indexOf(tokenContent);
+    let deltaLines = 0;
+    let indent = 0;
+    for (let i = parentIndex - 1; i >= 0; i--) {
+      if (parentContent[i] === "\n") {
+        deltaLines++;
+      } else if (deltaLines === 0) {
+        indent++;
+      }
+    }
+    let lineIndex = token.lineNumber - 1 + deltaLines;
+    do {
+      const index = tokenContent.indexOf("\n");
+      const length = (index === -1) ? tokenContent.length : index;
+      exclusions.push([ lineIndex, indent, length ]);
+      tokenContent = tokenContent.slice(length + 1);
+      lineIndex++;
+      indent = 0;
+    } while (tokenContent.length > 0);
+  });
+  // Return results
   return exclusions;
 };
 

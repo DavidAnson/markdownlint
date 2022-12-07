@@ -29,3 +29,21 @@ As is <a href="https://example.com/info.htm">https://example.com/info.htm text</
 <br> Another violation: https://example.com. {MD034} <br>
 
 <br/> Another violation: https://example.com. {MD034} <br/>
+
+This is not a bare [link]( https://example.com ).
+
+URLs in HTML are not bare:
+
+<element-name first-attribute=" https://example.com/first " second-attribute=" https://example.com/second ">
+  Text
+</element-name>
+
+<element-name
+  first-attribute=" https://example.com/first "
+  second-attribute=" https://example.com/second "></element-name>
+
+URLs in link and image text are not bare:
+
+Text [link to https://example.com site](https://example.com) text.
+
+Image ![for https://example.com site](https://example.com) text.

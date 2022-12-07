@@ -47,7 +47,8 @@ module.exports.inlineCommentStartRe = inlineCommentStartRe;
 const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
-module.exports.bareUrlRe = /(?:http|ftp)s?:\/\/[^\s\]"']*(?:\/|[^\s\]"'\W])/ig;
+module.exports.bareUrlRe =
+    /(?:http|ftp)s?:\/\/[^\s\]<>"'`]*(?:\/|[^\s\]<>"'`\W])/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
@@ -414,17 +415,22 @@ module.exports.flattenLists = function flattenLists(tokens) {
     }
     return flattenedLists;
 };
-// Calls the provided function for each specified inline child token
-module.exports.forEachInlineChild =
-    function forEachInlineChild(params, type, handler) {
-        filterTokens(params, "inline", function forToken(token) {
-            for (const child of token.children) {
-                if (child.type === type) {
-                    handler(child, token);
-                }
-            }
-        });
-    };
+/**
+ * Calls the provided function for each specified inline child token.
+ *
+ * @param {Object} params RuleParams instance.
+ * @param {string} type Token type identifier.
+ * @param {Function} handler Callback function.
+ * @returns {void}
+ */
+function forEachInlineChild(params, type, handler) {
+    filterTokens(params, "inline", (token) => {
+        for (const child of token.children.filter((c) => c.type === type)) {
+            handler(child, token);
+        }
+    });
+}
+module.exports.forEachInlineChild = forEachInlineChild;
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
     let heading = null;
@@ -585,6 +591,7 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
  */
 module.exports.htmlElementRanges = (params, lineMetadata) => {
     const exclusions = [];
+    // Match with htmlElementRe
     forEachLine(lineMetadata, (line, lineIndex, inCode) => {
         let match = null;
         // eslint-disable-next-line no-unmodified-loop-condition
@@ -592,6 +599,32 @@ module.exports.htmlElementRanges = (params, lineMetadata) => {
             exclusions.push([lineIndex, match.index, match[0].length]);
         }
     });
+    // Match with html_inline
+    forEachInlineChild(params, "html_inline", (token, parent) => {
+        const parentContent = parent.content;
+        let tokenContent = token.content;
+        const parentIndex = parentContent.indexOf(tokenContent);
+        let deltaLines = 0;
+        let indent = 0;
+        for (let i = parentIndex - 1; i >= 0; i--) {
+            if (parentContent[i] === "\n") {
+                deltaLines++;
+            }
+            else if (deltaLines === 0) {
+                indent++;
+            }
+        }
+        let lineIndex = token.lineNumber - 1 + deltaLines;
+        do {
+            const index = tokenContent.indexOf("\n");
+            const length = (index === -1) ? tokenContent.length : index;
+            exclusions.push([lineIndex, indent, length]);
+            tokenContent = tokenContent.slice(length + 1);
+            lineIndex++;
+            indent = 0;
+        } while (tokenContent.length > 0);
+    });
+    // Return results
     return exclusions;
 };
 /**
@@ -3704,60 +3737,62 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorContext, bareUrlRe, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const htmlLinkOpenRe = /^<a[\s>]/i;
-const htmlLinkCloseRe = /^<\/a[\s>]/i;
+const { addErrorContext, bareUrlRe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { codeBlockAndSpanRanges, htmlElementRanges, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const htmlLinkRe = /<a(?:|\s[^>]+)>[^<>]*<\/a\s*>/ig;
 module.exports = {
     "names": ["MD034", "no-bare-urls"],
     "description": "Bare URL used",
     "tags": ["links", "url"],
     "function": function MD034(params, onError) {
-        filterTokens(params, "inline", (token) => {
-            let inLink = false;
-            let inInline = false;
-            for (const child of token.children) {
-                const { content, line, lineNumber, type } = child;
+        const { lines } = params;
+        const codeExclusions = [
+            ...codeBlockAndSpanRanges(),
+            ...htmlElementRanges()
+        ];
+        const { definitionLineIndices } = referenceLinkImageData();
+        for (const [lineIndex, line] of lines.entries()) {
+            if (definitionLineIndices[0] === lineIndex) {
+                definitionLineIndices.shift();
+            }
+            else {
                 let match = null;
-                if (type === "link_open") {
-                    inLink = true;
+                const lineExclusions = [];
+                while ((match = htmlLinkRe.exec(line)) !== null) {
+                    lineExclusions.push([lineIndex, match.index, match[0].length]);
                 }
-                else if (type === "link_close") {
-                    inLink = false;
-                }
-                else if ((type === "html_inline") && htmlLinkOpenRe.test(content)) {
-                    inInline = true;
-                }
-                else if ((type === "html_inline") && htmlLinkCloseRe.test(content)) {
-                    inInline = false;
-                }
-                else if ((type === "text") && !inLink && !inInline) {
-                    while ((match = bareUrlRe.exec(content)) !== null) {
-                        const [bareUrl] = match;
-                        const matchIndex = match.index;
-                        const bareUrlLength = bareUrl.length;
-                        // Allow "[LINK]" to avoid conflicts with MD011/no-reversed-links
-                        // Allow quoting as a way of deliberately including a bare URL
-                        const leftChar = content[matchIndex - 1];
-                        const rightChar = content[matchIndex + bareUrlLength];
-                        if (!((leftChar === "[") && (rightChar === "]")) &&
-                            !((leftChar === "\"") && (rightChar === "\"")) &&
-                            !((leftChar === "'") && (rightChar === "'"))) {
-                            const index = line.indexOf(content);
-                            const range = (index === -1) ? null : [
-                                index + matchIndex + 1,
-                                bareUrlLength
-                            ];
-                            const fixInfo = range ? {
-                                "editColumn": range[0],
-                                "deleteCount": range[1],
-                                "insertText": `<${bareUrl}>`
-                            } : null;
-                            addErrorContext(onError, lineNumber, bareUrl, null, null, range, fixInfo);
-                        }
+                while ((match = bareUrlRe.exec(line)) !== null) {
+                    const [bareUrl] = match;
+                    const matchIndex = match.index;
+                    const bareUrlLength = bareUrl.length;
+                    const prefix = line.slice(0, matchIndex);
+                    const postfix = line.slice(matchIndex + bareUrlLength);
+                    if (
+                    // Allow ](... to avoid reporting Markdown-style links
+                    !(/\]\(\s*$/.test(prefix)) &&
+                        // Allow <...> to avoid reporting non-bare links
+                        !(prefix.endsWith("<") && /^[#)]?>/.test(postfix)) &&
+                        // Allow [...] to avoid MD011/no-reversed-links and nested links
+                        !(/\[[^\]]*$/.test(prefix) && /^[^[]*\]/.test(postfix)) &&
+                        // Allow "..." and '...' for deliberately including a bare link
+                        !(prefix.endsWith("\"") && postfix.startsWith("\"")) &&
+                        !(prefix.endsWith("'") && postfix.startsWith("'")) &&
+                        !withinAnyRange(lineExclusions, lineIndex, matchIndex, bareUrlLength) &&
+                        !withinAnyRange(codeExclusions, lineIndex, matchIndex, bareUrlLength)) {
+                        const range = [
+                            matchIndex + 1,
+                            bareUrlLength
+                        ];
+                        const fixInfo = {
+                            "editColumn": range[0],
+                            "deleteCount": range[1],
+                            "insertText": `<${bareUrl}>`
+                        };
+                        addErrorContext(onError, lineIndex + 1, bareUrl, null, null, range, fixInfo);
                     }
                 }
             }
-        });
+        }
     }
 };
 
