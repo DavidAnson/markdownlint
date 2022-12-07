@@ -120,3 +120,14 @@ code {MD046:114}
 Text `code <element> code` text
 
 Text <element> text {MD033}
+
+A [<link-with>][a-reference] is problematic. {MD033}
+
+A [link with][a-<reference>] is okay.
+
+A link with [a-<reference>][] is problematic. {MD033}
+
+A link with [a-<reference>] is problematic. {MD033}
+
+[a-reference]: https://example.com/
+[a-<reference>]: https://example.com/

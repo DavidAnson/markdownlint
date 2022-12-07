@@ -931,7 +931,9 @@ function getReferenceLinkImageData(lineMetadata) {
             referenceData.push([
               lineIndex,
               referenceIndex,
-              matchString.length
+              matchString.length,
+              matchText.length,
+              matchLabel.length
             ]);
             references.set(label, referenceData);
           }

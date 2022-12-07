@@ -894,7 +894,9 @@ function getReferenceLinkImageData(lineMetadata) {
                         referenceData.push([
                             lineIndex,
                             referenceIndex,
-                            matchString.length
+                            matchString.length,
+                            matchText.length,
+                            matchLabel.length
                         ]);
                         references.set(label, referenceData);
                     }
@@ -3688,7 +3690,7 @@ module.exports = {
 // @ts-check
 
 const { addError, forEachLine, htmlElementRe, withinAnyRange, unescapeMarkdown } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { codeBlockAndSpanRanges, lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const linkDestinationRe = /]\(\s*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
 const emailAddressRe = 
@@ -3703,6 +3705,15 @@ module.exports = {
         allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
         allowedElements = allowedElements.map((element) => element.toLowerCase());
         const exclusions = codeBlockAndSpanRanges();
+        const { references, definitionLineIndices } = referenceLinkImageData();
+        for (const datas of references.values()) {
+            for (const data of datas) {
+                const [lineIndex, index, , textLength, labelLength] = data;
+                if (labelLength > 0) {
+                    exclusions.push([lineIndex, index + 3 + textLength, labelLength]);
+                }
+            }
+        }
         forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
             let match = null;
             // eslint-disable-next-line no-unmodified-loop-condition
@@ -3711,7 +3722,8 @@ module.exports = {
                 if (!allowedElements.includes(element.toLowerCase()) &&
                     !tag.endsWith("\\>") &&
                     !emailAddressRe.test(content) &&
-                    !withinAnyRange(exclusions, lineIndex, match.index, match[0].length)) {
+                    !withinAnyRange(exclusions, lineIndex, match.index, tag.length) &&
+                    !definitionLineIndices.includes(lineIndex)) {
                     const prefix = line.substring(0, match.index);
                     if (!linkDestinationRe.test(prefix)) {
                         const unescaped = unescapeMarkdown(prefix + "<", "_");
