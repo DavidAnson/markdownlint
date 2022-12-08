@@ -3190,7 +3190,13 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorDetailIf, filterTokens, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf, blockquotePrefixRe, filterTokens, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const getBlockQuote = (str, count) => ((str || "")
+    .match(blockquotePrefixRe)[0]
+    .trimEnd()
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat("\n")
+    .repeat(count));
 module.exports = {
     "names": ["MD022", "blanks-around-headings", "blanks-around-headers"],
     "description": "Headings should be surrounded by blank lines",
@@ -3210,7 +3216,7 @@ module.exports = {
                 }
             }
             addErrorDetailIf(onError, topIndex + 1, linesAbove, actualAbove, "Above", lines[topIndex].trim(), null, {
-                "insertText": "".padEnd(linesAbove - actualAbove, "\n")
+                "insertText": getBlockQuote(lines[topIndex - 1], linesAbove - actualAbove)
             });
             let actualBelow = 0;
             for (let i = 0; i < linesBelow; i++) {
@@ -3220,7 +3226,7 @@ module.exports = {
             }
             addErrorDetailIf(onError, topIndex + 1, linesBelow, actualBelow, "Below", lines[topIndex].trim(), null, {
                 "lineNumber": nextIndex + 1,
-                "insertText": "".padEnd(linesBelow - actualBelow, "\n")
+                "insertText": getBlockQuote(lines[nextIndex], linesBelow - actualBelow)
             });
         });
     }
