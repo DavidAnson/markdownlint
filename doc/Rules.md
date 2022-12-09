@@ -99,8 +99,8 @@ Parameters:
   `atx_closed` / `consistent` / `setext` / `setext_with_atx` /
   `setext_with_atx_closed`)
 
-This rule is triggered when different heading styles (atx, setext, and 'closed'
-atx) are used in the same document:
+This rule is triggered when different heading styles are used in the same
+document:
 
 ```markdown
 # ATX style H1
@@ -111,7 +111,7 @@ Setext style H1
 ===============
 ```
 
-Be consistent with the style of heading used in a document:
+To fix the issue, use consistent heading styles throughout the document:
 
 ```markdown
 # ATX style H1
@@ -119,8 +119,9 @@ Be consistent with the style of heading used in a document:
 ## ATX style H2
 ```
 
-The setext_with_atx and setext_with_atx_closed doc styles allow atx-style
-headings of level 3 or more in documents with setext style headings:
+The `setext_with_atx` and `setext_with_atx_closed` settings allow ATX-style
+headings of level 3 or more in documents with setext-style headings (which only
+support level 1 and 2 headings):
 
 ```markdown
 Setext style H1
@@ -132,9 +133,17 @@ Setext style H2
 ### ATX style H3
 ```
 
-Note: the configured heading style can be a specific style to use (atx,
-atx_closed, setext, setext_with_atx, setext_with_atx_closed), or simply require
-that the usage is consistent within the document.
+Note: The configured heading style can be a specific style to require (`atx`,
+`atx_closed`, `setext`, `setext_with_atx`, `setext_with_atx_closed`), or may
+just require that usage is consistent within the document via `consistent`.
+
+Note: The placement of a horizontal rule directly below a line of text can
+trigger this rule by turning that text into a level 2 setext-style heading:
+
+```markdown
+A line of text followed by a horizontal rule becomes a heading
+---
+```
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
