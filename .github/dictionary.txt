@@ -4,7 +4,7 @@ async
 atx
 ATX
 atx_closed
-atx-style
+ATX-style
 axibase
 backtick
 backticks
@@ -81,6 +81,7 @@ reimplement
 setext
 setext_with_atx
 setext_with_atx_closed
+setext-style
 single-h1
 sublist
 Super-Linter
