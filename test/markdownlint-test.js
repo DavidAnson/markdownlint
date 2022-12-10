@@ -654,6 +654,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "### Related",
           "## Demonstration",
           "## Rules / Aliases",
+          "### Custom Rules",
           "## Tags",
           "## Configuration",
           "## API",
