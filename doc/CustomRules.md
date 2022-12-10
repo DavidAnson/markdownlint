@@ -7,6 +7,17 @@ rules can and are defined inline or imported from another package ([keyword
 `markdownlint-rule` on npm][markdownlint-rule]). Custom rules can be disabled,
 enabled, and customized using the same syntax as built-in rules.
 
+## Implementing Simple Rules
+
+For simple requirements like disallowing certain characters or patterns,
+the community-developed
+[markdownlint-rule-search-replace][markdownlint-rule-search-replace]
+plug-in can be used.
+This plug-in allows anyone to create a set of simple text-replacement rules in
+JSON without needing to write any code.
+
+[markdownlint-rule-search-replace]: https://www.npmjs.com/package/markdownlint-rule-search-replace
+
 ## Authoring
 
 Rules are defined by a name (or multiple names), a description, an optional link
@@ -85,7 +96,7 @@ properties:
         characters to delete (the value `-1` is used to delete the line).
       - `insertText` is an optional `String` specifying the text to insert. `\n`
         is the platform-independent way to add a line break; line breaks should
-        be added at the beginning of a line instead of at the end).
+        be added at the beginning of a line instead of at the end.
 
 The collection of helper functions shared by the built-in rules is available for
 use by custom rules in the [markdownlint-rule-helpers package][rule-helpers].

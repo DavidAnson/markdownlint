@@ -137,6 +137,15 @@ See [Rules.md](doc/Rules.md) for more details.
 > aliases (e.g. `heading-increment` is also available as `header-increment`).
 > The use of `header` is deprecated and provided for backward-compatibility.
 
+### Custom Rules
+
+In addition to built-in rules, custom rules can be used to address
+project-specific requirements. To find community-developed rules use
+[keyword `markdownlint-rule` on npm][markdownlint-rule].
+To implement your own rules, refer to [CustomRules.md](doc/CustomRules.md).
+
+[markdownlint-rule]: https://www.npmjs.com/search?q=keywords:markdownlint-rule
+
 ## Tags
 
 Tags group related rules and can be used to enable/disable multiple
@@ -460,10 +469,7 @@ Type: `Array` of `Object`
 List of custom rules to include with the default rule set for linting.
 
 Each array element should define a rule. Rules are typically exported
-by another package, but can be defined locally. Custom rules are
-identified by the [keyword `markdownlint-rule` on npm][markdownlint-rule].
-
-[markdownlint-rule]: https://www.npmjs.com/search?q=keywords:markdownlint-rule
+by another package, but can be defined locally.
 
 Example:
 

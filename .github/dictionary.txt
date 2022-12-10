@@ -20,8 +20,8 @@ CodeQL
 CodiMD
 CommonMark
 config
-Config
 config.
+Config
 CVE-2022-21670
 docs-util
 ES2015
@@ -48,6 +48,7 @@ markdownlint
 markdownlint-cli
 markdownlint-cli2
 markdownlint-rule-helpers
+markdownlint-rule-search-replace
 matcher
 MD\d\d\d
 MD\d\d\d-MD\d\d\d
@@ -79,9 +80,9 @@ Reactable
 README
 reimplement
 setext
+setext-style
 setext_with_atx
 setext_with_atx_closed
-setext-style
 single-h1
 sublist
 Super-Linter
@@ -90,8 +91,8 @@ TOML
 trimLeft
 trimRight
 ul
-ul_single
 ul-indent
+ul_single
 ul-start-left
 ul-style
 unhandled
