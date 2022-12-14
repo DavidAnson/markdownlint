@@ -10,9 +10,12 @@
   },
   "fenced-code-language": {
     "allowed_languages": [
+      "bash",
+      "html",
       "javascript",
       "json",
-      "markdown"
+      "markdown",
+      "text"
     ],
     "language_only": true
   },

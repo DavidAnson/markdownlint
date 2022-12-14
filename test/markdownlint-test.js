@@ -75,36 +75,16 @@ test("simplePromise", (t) => {
   });
 });
 
-test("projectFilesNoInlineConfig", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "CONTRIBUTING.md",
-      "doc/CustomRules.md",
-      "doc/Prettier.md",
-      "helpers/README.md"
-    ],
-    "config": require("../.markdownlint.json"),
-    "customRules": [ require("markdownlint-rule-github-internal-links") ],
-    "noInlineConfig": true
-  };
-  markdownlint(options, function callback(err, actual) {
-    t.falsy(err);
-    const expected = {
-      "CONTRIBUTING.md": [],
-      "doc/CustomRules.md": [],
-      "doc/Prettier.md": [],
-      "helpers/README.md": []
-    };
-    t.deepEqual(actual, expected, "Issue(s) with project files.");
-    resolve();
-  });
-}));
-
-test("projectFilesInlineConfig", (t) => new Promise((resolve) => {
+test("projectFiles", (t) => new Promise((resolve) => {
   t.plan(2);
   import("globby")
     .then((module) => module.globby("doc/*.md"))
+    .then((files) => [
+      ...files,
+      "CONTRIBUTING.md",
+      "README.md",
+      "helpers/README.md"
+    ])
     .then((files) => {
       const options = {
         files,

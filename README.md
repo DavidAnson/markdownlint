@@ -7,7 +7,7 @@
 
 ## Install
 
-```shell
+```bash
 npm install markdownlint --save-dev
 ```
 
@@ -32,26 +32,26 @@ and test cases came directly from that project.
 
 ### Related
 
-* CLI
-  * [markdownlint-cli][markdownlint-cli] command-line interface for Node.js
+- CLI
+  - [markdownlint-cli][markdownlint-cli] command-line interface for Node.js
     ([works with pre-commit][markdownlint-cli-precommit])
-  * [markdownlint-cli2][markdownlint-cli2] command-line interface for Node.js
+  - [markdownlint-cli2][markdownlint-cli2] command-line interface for Node.js
     ([works with pre-commit][markdownlint-cli2-precommit])
-* GitHub
-  * [GitHub Super-Linter Action][super-linter]
-  * [GitHub Actions problem matcher for
+- GitHub
+  - [GitHub Super-Linter Action][super-linter]
+  - [GitHub Actions problem matcher for
     markdownlint-cli][markdownlint-problem-matcher]
-* Editor
-  * [vscode-markdownlint extension for VS Code][vscode-markdownlint]
-  * [Sublime Text markdownlint for Sublime Text][sublimelinter]
-  * [coc-markdownlint extension for Vim/Neovim][coc]
-* Tooling
-  * [eslint-plugin-markdownlint for the ESLint analyzer][eslint-plugin]
-  * [grunt-markdownlint for the Grunt task runner][grunt-markdownlint]
-  * [Cake.Markdownlint addin for Cake build automation system][cake]
-  * [Lombiq Node.js Extensions for MSBuild (.NET builds)][nodejs-extensions]
-* Ruby
-  * [markdownlint/mdl gem for Ruby][rubygems-mdl]
+- Editor
+  - [vscode-markdownlint extension for VS Code][vscode-markdownlint]
+  - [Sublime Text markdownlint for Sublime Text][sublimelinter]
+  - [coc-markdownlint extension for Vim/Neovim][coc]
+- Tooling
+  - [eslint-plugin-markdownlint for the ESLint analyzer][eslint-plugin]
+  - [grunt-markdownlint for the Grunt task runner][grunt-markdownlint]
+  - [Cake.Markdownlint addin for Cake build automation system][cake]
+  - [Lombiq Node.js Extensions for MSBuild (.NET builds)][nodejs-extensions]
+- Ruby
+  - [markdownlint/mdl gem for Ruby][rubygems-mdl]
 
 [cake]: https://github.com/cake-contrib/Cake.Markdownlint
 [coc]: https://github.com/fannheyward/coc-markdownlint
@@ -77,55 +77,55 @@ playground for learning and exploring.
 
 <!-- markdownlint-disable line-length -->
 
-* **[MD001](doc/md001.md)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
-* ~~**[MD002](doc/md002.md)** *first-heading-h1/first-header-h1* - First heading should be a top-level heading~~
-* **[MD003](doc/md003.md)** *heading-style/header-style* - Heading style
-* **[MD004](doc/md004.md)** *ul-style* - Unordered list style
-* **[MD005](doc/md005.md)** *list-indent* - Inconsistent indentation for list items at the same level
-* ~~**[MD006](doc/md006.md)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line~~
-* **[MD007](doc/md007.md)** *ul-indent* - Unordered list indentation
-* **[MD009](doc/md009.md)** *no-trailing-spaces* - Trailing spaces
-* **[MD010](doc/md010.md)** *no-hard-tabs* - Hard tabs
-* **[MD011](doc/md011.md)** *no-reversed-links* - Reversed link syntax
-* **[MD012](doc/md012.md)** *no-multiple-blanks* - Multiple consecutive blank lines
-* **[MD013](doc/md013.md)** *line-length* - Line length
-* **[MD014](doc/md014.md)** *commands-show-output* - Dollar signs used before commands without showing output
-* **[MD018](doc/md018.md)** *no-missing-space-atx* - No space after hash on atx style heading
-* **[MD019](doc/md019.md)** *no-multiple-space-atx* - Multiple spaces after hash on atx style heading
-* **[MD020](doc/md020.md)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style heading
-* **[MD021](doc/md021.md)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style heading
-* **[MD022](doc/md022.md)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
-* **[MD023](doc/md023.md)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
-* **[MD024](doc/md024.md)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
-* **[MD025](doc/md025.md)** *single-title/single-h1* - Multiple top-level headings in the same document
-* **[MD026](doc/md026.md)** *no-trailing-punctuation* - Trailing punctuation in heading
-* **[MD027](doc/md027.md)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
-* **[MD028](doc/md028.md)** *no-blanks-blockquote* - Blank line inside blockquote
-* **[MD029](doc/md029.md)** *ol-prefix* - Ordered list item prefix
-* **[MD030](doc/md030.md)** *list-marker-space* - Spaces after list markers
-* **[MD031](doc/md031.md)** *blanks-around-fences* - Fenced code blocks should be surrounded by blank lines
-* **[MD032](doc/md032.md)** *blanks-around-lists* - Lists should be surrounded by blank lines
-* **[MD033](doc/md033.md)** *no-inline-html* - Inline HTML
-* **[MD034](doc/md034.md)** *no-bare-urls* - Bare URL used
-* **[MD035](doc/md035.md)** *hr-style* - Horizontal rule style
-* **[MD036](doc/md036.md)** *no-emphasis-as-heading/no-emphasis-as-header* - Emphasis used instead of a heading
-* **[MD037](doc/md037.md)** *no-space-in-emphasis* - Spaces inside emphasis markers
-* **[MD038](doc/md038.md)** *no-space-in-code* - Spaces inside code span elements
-* **[MD039](doc/md039.md)** *no-space-in-links* - Spaces inside link text
-* **[MD040](doc/md040.md)** *fenced-code-language* - Fenced code blocks should have a language specified
-* **[MD041](doc/md041.md)** *first-line-heading/first-line-h1* - First line in a file should be a top-level heading
-* **[MD042](doc/md042.md)** *no-empty-links* - No empty links
-* **[MD043](doc/md043.md)** *required-headings/required-headers* - Required heading structure
-* **[MD044](doc/md044.md)** *proper-names* - Proper names should have the correct capitalization
-* **[MD045](doc/md045.md)** *no-alt-text* - Images should have alternate text (alt text)
-* **[MD046](doc/md046.md)** *code-block-style* - Code block style
-* **[MD047](doc/md047.md)** *single-trailing-newline* - Files should end with a single newline character
-* **[MD048](doc/md048.md)** *code-fence-style* - Code fence style
-* **[MD049](doc/md049.md)** *emphasis-style* - Emphasis style should be consistent
-* **[MD050](doc/md050.md)** *strong-style* - Strong style should be consistent
-* **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
-* **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
-* **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
+- **[MD001](doc/md001.md)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
+- ~~**[MD002](doc/md002.md)** *first-heading-h1/first-header-h1* - First heading should be a top-level heading~~
+- **[MD003](doc/md003.md)** *heading-style/header-style* - Heading style
+- **[MD004](doc/md004.md)** *ul-style* - Unordered list style
+- **[MD005](doc/md005.md)** *list-indent* - Inconsistent indentation for list items at the same level
+- ~~**[MD006](doc/md006.md)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line~~
+- **[MD007](doc/md007.md)** *ul-indent* - Unordered list indentation
+- **[MD009](doc/md009.md)** *no-trailing-spaces* - Trailing spaces
+- **[MD010](doc/md010.md)** *no-hard-tabs* - Hard tabs
+- **[MD011](doc/md011.md)** *no-reversed-links* - Reversed link syntax
+- **[MD012](doc/md012.md)** *no-multiple-blanks* - Multiple consecutive blank lines
+- **[MD013](doc/md013.md)** *line-length* - Line length
+- **[MD014](doc/md014.md)** *commands-show-output* - Dollar signs used before commands without showing output
+- **[MD018](doc/md018.md)** *no-missing-space-atx* - No space after hash on atx style heading
+- **[MD019](doc/md019.md)** *no-multiple-space-atx* - Multiple spaces after hash on atx style heading
+- **[MD020](doc/md020.md)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style heading
+- **[MD021](doc/md021.md)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style heading
+- **[MD022](doc/md022.md)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
+- **[MD023](doc/md023.md)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
+- **[MD024](doc/md024.md)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
+- **[MD025](doc/md025.md)** *single-title/single-h1* - Multiple top-level headings in the same document
+- **[MD026](doc/md026.md)** *no-trailing-punctuation* - Trailing punctuation in heading
+- **[MD027](doc/md027.md)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
+- **[MD028](doc/md028.md)** *no-blanks-blockquote* - Blank line inside blockquote
+- **[MD029](doc/md029.md)** *ol-prefix* - Ordered list item prefix
+- **[MD030](doc/md030.md)** *list-marker-space* - Spaces after list markers
+- **[MD031](doc/md031.md)** *blanks-around-fences* - Fenced code blocks should be surrounded by blank lines
+- **[MD032](doc/md032.md)** *blanks-around-lists* - Lists should be surrounded by blank lines
+- **[MD033](doc/md033.md)** *no-inline-html* - Inline HTML
+- **[MD034](doc/md034.md)** *no-bare-urls* - Bare URL used
+- **[MD035](doc/md035.md)** *hr-style* - Horizontal rule style
+- **[MD036](doc/md036.md)** *no-emphasis-as-heading/no-emphasis-as-header* - Emphasis used instead of a heading
+- **[MD037](doc/md037.md)** *no-space-in-emphasis* - Spaces inside emphasis markers
+- **[MD038](doc/md038.md)** *no-space-in-code* - Spaces inside code span elements
+- **[MD039](doc/md039.md)** *no-space-in-links* - Spaces inside link text
+- **[MD040](doc/md040.md)** *fenced-code-language* - Fenced code blocks should have a language specified
+- **[MD041](doc/md041.md)** *first-line-heading/first-line-h1* - First line in a file should be a top-level heading
+- **[MD042](doc/md042.md)** *no-empty-links* - No empty links
+- **[MD043](doc/md043.md)** *required-headings/required-headers* - Required heading structure
+- **[MD044](doc/md044.md)** *proper-names* - Proper names should have the correct capitalization
+- **[MD045](doc/md045.md)** *no-alt-text* - Images should have alternate text (alt text)
+- **[MD046](doc/md046.md)** *code-block-style* - Code block style
+- **[MD047](doc/md047.md)** *single-trailing-newline* - Files should end with a single newline character
+- **[MD048](doc/md048.md)** *code-fence-style* - Code fence style
+- **[MD049](doc/md049.md)** *emphasis-style* - Emphasis style should be consistent
+- **[MD050](doc/md050.md)** *strong-style* - Strong style should be consistent
+- **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
+- **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
+- **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
 
 <!-- markdownlint-restore -->
 
@@ -151,33 +151,33 @@ To implement your own rules, refer to [CustomRules.md](doc/CustomRules.md).
 Tags group related rules and can be used to enable/disable multiple
 rules at once.
 
-* **`accessibility`** - `MD045`
-* **`atx`** - `MD018`, `MD019`
-* **`atx_closed`** - `MD020`, `MD021`
-* **`blank_lines`** - `MD012`, `MD022`, `MD031`, `MD032`, `MD047`
-* **`blockquote`** - `MD027`, `MD028`
-* **`bullet`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD032`
-* **`code`** - `MD014`, `MD031`, `MD038`, `MD040`, `MD046`, `MD048`
-* **`emphasis`** - `MD036`, `MD037`, `MD049`, `MD050`
-* **`hard_tab`** - `MD010`
-* **`headers`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
+- **`accessibility`** - `MD045`
+- **`atx`** - `MD018`, `MD019`
+- **`atx_closed`** - `MD020`, `MD021`
+- **`blank_lines`** - `MD012`, `MD022`, `MD031`, `MD032`, `MD047`
+- **`blockquote`** - `MD027`, `MD028`
+- **`bullet`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD032`
+- **`code`** - `MD014`, `MD031`, `MD038`, `MD040`, `MD046`, `MD048`
+- **`emphasis`** - `MD036`, `MD037`, `MD049`, `MD050`
+- **`hard_tab`** - `MD010`
+- **`headers`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
   `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
-* **`headings`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`,
+- **`headings`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`,
   `MD021`, `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`,
   `MD043`
-* **`hr`** - `MD035`
-* **`html`** - `MD033`
-* **`images`** - `MD045`, `MD052`, `MD053`
-* **`indentation`** - `MD005`, `MD006`, `MD007`, `MD027`
-* **`language`** - `MD040`
-* **`line_length`** - `MD013`
-* **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`
-* **`ol`** - `MD029`, `MD030`, `MD032`
-* **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
-* **`spelling`** - `MD044`
-* **`ul`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD030`, `MD032`
-* **`url`** - `MD034`
-* **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
+- **`hr`** - `MD035`
+- **`html`** - `MD033`
+- **`images`** - `MD045`, `MD052`, `MD053`
+- **`indentation`** - `MD005`, `MD006`, `MD007`, `MD027`
+- **`language`** - `MD040`
+- **`line_length`** - `MD013`
+- **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`
+- **`ol`** - `MD029`, `MD030`, `MD032`
+- **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
+- **`spelling`** - `MD044`
+- **`ul`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD030`, `MD032`
+- **`url`** - `MD034`
+- **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
   `MD037`, `MD038`, `MD039`
 
 ## Configuration
@@ -185,8 +185,8 @@ rules at once.
 Text passed to `markdownlint` is parsed as Markdown, analyzed, and any
 issues reported. Two kinds of text are ignored:
 
-* [HTML comments](https://www.w3.org/TR/html5/syntax.html#comments)
-* [Front matter](https://jekyllrb.com/docs/frontmatter/) (see
+- [HTML comments](https://www.w3.org/TR/html5/syntax.html#comments)
+- [Front matter](https://jekyllrb.com/docs/frontmatter/) (see
   `options.frontMatter` below)
 
 Rules can be enabled, disabled, and configured via `options.config`
@@ -195,18 +195,18 @@ To enable or disable rules at a particular location within a file, add
 one of these markers to the appropriate place (HTML comments don't
 appear in the final markup):
 
-* Disable all rules: `<!-- markdownlint-disable -->`
-* Enable all rules: `<!-- markdownlint-enable -->`
-* Disable all rules for the current line: `<!-- markdownlint-disable-line -->`
-* Disable all rules for the next line: `<!-- markdownlint-disable-next-line -->`
-* Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
-* Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
-* Disable one or more rules by name for the current line:
+- Disable all rules: `<!-- markdownlint-disable -->`
+- Enable all rules: `<!-- markdownlint-enable -->`
+- Disable all rules for the current line: `<!-- markdownlint-disable-line -->`
+- Disable all rules for the next line: `<!-- markdownlint-disable-next-line -->`
+- Disable one or more rules by name: `<!-- markdownlint-disable MD001 MD005 -->`
+- Enable one or more rules by name: `<!-- markdownlint-enable MD001 MD005 -->`
+- Disable one or more rules by name for the current line:
   `<!-- markdownlint-disable-line MD001 MD005 -->`
-* Disable one or more rules by name for the next line:
+- Disable one or more rules by name for the next line:
   `<!-- markdownlint-disable-next-line MD001 MD005 -->`
-* Capture the current rule configuration: `<!-- markdownlint-capture -->`
-* Restore the captured rule configuration: `<!-- markdownlint-restore -->`
+- Capture the current rule configuration: `<!-- markdownlint-capture -->`
+- Restore the captured rule configuration: `<!-- markdownlint-restore -->`
 
 For example:
 
@@ -258,17 +258,17 @@ space * in * emphasis <!-- markdownlint-disable --> <!-- markdownlint-enable -->
 To apply changes to an entire file regardless of where the comment is located,
 the following syntax is supported:
 
-* Disable all rules: `<!-- markdownlint-disable-file -->`
-* Enable all rules: `<!-- markdownlint-enable-file -->`
-* Disable one or more rules by name: `<!-- markdownlint-disable-file MD001 -->`
-* Enable one or more rules by name: `<!-- markdownlint-enable-file MD001 -->`
+- Disable all rules: `<!-- markdownlint-disable-file -->`
+- Enable all rules: `<!-- markdownlint-enable-file -->`
+- Disable one or more rules by name: `<!-- markdownlint-disable-file MD001 -->`
+- Enable one or more rules by name: `<!-- markdownlint-enable-file MD001 -->`
 
 This can be used to "hide" `markdownlint` comments at the bottom of a file.
 
 In cases where it is desirable to change the configuration of one or
 more rules for a file, the following more advanced syntax is supported:
 
-* Configure: `<!-- markdownlint-configure-file { options.config JSON } -->`
+- Configure: `<!-- markdownlint-configure-file { options.config JSON } -->`
 
 For example:
 
@@ -301,7 +301,7 @@ alternate formats.
 
 Standard asynchronous API:
 
-```js
+```javascript
 /**
  * Lint specified Markdown files.
  *
@@ -314,7 +314,7 @@ function markdownlint(options, callback) { ... }
 
 Synchronous API (for build scripts, etc.):
 
-```js
+```javascript
 /**
  * Lint specified Markdown files synchronously.
  *
@@ -327,7 +327,7 @@ function markdownlint.sync(options) { ... }
 Promise API (in the `promises` namespace like Node.js's
 [`fs` Promises API](https://nodejs.org/api/fs.html#fs_fs_promises_api)):
 
-```js
+```javascript
 /**
  * Lint specified Markdown files.
  *
@@ -382,7 +382,7 @@ as [JSON](https://en.wikipedia.org/wiki/JSON).
 
 Example of referencing a built-in style from JavaScript:
 
-```js
+```javascript
 const options = {
   "files": [ "..." ],
   "config": require("style/relaxed.json")
@@ -426,7 +426,7 @@ And a `custom.json` configuration file:
 
 Then code like the following:
 
-```js
+```javascript
 const options = {
   "config": markdownlint.readConfigSync("./custom.json")
 };
@@ -434,7 +434,7 @@ const options = {
 
 Merges `custom.json` and `base.json` and is equivalent to:
 
-```js
+```javascript
 const options = {
   "config": {
     "default": true,
@@ -458,7 +458,7 @@ ones.
 
 For example:
 
-```js
+```javascript
 [ JSON.parse, require("toml").parse, require("js-yaml").load ]
 ```
 
@@ -473,7 +473,7 @@ by another package, but can be defined locally.
 
 Example:
 
-```js
+```javascript
 const extraRules = require("extraRules");
 const options = {
   "customRules": [ extraRules.one, extraRules.two ]
@@ -510,7 +510,7 @@ The default value:
 
 <!-- markdownlint-disable line-length -->
 
-```js
+```javascript
 /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m
 ```
 
@@ -568,7 +568,7 @@ advanced scenarios.
 
 Each item in the top-level `Array` should be of the form:
 
-```js
+```javascript
 [ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
 ```
 
@@ -655,7 +655,7 @@ like JSONC, YAML, and TOML.
 
 Asynchronous API:
 
-```js
+```javascript
 /**
  * Read specified configuration file.
  *
@@ -670,7 +670,7 @@ function readConfig(file, parsers, fs, callback) { ... }
 
 Synchronous API:
 
-```js
+```javascript
 /**
  * Read specified configuration file synchronously.
  *
@@ -685,7 +685,7 @@ function readConfigSync(file, parsers, fs) { ... }
 Promise API (in the `promises` namespace like Node.js's
 [`fs` Promises API](https://nodejs.org/api/fs.html#fs_promises_api)):
 
-```js
+```javascript
 /**
  * Read specified configuration file.
  *
@@ -723,7 +723,7 @@ parsers should come before flexible parsers.
 
 For example:
 
-```js
+```javascript
 [ JSON.parse, require("toml").parse, require("js-yaml").load ]
 ```
 
@@ -756,7 +756,7 @@ Configuration object.
 
 Invoke `markdownlint` and use the `result` object's `toString` method:
 
-```js
+```javascript
 const markdownlint = require("markdownlint");
 
 const options = {
@@ -793,14 +793,14 @@ bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be
 
 Or invoke `markdownlint.sync` for a synchronous call:
 
-```js
+```javascript
 const result = markdownlint.sync(options);
 console.log(result.toString());
 ```
 
 To examine the `result` object directly:
 
-```js
+```javascript
 markdownlint(options, function callback(err, result) {
   if (!err) {
     console.dir(result, { "colors": true, "depth": null });
@@ -853,7 +853,7 @@ Output:
 Integration with the [gulp](https://gulpjs.com/) build system is
 straightforward:
 
-```js
+```javascript
 const gulp = require("gulp");
 const through2 = require("through2");
 const markdownlint = require("markdownlint");
@@ -891,7 +891,7 @@ bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be
 
 Integration with the [Grunt](https://gruntjs.com/) build system is similar:
 
-```js
+```javascript
 const markdownlint = require("markdownlint");
 
 module.exports = function wrapper(grunt) {
@@ -948,7 +948,7 @@ be used.
 
 Generate normal and minified scripts with:
 
-```shell
+```bash
 npm run build-demo
 ```
 
@@ -961,7 +961,7 @@ Then reference `markdown-it` and `markdownlint`:
 
 And call it like so:
 
-```js
+```javascript
 const options = {
   "strings": {
     "content": "Some Markdown to lint."
@@ -975,23 +975,23 @@ const results = window.markdownlint.sync(options).toString();
 For ideas how to integrate `markdownlint` into your workflow, refer to the
 following projects or one of the tools in the [Related section](#related):
 
-* [.NET Documentation][dot-net-doc] ([Search repository][dot-net-doc-search])
-* [ally.js][ally-js] ([Search repository][ally-js-search])
-* [Boostnote][boostnote] ([Search repository][boostnote-search])
-* [CodiMD][codimd] ([Search repository][codimd-search])
-* [ESLint][eslint] ([Search repository][eslint-search])
-* [Garden React Components][garden] ([Search repository][garden-search])
-* [MDN Web Docs][mdn] ([Search repository][mdn-search])
-* [MkDocs][mkdocs] ([Search repository][mkdocs-search])
-* [Mocha][mocha] ([Search repository][mocha-search])
-* [Pi-hole documentation][pi-hole] ([Search repository][pi-hole-search])
-* [Reactable][reactable] ([Search repository][reactable-search])
-* [Sinon.JS][sinon-js] ([Search repository][sinon-js-search])
-* [TestCafe][testcafe] ([Search repository][testcafe-search])
-* [V8][v8] ([Search repository][v8-search])
-* [webhint][webhint] ([Search repository][webhint-search])
-* [webpack][webpack] ([Search repository][webpack-search])
-* [WordPress][wordpress] ([Search repository][wordpress-search])
+- [.NET Documentation][dot-net-doc] ([Search repository][dot-net-doc-search])
+- [ally.js][ally-js] ([Search repository][ally-js-search])
+- [Boostnote][boostnote] ([Search repository][boostnote-search])
+- [CodiMD][codimd] ([Search repository][codimd-search])
+- [ESLint][eslint] ([Search repository][eslint-search])
+- [Garden React Components][garden] ([Search repository][garden-search])
+- [MDN Web Docs][mdn] ([Search repository][mdn-search])
+- [MkDocs][mkdocs] ([Search repository][mkdocs-search])
+- [Mocha][mocha] ([Search repository][mocha-search])
+- [Pi-hole documentation][pi-hole] ([Search repository][pi-hole-search])
+- [Reactable][reactable] ([Search repository][reactable-search])
+- [Sinon.JS][sinon-js] ([Search repository][sinon-js-search])
+- [TestCafe][testcafe] ([Search repository][testcafe-search])
+- [V8][v8] ([Search repository][v8-search])
+- [webhint][webhint] ([Search repository][webhint-search])
+- [webpack][webpack] ([Search repository][webpack-search])
+- [WordPress][wordpress] ([Search repository][wordpress-search])
 
 [ally-js]: https://allyjs.io/
 [ally-js-search]: https://github.com/medialize/ally.js/search?q=markdownlint
@@ -1038,117 +1038,117 @@ See [ReleaseProcess.md](doc/ReleaseProcess.md) for more information.
 
 ## History
 
-* 0.0.1 - Initial release, includes tests MD001-MD032.
-* 0.0.2 - Improve documentation, tests, and code.
-* 0.0.3 - Add synchronous API, improve documentation and code.
-* 0.0.4 - Add tests MD033-MD040, update dependencies.
-* 0.0.5 - Add `strings` option to enable file-less scenarios, add in-browser
+- 0.0.1 - Initial release, includes tests MD001-MD032.
+- 0.0.2 - Improve documentation, tests, and code.
+- 0.0.3 - Add synchronous API, improve documentation and code.
+- 0.0.4 - Add tests MD033-MD040, update dependencies.
+- 0.0.5 - Add `strings` option to enable file-less scenarios, add in-browser
           demo.
-* 0.0.6 - Improve performance, simplify in-browser, update dependencies.
-* 0.0.7 - Add MD041, improve MD003, ignore front matter, update dependencies.
-* 0.0.8 - Support disabling/enabling rules inline, improve code fence,
+- 0.0.6 - Improve performance, simplify in-browser, update dependencies.
+- 0.0.7 - Add MD041, improve MD003, ignore front matter, update dependencies.
+- 0.0.8 - Support disabling/enabling rules inline, improve code fence,
           dependencies.
-* 0.1.0 - Add aliases, exceptions for MD033, exclusions for MD013, dependencies.
-  * 0.1.1 - Fix bug handling HTML in tables, reference markdownlint-cli.
-* 0.2.0 - Add MD042/MD043, enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041,
+- 0.1.0 - Add aliases, exceptions for MD033, exclusions for MD013, dependencies.
+  - 0.1.1 - Fix bug handling HTML in tables, reference markdownlint-cli.
+- 0.2.0 - Add MD042/MD043, enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041,
           dependencies.
-* 0.3.0 - More detailed error reporting with `resultVersion`, enhance
+- 0.3.0 - More detailed error reporting with `resultVersion`, enhance
           MD010/MD012/MD036, fixes for MD027/MD029/MD030, include JSON schema,
           dependencies.
-  * 0.3.1 - Fix regressions in MD032/MD038, update dependencies.
-* 0.4.0 - Add MD044, enhance MD013/MD032/MD041/MD042/MD043, fix for MD038,
+  - 0.3.1 - Fix regressions in MD032/MD038, update dependencies.
+- 0.4.0 - Add MD044, enhance MD013/MD032/MD041/MD042/MD043, fix for MD038,
           dependencies.
-  * 0.4.1 - Fixes for MD038/front matter, improvements to MD044, update
+  - 0.4.1 - Fixes for MD038/front matter, improvements to MD044, update
             dependencies.
-* 0.5.0 - Add shareable configuration, `noInlineConfig` option, README links,
+- 0.5.0 - Add shareable configuration, `noInlineConfig` option, README links,
           fix MD030, improve MD009/MD041, update dependencies.
-* 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments,
+- 0.6.0 - `resultVersion` defaults to 1 (breaking change), ignore HTML comments,
           TOML front matter, fixes for MD044, update dependencies.
-  * 0.6.1 - Update `markdown-it` versioning, exclude demo/test from publishing.
-  * 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update
+  - 0.6.1 - Update `markdown-it` versioning, exclude demo/test from publishing.
+  - 0.6.2 - Improve MD013/MD027/MD034/MD037/MD038/MD041/MD044, update
             dependencies.
-  * 0.6.3 - Improve highlighting for MD020.
-  * 0.6.4 - Improve MD029/MD042, update dependencies.
-* 0.7.0 - `resultVersion` defaults to 2 (breaking change), add MD045, improve
+  - 0.6.3 - Improve highlighting for MD020.
+  - 0.6.4 - Improve MD029/MD042, update dependencies.
+- 0.7.0 - `resultVersion` defaults to 2 (breaking change), add MD045, improve
           MD029, remove trimLeft/trimRight, split rules, refactor, update
           dependencies.
-* 0.8.0 - Add support for using and authoring custom rules, improve
+- 0.8.0 - Add support for using and authoring custom rules, improve
           MD004/MD007/MD013, add `engines` to `package.json`, refactor, update
           dependencies.
-  * 0.8.1 - Update item loop to be iterative, improve MD014, update
+  - 0.8.1 - Update item loop to be iterative, improve MD014, update
             dependencies.
-* 0.9.0 - Remove support for end-of-life Node versions 0.10/0.12/4, change
+- 0.9.0 - Remove support for end-of-life Node versions 0.10/0.12/4, change
           "header" to "heading" per spec (non-breaking), improve
           MD003/MD009/MD041, handle uncommon line-break characters, refactor for
           ES6, update dependencies.
-* 0.10.0 - Add support for non-JSON configuration files, pass file/string name
+- 0.10.0 - Add support for non-JSON configuration files, pass file/string name
            to custom rules, update dependencies.
-* 0.11.0 - Improve MD005/MD024/MD029/MD038, improve custom rule example, add
+- 0.11.0 - Improve MD005/MD024/MD029/MD038, improve custom rule example, add
            CONTRIBUTING.md, update dependencies.
-* 0.12.0 - Add `information` link for custom rules, `markdownItPlugins` for
+- 0.12.0 - Add `information` link for custom rules, `markdownItPlugins` for
            extensibility, improve MD023/MD032/MD038, update dependencies.
-* 0.13.0 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041/, deprecate
+- 0.13.0 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041/, deprecate
            MD002, improve pandoc YAML support, update dependencies.
-* 0.14.0 - Remove support for end-of-life Node version 6, introduce
+- 0.14.0 - Remove support for end-of-life Node version 6, introduce
            `markdownlint-rule-helpers`, add MD046/MD047, improve
            MD033/MD034/MD039, improve custom rule validation and in-browser
            demo, update dependencies.
-  * 0.14.1 - Improve MD033.
-  * 0.14.2 - Improve MD047, add `handleRuleFailures` option.
-* 0.15.0 - Add `markdownlint-capture`/`markdownlint-restore` inline comments,
+  - 0.14.1 - Improve MD033.
+  - 0.14.2 - Improve MD047, add `handleRuleFailures` option.
+- 0.15.0 - Add `markdownlint-capture`/`markdownlint-restore` inline comments,
            improve MD009/MD013/MD026/MD033/MD036, update dependencies.
-* 0.16.0 - Add custom rule sample for linting code, improve
+- 0.16.0 - Add custom rule sample for linting code, improve
            MD026/MD031/MD033/MD038, update dependencies.
-* 0.17.0 - Add `resultVersion` 3 to support fix information for default and
+- 0.17.0 - Add `resultVersion` 3 to support fix information for default and
            custom rules, add fix information for 24 rules, update newline
            handling to match latest CommonMark specification, improve
            MD014/MD037/MD039, update dependencies.
-  * 0.17.1 - Fix handling of front matter by fix information.
-  * 0.17.2 - Improve MD020/MD033/MD044.
-* 0.18.0 - Add MD048/code-fence-style, add fix information for MD007/ul-indent,
+  - 0.17.1 - Fix handling of front matter by fix information.
+  - 0.17.2 - Improve MD020/MD033/MD044.
+- 0.18.0 - Add MD048/code-fence-style, add fix information for MD007/ul-indent,
            add `markdownlint-disable-file`/`markdownlint-enable-file` inline
            comments, add type declaration file (.d.ts) for TypeScript
            dependents, update schema, improve MD006/MD007/MD009/MD013/MD030,
            update dependencies.
-* 0.19.0 - Remove support for end-of-life Node version 8, add fix information
+- 0.19.0 - Remove support for end-of-life Node version 8, add fix information
            for MD005/list-indent, improve MD007/MD013/MD014, deprecate
            MD006/ul-start-left, add rationale for every rule, update test runner
            and code coverage, add more JSDoc comments, update dependencies.
-* 0.20.0 - Add `markdownlint-configure-file` inline comment, reimplement MD037,
+- 0.20.0 - Add `markdownlint-configure-file` inline comment, reimplement MD037,
            improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD038/MD039,
            improve HTML comment handling, update dependencies.
-  * 0.20.1 - Fix regression in MD037.
-  * 0.20.2 - Fix regression in MD037, improve MD038.
-  * 0.20.3 - Fix regression in MD037, improve MD044, add automatic regression
+  - 0.20.1 - Fix regression in MD037.
+  - 0.20.2 - Fix regression in MD037, improve MD038.
+  - 0.20.3 - Fix regression in MD037, improve MD044, add automatic regression
              testing.
-  * 0.20.4 - Fix regression in MD037, improve MD034/MD044, improve
+  - 0.20.4 - Fix regression in MD037, improve MD034/MD044, improve
              documentation.
-* 0.21.0 - Lint concurrently for better performance (async only), add
+- 0.21.0 - Lint concurrently for better performance (async only), add
            Promise-based APIs, update TypeScript declaration file, hide
            `toString` on `LintResults`, add ability to fix in browser demo,
            allow custom rules in `.markdownlint.json` schema, improve
            MD042/MD044, improve documentation, update dependencies.
-  * 0.21.1 - Improve MD011/MD031, export `getVersion` API.
-* 0.22.0 - Allow `extends` in config to reference installed packages by name,
+  - 0.21.1 - Improve MD011/MD031, export `getVersion` API.
+- 0.22.0 - Allow `extends` in config to reference installed packages by name,
            add `markdownlint-disable-next-line` inline comment, support JSON
            front matter, improve MD009/MD026/MD028/MD043, update dependencies
            (including `markdown-it` to v12).
-* 0.23.0 - Add comprehensive example `.markdownlint.jsonc`/`.markdownlint.yaml`
+- 0.23.0 - Add comprehensive example `.markdownlint.jsonc`/`.markdownlint.yaml`
            files, add fix information for MD004/ul-style, improve
            MD018/MD019/MD020/MD021/MD037/MD041, improve HTML comment handling,
            update test runner and test suite, update dependencies.
-  * 0.23.1 - Work around lack of webpack support for dynamic calls to
+  - 0.23.1 - Work around lack of webpack support for dynamic calls to
              `require`(`.resolve`).
-* 0.24.0 - Remove support for end-of-life Node version 10, add support for
+- 0.24.0 - Remove support for end-of-life Node version 10, add support for
            custom file system module, improve MD010/MD011/MD037/MD043/MD044,
            improve TypeScript declaration file and JSON schema, update
            dependencies.
-* 0.25.0 - Add MD049/MD050 for consistent emphasis/strong style (both
+- 0.25.0 - Add MD049/MD050 for consistent emphasis/strong style (both
            auto-fixable), improve MD007/MD010/MD032/MD033/MD035/MD037/MD039,
            support asynchronous custom rules, improve performance, improve CI
            process, reduce dependencies, update dependencies.
-  * 0.25.1 - Update dependencies for CVE-2022-21670.
-* 0.26.0 - Add MD051/MD052/MD053 for validating link fragments & reference
+  - 0.25.1 - Update dependencies for CVE-2022-21670.
+- 0.26.0 - Add MD051/MD052/MD053 for validating link fragments & reference
            links/images & link/image reference definitions (MD053 auto-fixable),
            improve MD010/MD031/MD035/MD039/MD042/MD044/MD049/MD050, add
            `markdownlint-disable-line` inline comment, support `~` paths in
@@ -1156,8 +1156,8 @@ See [ReleaseProcess.md](doc/ReleaseProcess.md) for more information.
            end-of-life Node version 12, default `resultVersion` to 3, update
            browser script to use ES2015, simplify JSON schema, address remaining
            CodeQL issues, improve performance, update dependencies.
-  * 0.26.1 - Improve MD051.
-  * 0.26.2 - Improve MD037/MD051/MD053.
+  - 0.26.1 - Improve MD051.
+  - 0.26.2 - Improve MD037/MD051/MD053.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
