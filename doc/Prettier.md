@@ -12,17 +12,16 @@ Other scenarios are documented below.
 
 The default settings of `markdownlint` and `Prettier` are compatible and don't
 result in any linting violations. If `Prettier` is used with `--tab-width` set
-to `4`, the following `markdownlint` configuration can be used:
+to `4` (vs. `2`), the following `markdownlint` configuration can be used:
 
 ```json
 {
-  "MD007": {
-    "indent": 4
-  },
-  "MD030": {
-    "ul_single": 3,
+  "list-marker-space": {
     "ul_multi": 3,
-    "ol_multi": 2
+    "ul_single": 3
+  },
+  "ul-indent": {
+    "indent": 4
   }
 }
 ```
