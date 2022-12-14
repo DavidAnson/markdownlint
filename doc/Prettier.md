@@ -17,6 +17,8 @@ to `4` (vs. `2`), the following `markdownlint` configuration can be used:
 ```json
 {
   "list-marker-space": {
+    "ol_multi": 2,
+    "ol_single": 2,
     "ul_multi": 3,
     "ul_single": 3
   },
