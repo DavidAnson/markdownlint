@@ -38,6 +38,7 @@ and test cases came directly from that project.
   - [markdownlint-cli2][markdownlint-cli2] command-line interface for Node.js
     ([works with pre-commit][markdownlint-cli2-precommit])
 - GitHub
+  - [GitHub Action for markdownlint-cli2][markdownlint-cli2-action]
   - [GitHub Super-Linter Action][super-linter]
   - [GitHub Actions problem matcher for
     markdownlint-cli][markdownlint-problem-matcher]
@@ -60,6 +61,7 @@ and test cases came directly from that project.
 [markdownlint-cli]: https://github.com/igorshubovych/markdownlint-cli
 [markdownlint-cli-precommit]: https://github.com/igorshubovych/markdownlint-cli#use-with-pre-commit
 [markdownlint-cli2]: https://github.com/DavidAnson/markdownlint-cli2
+[markdownlint-cli2-action]: https://github.com/marketplace/actions/markdownlint-cli2-action
 [markdownlint-cli2-precommit]: https://github.com/DavidAnson/markdownlint-cli2#pre-commit
 [markdownlint-problem-matcher]: https://github.com/xt0rted/markdownlint-problem-matcher
 [nodejs-extensions]: https://github.com/Lombiq/NodeJs-Extensions
