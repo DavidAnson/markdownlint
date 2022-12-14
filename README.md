@@ -1032,6 +1032,10 @@ following projects or one of the tools in the [Related section](#related):
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more information.
 
+## Releasing
+
+See [ReleaseProcess.md](doc/ReleaseProcess.md) for more information.
+
 ## History
 
 * 0.0.1 - Initial release, includes tests MD001-MD032.

@@ -684,6 +684,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "## Browser",
           "## Examples",
           "## Contributing",
+          "## Releasing",
           "## History"
         ]
       }
