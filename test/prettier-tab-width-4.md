@@ -1,4 +1,4 @@
-# Prettier `--tab-width==4`
+# Prettier `--tab-width=4`
 
 Text
 
