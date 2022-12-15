@@ -3756,7 +3756,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorContext, urlRe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, filterTokens, urlRe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, htmlElementRanges, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const htmlLinkRe = /<a(?:|\s[^>]+)>[^<>]*<\/a\s*>/ig;
 module.exports = {
@@ -3769,6 +3769,11 @@ module.exports = {
             ...codeBlockAndSpanRanges(),
             ...htmlElementRanges()
         ];
+        filterTokens(params, "html_block", (token) => {
+            for (let i = token.map[0]; i < token.map[1]; i++) {
+                codeExclusions.push([i, 0, lines[i].length]);
+            }
+        });
         const { definitionLineIndices } = referenceLinkImageData();
         for (const [lineIndex, line] of lines.entries()) {
             if (definitionLineIndices[0] === lineIndex) {
@@ -3787,15 +3792,17 @@ module.exports = {
                     const prefix = line.slice(0, matchIndex);
                     const postfix = line.slice(matchIndex + bareUrlLength);
                     if (
-                    // Allow ](... to avoid reporting Markdown-style links
-                    !(/\]\(\s*$/.test(prefix)) &&
-                        // Allow <...> to avoid reporting non-bare links
-                        !(prefix.endsWith("<") && /^[#)]?>/.test(postfix)) &&
-                        // Allow [...] to avoid MD011/no-reversed-links and nested links
-                        !(/\[[^\]]*$/.test(prefix) && /^[^[]*\]/.test(postfix)) &&
-                        // Allow "..." and '...' for deliberately including a bare link
+                    // Allow <...> to avoid reporting non-bare links
+                    !(prefix.endsWith("<") && postfix.startsWith(">")) &&
+                        // Allow >...</ to avoid reporting <code>...</code>
+                        !(prefix.endsWith(">") && postfix.startsWith("</")) &&
+                        // Allow "..." and '...' to allow quoting a bare link
                         !(prefix.endsWith("\"") && postfix.startsWith("\"")) &&
                         !(prefix.endsWith("'") && postfix.startsWith("'")) &&
+                        // Allow ](... to avoid reporting Markdown-style links
+                        !(/\]\(\s*$/.test(prefix)) &&
+                        // Allow [...] to avoid MD011/no-reversed-links and nested links
+                        !(/\[[^\]]*$/.test(prefix) && /^[^[]*\]/.test(postfix)) &&
                         !withinAnyRange(lineExclusions, lineIndex, matchIndex, bareUrlLength) &&
                         !withinAnyRange(codeExclusions, lineIndex, matchIndex, bareUrlLength)) {
                         const range = [

@@ -147,7 +147,11 @@ test("https://github.com/mdn/content", (t) => {
   const rootDir = "./test-repos/mdn-content";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  const ignoreRes = [ /^[^:]+: \d+: MD034\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    /test-repos\/mdn-content\/files\/en-us\/mdn\/community\/pull_requests\/index.md: \d+: MD034\/.*$\r?\n?/gm,
+    /test-repos\/mdn-content\/files\/en-us\/web\/api\/customelementregistry\/whendefined\/index.md: \d+: MD034\/.*$\r?\n?/gm,
+    /test-repos\/mdn-content\/files\/en-us\/web\/api\/css_painting_api\/guide\/index.md: \d+: MD034\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 

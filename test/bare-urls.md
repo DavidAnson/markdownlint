@@ -32,7 +32,11 @@ As is <a href="https://example.com/info.htm">https://example.com/info.htm text</
 
 This is not a bare [link]( https://example.com ).
 
-URLs in HTML are not bare:
+Nor is [link](https://example.com/path-with(parens)).
+
+Or <https://example.com/path-with(parens)>.
+
+URLs in HTML attributes are not bare:
 
 <element-name first-attribute=" https://example.com/first " second-attribute=" https://example.com/second ">
   Text
@@ -42,8 +46,27 @@ URLs in HTML are not bare:
   first-attribute=" https://example.com/first "
   second-attribute=" https://example.com/second "></element-name>
 
+URLs surrounded by HTML tags are not bare:
+
+Not <code>https://example.com</code> bare.
+
+Not <pre>https://example.com</pre> bare.
+
+<p>
+Not bare due to being in an HTML block:
+https://example.com
+<code>https://example.com</code>
+<pre>https://example.com</pre>
+</p>
+
 URLs in link and image text are not bare:
 
 Text [link to https://example.com site](https://example.com) text.
 
 Image ![for https://example.com site](https://example.com) text.
+
+URLs may end with a dash: https://example.com#heading- {MD034}
+
+... when explicit: <https://example.com#heading->
+
+... when embedded: <code>https://example.com#heading-</code>
