@@ -2,7 +2,6 @@
 
 "use strict";
 
-const { existsSync } = require("node:fs");
 const { join } = require("node:path").posix;
 const { promisify } = require("node:util");
 const jsYaml = require("js-yaml");
@@ -97,6 +96,7 @@ async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
     //   });
     }).then((results) => {
       // Fail if any issues were found (that aren't ignored)
+      // @ts-ignore
       let resultsString = results.toString();
       for (const ignoreRe of (ignoreRes || [])) {
         const lengthBefore = resultsString.length;
@@ -127,6 +127,13 @@ function excludeGlobs(rootDir, ...globs) {
 
 // Run markdownlint the same way the corresponding repositories do
 /* eslint-disable max-len */
+
+test("https://github.com/dotnet/docs", (t) => {
+  const rootDir = "./test-repos/dotnet-docs";
+  const globPatterns = [ join(rootDir, "**/*.md") ];
+  const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
+  return lintTestRepo(t, globPatterns, configPath);
+});
 
 test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
@@ -180,6 +187,13 @@ test("https://github.com/pi-hole/docs", (t) => {
   return lintTestRepo(t, globPatterns, configPath);
 });
 
+test("https://github.com/v8/v8.dev", (t) => {
+  const rootDir = "./test-repos/v8-v8-dev";
+  const globPatterns = [ join(rootDir, "src/**/*.md") ];
+  const configPath = join(rootDir, ".markdownlint.json");
+  return lintTestRepo(t, globPatterns, configPath);
+});
+
 test("https://github.com/webhintio/hint", (t) => {
   const rootDir = "./test-repos/webhintio-hint";
   const globPatterns = [
@@ -219,25 +233,3 @@ test("https://github.com/webpack/webpack.js.org", (t) => {
   const configPath = join(rootDir, ".markdownlint.json");
   return lintTestRepo(t, globPatterns, configPath);
 });
-
-// Optional repositories (very large)
-
-const dotnetDocsDir = "./test-repos/dotnet-docs";
-if (existsSync(dotnetDocsDir)) {
-  test("https://github.com/dotnet/docs", (t) => {
-    const rootDir = dotnetDocsDir;
-    const globPatterns = [ join(rootDir, "**/*.md") ];
-    const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-    return lintTestRepo(t, globPatterns, configPath);
-  });
-}
-
-const v8v8DevDir = "./test-repos/v8-v8-dev";
-if (existsSync(v8v8DevDir)) {
-  test("https://github.com/v8/v8.dev", (t) => {
-    const rootDir = v8v8DevDir;
-    const globPatterns = [ join(rootDir, "src/**/*.md") ];
-    const configPath = join(rootDir, ".markdownlint.json");
-    return lintTestRepo(t, globPatterns, configPath);
-  });
-}

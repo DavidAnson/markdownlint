@@ -24,7 +24,7 @@ jobs:
     - name: Install Dependencies
       run: npm install --no-package-lock
     - name: Clone Test Repos
-      run: npm run clone-test-repos-large
+      run: npm run clone-test-repos
     - name: Lint Test Repos
       run: npm run lint-test-repos
     - name: Run Extra Tests
