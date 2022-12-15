@@ -143,6 +143,14 @@ test("https://github.com/eslint/eslint", (t) => {
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
+test("https://github.com/mdn/content", (t) => {
+  const rootDir = "./test-repos/mdn-content";
+  const globPatterns = [ join(rootDir, "**/*.md") ];
+  const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
+  const ignoreRes = [ /^[^:]+: \d+: MD034\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+});
+
 test("https://github.com/mkdocs/mkdocs", (t) => {
   const rootDir = "./test-repos/mkdocs-mkdocs";
   const globPatterns = [
