@@ -228,8 +228,9 @@ bar`
 
 test("isBlankLine", (t) => {
   t.plan(33);
+  // @ts-ignore
+  t.true(helpers.isBlankLine(null), "[null]");
   const blankLines = [
-    null,
     "",
     " ",
     "  ",
@@ -254,7 +255,7 @@ test("isBlankLine", (t) => {
     "text --> --> <!--text--> <!--text--> <!-- <!-- text"
   ];
   for (const line of blankLines) {
-    t.true(helpers.isBlankLine(line), line || "");
+    t.true(helpers.isBlankLine(line), line);
   }
   const nonBlankLines = [
     "text",
@@ -384,6 +385,7 @@ test("forEachInlineCodeSpan", (t) => {
   for (const testCase of testCases) {
     const { input, expecteds } = testCase;
     helpers.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
+      // @ts-ignore
       const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
         expecteds.shift();
       t.is(code, expectedCode, input);
@@ -1305,4 +1307,88 @@ test("expandTildePath", (t) => {
     path.join(homedir, "/dir/file")
   );
   t.is(helpers.expandTildePath("~/dir/file", null), "~/dir/file");
+});
+
+test("urlRe", (t) => {
+  t.plan(1);
+  const input = `
+Text ftp://example.com text
+Text ftps://example.com text
+Text http://example.com text
+Text https://example.com text
+Text https://example.com/ text
+Text https://example.com/path text
+Text https://example.com/path/ text
+Text https://example.com/path/file.txt text
+Text https://example.com/path/file.txt?query=string text
+Text https://example.com/path/file.txt#hash text
+Text https://example.com/path/file.txt?query=string#hash text
+Text https://example.com/path# text
+Text https://example.com/path- text
+Text https://example.com/path() text
+Text https://example.com/path(path) text
+Text https://example.com/path(path)path text
+Text https://example.com/path-(path) text
+Text (https://example.com/path) text
+Text <https://example.com/path> text
+Text >https://example.com/path< text
+Text [https://example.com/path] text
+Text "https://example.com/path" text
+Text 'https://example.com/path' text
+Text \`https://example.com/path\` text
+Text [link](https://example.com/path) text
+Text [link]( https://example.com/path ) text
+Text <code>https://example.com/path</code> text
+Text <a href="https://example.com/path">link</a> text
+Text <a href="https://example.com/path">https://example.com/path</a> text
+Text *https://example.com* text
+Text **https://example.com** text
+Text _https://example.com_ text
+Text __https://example.com__ text
+Text https://example.com, text
+Text https://example.com. Text
+Text https://example.com? Text
+Text https://example.com! Text
+  `;
+  const expected = `
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text  text
+Text () text
+Text <> text
+Text >< text
+Text [] text
+Text "" text
+Text '' text
+Text \`\` text
+Text [link]() text
+Text [link](  ) text
+Text <code></code> text
+Text <a href="">link</a> text
+Text <a href=""></a> text
+Text ** text
+Text **** text
+Text _ text
+Text __ text
+Text , text
+Text . Text
+Text ? Text
+Text ! Text
+  `;
+  const actual = input.replace(helpers.urlRe, "");
+  t.is(actual, expected);
 });

@@ -47,8 +47,9 @@ module.exports.inlineCommentStartRe = inlineCommentStartRe;
 const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
-module.exports.bareUrlRe =
-    /(?:http|ftp)s?:\/\/[^\s\]<>"'`]*(?:\/|[^\s\]<>"'`\W])/ig;
+module.exports.urlRe =
+    // eslint-disable-next-line max-len
+    /(?:http|ftp)s?:\/\/(?:[^\s()<>\]"'`]|\([^\s<>\]"'`]*\))*\b(?:[-#/]|\([^\s<>\]"'`]*\))*/ig;
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
 // Regular expression for all instances of emphasis markers
@@ -3755,7 +3756,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorContext, bareUrlRe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, urlRe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, htmlElementRanges, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 const htmlLinkRe = /<a(?:|\s[^>]+)>[^<>]*<\/a\s*>/ig;
 module.exports = {
@@ -3779,7 +3780,7 @@ module.exports = {
                 while ((match = htmlLinkRe.exec(line)) !== null) {
                     lineExclusions.push([lineIndex, match.index, match[0].length]);
                 }
-                while ((match = bareUrlRe.exec(line)) !== null) {
+                while ((match = urlRe.exec(line)) !== null) {
                     const [bareUrl] = match;
                     const matchIndex = match.index;
                     const bareUrlLength = bareUrl.length;
@@ -4436,7 +4437,7 @@ module.exports = {
 "use strict";
 // @ts-check
 
-const { addErrorDetailIf, bareUrlRe, escapeForRegExp, forEachLine, forEachLink, withinAnyRange, linkReferenceDefinitionRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf, escapeForRegExp, forEachLine, forEachLink, linkReferenceDefinitionRe, urlRe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, htmlElementRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 module.exports = {
     "names": ["MD044", "proper-names"],
@@ -4457,7 +4458,7 @@ module.exports = {
             }
             else {
                 let match = null;
-                while ((match = bareUrlRe.exec(line)) !== null) {
+                while ((match = urlRe.exec(line)) !== null) {
                     exclusions.push([lineIndex, match.index, match[0].length]);
                 }
                 forEachLink(line, (index, _, text, destination) => {
