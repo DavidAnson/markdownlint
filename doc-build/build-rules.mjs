@@ -90,7 +90,7 @@ for (const rule of rules) {
   }
   if (fixableRuleNames.includes(name)) {
     section.push(
-      "Fixable: Most violations can be fixed by tooling",
+      "Fixable: Some violations can be fixed by tooling",
       ""
     );
   }

@@ -160,7 +160,7 @@ Parameters:
 - `style`: List style (`string`, default `consistent`, values `asterisk` /
   `consistent` / `dash` / `plus` / `sublist`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when the symbols used in the document for unordered
 list items do not match the configured unordered list style:
@@ -207,7 +207,7 @@ Tags: `bullet`, `indentation`, `ul`
 
 Aliases: `list-indent`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when list items are parsed as being at the same level,
 but don't have the same indentation:
@@ -265,7 +265,7 @@ Tags: `bullet`, `indentation`, `ul`
 
 Aliases: `ul-start-left`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when top-level lists don't start at the beginning of a
 line:
@@ -320,7 +320,7 @@ Parameters:
 - `start_indented`: Whether to indent the first level of the list (`boolean`,
   default `false`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when list items are not indented by the configured
 number of spaces (default: 2).
@@ -377,7 +377,7 @@ Parameters:
   (`boolean`, default `false`)
 - `strict`: Include unnecessary breaks (`boolean`, default `false`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered on any lines that end with unexpected whitespace. To fix
 this, remove the trailing space from the end of the line.
@@ -431,7 +431,7 @@ Parameters:
   `[]`)
 - `spaces_per_tab`: Number of spaces for each hard tab (`integer`, default `1`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered by any lines that contain hard tab characters instead
 of using spaces for indentation. To fix this, replace any hard tab characters
@@ -483,7 +483,7 @@ Tags: `links`
 
 Aliases: `no-reversed-links`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when text that appears to be a link is encountered, but
 where the syntax appears to have been reversed (the `[]` and `()` are
@@ -520,7 +520,7 @@ Parameters:
 
 - `maximum`: Consecutive blank lines (`integer`, default `1`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when there are multiple consecutive blank lines in the
 document:
@@ -620,7 +620,7 @@ Tags: `code`
 
 Aliases: `commands-show-output`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when there are code blocks showing shell commands to be
 typed, and *all* of the shell commands are preceded by dollar signs ($):
@@ -677,7 +677,7 @@ Tags: `atx`, `headers`, `headings`, `spaces`
 
 Aliases: `no-missing-space-atx`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when spaces are missing after the hash characters
 in an atx style heading:
@@ -707,7 +707,7 @@ Tags: `atx`, `headers`, `headings`, `spaces`
 
 Aliases: `no-multiple-space-atx`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when more than one space is used to separate the
 heading text from the hash characters in an atx style heading:
@@ -738,7 +738,7 @@ Tags: `atx_closed`, `headers`, `headings`, `spaces`
 
 Aliases: `no-missing-space-closed-atx`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when spaces are missing inside the hash characters
 in a closed atx style heading:
@@ -770,7 +770,7 @@ Tags: `atx_closed`, `headers`, `headings`, `spaces`
 
 Aliases: `no-multiple-space-closed-atx`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when more than one space is used to separate the
 heading text from the hash characters in a closed atx style heading:
@@ -809,7 +809,7 @@ Parameters:
 - `lines_above`: Blank lines above heading (`integer`, default `1`)
 - `lines_below`: Blank lines below heading (`integer`, default `1`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when headings (any style) are either not preceded or not
 followed by at least one blank line:
@@ -853,7 +853,7 @@ Tags: `headers`, `headings`, `spaces`
 
 Aliases: `header-start-left`, `heading-start-left`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when a heading is indented by one or more spaces:
 
@@ -989,7 +989,7 @@ Parameters:
 - `punctuation`: Punctuation characters not allowed at end of headings
   (`string`, default `.,;:!。，；：！`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered on any heading that has one of the specified normal or
 full-width punctuation characters as the last character in the line:
@@ -1028,7 +1028,7 @@ Tags: `blockquote`, `indentation`, `whitespace`
 
 Aliases: `no-multiple-space-blockquote`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when blockquotes have more than one space after the
 blockquote (`>`) symbol:
@@ -1209,7 +1209,7 @@ Parameters:
 - `ul_single`: Spaces for single-line unordered list items (`integer`, default
   `1`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule checks for the number of spaces between a list marker (e.g. '`-`',
 '`*`', '`+`' or '`1.`') and the text of the list item.
@@ -1288,7 +1288,7 @@ Parameters:
 
 - `list_items`: Include list items (`boolean`, default `true`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when fenced code blocks are either not preceded or not
 followed by a blank line:
@@ -1337,7 +1337,7 @@ Tags: `blank_lines`, `bullet`, `ol`, `ul`
 
 Aliases: `blanks-around-lists`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when lists (of any kind) are either not preceded or not
 followed by a blank line:
@@ -1408,7 +1408,7 @@ Tags: `links`, `url`
 
 Aliases: `no-bare-urls`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered whenever a URL is given that isn't surrounded by angle
 brackets:
@@ -1548,7 +1548,7 @@ Tags: `emphasis`, `whitespace`
 
 Aliases: `no-space-in-emphasis`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when emphasis markers (bold, italic) are used, but they
 have spaces between the markers and the text:
@@ -1588,7 +1588,7 @@ Tags: `code`, `whitespace`
 
 Aliases: `no-space-in-code`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered for code span elements that have spaces adjacent to the
 backticks:
@@ -1631,7 +1631,7 @@ Tags: `links`, `whitespace`
 
 Aliases: `no-space-in-links`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered on links that have spaces surrounding the link text:
 
@@ -1878,7 +1878,7 @@ Parameters:
 - `html_elements`: Include HTML elements (`boolean`, default `true`)
 - `names`: List of proper names (`string[]`, default `[]`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when any of the strings in the `names` array do not have
 the specified capitalization. It can be used to enforce a standard letter case
@@ -1990,7 +1990,7 @@ Tags: `blank_lines`
 
 Aliases: `single-trailing-newline`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when there is not a single newline character at the end
 of a file.
@@ -2076,7 +2076,7 @@ Parameters:
 - `style`: Emphasis style should be consistent (`string`, default `consistent`,
   values `asterisk` / `consistent` / `underscore`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when the symbols used in the document for emphasis do not
 match the configured emphasis style:
@@ -2111,7 +2111,7 @@ Parameters:
 - `style`: Strong style should be consistent (`string`, default `consistent`,
   values `asterisk` / `consistent` / `underscore`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when the symbols used in the document for strong do not
 match the configured strong style:
@@ -2141,7 +2141,7 @@ Tags: `links`
 
 Aliases: `link-fragments`
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 This rule is triggered when a link fragment does not match any of the fragments
 that are automatically generated for headings in a document:
@@ -2234,7 +2234,7 @@ Parameters:
 
 - `ignored_definitions`: Ignored definitions (`string[]`, default `["//"]`)
 
-Fixable: Most violations can be fixed by tooling
+Fixable: Some violations can be fixed by tooling
 
 Links and images in Markdown can provide the link destination or image source
 at the time of use or can define it elsewhere and use a label for reference.
