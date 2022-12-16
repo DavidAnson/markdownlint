@@ -2141,6 +2141,8 @@ Tags: `links`
 
 Aliases: `link-fragments`
 
+Fixable: Most violations can be fixed by tooling
+
 This rule is triggered when a link fragment does not match any of the fragments
 that are automatically generated for headings in a document:
 

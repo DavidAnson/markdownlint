@@ -161,6 +161,16 @@ Text
 
 [badref]: #missing
 
+## Inconsistent Case Fragments
+
+[Title](#Valid-Fragments) {MD051}
+
+[ALL CAPS](#NAMEDLINK) {MD051}
+
+[MiXeD][mixedref] {MD051}
+
+[mixedref]: #idLINK
+
 <!-- markdownlint-configure-file {
   "emphasis-style": false,
   "heading-style": false,

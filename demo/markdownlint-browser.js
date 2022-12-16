@@ -1247,7 +1247,7 @@ module.exports.fixableRuleNames = [
     "MD011", "MD012", "MD014", "MD018", "MD019", "MD020",
     "MD021", "MD022", "MD023", "MD026", "MD027", "MD030",
     "MD031", "MD032", "MD034", "MD037", "MD038", "MD039",
-    "MD044", "MD047", "MD049", "MD050", "MD053"
+    "MD044", "MD047", "MD049", "MD050", "MD051", "MD053"
 ];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.26.2";
@@ -4705,7 +4705,7 @@ module.exports = [
 "use strict";
 // @ts-check
 
-const { addError, escapeForRegExp, filterTokens, forEachInlineChild, forEachHeading, htmlElementRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, addErrorDetailIf, escapeForRegExp, filterTokens, forEachInlineChild, forEachHeading, htmlElementRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 // Regular expression for identifying HTML anchor names
 const idRe = /\sid\s*=\s*['"]?([^'"\s>]+)/iu;
 const nameRe = /\sname\s*=\s*['"]?([^'"\s>]+)/iu;
@@ -4767,12 +4767,31 @@ module.exports = {
             if (id && (id.length > 1) && (id[0] === "#") && !fragments.has(id)) {
                 let context = id;
                 let range = null;
+                let fixInfo = null;
                 const match = line.match(new RegExp(`\\[.*?\\]\\(${escapeForRegExp(context)}\\)`));
                 if (match) {
-                    context = match[0];
-                    range = [match.index + 1, match[0].length];
+                    [context] = match;
+                    const index = match.index;
+                    const length = context.length;
+                    range = [index + 1, length];
+                    fixInfo = {
+                        "editColumn": index + (length - id.length),
+                        "deleteCount": id.length,
+                        "insertText": null
+                    };
                 }
-                addError(onError, lineNumber, undefined, context, range);
+                const idLower = id.toLowerCase();
+                const mixedCaseKey = [...fragments.keys()]
+                    .find((key) => idLower === key.toLowerCase());
+                if (mixedCaseKey) {
+                    (fixInfo || {}).insertText = mixedCaseKey;
+                    addErrorDetailIf(onError, lineNumber, mixedCaseKey, id, undefined, context, range, fixInfo);
+                }
+                else {
+                    addError(onError, lineNumber, undefined, context, 
+                    // @ts-ignore
+                    range);
+                }
             }
         });
     }
