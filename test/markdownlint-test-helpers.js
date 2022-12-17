@@ -1336,7 +1336,12 @@ Text [https://example.com/path] text
 Text "https://example.com/path" text
 Text 'https://example.com/path' text
 Text \`https://example.com/path\` text
+Text ‘https://example.com/path’ text
+Text “https://example.com/path” text
+Text «https://example.com/path» text
 Text [link](https://example.com/path) text
+Text [link](https://example.com/path ) text
+Text [link]( https://example.com/path) text
 Text [link]( https://example.com/path ) text
 Text <code>https://example.com/path</code> text
 Text <a href="https://example.com/path">link</a> text
@@ -1345,11 +1350,28 @@ Text *https://example.com* text
 Text **https://example.com** text
 Text _https://example.com_ text
 Text __https://example.com__ text
-Text https://example.com, text
 Text https://example.com. Text
+Text https://example.com, text
+Text https://example.com; text
+Text https://example.com: text
 Text https://example.com? Text
 Text https://example.com! Text
-  `;
+Text https://example.com。 Text
+Text https://example.com， Text
+Text https://example.com； Text
+Text https://example.com： Text
+Text https://example.com！ Text
+Text https://example.com,text
+Text https://example.com.path text
+Text https://example.com?path text
+Text https://example.com!text
+[https://example.com/path](https://example.com/path)
+[ https://example.com/path](https://example.com/path)
+[https://example.com/path ](https://example.com/path)
+https://example.com
+ https://example.com
+https://example.com 
+  `.split(helpers.newLineRe);
   const expected = `
 Text  text
 Text  text
@@ -1375,7 +1397,12 @@ Text [] text
 Text "" text
 Text '' text
 Text \`\` text
+Text ‘’ text
+Text “” text
+Text «» text
 Text [link]() text
+Text [link]( ) text
+Text [link]( ) text
 Text [link](  ) text
 Text <code></code> text
 Text <a href="">link</a> text
@@ -1384,11 +1411,41 @@ Text ** text
 Text **** text
 Text _ text
 Text __ text
-Text , text
 Text . Text
+Text , text
+Text ; text
+Text : text
 Text ? Text
 Text ! Text
-  `;
-  const actual = input.replace(helpers.urlRe, "");
-  t.is(actual, expected);
+Text 。 Text
+Text ， Text
+Text ； Text
+Text ： Text
+Text ！ Text
+Text 
+Text  text
+Text  text
+Text 
+[]()
+[ ]()
+[ ]()
+
+ 
+ 
+  `.split(helpers.newLineRe);
+  const actual = [];
+  for (let line of input) {
+    const urlRanges = [];
+    let match = null;
+    while ((match = helpers.urlRe.exec(line)) !== null) {
+      urlRanges.push([ match.index, match[0].length ]);
+    }
+    urlRanges.reverse();
+    for (const range of urlRanges) {
+      const [ index, length ] = range;
+      line = line.slice(0, index) + line.slice(index + length);
+    }
+    actual.push(line);
+  }
+  t.deepEqual(actual, expected);
 });
