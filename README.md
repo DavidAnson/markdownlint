@@ -988,8 +988,6 @@ following projects or one of the tools in the [Related section](#related):
 - [Mocha][mocha] ([Search repository][mocha-search])
 - [Pi-hole documentation][pi-hole] ([Search repository][pi-hole-search])
 - [Reactable][reactable] ([Search repository][reactable-search])
-- [Sinon.JS][sinon-js] ([Search repository][sinon-js-search])
-- [TestCafe][testcafe] ([Search repository][testcafe-search])
 - [V8][v8] ([Search repository][v8-search])
 - [webhint][webhint] ([Search repository][webhint-search])
 - [webpack][webpack] ([Search repository][webpack-search])
@@ -1017,10 +1015,6 @@ following projects or one of the tools in the [Related section](#related):
 [pi-hole-search]: https://github.com/pi-hole/docs/search?q=markdownlint
 [reactable]: https://glittershark.github.io/reactable/
 [reactable-search]: https://github.com/glittershark/reactable/search?q=markdownlint
-[sinon-js]: https://sinonjs.org/
-[sinon-js-search]: https://github.com/sinonjs/sinon/search?q=markdownlint
-[testcafe]: https://devexpress.github.io/testcafe/
-[testcafe-search]: https://github.com/DevExpress/testcafe/search?q=markdownlint
 [v8]: https://v8.dev/
 [v8-search]: https://github.com/v8/v8.dev/search?q=markdownlint
 [webhint]: https://webhint.io/
