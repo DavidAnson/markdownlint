@@ -1309,7 +1309,7 @@ test("expandTildePath", (t) => {
   t.is(helpers.expandTildePath("~/dir/file", null), "~/dir/file");
 });
 
-test("urlRe", (t) => {
+test("urlFe", (t) => {
   t.plan(1);
   const input = `
 Text ftp://example.com text
@@ -1329,6 +1329,11 @@ Text https://example.com/path() text
 Text https://example.com/path(path) text
 Text https://example.com/path(path)path text
 Text https://example.com/path-(path) text
+Text https://example.com/path(() text
+Text https://example.com/path()) text
+Text https://example.com/path(()) text
+Text https://example.com/path((())) text
+Text https://example.com/path()() text
 Text (https://example.com/path) text
 Text <https://example.com/path> text
 Text >https://example.com/path< text
@@ -1350,24 +1355,35 @@ Text *https://example.com* text
 Text **https://example.com** text
 Text _https://example.com_ text
 Text __https://example.com__ text
-Text https://example.com. Text
+Text https://example.com. text
 Text https://example.com, text
 Text https://example.com; text
 Text https://example.com: text
-Text https://example.com? Text
-Text https://example.com! Text
-Text https://example.com。 Text
-Text https://example.com， Text
-Text https://example.com； Text
-Text https://example.com： Text
-Text https://example.com！ Text
+Text https://example.com? text
+Text https://example.com! text
+Text https://example.com。 text
+Text https://example.com， text
+Text https://example.com； text
+Text https://example.com： text
+Text https://example.com！ text
 Text https://example.com,text
 Text https://example.com.path text
 Text https://example.com?path text
 Text https://example.com!text
+Text https://example.com.. text
+Text https://example.com... text
+Text https://example.com.co text
+Text <https://example.com/path text> text
+Text <https://example.com/path.path> text
+Text <https://example.com/path,path> text
+Text <https://example.com/path;path> text
+Text <https://example.com/path:path> text
+Text <https://example.com/path?path> text
+Text <https://example.com/path!path> text
 [https://example.com/path](https://example.com/path)
 [ https://example.com/path](https://example.com/path)
 [https://example.com/path ](https://example.com/path)
+https://example.com/ text https://example.com/path text https://example.com/
 https://example.com
  https://example.com
 https://example.com 
@@ -1390,6 +1406,11 @@ Text  text
 Text  text
 Text  text
 Text  text
+Text  text
+Text ) text
+Text ) text
+Text )) text
+Text  text
 Text () text
 Text <> text
 Text >< text
@@ -1409,26 +1430,37 @@ Text <a href="">link</a> text
 Text <a href=""></a> text
 Text ** text
 Text **** text
-Text _ text
 Text __ text
-Text . Text
+Text ____ text
+Text . text
 Text , text
 Text ; text
 Text : text
-Text ? Text
-Text ! Text
-Text 。 Text
-Text ， Text
-Text ； Text
-Text ： Text
-Text ！ Text
-Text 
+Text ? text
+Text ! text
+Text 。 text
+Text ， text
+Text ； text
+Text ： text
+Text ！ text
+Text ,text
 Text  text
 Text  text
-Text 
+Text !text
+Text .. text
+Text ... text
+Text  text
+Text < text> text
+Text <> text
+Text <> text
+Text <> text
+Text <> text
+Text <> text
+Text <> text
 []()
 [ ]()
 [ ]()
+ text  text 
 
  
  
@@ -1437,7 +1469,8 @@ Text
   for (let line of input) {
     const urlRanges = [];
     let match = null;
-    while ((match = helpers.urlRe.exec(line)) !== null) {
+    while ((match = helpers.funcExpExec(helpers.urlFe, line)) !== null) {
+      // @ts-ignore
       urlRanges.push([ match.index, match[0].length ]);
     }
     urlRanges.reverse();
