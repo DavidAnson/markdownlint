@@ -128,10 +128,27 @@ function excludeGlobs(rootDir, ...globs) {
 // Run markdownlint the same way the corresponding repositories do
 /* eslint-disable max-len */
 
+test("https://github.com/apache-airflow", (t) => {
+  const rootDir = "./test-repos/apache-airflow";
+  const globPatterns = [ join(rootDir, "**/*.{md,mdown,markdown}") ];
+  const configPath = join(rootDir, ".markdownlint.yml");
+  return lintTestRepo(t, globPatterns, configPath);
+});
+
 test("https://github.com/dotnet/docs", (t) => {
   const rootDir = "./test-repos/dotnet-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
+  return lintTestRepo(t, globPatterns, configPath);
+});
+
+test("https://github.com/electron-electron", (t) => {
+  const rootDir = "./test-repos/electron-electron";
+  const globPatterns = [
+    join(rootDir, "*.md"),
+    join(rootDir, "docs/**/*.md")
+  ];
+  const configPath = join(rootDir, ".markdownlint.json");
   return lintTestRepo(t, globPatterns, configPath);
 });
 

@@ -979,8 +979,10 @@ following projects or one of the tools in the [Related section](#related):
 
 - [.NET Documentation][dot-net-doc] ([Search repository][dot-net-doc-search])
 - [ally.js][ally-js] ([Search repository][ally-js-search])
+- [Apache Airflow][airflow] ([Search repository][airflow-search])
 - [Boostnote][boostnote] ([Search repository][boostnote-search])
 - [CodiMD][codimd] ([Search repository][codimd-search])
+- [Electron][electron] ([Search repository][electron-search])
 - [ESLint][eslint] ([Search repository][eslint-search])
 - [Garden React Components][garden] ([Search repository][garden-search])
 - [MDN Web Docs][mdn] ([Search repository][mdn-search])
@@ -995,12 +997,16 @@ following projects or one of the tools in the [Related section](#related):
 
 [ally-js]: https://allyjs.io/
 [ally-js-search]: https://github.com/medialize/ally.js/search?q=markdownlint
+[airflow]: https://airflow.apache.org
+[airflow-search]: https://github.com/apache/airflow/search?q=markdownlint
 [boostnote]: https://boostnote.io/
 [boostnote-search]: https://github.com/BoostIO/Boostnote/search?q=markdownlint
 [codimd]: https://github.com/hackmdio/codimd
 [codimd-search]: https://github.com/hackmdio/codimd/search?q=markdownlint
 [dot-net-doc]: https://docs.microsoft.com/en-us/dotnet/
 [dot-net-doc-search]: https://github.com/dotnet/docs/search?q=markdownlint
+[electron]: https://www.electronjs.org
+[electron-search]: https://github.com/electron/electron/search?q=markdownlint
 [eslint]: https://eslint.org/
 [eslint-search]: https://github.com/eslint/eslint/search?q=markdownlint
 [garden]: https://zendeskgarden.github.io/react-components/
