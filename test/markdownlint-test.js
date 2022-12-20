@@ -568,7 +568,7 @@ test("customFrontMatter", (t) => new Promise((resolve) => {
     "strings": {
       "content": "<head>\n\t\n</head>\n# Heading\n"
     },
-    "frontMatter": /<head>[^]*<\/head>/,
+    "frontMatter": /<head>[\s\S]*<\/head>/,
     "config": {
       "default": false,
       "MD010": true

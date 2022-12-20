@@ -10,16 +10,16 @@ module.exports.newLineRe = newLineRe;
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
   // eslint-disable-next-line max-len
-  /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m;
+  /((^---\s*$[\s\S]*?^---\s*$)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[\s\S]*?^\}\s*$))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching the start of inline disable/enable comments
 const inlineCommentStartRe =
   // eslint-disable-next-line max-len
-  /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/ig;
+  /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
 // Regular expression for matching HTML elements
-const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
+const htmlElementRe = /<(([A-Za-z][A-Za-z\d-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 
 // Regular expressions for range matching
@@ -35,10 +35,10 @@ module.exports.blockquotePrefixRe = blockquotePrefixRe;
 
 // Regular expression for reference links (full, collapsed, and shortcut)
 const referenceLinkRe =
-  /!?\\?\[((?:\[[^\]\0]*]|[^[\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
+  /!?\\?\[((?:\[[^\]\0]*\]|[^[\]\0])*)\](?:\[([^\]\0]*)\]|([^(])|$)/g;
 
 // Regular expression for link reference definitions
-const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
+const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
 
 // All punctuation characters (normal and full-width)

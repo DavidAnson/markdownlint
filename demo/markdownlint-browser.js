@@ -37,14 +37,14 @@ module.exports.newLineRe = newLineRe;
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
     // eslint-disable-next-line max-len
-    /((^---\s*$[^]*?^---\s*$)|(^\+\+\+\s*$[^]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[^]*?^\}\s*$))(\r\n|\r|\n|$)/m;
+    /((^---\s*$[\s\S]*?^---\s*$)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[\s\S]*?^\}\s*$))(\r\n|\r|\n|$)/m;
 // Regular expression for matching the start of inline disable/enable comments
 const inlineCommentStartRe = 
 // eslint-disable-next-line max-len
-/(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/ig;
+/(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 // Regular expression for matching HTML elements
-const htmlElementRe = /<(([A-Za-z][A-Za-z0-9-]*)(?:\s[^`>]*)?)\/?>/g;
+const htmlElementRe = /<(([A-Za-z][A-Za-z\d-]*)(?:\s[^`>]*)?)\/?>/g;
 module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
@@ -55,9 +55,9 @@ const emphasisMarkersRe = /[_*]/g;
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
 // Regular expression for reference links (full, collapsed, and shortcut)
-const referenceLinkRe = /!?\\?\[((?:\[[^\]\0]*]|[^[\]\0])*)](?:(?:\[([^\]\0]*)\])|([^(])|$)/g;
+const referenceLinkRe = /!?\\?\[((?:\[[^\]\0]*\]|[^[\]\0])*)\](?:\[([^\]\0]*)\]|([^(])|$)/g;
 // Regular expression for link reference definitions
-const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])]:/;
+const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
 // All punctuation characters (normal and full-width)
 const allPunctuation = ".,;:!?。，；：！？";
@@ -2902,7 +2902,7 @@ module.exports = {
 
 const { addError, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const reversedLinkRe = /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)](?!\()/g;
+const reversedLinkRe = /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
 module.exports = {
     "names": ["MD011", "no-reversed-links"],
     "description": "Reversed link syntax",
@@ -3163,7 +3163,7 @@ module.exports = {
         filterTokens(params, "heading_open", (token) => {
             if (headingStyleFor(token) === "atx") {
                 const { line, lineNumber } = token;
-                const match = /^(#+)([ \t]{2,})(?:\S)/.exec(line);
+                const match = /^(#+)([ \t]{2,})\S/.exec(line);
                 if (match) {
                     const [, { "length": hashLength }, { "length": spacesLength }] = match;
                     addErrorContext(onError, lineNumber, line.trim(), null, null, [1, hashLength + spacesLength + 1], {
@@ -3346,7 +3346,7 @@ module.exports = {
 // @ts-check
 
 const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const spaceBeforeHeadingRe = /^((?:\s+)|(?:[>\s]+\s\s))[^>\s]/;
+const spaceBeforeHeadingRe = /^(\s+|[>\s]+\s\s)[^>\s]/;
 module.exports = {
     "names": ["MD023", "heading-start-left", "header-start-left"],
     "description": "Headings must start at the beginning of the line",
@@ -3465,7 +3465,7 @@ module.exports = {
 // @ts-check
 
 const { addError, allPunctuationNoQuestion, escapeForRegExp, forEachHeading } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const endOfLineHtmlEntityRe = /&#?[0-9a-zA-Z]+;$/;
+const endOfLineHtmlEntityRe = /&#?[\da-zA-Z]+;$/;
 module.exports = {
     "names": ["MD026", "no-trailing-punctuation"],
     "description": "Trailing punctuation in heading",
@@ -3798,11 +3798,11 @@ module.exports = {
 
 const { addError, forEachLine, htmlElementRe, withinAnyRange, unescapeMarkdown } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const linkDestinationRe = /]\(\s*$/;
+const linkDestinationRe = /\]\(\s*$/;
 // See https://spec.commonmark.org/0.29/#autolinks
 const emailAddressRe = 
 // eslint-disable-next-line max-len
-/^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+/^[\w.!#$%&'*+/=?^`{|}~-]+@[a-zA-Z\d](?:[a-zA-Z\d-]{0,61}[a-zA-Z\d])?(?:\.[a-zA-Z\d](?:[a-zA-Z\d-]{0,61}[a-zA-Z\d])?)*$/;
 module.exports = {
     "names": ["MD033", "no-inline-html"],
     "description": "Inline HTML",
@@ -3858,7 +3858,7 @@ module.exports = {
 
 const { addErrorContext, filterTokens, funcExpExec, urlFe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, htmlElementRanges, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const htmlLinkRe = /<a(?:|\s[^>]+)>[^<>]*<\/a\s*>/ig;
+const htmlLinkRe = /<a(?:|\s[^>]+)>[^<>]*<\/a\s*>/gi;
 module.exports = {
     "names": ["MD034", "no-bare-urls"],
     "description": "Bare URL used",
@@ -3945,7 +3945,7 @@ module.exports = {
         filterTokens(params, "hr", (token) => {
             const { line, lineNumber } = token;
             let { markup } = token;
-            const match = line.match(/[_*\-\s\t]+$/);
+            const match = line.match(/[_*\-\s]+$/);
             if (match) {
                 markup = match[0].trim();
             }
@@ -4036,8 +4036,8 @@ module.exports = {
 
 const { addErrorContext, emphasisMarkersInContent, forEachLine, isBlankLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { htmlElementRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const emphasisRe = /(^|[^\\]|\\\\)(?:(\*\*?\*?)|(__?_?))/g;
-const embeddedUnderscoreRe = /([A-Za-z0-9])_([A-Za-z0-9])/g;
+const emphasisRe = /(^|[^\\]|\\\\)(?:(\*{1,3})|(_{1,3}))/g;
+const embeddedUnderscoreRe = /([A-Za-z\d])_([A-Za-z\d])/g;
 const asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 const leftSpaceRe = /^\s+/;
 const rightSpaceRe = /\s+$/;
@@ -4271,7 +4271,7 @@ module.exports = {
 // @ts-check
 
 const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const spaceInLinkRe = /\[(?:\s+(?:[^\]]*?)\s*|(?:[^\]]*?)\s+)](?=((?:\([^)]*\))|(?:\[[^\]]*\])))/;
+const spaceInLinkRe = /\[(?:\s[^\]]*|[^\]]*?\s)\](?=(\([^)]*\)|\[[^\]]*\]))/;
 module.exports = {
     "names": ["MD039", "no-space-in-links"],
     "description": "Spaces inside link text",
