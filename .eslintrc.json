@@ -201,10 +201,7 @@
     "n/prefer-promises/dns": "error",
     "n/prefer-promises/fs": "error",
 
-    "regexp/no-empty-alternative": "off",
     "regexp/no-super-linear-backtracking": "off",
-    "regexp/no-unused-capturing-group": "off",
-    "regexp/no-useless-assertions": "off",
 
     "unicorn/better-regex": "off",
     "unicorn/consistent-function-scoping": "off",

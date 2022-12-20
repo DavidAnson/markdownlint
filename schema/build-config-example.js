@@ -8,7 +8,7 @@ const configSchema = require("./markdownlint-config-schema.json");
 
 const configExample = {};
 for (const rule in configSchema.properties) {
-  if (/^(MD\d{3}|default|extends)$/.test(rule)) {
+  if (/^(?:MD\d{3}|default|extends)$/.test(rule)) {
     const properties = configSchema.properties[rule];
     configExample[rule + "-description"] = properties.description;
     configExample[rule] = properties.default;

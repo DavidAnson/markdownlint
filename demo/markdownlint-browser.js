@@ -37,7 +37,7 @@ module.exports.newLineRe = newLineRe;
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
     // eslint-disable-next-line max-len
-    /((^---\s*$[\s\S]*?^---\s*$)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*$)|(^\{\s*$[\s\S]*?^\}\s*$))(\r\n|\r|\n|$)/m;
+    /((^---\s*$[\s\S]*?^---\s*)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]*?^\}\s*))(\r\n|\r|\n|$)/m;
 // Regular expression for matching the start of inline disable/enable comments
 const inlineCommentStartRe = 
 // eslint-disable-next-line max-len
@@ -2980,8 +2980,8 @@ const { lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache
 const longLineRePrefix = "^.{";
 const longLineRePostfixRelaxed = "}.*\\s.*$";
 const longLineRePostfixStrict = "}.+$";
-const linkOrImageOnlyLineRe = /^[es]*(lT?L|I)[ES]*$/;
-const sternModeRe = /^([#>\s]*\s)?\S*$/;
+const linkOrImageOnlyLineRe = /^[es]*(?:lT?L|I)[ES]*$/;
+const sternModeRe = /^(?:[#>\s]*\s)?\S*$/;
 const tokenTypeMap = {
     "em_open": "e",
     "em_close": "E",
@@ -3858,7 +3858,7 @@ module.exports = {
 
 const { addErrorContext, filterTokens, funcExpExec, urlFe, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { codeBlockAndSpanRanges, htmlElementRanges, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const htmlLinkRe = /<a(?:|\s[^>]+)>[^<>]*<\/a\s*>/gi;
+const htmlLinkRe = /<a(?:\s[^>]*)?>[^<>]*<\/a\s*>/gi;
 module.exports = {
     "names": ["MD034", "no-bare-urls"],
     "description": "Bare URL used",
@@ -4208,7 +4208,7 @@ module.exports = {
 // @ts-check
 
 const { addErrorContext, filterTokens, forEachInlineCodeSpan, newLineRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const leftSpaceRe = /^\s([^`]|$)/;
+const leftSpaceRe = /^\s(?:[^`]|$)/;
 const rightSpaceRe = /[^`]\s$/;
 const spaceInsideCodeInline = (token) => ((token.type === "code_inline") &&
     (leftSpaceRe.test(token.content) || rightSpaceRe.test(token.content)));
