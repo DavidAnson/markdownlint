@@ -6,6 +6,7 @@ const os = require("node:os");
 const path = require("node:path");
 const test = require("ava").default;
 const helpers = require("../helpers");
+const { markdownlint } = require("../lib/markdownlint").promises;
 
 test("clearHtmlCommentTextValid", (t) => {
   t.plan(1);
@@ -1481,4 +1482,36 @@ Text <> text
     actual.push(line);
   }
   t.deepEqual(actual, expected);
+});
+
+test("getReferenceLinkImageData().shortcuts", (t) => {
+  t.plan(1);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "no-shortcut-links" ],
+        "description": "-",
+        "tags": [ "-" ],
+        "function":
+          (params) => {
+            const lineMetadata = helpers.getLineMetadata(params);
+            const { shortcuts } =
+              helpers.getReferenceLinkImageData(lineMetadata);
+            t.is(shortcuts.size, 0, [ ...shortcuts.keys() ].join(", "));
+          }
+      }
+    ],
+    "strings": {
+      "no-shortcut-links": `
+Full reference link: [text0][label]
+Collapsed reference link: [label][]
+Nested empty brackets: [text1[]](https://example.com/)
+Missing close bracket, empty text: [text2[](https://example.com/)
+Empty bracket pairs: [text3[]][]
+
+[label]: https://example.com/label
+      `
+    }
+  };
+  return markdownlint(options).then(() => null);
 });
