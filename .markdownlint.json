@@ -26,7 +26,8 @@
     "style": "---"
   },
   "line-length": {
-    "strict": true
+    "strict": true,
+    "code_blocks": false
   },
   "no-duplicate-heading": {
     "siblings_only": true

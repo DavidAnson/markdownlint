@@ -510,13 +510,9 @@ specify a custom `RegExp` or use the value `null` to disable the feature.
 
 The default value:
 
-<!-- markdownlint-disable line-length -->
-
 ```javascript
 /((^---\s*$[\s\S]*?^---\s*)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]*?^\}\s*))(\r\n|\r|\n|$)/m
 ```
-
-<!-- markdownlint-restore -->
 
 Ignores [YAML](https://en.wikipedia.org/wiki/YAML),
 [TOML](https://en.wikipedia.org/wiki/TOML), and
@@ -778,8 +774,6 @@ markdownlint(options, function callback(err, result) {
 
 Output:
 
-<!-- markdownlint-disable line-length -->
-
 ```text
 bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
 bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.string"]
@@ -790,8 +784,6 @@ bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 ```
-
-<!-- markdownlint-restore -->
 
 Or invoke `markdownlint.sync` for a synchronous call:
 
@@ -811,8 +803,6 @@ markdownlint(options, function callback(err, result) {
 ```
 
 Output:
-
-<!-- markdownlint-disable line-length -->
 
 ```json
 {
@@ -850,8 +840,6 @@ Output:
 }
 ```
 
-<!-- markdownlint-restore -->
-
 Integration with the [gulp](https://gulpjs.com/) build system is
 straightforward:
 
@@ -878,8 +866,6 @@ gulp.task("markdownlint", function task() {
 
 Output:
 
-<!-- markdownlint-disable line-length -->
-
 ```text
 [00:00:00] Starting 'markdownlint'...
 bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
@@ -888,8 +874,6 @@ bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 [00:00:00] Finished 'markdownlint' after 10 ms
 ```
-
-<!-- markdownlint-restore -->
 
 Integration with the [Grunt](https://gruntjs.com/) build system is similar:
 
@@ -922,8 +906,6 @@ module.exports = function wrapper(grunt) {
 
 Output:
 
-<!-- markdownlint-disable line-length -->
-
 ```text
 Running "markdownlint:example" (markdownlint) task
 Warning:
@@ -933,8 +915,6 @@ bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
  Use --force to continue.
 ```
-
-<!-- markdownlint-restore -->
 
 ### Fixing
 
