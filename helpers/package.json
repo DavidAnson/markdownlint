@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "engines": {
-    "node": ">=12"
+    "node": ">=14.18.0"
   },
   "keywords": [
     "markdownlint",
