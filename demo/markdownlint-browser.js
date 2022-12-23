@@ -792,7 +792,7 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 function getReferenceLinkImageData(lineMetadata) {
     // Initialize return values
     const references = new Map();
-    const shortcuts = new Set();
+    const shortcuts = new Map();
     const definitions = new Map();
     const duplicateDefinitions = [];
     const definitionLineIndices = [];
@@ -882,20 +882,23 @@ function getReferenceLinkImageData(lineMetadata) {
                     }
                     const referenceIndex = referenceindex +
                         (topLevel ? -lineOffsets[lineIndex] : contentIndex);
+                    const referenceDatum = [
+                        lineIndex,
+                        referenceIndex,
+                        matchString.length,
+                        matchText.length,
+                        (matchLabel || "").length
+                    ];
                     if (shortcutLink) {
                         // Track separately due to ambiguity in "text [text] text"
-                        shortcuts.add(label);
+                        const shortcutData = shortcuts.get(label) || [];
+                        shortcutData.push(referenceDatum);
+                        shortcuts.set(label, shortcutData);
                     }
                     else {
                         // Track reference and location
                         const referenceData = references.get(label) || [];
-                        referenceData.push([
-                            lineIndex,
-                            referenceIndex,
-                            matchString.length,
-                            matchText.length,
-                            matchLabel.length
-                        ]);
+                        referenceData.push(referenceDatum);
                         references.set(label, referenceData);
                     }
                     // Check for links embedded in brackets
