@@ -1140,6 +1140,9 @@ See [ReleaseProcess.md](doc/ReleaseProcess.md) for more information.
            CodeQL issues, improve performance, update dependencies.
   - 0.26.1 - Improve MD051.
   - 0.26.2 - Improve MD037/MD051/MD053.
+- 0.27.0 - Improve MD011/MD013/MD022/MD031/MD032/MD033/MD034/MD040/MD043/MD051/
+           MD053, generate/separate documentation, improve documentation, update
+           dependencies.
 
 [npm-image]: https://img.shields.io/npm/v/markdownlint.svg
 [npm-url]: https://www.npmjs.com/package/markdownlint
