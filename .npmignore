@@ -7,6 +7,7 @@
 coverage
 demo/*
 !demo/markdownlint-browser.js
+doc-build
 example
 npm-debug.log
 schema/*.js
