@@ -1,6 +1,10 @@
 "use strict";
 
 (function main() {
+  // Dependencies
+  var markdownlint = window.markdownlint.library;
+  var helpers = window.markdownlint.helpers;
+
   // DOM elements
   var markdown = document.getElementById("markdown");
   var markup = document.getElementById("markup");
@@ -54,7 +58,7 @@
       },
       "handleRuleFailures": true
     };
-    allLintErrors = window.markdownlint.sync(options).content;
+    allLintErrors = markdownlint.sync(options).content;
     violations.innerHTML = allLintErrors.map(function mapResult(result) {
       var ruleName = result.ruleNames.slice(0, 2).join(" / ");
       return "<em><a href='#line' target='" + result.lineNumber + "'>" +
@@ -126,8 +130,7 @@
         var errors = e.shiftKey ?
           allLintErrors :
           [ JSON.parse(decodeURIComponent(e.target.target)) ];
-        var fixed =
-          window.markdownlintRuleHelpers.applyFixes(markdown.value, errors);
+        var fixed = helpers.applyFixes(markdown.value, errors);
         markdown.value = fixed;
         onMarkdownInput();
         e.preventDefault();
@@ -166,7 +169,7 @@
 
   // Show library version
   document.getElementById("version").textContent =
-    "(v" + window.markdownlint.getVersion() + ")";
+    "(v" + markdownlint.getVersion() + ")";
 
   // Add event listeners
   document.body.addEventListener("dragover", onDragOver);
