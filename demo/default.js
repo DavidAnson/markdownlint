@@ -2,6 +2,7 @@
 
 (function main() {
   // Dependencies
+  var markdownit = window.markdownit({ "html": true });
   var markdownlint = window.markdownlint.library;
   var helpers = window.markdownlint.helpers;
 
@@ -15,7 +16,6 @@
   var copyLink = document.getElementById("copyLink");
 
   // Variables
-  var markdownit = window.markdownit({ "html": true });
   var newLineRe = /\r\n|\r|\n/;
   var hashPrefix = "%m";
   var allLintErrors = [];
