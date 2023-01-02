@@ -3,8 +3,6 @@ name: Checkers
 on:
   pull_request:
   push:
-  schedule:
-  - cron: '30 12 * * *'
   workflow_dispatch:
 
 jobs:
