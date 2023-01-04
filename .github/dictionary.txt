@@ -13,6 +13,9 @@ blockquotes
 Boostnote
 br
 br_spaces
+Changelog
+Changelogs
+changelog
 changelogs
 CLI
 coc-markdownlint
@@ -78,6 +81,7 @@ parsers
 pre-commit
 Reactable
 README
+Reimplement
 reimplement
 setext
 setext-style
