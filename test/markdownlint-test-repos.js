@@ -171,6 +171,7 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
   const rootDir = "./test-repos/mkdocs-mkdocs";
   const globPatterns = [
     join(rootDir, "README.md"),
+    join(rootDir, "CHANGELOG.md"),
     join(rootDir, "CONTRIBUTING.md"),
     join(rootDir, "docs"),
     ...excludeGlobs(

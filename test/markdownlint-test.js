@@ -81,6 +81,7 @@ test("projectFiles", (t) => new Promise((resolve) => {
     .then((module) => module.globby("doc/*.md"))
     .then((files) => [
       ...files,
+      "CHANGELOG.md",
       "CONTRIBUTING.md",
       "README.md",
       "helpers/README.md"
