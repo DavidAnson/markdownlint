@@ -20,10 +20,10 @@
 - Add MD051/MD052/MD053 for validating link fragments & reference
   links/images & link/image reference definitions (MD053 auto-fixable)
 - Improve MD010/MD031/MD035/MD039/MD042/MD044/MD049/MD050
-- Add `markdownlint-disable-line` inline comment support `~` paths
-  in `readConfig/Sync`
+- Add `markdownlint-disable-line` inline comment
+- Support `~` paths in `readConfig/Sync`
 - Add `configParsers` option
-- Remove support for  end-of-life Node version 12
+- Remove support for end-of-life Node version 12
 - Default `resultVersion` to 3
 - Update browser script to use ES2015
 - Simplify JSON schema
@@ -72,11 +72,12 @@
 - Add `markdownlint-disable-next-line` inline comment
 - Support JSON front matter
 - Improve MD009/MD026/MD028/MD043
-- Update dependencies (including `markdown-it` to v12
+- Update dependencies (including `markdown-it` to v12)
 
 ## 0.21.1
 
-- Improve MD011/MD031, export `getVersion` API
+- Improve MD011/MD031
+- Export `getVersion` API
 
 ## 0.21.0
 
@@ -115,7 +116,7 @@
 
 - Add `markdownlint-configure-file` inline comment
 - Reimplement MD037
-- improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD038/MD039
+- Improve MD005/MD007/MD013/MD018/MD029/MD031/MD034/MD038/MD039
 - Improve HTML comment handling
 - Update dependencies
 
@@ -239,7 +240,7 @@
 ## 0.7.0
 
 - `resultVersion` defaults to 2 (breaking change)
-- Ad MD045
+- AdD MD045
 - Improve MD029
 - Remove trimLeft/trimRight
 - Split rules
@@ -248,7 +249,8 @@
 
 ## 0.6.4
 
-- Improve MD029/MD042, update dependencies
+- Improve MD029/MD042
+- Update dependencies
 
 ## 0.6.3
 
@@ -267,7 +269,8 @@
 ## 0.6.0
 
 - `resultVersion` defaults to 1 (breaking change)
-- Ignore HTML comments TOML front matter
+- Ignore HTML comments
+- TOML front matter
 - Fixes for MD044
 - Update dependencies
 
@@ -290,7 +293,8 @@
 
 - Add MD044
 - Enhance MD013/MD032/MD041/MD042/MD043
-- Fix for MD038 dependencies
+- Fix for MD038
+- Update dependencies
 
 ## 0.3.1
 
@@ -304,10 +308,11 @@
 - Fixes for MD027/MD029/MD030
 - Include JSON schema dependencies
 
-## 0.2
+## 0.2.0
 
 - Add MD042/MD043
-- Enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041 dependencies
+- Enhance MD002/MD003/MD004/MD007/MD011/MD025/MD041
+- Update dependencies
 
 ## 0.1.1
 
@@ -324,7 +329,8 @@
 ## 0.0.8
 
 - Support disabling/enabling rules inline
-- Improve code fence dependencies
+- Improve code fence
+- Update dependencies
 
 ## 0.0.7
 
