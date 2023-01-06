@@ -13,6 +13,9 @@ blockquotes
 Boostnote
 br
 br_spaces
+Changelog
+Changelogs
+changelog
 changelogs
 CLI
 coc-markdownlint
@@ -72,12 +75,14 @@ npm
 ol
 ol_multi
 ol-prefix
+Pandoc
 pandoc
 Params
 parsers
 pre-commit
 Reactable
 README
+Reimplement
 reimplement
 setext
 setext-style
