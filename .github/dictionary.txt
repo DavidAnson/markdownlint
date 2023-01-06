@@ -75,6 +75,7 @@ npm
 ol
 ol_multi
 ol-prefix
+Pandoc
 pandoc
 Params
 parsers
