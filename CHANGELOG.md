@@ -191,7 +191,7 @@
 
 - Improve MD013/MD022/MD025/MD029/MD031/MD032/MD037/MD041
 - Deprecate MD002
-- Improve pandoc YAML support
+- Improve Pandoc YAML support
 - Update dependencies
 
 ## 0.12.0
@@ -205,7 +205,7 @@
 
 - Improve MD005/MD024/MD029/MD038
 - Improve custom rule example
-- Add CONTRIBUTING.md
+- Add `CONTRIBUTING.md`
 - Update dependencies
 
 ## 0.10.0
@@ -240,9 +240,9 @@
 ## 0.7.0
 
 - `resultVersion` defaults to 2 (breaking change)
-- AdD MD045
+- Add MD045
 - Improve MD029
-- Remove trimLeft/trimRight
+- Remove `trimLeft`/`trimRight`
 - Split rules
 - Refactor
 - Update dependencies
@@ -278,7 +278,7 @@
 
 - Add shareable configuration
 - Add `noInlineConfig` option
-- Add README links
+- Add `README.md` links
 - Fix MD030
 - Improve MD009/MD041
 - Update dependencies
@@ -317,7 +317,7 @@
 ## 0.1.1
 
 - Fix bug handling HTML in tables
-- Reference markdownlint-cli
+- Reference `markdownlint-cli`
 
 ## 0.1.0
 
