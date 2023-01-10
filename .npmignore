@@ -9,6 +9,7 @@ demo/*
 !demo/markdownlint-browser.js
 doc-build
 example
+micromark
 npm-debug.log
 schema/*.js
 scripts
