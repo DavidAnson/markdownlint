@@ -1,6 +1,8 @@
+// @ts-check
+
 import fs from "node:fs/promises";
 import test from "ava";
-import newLineRe from "../helpers/helpers.js";
+import { newLineRe } from "../helpers/helpers.js";
 import { parse } from "../lib/micromark.mjs";
 
 test("parse", async(t) => {
