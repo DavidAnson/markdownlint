@@ -76,6 +76,8 @@ Mixed valid/invalid: [text][label] [text][missing] {MD052}
 Missing multi-line label {MD052}: [text][missing
 label]
 
+> Missing label in blockquote: [text][missing] {MD052}
+
 ## Non-Links
 
 Space: [text] [wrong]
