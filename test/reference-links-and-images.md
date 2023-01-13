@@ -59,6 +59,8 @@ Shortcut ending in colon: [colon]:
 
 Use of multi-line label: [multi-line-label][]
 
+Use of link in label: [link-in-label][]
+
 Standard link: [text](https://example.com/standard)
 
 Wrapped in brackets: [[text][unique0]] [[unique1][]] [[unique2]]
@@ -168,6 +170,7 @@ Missing[^2]
 [colon]: https://example.com/colon
 [multi-line-label]:
 https://example.com/multi-line-label
+[link-in-label]: https://example.com/path?[brackets][]
 [unique0]: https://example.com/unique0
 [unique1]: https://example.com/unique1
 [unique2]: https://example.com/unique2
