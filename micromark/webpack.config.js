@@ -19,7 +19,7 @@ module.exports = [
     "mode": "production",
     "output": {
       ...shared.output,
-      "filename": "micromark.js"
+      "filename": "micromark.cjs"
     }
   },
   {
@@ -28,7 +28,7 @@ module.exports = [
     "mode": "development",
     "output": {
       ...shared.output,
-      "filename": "micromark.dev.js"
+      "filename": "micromark.dev.cjs"
     }
   }
 ];

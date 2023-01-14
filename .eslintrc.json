@@ -15,8 +15,8 @@
     "demo/markdownlint-browser.js",
     "demo/markdownlint-browser.min.js",
     "example/typescript/type-check.js",
-    "micromark/micromark.js",
-    "micromark/micromark.dev.js",
+    "micromark/micromark.cjs",
+    "micromark/micromark.dev.cjs",
     "test-repos/"
   ],
   "overrides": [

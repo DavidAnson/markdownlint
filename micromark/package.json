@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "A trivial package that re-exports some micromark functionality as a CommonJS module",
   "type": "commonjs",
-  "exports": "./micromark.js",
+  "exports": "./micromark.cjs",
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
