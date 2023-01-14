@@ -1305,6 +1305,23 @@ module.exports = markdownit;
 
 /***/ }),
 
+/***/ "./markdownlint-exports.js":
+/*!*********************************!*\
+  !*** ./markdownlint-exports.js ***!
+  \*********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+module.exports = {
+    "library": __webpack_require__(/*! .. */ "../lib/markdownlint.js"),
+    "helpers": __webpack_require__(/*! ../helpers */ "../helpers/helpers.js")
+};
+
+
+/***/ }),
+
 /***/ "../lib/cache.js":
 /*!***********************!*\
   !*** ../lib/cache.js ***!
@@ -5096,7 +5113,7 @@ module.exports = rules;
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__("../lib/markdownlint.js");
+/******/ 	var __webpack_exports__ = __webpack_require__("./markdownlint-exports.js");
 /******/ 	markdownlint = __webpack_exports__;
 /******/ 	
 /******/ })()

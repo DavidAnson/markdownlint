@@ -3,6 +3,7 @@ import library from "../lib/markdownlint.js";
 const markdownlint = library.promises.markdownlint;
 
 const strings = {
+  "CHANGELOG": await readFile("CHANGELOG.md", "utf8"),
   "CONTRIBUTING": await readFile("CONTRIBUTING.md", "utf8"),
   "README": await readFile("README.md", "utf8"),
   "CustomRules": await readFile("./doc/CustomRules.md", "utf8"),

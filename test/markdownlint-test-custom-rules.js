@@ -1224,6 +1224,7 @@ test("customRulesParamsAreFrozen", (t) => {
       }
     ],
     "files": [
+      "CHANGELOG.md",
       "CONTRIBUTING.md",
       "README.md",
       "doc/CustomRules.md",
