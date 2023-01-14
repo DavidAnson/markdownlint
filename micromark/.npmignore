@@ -1,3 +1,3 @@
 exports.mjs
-micromark.dev.js
+micromark.dev.cjs
 webpack.config.js
