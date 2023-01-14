@@ -104,7 +104,7 @@ unhandled
 unreferenced
 url
 v12
-V8
+V8v8
 vscode-docs-authoring
 vscode-markdownlint
 W3C
