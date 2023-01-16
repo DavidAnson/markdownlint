@@ -167,6 +167,14 @@ test("https://github.com/mdn/content", (t) => {
   return lintTestRepo(t, globPatterns, configPath);
 });
 
+test("https://github.com/mdn/translated-content", (t) => {
+  const rootDir = "./test-repos/mdn-translated-content";
+  const globPatterns = [ join(rootDir, "**/*.md") ];
+  const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
+  const ignoreRes = [ /^.*\/(?:conflicting|orphaned)\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+});
+
 test("https://github.com/mkdocs/mkdocs", (t) => {
   const rootDir = "./test-repos/mkdocs-mkdocs";
   const globPatterns = [
