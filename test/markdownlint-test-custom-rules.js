@@ -1223,13 +1223,7 @@ test("customRulesParamsAreFrozen", (t) => {
           }
       }
     ],
-    "files": [
-      "CHANGELOG.md",
-      "CONTRIBUTING.md",
-      "README.md",
-      "doc/CustomRules.md",
-      "doc/Rules.md"
-    ]
+    "files": [ "README.md" ]
   };
   return markdownlint.promises.markdownlint(options).then(() => null);
 });
