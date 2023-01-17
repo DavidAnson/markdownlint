@@ -19,16 +19,14 @@ function config(options) {
     "module": {
       "rules": [
         {
-          "test": /.js$/,
-          "use": [
-            {
-              "loader": "ts-loader",
-              "options": {
-                "configFile": "../demo/tsconfig.json",
-                "transpileOnly": true
-              }
+          "test": /\.[cm]?js$/,
+          "exclude": /node_modules/,
+          "use": {
+            "loader": "babel-loader",
+            "options": {
+              "presets": [ "@babel/preset-env" ]
             }
-          ]
+          }
         }
       ]
     },
