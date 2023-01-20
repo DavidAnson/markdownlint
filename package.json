@@ -69,7 +69,7 @@
     "c8": "7.12.0",
     "eslint": "8.32.0",
     "eslint-plugin-es": "4.1.0",
-    "eslint-plugin-jsdoc": "39.6.6",
+    "eslint-plugin-jsdoc": "39.6.7",
     "eslint-plugin-n": "15.6.1",
     "eslint-plugin-regexp": "1.12.0",
     "eslint-plugin-unicorn": "45.0.2",
