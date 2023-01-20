@@ -1446,6 +1446,124 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../helpers/micromark.cjs":
+/*!********************************!*\
+  !*** ../helpers/micromark.cjs ***!
+  \********************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+/* eslint-disable n/no-unpublished-require */
+
+// @ts-ignore
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var _require = __webpack_require__(/*! ../micromark/micromark.cjs */ "../micromark/micromark.cjs"),
+  parse = _require.parse,
+  postprocess = _require.postprocess,
+  preprocess = _require.preprocess;
+
+/**
+ * Markdown token.
+ *
+ * @typedef {Object} Token
+ * @property {string} type Token type.
+ * @property {number} startLine Start line (1-based).
+ * @property {number} startColumn Start column (1-based).
+ * @property {number} endLine End line (1-based).
+ * @property {number} endColumn End column (1-based).
+ * @property {string} text Token text.
+ * @property {Token[]} tokens Child tokens.
+ */
+
+/**
+ * Parses a Markdown document and returns (frozen) tokens.
+ *
+ * @param {string} markdown Markdown document.
+ * @returns {Token[]} Markdown tokens (frozen).
+ */
+function micromarkParse(markdown) {
+  // Use micromark to parse document into Events
+  var encoding = undefined;
+  var eol = true;
+  var options = undefined;
+  var chunks = preprocess()(markdown, encoding, eol);
+  var parseContext = parse(options).document().write(chunks);
+  var events = postprocess(parseContext);
+
+  // Create Token objects
+  var document = [];
+  var current = {
+    "tokens": document
+  };
+  var history = [current];
+  var _iterator = _createForOfIteratorHelper(events),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var event = _step.value;
+      var _event = _slicedToArray(event, 3),
+        kind = _event[0],
+        token = _event[1],
+        context = _event[2];
+      var type = token.type,
+        start = token.start,
+        end = token.end;
+      var startColumn = start["column"],
+        startLine = start["line"];
+      var endColumn = end["column"],
+        endLine = end["line"];
+      var text = null;
+      try {
+        text = context.sliceSerialize(token);
+      } catch (_unused) {
+        // https://github.com/micromark/micromark/issues/131
+      }
+      if (kind === "enter") {
+        var previous = current;
+        history.push(previous);
+        current = {
+          type: type,
+          startLine: startLine,
+          startColumn: startColumn,
+          endLine: endLine,
+          endColumn: endColumn,
+          text: text,
+          "tokens": []
+        };
+        previous.tokens.push(current);
+      } else if (kind === "exit") {
+        Object.freeze(current.tokens);
+        Object.freeze(current);
+        // @ts-ignore
+        current = history.pop();
+      }
+    }
+
+    // Return document
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
+  Object.freeze(document);
+  return document;
+}
+module.exports = {
+  "parse": micromarkParse
+};
+
+/***/ }),
+
 /***/ "../lib/cache.js":
 /*!***********************!*\
   !*** ../lib/cache.js ***!
@@ -1543,7 +1661,7 @@ var path = __webpack_require__(/*! node:path */ "?9a52");
 var _require = __webpack_require__(/*! node:util */ "?39e5"),
   promisify = _require.promisify;
 var markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
-var micromark = __webpack_require__(/*! ./micromark.cjs */ "../lib/micromark.cjs");
+var micromark = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 var _require2 = __webpack_require__(/*! ./constants */ "../lib/constants.js"),
   deprecatedRuleNames = _require2.deprecatedRuleNames;
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
@@ -6236,124 +6354,6 @@ module.exports = {
       _iterator2.f();
     }
   }
-};
-
-/***/ }),
-
-/***/ "../lib/micromark.cjs":
-/*!****************************!*\
-  !*** ../lib/micromark.cjs ***!
-  \****************************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-// @ts-check
-
-
-
-/* eslint-disable n/no-unpublished-require */
-
-// @ts-ignore
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-var _require = __webpack_require__(/*! ../micromark/micromark.cjs */ "../micromark/micromark.cjs"),
-  parse = _require.parse,
-  postprocess = _require.postprocess,
-  preprocess = _require.preprocess;
-
-/**
- * Markdown token.
- *
- * @typedef {Object} Token
- * @property {string} type Token type.
- * @property {number} startLine Start line (1-based).
- * @property {number} startColumn Start column (1-based).
- * @property {number} endLine End line (1-based).
- * @property {number} endColumn End column (1-based).
- * @property {string} text Token text.
- * @property {Token[]} tokens Child tokens.
- */
-
-/**
- * Parses a Markdown document and returns (frozen) tokens.
- *
- * @param {string} markdown Markdown document.
- * @returns {Token[]} Markdown tokens (frozen).
- */
-function micromarkParse(markdown) {
-  // Use micromark to parse document into Events
-  var encoding = undefined;
-  var eol = true;
-  var options = undefined;
-  var chunks = preprocess()(markdown, encoding, eol);
-  var parseContext = parse(options).document().write(chunks);
-  var events = postprocess(parseContext);
-
-  // Create Token objects
-  var document = [];
-  var current = {
-    "tokens": document
-  };
-  var history = [current];
-  var _iterator = _createForOfIteratorHelper(events),
-    _step;
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var event = _step.value;
-      var _event = _slicedToArray(event, 3),
-        kind = _event[0],
-        token = _event[1],
-        context = _event[2];
-      var type = token.type,
-        start = token.start,
-        end = token.end;
-      var startColumn = start["column"],
-        startLine = start["line"];
-      var endColumn = end["column"],
-        endLine = end["line"];
-      var text = null;
-      try {
-        text = context.sliceSerialize(token);
-      } catch (_unused) {
-        // https://github.com/micromark/micromark/issues/131
-      }
-      if (kind === "enter") {
-        var previous = current;
-        history.push(previous);
-        current = {
-          type: type,
-          startLine: startLine,
-          startColumn: startColumn,
-          endLine: endLine,
-          endColumn: endColumn,
-          text: text,
-          "tokens": []
-        };
-        previous.tokens.push(current);
-      } else if (kind === "exit") {
-        Object.freeze(current.tokens);
-        Object.freeze(current);
-        // @ts-ignore
-        current = history.pop();
-      }
-    }
-
-    // Return document
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-  Object.freeze(document);
-  return document;
-}
-module.exports = {
-  "parse": micromarkParse
 };
 
 /***/ }),

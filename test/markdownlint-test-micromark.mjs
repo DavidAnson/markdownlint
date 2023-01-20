@@ -3,7 +3,7 @@
 import fs from "node:fs/promises";
 import test from "ava";
 import { newLineRe } from "../helpers/helpers.js";
-import { parse } from "../lib/micromark.cjs";
+import { parse } from "../helpers/micromark.cjs";
 
 test("parse", async(t) => {
   t.plan(1);
