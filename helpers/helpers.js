@@ -193,19 +193,6 @@ module.exports.escapeForRegExp = function escapeForRegExp(str) {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-// Un-escapes Markdown content (simple algorithm; not a parser)
-const escapedMarkdownRe = /\\./g;
-module.exports.unescapeMarkdown =
-  function unescapeMarkdown(markdown, replacement) {
-    return markdown.replace(escapedMarkdownRe, (match) => {
-      const char = match[1];
-      if ("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".includes(char)) {
-        return replacement || char;
-      }
-      return match;
-    });
-  };
-
 /**
  * Return the string representation of a fence markup character.
  *

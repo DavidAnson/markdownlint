@@ -24,14 +24,14 @@ const { parse, postprocess, preprocess } = require("../micromark/micromark.cjs")
  * Parses a Markdown document and returns (frozen) tokens.
  *
  * @param {string} markdown Markdown document.
- * @returns {Token[]} Markdown tokens (frozen).
+ * @param {Object} [options] Options for micromark.
+ * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParse(markdown) {
+function micromarkParse(markdown, options) {
 
   // Use micromark to parse document into Events
   const encoding = undefined;
   const eol = true;
-  const options = undefined;
   const chunks = preprocess()(markdown, encoding, eol);
   const parseContext = parse(options).document().write(chunks);
   const events = postprocess(parseContext);
@@ -79,6 +79,39 @@ function micromarkParse(markdown) {
   return document;
 }
 
+/**
+ * Filter a list of Micromark tokens by predicate.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {Function} predicate Filter predicate.
+ * @returns {Token[]} Filtered tokens.
+ */
+function filterByPredicate(tokens, predicate) {
+  const result = [];
+  const pending = [ ...tokens ];
+  let token = null;
+  while ((token = pending.shift())) {
+    if (predicate(token)) {
+      result.push(token);
+    }
+    pending.unshift(...token.tokens);
+  }
+  return result;
+}
+
+/**
+ * Filter a list of Micromark tokens by type.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {string[]} types Types to allow.
+ * @returns {Token[]} Filtered tokens.
+ */
+function filterByTypes(tokens, ...types) {
+  return filterByPredicate(tokens, (token) => types.includes(token.type));
+}
+
 module.exports = {
+  filterByPredicate,
+  filterByTypes,
   "parse": micromarkParse
 };
