@@ -219,18 +219,6 @@ module.exports.escapeForRegExp = function escapeForRegExp(str) {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
-// Un-escapes Markdown content (simple algorithm; not a parser)
-var escapedMarkdownRe = /\\./g;
-module.exports.unescapeMarkdown = function unescapeMarkdown(markdown, replacement) {
-  return markdown.replace(escapedMarkdownRe, function (match) {
-    var _char = match[1];
-    if ("!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~".includes(_char)) {
-      return replacement || _char;
-    }
-    return match;
-  });
-};
-
 /**
  * Return the string representation of a fence markup character.
  *
@@ -1460,6 +1448,10 @@ module.exports = {
 /* eslint-disable n/no-unpublished-require */
 
 // @ts-ignore
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
@@ -1489,13 +1481,13 @@ var _require = __webpack_require__(/*! ../micromark/micromark.cjs */ "../microma
  * Parses a Markdown document and returns (frozen) tokens.
  *
  * @param {string} markdown Markdown document.
- * @returns {Token[]} Markdown tokens (frozen).
+ * @param {Object} [options] Options for micromark.
+ * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParse(markdown) {
+function micromarkParse(markdown, options) {
   // Use micromark to parse document into Events
   var encoding = undefined;
   var eol = true;
-  var options = undefined;
   var chunks = preprocess()(markdown, encoding, eol);
   var parseContext = parse(options).document().write(chunks);
   var events = postprocess(parseContext);
@@ -1558,7 +1550,45 @@ function micromarkParse(markdown) {
   Object.freeze(document);
   return document;
 }
+
+/**
+ * Filter a list of Micromark tokens by predicate.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {Function} predicate Filter predicate.
+ * @returns {Token[]} Filtered tokens.
+ */
+function filterByPredicate(tokens, predicate) {
+  var result = [];
+  var pending = _toConsumableArray(tokens);
+  var token = null;
+  while (token = pending.shift()) {
+    if (predicate(token)) {
+      result.push(token);
+    }
+    pending.unshift.apply(pending, _toConsumableArray(token.tokens));
+  }
+  return result;
+}
+
+/**
+ * Filter a list of Micromark tokens by type.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {string[]} types Types to allow.
+ * @returns {Token[]} Filtered tokens.
+ */
+function filterByTypes(tokens) {
+  for (var _len = arguments.length, types = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    types[_key - 1] = arguments[_key];
+  }
+  return filterByPredicate(tokens, function (token) {
+    return types.includes(token.type);
+  });
+}
 module.exports = {
+  filterByPredicate: filterByPredicate,
+  filterByTypes: filterByTypes,
   "parse": micromarkParse
 };
 
@@ -4870,28 +4900,21 @@ module.exports = {
 
 
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addError = _require.addError,
-  forEachLine = _require.forEachLine,
-  htmlElementRe = _require.htmlElementRe,
-  withinAnyRange = _require.withinAnyRange,
-  unescapeMarkdown = _require.unescapeMarkdown;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  codeBlockAndSpanRanges = _require2.codeBlockAndSpanRanges,
-  lineMetadata = _require2.lineMetadata,
-  referenceLinkImageData = _require2.referenceLinkImageData;
-var linkDestinationRe = /\]\(\s*$/;
-// See https://spec.commonmark.org/0.29/#autolinks
-var emailAddressRe =
-// eslint-disable-next-line max-len
-/^[\w.!#$%&'*+/=?^`{|}~-]+@[a-zA-Z\d](?:[a-zA-Z\d-]{0,61}[a-zA-Z\d])?(?:\.[a-zA-Z\d](?:[a-zA-Z\d-]{0,61}[a-zA-Z\d])?)*$/;
+  addError = _require.addError;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes,
+  parse = _require2.parse;
+
+// eslint-disable-next-line regexp/optimal-quantifier-concatenation
+var htmlTextRe = /^<([^!/\s>]+)[^\r\n>]*>?/;
 module.exports = {
   "names": ["MD033", "no-inline-html"],
   "description": "Inline HTML",
@@ -4902,60 +4925,48 @@ module.exports = {
     allowedElements = allowedElements.map(function (element) {
       return element.toLowerCase();
     });
-    var exclusions = codeBlockAndSpanRanges();
-    var _referenceLinkImageDa = referenceLinkImageData(),
-      references = _referenceLinkImageDa.references,
-      definitionLineIndices = _referenceLinkImageDa.definitionLineIndices;
-    var _iterator = _createForOfIteratorHelper(references.values()),
-      _step;
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var datas = _step.value;
-        var _iterator2 = _createForOfIteratorHelper(datas),
-          _step2;
-        try {
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var data = _step2.value;
-            var _data = _slicedToArray(data, 5),
-              lineIndex = _data[0],
-              index = _data[1],
-              textLength = _data[3],
-              labelLength = _data[4];
-            if (labelLength > 0) {
-              exclusions.push([lineIndex, index + 3 + textLength, labelLength]);
+    var pending = [[0, params.parsers.micromark]];
+    var current = null;
+    while (current = pending.shift()) {
+      var _current = current,
+        _current2 = _slicedToArray(_current, 2),
+        offset = _current2[0],
+        tokens = _current2[1];
+      var _iterator = _createForOfIteratorHelper(filterByTypes(tokens, "htmlFlow", "htmlText")),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var token = _step.value;
+          if (token.type === "htmlText") {
+            var match = htmlTextRe.exec(token.text);
+            if (match) {
+              var _match = _slicedToArray(match, 2),
+                tag = _match[0],
+                element = _match[1];
+              if (!allowedElements.includes(element.toLowerCase())) {
+                addError(onError, token.startLine + offset, "Element: " + element, undefined, [token.startColumn, tag.length]);
+              }
             }
+          } else {
+            // token.type === "htmlFlow"
+            // Re-parse without "htmlFlow" to get only "htmlText" tokens
+            var options = {
+              "extensions": [{
+                "disable": {
+                  "null": ["htmlFlow"]
+                }
+              }]
+            };
+            var flowTokens = parse(token.text, options);
+            pending.push([token.startLine - 1, flowTokens]);
           }
-        } catch (err) {
-          _iterator2.e(err);
-        } finally {
-          _iterator2.f();
         }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
     }
-    forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
-      var match = null;
-      // eslint-disable-next-line no-unmodified-loop-condition
-      while (!inCode && (match = htmlElementRe.exec(line)) !== null) {
-        var _match = match,
-          _match2 = _slicedToArray(_match, 3),
-          tag = _match2[0],
-          content = _match2[1],
-          element = _match2[2];
-        if (!allowedElements.includes(element.toLowerCase()) && !tag.endsWith("\\>") && !emailAddressRe.test(content) && !withinAnyRange(exclusions, lineIndex, match.index, tag.length) && !definitionLineIndices.includes(lineIndex)) {
-          var prefix = line.substring(0, match.index);
-          if (!linkDestinationRe.test(prefix)) {
-            var unescaped = unescapeMarkdown(prefix + "<", "_");
-            if (!unescaped.endsWith("_")) {
-              addError(onError, lineIndex + 1, "Element: " + element, undefined, [match.index + 1, tag.length]);
-            }
-          }
-        }
-      }
-    });
   }
 };
 

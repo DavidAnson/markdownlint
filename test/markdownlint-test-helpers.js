@@ -166,67 +166,6 @@ test("clearHtmlCommentTextEmbedded", (t) => {
   t.is(actual, expected);
 });
 
-test("unescapeMarkdown", (t) => {
-  t.plan(7);
-  // Test cases from https://spec.commonmark.org/0.29/#backslash-escapes
-  const testCases = [
-    [
-      "\\!\\\"\\#\\$\\%\\&\\'\\(\\)\\*\\+\\,\\-\\.\\/\\:\\;" +
-        "\\<\\=\\>\\?\\@\\[\\\\\\]\\^\\_\\`\\{\\|\\}\\~",
-      "!\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
-    ],
-    [
-      "\\→\\A\\a\\ \\3\\φ\\«",
-      "\\→\\A\\a\\ \\3\\φ\\«"
-    ],
-    [
-      `\\*not emphasized*
-\\<br/> not a tag
-\\[not a link](/foo)
-\\\`not code\`
-1\\. not a list
-\\* not a list
-\\# not a heading
-\\[foo]: /url "not a reference"
-\\&ouml; not a character entity`,
-      `*not emphasized*
-<br/> not a tag
-[not a link](/foo)
-\`not code\`
-1. not a list
-* not a list
-# not a heading
-[foo]: /url "not a reference"
-&ouml; not a character entity`
-    ],
-    [
-      "\\\\*emphasis*",
-      "\\*emphasis*"
-    ],
-    [
-      `foo\\
-bar`,
-      `foo\\
-bar`
-    ],
-    [
-      "Text \\<",
-      "Text _",
-      "_"
-    ],
-    [
-      "Text \\\\<",
-      "Text _<",
-      "_"
-    ]
-  ];
-  for (const testCase of testCases) {
-    const [ markdown, expected, replacement ] = testCase;
-    const actual = helpers.unescapeMarkdown(markdown, replacement);
-    t.is(actual, expected);
-  }
-});
-
 test("isBlankLine", (t) => {
   t.plan(33);
   // @ts-ignore

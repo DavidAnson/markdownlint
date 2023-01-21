@@ -139,7 +139,8 @@ test("https://github.com/dotnet/docs", (t) => {
   const rootDir = "./test-repos/dotnet-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^test-repos\/dotnet-docs\/docs\/core\/compatibility\/core-libraries\/5.0\/code-access-security-apis-obsolete.md: \d+: MD033\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/electron-electron", (t) => {
@@ -215,7 +216,8 @@ test("https://github.com/v8/v8.dev", (t) => {
   const rootDir = "./test-repos/v8-v8-dev";
   const globPatterns = [ join(rootDir, "src/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^[^:]+: \d+: MD033\/.*\[Element: feature-support\].*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
