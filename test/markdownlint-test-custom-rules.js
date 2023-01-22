@@ -26,6 +26,7 @@ test("customRulesV0", (t) => new Promise((resolve) => {
       "letters-E-X": [ 3, 7 ]
     };
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    // @ts-ignore
     let actualMessage = actualResult.toString();
     let expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
@@ -162,6 +163,7 @@ test("customRulesV1", (t) => new Promise((resolve) => {
         "errorRange": null }
     ];
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    // @ts-ignore
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote/any-blockquote" +
@@ -270,6 +272,7 @@ test("customRulesV2", (t) => new Promise((resolve) => {
         "errorRange": null }
     ];
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    // @ts-ignore
     const actualMessage = actualResult.toString();
     const expectedMessage =
       "./test/custom-rules.md: 12: any-blockquote" +
@@ -413,6 +416,7 @@ test("customRulesUsedNameName", (t) => new Promise((resolve) => {
   }, function callback(err, result) {
     t.truthy(err, "Did not get an error for duplicate name.");
     t.true(err instanceof Error, "Error not instance of Error.");
+    // @ts-ignore
     t.is(err.message,
       "Name 'NO-missing-SPACE-atx' of custom rule at index 0 is " +
         "already used as a name or tag.",
@@ -436,6 +440,7 @@ test("customRulesUsedNameTag", (t) => new Promise((resolve) => {
   }, function callback(err, result) {
     t.truthy(err, "Did not get an error for duplicate name.");
     t.true(err instanceof Error, "Error not instance of Error.");
+    // @ts-ignore
     t.is(err.message,
       "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
       "Incorrect message for duplicate name.");
@@ -464,6 +469,7 @@ test("customRulesUsedTagName", (t) => new Promise((resolve) => {
   }, function callback(err, result) {
     t.truthy(err, "Did not get an error for duplicate tag.");
     t.true(err instanceof Error, "Error not instance of Error.");
+    // @ts-ignore
     t.is(err.message,
       "Tag 'NO-missing-SPACE-atx' of custom rule at index 1 is " +
         "already used as a name.",
@@ -491,6 +497,7 @@ test("customRulesThrowForFile", (t) => new Promise((resolve) => {
   }, function callback(err, result) {
     t.truthy(err, "Did not get an error for function thrown.");
     t.true(err instanceof Error, "Error not instance of Error.");
+    // @ts-ignore
     t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
     t.true(!result, "Got result for function thrown.");
@@ -544,6 +551,7 @@ test("customRulesThrowForString", (t) => new Promise((resolve) => {
   }, function callback(err, result) {
     t.truthy(err, "Did not get an error for function thrown.");
     t.true(err instanceof Error, "Error not instance of Error.");
+    // @ts-ignore
     t.is(err.message, exceptionMessage,
       "Incorrect message for function thrown.");
     t.true(!result, "Got result for function thrown.");
@@ -588,6 +596,7 @@ test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
         "description": "description",
         "tags": [ "tag" ],
         "function": function onErrorNull(params, onError) {
+          // @ts-ignore
           onError(null);
         }
       }
@@ -600,6 +609,7 @@ test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
     t.truthy(err, "Did not get an error for function thrown.");
     t.true(err instanceof Error, "Error not instance of Error.");
     t.is(
+      // @ts-ignore
       err.message,
       "Property 'lineNumber' of onError parameter is incorrect.",
       "Did not get correct exception for null object."
@@ -1210,7 +1220,7 @@ test("customRulesParamsTokensSameObject", (t) => {
         "tags": [ "tag" ],
         "function":
           (params) => {
-            t.is(params.tokens, params.parsers.markdownit);
+            t.is(params.tokens, params.parsers.markdownit.tokens);
           }
       }
     ],
@@ -1418,7 +1428,7 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "asynchronous": true,
         "function": (params, onError) => new Promise((resolve) => {
           onError({ "lineNumber": 1 });
-          resolve();
+          resolve(null);
         })
       }
     ],
@@ -1523,6 +1533,7 @@ for (const flavor of [
       }, function callback(err, result) {
         t.truthy(err, "Did not get an error for exception.");
         t.true(err instanceof Error, "Error not instance of Error.");
+        // @ts-ignore
         t.is(err.message, errorMessage, "Incorrect message for exception.");
         t.true(!result, "Got result for exception.");
         resolve();
@@ -1641,6 +1652,7 @@ for (const flavor of [
       }, function callback(err, result) {
         t.truthy(err, "Did not get an error for rejection.");
         t.true(err instanceof Error, "Error not instance of Error.");
+        // @ts-ignore
         t.is(err.message, errorMessage, "Incorrect message for rejection.");
         t.true(!result, "Got result for rejection.");
         resolve();
