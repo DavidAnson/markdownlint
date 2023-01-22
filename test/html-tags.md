@@ -105,3 +105,14 @@ And neither is <foo_bar>.
 Nor <123abc>.
 
 Text
+
+<details>
+
+{MD033:109}
+
+	<details>
+
+- Item
+	<details>
+
+{MD033:116}

@@ -139,8 +139,7 @@ test("https://github.com/dotnet/docs", (t) => {
   const rootDir = "./test-repos/dotnet-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  const ignoreRes = [ /^test-repos\/dotnet-docs\/docs\/core\/compatibility\/core-libraries\/5.0\/code-access-security-apis-obsolete.md: \d+: MD033\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/electron-electron", (t) => {

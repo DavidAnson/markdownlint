@@ -4953,11 +4953,13 @@ module.exports = {
             var options = {
               "extensions": [{
                 "disable": {
-                  "null": ["htmlFlow"]
+                  "null": ["codeIndented", "htmlFlow"]
                 }
               }]
             };
-            var flowTokens = parse(token.text, options);
+            // Use lines instead of token.text for accurate columns
+            var lines = params.lines.slice(token.startLine - 1, token.endLine).join("\n");
+            var flowTokens = parse(lines, options);
             pending.push([token.startLine - 1, flowTokens]);
           }
         }
