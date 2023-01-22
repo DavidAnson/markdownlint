@@ -1,5 +1,6 @@
 {
   "default": true,
+  "MD010": false,
   "MD033": {
     "allowed_elements": [
       "strong"
