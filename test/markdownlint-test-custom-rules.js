@@ -1200,6 +1200,25 @@ test("customRulesAsyncThrowsInSyncContext", (t) => {
   );
 });
 
+test("customRulesParamsTokensSameObject", (t) => {
+  t.plan(1);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function":
+          (params) => {
+            t.is(params.tokens, params.parsers.markdownit);
+          }
+      }
+    ],
+    "files": [ "README.md" ]
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
 test("customRulesParamsAreFrozen", (t) => {
   const options = {
     "customRules": [
