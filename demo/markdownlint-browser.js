@@ -2377,8 +2377,12 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
   annotateAndFreezeTokens(markdownitTokens, lines);
   // Create (frozen) parameters for rules
   var parsers = Object.freeze({
-    "markdownit": markdownitTokens,
-    "micromark": micromarkTokens
+    "markdownit": Object.freeze({
+      "tokens": markdownitTokens
+    }),
+    "micromark": Object.freeze({
+      "tokens": micromarkTokens
+    })
   });
   var paramsBase = {
     name: name,
@@ -4925,7 +4929,7 @@ module.exports = {
     allowedElements = allowedElements.map(function (element) {
       return element.toLowerCase();
     });
-    var pending = [[0, params.parsers.micromark]];
+    var pending = [[0, params.parsers.micromark.tokens]];
     var current = null;
     while (current = pending.shift()) {
       var _current = current,
