@@ -96,6 +96,8 @@ Strong **with** different style {MD050}
 [Missing link fragment](#missing) {MD051}
 
 [Missing link][label] {MD052}
-[unused]: link-destination {MD053}
+
+[unused]: link-destination
+{MD053:100}
 
 EOF {MD047}
