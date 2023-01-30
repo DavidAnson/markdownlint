@@ -1433,9 +1433,8 @@ test("getReferenceLinkImageData().shortcuts", (t) => {
         "tags": [ "-" ],
         "function":
           (params) => {
-            const lineMetadata = helpers.getLineMetadata(params);
             const { shortcuts } =
-              helpers.getReferenceLinkImageData(lineMetadata);
+              helpers.getReferenceLinkImageData(params);
             t.is(shortcuts.size, 0, [ ...shortcuts.keys() ].join(", "));
           }
       }

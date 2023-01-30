@@ -5,7 +5,7 @@
 /* eslint-disable n/no-unpublished-require */
 
 // @ts-ignore
-const { parse, postprocess, preprocess } = require("../micromark/micromark.cjs");
+const { gfmFootnote, parse, postprocess, preprocess } = require("../micromark/micromark.cjs");
 
 /**
  * Markdown token.
@@ -27,14 +27,20 @@ const { parse, postprocess, preprocess } = require("../micromark/micromark.cjs")
  * @param {Object} [options] Options for micromark.
  * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParse(markdown, options) {
+function micromarkParse(markdown, options = {}) {
+
+  // Customize options object to add useful extensions
+  options.extensions ||= [];
+  options.extensions.push(gfmFootnote());
 
   // Use micromark to parse document into Events
   const encoding = undefined;
   const eol = true;
+  const parseContext = parse(options);
+  // Customize ParseContext to treat all references as defined
+  parseContext.defined.includes = (searchElement) => searchElement.length > 0;
   const chunks = preprocess()(markdown, encoding, eol);
-  const parseContext = parse(options).document().write(chunks);
-  const events = postprocess(parseContext);
+  const events = postprocess(parseContext.document().write(chunks));
 
   // Create Token objects
   const document = [];
@@ -110,8 +116,46 @@ function filterByTypes(tokens, ...types) {
   return filterByPredicate(tokens, (token) => types.includes(token.type));
 }
 
+/**
+ * Get the text of a single token from a list of Micromark tokens by type.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {string} type Types to match.
+ * @returns {string | null} Text of token.
+ */
+function getTokenTextByType(tokens, type) {
+  const filtered = tokens.filter((token) => token.type === type);
+  return (filtered.length === 1) ? filtered[0].text : null;
+}
+
+/**
+ * Determines a list of Micromark tokens matches and returns a subset.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {string[]} matchTypes Types to match.
+ * @param {string[]} [resultTypes] Types to return.
+ * @returns {Object | null} Matching tokens by type.
+ */
+function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
+  if (tokens.length !== matchTypes.length) {
+    return null;
+  }
+  resultTypes ||= matchTypes;
+  const result = {};
+  for (let i = 0; i < matchTypes.length; i++) {
+    if (tokens[i].type !== matchTypes[i]) {
+      return null;
+    } else if (resultTypes.includes(matchTypes[i])) {
+      result[matchTypes[i]] = tokens[i];
+    }
+  }
+  return result;
+}
+
 module.exports = {
   filterByPredicate,
   filterByTypes,
+  getTokenTextByType,
+  matchAndGetTokensByType,
   "parse": micromarkParse
 };
