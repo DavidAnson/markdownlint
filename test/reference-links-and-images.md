@@ -155,7 +155,6 @@ Missing[^2]
 [image7]: https://example.com/image7
 [image8]: https://example.com/image8
 [`code`]: https://example.com/code
-[^1]: https://example.com/footnote
 [multi line full text]: https://example.com/multi-line-full-text
 [multi line full label]: https://example.com/multi-line-full-label
 [multi line collapsed label]: https://example.com/multi-line-collapsed-label
@@ -179,6 +178,7 @@ https://example.com/multi-line-label
 [unique8]: https://example.com/unique8
 [unique9]: https://example.com/unique9
 [unique10]: https://example.com/unique10
+[^1]: https://example.com/footnote
 
 ## Ignored Labels
 
@@ -188,14 +188,15 @@ https://example.com/multi-line-label
 
 ## Invalid Labels
 
-Duplicate:
+Duplicate/unused:
+
 [label]: {MD053}
-
-Unused:
+[blank-line-filler-0]: https://example.com
 [unused]: {MD053}
-
-Unused footnote:
+[blank-line-filler-1]: https://example.com
 [^3]: {MD053}
+
+[blank-line-filler-0][] [blank-line-filler-1][]
 
 [Duplicate unused multi-line label {MD053}]:
 https://example.com/duplicate-unused-multi-line-label

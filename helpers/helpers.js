@@ -2,6 +2,8 @@
 
 "use strict";
 
+const micromark = require("./micromark.cjs");
+
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 const newLineRe = /\r\n?|\n/g;
@@ -32,10 +34,6 @@ const emphasisMarkersRe = /[_*]/g;
 // Regular expression for blockquote prefixes
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
-
-// Regular expression for reference links (full, collapsed, and shortcut)
-const referenceLinkRe =
-  /!?\\?\[((?:\[[^\]\0]*\]|[^[\]\0])*)\](?:\[([^\]\0]*)\]|([^(])|$)/g;
 
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
@@ -805,137 +803,115 @@ module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {Object} lineMetadata Line metadata object.
+ * @param {Object} params RuleParams instance.
  * @returns {Object} Reference link/image data.
  */
-function getReferenceLinkImageData(lineMetadata) {
-  // Initialize return values
+function getReferenceLinkImageData(params) {
+  const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
+  const definitions = new Map();
+  const definitionLineIndices = [];
+  const duplicateDefinitions = [];
   const references = new Map();
   const shortcuts = new Map();
-  const definitions = new Map();
-  const duplicateDefinitions = [];
-  const definitionLineIndices = [];
-  // Define helper functions
-  const normalizeLabel = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
-  const exclusions = [];
-  const excluded = (match) => withinAnyRange(
-    exclusions, 0, match.index, match[0].length - (match[3] || "").length
-  );
-  // Convert input to single-line so multi-line links/images are easier
-  const lineOffsets = [];
-  let currentOffset = 0;
-  const contentLines = [];
-  forEachLine(lineMetadata, (line, lineIndex, inCode) => {
-    lineOffsets[lineIndex] = currentOffset;
-    if (!inCode) {
-      line = line.replace(blockquotePrefixRe, "");
-      if (line.trim().length === 0) {
-        // Allow RegExp to detect the end of a block
-        line = "\0";
-      }
-      contentLines.push(line);
-      currentOffset += line.length + 1;
-    }
-  });
-  lineOffsets.push(currentOffset);
-  const contentLine = contentLines.join(" ");
-  // Determine single-line exclusions for inline code spans
-  forEachInlineCodeSpan(contentLine, (code, lineIndex, columnIndex) => {
-    exclusions.push([ 0, columnIndex, code.length ]);
-  });
-  // Identify all link/image reference definitions
-  forEachLine(lineMetadata, (line, lineIndex, inCode) => {
-    if (!inCode) {
-      const linkReferenceDefinitionMatch = linkReferenceDefinitionRe.exec(line);
-      if (linkReferenceDefinitionMatch) {
-        const label = normalizeLabel(linkReferenceDefinitionMatch[1]);
-        if (definitions.has(label)) {
-          duplicateDefinitions.push([ label, lineIndex ]);
-        } else {
-          definitions.set(label, lineIndex);
+  const filteredTokens =
+    micromark.filterByTypes(
+      params.parsers.micromark.tokens,
+      // definitionLineIndices
+      "definition", "gfmFootnoteDefinition",
+      // definitions and definitionLineIndices
+      "definitionLabelString", "gfmFootnoteDefinitionLabelString",
+      // references and shortcuts
+      "gfmFootnoteCall", "image", "link"
+    );
+  for (const token of filteredTokens) {
+    let labelPrefix = "";
+    // eslint-disable-next-line default-case
+    switch (token.type) {
+      case "definition":
+      case "gfmFootnoteDefinition":
+        // definitionLineIndices
+        for (let i = token.startLine; i <= token.endLine; i++) {
+          definitionLineIndices.push(i - 1);
         }
-        const labelLength = linkReferenceDefinitionMatch[0].length;
-        exclusions.push([ 0, lineOffsets[lineIndex], labelLength ]);
-        const hasDefinition = line.slice(labelLength).trim().length > 0;
-        definitionLineIndices.push(lineIndex);
-        if (!hasDefinition) {
-          definitionLineIndices.push(lineIndex + 1);
-        }
-      }
-    }
-  });
-  // Identify all link and image references
-  let lineIndex = 0;
-  const pendingContents = [
-    {
-      "content": contentLine,
-      "contentLineIndex": 0,
-      "contentIndex": 0,
-      "topLevel": true
-    }
-  ];
-  let pendingContent = null;
-  while ((pendingContent = pendingContents.shift())) {
-    const { content, contentLineIndex, contentIndex, topLevel } =
-      pendingContent;
-    let referenceLinkMatch = null;
-    while ((referenceLinkMatch = referenceLinkRe.exec(content)) !== null) {
-      const [ matchString, matchText, matchLabel ] = referenceLinkMatch;
-      if (
-        !matchString.startsWith("\\") &&
-        !matchString.startsWith("!\\") &&
-        !matchText.endsWith("\\") &&
-        !(matchLabel || "").endsWith("\\") &&
-        !(topLevel && excluded(referenceLinkMatch))
-      ) {
-        const shortcutLink = (matchLabel === undefined);
-        const collapsedLink =
-          (!shortcutLink && (matchLabel.length === 0));
-        const label = normalizeLabel(
-          (shortcutLink || collapsedLink) ? matchText : matchLabel
-        );
-        if (label.length > 0) {
-          const referenceindex = referenceLinkMatch.index;
-          if (topLevel) {
-            // Calculate line index
-            while (lineOffsets[lineIndex + 1] <= referenceindex) {
-              lineIndex++;
-            }
+        break;
+      case "gfmFootnoteDefinitionLabelString":
+        labelPrefix = "^";
+      case "definitionLabelString": // eslint-disable-line no-fallthrough
+        {
+          // definitions and definitionLineIndices
+          const reference = normalizeReference(`${labelPrefix}${token.text}`);
+          if (definitions.has(reference)) {
+            duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
-            // Use provided line index
-            lineIndex = contentLineIndex;
+            definitions.set(reference, token.startLine - 1);
           }
-          const referenceIndex = referenceindex +
-            (topLevel ? -lineOffsets[lineIndex] : contentIndex);
-          const referenceDatum = [
-            lineIndex,
-            referenceIndex,
-            matchString.length,
-            matchText.length,
-            (matchLabel || "").length
-          ];
-          if (shortcutLink) {
-            // Track separately due to ambiguity in "text [text] text"
-            const shortcutData = shortcuts.get(label) || [];
-            shortcutData.push(referenceDatum);
-            shortcuts.set(label, shortcutData);
-          } else {
-            // Track reference and location
-            const referenceData = references.get(label) || [];
+        }
+        break;
+      case "gfmFootnoteCall":
+      case "image":
+      case "link":
+        {
+          let isShortcut = false;
+          let isFullOrCollapsed = false;
+          let labelText = null;
+          let referenceStringText = null;
+          const shortcutCandidate =
+            micromark.matchAndGetTokensByType(token.tokens, [ "label" ]);
+          if (shortcutCandidate) {
+            labelText =
+              micromark.getTokenTextByType(
+                shortcutCandidate.label.tokens, "labelText"
+              );
+            isShortcut = (labelText !== null);
+          }
+          const fullAndCollapsedCandidate =
+            micromark.matchAndGetTokensByType(
+              token.tokens, [ "label", "reference" ]
+            );
+          if (fullAndCollapsedCandidate) {
+            labelText =
+              micromark.getTokenTextByType(
+                fullAndCollapsedCandidate.label.tokens, "labelText"
+              );
+            referenceStringText =
+              micromark.getTokenTextByType(
+                fullAndCollapsedCandidate.reference.tokens, "referenceString"
+              );
+            isFullOrCollapsed = (labelText !== null);
+          }
+          const footnote = micromark.matchAndGetTokensByType(
+            token.tokens,
+            [
+              "gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker",
+              "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"
+            ],
+            [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ]
+          );
+          if (footnote) {
+            const callMarkerText = footnote.gfmFootnoteCallMarker.text;
+            const callString = footnote.gfmFootnoteCallString.text;
+            labelText = `${callMarkerText}${callString}`;
+            isShortcut = true;
+          }
+          // Track shortcuts separately due to ambiguity in "text [text] text"
+          if (isShortcut || isFullOrCollapsed) {
+            const referenceDatum = [
+              token.startLine - 1,
+              token.startColumn - 1,
+              token.text.length,
+              // @ts-ignore
+              labelText.length,
+              (referenceStringText || "").length
+            ];
+            const reference =
+              normalizeReference(referenceStringText || labelText);
+            const dictionary = isShortcut ? shortcuts : references;
+            const referenceData = dictionary.get(reference) || [];
             referenceData.push(referenceDatum);
-            references.set(label, referenceData);
-          }
-          // Check for links embedded in brackets
-          if (!matchString.startsWith("!")) {
-            pendingContents.push({
-              "content": matchText,
-              "contentLineIndex": lineIndex,
-              "contentIndex": referenceIndex + 1,
-              "topLevel": false
-            });
+            dictionary.set(reference, referenceData);
           }
         }
-      }
+        break;
     }
   }
   return {

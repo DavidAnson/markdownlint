@@ -6,7 +6,6 @@ const fs = require("node:fs");
 const path = require("node:path");
 const jsYaml = require("js-yaml");
 const md = require("markdown-it")();
-const pluginFootnote = require("markdown-it-footnote");
 const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
@@ -1154,7 +1153,7 @@ test("texmath test files with texmath plugin", (t) => new Promise((resolve) => {
   });
 }));
 
-test("Pandoc footnote via footnote plugin", (t) => new Promise((resolve) => {
+test("Pandoc footnote", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
@@ -1170,7 +1169,6 @@ Text with: [^footnote]
 [reference]: https://example.com
 `
     },
-    "markdownItPlugins": [ [ pluginFootnote ] ],
     "resultVersion": 0
   }, (err, actual) => {
     t.falsy(err);

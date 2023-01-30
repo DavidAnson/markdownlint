@@ -33,7 +33,7 @@ A sentence with a long footnotes: [^long] [^longer] [^longest]
 
 [PCW2]: https://www.example.com/article.html
 [Pandoc2]: https://pandoc.org/MANUAL.html#extension-footnotes
-[Another2]: https://www.example.com/another.{MD053}.html
+[Another2]: https://www.example.com/another.html
 
 ## GitHub Footnotes
 
