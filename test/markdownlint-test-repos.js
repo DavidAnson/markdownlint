@@ -128,7 +128,7 @@ function excludeGlobs(rootDir, ...globs) {
 // Run markdownlint the same way the corresponding repositories do
 /* eslint-disable max-len */
 
-test("https://github.com/apache-airflow", (t) => {
+test("https://github.com/apache/airflow", (t) => {
   const rootDir = "./test-repos/apache-airflow";
   const globPatterns = [ join(rootDir, "**/*.{md,mdown,markdown}") ];
   const configPath = join(rootDir, ".markdownlint.yml");
@@ -142,14 +142,18 @@ test("https://github.com/dotnet/docs", (t) => {
   return lintTestRepo(t, globPatterns, configPath);
 });
 
-test("https://github.com/electron-electron", (t) => {
+test("https://github.com/electron/electron", (t) => {
   const rootDir = "./test-repos/electron-electron";
   const globPatterns = [
     join(rootDir, "*.md"),
     join(rootDir, "docs/**/*.md")
   ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [
+    /^test-repos\/electron-electron\/docs\/tutorial\/offscreen-rendering\.md: \d+: MD052\/.*$\r?\n?/gm,
+    /^test-repos\/electron-electron\/docs\/tutorial\/progress-bar\.md: \d+: MD052\/.*$\r?\n?/gm
+  ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/eslint/eslint", (t) => {
