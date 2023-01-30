@@ -2,11 +2,11 @@ export = markdownlint;
 /**
  * Lint specified Markdown files.
  *
- * @param {Options} options Configuration options.
+ * @param {Options | null} options Configuration options.
  * @param {LintCallback} callback Callback (err, result) function.
  * @returns {void}
  */
-declare function markdownlint(options: Options, callback: LintCallback): void;
+declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
     export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
@@ -33,7 +33,7 @@ type Options = {
     /**
      * Front matter pattern.
      */
-    frontMatter?: RegExp;
+    frontMatter?: RegExp | null;
     /**
      * File system implementation.
      */
@@ -68,10 +68,10 @@ type LintCallback = (err: Error | null, results?: LintResults) => void;
 /**
  * Lint specified Markdown files synchronously.
  *
- * @param {Options} options Configuration options.
+ * @param {Options | null} options Configuration options.
  * @returns {LintResults} Results object.
  */
-declare function markdownlintSync(options: Options): LintResults;
+declare function markdownlintSync(options: Options | null): LintResults;
 /**
  * Read specified configuration file.
  *

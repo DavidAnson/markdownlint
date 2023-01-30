@@ -42,6 +42,7 @@ test("simpleAsync", (t) => new Promise((resolve) => {
     "Files should end with a single newline character";
   markdownlint(options, (err, actual) => {
     t.falsy(err);
+    // @ts-ignore
     t.is(actual.toString(), expected, "Unexpected results.");
     resolve();
   });
@@ -784,7 +785,9 @@ test("missingStringValue", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
     "strings": {
+      // @ts-ignore
       "undefined": undefined,
+      // @ts-ignore
       "null": null,
       "empty": ""
     }
@@ -830,6 +833,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
     "fs": fsApi
   }, function callback(err, result) {
     t.falsy(err);
+    // @ts-ignore
     t.deepEqual(result[file].length, 1, "Did not report violations.");
     resolve();
   });
@@ -1291,6 +1295,7 @@ test("configParsersYAML", async(t) => {
     },
     "configParsers": [ jsYaml.load ]
   };
+  // @ts-ignore
   const actual = await markdownlint.promises.markdownlint(options);
   t.is(actual.toString(), "", "Unexpected results.");
 });
