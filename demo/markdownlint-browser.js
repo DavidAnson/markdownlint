@@ -1906,7 +1906,7 @@ function newResults(ruleList) {
  * Remove front matter (if present at beginning of content).
  *
  * @param {string} content Markdown content.
- * @param {RegExp} frontMatter Regular expression to match front matter.
+ * @param {RegExp | null} frontMatter Regular expression to match front matter.
  * @returns {Object} Trimmed content and front matter lines.
  */
 function removeFrontMatter(content, frontMatter) {
@@ -2368,7 +2368,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
- * @param {RegExp} frontMatter Regular expression for front matter.
+ * @param {RegExp | null} frontMatter Regular expression for front matter.
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
  * @param {number} resultVersion Version of the LintResults object to return.
@@ -2629,7 +2629,7 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
- * @param {RegExp} frontMatter Regular expression for front matter.
+ * @param {RegExp | null} frontMatter Regular expression for front matter.
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
  * @param {number} resultVersion Version of the LintResults object to return.
@@ -2657,7 +2657,7 @@ function lintFile(ruleList, file, md, config, configParsers, frontMatter, handle
 /**
  * Lint files and strings specified in the Options object.
  *
- * @param {Options} options Options object.
+ * @param {Options | null} options Options object.
  * @param {boolean} synchronous Whether to execute synchronously.
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
@@ -2766,7 +2766,7 @@ function lintInput(options, synchronous, callback) {
 /**
  * Lint specified Markdown files.
  *
- * @param {Options} options Configuration options.
+ * @param {Options | null} options Configuration options.
  * @param {LintCallback} callback Callback (err, result) function.
  * @returns {void}
  */
@@ -2789,7 +2789,7 @@ function markdownlintPromise(options) {
 /**
  * Lint specified Markdown files synchronously.
  *
- * @param {Options} options Configuration options.
+ * @param {Options | null} options Configuration options.
  * @returns {LintResults} Results object.
  */
 function markdownlintSync(options) {
@@ -3085,7 +3085,7 @@ module.exports = markdownlint;
  * @property {ConfigurationParser[]} [configParsers] Configuration parsers.
  * @property {Rule[] | Rule} [customRules] Custom rules.
  * @property {string[] | string} [files] Files to lint.
- * @property {RegExp} [frontMatter] Front matter pattern.
+ * @property {RegExp | null} [frontMatter] Front matter pattern.
  * @property {Object} [fs] File system implementation.
  * @property {boolean} [handleRuleFailures] True to catch exceptions.
  * @property {Plugin[]} [markdownItPlugins] Additional plugins.
