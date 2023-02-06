@@ -10,6 +10,7 @@ Every Markdown Syntax
 Text *emphasized* **strong** ___emphasized+strong___.
 Text `code` <strike>html</strike> <https://example.com/page>.
 Text [link](https://example.com/page) [link][] [link] ![image][link].
+Text https://example.com/page.
 
 Hard  
 line break

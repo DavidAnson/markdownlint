@@ -116,3 +116,10 @@ Text
 	<details>
 
 {MD033:116}
+
+<custom-element attribute1="value1"
+                attribute2="value2" />
+
+{MD033:120}
+
+Text <!-- <commented-out html="tag"> --> text.

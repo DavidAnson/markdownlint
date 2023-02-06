@@ -70,3 +70,9 @@ URLs may end with a dash: https://example.com#heading- {MD034}
 ... when explicit: <https://example.com#heading->
 
 ... when embedded: <code>https://example.com#heading-</code>
+
+Links with spaces inside angle brackets are okay: [blue jay](<https://en.wikipedia.org/wiki/Blue jay>)
+
+Email addresses are treated similarly: user@example.com {MD034}
+
+Angle brackets work the same for email: <user@example.com>

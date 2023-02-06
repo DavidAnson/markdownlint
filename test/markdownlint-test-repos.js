@@ -139,7 +139,30 @@ test("https://github.com/dotnet/docs", (t) => {
   const rootDir = "./test-repos/dotnet-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [
+    /^test-repos\/dotnet-docs\/docs\/core\/diagnostics\/dotnet-symbol\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/core\/install\/linux-package-mixup\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/core\/porting\/third-party-deps\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/issuedtokenparameters\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/servicemetadata\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/userprincipalname\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/extending\/how-to-compare-claims\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/extending\/overriding-the-identity-of-a-service-for-authentication\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/managing-claims-and-authorization-with-the-identity-model\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/message-filters\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/stand-alone-json-serialization\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/wcf-security-terminology\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/xml-and-ado-net-types-in-data-contracts\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/privacy-information\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/samples\/custom-channel-dispatcher\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/samples\/security-validation\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/service-versioning\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/framework\/whats-new\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/orleans\/tutorials-and-samples\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/regular-expression-source-generators\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/standard\/serialization\/xml-schema-def-tool-gen\.md: \d+: MD034\/.*$\r?\n?/gm
+  ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/electron/electron", (t) => {
@@ -160,7 +183,10 @@ test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  const ignoreRes = [ /^[^:]+: \d+: MD051\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+    /^test-repos\/eslint-eslint\/docs\/src\/library\/link-card\.md: \d+: MD034\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
@@ -168,7 +194,44 @@ test("https://github.com/mdn/content", (t) => {
   const rootDir = "./test-repos/mdn-content";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [
+    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_a-frame\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_babylon.js\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_playcanvas\/engine\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_three.js\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/animations_and_tweens\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/bounce_off_the_walls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/build_the_brick_field\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/buttons\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/collision_detection\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/extra_lives\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/game_over\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/initialize_the_framework\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/load_the_assets_and_print_them_on_screen\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/move_the_ball\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/physics\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/player_paddle_and_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/randomizing_gameplay\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/scaling\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/the_score\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/win_the_game\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/bounce_off_the_walls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/build_the_brick_field\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/collision_detection\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/create_the_canvas_and_draw_on_it\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/finishing_up\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/game_over\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/mouse_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/move_the_ball\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/paddle_and_keyboard_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/track_the_score_and_win\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/learn\/server-side\/apache_configuration_htaccess\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/mozilla\/add-ons\/webextensions\/manifest.json\/content_security_policy\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/web\/api\/window\/window\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/web\/html\/element\/input\/email\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/mdn-content\/files\/en-us\/web\/http\/headers\/www-authenticate\/index\.md: \d+: MD034\/.*$\r?\n?/gm
+  ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/mdn/translated-content", (t) => {
@@ -211,6 +274,7 @@ test("https://github.com/mochajs/mocha", (t) => {
   const configPath = join(rootDir, ".markdownlint.json");
   const ignoreRes = [
     /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
+    /^test-repos\/mochajs-mocha\/\.github\/CODE_OF_CONDUCT\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/mochajs-mocha\/docs\/index\.md: \d+: MD053\/.*$\r?\n?/gm
   ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
@@ -220,14 +284,23 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
+  const ignoreRes = [ /^test-repos\/pi-hole-docs\/docs\/guides\/vpn\/wireguard\/route-everything\.md: \d+: MD034\/.*$\r?\n?/gm ];
+  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/v8/v8.dev", (t) => {
   const rootDir = "./test-repos/v8-v8-dev";
   const globPatterns = [ join(rootDir, "src/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [ /^[^:]+: \d+: MD033\/.*\[Element: feature-support\].*$\r?\n?/gm ];
+  const ignoreRes = [
+    /^[^:]+: \d+: MD033\/.*\[Element: feature-support\].*$\r?\n?/gm,
+    /^test-repos\/v8-v8-dev\/src\/docs\/become-committer\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/v8-v8-dev\/src\/docs\/design-review-guidelines\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/v8-v8-dev\/src\/docs\/feature-launch-process\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/v8-v8-dev\/src\/docs\/official-support\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/v8-v8-dev\/src\/features\/import-assertions\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/v8-v8-dev\/src\/features\/private-brand-checks\.md: \d+: MD034\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
