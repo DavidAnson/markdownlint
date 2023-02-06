@@ -5,7 +5,8 @@
 /* eslint-disable n/no-unpublished-require */
 
 // @ts-ignore
-const { gfmFootnote, parse, postprocess, preprocess } = require("../micromark/micromark.cjs");
+const { gfmAutolinkLiteral, gfmFootnote, parse, postprocess, preprocess } =
+  require("../micromark/micromark.cjs");
 
 /**
  * Markdown token.
@@ -31,7 +32,7 @@ function micromarkParse(markdown, options = {}) {
 
   // Customize options object to add useful extensions
   options.extensions ||= [];
-  options.extensions.push(gfmFootnote());
+  options.extensions.push(gfmAutolinkLiteral, gfmFootnote());
 
   // Use micromark to parse document into Events
   const encoding = undefined;
@@ -89,18 +90,20 @@ function micromarkParse(markdown, options = {}) {
  * Filter a list of Micromark tokens by predicate.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {Function} predicate Filter predicate.
+ * @param {Function} allowed Allowed token predicate.
+ * @param {Function} [transform] Transform token list predicate.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByPredicate(tokens, predicate) {
+function filterByPredicate(tokens, allowed, transform) {
   const result = [];
   const pending = [ ...tokens ];
   let token = null;
   while ((token = pending.shift())) {
-    if (predicate(token)) {
+    if (allowed(token)) {
       result.push(token);
     }
-    pending.unshift(...token.tokens);
+    const transformed = transform ? transform(token.tokens) : token.tokens;
+    pending.unshift(...transformed);
   }
   return result;
 }
@@ -109,11 +112,36 @@ function filterByPredicate(tokens, predicate) {
  * Filter a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string[]} types Types to allow.
+ * @param {string[]} allowed Types to allow.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByTypes(tokens, ...types) {
-  return filterByPredicate(tokens, (token) => types.includes(token.type));
+function filterByTypes(tokens, allowed) {
+  return filterByPredicate(
+    tokens,
+    (token) => allowed.includes(token.type)
+  );
+}
+
+/**
+ * Gets information about the tag in an HTML token.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {Object | null} HTML tag information.
+ */
+function getHtmlTagInfo(token) {
+  const htmlTagNameRe = /^<([^!>][^/\s>]*)/;
+  if (token.type === "htmlText") {
+    const match = htmlTagNameRe.exec(token.text);
+    if (match) {
+      const name = match[1];
+      const close = name.startsWith("/");
+      return {
+        close,
+        "name": close ? name.slice(1) : name
+      }
+    }
+  }
+  return null;
 }
 
 /**
@@ -153,9 +181,10 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
 }
 
 module.exports = {
+  "parse": micromarkParse,
   filterByPredicate,
   filterByTypes,
+  getHtmlTagInfo,
   getTokenTextByType,
-  matchAndGetTokensByType,
-  "parse": micromarkParse
+  matchAndGetTokensByType
 };

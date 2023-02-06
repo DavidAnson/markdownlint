@@ -1410,42 +1410,35 @@ Aliases: `no-bare-urls`
 
 Fixable: Some violations can be fixed by tooling
 
-This rule is triggered whenever a URL is given that isn't surrounded by angle
-brackets:
+This rule is triggered whenever a URL or email address appears without
+surrounding angle brackets:
 
 ```markdown
-For more information, see https://www.example.com/.
+For more info, visit https://www.example.com/ or email user@example.com.
 ```
 
-To fix this, add angle brackets around the URL:
+To fix this, add angle brackets around the URL or email address:
 
 ```markdown
-For more information, see <https://www.example.com/>.
+For more info, visit <https://www.example.com/> or email <user@example.com>.
 ```
 
-Note: To use a bare URL without it being converted into a link, enclose it in
-a code block, otherwise in some Markdown parsers it *will* be converted:
+Note: To include a bare URL or email without it being converted into a link,
+wrap it in a code span:
 
 ```markdown
-`https://www.example.com`
+Not a clickable link: `https://www.example.com`
 ```
 
-Note: The following scenario does *not* trigger this rule to avoid conflicts
-with `MD011`/`no-reversed-links`:
+Note: The following scenario does not trigger this rule because it could be a
+valid shortcut link:
 
 ```markdown
 [https://www.example.com]
 ```
 
-The use of quotes around a bare link will *not* trigger this rule, either:
-
-```markdown
-"https://www.example.com"
-'https://www.example.com'
-```
-
-Rationale: Without angle brackets, the URL isn't converted into a link by many
-Markdown parsers.
+Rationale: Without angle brackets, a bare URL or email isn't converted into a
+link by some Markdown parsers.
 
 <a name="md035"></a>
 

@@ -183,7 +183,7 @@ https://example.com/multi-line-label
 [unique8]: https://example.com/unique8
 [unique9]: https://example.com/unique9
 [unique10]: https://example.com/unique10
-[^1]: https://example.com/footnote
+[^1]: https://example.com/footnote {MD034}
 
 ## Ignored Labels
 

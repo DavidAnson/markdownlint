@@ -816,12 +816,14 @@ function getReferenceLinkImageData(params) {
   const filteredTokens =
     micromark.filterByTypes(
       params.parsers.micromark.tokens,
-      // definitionLineIndices
-      "definition", "gfmFootnoteDefinition",
-      // definitions and definitionLineIndices
-      "definitionLabelString", "gfmFootnoteDefinitionLabelString",
-      // references and shortcuts
-      "gfmFootnoteCall", "image", "link"
+      [
+        // definitionLineIndices
+        "definition", "gfmFootnoteDefinition",
+        // definitions and definitionLineIndices
+        "definitionLabelString", "gfmFootnoteDefinitionLabelString",
+        // references and shortcuts
+        "gfmFootnoteCall", "image", "link"
+      ]
     );
   for (const token of filteredTokens) {
     let labelPrefix = "";
