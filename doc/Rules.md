@@ -1431,10 +1431,23 @@ Not a clickable link: `https://www.example.com`
 ```
 
 Note: The following scenario does not trigger this rule because it could be a
-valid shortcut link:
+shortcut link:
 
 ```markdown
 [https://www.example.com]
+```
+
+Note: The following syntax triggers this rule because the nested link could be
+a shortcut link (which takes precedence):
+
+```markdown
+[text [shortcut] text](https://example.com)
+```
+
+To avoid this, escape both inner brackets:
+
+```markdown
+[link \[text\] link](https://example.com)
 ```
 
 Rationale: Without angle brackets, a bare URL or email isn't converted into a
