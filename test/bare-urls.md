@@ -76,3 +76,15 @@ Links with spaces inside angle brackets are okay: [blue jay](<https://en.wikiped
 Email addresses are treated similarly: user@example.com {MD034}
 
 Angle brackets work the same for email: <user@example.com>
+
+---
+
+[is-a-valid]: https://example.com
+
+Links bind to the innermost [link that [is-a-valid] link](https://example.com) {MD034}
+
+But not if the [link [is-not-a-valid] link](https://example.com) {MD034}
+HOWEVER this scenario could have an invalid shortcut and IS reported
+
+Escaping both inner square brackets avoids the unwanted report:
+[link \[is-not-a-valid\] link](https://example.com)
