@@ -2,33 +2,75 @@
 
 "use strict";
 
-const shared = {
+const base = {
   "entry": "./exports.mjs",
   "output": {
+    "path": __dirname
+  }
+};
+
+const commonjs = {
+  ...base,
+  "output": {
+    ...base.output,
     "library": {
       "type": "commonjs"
-    },
-    "path": __dirname
+    }
   },
   "target": "node"
 };
 
+const web = {
+  ...base,
+  "output": {
+    ...base.output,
+    "library": {
+      "type": "var"
+    }
+  },
+  "target": "web"
+};
+
+const production = {
+  "mode": "production"
+};
+
+const development = {
+  "devtool": false,
+  "mode": "development"
+};
+
 module.exports = [
   {
-    ...shared,
-    "mode": "production",
+    ...commonjs,
+    ...production,
     "output": {
-      ...shared.output,
+      ...commonjs.output,
       "filename": "micromark.cjs"
     }
   },
   {
-    ...shared,
-    "devtool": false,
-    "mode": "development",
+    ...commonjs,
+    ...development,
     "output": {
-      ...shared.output,
+      ...commonjs.output,
       "filename": "micromark.dev.cjs"
+    }
+  },
+  {
+    ...web,
+    ...production,
+    "output": {
+      ...commonjs.output,
+      "filename": "micromark-browser.js"
+    }
+  },
+  {
+    ...web,
+    ...development,
+    "output": {
+      ...commonjs.output,
+      "filename": "micromark-browser.dev.js"
     }
   }
 ];
