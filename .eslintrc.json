@@ -17,6 +17,8 @@
     "example/typescript/type-check.js",
     "micromark/micromark.cjs",
     "micromark/micromark.dev.cjs",
+    "micromark/micromark-browser.js",
+    "micromark/micromark-browser.dev.js",
     "test-repos/"
   ],
   "overrides": [
