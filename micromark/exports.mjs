@@ -1,6 +1,6 @@
 // @ts-check
 
-/* eslint-disable n/file-extension-in-import */
+/* eslint-disable n/no-missing-import */
 
 export { gfmAutolinkLiteral } from "micromark-extension-gfm-autolink-literal";
 export { gfmFootnote } from "micromark-extension-gfm-footnote";

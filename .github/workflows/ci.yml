@@ -26,5 +26,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
       run: npm install --no-package-lock
-    - name: Run All Validations
+    - name: Run CI Tests
       run: npm run ci
+    - name: Build markdownlint-micromark
+      run: npm run build-micromark
