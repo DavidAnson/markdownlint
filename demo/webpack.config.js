@@ -13,7 +13,8 @@ function config(options) {
     "devtool": false,
     "entry": entry,
     "externals": {
-      "markdown-it": "markdownit"
+      "markdown-it": "markdownit",
+      "markdownlint-micromark": "micromarkBrowser"
     },
     "mode": mode,
     "module": {
@@ -34,7 +35,10 @@ function config(options) {
     "optimization": optimization,
     "output": {
       "filename": filename,
-      "library": name.replace(/(-\w)/g, (m) => m.slice(1).toUpperCase()),
+      "library": {
+        "name": name.replace(/(-\w)/g, (m) => m.slice(1).toUpperCase()),
+        "type": "var"
+      },
       "path": __dirname
     },
     "plugins": [

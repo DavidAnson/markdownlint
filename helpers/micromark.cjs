@@ -6,7 +6,8 @@
 
 // @ts-ignore
 const { gfmAutolinkLiteral, gfmFootnote, parse, postprocess, preprocess } =
-  require("../micromark/micromark.cjs");
+  // @ts-ignore
+  require("markdownlint-micromark");
 
 /**
  * Markdown token.
