@@ -25,6 +25,7 @@ const web = {
   "output": {
     ...base.output,
     "library": {
+      "name": "micromarkBrowser",
       "type": "var"
     }
   },
@@ -61,7 +62,7 @@ module.exports = [
     ...web,
     ...production,
     "output": {
-      ...commonjs.output,
+      ...web.output,
       "filename": "micromark-browser.js"
     }
   },
@@ -69,7 +70,7 @@ module.exports = [
     ...web,
     ...development,
     "output": {
-      ...commonjs.output,
+      ...web.output,
       "filename": "micromark-browser.dev.js"
     }
   }
