@@ -1462,13 +1462,13 @@ var _require =
  */
 
 /**
- * Parses a Markdown document and returns (frozen) tokens.
+ * Parses a Markdown document and returns Micromark events.
  *
  * @param {string} markdown Markdown document.
  * @param {Object} [options] Options for micromark.
- * @returns {Token[]} Micromark tokens (frozen).
+ * @returns {Object[]} Micromark events.
  */
-function micromarkParse(markdown) {
+function getMicromarkEvents(markdown) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   // Customize options object to add useful extensions
   options.extensions || (options.extensions = []);
@@ -1484,6 +1484,20 @@ function micromarkParse(markdown) {
   };
   var chunks = preprocess()(markdown, encoding, eol);
   var events = postprocess(parseContext.document().write(chunks));
+  return events;
+}
+
+/**
+ * Parses a Markdown document and returns (frozen) tokens.
+ *
+ * @param {string} markdown Markdown document.
+ * @param {Object} [options] Options for micromark.
+ * @returns {Token[]} Micromark tokens (frozen).
+ */
+function micromarkParse(markdown) {
+  var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  // Use micromark to parse document into Events
+  var events = getMicromarkEvents(markdown, options);
 
   // Create Token objects
   var document = [];
@@ -1643,6 +1657,7 @@ module.exports = {
   filterByPredicate: filterByPredicate,
   filterByTypes: filterByTypes,
   getHtmlTagInfo: getHtmlTagInfo,
+  getMicromarkEvents: getMicromarkEvents,
   getTokenTextByType: getTokenTextByType,
   matchAndGetTokensByType: matchAndGetTokensByType
 };

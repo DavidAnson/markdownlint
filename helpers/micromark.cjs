@@ -23,13 +23,13 @@ const { gfmAutolinkLiteral, gfmFootnote, parse, postprocess, preprocess } =
  */
 
 /**
- * Parses a Markdown document and returns (frozen) tokens.
+ * Parses a Markdown document and returns Micromark events.
  *
  * @param {string} markdown Markdown document.
  * @param {Object} [options] Options for micromark.
- * @returns {Token[]} Micromark tokens (frozen).
+ * @returns {Object[]} Micromark events.
  */
-function micromarkParse(markdown, options = {}) {
+function getMicromarkEvents(markdown, options = {}) {
 
   // Customize options object to add useful extensions
   options.extensions ||= [];
@@ -43,6 +43,20 @@ function micromarkParse(markdown, options = {}) {
   parseContext.defined.includes = (searchElement) => searchElement.length > 0;
   const chunks = preprocess()(markdown, encoding, eol);
   const events = postprocess(parseContext.document().write(chunks));
+  return events;
+}
+
+/**
+ * Parses a Markdown document and returns (frozen) tokens.
+ *
+ * @param {string} markdown Markdown document.
+ * @param {Object} [options] Options for micromark.
+ * @returns {Token[]} Micromark tokens (frozen).
+ */
+function micromarkParse(markdown, options = {}) {
+
+  // Use micromark to parse document into Events
+  const events = getMicromarkEvents(markdown, options);
 
   // Create Token objects
   const document = [];
@@ -186,6 +200,7 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   getHtmlTagInfo,
+  getMicromarkEvents,
   getTokenTextByType,
   matchAndGetTokensByType
 };
