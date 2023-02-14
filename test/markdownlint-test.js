@@ -837,7 +837,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", (t) => new Promise((resolve) => {
-  t.plan(125);
+  t.plan(128);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -1005,7 +1005,7 @@ test("validateConfigExampleJson", async(t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(147);
+  t.plan(150);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

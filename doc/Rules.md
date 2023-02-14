@@ -2263,6 +2263,51 @@ Markdown:
 [//]: # (This behaves like a comment)
 ```
 
+<a name="md054"></a>
+
+## `MD054` - Each sentence should be on its own line
+
+Tags: `sentences`
+
+Aliases: `sentences-per-line`
+
+Parameters:
+
+- `context_length`: Size of context provided in error message (`integer`,
+  default `14`)
+- `ignored_words`: Words which will be ignored during the detection
+  (`string[]`, default `["ie","i.e","eg","e.g","etc","ex"]`)
+- `line_endings`: Recognized line-endings (`string[]`, default `[".","?","!"]`)
+
+Fixable: Some violations can be fixed by tooling
+
+Tags: `sentences`
+
+Aliases: `sentences-per-line`
+
+Parameters:
+
+- `ignored_words`: Ignored words (`string[]`,
+  default `["ie",  "i.e", "eg", "e.g", "etc", "ex" ]`)
+- `line_endings`: Line ending characters (`string[]`,
+  default `[ ".", "?", "!" ]`)
+- `context_length`: Context length provided in Error(`integer`, default `14`)
+
+Fixable: Some violations can be fixed by tooling
+
+This rule is triggered if there are multiple sentences per line.
+
+```markdown
+First sentence. Second sentence.
+```
+
+should be:
+
+```markdown
+First sentence.
+Second sentence.
+```
+
 <!-- markdownlint-configure-file {
   "no-inline-html": {
     "allowed_elements": [

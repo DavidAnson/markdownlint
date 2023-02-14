@@ -498,6 +498,31 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD054":
+      scheme.properties = {
+        "ignored_words": {
+          "description": "Words which will be ignored during the detection",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [ "ie", "i.e", "eg", "e.g", "etc", "ex" ]
+        },
+        "line_endings": {
+          "description": "Recognized line-endings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [ ".", "?", "!" ]
+        },
+        "context_length": {
+          "description": "Size of context provided in error message",
+          "type": "integer",
+          "default": 14
+        }
+      };
+      break;
     default:
       custom = false;
       break;

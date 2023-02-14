@@ -128,6 +128,7 @@ playground for learning and exploring.
 - **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
 - **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
 - **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
+- **[MD054](doc/md054.md)** *sentences-per-line* - Each sentence should be on its own line
 
 <!-- markdownlint-restore -->
 
@@ -177,6 +178,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
+- **`sentences`** - `MD054`
 - **`ul`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,

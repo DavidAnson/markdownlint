@@ -1362,12 +1362,13 @@ module.exports.referenceLinkImageData =
 // @ts-check
 
 module.exports.deprecatedRuleNames = ["MD002", "MD006"];
+module.exports.optionalRuleNames = ["MD002", "MD054"];
 module.exports.fixableRuleNames = [
     "MD004", "MD005", "MD006", "MD007", "MD009", "MD010",
     "MD011", "MD012", "MD014", "MD018", "MD019", "MD020",
     "MD021", "MD022", "MD023", "MD026", "MD027", "MD030",
     "MD031", "MD032", "MD034", "MD037", "MD038", "MD039",
-    "MD044", "MD047", "MD049", "MD050", "MD051", "MD053"
+    "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"
 ];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.27.0";
@@ -1387,7 +1388,7 @@ module.exports.version = "0.27.0";
 const path = __webpack_require__(/*! node:path */ "?9a52");
 const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
 const markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
-const { deprecatedRuleNames } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
+const { deprecatedRuleNames, optionalRuleNames } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 const helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -1688,6 +1689,9 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
         effectiveConfig[ruleName] = ruleDefault;
     }
     for (const ruleName of deprecatedRuleNames) {
+        effectiveConfig[ruleName] = false;
+    }
+    for (const ruleName of optionalRuleNames) {
         effectiveConfig[ruleName] = false;
     }
     for (const key of Object.keys(config)) {
@@ -5005,6 +5009,101 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md054.js":
+/*!***********************!*\
+  !*** ../lib/md054.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+const { forEachLine, getLineMetadata, addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const isCapitalizedAlphabetCharacter = (char) => {
+    const charCode = char.codePointAt(0);
+    return charCode >= "A".codePointAt(0) && charCode <= "Z".codePointAt(0);
+};
+const getNextIndexNotInCode = (line, i) => {
+    if (line[i] !== "`") {
+        return i;
+    }
+    i += 1;
+    // Get to the inside of this inline code segment
+    while (line[i] === "`") {
+        i += 1;
+        if (i === line.length) {
+            return -1;
+        }
+    }
+    // Get to the end of the inline code segment
+    // eslint-disable-next-line no-constant-condition
+    while (true) {
+        i = line.indexOf("`", i);
+        if (i === -1) {
+            return -1;
+        }
+        if (line[i - 1] !== "\\") {
+            break;
+        }
+    }
+    while (line[i] === "`") {
+        i += 1;
+        if (i === line.length) {
+            return -1;
+        }
+    }
+    return i;
+};
+const isAfterIgnoredWord = (ignoredWords, line, i) => {
+    for (const ignoredWord of ignoredWords) {
+        const lastWordInLine = line.substring(i - ignoredWord.length, i);
+        if (ignoredWord === lastWordInLine.toLowerCase()) {
+            return true;
+        }
+    }
+    return false;
+};
+module.exports = {
+    "names": ["MD054", "sentences-per-line"],
+    "description": "Each sentence should be on its own line",
+    "tags": ["sentences"],
+    "function": (params, onError) => {
+        const ignoredWords = params.config.ignored_words || [];
+        const lineEndings = params.config.line_endings || ["."];
+        const contextSize = Number(params.config.context_length || 14);
+        forEachLine(getLineMetadata(params), (line, lineIndex) => {
+            let i = 0;
+            // Ignore headings
+            if (/^\s*#/.test(line)) {
+                return;
+            }
+            // Ignore any starting list number, e.g. "1. " or " 1. "
+            if (/^\s*\d+\./.test(line)) {
+                i = line.indexOf(".") + 1;
+            }
+            for (; i < line.length - 2; i += 1) {
+                i = getNextIndexNotInCode(line, i);
+                if (i === -1 || i >= line.length - 2) {
+                    return;
+                }
+                if (lineEndings.includes(line[i]) &&
+                    line[i + 1] === " " &&
+                    isCapitalizedAlphabetCharacter(line[i + 2]) &&
+                    !isAfterIgnoredWord(ignoredWords, line, i)) {
+                    addError(onError, lineIndex, null, line.substr(Math.max(0, i - (contextSize / 2)), contextSize), null, {
+                        "lineNumber": lineIndex,
+                        "editColumn": i + 2,
+                        "insertText": "\n"
+                    });
+                }
+            }
+        });
+    }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -5063,7 +5162,8 @@ const rules = [
     ...__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"),
     __webpack_require__(/*! ./md051 */ "../lib/md051.js"),
     __webpack_require__(/*! ./md052 */ "../lib/md052.js"),
-    __webpack_require__(/*! ./md053 */ "../lib/md053.js")
+    __webpack_require__(/*! ./md053 */ "../lib/md053.js"),
+    __webpack_require__(/*! ./md054 */ "../lib/md054.js")
 ];
 for (const rule of rules) {
     const name = rule.names[0].toLowerCase();

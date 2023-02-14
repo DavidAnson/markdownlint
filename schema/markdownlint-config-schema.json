@@ -955,6 +955,52 @@
     "link-image-reference-definitions": {
       "$ref": "#/properties/MD053"
     },
+    "MD054": {
+      "description": "MD054/sentences-per-line - Each sentence should be on its own line",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "ignored_words": {
+          "description": "Words which will be ignored during the detection",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "ie",
+            "i.e",
+            "eg",
+            "e.g",
+            "etc",
+            "ex"
+          ]
+        },
+        "line_endings": {
+          "description": "Recognized line-endings",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            ".",
+            "?",
+            "!"
+          ]
+        },
+        "context_length": {
+          "description": "Size of context provided in error message",
+          "type": "integer",
+          "default": 14
+        }
+      },
+      "additionalProperties": false
+    },
+    "sentences-per-line": {
+      "$ref": "#/properties/MD054"
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1072,6 +1118,11 @@
     },
     "images": {
       "description": "images - MD045, MD052, MD053",
+      "type": "boolean",
+      "default": true
+    },
+    "sentences": {
+      "description": "sentences - MD054",
       "type": "boolean",
       "default": true
     }
