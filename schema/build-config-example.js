@@ -5,6 +5,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const configSchema = require("./markdownlint-config-schema.json");
+const YAML = require("yaml");
 
 const configExample = {};
 for (const rule in configSchema.properties) {
@@ -36,18 +37,17 @@ fs.writeFileSync(
   "utf8"
 );
 
-const configStringYaml = configStringJson
-  .replace(/JSON\(C\)/, "YAML")
-  .replace(/\n {2}/g, "\n")
-  .replace(/\/\/ /g, "# ")
-  .replace(/(\s*)"([^"]+)":/g, "$1$2:")
-  .replace(/: \{/g, ":")
-  .replace(/\n\}/g, "")
-  .replace(/,\n/g, "\n")
-  .replace(/^\{\n/, "")
-  .replace(/\}$/, "");
+const configStringYaml = YAML.stringify(configExample, {
+  "lineWidth": 0,
+  "defaultStringType": "QUOTE_DOUBLE",
+  "defaultKeyType": "PLAIN"
+})
+  .replace(/^(\s*)[^-\s]+-sub-description: "(.+)"$/gm, "$1# $2")
+  .replace(/^[^-\s]+-description: "(.+)"$/gm, "\n# $1");
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.yaml"),
+  // eslint-disable-next-line max-len
+  "# Example markdownlint YAML configuration with all properties set to their default value\n" +
   configStringYaml,
   "utf8"
 );
