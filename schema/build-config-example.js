@@ -4,8 +4,8 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const yaml = require("yaml");
 const configSchema = require("./markdownlint-config-schema.json");
-const YAML = require("yaml");
 
 const configExample = {};
 for (const rule in configSchema.properties) {
@@ -37,7 +37,7 @@ fs.writeFileSync(
   "utf8"
 );
 
-const configStringYaml = YAML.stringify(configExample, {
+const configStringYaml = yaml.stringify(configExample, {
   "lineWidth": 0,
   "defaultStringType": "QUOTE_DOUBLE",
   "defaultKeyType": "PLAIN"
