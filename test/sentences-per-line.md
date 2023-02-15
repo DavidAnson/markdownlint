@@ -1,14 +1,12 @@
 
 # Testing one sentence per line
 
-At vero eos et accusam et justo duo dolores et `ea rebum.` Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
-Lorem ipsum dolor sit `amet. consetetur.` sadipscing elitr.
-
 ## Sugar cases
 
 ### Lower case
 
 Lorem ipsum dolor sit amet. consetetur sadipscing elitr.{MD054}
+Lorem ipsum dolor sit amet. consetetur sadipscing elitr. consetetur sadipscing elitr. consetetur sadipscing elitr.{MD054}
 Lorem ipsum dolor sit amet! consetetur sadipscing elitr.{MD054}
 Lorem ipsum dolor sit amet? consetetur sadipscing elitr.{MD054}
 
@@ -38,9 +36,12 @@ Lorem ipsum dolor sit amet?  consetetur sadipscing elitr.{MD054}
 Lorem ipsum dolor sit `amet. consetetur` sadipscing elitr.
 Lorem ipsum dolor sit `amet. consetetur.` sadipscing elitr.
 Lorem ipsum dolor sit `amet.` consetetur. sadipscing elitr.{MD054}
-Lorem ipsum dolor sit `amet! consetetur` sadipscing elitr.
-Lorem ipsum dolor sit `amet! consetetur!` sadipscing elitr.
-Lorem ipsum dolor sit `amet!` consetetur! sadipscing elitr.{MD054}
+Lorem ipsum dolor sit ``amet! consetetur`` sadipscing elitr.
+Lorem ipsum dolor sit ``amet! consetetur!`` sadipscing elitr.
+Lorem ipsum dolor sit ``amet!`` consetetur! sadipscing elitr.{MD054}
+Lorem ipsum dolor sit ```amet! consetetur``` sadipscing elitr.
+Lorem ipsum dolor sit ```amet`! consetetur!``` sadipscing elitr.
+Lorem ipsum dolor sit ```amet!``` consetetur! sadipscing elitr.{MD054}
 
 ### Code Blocks with multiple spaces
 
