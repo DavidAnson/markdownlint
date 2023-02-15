@@ -516,6 +516,11 @@ for (const rule of rules) {
           },
           "default": [ ".", "?", "!" ]
         },
+        "sentence_start": {
+          "description": "Regex for sentence start",
+          "type": "string",
+          "default": "\\s+(\\w|[*_'\"])"
+        },
         "context_length": {
           "description": "Size of context provided in error message",
           "type": "integer",

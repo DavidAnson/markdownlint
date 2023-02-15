@@ -1362,13 +1362,13 @@ module.exports.referenceLinkImageData =
 // @ts-check
 
 module.exports.deprecatedRuleNames = ["MD002", "MD006"];
-module.exports.optionalRuleNames = ["MD002", "MD054"];
 module.exports.fixableRuleNames = [
     "MD004", "MD005", "MD006", "MD007", "MD009", "MD010",
     "MD011", "MD012", "MD014", "MD018", "MD019", "MD020",
     "MD021", "MD022", "MD023", "MD026", "MD027", "MD030",
     "MD031", "MD032", "MD034", "MD037", "MD038", "MD039",
-    "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"
+    "MD044", "MD047", "MD049", "MD050", "MD051", "MD053",
+    "MD054"
 ];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.27.0";
@@ -1388,7 +1388,7 @@ module.exports.version = "0.27.0";
 const path = __webpack_require__(/*! node:path */ "?9a52");
 const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
 const markdownIt = __webpack_require__(/*! markdown-it */ "markdown-it");
-const { deprecatedRuleNames, optionalRuleNames } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
+const { deprecatedRuleNames } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 const helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -1689,9 +1689,6 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
         effectiveConfig[ruleName] = ruleDefault;
     }
     for (const ruleName of deprecatedRuleNames) {
-        effectiveConfig[ruleName] = false;
-    }
-    for (const ruleName of optionalRuleNames) {
         effectiveConfig[ruleName] = false;
     }
     for (const key of Object.keys(config)) {
@@ -5090,9 +5087,10 @@ module.exports = {
                     line[i + 1] === " " &&
                     isCapitalizedAlphabetCharacter(line[i + 2]) &&
                     !isAfterIgnoredWord(ignoredWords, line, i)) {
-                    addError(onError, lineIndex, null, line.substr(Math.max(0, i - (contextSize / 2)), contextSize), null, {
-                        "lineNumber": lineIndex,
-                        "editColumn": i + 2,
+                    addError(onError, lineIndex + 1, null, line.substr(Math.max(0, i - (contextSize / 2)), contextSize), [i, 1], {
+                        "lineNumber": lineIndex + 1,
+                        "editColumn": i,
+                        "deleteCount": 1,
                         "insertText": "\n"
                     });
                 }

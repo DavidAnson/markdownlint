@@ -275,5 +275,7 @@ MD054:
     - "."
     - "?"
     - "!"
+  # Regex for sentence start
+  sentence_start: "\\s+(\\w|[*_'\"])"
   # Size of context provided in error message
   context_length: 14

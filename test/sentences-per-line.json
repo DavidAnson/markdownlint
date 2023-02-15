@@ -1,0 +1,19 @@
+{
+  "MD013": false,
+  "MD054": {
+    "ignored_words": [
+      "ie",
+      "i.e",
+      "eg",
+      "e.g",
+      "etc",
+      "ex"
+    ],
+    "line_endings": [
+      ".",
+      "?",
+      "!"
+    ],
+    "context_length": 14
+  }
+}

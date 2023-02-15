@@ -1,5 +1,6 @@
 // Example markdownlint configuration with all properties set to their default value
 {
+  // Example markdownlint JSON(C) configuration with all properties set to their default value
 
   // Default state for all rules
   "default": true,
@@ -306,6 +307,8 @@
       "?",
       "!"
     ],
+    // Regex for sentence start
+    "sentence_start": "\\s+(\\w|[*_'\"])",
     // Size of context provided in error message
     "context_length": 14
   }
