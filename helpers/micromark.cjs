@@ -9,6 +9,8 @@ const { gfmAutolinkLiteral, gfmFootnote, parse, postprocess, preprocess } =
   // @ts-ignore
   require("markdownlint-micromark");
 
+const nooxt = Symbol();
+
 /**
  * Markdown token.
  *
@@ -64,6 +66,7 @@ function micromarkParse(markdown, options = {}) {
     "tokens": document
   };
   const history = [ current ];
+  let before = {};
   for (const event of events) {
     const [ kind, token, context ] = event;
     const { type, start, end } = token;
@@ -85,12 +88,15 @@ function micromarkParse(markdown, options = {}) {
         endLine,
         endColumn,
         text,
-        "tokens": []
+        "tokens": [],
+        [nooxt]: null
       };
       previous.tokens.push(current);
+      before[nooxt] = current;
+      before = current;
     } else if (kind === "exit") {
       Object.freeze(current.tokens);
-      Object.freeze(current);
+      // Object.freeze(current);
       // @ts-ignore
       current = history.pop();
     }
@@ -111,15 +117,28 @@ function micromarkParse(markdown, options = {}) {
  */
 function filterByPredicate(tokens, allowed, transform) {
   const result = [];
-  const pending = [ ...tokens ];
-  let token = null;
-  while ((token = pending.shift())) {
-    if (allowed(token)) {
-      result.push(token);
+  if (transform) {
+    const pending = [ ...tokens ];
+    let token = null;
+    while ((token = pending.shift())) {
+      if (allowed(token)) {
+        result.push(token);
+      }
+      pending.unshift(...transform(token.tokens));
+    }  
+  } else {
+    let token = {
+      [nooxt]: tokens[0]
     }
-    const transformed = transform ? transform(token.tokens) : token.tokens;
-    pending.unshift(...transformed);
+    const end = tokens.length ? tokens[tokens.length - 1][nooxt] : null;
+    // @ts-ignore
+    while ((token = token[nooxt]) !== end) {
+      if (allowed(token)) {
+        result.push(token);
+      }
+    }
   }
+  // @ts-ignore
   return result;
 }
 

@@ -6,12 +6,15 @@ import { newLineRe } from "../helpers/helpers.js";
 import { filterByPredicate, filterByTypes, getMicromarkEvents, parse }
   from "../helpers/micromark.cjs";
 
+// TODO: fs.readFile
+
 test("parse", async(t) => {
   t.plan(1);
   const content = await fs.readFile("./test/every-markdown-syntax.md", "utf8");
   const normalizedContent = content.split(newLineRe).join("\n");
   const document = parse(normalizedContent);
-  t.snapshot(document, "Unexpected tokens");
+  const documentNoSymbols = JSON.parse(JSON.stringify(document));
+  t.snapshot(documentNoSymbols, "Unexpected tokens");
 });
 
 test("getMicromarkEvents/filterByPredicate", async(t) => {
