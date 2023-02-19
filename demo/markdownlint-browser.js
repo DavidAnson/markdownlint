@@ -298,7 +298,7 @@ module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
  * @returns {void}
  */
 function filterTokens(params, type, handler) {
-  var _iterator = _createForOfIteratorHelper(params.tokens),
+  var _iterator = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
     _step;
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -358,7 +358,7 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   filterTokens(params, "hr", function (token) {
     lineMetadata[token.map[0]][6] = true;
   });
-  var _iterator2 = _createForOfIteratorHelper(params.tokens.filter(isMathBlock)),
+  var _iterator2 = _createForOfIteratorHelper(params.parsers.markdownit.tokens.filter(isMathBlock)),
     _step2;
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
@@ -489,7 +489,7 @@ module.exports.forEachInlineChild = forEachInlineChild;
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
   var heading = null;
-  var _iterator6 = _createForOfIteratorHelper(params.tokens),
+  var _iterator6 = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
     _step6;
   try {
     for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
@@ -2463,7 +2463,7 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
   };
   var lineMetadata = helpers.getLineMetadata(paramsBase);
   var codeBlockAndSpanRanges = helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
-  var flattenedLists = helpers.flattenLists(paramsBase.tokens);
+  var flattenedLists = helpers.flattenLists(paramsBase.parsers.markdownit.tokens);
   var htmlElementRanges = helpers.htmlElementRanges(paramsBase, lineMetadata);
   var referenceLinkImageData = helpers.getReferenceLinkImageData(paramsBase);
   cache.set({
@@ -3292,7 +3292,7 @@ module.exports = {
   "function": function MD002(params, onError) {
     var level = Number(params.config.level || 1);
     var tag = "h" + level;
-    params.tokens.every(function forToken(token) {
+    params.parsers.markdownit.tokens.every(function forToken(token) {
       if (token.type === "heading_open") {
         addErrorDetailIf(onError, token.lineNumber, tag, token.tag);
         return false;
@@ -4573,7 +4573,7 @@ module.exports = {
   "function": function MD027(params, onError) {
     var blockquoteNesting = 0;
     var listItemNesting = 0;
-    var _iterator = _createForOfIteratorHelper(params.tokens),
+    var _iterator = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -4642,7 +4642,7 @@ module.exports = {
   "function": function MD028(params, onError) {
     var prevToken = {};
     var prevLineNumber = null;
-    var _iterator = _createForOfIteratorHelper(params.tokens),
+    var _iterator = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -5214,7 +5214,7 @@ module.exports = {
       return base;
     }
     var state = base;
-    var _iterator = _createForOfIteratorHelper(params.tokens),
+    var _iterator = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -5608,7 +5608,7 @@ module.exports = {
     var foundFrontMatterTitle = frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title);
     if (!foundFrontMatterTitle) {
       var htmlHeadingRe = new RegExp("^<h".concat(level, "[ />]"), "i");
-      params.tokens.every(function (token) {
+      params.parsers.markdownit.tokens.every(function (token) {
         var isError = false;
         if (token.type === "html_block") {
           if (token.content.startsWith("<!--")) {
@@ -5955,7 +5955,7 @@ module.exports = {
   "tags": ["code"],
   "function": function MD046(params, onError) {
     var expectedStyle = String(params.config.style || "consistent");
-    var codeBlocksAndFences = params.tokens.filter(function (token) {
+    var codeBlocksAndFences = params.parsers.markdownit.tokens.filter(function (token) {
       return token.type === "code_block" || token.type === "fence";
     });
     var _iterator = _createForOfIteratorHelper(codeBlocksAndFences),
@@ -6036,7 +6036,7 @@ module.exports = {
   "function": function MD048(params, onError) {
     var style = String(params.config.style || "consistent");
     var expectedStyle = style;
-    var fenceTokens = params.tokens.filter(function (token) {
+    var fenceTokens = params.parsers.markdownit.tokens.filter(function (token) {
       return token.type === "fence";
     });
     var _iterator = _createForOfIteratorHelper(fenceTokens),

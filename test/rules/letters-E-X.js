@@ -10,13 +10,13 @@ module.exports = {
     "/blob/main/test/rules/letters-E-X.js"
   ),
   "tags": [ "test" ],
-  "function": function rule(params, onError) {
-    for (const inline of params.tokens.filter(function filterToken(token) {
-      return token.type === "inline";
-    })) {
-      for (const text of inline.children.filter(function filterChild(child) {
-        return child.type === "text";
-      })) {
+  "function": (params, onError) => {
+    for (const inline of params.parsers.markdownit.tokens.filter(
+      (token) => token.type === "inline"
+    )) {
+      for (const text of inline.children.filter(
+        (child) => child.type === "text"
+      )) {
         const index = text.content.toLowerCase().indexOf("ex");
         if (index !== -1) {
           onError({
