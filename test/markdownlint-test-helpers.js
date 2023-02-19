@@ -1199,12 +1199,16 @@ test("htmlElementRanges", (t) => {
       "Text `<br/>` text",
       "text <br/> text"
     ],
-    "tokens": [
-      {
-        "type": "code_block",
-        "map": [ 10, 12 ]
+    "parsers": {
+      "markdownit": {
+        "tokens": [
+          {
+            "type": "code_block",
+            "map": [ 10, 12 ]
+          }
+        ]
       }
-    ]
+    }
   };
   const expected = [
     [ 3, 5, 12 ],

@@ -1193,7 +1193,9 @@ test("token-map-spans", (t) => {
         "function": function tokenMapSpans(params) {
           const tokenLines = [];
           let lastLineNumber = -1;
-          const inlines = params.tokens.filter((c) => c.type === "inline");
+          const inlines = params.parsers.markdownit.tokens.filter(
+            (c) => c.type === "inline"
+          );
           for (const token of inlines) {
             t.truthy(token.map);
             for (let i = token.map[0]; i < token.map[1]; i++) {

@@ -273,7 +273,7 @@ module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
  * @returns {void}
  */
 function filterTokens(params, type, handler) {
-  for (const token of params.tokens) {
+  for (const token of params.parsers.markdownit.tokens) {
     if (token.type === type) {
       handler(token);
     }
@@ -328,7 +328,7 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   filterTokens(params, "hr", (token) => {
     lineMetadata[token.map[0]][6] = true;
   });
-  for (const token of params.tokens.filter(isMathBlock)) {
+  for (const token of params.parsers.markdownit.tokens.filter(isMathBlock)) {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][7] = true;
     }
@@ -422,7 +422,7 @@ module.exports.forEachInlineChild = forEachInlineChild;
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
   let heading = null;
-  for (const token of params.tokens) {
+  for (const token of params.parsers.markdownit.tokens) {
     if (token.type === "heading_open") {
       heading = token;
     } else if (token.type === "heading_close") {
