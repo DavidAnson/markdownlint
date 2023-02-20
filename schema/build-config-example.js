@@ -4,6 +4,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const yaml = require("yaml");
 const configSchema = require("./markdownlint-config-schema.json");
 
 const configExample = {};
@@ -25,29 +26,34 @@ for (const rule in configSchema.properties) {
   }
 }
 
-const configStringJson = JSON.stringify(configExample, null, 2)
+const transformComments = (input, commentPrefix) => (
+  commentPrefix +
   // eslint-disable-next-line max-len
-  .replace(/^\{/, "{\n  // Example markdownlint JSON(C) configuration with all properties set to their default value")
-  .replace(/(\s+)"[^-"]+-description": "(.+)",/g, "\n$1// $2")
-  .replace(/"[^-"]+-sub-description": "(.+)",/g, "// $1");
+  " Example markdownlint configuration with all properties set to their default value\n" +
+  input
+    // eslint-disable-next-line max-len
+    .replace(/^(\s*)[^-\s]+-sub-description"?: "?([^"\n]+)"?,?$/gm, "$1" + commentPrefix + " $2")
+    // eslint-disable-next-line max-len
+    .replace(/^(\s*)[^-\s]+-description"?: "?([^"\n]+)"?,?$/gm, "\n$1" + commentPrefix + " $2")
+);
+
+const configStringJson = JSON.stringify(configExample, null, 2);
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.jsonc"),
-  configStringJson,
+  transformComments(configStringJson, "//"),
   "utf8"
 );
 
-const configStringYaml = configStringJson
-  .replace(/JSON\(C\)/, "YAML")
-  .replace(/\n {2}/g, "\n")
-  .replace(/\/\/ /g, "# ")
-  .replace(/(\s*)"([^"]+)":/g, "$1$2:")
-  .replace(/: \{/g, ":")
-  .replace(/\n\}/g, "")
-  .replace(/,\n/g, "\n")
-  .replace(/^\{\n/, "")
-  .replace(/\}$/, "");
+const configStringYaml = yaml.stringify(
+  configExample,
+  {
+    "lineWidth": 0,
+    "defaultStringType": "QUOTE_DOUBLE",
+    "defaultKeyType": "PLAIN"
+  }
+);
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.yaml"),
-  configStringYaml,
+  transformComments(configStringYaml, "#"),
   "utf8"
 );
