@@ -26,28 +26,31 @@ for (const rule in configSchema.properties) {
   }
 }
 
-const configStringJson = JSON.stringify(configExample, null, 2)
+const transferComments = (input, commentLiterals) => commentLiterals +
   // eslint-disable-next-line max-len
-  .replace(/^\{/, "{\n  // Example markdownlint JSON(C) configuration with all properties set to their default value")
-  .replace(/(\s+)"[^-"]+-description": "(.+)",/g, "\n$1// $2")
-  .replace(/"[^-"]+-sub-description": "(.+)",/g, "// $1");
+  " Example markdownlint configuration with all properties set to their default value\n" +
+  input
+    // eslint-disable-next-line max-len
+    .replace(/^(\s*)"?[^-\s]+-sub-description"?: "?([^"\n]+)"?,?$/gm, "$1" + commentLiterals + " $2")
+    // eslint-disable-next-line max-len
+    .replace(/^(\s*)"?[^-\s]+-description"?: "?([^"\n]+)"?,?$/gm, "\n$1" + commentLiterals + " $2");
+
+
+const configStringJson = JSON.stringify(configExample, null, 2);
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.jsonc"),
-  configStringJson,
+  transferComments(configStringJson, "//"),
   "utf8"
 );
 
-const configStringYaml = yaml.stringify(configExample, {
-  "lineWidth": 0,
-  "defaultStringType": "QUOTE_DOUBLE",
-  "defaultKeyType": "PLAIN"
-})
-  .replace(/^(\s*)[^-\s]+-sub-description: "(.+)"$/gm, "$1# $2")
-  .replace(/^[^-\s]+-description: "(.+)"$/gm, "\n# $1");
+const configStringYaml = yaml.stringify(configExample,
+  {
+    "lineWidth": 0,
+    "defaultStringType": "QUOTE_DOUBLE",
+    "defaultKeyType": "PLAIN"
+  });
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.yaml"),
-  // eslint-disable-next-line max-len
-  "# Example markdownlint YAML configuration with all properties set to their default value\n" +
-  configStringYaml,
+  transferComments(configStringYaml, "#"),
   "utf8"
 );

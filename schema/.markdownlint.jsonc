@@ -1,5 +1,5 @@
+// Example markdownlint configuration with all properties set to their default value
 {
-  // Example markdownlint JSON(C) configuration with all properties set to their default value
 
   // Default state for all rules
   "default": true,
