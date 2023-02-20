@@ -26,31 +26,34 @@ for (const rule in configSchema.properties) {
   }
 }
 
-const transferComments = (input, commentLiterals) => commentLiterals +
+const transformComments = (input, commentPrefix) => (
+  commentPrefix +
   // eslint-disable-next-line max-len
   " Example markdownlint configuration with all properties set to their default value\n" +
   input
     // eslint-disable-next-line max-len
-    .replace(/^(\s*)"?[^-\s]+-sub-description"?: "?([^"\n]+)"?,?$/gm, "$1" + commentLiterals + " $2")
+    .replace(/^(\s*)[^-\s]+-sub-description"?: "?([^"\n]+)"?,?$/gm, "$1" + commentPrefix + " $2")
     // eslint-disable-next-line max-len
-    .replace(/^(\s*)"?[^-\s]+-description"?: "?([^"\n]+)"?,?$/gm, "\n$1" + commentLiterals + " $2");
-
+    .replace(/^(\s*)[^-\s]+-description"?: "?([^"\n]+)"?,?$/gm, "\n$1" + commentPrefix + " $2")
+);
 
 const configStringJson = JSON.stringify(configExample, null, 2);
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.jsonc"),
-  transferComments(configStringJson, "//"),
+  transformComments(configStringJson, "//"),
   "utf8"
 );
 
-const configStringYaml = yaml.stringify(configExample,
+const configStringYaml = yaml.stringify(
+  configExample,
   {
     "lineWidth": 0,
     "defaultStringType": "QUOTE_DOUBLE",
     "defaultKeyType": "PLAIN"
-  });
+  }
+);
 fs.writeFileSync(
   path.join(__dirname, ".markdownlint.yaml"),
-  transferComments(configStringYaml, "#"),
+  transformComments(configStringYaml, "#"),
   "utf8"
 );
