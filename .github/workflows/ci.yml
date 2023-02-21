@@ -16,10 +16,13 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node-version: [14.x, 16.x, 18.x]
+        node-version: [ 14, 16, 18 ]
 
     steps:
     - uses: actions/checkout@v3
+    - name: Edit .npmrc to avoid setup-node issue with Node 14
+      if: ${{ matrix.node-version == '14' }}
+      run: perl -i -p -e 's/(ignore-scripts=true)/# $1/' .npmrc && git add .npmrc && git config --global user.name 'User' && git config --global user.email 'user@example.com' && git commit -m 'Edit .npmrc to avoid setup-node issue with Node 14'
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
