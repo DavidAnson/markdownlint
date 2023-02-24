@@ -15,6 +15,9 @@
   "engines": {
     "node": ">=14.18.0"
   },
+  "dependencies": {
+    "markdownlint-micromark": "0.1.2"
+  },
   "keywords": [
     "markdownlint",
     "markdownlint-rule"
