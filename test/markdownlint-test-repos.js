@@ -160,6 +160,7 @@ test("https://github.com/dotnet/docs", (t) => {
     /^test-repos\/dotnet-docs\/docs\/framework\/whats-new\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/orleans\/tutorials-and-samples\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/regular-expression-source-generators\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/standard\/generics\/math\.md: \d+: MD038\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/standard\/serialization\/xml-schema-def-tool-gen\.md: \d+: MD034\/.*$\r?\n?/gm
   ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
