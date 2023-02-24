@@ -862,7 +862,7 @@ function getReferenceLinkImageData(params) {
           if (shortcutCandidate) {
             labelText =
               micromark.getTokenTextByType(
-                shortcutCandidate.label.tokens, "labelText"
+                shortcutCandidate[0].tokens, "labelText"
               );
             isShortcut = (labelText !== null);
           }
@@ -873,11 +873,11 @@ function getReferenceLinkImageData(params) {
           if (fullAndCollapsedCandidate) {
             labelText =
               micromark.getTokenTextByType(
-                fullAndCollapsedCandidate.label.tokens, "labelText"
+                fullAndCollapsedCandidate[0].tokens, "labelText"
               );
             referenceStringText =
               micromark.getTokenTextByType(
-                fullAndCollapsedCandidate.reference.tokens, "referenceString"
+                fullAndCollapsedCandidate[1].tokens, "referenceString"
               );
             isFullOrCollapsed = (labelText !== null);
           }
@@ -890,8 +890,8 @@ function getReferenceLinkImageData(params) {
             [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ]
           );
           if (footnote) {
-            const callMarkerText = footnote.gfmFootnoteCallMarker.text;
-            const callString = footnote.gfmFootnoteCallString.text;
+            const callMarkerText = footnote[0].text;
+            const callString = footnote[1].text;
             labelText = `${callMarkerText}${callString}`;
             isShortcut = true;
           }

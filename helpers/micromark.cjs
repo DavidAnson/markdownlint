@@ -2,12 +2,11 @@
 
 "use strict";
 
-/* eslint-disable n/no-unpublished-require */
-
 // @ts-ignore
-const { gfmAutolinkLiteral, gfmFootnote, parse, postprocess, preprocess } =
+const {
+  gfmAutolinkLiteral, gfmFootnote, gfmTable, parse, postprocess, preprocess
   // @ts-ignore
-  require("markdownlint-micromark");
+} = require("markdownlint-micromark");
 
 /**
  * Markdown token.
@@ -33,7 +32,7 @@ function getMicromarkEvents(markdown, options = {}) {
 
   // Customize options object to add useful extensions
   options.extensions ||= [];
-  options.extensions.push(gfmAutolinkLiteral, gfmFootnote());
+  options.extensions.push(gfmAutolinkLiteral, gfmFootnote(), gfmTable);
 
   // Use micromark to parse document into Events
   const encoding = undefined;
@@ -153,7 +152,7 @@ function getHtmlTagInfo(token) {
       return {
         close,
         "name": close ? name.slice(1) : name
-      }
+      };
     }
   }
   return null;
@@ -177,19 +176,20 @@ function getTokenTextByType(tokens, type) {
  * @param {Token[]} tokens Micromark tokens.
  * @param {string[]} matchTypes Types to match.
  * @param {string[]} [resultTypes] Types to return.
- * @returns {Object | null} Matching tokens by type.
+ * @returns {Token[] | null} Matching tokens.
  */
 function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
   if (tokens.length !== matchTypes.length) {
     return null;
   }
   resultTypes ||= matchTypes;
-  const result = {};
+  const result = [];
+  // eslint-disable-next-line unicorn/no-for-loop
   for (let i = 0; i < matchTypes.length; i++) {
     if (tokens[i].type !== matchTypes[i]) {
       return null;
     } else if (resultTypes.includes(matchTypes[i])) {
-      result[matchTypes[i]] = tokens[i];
+      result.push(tokens[i]);
     }
   }
   return result;

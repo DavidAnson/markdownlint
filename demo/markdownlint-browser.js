@@ -952,19 +952,19 @@ function getReferenceLinkImageData(params) {
             var referenceStringText = null;
             var shortcutCandidate = micromark.matchAndGetTokensByType(token.tokens, ["label"]);
             if (shortcutCandidate) {
-              labelText = micromark.getTokenTextByType(shortcutCandidate.label.tokens, "labelText");
+              labelText = micromark.getTokenTextByType(shortcutCandidate[0].tokens, "labelText");
               isShortcut = labelText !== null;
             }
             var fullAndCollapsedCandidate = micromark.matchAndGetTokensByType(token.tokens, ["label", "reference"]);
             if (fullAndCollapsedCandidate) {
-              labelText = micromark.getTokenTextByType(fullAndCollapsedCandidate.label.tokens, "labelText");
-              referenceStringText = micromark.getTokenTextByType(fullAndCollapsedCandidate.reference.tokens, "referenceString");
+              labelText = micromark.getTokenTextByType(fullAndCollapsedCandidate[0].tokens, "labelText");
+              referenceStringText = micromark.getTokenTextByType(fullAndCollapsedCandidate[1].tokens, "referenceString");
               isFullOrCollapsed = labelText !== null;
             }
             var footnote = micromark.matchAndGetTokensByType(token.tokens, ["gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker", "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"], ["gfmFootnoteCallMarker", "gfmFootnoteCallString"]);
             if (footnote) {
-              var callMarkerText = footnote.gfmFootnoteCallMarker.text;
-              var callString = footnote.gfmFootnoteCallString.text;
+              var callMarkerText = footnote[0].text;
+              var callString = footnote[1].text;
               labelText = "".concat(callMarkerText).concat(callString);
               isShortcut = true;
             }
@@ -1425,8 +1425,6 @@ module.exports = {
 
 
 
-/* eslint-disable n/no-unpublished-require */
-
 // @ts-ignore
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -1439,11 +1437,10 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-var _require =
-  // @ts-ignore
-  __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark"),
+var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark"),
   gfmAutolinkLiteral = _require.gfmAutolinkLiteral,
   gfmFootnote = _require.gfmFootnote,
+  gfmTable = _require.gfmTable,
   parse = _require.parse,
   postprocess = _require.postprocess,
   preprocess = _require.preprocess;
@@ -1472,7 +1469,7 @@ function getMicromarkEvents(markdown) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   // Customize options object to add useful extensions
   options.extensions || (options.extensions = []);
-  options.extensions.push(gfmAutolinkLiteral, gfmFootnote());
+  options.extensions.push(gfmAutolinkLiteral, gfmFootnote(), gfmTable);
 
   // Use micromark to parse document into Events
   var encoding = undefined;
@@ -1635,19 +1632,20 @@ function getTokenTextByType(tokens, type) {
  * @param {Token[]} tokens Micromark tokens.
  * @param {string[]} matchTypes Types to match.
  * @param {string[]} [resultTypes] Types to return.
- * @returns {Object | null} Matching tokens by type.
+ * @returns {Token[] | null} Matching tokens.
  */
 function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
   if (tokens.length !== matchTypes.length) {
     return null;
   }
   resultTypes || (resultTypes = matchTypes);
-  var result = {};
+  var result = [];
+  // eslint-disable-next-line unicorn/no-for-loop
   for (var i = 0; i < matchTypes.length; i++) {
     if (tokens[i].type !== matchTypes[i]) {
       return null;
     } else if (resultTypes.includes(matchTypes[i])) {
-      result[matchTypes[i]] = tokens[i];
+      result.push(tokens[i]);
     }
   }
   return result;
