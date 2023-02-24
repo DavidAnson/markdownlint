@@ -5408,56 +5408,86 @@ module.exports = {
 
 
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addErrorContext = _require.addErrorContext,
-  filterTokens = _require.filterTokens,
-  forEachInlineCodeSpan = _require.forEachInlineCodeSpan,
-  newLineRe = _require.newLineRe;
+  addErrorContext = _require.addErrorContext;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes;
 var leftSpaceRe = /^\s(?:[^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
-var spaceInsideCodeInline = function spaceInsideCodeInline(token) {
-  return token.type === "code_inline" && (leftSpaceRe.test(token.content) || rightSpaceRe.test(token.content));
+var trimCodeText = function trimCodeText(text, start, end) {
+  text = text.replace(/^\s+$/, "");
+  if (start) {
+    text = text.replace(/^\s+?(\s`|\S)/, "$1");
+  }
+  if (end) {
+    text = text.replace(/(`\s|\S)\s+$/, "$1");
+  }
+  return text;
+};
+var tokenIfType = function tokenIfType(token, type) {
+  return token && token.type === type && token;
 };
 module.exports = {
   "names": ["MD038", "no-space-in-code"],
   "description": "Spaces inside code span elements",
   "tags": ["whitespace", "code"],
   "function": function MD038(params, onError) {
-    filterTokens(params, "inline", function (token) {
-      if (token.children.some(spaceInsideCodeInline)) {
-        var tokenLines = params.lines.slice(token.map[0], token.map[1]);
-        forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, columnIndex, tickCount) {
-          var rangeIndex = columnIndex - tickCount;
-          var rangeLength = code.length + 2 * tickCount;
-          var rangeLineOffset = 0;
-          var fixIndex = columnIndex;
-          var fixLength = code.length;
-          var codeLines = code.split(newLineRe);
-          var left = leftSpaceRe.test(code);
-          var right = !left && rightSpaceRe.test(code);
-          if (right && codeLines.length > 1) {
-            rangeIndex = 0;
-            rangeLineOffset = codeLines.length - 1;
-            fixIndex = 0;
-          }
-          if (left || right) {
-            var codeLinesRange = codeLines[rangeLineOffset];
-            if (codeLines.length > 1) {
-              rangeLength = codeLinesRange.length + tickCount;
-              fixLength = codeLinesRange.length;
+    var codeTextTokens = filterByTypes(params.parsers.micromark.tokens, ["codeText"]);
+    var _iterator = _createForOfIteratorHelper(codeTextTokens),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var token = _step.value;
+        var tokens = token.tokens;
+        var first = 0;
+        var last = tokens.length - 1;
+        var startSequence = tokenIfType(tokens[first], "codeTextSequence");
+        var endSequence = tokenIfType(tokens[last], "codeTextSequence");
+        var startData = tokenIfType(tokens[first + 1], "codeTextData") || tokenIfType(tokens[first + 2], "codeTextData");
+        var endData = tokenIfType(tokens[last - 1], "codeTextData") || tokenIfType(tokens[last - 2], "codeTextData");
+        if (startSequence && endSequence && startData && endData) {
+          var spaceLeft = leftSpaceRe.test(startData.text);
+          var spaceRight = !spaceLeft && rightSpaceRe.test(endData.text);
+          if (spaceLeft || spaceRight) {
+            var lineNumber = startSequence.startLine;
+            var range = null;
+            var fixInfo = null;
+            if (startSequence.startLine === endSequence.endLine) {
+              range = [startSequence.startColumn, endSequence.endColumn - startSequence.startColumn];
+              fixInfo = {
+                "editColumn": startSequence.endColumn,
+                "deleteCount": endSequence.startColumn - startSequence.endColumn,
+                "insertText": trimCodeText(startData.text, true, true)
+              };
+            } else if (spaceLeft) {
+              range = [startSequence.startColumn, startData.endColumn - startSequence.startColumn];
+              fixInfo = {
+                "editColumn": startSequence.endColumn,
+                "deleteCount": startData.endColumn - startData.startColumn,
+                "insertText": trimCodeText(startData.text, true, false)
+              };
+            } else {
+              lineNumber = endSequence.endLine;
+              range = [endData.startColumn, endSequence.endColumn - endData.startColumn];
+              fixInfo = {
+                "editColumn": endData.startColumn,
+                "deleteCount": endData.endColumn - endData.startColumn,
+                "insertText": trimCodeText(endData.text, false, true)
+              };
             }
-            var context = tokenLines[lineIndex + rangeLineOffset].substring(rangeIndex, rangeIndex + rangeLength);
-            var codeLinesRangeTrim = codeLinesRange.trim();
-            var fixText = (codeLinesRangeTrim.startsWith("`") ? " " : "") + codeLinesRangeTrim + (codeLinesRangeTrim.endsWith("`") ? " " : "");
-            addErrorContext(onError, token.lineNumber + lineIndex + rangeLineOffset, context, left, right, [rangeIndex + 1, rangeLength], {
-              "editColumn": fixIndex + 1,
-              "deleteCount": fixLength,
-              "insertText": fixText
-            });
+            var context = params.lines[lineNumber - 1].substring(range[0] - 1, range[0] - 1 + range[1]);
+            addErrorContext(onError, lineNumber, context, spaceLeft, spaceRight, range, fixInfo);
           }
-        });
+        }
       }
-    });
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
   }
 };
 

@@ -122,3 +122,18 @@ Again, 3 characters: ` abc `
 Again, 2 characters: ` ab `
 Again, 1 character: ` a `
 Many internal spaces: ` code code  code   code    code     code `
+
+text ``` ` leading space
+allowed for backtick``` text
+
+text ```  ` multiple leading {MD038}
+spaces not allowed``` text
+
+text ``trailing space
+allowed for backtick ` `` text
+
+text ``multiple trailing spaces
+not allowed `  `` text {MD038}
+
+text `` ` leading and trailing
+space allowed for backtick ` `` text
