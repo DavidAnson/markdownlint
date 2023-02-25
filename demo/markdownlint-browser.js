@@ -950,18 +950,18 @@ function getReferenceLinkImageData(params) {
             var isFullOrCollapsed = false;
             var labelText = null;
             var referenceStringText = null;
-            var shortcutCandidate = micromark.matchAndGetTokensByType(token.tokens, ["label"]);
+            var shortcutCandidate = micromark.matchAndGetTokensByType(token.children, ["label"]);
             if (shortcutCandidate) {
-              labelText = micromark.getTokenTextByType(shortcutCandidate[0].tokens, "labelText");
+              labelText = micromark.getTokenTextByType(shortcutCandidate[0].children, "labelText");
               isShortcut = labelText !== null;
             }
-            var fullAndCollapsedCandidate = micromark.matchAndGetTokensByType(token.tokens, ["label", "reference"]);
+            var fullAndCollapsedCandidate = micromark.matchAndGetTokensByType(token.children, ["label", "reference"]);
             if (fullAndCollapsedCandidate) {
-              labelText = micromark.getTokenTextByType(fullAndCollapsedCandidate[0].tokens, "labelText");
-              referenceStringText = micromark.getTokenTextByType(fullAndCollapsedCandidate[1].tokens, "referenceString");
+              labelText = micromark.getTokenTextByType(fullAndCollapsedCandidate[0].children, "labelText");
+              referenceStringText = micromark.getTokenTextByType(fullAndCollapsedCandidate[1].children, "referenceString");
               isFullOrCollapsed = labelText !== null;
             }
-            var footnote = micromark.matchAndGetTokensByType(token.tokens, ["gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker", "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"], ["gfmFootnoteCallMarker", "gfmFootnoteCallString"]);
+            var footnote = micromark.matchAndGetTokensByType(token.children, ["gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker", "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"], ["gfmFootnoteCallMarker", "gfmFootnoteCallString"]);
             if (footnote) {
               var callMarkerText = footnote[0].text;
               var callString = footnote[1].text;
@@ -1455,7 +1455,7 @@ var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-m
  * @property {number} endLine End line (1-based).
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
- * @property {Token[]} tokens Child tokens.
+ * @property {Token[]} children Child tokens.
  */
 
 /**
@@ -1499,7 +1499,7 @@ function micromarkParse(markdown) {
   // Create Token objects
   var document = [];
   var current = {
-    "tokens": document
+    "children": document
   };
   var history = [current];
   var _iterator = _createForOfIteratorHelper(events),
@@ -1534,11 +1534,11 @@ function micromarkParse(markdown) {
           endLine: endLine,
           endColumn: endColumn,
           text: text,
-          "tokens": []
+          "children": []
         };
-        previous.tokens.push(current);
+        previous.children.push(current);
       } else if (kind === "exit") {
-        Object.freeze(current.tokens);
+        Object.freeze(current.children);
         Object.freeze(current);
         // @ts-ignore
         current = history.pop();
@@ -1571,7 +1571,7 @@ function filterByPredicate(tokens, allowed, transform) {
     if (allowed(token)) {
       result.push(token);
     }
-    var transformed = transform ? transform(token.tokens) : token.tokens;
+    var transformed = transform ? transform(token.children) : token.children;
     pending.unshift.apply(pending, _toConsumableArray(transformed));
   }
   return result;
@@ -5441,13 +5441,13 @@ module.exports = {
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var token = _step.value;
-        var tokens = token.tokens;
+        var children = token.children;
         var first = 0;
-        var last = tokens.length - 1;
-        var startSequence = tokenIfType(tokens[first], "codeTextSequence");
-        var endSequence = tokenIfType(tokens[last], "codeTextSequence");
-        var startData = tokenIfType(tokens[first + 1], "codeTextData") || tokenIfType(tokens[first + 2], "codeTextData");
-        var endData = tokenIfType(tokens[last - 1], "codeTextData") || tokenIfType(tokens[last - 2], "codeTextData");
+        var last = children.length - 1;
+        var startSequence = tokenIfType(children[first], "codeTextSequence");
+        var endSequence = tokenIfType(children[last], "codeTextSequence");
+        var startData = tokenIfType(children[first + 1], "codeTextData") || tokenIfType(children[first + 2], "codeTextData");
+        var endData = tokenIfType(children[last - 1], "codeTextData") || tokenIfType(children[last - 2], "codeTextData");
         if (startSequence && endSequence && startData && endData) {
           var spaceLeft = leftSpaceRe.test(startData.text);
           var spaceRight = !spaceLeft && rightSpaceRe.test(endData.text);

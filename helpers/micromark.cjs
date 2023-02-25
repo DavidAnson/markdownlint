@@ -18,7 +18,7 @@ const {
  * @property {number} endLine End line (1-based).
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
- * @property {Token[]} tokens Child tokens.
+ * @property {Token[]} children Child tokens.
  */
 
 /**
@@ -60,7 +60,7 @@ function micromarkParse(markdown, options = {}) {
   // Create Token objects
   const document = [];
   let current = {
-    "tokens": document
+    "children": document
   };
   const history = [ current ];
   for (const event of events) {
@@ -84,11 +84,11 @@ function micromarkParse(markdown, options = {}) {
         endLine,
         endColumn,
         text,
-        "tokens": []
+        "children": []
       };
-      previous.tokens.push(current);
+      previous.children.push(current);
     } else if (kind === "exit") {
-      Object.freeze(current.tokens);
+      Object.freeze(current.children);
       Object.freeze(current);
       // @ts-ignore
       current = history.pop();
@@ -116,7 +116,7 @@ function filterByPredicate(tokens, allowed, transform) {
     if (allowed(token)) {
       result.push(token);
     }
-    const transformed = transform ? transform(token.tokens) : token.tokens;
+    const transformed = transform ? transform(token.children) : token.children;
     pending.unshift(...transformed);
   }
   return result;

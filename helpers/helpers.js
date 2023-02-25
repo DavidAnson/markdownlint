@@ -858,31 +858,31 @@ function getReferenceLinkImageData(params) {
           let labelText = null;
           let referenceStringText = null;
           const shortcutCandidate =
-            micromark.matchAndGetTokensByType(token.tokens, [ "label" ]);
+            micromark.matchAndGetTokensByType(token.children, [ "label" ]);
           if (shortcutCandidate) {
             labelText =
               micromark.getTokenTextByType(
-                shortcutCandidate[0].tokens, "labelText"
+                shortcutCandidate[0].children, "labelText"
               );
             isShortcut = (labelText !== null);
           }
           const fullAndCollapsedCandidate =
             micromark.matchAndGetTokensByType(
-              token.tokens, [ "label", "reference" ]
+              token.children, [ "label", "reference" ]
             );
           if (fullAndCollapsedCandidate) {
             labelText =
               micromark.getTokenTextByType(
-                fullAndCollapsedCandidate[0].tokens, "labelText"
+                fullAndCollapsedCandidate[0].children, "labelText"
               );
             referenceStringText =
               micromark.getTokenTextByType(
-                fullAndCollapsedCandidate[1].tokens, "referenceString"
+                fullAndCollapsedCandidate[1].children, "referenceString"
               );
             isFullOrCollapsed = (labelText !== null);
           }
           const footnote = micromark.matchAndGetTokensByType(
-            token.tokens,
+            token.children,
             [
               "gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker",
               "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"
