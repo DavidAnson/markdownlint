@@ -49,7 +49,7 @@
     "docker-npm-install": "docker run --rm --tty --name npm-install --volume $PWD:/home/workdir --workdir /home/workdir --user node node:16 npm install",
     "docker-npm-run-upgrade": "docker run --rm --tty --name npm-run-upgrade --volume $PWD:/home/workdir --workdir /home/workdir --user node node:16 npm run upgrade",
     "lint": "eslint --ext .js,.cjs,.mjs --max-warnings 0 .",
-    "lint-test-repos": "ava --timeout=5m test/markdownlint-test-repos.js",
+    "lint-test-repos": "ava --timeout=10m test/markdownlint-test-repos.js",
     "serial-config-docs": "npm run build-config && npm run build-docs",
     "serial-declaration-demo": "npm run build-declaration && npm-run-all --continue-on-error --parallel build-demo test-declaration",
     "test": "ava test/markdownlint-test.js test/markdownlint-test-config.js test/markdownlint-test-custom-rules.js test/markdownlint-test-helpers.js test/markdownlint-test-micromark.mjs test/markdownlint-test-result-object.js test/markdownlint-test-scenarios.js",
@@ -63,7 +63,8 @@
     "node": ">=14.18.0"
   },
   "dependencies": {
-    "markdown-it": "13.0.1"
+    "markdown-it": "13.0.1",
+    "markdownlint-micromark": "0.1.2"
   },
   "devDependencies": {
     "ava": "5.2.0",
@@ -83,7 +84,6 @@
     "markdown-it-sub": "1.0.0",
     "markdown-it-sup": "1.0.0",
     "markdown-it-texmath": "1.0.0",
-    "markdownlint-micromark": "0.1.2",
     "markdownlint-rule-helpers": "0.18.0",
     "npm-run-all": "4.1.5",
     "strip-json-comments": "5.0.0",
