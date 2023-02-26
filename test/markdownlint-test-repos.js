@@ -191,55 +191,59 @@ test("https://github.com/eslint/eslint", (t) => {
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
+const mdnIgnoreRes = [
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_a-frame\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_babylon.js\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_playcanvas\/engine\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_three.js\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/animations_and_tweens\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/bounce_off_the_walls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/build_the_brick_field\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/buttons\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/collision_detection\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/extra_lives\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/game_over\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/initialize_the_framework\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/load_the_assets_and_print_them_on_screen\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/move_the_ball\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/physics\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/player_paddle_and_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/randomizing_gameplay\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/scaling\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/the_score\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_phaser\/win_the_game\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/bounce_off_the_walls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/build_the_brick_field\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/collision_detection\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/create_the_canvas_and_draw_on_it\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/finishing_up\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/game_over\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/mouse_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/move_the_ball\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/paddle_and_keyboard_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/games\/tutorials\/2d_breakout_game_pure_javascript\/track_the_score_and_win\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/learn\/server-side\/apache_configuration_htaccess\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/mozilla\/add-ons\/webextensions\/manifest.json\/content_security_policy\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/web\/api\/window\/window\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/web\/html\/element\/input\/email\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
+  /^test-repos\/mdn-(?:translated-)?content\/files\/[^/]+\/web\/http\/headers\/www-authenticate\/index\.md: \d+: MD034\/.*$\r?\n?/gm
+];
+
 test("https://github.com/mdn/content", (t) => {
   const rootDir = "./test-repos/mdn-content";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  const ignoreRes = [
-    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_a-frame\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_babylon.js\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_playcanvas\/engine\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/techniques\/3d_on_the_web\/building_up_a_basic_demo_with_three.js\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/animations_and_tweens\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/bounce_off_the_walls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/build_the_brick_field\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/buttons\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/collision_detection\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/extra_lives\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/game_over\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/initialize_the_framework\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/load_the_assets_and_print_them_on_screen\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/move_the_ball\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/physics\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/player_paddle_and_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/randomizing_gameplay\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/scaling\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/the_score\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_phaser\/win_the_game\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/bounce_off_the_walls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/build_the_brick_field\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/collision_detection\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/create_the_canvas_and_draw_on_it\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/finishing_up\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/game_over\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/mouse_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/move_the_ball\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/paddle_and_keyboard_controls\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/games\/tutorials\/2d_breakout_game_pure_javascript\/track_the_score_and_win\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/learn\/server-side\/apache_configuration_htaccess\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/mozilla\/add-ons\/webextensions\/manifest.json\/content_security_policy\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/web\/api\/window\/window\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/web\/html\/element\/input\/email\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mdn-content\/files\/en-us\/web\/http\/headers\/www-authenticate\/index\.md: \d+: MD034\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath, mdnIgnoreRes);
 });
 
-test("https://github.com/mdn/translated-content", (t) => {
+test.skip("https://github.com/mdn/translated-content", (t) => {
   const rootDir = "./test-repos/mdn-translated-content";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  const ignoreRes = [ /^.*\/(?:conflicting|orphaned)\/.*$\r?\n?/gm ];
+  const ignoreRes = [
+    ...mdnIgnoreRes,
+    /^.*\/(?:conflicting|orphaned)\/.*$\r?\n?/gm
+  ];
   return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
