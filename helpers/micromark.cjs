@@ -31,7 +31,7 @@ const {
 function getMicromarkEvents(markdown, options = {}) {
 
   // Customize options object to add useful extensions
-  options.extensions ||= [];
+  options.extensions = options.extensions || [];
   options.extensions.push(gfmAutolinkLiteral, gfmFootnote(), gfmTable);
 
   // Use micromark to parse document into Events
@@ -182,7 +182,7 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
   if (tokens.length !== matchTypes.length) {
     return null;
   }
-  resultTypes ||= matchTypes;
+  resultTypes = resultTypes || matchTypes;
   const result = [];
   // eslint-disable-next-line unicorn/no-for-loop
   for (let i = 0; i < matchTypes.length; i++) {

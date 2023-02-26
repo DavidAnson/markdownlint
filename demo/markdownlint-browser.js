@@ -1468,7 +1468,7 @@ var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-m
 function getMicromarkEvents(markdown) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
   // Customize options object to add useful extensions
-  options.extensions || (options.extensions = []);
+  options.extensions = options.extensions || [];
   options.extensions.push(gfmAutolinkLiteral, gfmFootnote(), gfmTable);
 
   // Use micromark to parse document into Events
@@ -1638,7 +1638,7 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
   if (tokens.length !== matchTypes.length) {
     return null;
   }
-  resultTypes || (resultTypes = matchTypes);
+  resultTypes = resultTypes || matchTypes;
   var result = [];
   // eslint-disable-next-line unicorn/no-for-loop
   for (var i = 0; i < matchTypes.length; i++) {
