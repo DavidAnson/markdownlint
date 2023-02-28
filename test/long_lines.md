@@ -59,3 +59,16 @@ _**[This long line is comprised of an emphasized and bolded link {MD049}](https:
 **![Reference style for long line image which is itself an example of a long line with content][image]**
 
 [image]: https://example.com "Title text for long line image example using reference style for image details"
+
+<!--
+Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013}
+-->
+
+<!--
+Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013}
+Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013}
+-->
+
+<!-- Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013} -->
+
+Long lines inside HTML comments should also <!-- produce a violation of the line-length rule. {MD013} -->
