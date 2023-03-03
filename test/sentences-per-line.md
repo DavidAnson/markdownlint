@@ -1,6 +1,22 @@
 
 # Testing one sentence per line
 
+# MD054/sentences-per-line
+
+This should? Produce a violation.
+
+So should! This example.
+
+Abbreviations (e.g. like) these (i.e. should) not.
+
+"Sentences in." Quotes should, too.
+
+Pausing... for... thought... should not?
+
+This rule does weird things if a sentence is
+already wrapped. It should maybe unwrap in
+cases like this?
+
 ## Sugar cases
 
 ### Lower case
