@@ -105,7 +105,6 @@ unreferenced
 url
 v12
 V8
-vscode-docs-authoring
 vscode-markdownlint
 W3C
 webhint

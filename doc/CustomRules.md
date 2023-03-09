@@ -120,8 +120,6 @@ exception.
 - [Code for all `markdownlint` built-in rules][lib]
 - [Package configuration for publishing to npm][test-rules-npm]
   - Packages should export a single rule object or an `Array` of rule objects
-- [Custom rules from the Microsoft/vscode-docs-authoring
-  repository][vscode-docs-authoring]
 - [Custom rules from the axibase/docs-util repository][docs-util]
 - [Custom rules from the webhintio/hint repository][hint]
 
@@ -374,4 +372,3 @@ Yields the `params` object:
 [options-custom-rules]: ../README.md#optionscustomrules
 [test-rules]: ../test/rules
 [test-rules-npm]: ../test/rules/npm
-[vscode-docs-authoring]: https://github.com/microsoft/vscode-docs-authoring/tree/main/packages/docs-linting/markdownlint-custom-rules
