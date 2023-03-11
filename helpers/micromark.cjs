@@ -116,8 +116,11 @@ function filterByPredicate(tokens, allowed, transform) {
     if (allowed(token)) {
       result.push(token);
     }
-    const transformed = transform ? transform(token.children) : token.children;
-    pending.unshift(...transformed);
+    if (token.children.length > 0) {
+      const transformed =
+        transform ? transform(token.children) : token.children;
+      pending.unshift(...transformed);
+    }
   }
   return result;
 }

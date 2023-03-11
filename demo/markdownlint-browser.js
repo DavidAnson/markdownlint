@@ -1571,8 +1571,10 @@ function filterByPredicate(tokens, allowed, transform) {
     if (allowed(token)) {
       result.push(token);
     }
-    var transformed = transform ? transform(token.children) : token.children;
-    pending.unshift.apply(pending, _toConsumableArray(transformed));
+    if (token.children.length > 0) {
+      var transformed = transform ? transform(token.children) : token.children;
+      pending.unshift.apply(pending, _toConsumableArray(transformed));
+    }
   }
   return result;
 }
