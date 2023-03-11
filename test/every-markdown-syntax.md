@@ -44,4 +44,8 @@ Fenced code block
 HTML block
 </p>
 
+| Table | Heading |
+| ----- | ------- |
+| Table | Cell    |
+
 <!-- markdownlint-disable-file -->
