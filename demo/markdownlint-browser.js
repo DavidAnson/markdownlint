@@ -2414,6 +2414,8 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * Lints a string containing Markdown content.
  *
  * @param {Rule[]} ruleList List of rules.
+ * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
+ * names.
  * @param {string} name Identifier for the content.
  * @param {string} content Markdown content.
  * @param {Object} md Instance of markdown-it.
@@ -2426,7 +2428,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintContent(ruleList, name, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback) {
+function lintContent(ruleList, aliasToRuleNames, name, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback) {
   // Remove UTF-8 byte order marker (if present)
   content = content.replace(/^\uFEFF/, "");
   // Remove front matter
@@ -2434,7 +2436,7 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
   var frontMatterLines = removeFrontMatterResult.frontMatterLines;
   content = removeFrontMatterResult.content;
   // Get enabled rules per line (with HTML comments present)
-  var _getEnabledRulesPerLi = getEnabledRulesPerLineNumber(ruleList, content.split(helpers.newLineRe), frontMatterLines, noInlineConfig, config, configParsers, mapAliasToRuleNames(ruleList)),
+  var _getEnabledRulesPerLi = getEnabledRulesPerLineNumber(ruleList, content.split(helpers.newLineRe), frontMatterLines, noInlineConfig, config, configParsers, aliasToRuleNames),
     effectiveConfig = _getEnabledRulesPerLi.effectiveConfig,
     enabledRulesPerLineNumber = _getEnabledRulesPerLi.enabledRulesPerLineNumber;
   // Parse content into parser tokens
@@ -2676,6 +2678,8 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
  * Lints a file containing Markdown content.
  *
  * @param {Rule[]} ruleList List of rules.
+ * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
+ * names.
  * @param {string} file Path of file to lint.
  * @param {Object} md Instance of markdown-it.
  * @param {Configuration} config Configuration object.
@@ -2689,13 +2693,13 @@ function lintContent(ruleList, name, content, md, config, configParsers, frontMa
  * @param {Function} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintFile(ruleList, file, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
+function lintFile(ruleList, aliasToRuleNames, file, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
   // eslint-disable-next-line jsdoc/require-jsdoc
   function lintContentWrapper(err, content) {
     if (err) {
       return callback(err);
     }
-    return lintContent(ruleList, file, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback);
+    return lintContent(ruleList, aliasToRuleNames, file, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback);
   }
   // Make a/synchronous call to read file
   if (synchronous) {
@@ -2758,6 +2762,7 @@ function lintInput(options, synchronous, callback) {
     _iterator24.f();
   }
   var fs = options.fs || __webpack_require__(/*! node:fs */ "?d0ee");
+  var aliasToRuleNames = mapAliasToRuleNames(ruleList);
   var results = newResults(ruleList);
   var done = false;
   var concurrency = 0;
@@ -2783,11 +2788,11 @@ function lintInput(options, synchronous, callback) {
       // Lint next file
       concurrency++;
       currentItem = files.shift();
-      lintFile(ruleList, currentItem, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
+      lintFile(ruleList, aliasToRuleNames, currentItem, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
     } else if (currentItem = stringsKeys.shift()) {
       // Lint next string
       concurrency++;
-      lintContent(ruleList, currentItem, strings[currentItem] || "", md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
+      lintContent(ruleList, aliasToRuleNames, currentItem, strings[currentItem] || "", md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
     } else if (concurrency === 0) {
       // Finish
       done = true;
