@@ -105,10 +105,10 @@ function micromarkParse(markdown, options = {}) {
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {Function} allowed Allowed token predicate.
- * @param {Function} [transform] Transform token list predicate.
+ * @param {Function} [transformChildren] Transform children predicate.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByPredicate(tokens, allowed, transform) {
+function filterByPredicate(tokens, allowed, transformChildren) {
   const result = [];
   const pending = [ ...tokens ];
   let token = null;
@@ -118,7 +118,7 @@ function filterByPredicate(tokens, allowed, transform) {
     }
     if (token.children.length > 0) {
       const transformed =
-        transform ? transform(token.children) : token.children;
+        transformChildren ? transformChildren(token) : token.children;
       pending.unshift(...transformed);
     }
   }

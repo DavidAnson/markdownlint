@@ -1233,95 +1233,6 @@ function expandTildePath(file, os) {
 }
 module.exports.expandTildePath = expandTildePath;
 
-/**
- * RegExp.exec-style implementation of function expressions.
- *
- * @param {Function} funcExp Function that takes string and returns
- * [index, length] or null.
- * @param {string} input String to search.
- * @returns {string[] | null} RegExp.exec-style [match] with an index property.
- */
-function funcExpExec(funcExp, input) {
-  // Start or resume match
-  // @ts-ignore
-  var lastIndex = funcExp.lastIndex || 0;
-  var result = funcExp(input.slice(lastIndex));
-  if (result) {
-    // Update lastIndex and return match
-    var _result = _slicedToArray(result, 2),
-      subIndex = _result[0],
-      length = _result[1];
-    var index = lastIndex + subIndex;
-    // @ts-ignore
-    funcExp.lastIndex = index + length;
-    var match = [input.slice(index, index + length)];
-    // @ts-ignore
-    match.index = index;
-    return match;
-  }
-  // Reset lastIndex and return no match
-  // @ts-ignore
-  funcExp.lastIndex = 0;
-  return null;
-}
-module.exports.funcExpExec = funcExpExec;
-var urlFeProtocolRe = /(?:http|ftp)s?:\/\//i;
-var urlFeAutolinkTerminalsRe = / |$/;
-var urlFeBareTerminalsRe = /[ ,!`'"\]]|$/;
-var urlFeNonTerminalsRe = "-#/";
-var urlFePunctuationRe = /(?:[!-#%-\*,-\/:;\?@\[-\]_\{\}\xA1\xA7\xAB\xB6\xB7\xBB\xBF\u037E\u0387\u055A-\u055F\u0589\u058A\u05BE\u05C0\u05C3\u05C6\u05F3\u05F4\u0609\u060A\u060C\u060D\u061B\u061D-\u061F\u066A-\u066D\u06D4\u0700-\u070D\u07F7-\u07F9\u0830-\u083E\u085E\u0964\u0965\u0970\u09FD\u0A76\u0AF0\u0C77\u0C84\u0DF4\u0E4F\u0E5A\u0E5B\u0F04-\u0F12\u0F14\u0F3A-\u0F3D\u0F85\u0FD0-\u0FD4\u0FD9\u0FDA\u104A-\u104F\u10FB\u1360-\u1368\u1400\u166E\u169B\u169C\u16EB-\u16ED\u1735\u1736\u17D4-\u17D6\u17D8-\u17DA\u1800-\u180A\u1944\u1945\u1A1E\u1A1F\u1AA0-\u1AA6\u1AA8-\u1AAD\u1B5A-\u1B60\u1B7D\u1B7E\u1BFC-\u1BFF\u1C3B-\u1C3F\u1C7E\u1C7F\u1CC0-\u1CC7\u1CD3\u2010-\u2027\u2030-\u2043\u2045-\u2051\u2053-\u205E\u207D\u207E\u208D\u208E\u2308-\u230B\u2329\u232A\u2768-\u2775\u27C5\u27C6\u27E6-\u27EF\u2983-\u2998\u29D8-\u29DB\u29FC\u29FD\u2CF9-\u2CFC\u2CFE\u2CFF\u2D70\u2E00-\u2E2E\u2E30-\u2E4F\u2E52-\u2E5D\u3001-\u3003\u3008-\u3011\u3014-\u301F\u3030\u303D\u30A0\u30FB\uA4FE\uA4FF\uA60D-\uA60F\uA673\uA67E\uA6F2-\uA6F7\uA874-\uA877\uA8CE\uA8CF\uA8F8-\uA8FA\uA8FC\uA92E\uA92F\uA95F\uA9C1-\uA9CD\uA9DE\uA9DF\uAA5C-\uAA5F\uAADE\uAADF\uAAF0\uAAF1\uABEB\uFD3E\uFD3F\uFE10-\uFE19\uFE30-\uFE52\uFE54-\uFE61\uFE63\uFE68\uFE6A\uFE6B\uFF01-\uFF03\uFF05-\uFF0A\uFF0C-\uFF0F\uFF1A\uFF1B\uFF1F\uFF20\uFF3B-\uFF3D\uFF3F\uFF5B\uFF5D\uFF5F-\uFF65]|\uD800[\uDD00-\uDD02\uDF9F\uDFD0]|\uD801\uDD6F|\uD802[\uDC57\uDD1F\uDD3F\uDE50-\uDE58\uDE7F\uDEF0-\uDEF6\uDF39-\uDF3F\uDF99-\uDF9C]|\uD803[\uDEAD\uDF55-\uDF59\uDF86-\uDF89]|\uD804[\uDC47-\uDC4D\uDCBB\uDCBC\uDCBE-\uDCC1\uDD40-\uDD43\uDD74\uDD75\uDDC5-\uDDC8\uDDCD\uDDDB\uDDDD-\uDDDF\uDE38-\uDE3D\uDEA9]|\uD805[\uDC4B-\uDC4F\uDC5A\uDC5B\uDC5D\uDCC6\uDDC1-\uDDD7\uDE41-\uDE43\uDE60-\uDE6C\uDEB9\uDF3C-\uDF3E]|\uD806[\uDC3B\uDD44-\uDD46\uDDE2\uDE3F-\uDE46\uDE9A-\uDE9C\uDE9E-\uDEA2\uDF00-\uDF09]|\uD807[\uDC41-\uDC45\uDC70\uDC71\uDEF7\uDEF8\uDF43-\uDF4F\uDFFF]|\uD809[\uDC70-\uDC74]|\uD80B[\uDFF1\uDFF2]|\uD81A[\uDE6E\uDE6F\uDEF5\uDF37-\uDF3B\uDF44]|\uD81B[\uDE97-\uDE9A\uDFE2]|\uD82F\uDC9F|\uD836[\uDE87-\uDE8B]|\uD83A[\uDD5E\uDD5F])/;
-var urlFePrefixToPostfix = new Map([[" ", " "], ["`", "`"], ["'", "'"], ["\"", "\""], ["‘", "’"], ["“", "”"], ["«", "»"], ["*", "*"], ["_", "_"], ["(", ")"], ["[", "]"], ["{", "}"], ["<", ">"], [">", "<"]]);
-
-/**
- * Function expression that matches URLs.
- *
- * @param {string} input Substring to search for a URL.
- * @returns {Array | null} [index, length] of URL or null.
- */
-function urlFe(input) {
-  // Find start of URL by searching for protocol
-  var match = input.match(urlFeProtocolRe);
-  if (match) {
-    // Look for matching pre/postfix characters (ex: <...>)
-    var start = match.index || 0;
-    var length = match[0].length;
-    var prefix = input[start - 1] || " ";
-    var postfix = urlFePrefixToPostfix.get(prefix);
-    // @ts-ignore
-    var endPostfix = input.indexOf(postfix, start + length);
-    if (endPostfix === -1) {
-      endPostfix = input.length;
-    }
-    // Look for characters that terminate a URL
-    var terminalsRe = prefix === "<" ? urlFeAutolinkTerminalsRe : urlFeBareTerminalsRe;
-    var endTerminal = start + input.slice(start).search(terminalsRe);
-    // Determine tentative end of URL
-    var end = Math.min(endPostfix, endTerminal);
-    if (prefix === " ") {
-      // If the URL used " " as pre/postfix characters, trim the end
-      if (input[end - 1] === ")") {
-        // Trim any ")" beyond the last "(...)" pair
-        var lastOpenParen = input.lastIndexOf("(", end - 2);
-        if (lastOpenParen <= start) {
-          end--;
-        } else {
-          var nextCloseParen = input.indexOf(")", lastOpenParen + 1);
-          end = nextCloseParen + 1;
-        }
-      } else {
-        // Trim unwanted punctuation
-        while (!urlFeNonTerminalsRe.includes(input[end - 1]) && urlFePunctuationRe.test(input[end - 1])) {
-          end--;
-        }
-      }
-    }
-    return [start, end - start];
-  }
-  // No match
-  return null;
-}
-module.exports.urlFe = urlFe;
-
 /***/ }),
 
 /***/ "markdown-it":
@@ -1560,10 +1471,10 @@ function micromarkParse(markdown) {
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {Function} allowed Allowed token predicate.
- * @param {Function} [transform] Transform token list predicate.
+ * @param {Function} [transformChildren] Transform children predicate.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByPredicate(tokens, allowed, transform) {
+function filterByPredicate(tokens, allowed, transformChildren) {
   var result = [];
   var pending = _toConsumableArray(tokens);
   var token = null;
@@ -1572,7 +1483,7 @@ function filterByPredicate(tokens, allowed, transform) {
       result.push(token);
     }
     if (token.children.length > 0) {
-      var transformed = transform ? transform(token.children) : token.children;
+      var transformed = transformChildren ? transformChildren(token) : token.children;
       pending.unshift.apply(pending, _toConsumableArray(transformed));
     }
   }
@@ -5074,15 +4985,16 @@ module.exports = {
   "function": function MD034(params, onError) {
     var literalAutolinks = filterByPredicate(params.parsers.micromark.tokens, function (token) {
       return token.type === "literalAutolink";
-    }, function (tokens) {
+    }, function (token) {
+      var children = token.children;
       var result = [];
-      for (var i = 0; i < tokens.length; i++) {
-        var openToken = tokens[i];
+      for (var i = 0; i < children.length; i++) {
+        var openToken = children[i];
         var openTagInfo = getHtmlTagInfo(openToken);
         if (openTagInfo && !openTagInfo.close) {
           var count = 1;
-          for (var j = i + 1; j < tokens.length; j++) {
-            var closeToken = tokens[j];
+          for (var j = i + 1; j < children.length; j++) {
+            var closeToken = children[j];
             var closeTagInfo = getHtmlTagInfo(closeToken);
             if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
               if (closeTagInfo.close) {
@@ -5838,30 +5750,26 @@ module.exports = {
 
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf,
   escapeForRegExp = _require.escapeForRegExp,
-  forEachLine = _require.forEachLine,
-  forEachLink = _require.forEachLink,
-  funcExpExec = _require.funcExpExec,
-  linkReferenceDefinitionRe = _require.linkReferenceDefinitionRe,
-  urlFe = _require.urlFe,
   withinAnyRange = _require.withinAnyRange;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  codeBlockAndSpanRanges = _require2.codeBlockAndSpanRanges,
-  htmlElementRanges = _require2.htmlElementRanges,
-  lineMetadata = _require2.lineMetadata;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByPredicate = _require2.filterByPredicate,
+  filterByTypes = _require2.filterByTypes,
+  parse = _require2.parse;
+var ignoredChildTypes = new Set(["codeFencedFence", "definition", "reference", "resource"]);
 module.exports = {
   "names": ["MD044", "proper-names"],
   "description": "Proper names should have the correct capitalization",
@@ -5876,63 +5784,80 @@ module.exports = {
     var includeCodeBlocks = codeBlocks === undefined ? true : !!codeBlocks;
     var htmlElements = params.config.html_elements;
     var includeHtmlElements = htmlElements === undefined ? true : !!htmlElements;
-    var exclusions = [];
-    forEachLine(lineMetadata(), function (line, lineIndex) {
-      if (linkReferenceDefinitionRe.test(line)) {
-        exclusions.push([lineIndex, 0, line.length]);
-      } else {
-        var match = null;
-        while ((match = funcExpExec(urlFe, line)) !== null) {
-          // @ts-ignore
-          exclusions.push([lineIndex, match.index, match[0].length]);
-        }
-        forEachLink(line, function (index, _, text, destination) {
-          if (destination) {
-            exclusions.push([lineIndex, index + text.length, destination.length]);
-          }
-        });
+    var scannedTypes = new Set(["data", "htmlFlowData"]);
+    if (includeCodeBlocks) {
+      scannedTypes.add("codeFlowValue");
+      scannedTypes.add("codeTextData");
+    }
+    var contentTokens = filterByPredicate(params.parsers.micromark.tokens, function (token) {
+      return scannedTypes.has(token.type);
+    }, function (token) {
+      var children = token.children;
+      if (!includeHtmlElements && token.type === "htmlFlow") {
+        children = children.slice(1, -1);
       }
+      return children.filter(function (t) {
+        return !ignoredChildTypes.has(t.type);
+      });
     });
-    if (!includeCodeBlocks) {
-      exclusions.push.apply(exclusions, _toConsumableArray(codeBlockAndSpanRanges()));
-    }
-    if (!includeHtmlElements) {
-      exclusions.push.apply(exclusions, _toConsumableArray(htmlElementRanges()));
-    }
+    var exclusions = [];
+    var autoLinked = new Set();
     var _iterator = _createForOfIteratorHelper(names),
       _step;
     try {
-      var _loop = function _loop() {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var name = _step.value;
         var escapedName = escapeForRegExp(name);
         var startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
         var endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
         var namePattern = "(".concat(startNamePattern, ")(").concat(escapedName, ")").concat(endNamePattern);
         var nameRe = new RegExp(namePattern, "gi");
-        forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence) {
-          if (includeCodeBlocks || !inCode && !onFence) {
+        var _iterator2 = _createForOfIteratorHelper(contentTokens),
+          _step2;
+        try {
+          var _loop = function _loop() {
+            var token = _step2.value;
             var match = null;
-            while ((match = nameRe.exec(line)) !== null) {
+            var _loop2 = function _loop2() {
               var _match = match,
                 _match2 = _slicedToArray(_match, 3),
                 leftMatch = _match2[1],
                 nameMatch = _match2[2];
-              var index = match.index + leftMatch.length;
+              var index = token.startColumn - 1 + match.index + leftMatch.length;
               var length = nameMatch.length;
+              var lineIndex = token.startLine - 1;
               if (!withinAnyRange(exclusions, lineIndex, index, length) && !names.includes(nameMatch)) {
-                addErrorDetailIf(onError, lineIndex + 1, name, nameMatch, null, null, [index + 1, length], {
-                  "editColumn": index + 1,
-                  "deleteCount": length,
-                  "insertText": name
-                });
+                var urlRanges = [];
+                if (!autoLinked.has(token)) {
+                  urlRanges = filterByTypes(parse(token.text), ["literalAutolink"]).map(function (t) {
+                    return [lineIndex, token.startColumn - 1 + t.startColumn - 1, t.endColumn - t.startColumn];
+                  });
+                  exclusions.push.apply(exclusions, _toConsumableArray(urlRanges));
+                  autoLinked.add(token);
+                }
+                if (!withinAnyRange(urlRanges, lineIndex, index, length)) {
+                  var column = index + 1;
+                  addErrorDetailIf(onError, token.startLine, name, nameMatch, null, null, [column, length], {
+                    "editColumn": column,
+                    "deleteCount": length,
+                    "insertText": name
+                  });
+                }
               }
               exclusions.push([lineIndex, index, length]);
+            };
+            while ((match = nameRe.exec(token.text)) !== null) {
+              _loop2();
             }
+          };
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            _loop();
           }
-        });
-      };
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        _loop();
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
       }
     } catch (err) {
       _iterator.e(err);
