@@ -37,3 +37,11 @@
         * item 2.2.1 {MD007}
      * item 2.3 {MD007}
   * item 3 {MD007}
+
+<!-- markdownlint-configure-file {
+  "MD006": false,
+  "MD007": {
+    "indent": 3,
+    "start_indented": true
+  }
+} -->

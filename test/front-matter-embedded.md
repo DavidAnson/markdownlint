@@ -7,3 +7,7 @@ title: embedded
 ---
 
 Text text text
+
+<!-- markdownlint-configure-file {
+  "MD041": false
+} -->

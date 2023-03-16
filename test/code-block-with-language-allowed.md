@@ -48,3 +48,13 @@ if (true) {
 	}                         // {MD010}
 }
 ```
+
+<!-- markdownlint-configure-file {
+  "MD010": {
+    "ignore_code_languages": [
+      "js",
+      "text"
+    ]
+  },
+  "MD046": false
+} -->

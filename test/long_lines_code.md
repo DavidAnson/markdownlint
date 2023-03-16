@@ -45,3 +45,10 @@ Another line.
 | ============== | ============== | ============== | ============== | ============== | ============== |
 | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |
 {: rules="groups"}
+
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "code_blocks": false,
+    "tables": false
+  }
+} -->

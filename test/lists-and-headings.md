@@ -18,3 +18,7 @@ Heading 3
 
 * list
 * list
+
+<!-- markdownlint-configure-file {
+  "MD041": false
+} -->

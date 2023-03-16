@@ -61,3 +61,14 @@ body {
   }
 }
 ```
+
+<!-- markdownlint-configure-file {
+  "MD040": {
+    "allowed_languages": [
+      "js",
+      "scss",
+      "md",
+      "TS"
+    ]
+  }
+} -->

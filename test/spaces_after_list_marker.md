@@ -74,3 +74,13 @@ the first item determining that the entire list has children:
 1.  Bar
     * Hi
 1.  Baz
+
+<!-- markdownlint-configure-file {
+  "MD007": {
+    "indent": 4
+  },
+  "MD030": {
+    "ul_multi": 3,
+    "ol_multi": 2
+  }
+} -->

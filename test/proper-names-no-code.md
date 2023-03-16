@@ -41,3 +41,17 @@ text `javascript` text JavaScript text `javascript` text
 
 text javascript text `javascript` text {MD044}
 text `javascript` text javascript text {MD044}
+
+<!-- markdownlint-configure-file {
+  "MD044": {
+    "names": [
+      "Internet Explorer",
+      "markdownlint",
+      "JavaScript",
+      "Node.js",
+      "GitHub",
+      "npm"
+    ],
+    "code_blocks": false
+  }
+} -->

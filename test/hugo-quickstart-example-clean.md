@@ -5,3 +5,9 @@ title = "Good to Great Book Review"
 
 +++
 # Heading 1
+
+<!-- markdownlint-configure-file {
+  "MD025": {
+    "front_matter_title": ""
+  }
+} -->

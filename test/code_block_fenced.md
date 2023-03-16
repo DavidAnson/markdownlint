@@ -17,3 +17,9 @@ But we'll do another:
     will.
 
 Final text is here
+
+<!-- markdownlint-configure-file {
+  "MD046": {
+    "style": "fenced"
+  }
+} -->

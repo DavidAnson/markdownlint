@@ -13,3 +13,9 @@ Bad list:
 2) Do nothing. {MD029}
 3) ??? {MD029}
 4) Failed! {MD029}
+
+<!-- markdownlint-configure-file {
+  "MD029": {
+    "style": "one"
+  }
+} -->

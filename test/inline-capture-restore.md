@@ -116,3 +116,7 @@ space `in ` code
 hard	tab {MD010}
 space *in * emphasis {MD037}
 space `in ` code
+
+<!-- markdownlint-configure-file {
+  "no-hard-tabs": false
+} -->

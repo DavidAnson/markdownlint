@@ -57,3 +57,9 @@ Text
       fence
       ```
 1. Item
+
+<!-- markdownlint-configure-file {
+  "MD031": {
+    "list_items": false
+  }
+} -->

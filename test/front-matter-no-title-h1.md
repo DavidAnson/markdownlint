@@ -7,3 +7,7 @@ categories: jekyll update
 # Top level heading
 
 Front matter from [Jekyll documentation](https://jekyllrb.com/docs/posts/#a-typical-post).
+
+<!-- markdownlint-configure-file {
+  "MD013": false
+} -->

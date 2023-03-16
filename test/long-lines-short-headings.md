@@ -18,3 +18,10 @@ Long heading of text text text text text text {MD013}
 -----------------------------------------------------
 
 Text
+
+<!-- markdownlint-configure-file {
+  "MD003": false,
+  "MD013": {
+    "heading_line_length": 30
+  }
+} -->

@@ -6,3 +6,9 @@ set to 4 space indents for lists:
 * Test X
   * Test Y {MD007}
     * Test Z {MD007}
+
+<!-- markdownlint-configure-file {
+  "MD007": {
+    "indent": 4
+  }
+} -->

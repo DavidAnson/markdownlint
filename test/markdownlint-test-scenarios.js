@@ -16,26 +16,17 @@ const constants = require("../lib/constants");
  * @returns {Function} Test function.
  */
 function createTestForFile(file) {
-  return (t) => {
-    // Read configuration for test file
-    const contentPromise = fs.readFile(file, "utf8");
-    const configFile = file.replace(/\.md$/, ".json");
-    return fs.access(configFile)
-      .then(
-        () => fs.readFile(configFile, "utf8").then(JSON.parse),
-        () => {}
-      // Read and lint Markdown test file
-      ).then((config) => Promise.all([
-        config,
-        contentPromise,
-        markdownlint({
-          "files": [ file ],
-          config
-        })
-      ]))
+  return (t) => (
+    // Read and lint Markdown test file
+    Promise.all([
+      fs.readFile(file, "utf8"),
+      markdownlint({
+        "files": [ file ]
+      })
+    ])
       // Compare expected results and snapshot
       .then((params) => {
-        const [ config, content, results ] = params;
+        const [ content, results ] = params;
         // Canonicalize version number
         const errors = results[file]
           .filter((error) => !!error.ruleInformation);
@@ -54,7 +45,11 @@ function createTestForFile(file) {
             const rule = match[1];
             // eslint-disable-next-line no-multi-assign
             const indices = expected[rule] = expected[rule] || [];
-            indices.push(match[2] ? Number.parseInt(match[2], 10) : index + 1);
+            const lineNumber =
+              match[2] ? Number.parseInt(match[2], 10) : index + 1;
+            if (!indices.includes(lineNumber)) {
+              indices.push(lineNumber);
+            }
           }
         }
         const actual = {};
@@ -82,16 +77,15 @@ function createTestForFile(file) {
         return markdownlint({
           "strings": {
             "input": fixed
-          },
-          config
+          }
         }).then((fixedResults) => {
           const unfixed = fixedResults.input.filter((error) => !!error.fixInfo);
           t.deepEqual(unfixed, [], "Fixable error(s) not fixed.");
         });
       })
       .catch()
-      .then(t.done);
-  };
+      .then(t.done)
+  );
 }
 
 const files = require("node:fs")

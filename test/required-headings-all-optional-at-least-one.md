@@ -9,3 +9,11 @@
 ##### Five
 
 ###### SiX
+
+<!-- markdownlint-configure-file {
+  "MD043": {
+    "headings": [
+      "+"
+    ]
+  }
+} -->

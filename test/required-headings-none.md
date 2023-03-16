@@ -3,3 +3,9 @@
 ## Two
 
 ### Three
+
+<!-- markdownlint-configure-file {
+  "MD043": {
+    "headings": []
+  }
+} -->

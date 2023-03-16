@@ -33,3 +33,9 @@ if (true) {
 	}
 
 Line with	hard tab. {MD010}
+
+<!-- markdownlint-configure-file {
+  "MD010": {
+    "code_blocks": false
+  }
+} -->

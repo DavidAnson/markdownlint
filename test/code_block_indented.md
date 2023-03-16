@@ -21,3 +21,9 @@ One last one:
     This is code
     
     with an empty indented line.
+
+<!-- markdownlint-configure-file {
+  "MD046": {
+    "style": "indented"
+  }
+} -->

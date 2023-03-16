@@ -36,6 +36,7 @@ test("resultFormattingV0", (t) => new Promise((resolve) => {
       "MD002": true,
       "MD041": false
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -94,6 +95,7 @@ test("resultFormattingSyncV0", (t) => {
       "MD002": true,
       "MD041": false
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   const actualResult = markdownlint.sync(options);
@@ -153,6 +155,7 @@ test("resultFormattingV1", (t) => new Promise((resolve) => {
       "MD002": true,
       "MD041": false
     },
+    "noInlineConfig": true,
     "resultVersion": 1
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -256,6 +259,7 @@ test("resultFormattingV2", (t) => new Promise((resolve) => {
       "MD002": true,
       "MD041": false
     },
+    "noInlineConfig": true,
     "resultVersion": 2
   };
   markdownlint(options, function callback(err, actualResult) {

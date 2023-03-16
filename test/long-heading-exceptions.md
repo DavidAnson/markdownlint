@@ -19,3 +19,9 @@ Text text text text text text text text text text text text text text text text 
 Text
 
 Text text text text text text text text text text text text text text text text text text text text text text text text {MD013}
+
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "headings": false
+  }
+} -->

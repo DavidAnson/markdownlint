@@ -13,3 +13,9 @@ Bad list:
 1. Do nothing. {MD029}
 1. ??? {MD029}
 1. Failed! {MD029}
+
+<!-- markdownlint-configure-file {
+  "MD029": {
+    "style": "ordered"
+  }
+} -->

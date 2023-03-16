@@ -11,3 +11,9 @@
 ## Heading !
 
 ## Heading ?
+
+<!-- markdownlint-configure-file {
+  "MD026": {
+    "punctuation": ""
+  }
+} -->

@@ -86,3 +86,9 @@ text text
 {MD009:65}
 {MD009:67}
 {MD009:71}
+
+<!-- markdownlint-configure-file {
+  "MD009": {
+    "strict": true
+  }
+} -->

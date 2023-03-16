@@ -94,3 +94,10 @@ BB
 ## BBB ##
 
 {MD024:94}
+
+<!-- markdownlint-configure-file {
+  "MD003": false,
+  "MD024": {
+    "siblings_only": true
+  }
+} -->

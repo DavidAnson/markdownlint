@@ -4,3 +4,9 @@
 
 Heading 3 {MD003}
 -----------------
+
+<!-- markdownlint-configure-file {
+  "MD003": {
+    "style": "atx"
+  }
+} -->

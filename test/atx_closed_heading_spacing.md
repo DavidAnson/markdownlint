@@ -17,3 +17,8 @@
 ## Heading 9 {MD003} \#
 
 ## Heading 10 {MD003}  \#
+
+<!-- markdownlint-configure-file {
+  "MD002": false,
+  "MD041": false
+} -->

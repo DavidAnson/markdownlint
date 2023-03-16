@@ -42,3 +42,8 @@ Text [ link][reference] text. {MD039}
 Text [ link ][reference] text. {MD039}
 
 [reference]: https://example.com/
+
+<!-- markdownlint-configure-file {
+  "MD013": false,
+  "MD046": false
+} -->

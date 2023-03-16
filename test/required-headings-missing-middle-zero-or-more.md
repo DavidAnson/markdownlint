@@ -12,4 +12,18 @@
 
 #### 7
 
-{MD043:16}
+{MD043:30}
+
+<!-- markdownlint-configure-file {
+  "MD043": {
+    "headings": [
+      "# One",
+      "*",
+      "### Three",
+      "*",
+      "### FOO",
+      "*",
+      "#### 7"
+    ]
+  }
+} -->

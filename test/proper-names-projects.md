@@ -45,3 +45,18 @@ Underscored _Vue_ and _vue-router_ {MD049}
 Call it npm
 But not Npm {MD044}
 Or NPM {MD044}
+
+<!-- markdownlint-configure-file {
+  "proper-names": {
+    "names": [
+      "github.com/about",
+      "github.com",
+      "vue-router",
+      "GitHub",
+      "Vuex",
+      "npm",
+      "Vue"
+    ],
+    "code_blocks": false
+  }
+} -->

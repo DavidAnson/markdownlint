@@ -123,3 +123,13 @@ Text
 {MD033:120}
 
 Text <!-- <commented-out html="tag"> --> text.
+
+<!-- markdownlint-configure-file {
+  "MD010": false,
+  "MD033": {
+    "allowed_elements": [
+      "strong"
+    ]
+  },
+  "MD046": false
+} -->

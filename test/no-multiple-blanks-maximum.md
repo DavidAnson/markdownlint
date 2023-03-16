@@ -44,3 +44,9 @@ Text
 Text
 
 Text
+
+<!-- markdownlint-configure-file {
+  "MD012": {
+    "maximum": 3
+  }
+} -->

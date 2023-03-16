@@ -165,6 +165,7 @@ test("defaultTrue", (t) => new Promise((resolve) => {
     "config": {
       "default": true
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -195,6 +196,7 @@ test("defaultFalse", (t) => new Promise((resolve) => {
     "config": {
       "default": false
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -217,6 +219,7 @@ test("defaultUndefined", (t) => new Promise((resolve) => {
       "./test/first_heading_bad_atx.md"
     ],
     "config": {},
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -278,6 +281,7 @@ test("enableRules", (t) => new Promise((resolve) => {
       "default": false,
       "no-multiple-space-atx": true
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -309,6 +313,7 @@ test("enableRulesMixedCase", (t) => new Promise((resolve) => {
       "DeFaUlT": false,
       "nO-mUlTiPlE-sPaCe-AtX": true
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -339,6 +344,7 @@ test("disableTag", (t) => new Promise((resolve) => {
       "default": true,
       "spaces": false
     },
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -434,6 +440,7 @@ test("styleAll", (t) => new Promise((resolve) => {
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/all.json"),
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -477,7 +484,7 @@ test("styleAll", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 103 ],
+        "MD047": [ 120 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
@@ -497,6 +504,7 @@ test("styleRelaxed", (t) => new Promise((resolve) => {
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/relaxed.json"),
+    "noInlineConfig": true,
     "resultVersion": 0
   };
   markdownlint(options, function callback(err, actualResult) {
@@ -525,7 +533,7 @@ test("styleRelaxed", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 103 ],
+        "MD047": [ 120 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
@@ -914,33 +922,6 @@ test("readme", (t) => new Promise((resolve) => {
       resolve();
     });
 }));
-
-test("validateJsonUsingConfigSchemaStrict", (t) => {
-  const jsonFileRe = /\.json$/i;
-  const resultsFileRe = /\.results\.json$/i;
-  const jsConfigFileRe = /^jsconfig\.json$/i;
-  const wrongTypesFileRe = /wrong-types-in-config-file.json$/i;
-  const testDirectory = __dirname;
-  const testFiles = fs
-    .readdirSync(testDirectory)
-    .filter(function filterFile(file) {
-      return jsonFileRe.test(file) &&
-        !resultsFileRe.test(file) &&
-        !jsConfigFileRe.test(file) &&
-        !wrongTypesFileRe.test(file);
-    });
-  for (const file of testFiles) {
-    const data = fs.readFileSync(
-      path.join(testDirectory, file),
-      // eslint-disable-next-line unicorn/prefer-json-parse-buffer
-      "utf8"
-    );
-    t.true(
-      // @ts-ignore
-      tv4.validate(JSON.parse(data), configSchemaStrict),
-      file + "\n" + JSON.stringify(tv4.error, null, 2));
-  }
-});
 
 test("validateConfigSchemaAllowsUnknownProperties", (t) => {
   t.plan(4);

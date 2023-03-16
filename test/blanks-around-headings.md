@@ -20,3 +20,7 @@ Elderberry {MD022}
 Text
 
 ## Fig
+
+<!-- markdownlint-configure-file {
+  "MD003": false
+} -->

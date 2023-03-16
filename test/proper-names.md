@@ -97,3 +97,20 @@ javascript {MD044}
 </script>
 
 <a error="{MD044}" id="javascript"/>
+
+<!-- markdownlint-configure-file {
+  "MD033": false,
+  "MD044": {
+    "names": [
+      "Internet Explorer",
+      "markdownlint",
+      "multiplecase",
+      "mULTIPLEcASE",
+      "MultipleCase",
+      "JavaScript",
+      "Node.js",
+      "GitHub",
+      "npm"
+    ]
+  }
+} -->

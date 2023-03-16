@@ -7,3 +7,9 @@ This is a very very very very very very very very very very long line over 80 ch
 This is a very very very very very very very very very long line that is exactly 100 characters long
 
 This line however, while very long, doesn't have whitespace after the 100th columnwhichallowsforURLsandotherlongthings.
+
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "line_length": 100
+  }
+} -->

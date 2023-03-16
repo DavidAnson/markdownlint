@@ -23,3 +23,13 @@ Fence code block information without whitespaces and extra data:
 ```css
 a {}
 ```
+
+<!-- markdownlint-configure-file {
+  "MD040": {
+    "allowed_languages": [
+      "html",
+      "css"
+    ],
+    "language_only": true
+  }
+} -->

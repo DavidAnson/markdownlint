@@ -17,3 +17,9 @@ text
 1. Item {MD029}
 2. Item {MD029}
 3. Item {MD029}
+
+<!-- markdownlint-configure-file {
+  "MD029": {
+    "style": "zero"
+  }
+} -->

@@ -33,3 +33,9 @@
     ```javascript
     debugger; debugger; debugger; debugger; debugger; debugger; debugger; debugger; debugger; debugger;
     ```
+
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "code_blocks": false
+  }
+} -->

@@ -29,3 +29,11 @@ This code is short.
 {MD013:9}
 {MD013:15}
 {MD013:22}
+
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "strict": true,
+    "heading_line_length": 30,
+    "code_block_line_length": 20
+  }
+} -->

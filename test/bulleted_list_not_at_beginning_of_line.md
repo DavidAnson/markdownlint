@@ -57,3 +57,7 @@ Text
   * Item {MD006} {MD007}
 
   * Item {MD006} {MD007}
+
+<!-- markdownlint-configure-file {
+  "MD006": true
+} -->

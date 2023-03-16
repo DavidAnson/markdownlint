@@ -5,3 +5,12 @@ title: "First level heading"
 ---
 
 ## Second level heading
+
+<!-- markdownlint-configure-file {
+  "MD002": {
+    "level": 2
+  },
+  "MD041": {
+    "level": 2
+  }
+} -->

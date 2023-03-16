@@ -1,6 +1,6 @@
-## Heading 1 {MD002} {MD041}
+## Heading 1 {MD002:1} {MD041:1}
 
-#### Heading 2 {MD001}
+#### Heading 2 {MD001:3}
 
 # Heading 3 {MD003} {MD043} #
 
@@ -99,5 +99,22 @@ Strong **with** different style {MD050}
 
 [unused]: link-destination
 {MD053:100}
+
+<!-- markdownlint-configure-file {
+  "MD002": true,
+  "MD006": true,
+  "MD043": {
+    "headings": [
+      "## Heading 1 {MD002:1} {MD041:1}",
+      "#### Heading 2 {MD001:3}",
+      "# Broken"
+    ]
+  },
+  "MD044": {
+    "names": [
+      "markdownlint"
+    ]
+  }
+} -->
 
 EOF {MD047}

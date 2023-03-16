@@ -37,6 +37,11 @@ code
 
 text
 
+<!-- markdownlint-configure-file {
+  "MD040": false,
+  "MD041": false
+} -->
+
 ```
-code at end of file without newline {MD047:42}
+code at end of file without newline {MD047:47}
 ```

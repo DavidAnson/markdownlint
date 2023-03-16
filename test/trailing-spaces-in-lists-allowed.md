@@ -50,3 +50,9 @@
      
 {MD009:37}
 {MD009:50}
+
+<!-- markdownlint-configure-file {
+  "MD009": {
+    "list_item_empty_lines": true
+  }
+} -->

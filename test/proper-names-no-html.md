@@ -19,3 +19,13 @@ javascript {MD044}
 <javascript/>
 
 <code>javascript</code> {MD044}
+
+<!-- markdownlint-configure-file {
+  "MD033": false,
+  "MD044": {
+    "names": [
+      "JavaScript"
+    ],
+    "html_elements": false
+  }
+} -->

@@ -49,3 +49,20 @@ Text [https://example.com/directory/text.file](https://example.com/directory/tex
 
 Text [https://example.com/directory/text%20text.file](https://example.com/directory/text%20text.file) text
 Text [https://example.com/directory/text%20text.file](https://example.com/directory/text%20text.file) text
+
+{MD044:55}
+
+<!-- markdownlint-configure-file {
+  "proper-names": {
+    "names": [
+      "DIRECTORY",
+      "EXAMPLE",
+      "HTTPS",
+      "FILE",
+      "COM"
+    ]
+  },
+  "line-length": false,
+  "no-bare-urls": false,
+  "code-block-style": false
+} -->

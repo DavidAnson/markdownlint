@@ -7,3 +7,10 @@ categories: jekyll update
 ## Secondary heading
 
 Front matter from [Jekyll documentation](https://jekyllrb.com/docs/posts/#a-typical-post).
+
+<!-- markdownlint-configure-file {
+  "MD002": {
+    "level": 2
+  },
+  "MD013": false
+} -->

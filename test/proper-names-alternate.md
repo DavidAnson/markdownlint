@@ -31,3 +31,13 @@ node.JS {MD044}
 .net {MD044}
 
 example.net {MD044}
+
+<!-- markdownlint-configure-file {
+  "MD044": {
+    "names": [
+      "markdownlint",
+      "Node.js",
+      ".NET"
+    ]
+  }
+} -->

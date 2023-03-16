@@ -54,3 +54,11 @@ ThisTooLongCodeIsOkay.
 {MD013:35}
 {MD013:38}
 {MD013:42}
+
+<!-- markdownlint-configure-file {
+  "MD013": {
+    "stern": true,
+    "heading_line_length": 30,
+    "code_block_line_length": 20
+  }
+} -->

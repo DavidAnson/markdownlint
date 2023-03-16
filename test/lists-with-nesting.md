@@ -97,3 +97,7 @@
  * 1. Item {MD004} {MD006} {MD007}
  * 2. Item {MD004} {MD006} {MD007}
  * 3. Item {MD004} {MD006} {MD007}
+
+<!-- markdownlint-configure-file {
+  "MD006": true
+} -->
