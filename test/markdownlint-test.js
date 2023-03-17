@@ -75,33 +75,31 @@ test("simplePromise", (t) => {
   });
 });
 
-test("projectFiles", (t) => new Promise((resolve) => {
+test("projectFiles", (t) => {
   t.plan(2);
-  import("globby")
-    .then((module) => module.globby("doc/*.md"))
-    .then((files) => [
-      ...files,
-      "CHANGELOG.md",
-      "CONTRIBUTING.md",
-      "README.md",
-      "helpers/README.md"
-    ])
+  return import("globby")
+    .then((module) => module.globby([
+      "*.md",
+      "doc/*.md",
+      "helpers/*.md",
+      "micromark/*.md",
+      "schema/*.md"
+    ]))
     .then((files) => {
+      t.is(files.length, 58);
       const options = {
         files,
         "config": require("../.markdownlint.json")
       };
-      markdownlint(options, function callback(err, actual) {
-        t.falsy(err);
+      return markdownlint.promises.markdownlint(options).then((actual) => {
         const expected = {};
         for (const file of files) {
           expected[file] = [];
         }
         t.deepEqual(actual, expected, "Issue(s) with project files.");
-        resolve();
       });
     });
-}));
+});
 
 test("stringInputLineEndings", (t) => new Promise((resolve) => {
   t.plan(2);
@@ -922,6 +920,41 @@ test("readme", (t) => new Promise((resolve) => {
       resolve();
     });
 }));
+
+test("validateJsonUsingConfigSchemaStrict", (t) => {
+  t.plan(156);
+  const configRe =
+    /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
+  const ignoreFiles = new Set([
+    "README.md",
+    "test/inline-configure-file-invalid.md",
+    "test/inline-configure-file-violations.md",
+    "test/invalid-ul-style-style.md",
+    "test/wrong-types-in-config-file.md"
+  ]);
+  return import("globby")
+    .then((module) => module.globby([
+      "*.md",
+      "doc/*.md",
+      "helpers/*.md",
+      "micromark/*.md",
+      "schema/*.md",
+      "test/*.md"
+    ]))
+    .then((files) => {
+      const testFiles = files.filter((file) => !ignoreFiles.has(file));
+      for (const file of testFiles) {
+        const data = fs.readFileSync(file, "utf8");
+        if (configRe.test(data)) {
+          const config = data.replace(configRe, "$1");
+          t.true(
+            // @ts-ignore
+            tv4.validate(JSON.parse(config), configSchemaStrict),
+            file + "\n" + JSON.stringify(tv4.error, null, 2));
+        }
+      }
+    });
+});
 
 test("validateConfigSchemaAllowsUnknownProperties", (t) => {
   t.plan(4);
