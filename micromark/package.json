@@ -23,7 +23,7 @@
     "micromark-extension-gfm-autolink-literal": "1.0.3",
     "micromark-extension-gfm-footnote": "1.0.4",
     "micromark-extension-gfm-table": "1.0.5",
-    "webpack": "5.75.0",
+    "webpack": "5.76.2",
     "webpack-cli": "5.0.1"
   }
 }
