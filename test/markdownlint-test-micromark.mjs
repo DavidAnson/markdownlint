@@ -6,38 +6,42 @@ import { newLineRe } from "../helpers/helpers.js";
 import { filterByPredicate, filterByTypes, getMicromarkEvents, parse }
   from "../helpers/micromark.cjs";
 
+const testContent = new Promise((resolve, reject) => {
+  fs
+    .readFile("./test/every-markdown-syntax.md", "utf8")
+    .then((content) => content.split(newLineRe).join("\n"))
+    .then(resolve, reject);
+});
+
+const testTokens = new Promise((resolve, reject) => {
+  testContent.then(parse).then(resolve, reject);
+});
+
 test("parse", async(t) => {
   t.plan(1);
-  const content = await fs.readFile("./test/every-markdown-syntax.md", "utf8");
-  const normalizedContent = content.split(newLineRe).join("\n");
-  const document = parse(normalizedContent);
-  t.snapshot(document, "Unexpected tokens");
+  t.snapshot(await testTokens, "Unexpected tokens");
 });
 
 test("getMicromarkEvents/filterByPredicate", async(t) => {
   t.plan(1);
-  const content = await fs.readFile("./test/every-markdown-syntax.md", "utf8");
-  const normalizedContent = content.split(newLineRe).join("\n");
-  const events = getMicromarkEvents(normalizedContent);
+  const content = await testContent;
+  const events = getMicromarkEvents(content);
   const eventTypes = events
     .filter((event) => event[0] === "enter")
     .map((event) => event[1].type);
-  const document = parse(normalizedContent);
-  const tokens = filterByPredicate(document, () => true);
-  const tokenTypes = tokens.map((token) => token.type);
+  const tokens = parse(content);
+  const filtered = filterByPredicate(tokens, () => true);
+  const tokenTypes = filtered.map((token) => token.type);
   t.deepEqual(tokenTypes, eventTypes);
 });
 
 test("filterByTypes", async(t) => {
   t.plan(6);
-  const content = await fs.readFile("./test/every-markdown-syntax.md", "utf8");
-  const normalizedContent = content.split(newLineRe).join("\n");
-  const document = parse(normalizedContent);
-  const tokens = filterByTypes(
-    document,
+  const filtered = filterByTypes(
+    await testTokens,
     [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ]
   );
-  for (const token of tokens) {
+  for (const token of filtered) {
     t.true(token.type.endsWith("Text"));
   }
 });
