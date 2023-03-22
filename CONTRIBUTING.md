@@ -13,9 +13,9 @@ time and effort writing code that may not get used.
 Match the coding style of the files you edit. Although everyone has their own
 preferences and opinions, a pull request is not the right forum to debate them.
 
-Do not add new [`dependencies` to `package.json`][dependencies]. The excellent
-Markdown parser [markdown-it][markdown-it] is this project's one and only
-dependency.
+Do not add new [`dependencies` to `package.json`][dependencies]. The Markdown
+parsers [`markdown-it`][markdown-it] and [`micromark`][micromark] are the
+project's only dependencies.
 
 If developing a new rule, start by creating a [custom rule][custom-rules] in its
 own project. Once written, published, and tested in real world scenarios, open
@@ -80,6 +80,7 @@ Thank you!
 [dependencies]: https://docs.npmjs.com/files/package.json#dependencies
 [example-com]: https://en.wikipedia.org/wiki/Example.com
 [markdown-it]: https://www.npmjs.com/package/markdown-it
+[micromark]: https://www.npmjs.com/package/micromark
 [new-rule]: https://github.com/DavidAnson/markdownlint/labels/new%20rule
 [npm-scripts]: https://docs.npmjs.com/misc/scripts
 [rewriting-history]: https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History
