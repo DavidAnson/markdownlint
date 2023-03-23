@@ -331,6 +331,7 @@ test("https://github.com/webhintio/hint", (t) => {
     /test-repos\/webhintio-hint\/packages\/hint-meta-viewport\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
     /test-repos\/webhintio-hint\/packages\/hint-minified-js\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
     /test-repos\/webhintio-hint\/packages\/hint-no-p3p\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
+    /test-repos\/webhintio-hint\/packages\/hint-no-protocol-relative-urls\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
     /test-repos\/webhintio-hint\/packages\/hint-performance-budget\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
     /test-repos\/webhintio-hint\/packages\/hint-strict-transport-security\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
     /test-repos\/webhintio-hint\/packages\/hint-x-content-type-options\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
