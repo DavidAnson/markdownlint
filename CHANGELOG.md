@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.28.0
+
+- Introduce `micromark` parser for better positional data (internal only)
+- Use `micromark` in MD013/MD033/MD034/MD035/MD038/MD044/MD052/MD053
+- Simplify file-based test cases
+- Unify browser script for demo
+- Update dependencies
+
 ## 0.27.0
 
 - Improve MD011/MD013/MD022/MD031/MD032/MD033/MD034/MD040/MD043/MD051/MD053
