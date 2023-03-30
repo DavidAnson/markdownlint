@@ -3,6 +3,8 @@ name: CI
 on:
   pull_request:
   push:
+    branches-ignore:
+      - 'dependabot/**'
   schedule:
     - cron: '30 12 * * *'
   workflow_dispatch:

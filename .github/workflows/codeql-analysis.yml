@@ -3,6 +3,8 @@ name: "CodeQL"
 on:
   pull_request:
   push:
+    branches-ignore:
+      - 'dependabot/**'
   workflow_dispatch:
 
 jobs:
