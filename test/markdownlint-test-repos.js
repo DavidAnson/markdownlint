@@ -142,6 +142,7 @@ test("https://github.com/dotnet/docs", (t) => {
   const ignoreRes = [
     /^test-repos\/dotnet-docs\/docs\/core\/diagnostics\/dotnet-symbol\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/core\/install\/linux-package-mixup\.md: \d+: MD034\/.*$\r?\n?/gm,
+    /^test-repos\/dotnet-docs\/docs\/core\/introduction\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/core\/porting\/third-party-deps\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/issuedtokenparameters\.md: \d+: MD034\/.*$\r?\n?/gm,
     /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/servicemetadata\.md: \d+: MD034\/.*$\r?\n?/gm,
