@@ -69,7 +69,7 @@
   "devDependencies": {
     "ava": "5.2.0",
     "babel-loader": "9.1.2",
-    "@babel/core": "7.21.3",
+    "@babel/core": "7.21.4",
     "@babel/preset-env": "7.20.2",
     "c8": "7.13.0",
     "eslint": "8.37.0",
