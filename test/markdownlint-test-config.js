@@ -55,6 +55,7 @@ test("configMultiple", (t) => new Promise((resolve) => {
         ...require("./config/config-parent.json"),
         ...require("./config/config-grandparent.json")
       };
+      // @ts-ignore
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
       resolve();
@@ -70,6 +71,7 @@ test("configMultipleWithRequireResolve", (t) => new Promise((resolve) => {
         ...require("./node_modules/pseudo-package/config-frompackage.json"),
         ...require("./config/config-packageparent.json")
       };
+      // @ts-ignore
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
       resolve();
@@ -106,6 +108,7 @@ test("configCustomFileSystem", (t) => new Promise((resolve) => {
   };
   markdownlint.readConfig(
     file,
+    // @ts-ignore
     null,
     fsApi,
     function callback(err, actual) {
@@ -114,6 +117,7 @@ test("configCustomFileSystem", (t) => new Promise((resolve) => {
         ...extendedContent,
         ...fileContent
       };
+      // @ts-ignore
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
       resolve();
@@ -210,6 +214,7 @@ test("configMultipleYaml", (t) => new Promise((resolve) => {
         ...require("./config/config-parent.json"),
         ...require("./config/config-grandparent.json")
       };
+      // @ts-ignore
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
       resolve();
@@ -229,6 +234,7 @@ test("configMultipleHybrid", (t) => new Promise((resolve) => {
         ...require("./config/config-parent.json"),
         ...require("./config/config-grandparent.json")
       };
+      // @ts-ignore
       delete expected.extends;
       t.like(actual, expected, "Config object not correct.");
       resolve();
@@ -287,6 +293,7 @@ test("configMultipleSync", (t) => {
     ...require("./config/config-parent.json"),
     ...require("./config/config-grandparent.json")
   };
+  // @ts-ignore
   delete expected.extends;
   t.deepEqual(actual, expected, "Config object not correct.");
 });
@@ -366,6 +373,7 @@ test("configMultipleYamlSync", (t) => {
     ...require("./config/config-parent.json"),
     ...require("./config/config-grandparent.json")
   };
+  // @ts-ignore
   delete expected.extends;
   t.deepEqual(actual, expected, "Config object not correct.");
 });
@@ -381,6 +389,7 @@ test("configMultipleHybridSync", (t) => {
     ...require("./config/config-parent.json"),
     ...require("./config/config-grandparent.json")
   };
+  // @ts-ignore
   delete expected.extends;
   t.like(actual, expected, "Config object not correct.");
 });
@@ -412,11 +421,12 @@ test("configCustomFileSystemSync", (t) => {
       return t.fail(p);
     }
   };
-  const actual = markdownlint.readConfigSync(file, null, fsApi);
+  const actual = markdownlint.readConfigSync(file, undefined, fsApi);
   const expected = {
     ...extendedContent,
     ...fileContent
   };
+  // @ts-ignore
   delete expected.extends;
   t.deepEqual(actual, expected, "Config object not correct.");
 });
@@ -479,12 +489,13 @@ test("configCustomFileSystemPromise", (t) => new Promise((resolve) => {
       }
     }
   };
-  markdownlint.promises.readConfig(file, null, fsApi)
+  markdownlint.promises.readConfig(file, undefined, fsApi)
     .then((actual) => {
       const expected = {
         ...extendedContent,
         ...fileContent
       };
+      // @ts-ignore
       delete expected.extends;
       t.deepEqual(actual, expected, "Config object not correct.");
       resolve();
@@ -502,4 +513,58 @@ test("configBadFilePromise", (t) => new Promise((resolve) => {
         resolve();
       }
     );
+}));
+
+test("extendSinglePromise", (t) => new Promise((resolve) => {
+  t.plan(1);
+  const expected = require("./config/config-child.json");
+  markdownlint.promises.extendConfig(
+    expected, "./test/config/config-child.json"
+  )
+    .then((actual) => {
+      t.deepEqual(actual, expected, "Config object not correct.");
+      resolve();
+    });
+}));
+
+test("extendCustomFileSystemPromise", (t) => new Promise((resolve) => {
+  t.plan(4);
+  const file = path.resolve("/dir/file.json");
+  const extended = path.resolve("/dir/extended.json");
+  const fileContent = {
+    "extends": extended,
+    "default": true,
+    "MD001": false
+  };
+  const extendedContent = {
+    "MD001": true,
+    "MD002": true
+  };
+  const fsApi = {
+    "access": (p, m, cb) => {
+      t.is(p, extended);
+      return (cb || m)();
+    },
+    "readFile": (p, o, cb) => {
+      switch (p) {
+        case extended:
+          t.is(p, extended);
+          return cb(null, JSON.stringify(extendedContent));
+        default:
+          return t.fail();
+      }
+    }
+  };
+  markdownlint.promises.extendConfig(fileContent, file, undefined, fsApi)
+    .then((actual) => {
+      t.truthy(fileContent.extends);
+      const expected = {
+        ...extendedContent,
+        ...fileContent
+      };
+      // @ts-ignore
+      delete expected.extends;
+      t.deepEqual(actual, expected, "Config object not correct.");
+      resolve();
+    });
 }));

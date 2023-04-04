@@ -101,6 +101,7 @@ declare function readConfigSync(file: string, parsers?: ConfigurationParser[], f
 declare function getVersion(): string;
 declare namespace promises {
     export { markdownlintPromise as markdownlint };
+    export { extendConfigPromise as extendConfig };
     export { readConfigPromise as readConfig };
 }
 /**
@@ -378,6 +379,16 @@ type ResolveConfigExtendsCallback = (err: Error | null, path?: string) => void;
  * @returns {Promise<LintResults>} Results object.
  */
 declare function markdownlintPromise(options: Options): Promise<LintResults>;
+/**
+ * Extend specified configuration object.
+ *
+ * @param {Configuration} config Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+declare function extendConfigPromise(config: Configuration, file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;
 /**
  * Read specified configuration file.
  *

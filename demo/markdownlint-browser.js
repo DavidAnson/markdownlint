@@ -2829,6 +2829,53 @@ function resolveConfigExtendsSync(configFile, referenceId, fs) {
 }
 
 /**
+ * Extend specified configuration object.
+ *
+ * @param {Configuration} config Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} parsers Parsing
+ * function(s).
+ * @param {Object} fs File system implementation.
+ * @param {ReadConfigCallback} callback Callback (err, result) function.
+ * @returns {void}
+ */
+function extendConfig(config, file, parsers, fs, callback) {
+  var configExtends = config["extends"];
+  if (configExtends) {
+    return resolveConfigExtends(file, helpers.expandTildePath(configExtends, __webpack_require__(/*! node:os */ "?e6c4")), fs,
+    // eslint-disable-next-line no-use-before-define
+    function (_, resolvedExtends) {
+      return readConfig(
+      // @ts-ignore
+      resolvedExtends, parsers, fs, function (err, extendsConfig) {
+        if (err) {
+          return callback(err);
+        }
+        var result = _objectSpread(_objectSpread({}, extendsConfig), config);
+        delete result["extends"];
+        return callback(null, result);
+      });
+    });
+  }
+  return callback(null, config);
+}
+var extendConfigPromisify = promisify && promisify(extendConfig);
+
+/**
+ * Extend specified configuration object.
+ *
+ * @param {Configuration} config Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+function extendConfigPromise(config, file, parsers, fs) {
+  // @ts-ignore
+  return extendConfigPromisify(config, file, parsers, fs);
+}
+
+/**
  * Read specified configuration file.
  *
  * @param {string} file Configuration file name.
@@ -2854,8 +2901,7 @@ function readConfig(file, parsers, fs, callback) {
     fs = __webpack_require__(/*! node:fs */ "?d0ee");
   }
   // Read file
-  var os = __webpack_require__(/*! node:os */ "?e6c4");
-  file = helpers.expandTildePath(file, os);
+  file = helpers.expandTildePath(file, __webpack_require__(/*! node:os */ "?e6c4"));
   fs.readFile(file, "utf8", function (err, content) {
     if (err) {
       // @ts-ignore
@@ -2871,24 +2917,8 @@ function readConfig(file, parsers, fs, callback) {
       return callback(new Error(message));
     }
     // Extend configuration
-    var configExtends = config["extends"];
-    if (configExtends) {
-      delete config["extends"];
-      return resolveConfigExtends(file, helpers.expandTildePath(configExtends, os), fs, function (_, resolvedExtends) {
-        return readConfig(
-        // @ts-ignore
-        resolvedExtends, parsers, fs, function (errr, extendsConfig) {
-          if (errr) {
-            // @ts-ignore
-            return callback(errr);
-          }
-          // @ts-ignore
-          return callback(null, _objectSpread(_objectSpread({}, extendsConfig), config));
-        });
-      });
-    }
     // @ts-ignore
-    return callback(null, config);
+    return extendConfig(config, file, parsers, fs, callback);
   });
 }
 var readConfigPromisify = promisify && promisify(readConfig);
@@ -2956,6 +2986,7 @@ markdownlint.readConfigSync = readConfigSync;
 markdownlint.getVersion = getVersion;
 markdownlint.promises = {
   "markdownlint": markdownlintPromise,
+  "extendConfig": extendConfigPromise,
   "readConfig": readConfigPromise
 };
 module.exports = markdownlint;
