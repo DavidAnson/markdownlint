@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.28.1
+
+- Update dependencies
+
 ## 0.28.0
 
 - Introduce `micromark` parser for better positional data (internal only)
