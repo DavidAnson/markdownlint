@@ -72,7 +72,7 @@
     "@babel/core": "7.21.4",
     "@babel/preset-env": "7.21.4",
     "c8": "7.13.0",
-    "eslint": "8.37.0",
+    "eslint": "8.38.0",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-jsdoc": "40.1.1",
     "eslint-plugin-n": "15.7.0",
