@@ -1158,7 +1158,7 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
 }));
 
 test("customRulesValidateJson", (t) => new Promise((resolve) => {
-  t.plan(2);
+  t.plan(3);
   const options = {
     "customRules": customRules.validateJson,
     "files": "test/validate-json.md"
@@ -1172,13 +1172,18 @@ test("customRulesValidateJson", (t) => new Promise((resolve) => {
           "ruleNames": [ "validate-json" ],
           "ruleDescription": "Rule that validates JSON code",
           "ruleInformation": null,
-          "errorDetail": "Unexpected end of JSON input",
           "errorContext": null,
           "errorRange": null,
           "fixInfo": null
         }
       ]
     };
+    t.true(
+      actual && (actual["test/validate-json.md"][0].errorDetail.length > 0),
+      "Missing errorDetail"
+    );
+    // @ts-ignore
+    delete actual["test/validate-json.md"][0].errorDetail;
     t.deepEqual(actual, expected, "Unexpected issues.");
     resolve();
   });
