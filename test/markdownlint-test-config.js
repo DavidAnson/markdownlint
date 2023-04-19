@@ -252,7 +252,7 @@ test("configBadHybrid", (t) => new Promise((resolve) => {
       t.true(err instanceof Error, "Error not instance of Error.");
       t.truthy(err.message.match(
         // eslint-disable-next-line max-len
-        /^Unable to parse '[^']*'; Parser \d+: Unexpected token \S+ in JSON at position \d+;/
+        /^Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/
       ), "Error message unexpected.");
       t.true(!result, "Got result for bad child JSON.");
       resolve();
@@ -333,7 +333,7 @@ test("configBadJsonSync", (t) => {
     {
       "message":
         // eslint-disable-next-line max-len
-        /Unable to parse '[^']*'; Parser \d+: Unexpected token \S+ in JSON at position \d+/
+        /Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/
     },
     "Did not get correct exception for bad JSON."
   );
@@ -348,7 +348,7 @@ test("configBadChildJsonSync", (t) => {
     {
       "message":
         // eslint-disable-next-line max-len
-        /Unable to parse '[^']*'; Parser \d+: Unexpected token \S+ in JSON at position \d+/
+        /Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/
     },
     "Did not get correct exception for bad child JSON."
   );
@@ -442,7 +442,7 @@ test("configBadHybridSync", (t) => {
     },
     {
       // eslint-disable-next-line max-len
-      "message": /^Unable to parse '[^']*'; Parser \d+: Unexpected token \S+ in JSON at position \d+;/
+      "message": /^Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/
     },
     "Did not get correct exception for bad content."
   );
