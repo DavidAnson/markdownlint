@@ -139,32 +139,7 @@ test("https://github.com/dotnet/docs", (t) => {
   const rootDir = "./test-repos/dotnet-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  const ignoreRes = [
-    /^test-repos\/dotnet-docs\/docs\/core\/diagnostics\/dotnet-symbol\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/core\/install\/linux-package-mixup\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/core\/introduction\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/core\/porting\/third-party-deps\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/issuedtokenparameters\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/servicemetadata\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/configure-apps\/file-schema\/wcf\/userprincipalname\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/extending\/how-to-compare-claims\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/extending\/overriding-the-identity-of-a-service-for-authentication\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/managing-claims-and-authorization-with-the-identity-model\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/message-filters\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/stand-alone-json-serialization\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/wcf-security-terminology\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/feature-details\/xml-and-ado-net-types-in-data-contracts\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/privacy-information\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/samples\/custom-channel-dispatcher\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/samples\/security-validation\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/wcf\/service-versioning\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/framework\/whats-new\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/orleans\/tutorials-and-samples\/index\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/standard\/base-types\/regular-expression-source-generators\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/standard\/generics\/math\.md: \d+: MD038\/.*$\r?\n?/gm,
-    /^test-repos\/dotnet-docs\/docs\/standard\/serialization\/xml-schema-def-tool-gen\.md: \d+: MD034\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/electron/electron", (t) => {
