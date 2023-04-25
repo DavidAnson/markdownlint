@@ -20,7 +20,7 @@ const readConfigPromise = promisify(markdownlint.readConfig);
  * @returns {Promise} Test result.
  */
 async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
-  t.plan(1);
+  t.plan(2);
   const { globby } = await import("globby");
   const { "default": stripJsonComments } = await import("strip-json-comments");
   const jsoncParse = (json) => {
@@ -98,18 +98,24 @@ async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
       // Fail if any issues were found (that aren't ignored)
       // @ts-ignore
       let resultsString = results.toString();
+      const unnecessaryIgnores = [];
       for (const ignoreRe of (ignoreRes || [])) {
         const lengthBefore = resultsString.length;
         resultsString = resultsString.replace(ignoreRe, "");
         if (resultsString.length === lengthBefore) {
-          t.fail(`Unnecessary ignore: ${ignoreRe}`);
+          unnecessaryIgnores.push(ignoreRe);
         }
       }
-      if (resultsString.length > 0) {
-        // eslint-disable-next-line no-console
-        console.log(resultsString);
-      }
-      t.is(resultsString.length, 0, "Unexpected linting violations");
+      t.is(
+        unnecessaryIgnores.length,
+        0,
+        `Unnecessary ignores:\n${unnecessaryIgnores.join("\n")}`
+      );
+      t.is(
+        resultsString,
+        "",
+        `Unexpected linting violations:\n${resultsString}`
+      );
     });
   });
 }
@@ -265,8 +271,7 @@ test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [ /^test-repos\/pi-hole-docs\/docs\/guides\/vpn\/wireguard\/route-everything\.md: \d+: MD034\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/v8/v8.dev", (t) => {
