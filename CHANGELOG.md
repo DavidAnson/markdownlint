@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.28.2
+
+- Update dependencies for CVE-2023-2251
+
 ## 0.28.1
 
 - Update dependencies
