@@ -25,7 +25,7 @@ CommonMark
 config
 config.
 Config
-CVE-2022-21670
+CVE-\d+-\d+
 docs-util
 ES2015
 ES6
