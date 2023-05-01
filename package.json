@@ -70,7 +70,7 @@
     "ava": "5.2.0",
     "babel-loader": "9.1.2",
     "@babel/core": "7.21.5",
-    "@babel/preset-env": "7.21.4",
+    "@babel/preset-env": "7.21.5",
     "c8": "7.13.0",
     "eslint": "8.39.0",
     "eslint-plugin-es": "4.1.0",
