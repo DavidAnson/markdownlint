@@ -18,13 +18,10 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node-version: [ 14, 16, 18, 20 ]
+        node-version: [ 16, 18, 20 ]
 
     steps:
     - uses: actions/checkout@v3
-    - name: Edit .npmrc to avoid setup-node issue with Node 14
-      if: ${{ matrix.node-version == '14' }}
-      run: perl -i -p -e 's/(ignore-scripts=true)/# $1/' .npmrc && git add .npmrc
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
