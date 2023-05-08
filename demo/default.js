@@ -93,12 +93,10 @@
       onMarkdownInput();
     } else {
       // Update from File object
-      var reader = new FileReader();
-      reader.onload = function onload(e) {
-        markdown.value = e.target.result;
+      source.text().then((text) => {
+        markdown.value = text;
         onMarkdownInput();
-      };
-      reader.readAsText(source);
+      });
     }
   }
 
