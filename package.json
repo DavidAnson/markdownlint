@@ -48,6 +48,7 @@
     "example": "cd example && node standalone.js && grunt markdownlint --force && gulp markdownlint",
     "docker-npm-install": "docker run --rm --tty --name npm-install --volume $PWD:/home/workdir --workdir /home/workdir --user node node:latest npm install",
     "docker-npm-run-upgrade": "docker run --rm --tty --name npm-run-upgrade --volume $PWD:/home/workdir --workdir /home/workdir --user node node:latest npm run upgrade",
+    "install-micromark": "cd micromark && npm install --no-package-lock",
     "lint": "eslint --ext .js,.cjs,.mjs --max-warnings 0 .",
     "lint-test-repos": "ava --timeout=10m test/markdownlint-test-repos.js",
     "serial-config-docs": "npm run build-config && npm run build-docs",
@@ -67,10 +68,10 @@
     "markdownlint-micromark": "0.1.3"
   },
   "devDependencies": {
-    "ava": "5.2.0",
-    "babel-loader": "9.1.2",
     "@babel/core": "7.21.8",
     "@babel/preset-env": "7.21.5",
+    "ava": "5.2.0",
+    "babel-loader": "9.1.2",
     "c8": "7.13.0",
     "eslint": "8.40.0",
     "eslint-plugin-es": "4.1.0",
