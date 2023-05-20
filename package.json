@@ -73,7 +73,7 @@
     "ava": "5.2.0",
     "babel-loader": "9.1.2",
     "c8": "7.13.0",
-    "eslint": "8.40.0",
+    "eslint": "8.41.0",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-jsdoc": "44.2.4",
     "eslint-plugin-n": "16.0.0",
