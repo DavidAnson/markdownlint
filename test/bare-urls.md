@@ -83,8 +83,7 @@ Angle brackets work the same for email: <user@example.com>
 
 Links bind to the innermost [link that [is-a-valid] link](https://example.com) {MD034}
 
-But not if the [link [is-not-a-valid] link](https://example.com) {MD034}
-HOWEVER this scenario could have an invalid shortcut and IS reported
+But not if the [link [is-not-a-valid] link](https://example.com)
 
-Escaping both inner square brackets avoids the unwanted report:
+Escaping both inner square brackets avoids confusion:
 [link \[is-not-a-valid\] link](https://example.com)

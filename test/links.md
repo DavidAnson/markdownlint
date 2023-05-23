@@ -25,3 +25,8 @@ Duplicate links in tables should be handled:
 | Link                 | Same Link            | Violation |
 |----------------------|----------------------|-----------|
 | https://example.com/ | https://example.com/ | {MD034}   |
+
+This is not a bare URL: [text [undefined] text](https://example.com).
+This is a bare URL: [text [defined] text](https://example.com). {MD034}
+
+[defined]: https://example.com

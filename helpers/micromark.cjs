@@ -26,9 +26,10 @@ const {
  *
  * @param {string} markdown Markdown document.
  * @param {Object} [options] Options for micromark.
+ * @param {boolean} [refsDefined] Whether to treat references as defined.
  * @returns {Object[]} Micromark events.
  */
-function getMicromarkEvents(markdown, options = {}) {
+function getMicromarkEvents(markdown, options = {}, refsDefined = true) {
 
   // Customize options object to add useful extensions
   options.extensions = options.extensions || [];
@@ -38,8 +39,10 @@ function getMicromarkEvents(markdown, options = {}) {
   const encoding = undefined;
   const eol = true;
   const parseContext = parse(options);
-  // Customize ParseContext to treat all references as defined
-  parseContext.defined.includes = (searchElement) => searchElement.length > 0;
+  if (refsDefined) {
+    // Customize ParseContext to treat all references as defined
+    parseContext.defined.includes = (searchElement) => searchElement.length > 0;
+  }
   const chunks = preprocess()(markdown, encoding, eol);
   const events = postprocess(parseContext.document().write(chunks));
   return events;
@@ -50,12 +53,14 @@ function getMicromarkEvents(markdown, options = {}) {
  *
  * @param {string} markdown Markdown document.
  * @param {Object} [options] Options for micromark.
+ * @param {boolean} [refsDefined] Whether to treat references as defined.
  * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParse(markdown, options = {}) {
+function micromarkParse(markdown, options = {}, refsDefined = true) {
 
   // Use micromark to parse document into Events
-  const events = getMicromarkEvents(markdown, options);
+  const events =
+    getMicromarkEvents(markdown, options, refsDefined);
 
   // Create Token objects
   const document = [];

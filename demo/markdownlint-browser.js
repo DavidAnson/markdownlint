@@ -1374,10 +1374,12 @@ var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-m
  *
  * @param {string} markdown Markdown document.
  * @param {Object} [options] Options for micromark.
+ * @param {boolean} [refsDefined] Whether to treat references as defined.
  * @returns {Object[]} Micromark events.
  */
 function getMicromarkEvents(markdown) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var refsDefined = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   // Customize options object to add useful extensions
   options.extensions = options.extensions || [];
   options.extensions.push(gfmAutolinkLiteral, gfmFootnote(), gfmTable);
@@ -1386,10 +1388,12 @@ function getMicromarkEvents(markdown) {
   var encoding = undefined;
   var eol = true;
   var parseContext = parse(options);
-  // Customize ParseContext to treat all references as defined
-  parseContext.defined.includes = function (searchElement) {
-    return searchElement.length > 0;
-  };
+  if (refsDefined) {
+    // Customize ParseContext to treat all references as defined
+    parseContext.defined.includes = function (searchElement) {
+      return searchElement.length > 0;
+    };
+  }
   var chunks = preprocess()(markdown, encoding, eol);
   var events = postprocess(parseContext.document().write(chunks));
   return events;
@@ -1400,12 +1404,14 @@ function getMicromarkEvents(markdown) {
  *
  * @param {string} markdown Markdown document.
  * @param {Object} [options] Options for micromark.
+ * @param {boolean} [refsDefined] Whether to treat references as defined.
  * @returns {Token[]} Micromark tokens (frozen).
  */
 function micromarkParse(markdown) {
   var options = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+  var refsDefined = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   // Use micromark to parse document into Events
-  var events = getMicromarkEvents(markdown, options);
+  var events = getMicromarkEvents(markdown, options, refsDefined);
 
   // Create Token objects
   var document = [];
@@ -5008,60 +5014,68 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByPredicate = _require2.filterByPredicate,
-  getHtmlTagInfo = _require2.getHtmlTagInfo;
+  getHtmlTagInfo = _require2.getHtmlTagInfo,
+  parse = _require2.parse;
 module.exports = {
   "names": ["MD034", "no-bare-urls"],
   "description": "Bare URL used",
   "tags": ["links", "url"],
   "function": function MD034(params, onError) {
-    var literalAutolinks = filterByPredicate(params.parsers.micromark.tokens, function (token) {
-      return token.type === "literalAutolink";
-    }, function (token) {
-      var children = token.children;
-      var result = [];
-      for (var i = 0; i < children.length; i++) {
-        var openToken = children[i];
-        var openTagInfo = getHtmlTagInfo(openToken);
-        if (openTagInfo && !openTagInfo.close) {
-          var count = 1;
-          for (var j = i + 1; j < children.length; j++) {
-            var closeToken = children[j];
-            var closeTagInfo = getHtmlTagInfo(closeToken);
-            if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
-              if (closeTagInfo.close) {
-                count--;
-                if (count === 0) {
-                  i = j;
-                  break;
+    var literalAutolinks = function literalAutolinks(tokens) {
+      return filterByPredicate(tokens, function (token) {
+        return token.type === "literalAutolink";
+      }, function (token) {
+        var children = token.children;
+        var result = [];
+        for (var i = 0; i < children.length; i++) {
+          var openToken = children[i];
+          var openTagInfo = getHtmlTagInfo(openToken);
+          if (openTagInfo && !openTagInfo.close) {
+            var count = 1;
+            for (var j = i + 1; j < children.length; j++) {
+              var closeToken = children[j];
+              var closeTagInfo = getHtmlTagInfo(closeToken);
+              if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
+                if (closeTagInfo.close) {
+                  count--;
+                  if (count === 0) {
+                    i = j;
+                    break;
+                  }
+                } else {
+                  count++;
                 }
-              } else {
-                count++;
               }
             }
+          } else {
+            result.push(openToken);
           }
-        } else {
-          result.push(openToken);
         }
+        return result;
+      });
+    };
+    if (literalAutolinks(params.parsers.micromark.tokens).length > 0) {
+      // Re-parse with correct link/image reference definition handling
+      var document = params.lines.join("\n");
+      var tokens = parse(document, undefined, false);
+      var _iterator = _createForOfIteratorHelper(literalAutolinks(tokens)),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var token = _step.value;
+          var range = [token.startColumn, token.endColumn - token.startColumn];
+          var fixInfo = {
+            "editColumn": range[0],
+            "deleteCount": range[1],
+            "insertText": "<".concat(token.text, ">")
+          };
+          addErrorContext(onError, token.startLine, token.text, null, null, range, fixInfo);
+        }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
-      return result;
-    });
-    var _iterator = _createForOfIteratorHelper(literalAutolinks),
-      _step;
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var token = _step.value;
-        var range = [token.startColumn, token.endColumn - token.startColumn];
-        var fixInfo = {
-          "editColumn": range[0],
-          "deleteCount": range[1],
-          "insertText": "<".concat(token.text, ">")
-        };
-        addErrorContext(onError, token.startLine, token.text, null, null, range, fixInfo);
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
     }
   }
 };
