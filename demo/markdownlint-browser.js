@@ -1166,61 +1166,6 @@ function applyFixes(input, errors) {
 module.exports.applyFixes = applyFixes;
 
 /**
- * Gets the range and fixInfo values for reporting an error if the expected
- * text is found on the specified line.
- *
- * @param {string[]} lines Lines of Markdown content.
- * @param {number} lineIndex Line index to check.
- * @param {string} search Text to search for.
- * @param {string} replace Text to replace with.
- * @param {number} [instance] Instance on the line (1-based).
- * @returns {Object} Range and fixInfo wrapper.
- */
-module.exports.getRangeAndFixInfoIfFound = function (lines, lineIndex, search, replace) {
-  var instance = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : 1;
-  var range = null;
-  var fixInfo = null;
-  var searchIndex = -1;
-  while (instance > 0) {
-    searchIndex = lines[lineIndex].indexOf(search, searchIndex + 1);
-    instance--;
-  }
-  if (searchIndex !== -1) {
-    var column = searchIndex + 1;
-    var length = search.length;
-    range = [column, length];
-    fixInfo = {
-      "editColumn": column,
-      "deleteCount": length,
-      "insertText": replace
-    };
-  }
-  return {
-    range: range,
-    fixInfo: fixInfo
-  };
-};
-
-/**
- * Gets the next (subsequent) child token if it is of the expected type.
- *
- * @param {Object} parentToken Parent token.
- * @param {Object} childToken Child token basis.
- * @param {string} nextType Token type of next token.
- * @param {string} nextNextType Token type of next-next token.
- * @returns {Object} Next token.
- */
-function getNextChildToken(parentToken, childToken, nextType, nextNextType) {
-  var children = parentToken.children;
-  var index = children.indexOf(childToken);
-  if (index !== -1 && children.length > index + 2 && children[index + 1].type === nextType && children[index + 2].type === nextNextType) {
-    return children[index + 1];
-  }
-  return null;
-}
-module.exports.getNextChildToken = getNextChildToken;
-
-/**
  * Expands a path with a tilde to an absolute path.
  *
  * @param {string} file Path that may begin with a tilde.
@@ -1569,6 +1514,17 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
   }
   return result;
 }
+
+/**
+ * Returns the specified token iff it is of the desired type.
+ *
+ * @param {Token} token Micromark token candidate.
+ * @param {string} type Desired type.
+ * @returns {Token | null} Token instance.
+ */
+function tokenIfType(token, type) {
+  return token && token.type === type ? token : null;
+}
 module.exports = {
   "parse": micromarkParse,
   filterByPredicate: filterByPredicate,
@@ -1576,7 +1532,8 @@ module.exports = {
   getHtmlTagInfo: getHtmlTagInfo,
   getMicromarkEvents: getMicromarkEvents,
   getTokenTextByType: getTokenTextByType,
-  matchAndGetTokensByType: matchAndGetTokensByType
+  matchAndGetTokensByType: matchAndGetTokensByType,
+  tokenIfType: tokenIfType
 };
 
 /***/ }),
@@ -5387,7 +5344,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  tokenIfType = _require2.tokenIfType;
 var leftSpaceRe = /^\s(?:[^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
 var trimCodeText = function trimCodeText(text, start, end) {
@@ -5399,9 +5357,6 @@ var trimCodeText = function trimCodeText(text, start, end) {
     text = text.replace(/(`\s|\S)\s+$/, "$1");
   }
   return text;
-};
-var tokenIfType = function tokenIfType(token, type) {
-  return token && token.type === type && token;
 };
 module.exports = {
   "names": ["MD038", "no-space-in-code"],
@@ -6086,49 +6041,56 @@ module.exports = {
 
 
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
-  emphasisOrStrongStyleFor = _require.emphasisOrStrongStyleFor,
-  forEachInlineChild = _require.forEachInlineChild,
-  getNextChildToken = _require.getNextChildToken,
-  getRangeAndFixInfoIfFound = _require.getRangeAndFixInfoIfFound;
-var impl = function impl(params, onError, tagPrefix, asterisk, underline) {
+  emphasisOrStrongStyleFor = _require.emphasisOrStrongStyleFor;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes,
+  tokenIfType = _require2.tokenIfType;
+var impl = function impl(params, onError, type, asterisk, underline) {
   var style = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "consistent";
-  var lastLineNumber = -1;
-  var instances = new Map();
-  forEachInlineChild(params, "".concat(tagPrefix, "_open"), function (token, parent) {
-    var lineNumber = token.lineNumber,
-      markup = token.markup;
-    var markupStyle = emphasisOrStrongStyleFor(markup);
-    if (style === "consistent") {
-      style = markupStyle;
-    }
-    if (style !== markupStyle) {
-      var rangeAndFixInfo = {};
-      var contentToken = getNextChildToken(parent, token, "text", "".concat(tagPrefix, "_close"));
-      if (contentToken) {
-        var content = contentToken.content;
-        var actual = "".concat(markup).concat(content).concat(markup);
-        var expectedMarkup = style === "asterisk" ? asterisk : underline;
-        var expected = "".concat(expectedMarkup).concat(content).concat(expectedMarkup);
-        if (lastLineNumber !== lineNumber) {
-          lastLineNumber = lineNumber;
-          instances.clear();
+  var emphasisTokens = filterByTypes(params.parsers.micromark.tokens, [type]);
+  var _iterator = _createForOfIteratorHelper(emphasisTokens),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var token = _step.value;
+      var children = token.children;
+      var childType = "".concat(type, "Sequence");
+      var startSequence = tokenIfType(children[0], childType);
+      var endSequence = tokenIfType(children[children.length - 1], childType);
+      if (startSequence && endSequence) {
+        var markupStyle = emphasisOrStrongStyleFor(startSequence.text);
+        if (style === "consistent") {
+          style = markupStyle;
         }
-        var instance = (instances.get(expected) || 0) + 1;
-        instances.set(expected, instance);
-        rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instance);
+        if (style !== markupStyle) {
+          for (var _i = 0, _arr = [startSequence, endSequence]; _i < _arr.length; _i++) {
+            var sequence = _arr[_i];
+            addError(onError, sequence.startLine, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), undefined, [sequence.startColumn, sequence.text.length], {
+              "editColumn": sequence.startColumn,
+              "deleteCount": sequence.text.length,
+              "insertText": style === "asterisk" ? asterisk : underline
+            });
+          }
+        }
       }
-      addError(onError, lineNumber, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), undefined, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
     }
-  });
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
 };
 module.exports = [{
   "names": ["MD049", "emphasis-style"],
   "description": "Emphasis style should be consistent",
   "tags": ["emphasis"],
   "function": function MD049(params, onError) {
-    return impl(params, onError, "em", "*", "_", params.config.style || undefined);
+    return impl(params, onError, "emphasis", "*", "_", params.config.style || undefined);
   }
 }, {
   "names": ["MD050", "strong-style"],

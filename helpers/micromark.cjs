@@ -203,6 +203,17 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
   return result;
 }
 
+/**
+ * Returns the specified token iff it is of the desired type.
+ *
+ * @param {Token} token Micromark token candidate.
+ * @param {string} type Desired type.
+ * @returns {Token | null} Token instance.
+ */
+function tokenIfType(token, type) {
+  return (token && (token.type === type)) ? token : null;
+}
+
 module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
@@ -210,5 +221,6 @@ module.exports = {
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenTextByType,
-  matchAndGetTokensByType
+  matchAndGetTokensByType,
+  tokenIfType
 };

@@ -68,8 +68,8 @@ text text
 * Item item item
   item * emphasis * item {MD037}
 
-Text _ emphasis {MD037}
-emphasis _ text {MD037}
+Text * emphasis {MD037}
+emphasis * text {MD037}
 
 Text ** bold {MD037}
 bold ** text {MD037}
