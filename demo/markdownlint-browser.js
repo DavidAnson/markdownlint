@@ -6092,7 +6092,8 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   forEachInlineChild = _require.forEachInlineChild,
   getNextChildToken = _require.getNextChildToken,
   getRangeAndFixInfoIfFound = _require.getRangeAndFixInfoIfFound;
-var impl = function impl(params, onError, tagPrefix, asterisk, underline, style) {
+var impl = function impl(params, onError, tagPrefix, asterisk, underline) {
+  var style = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "consistent";
   var lastLineNumber = -1;
   var instances = new Map();
   forEachInlineChild(params, "".concat(tagPrefix, "_open"), function (token, parent) {
@@ -6118,7 +6119,7 @@ var impl = function impl(params, onError, tagPrefix, asterisk, underline, style)
         instances.set(expected, instance);
         rangeAndFixInfo = getRangeAndFixInfoIfFound(params.lines, lineNumber - 1, actual, expected, instance);
       }
-      addError(onError, lineNumber, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), null, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
+      addError(onError, lineNumber, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), undefined, rangeAndFixInfo.range, rangeAndFixInfo.fixInfo);
     }
   });
 };
@@ -6127,16 +6128,14 @@ module.exports = [{
   "description": "Emphasis style should be consistent",
   "tags": ["emphasis"],
   "function": function MD049(params, onError) {
-    var style = String(params.config.style || "consistent");
-    return impl(params, onError, "em", "*", "_", style);
+    return impl(params, onError, "em", "*", "_", params.config.style || undefined);
   }
 }, {
   "names": ["MD050", "strong-style"],
   "description": "Strong style should be consistent",
   "tags": ["emphasis"],
   "function": function MD050(params, onError) {
-    var style = String(params.config.style || "consistent");
-    return impl(params, onError, "strong", "**", "__", style);
+    return impl(params, onError, "strong", "**", "__", params.config.style || undefined);
   }
 }];
 
