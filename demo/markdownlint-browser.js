@@ -6050,9 +6050,12 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes,
   tokenIfType = _require2.tokenIfType;
+var intrawordRe = /\w/;
 var impl = function impl(params, onError, type, asterisk, underline) {
   var style = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "consistent";
-  var emphasisTokens = filterByTypes(params.parsers.micromark.tokens, [type]);
+  var lines = params.lines,
+    parsers = params.parsers;
+  var emphasisTokens = filterByTypes(parsers.micromark.tokens, [type]);
   var _iterator = _createForOfIteratorHelper(emphasisTokens),
     _step;
   try {
@@ -6068,13 +6071,16 @@ var impl = function impl(params, onError, type, asterisk, underline) {
           style = markupStyle;
         }
         if (style !== markupStyle) {
-          for (var _i = 0, _arr = [startSequence, endSequence]; _i < _arr.length; _i++) {
-            var sequence = _arr[_i];
-            addError(onError, sequence.startLine, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), undefined, [sequence.startColumn, sequence.text.length], {
-              "editColumn": sequence.startColumn,
-              "deleteCount": sequence.text.length,
-              "insertText": style === "asterisk" ? asterisk : underline
-            });
+          var underscoreIntraword = style === "underscore" && (intrawordRe.test(lines[startSequence.startLine - 1][startSequence.startColumn - 2]) || intrawordRe.test(lines[endSequence.endLine - 1][endSequence.endColumn - 1]));
+          if (!underscoreIntraword) {
+            for (var _i = 0, _arr = [startSequence, endSequence]; _i < _arr.length; _i++) {
+              var sequence = _arr[_i];
+              addError(onError, sequence.startLine, "Expected: ".concat(style, "; Actual: ").concat(markupStyle), undefined, [sequence.startColumn, sequence.text.length], {
+                "editColumn": sequence.startColumn,
+                "deleteCount": sequence.text.length,
+                "insertText": style === "asterisk" ? asterisk : underline
+              });
+            }
           }
         }
       }
