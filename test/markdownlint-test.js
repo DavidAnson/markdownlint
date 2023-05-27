@@ -639,6 +639,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "## Install",
           "## Overview",
           "### Related",
+          "### References",
           "## Demonstration",
           "## Rules / Aliases",
           "### Custom Rules",
@@ -860,6 +861,7 @@ test("readme", (t) => new Promise((resolve) => {
       t.falsy(err);
       const rulesLeft = [ ...rules ];
       let seenRelated = false;
+      let seenReferences = false;
       let seenRules = false;
       let inRules = false;
       let seenTags = false;
@@ -872,6 +874,8 @@ test("readme", (t) => new Promise((resolve) => {
         ) {
           if (!seenRelated) {
             seenRelated = true;
+          } else if (!seenReferences) {
+            seenReferences = true;
           } else if (!seenRules) {
             seenRules = true;
             inRules = true;

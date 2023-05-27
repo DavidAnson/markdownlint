@@ -70,6 +70,13 @@ and test cases came directly from that project.
 [super-linter]: https://github.com/github/super-linter
 [vscode-markdownlint]: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
 
+### References
+
+The following specifications are considered authoritative in cases of ambiguity:
+
+- [CommonMark](https://spec.commonmark.org/current/)
+- [GitHub Flavored Markdown Spec](https://github.github.com/gfm/)
+
 ## Demonstration
 
 [`markdownlint` demo](https://dlaa.me/markdownlint/), an interactive, in-browser
@@ -185,7 +192,7 @@ rules at once.
 ## Configuration
 
 Text passed to `markdownlint` is parsed as Markdown, analyzed, and any
-issues reported. Two kinds of text are ignored:
+issues reported. Two kinds of text are ignored by most rules:
 
 - [HTML comments](https://www.w3.org/TR/html5/syntax.html#comments)
 - [Front matter](https://jekyllrb.com/docs/frontmatter/) (see
