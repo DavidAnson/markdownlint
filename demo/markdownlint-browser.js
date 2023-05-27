@@ -5186,11 +5186,12 @@ var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
   htmlElementRanges = _require2.htmlElementRanges,
   lineMetadata = _require2.lineMetadata;
 var emphasisRe = /(^|[^\\]|\\\\)(?:(\*{1,3})|(_{1,3}))/g;
-var embeddedUnderscoreRe = /([A-Za-z\d])_([A-Za-z\d])/g;
+var embeddedUnderscoreRe = /([A-Za-z\d])(_([A-Za-z\d]))+/g;
 var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
 var leftSpaceRe = /^\s+/;
 var rightSpaceRe = /\s+$/;
 var tablePipeRe = /\|/;
+var allUnderscoresRe = /_/g;
 module.exports = {
   "names": ["MD037", "no-space-in-emphasis"],
   "description": "Spaces inside emphasis markers",
@@ -5256,7 +5257,9 @@ module.exports = {
         // Emphasis has no meaning here
         return;
       }
-      var patchedLine = line.replace(embeddedUnderscoreRe, "$1 $2");
+      var patchedLine = line.replace(embeddedUnderscoreRe, function (match) {
+        return match.replace(allUnderscoresRe, " ");
+      });
       if (onItemStart) {
         // Trim overlapping '*' list item marker
         patchedLine = patchedLine.replace(asteriskListItemMarkerRe, "$1 $2");

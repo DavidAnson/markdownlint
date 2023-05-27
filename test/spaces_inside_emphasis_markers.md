@@ -369,3 +369,6 @@ Emphasis <p data="inside * attribute * content"></p> {MD033}
 Emphasis <img alt="inside * attribute * content"/> {MD033}
 
 Emphasis <p data="* attribute *">* HTML *</p> {MD033} {MD037}
+
+Embedded underscore is okay:
+Text _emphas_i_s_ text _emphasis_
