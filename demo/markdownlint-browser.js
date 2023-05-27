@@ -5794,7 +5794,7 @@ module.exports = {
     }, function (token) {
       var children = token.children;
       if (!includeHtmlElements && token.type === "htmlFlow") {
-        children = children.slice(1, -1);
+        children = children[0] && children[0].text === "<!--" ? [] : children.slice(1, -1);
       }
       return children.filter(function (t) {
         return !ignoredChildTypes.has(t.type);

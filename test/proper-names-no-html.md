@@ -20,6 +20,12 @@ javascript {MD044}
 
 <code>javascript</code> {MD044}
 
+<!-- javascript -->
+
+<!--
+javascript
+-->
+
 <!-- markdownlint-configure-file {
   "MD033": false,
   "MD044": {

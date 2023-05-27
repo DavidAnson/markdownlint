@@ -98,6 +98,12 @@ javascript {MD044}
 
 <a error="{MD044}" id="javascript"/>
 
+<!-- javascript {MD044} -->
+
+<!--
+javascript {MD044}
+-->
+
 <!-- markdownlint-configure-file {
   "MD033": false,
   "MD044": {
