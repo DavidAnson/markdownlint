@@ -2,6 +2,9 @@
 
 "use strict";
 
+const htmlEntry = "./exports-html.mjs";
+const htmlName = "micromarkHtmlBrowser";
+
 const base = {
   "entry": "./exports.mjs",
   "output": {
@@ -72,6 +75,32 @@ module.exports = [
     "output": {
       ...web.output,
       "filename": "micromark-browser.dev.js"
+    }
+  },
+  {
+    ...web,
+    ...production,
+    "entry": htmlEntry,
+    "output": {
+      ...web.output,
+      "library": {
+        ...web.output.library,
+        "name": htmlName
+      },
+      "filename": "micromark-html-browser.js"
+    }
+  },
+  {
+    ...web,
+    ...development,
+    "entry": htmlEntry,
+    "output": {
+      ...web.output,
+      "library": {
+        ...web.output.library,
+        "name": htmlName
+      },
+      "filename": "micromark-html-browser.dev.js"
     }
   }
 ];
