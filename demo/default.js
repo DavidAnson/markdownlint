@@ -2,9 +2,11 @@
 
 (function main() {
   // Dependencies
-  var markdownit = window.markdownit({ "html": true });
+  var markdownit = window.markdownit;
   var markdownlint = window.markdownlint.library;
   var helpers = window.markdownlint.helpers;
+  var micromark = window.micromarkBrowser;
+  var micromarkHtml = window.micromarkHtmlBrowser;
 
   // DOM elements
   var markdown = document.getElementById("markdown");
@@ -31,12 +33,42 @@
       .replace(/>/g, "&gt;");
   }
 
+  // Renders Markdown to HTML
+  function render(markdown) {
+    const match = /^\?renderer=([a-z-]+)$/.exec(window.location.search);
+    const renderer = match ? match[1] : "micromark";
+    if (renderer === "markdown-it") {
+      return markdownit({ "html": true }).render(markdown);
+    } else if (renderer === "micromark") {
+      const parseOptions = {
+        "extensions": [
+          micromark.gfmAutolinkLiteral,
+          micromark.gfmFootnote(),
+          micromark.gfmTable
+        ]
+      };
+      const context = micromark.parse(parseOptions);
+      const chunks = micromark.preprocess()(markdown, undefined, true);
+      const events = micromark.postprocess(context.document().write(chunks));
+      const compileOptions = {
+        "allowDangerousHtml": true,
+        "htmlExtensions": [
+          micromarkHtml.gfmAutolinkLiteralHtml,
+          micromarkHtml.gfmFootnoteHtml(),
+          micromarkHtml.gfmTableHtml
+        ]
+      };
+      return micromarkHtml.compile(compileOptions)(events);
+    }
+    return `[Unsupported renderer "${renderer}"]`;
+  }
+
   // Handle input
   function onMarkdownInput() {
     // Markdown
     var content = markdown.value;
     // Markup
-    markup.innerHTML = markdownit.render(content);
+    markup.innerHTML = render(content);
     // Numbered
     var lines = content.split(newLineRe);
     var padding = lines.length.toString().replace(/\d/g, " ");

@@ -15,6 +15,7 @@
     "demo/markdownlint-browser.js",
     "demo/markdownlint-browser.min.js",
     "demo/micromark-browser.js",
+    "demo/micromark-html-browser.js",
     "example/typescript/type-check.js",
     "micromark/micromark.cjs",
     "micromark/micromark.dev.cjs",

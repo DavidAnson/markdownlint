@@ -2,6 +2,7 @@ coverage
 demo/markdown-it.min.js
 demo/markdownlint-browser.min.js
 demo/micromark-browser.js
+demo/micromark-html-browser.js
 micromark/micromark.cjs
 micromark/micromark.dev.cjs
 micromark/micromark-browser.js
