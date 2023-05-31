@@ -52,6 +52,9 @@ function createTestForFile(file) {
             }
           }
         }
+        for (const list of Object.values(expected)) {
+          list.sort();
+        }
         const actual = {};
         for (const error of errors) {
           const rule = error.ruleNames[0];
@@ -64,6 +67,9 @@ function createTestForFile(file) {
             !error.fixInfo || constants.fixableRuleNames.includes(rule),
             `Fixable rule ${rule} is not tagged as such.`
           );
+        }
+        for (const list of Object.values(actual)) {
+          list.sort();
         }
         t.deepEqual(actual, expected, "Too few or too many issues found.");
         // Create snapshot

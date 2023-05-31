@@ -1417,6 +1417,25 @@ function micromarkParse(markdown) {
   return document;
 }
 
+// /**
+//  * Log the structure of a Micromark token list.
+//  *
+//  * @param {Token[]} tokens Micromark tokens.
+//  * @param {number} depth Tree depth.
+//  * @returns {void}
+//  */
+// function consoleLogTokens(tokens, depth = 0) {
+//   for (const token of tokens) {
+//     const { children, text, type } = token;
+//     console.log(
+//       `${" ".repeat(depth * 2)}${type} ${text.replace(/\n/g, "\\n")}`
+//     );
+//     if (children.length > 0) {
+//       consoleLogTokens(children, depth + 1);
+//     }
+//   }
+// }
+
 /**
  * Filter a list of Micromark tokens by predicate.
  *
@@ -5753,20 +5772,21 @@ module.exports = {
 
 
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf,
   escapeForRegExp = _require.escapeForRegExp,
+  newLineRe = _require.newLineRe,
   withinAnyRange = _require.withinAnyRange;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByPredicate = _require2.filterByPredicate,
@@ -5792,12 +5812,39 @@ module.exports = {
       scannedTypes.add("codeFlowValue");
       scannedTypes.add("codeTextData");
     }
+    var tokenAdjustments = new Map();
     var contentTokens = filterByPredicate(params.parsers.micromark.tokens, function (token) {
       return scannedTypes.has(token.type);
     }, function (token) {
       var children = token.children;
+      var startLine = token.startLine,
+        text = token.text;
       if (!includeHtmlElements && token.type === "htmlFlow") {
-        children = children[0] && children[0].text === "<!--" ? [] : children.slice(1, -1);
+        if (text.startsWith("<!--")) {
+          // Remove comment content
+          children = [];
+        } else {
+          // Re-parse to get htmlText elements for detailed tokenization
+          var htmlTextLines = "<md044>\n".concat(text, "\n</md044>").split(newLineRe);
+          children = parse(htmlTextLines.join(""));
+          var reTokens = _toConsumableArray(children);
+          var _iterator = _createForOfIteratorHelper(reTokens),
+            _step;
+          try {
+            for (_iterator.s(); !(_step = _iterator.n()).done;) {
+              var reToken = _step.value;
+              tokenAdjustments.set(reToken, {
+                htmlTextLines: htmlTextLines,
+                startLine: startLine
+              });
+              reTokens.push.apply(reTokens, _toConsumableArray(reToken.children));
+            }
+          } catch (err) {
+            _iterator.e(err);
+          } finally {
+            _iterator.f();
+          }
+        }
       }
       return children.filter(function (t) {
         return !ignoredChildTypes.has(t.type);
@@ -5805,21 +5852,21 @@ module.exports = {
     });
     var exclusions = [];
     var autoLinked = new Set();
-    var _iterator = _createForOfIteratorHelper(names),
-      _step;
+    var _iterator2 = _createForOfIteratorHelper(names),
+      _step2;
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var name = _step.value;
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var name = _step2.value;
         var escapedName = escapeForRegExp(name);
         var startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
         var endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
         var namePattern = "(".concat(startNamePattern, ")(").concat(escapedName, ")").concat(endNamePattern);
         var nameRe = new RegExp(namePattern, "gi");
-        var _iterator2 = _createForOfIteratorHelper(contentTokens),
-          _step2;
+        var _iterator3 = _createForOfIteratorHelper(contentTokens),
+          _step3;
         try {
           var _loop = function _loop() {
-            var token = _step2.value;
+            var token = _step3.value;
             var match = null;
             var _loop2 = function _loop2() {
               var _match = match,
@@ -5839,8 +5886,21 @@ module.exports = {
                   autoLinked.add(token);
                 }
                 if (!withinAnyRange(urlRanges, lineIndex, index, length)) {
-                  var column = index + 1;
-                  addErrorDetailIf(onError, token.startLine, name, nameMatch, null, null, [column, length], {
+                  var lineNumber = token.startLine;
+                  var column = index;
+                  if (tokenAdjustments.has(token)) {
+                    var _tokenAdjustments$get = tokenAdjustments.get(token),
+                      htmlTextLines = _tokenAdjustments$get.htmlTextLines,
+                      startLine = _tokenAdjustments$get.startLine;
+                    var lineDelta = 0;
+                    while (htmlTextLines[lineDelta].length <= column) {
+                      column -= htmlTextLines[lineDelta].length;
+                      lineDelta++;
+                    }
+                    lineNumber = startLine + lineDelta - 1;
+                  }
+                  column++;
+                  addErrorDetailIf(onError, lineNumber, name, nameMatch, null, null, [column, length], {
                     "editColumn": column,
                     "deleteCount": length,
                     "insertText": name
@@ -5853,19 +5913,19 @@ module.exports = {
               _loop2();
             }
           };
-          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
             _loop();
           }
         } catch (err) {
-          _iterator2.e(err);
+          _iterator3.e(err);
         } finally {
-          _iterator2.f();
+          _iterator3.f();
         }
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator2.e(err);
     } finally {
-      _iterator.f();
+      _iterator2.f();
     }
   }
 };

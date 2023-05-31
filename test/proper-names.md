@@ -104,10 +104,27 @@ javascript {MD044}
 javascript {MD044}
 -->
 
+<a href="https://example.org">
+
+<div><a href="https://example.org"></div>
+
+<div>
+  <a href="https://example.org">
+</div>
+
+<div>
+  javascript {MD044}
+  <a href="https://example.org">
+  javascript {MD044}
+</div>
+
+{MD044:107} {MD044:109} {MD044:112} {MD044:117}
+
 <!-- markdownlint-configure-file {
   "MD033": false,
   "MD044": {
     "names": [
+      "HTTPS",
       "Internet Explorer",
       "markdownlint",
       "multiplecase",
