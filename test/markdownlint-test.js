@@ -86,7 +86,7 @@ test("projectFiles", (t) => {
       "schema/*.md"
     ]))
     .then((files) => {
-      t.is(files.length, 58);
+      t.is(files.length, 59);
       const options = {
         files,
         "config": require("../.markdownlint.json")
@@ -847,7 +847,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", (t) => new Promise((resolve) => {
-  t.plan(125);
+  t.plan(127);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -926,7 +926,7 @@ test("readme", (t) => new Promise((resolve) => {
 }));
 
 test("validateJsonUsingConfigSchemaStrict", (t) => {
-  t.plan(156);
+  t.plan(159);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([
@@ -1026,7 +1026,7 @@ test("validateConfigExampleJson", async(t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(147);
+  t.plan(150);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

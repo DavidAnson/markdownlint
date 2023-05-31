@@ -287,5 +287,11 @@
     "ignored_definitions": [
       "//"
     ]
+  },
+
+  // MD054/link-style - Link style
+  "MD054": {
+    // Link style should be consistent
+    "style": "consistent"
   }
 }

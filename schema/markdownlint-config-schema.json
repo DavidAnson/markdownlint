@@ -955,6 +955,30 @@
     "link-image-reference-definitions": {
       "$ref": "#/properties/MD053"
     },
+    "MD054": {
+      "description": "MD054/link-style - Link style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Link style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "inline",
+            "reference"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "link-style": {
+      "$ref": "#/properties/MD054"
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -991,7 +1015,7 @@
       "default": true
     },
     "links": {
-      "description": "links - MD011, MD034, MD039, MD042, MD051, MD052, MD053",
+      "description": "links - MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054",
       "type": "boolean",
       "default": true
     },
@@ -1071,7 +1095,7 @@
       "default": true
     },
     "images": {
-      "description": "images - MD045, MD052, MD053",
+      "description": "images - MD045, MD052, MD053, MD054",
       "type": "boolean",
       "default": true
     }

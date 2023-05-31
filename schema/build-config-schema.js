@@ -498,6 +498,20 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD054":
+      scheme.properties = {
+        "style": {
+          "description": "Link style should be consistent",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "inline",
+            "reference"
+          ],
+          "default": "consistent"
+        }
+      };
+      break;
     default:
       custom = false;
       break;
