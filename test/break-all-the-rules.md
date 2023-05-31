@@ -13,7 +13,7 @@
 
 	{MD009} {MD010} 
 
-(name)[link] {MD011}
+(name)[link] {MD011} {MD054}
 
 
 {MD012:18}
@@ -68,7 +68,7 @@ Emphasis _with _ space {MD037}
 
 Code `with ` space {MD038}
 
-[link with space ](link) {MD039}
+[link with space ](link) {MD039} {MD054}
 
 ```
 code fence without language {MD040:73} {MD046:73}
@@ -78,11 +78,11 @@ code fence without language {MD040:73} {MD046:73}
 code fence with different style {MD048:77} {MD046:77}
 ~~~
 
-[empty link]() {MD042}
+[empty link]() {MD042} {MD054}
 
 markdownLint {MD044}
 
-![](image.jpg) {MD045}
+![](image.jpg) {MD045} {MD054}
 ## Heading 10 {MD022}
 
 Emphasis _with_ underscore style
@@ -93,9 +93,9 @@ Strong __with__ underscore style
 
 Strong **with** different style {MD050}
 
-[Missing link fragment](#missing) {MD051}
+[Missing link fragment](#missing) {MD051} {MD054}
 
-[Missing link][label] {MD052}
+[Missing link][label] {MD052} {MD054}
 
 [unused]: link-destination
 {MD053:100}
@@ -114,6 +114,9 @@ Strong **with** different style {MD050}
     "names": [
       "markdownlint"
     ]
+  },
+  "MD054": {
+    "style": "consistent"
   }
 } -->
 
