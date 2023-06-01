@@ -6499,7 +6499,8 @@ module.exports = {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var token = _step.value;
         if (params.config.style === "consistent" && inlineLinks.length > 0 || params.config.style === "inline") {
-          addErrorContext(onError, token.startLine, token.text);
+          var range = [token.startColumn, token.endColumn - token.startColumn];
+          addErrorContext(onError, token.startLine, token.text, null, null, range);
         }
       }
     } catch (err) {
@@ -6513,7 +6514,8 @@ module.exports = {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
         var _token = _step2.value;
         if (params.config.style === "consistent" && referenceLinks.length > 0 || params.config.style === "reference") {
-          addErrorContext(onError, _token.startLine, _token.text);
+          var _range = [_token.startColumn, _token.endColumn - _token.startColumn];
+          addErrorContext(onError, _token.startLine, _token.text, null, null, _range);
         }
       }
     } catch (err) {
