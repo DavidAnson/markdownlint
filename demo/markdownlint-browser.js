@@ -1380,12 +1380,7 @@ function micromarkParse(markdown) {
         startLine = start["line"];
       var endColumn = end["column"],
         endLine = end["line"];
-      var text = null;
-      try {
-        text = context.sliceSerialize(token);
-      } catch (_unused) {
-        // https://github.com/micromark/micromark/issues/131
-      }
+      var text = context.sliceSerialize(token);
       if (kind === "enter") {
         var previous = current;
         history.push(previous);
