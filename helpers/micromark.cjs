@@ -73,12 +73,7 @@ function micromarkParse(markdown, options = {}, refsDefined = true) {
     const { type, start, end } = token;
     const { "column": startColumn, "line": startLine } = start;
     const { "column": endColumn, "line": endLine } = end;
-    let text = null;
-    try {
-      text = context.sliceSerialize(token);
-    } catch {
-      // https://github.com/micromark/micromark/issues/131
-    }
+    const text = context.sliceSerialize(token);
     if (kind === "enter") {
       const previous = current;
       history.push(previous);
