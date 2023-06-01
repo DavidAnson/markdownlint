@@ -1611,7 +1611,7 @@ module.exports.referenceLinkImageData = function () {
 
 
 module.exports.deprecatedRuleNames = ["MD002", "MD006"];
-module.exports.fixableRuleNames = ["MD004", "MD005", "MD006", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053"];
+module.exports.fixableRuleNames = ["MD004", "MD005", "MD006", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.29.0";
 
@@ -6470,7 +6470,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  filterByPredicate = _require2.filterByPredicate;
 module.exports = {
   "names": ["MD054", "link-style"],
   "description": "Link style",
@@ -6496,12 +6497,28 @@ module.exports = {
     var _iterator = _createForOfIteratorHelper(referenceLinks),
       _step;
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var _loop = function _loop() {
         var token = _step.value;
         if (params.config.style === "consistent" && inlineLinks.length > 0 || params.config.style === "inline") {
+          var fixInfo = null;
+          var label = filterByTypes([token], ["labelText"])[0].text;
+          var definitions = filterByTypes(params.parsers.micromark.tokens, ["definition"]);
+          var definition = filterByPredicate(definitions, function (d) {
+            return filterByTypes([d], ["definitionLabelString"])[0] && filterByTypes([d], ["definitionLabelString"])[0].text === label;
+          });
+          if (definition.length > 0) {
+            var destination = filterByTypes(definition, ["definitionDestination"])[0].text;
+            fixInfo = {
+              "editColumn": token.endColumn,
+              "insertText": "(" + destination + ")"
+            };
+          }
           var range = [token.startColumn, token.endColumn - token.startColumn];
-          addErrorContext(onError, token.startLine, token.text, null, null, range);
+          addErrorContext(onError, token.startLine, token.text, null, null, range, fixInfo);
         }
+      };
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        _loop();
       }
     } catch (err) {
       _iterator.e(err);
@@ -6512,10 +6529,10 @@ module.exports = {
       _step2;
     try {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var _token = _step2.value;
+        var token = _step2.value;
         if (params.config.style === "consistent" && referenceLinks.length > 0 || params.config.style === "reference") {
-          var _range = [_token.startColumn, _token.endColumn - _token.startColumn];
-          addErrorContext(onError, _token.startLine, _token.text, null, null, _range);
+          var range = [token.startColumn, token.endColumn - token.startColumn];
+          addErrorContext(onError, token.startLine, token.text, null, null, range);
         }
       }
     } catch (err) {
