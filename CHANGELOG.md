@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.29.0
+
+- Update `micromark` parser dependencies for better performance
+- Use `micromark` in MD049/MD050
+- Improve MD034/MD037/MD044/MD049/MD050
+- Support multiple parsers in demo page
+- Remove support for end-of-life Node version 14
+- Update dependencies
+
 ## 0.28.2
 
 - Update dependencies for CVE-2023-2251
@@ -13,7 +22,7 @@
 - Introduce `micromark` parser for better positional data (internal only)
 - Use `micromark` in MD013/MD033/MD034/MD035/MD038/MD044/MD052/MD053
 - Simplify file-based test cases
-- Unify browser script for demo
+- Unify browser script for demo page
 - Update dependencies
 
 ## 0.27.0
