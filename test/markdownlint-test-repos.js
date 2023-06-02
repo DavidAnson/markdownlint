@@ -16,11 +16,10 @@ const readConfigPromise = promisify(markdownlint.readConfig);
  * @param {Object} t Test instance.
  * @param {string[]} globPatterns Array of files to in/exclude.
  * @param {string} configPath Path to config file.
- * @param {RegExp[]} [ignoreRes] Array of RegExp violations to ignore.
  * @returns {Promise} Test result.
  */
-async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
-  t.plan(2);
+async function lintTestRepo(t, globPatterns, configPath) {
+  t.plan(1);
   const { globby } = await import("globby");
   const { "default": stripJsonComments } = await import("strip-json-comments");
   const jsoncParse = (json) => {
@@ -95,26 +94,11 @@ async function lintTestRepo(t, globPatterns, configPath, ignoreRes) {
     //     return results;
     //   });
     }).then((results) => {
-      // Fail if any issues were found (that aren't ignored)
       // @ts-ignore
-      let resultsString = results.toString();
-      const unnecessaryIgnores = [];
-      for (const ignoreRe of (ignoreRes || [])) {
-        const lengthBefore = resultsString.length;
-        resultsString = resultsString.replace(ignoreRe, "");
-        if (resultsString.length === lengthBefore) {
-          unnecessaryIgnores.push(ignoreRe);
-        }
-      }
-      t.is(
-        unnecessaryIgnores.length,
-        0,
-        `Unnecessary ignores:\n${unnecessaryIgnores.join("\n")}`
-      );
-      t.is(
+      const resultsString = results.toString();
+      t.snapshot(
         resultsString,
-        "",
-        `Unexpected linting violations:\n${resultsString}`
+        "Expected linting violations"
       );
     });
   });
@@ -132,7 +116,6 @@ function excludeGlobs(rootDir, ...globs) {
 }
 
 // Run markdownlint the same way the corresponding repositories do
-/* eslint-disable max-len */
 
 test("https://github.com/apache/airflow", (t) => {
   const rootDir = "./test-repos/apache-airflow";
@@ -155,22 +138,14 @@ test("https://github.com/electron/electron", (t) => {
     join(rootDir, "docs/**/*.md")
   ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [
-    /^test-repos\/electron-electron\/docs\/tutorial\/offscreen-rendering\.md: \d+: MD052\/.*$\r?\n?/gm,
-    /^test-repos\/electron-electron\/docs\/tutorial\/progress-bar\.md: \d+: MD052\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/eslint/eslint", (t) => {
   const rootDir = "./test-repos/eslint-eslint";
   const globPatterns = [ join(rootDir, "docs/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.yml");
-  const ignoreRes = [
-    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
-    /^test-repos\/eslint-eslint\/docs\/src\/library\/link-card\.md: \d+: MD034\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/mdn/content", (t) => {
@@ -178,14 +153,6 @@ test("https://github.com/mdn/content", (t) => {
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
   return lintTestRepo(t, globPatterns, configPath);
-});
-
-test.skip("https://github.com/mdn/translated-content", (t) => {
-  const rootDir = "./test-repos/mdn-translated-content";
-  const globPatterns = [ join(rootDir, "**/*.md") ];
-  const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  const ignoreRes = [ /^.*\/(?:conflicting|orphaned)\/.*$\r?\n?/gm ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
 });
 
 test("https://github.com/mkdocs/mkdocs", (t) => {
@@ -218,12 +185,7 @@ test("https://github.com/mochajs/mocha", (t) => {
     join(rootDir, "example/**/*.md")
   ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [
-    /^[^:]+: \d+: MD051\/.*$\r?\n?/gm,
-    /^test-repos\/mochajs-mocha\/\.github\/CODE_OF_CONDUCT\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/mochajs-mocha\/docs\/index\.md: \d+: MD053\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/pi-hole/docs", (t) => {
@@ -237,16 +199,7 @@ test("https://github.com/v8/v8.dev", (t) => {
   const rootDir = "./test-repos/v8-v8-dev";
   const globPatterns = [ join(rootDir, "src/**/*.md") ];
   const configPath = join(rootDir, ".markdownlint.json");
-  const ignoreRes = [
-    /^[^:]+: \d+: MD033\/.*\[Element: feature-support\].*$\r?\n?/gm,
-    /^test-repos\/v8-v8-dev\/src\/docs\/become-committer\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/v8-v8-dev\/src\/docs\/design-review-guidelines\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/v8-v8-dev\/src\/docs\/feature-launch-process\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/v8-v8-dev\/src\/docs\/official-support\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/v8-v8-dev\/src\/features\/import-assertions\.md: \d+: MD034\/.*$\r?\n?/gm,
-    /^test-repos\/v8-v8-dev\/src\/features\/private-brand-checks\.md: \d+: MD034\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/webhintio/hint", (t) => {
@@ -256,35 +209,7 @@ test("https://github.com/webhintio/hint", (t) => {
     ...excludeGlobs(rootDir, "**/CHANGELOG.md")
   ];
   const configPath = join(rootDir, ".markdownlintrc");
-  const ignoreRes = [
-    /test-repos\/webhintio-hint\/packages\/hint-apple-touch-icons\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-axe\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-compat-api\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-compat-api\/docs\/html\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-detect-css-reflows\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-detect-css-reflows\/docs\/composite\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-detect-css-reflows\/docs\/layout\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-detect-css-reflows\/docs\/paint\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-doctype\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-highest-available-document-mode\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-http-compression\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-meta-viewport\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-minified-js\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-no-p3p\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-no-protocol-relative-urls\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-performance-budget\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-strict-transport-security\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint-x-content-type-options\/README\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/about\/GOVERNANCE.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/contributor-guide\/getting-started\/architecture\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/contributor-guide\/getting-started\/development-environment\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/contributor-guide\/how-to\/hint\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/user-guide\/development-flow-integration\/local-server\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/user-guide\/index\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/hint\/docs\/user-guide\/troubleshoot\/summary\.md: \d+: MD053\/.*$\r?\n?/gm,
-    /test-repos\/webhintio-hint\/packages\/parser-html\/README\.md: \d+: MD053\/.*$\r?\n?/gm
-  ];
-  return lintTestRepo(t, globPatterns, configPath, ignoreRes);
+  return lintTestRepo(t, globPatterns, configPath);
 });
 
 test("https://github.com/webpack/webpack.js.org", (t) => {
