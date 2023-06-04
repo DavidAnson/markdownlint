@@ -6471,68 +6471,71 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes,
-  filterByPredicate = _require2.filterByPredicate;
+  filterByPredicate = _require2.filterByPredicate,
+  getTokenTextByType = _require2.getTokenTextByType;
+var isInlineLink = function isInlineLink(_ref) {
+  var children = _ref.children;
+  return children.some(function (_ref2) {
+    var type = _ref2.type;
+    return type === "resource";
+  });
+};
+var deepGetTokenTextByType = function deepGetTokenTextByType(tokens, type) {
+  return getTokenTextByType(filterByTypes(tokens, [type]), type);
+};
+var fixInfo = function fixInfo(tokens, link) {
+  if (isInlineLink(link)) {
+    return null;
+  }
+  var label = deepGetTokenTextByType([link], "labelText");
+  var definitions = filterByTypes(tokens, ["definition"]);
+  var definition = filterByPredicate(definitions, function (d) {
+    return deepGetTokenTextByType([d], "definitionLabelString") === label;
+  });
+  if (definition.length > 0) {
+    var destination = deepGetTokenTextByType(definition, "definitionDestination");
+    return {
+      "editColumn": link.endColumn,
+      "insertText": "(".concat(destination, ")")
+    };
+  }
+  return null;
+};
 module.exports = {
   "names": ["MD054", "link-style"],
   "description": "Link style",
   "tags": ["images", "links"],
-  "function": function MD054(params, onError) {
-    var links = filterByTypes(params.parsers.micromark.tokens, ["link", "image"]);
-    var isReferenceLink = function isReferenceLink(_ref) {
-      var children = _ref.children;
-      return !children.some(function (_ref2) {
-        var type = _ref2.type;
-        return type === "resource";
-      });
-    };
-    var isInlineLink = function isInlineLink(_ref3) {
-      var children = _ref3.children;
-      return children.some(function (_ref4) {
-        var type = _ref4.type;
-        return type === "resource";
-      });
-    };
-    var referenceLinks = links.filter(isReferenceLink);
-    var inlineLinks = links.filter(isInlineLink);
-    var _iterator = _createForOfIteratorHelper(referenceLinks),
+  "function": function MD054(_ref3, onError) {
+    var parsers = _ref3.parsers,
+      config = _ref3.config;
+    var links = filterByTypes(parsers.micromark.tokens, ["link", "image"]);
+    var style = config.style;
+    var consistentStyle = style === "consistent";
+    var referenceLinksPresent = false;
+    var inlineLinksPresent = false;
+    var _iterator = _createForOfIteratorHelper(links),
       _step;
     try {
-      var _loop = function _loop() {
-        var token = _step.value;
-        if (params.config.style === "consistent" && inlineLinks.length > 0 || params.config.style === "inline") {
-          var fixInfo = null;
-          var label = filterByTypes([token], ["labelText"])[0].text;
-          var definitions = filterByTypes(params.parsers.micromark.tokens, ["definition"]);
-          var definition = filterByPredicate(definitions, function (d) {
-            return filterByTypes([d], ["definitionLabelString"])[0] && filterByTypes([d], ["definitionLabelString"])[0].text === label;
-          });
-          if (definition.length > 0) {
-            var destination = filterByTypes(definition, ["definitionDestination"])[0].text;
-            fixInfo = {
-              "editColumn": token.endColumn,
-              "insertText": "(" + destination + ")"
-            };
-          }
-          var range = [token.startColumn, token.endColumn - token.startColumn];
-          addErrorContext(onError, token.startLine, token.text, null, null, range, fixInfo);
-        }
-      };
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        _loop();
+        var link = _step.value;
+        if (isInlineLink(link)) {
+          inlineLinksPresent = true;
+        } else {
+          referenceLinksPresent = true;
+        }
       }
     } catch (err) {
       _iterator.e(err);
     } finally {
       _iterator.f();
     }
-    var _iterator2 = _createForOfIteratorHelper(inlineLinks),
+    var _iterator2 = _createForOfIteratorHelper(links),
       _step2;
     try {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var token = _step2.value;
-        if (params.config.style === "consistent" && referenceLinks.length > 0 || params.config.style === "reference") {
-          var range = [token.startColumn, token.endColumn - token.startColumn];
-          addErrorContext(onError, token.startLine, token.text, null, null, range);
+        var _link = _step2.value;
+        if (inlineLinksPresent && referenceLinksPresent && consistentStyle || style === "inline" && !isInlineLink(_link) || style === "reference" && isInlineLink(_link)) {
+          addErrorContext(onError, _link.startLine, _link.text, null, null, [_link.startColumn, _link.endColumn - _link.startColumn], fixInfo(parsers.micromark.tokens, _link));
         }
       }
     } catch (err) {
