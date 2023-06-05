@@ -93,7 +93,7 @@
     "tv4": "1.3.0",
     "typescript": "5.1.3",
     "webpack": "5.85.0",
-    "webpack-cli": "5.1.1",
+    "webpack-cli": "5.1.3",
     "yaml": "2.3.1"
   },
   "keywords": [
