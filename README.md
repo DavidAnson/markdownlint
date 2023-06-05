@@ -135,7 +135,7 @@ playground for learning and exploring.
 - **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
 - **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
 - **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
-- **[MD054](doc/md054.md)** *link-style* - Link style
+- **[MD054](doc/md054.md)** *link-image-style* - Link and image style
 
 <!-- markdownlint-restore -->
 

@@ -1,14 +1,17 @@
 # Consistent Link Style
 
-[url {MD054}](http://example.com)
-![url {MD054}](http://example.com)
+[url](https://example.com)
+![url](https://example.com)
 [url] {MD054}
 ![url] {MD054}
 [text][url] {MD054}
 ![text][url] {MD054}
-<http://example.com>
+<https://example.com>
 
-[url]: http://example.com
+[url]: https://example.com
+
 <!-- markdownlint-configure-file {
-  "MD054": {"style": "consistent"}
+  "MD054": {
+    "style": "consistent"
+  }
 } -->

@@ -289,9 +289,9 @@
     ]
   },
 
-  // MD054/link-style - Link style
+  // MD054/link-image-style - Link and image style
   "MD054": {
-    // Link style should be consistent
+    // Link or image style should be consistent
     "style": "consistent"
   }
 }

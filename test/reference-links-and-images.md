@@ -61,7 +61,7 @@ Use of multi-line label: [multi-line-label][]
 
 Use of link in label: [link-in-label][]
 
-Standard link: [text](https://example.com/standard)
+Standard link: [text](https://example.com/standard) {MD054}
 
 Wrapped in brackets: [[text][unique0]] [[unique1][]] [[unique2]]
 
@@ -112,7 +112,7 @@ Collapsed style: ![image1][]
 
 Shortcut style: ![image2]
 
-Image in link: [![text][image3]](link) [![image4][]](link) [![image5]](link)
+Image in link: [![text][image3]](link) [![image4][]](link) [![image5]](link) {MD054}
 
 Image in shortcut link: [![text][image6]][unique6] [![image7][]][unique7] [![image8]][unique8]
 

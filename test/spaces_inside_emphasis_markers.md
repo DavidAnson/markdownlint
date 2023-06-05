@@ -372,3 +372,7 @@ Emphasis <p data="* attribute *">* HTML *</p> {MD033} {MD037}
 
 Embedded underscore is okay:
 Text _emphas_i_s_ text _emphasis_
+
+<!-- markdownlint-configure-file {
+  "MD054": false
+} -->

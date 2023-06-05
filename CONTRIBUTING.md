@@ -3,12 +3,12 @@
 Interested in contributing? Great! Here are some suggestions to make it a good
 experience:
 
-Start by [opening an issue](https://github.com/DavidAnson/markdownlint/issues),
-whether to identify a problem or outline a change. That issue should be used to
-discuss the situation and agree on a plan of action before writing code or
-sending a pull request. Maybe the problem isn't really a problem, or maybe there
-are more things to consider. If so, it's best to realize that before spending
-time and effort writing code that may not get used.
+Start by [opening an issue], whether to identify a problem or outline a change.
+That issue should be used to discuss the situation and agree on a plan of
+action before writing code or sending a pull request. Maybe the problem isn't
+really a problem, or maybe there are more things to consider. If so, it's best
+to realize that before spending time and effort writing code that may not get
+used.
 
 Match the coding style of the files you edit. Although everyone has their own
 preferences and opinions, a pull request is not the right forum to debate them.
@@ -90,3 +90,4 @@ Thank you!
 [npm-scripts]: https://docs.npmjs.com/misc/scripts
 [pin-dependencies]: https://maxleiter.com/blog/pin-dependencies
 [rewriting-history]: https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History
+[opening an issue]: https://github.com/DavidAnson/markdownlint/issues

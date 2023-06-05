@@ -501,7 +501,7 @@ for (const rule of rules) {
     case "MD054":
       scheme.properties = {
         "style": {
-          "description": "Link style should be consistent",
+          "description": "Link or image style should be consistent",
           "type": "string",
           "enum": [
             "consistent",

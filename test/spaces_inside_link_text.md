@@ -53,14 +53,14 @@ Wrapped [ link with leading space
 
 Non-wrapped [ link with leading space](https://example.com) {MD039}
 
-[][ref]
+[][ref] {MD054}
 
-[link][ref]
+[link][ref] {MD054}
 
-[link ][ref] {MD039}
+[link ][ref] {MD039} {MD054}
 
-[ link][ref] {MD039}
+[ link][ref] {MD039} {MD054}
 
-[ link ][ref] {MD039}
+[ link ][ref] {MD039} {MD054}
 
 [ref]: https://example.com

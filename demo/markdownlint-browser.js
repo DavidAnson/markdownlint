@@ -6480,20 +6480,20 @@ var isInlineLink = function isInlineLink(_ref) {
     return type === "resource";
   });
 };
-var deepGetTokenTextByType = function deepGetTokenTextByType(tokens, type) {
+var getNestedTokenByType = function getNestedTokenByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
 var fixInfo = function fixInfo(tokens, link) {
   if (isInlineLink(link)) {
     return null;
   }
-  var label = deepGetTokenTextByType([link], "labelText");
+  var label = getNestedTokenByType([link], "labelText");
   var definitions = filterByTypes(tokens, ["definition"]);
   var definition = filterByPredicate(definitions, function (d) {
-    return deepGetTokenTextByType([d], "definitionLabelString") === label;
+    return getNestedTokenByType([d], "definitionLabelString") === label;
   });
   if (definition.length > 0) {
-    var destination = deepGetTokenTextByType(definition, "definitionDestination");
+    var destination = getNestedTokenByType(definition, "definitionDestination");
     return {
       "editColumn": link.endColumn,
       "insertText": "(".concat(destination, ")")
@@ -6502,46 +6502,31 @@ var fixInfo = function fixInfo(tokens, link) {
   return null;
 };
 module.exports = {
-  "names": ["MD054", "link-style"],
-  "description": "Link style",
+  "names": ["MD054", "link-image-style"],
+  "description": "Link and image style",
   "tags": ["images", "links"],
   "function": function MD054(_ref3, onError) {
     var parsers = _ref3.parsers,
       config = _ref3.config;
+    var style = String(config.style || "consistent").trim();
     var links = filterByTypes(parsers.micromark.tokens, ["link", "image"]);
-    var style = config.style;
-    var consistentStyle = style === "consistent";
-    var referenceLinksPresent = false;
-    var inlineLinksPresent = false;
     var _iterator = _createForOfIteratorHelper(links),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var link = _step.value;
-        if (isInlineLink(link)) {
-          inlineLinksPresent = true;
-        } else {
-          referenceLinksPresent = true;
+        var inlineLink = isInlineLink(link);
+        if (style === "consistent") {
+          style = inlineLink ? "inline" : "reference";
+        }
+        if (style === "inline" && !inlineLink || style === "reference" && inlineLink) {
+          addErrorContext(onError, link.startLine, link.text, null, null, null, fixInfo(parsers.micromark.tokens, link));
         }
       }
     } catch (err) {
       _iterator.e(err);
     } finally {
       _iterator.f();
-    }
-    var _iterator2 = _createForOfIteratorHelper(links),
-      _step2;
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var _link = _step2.value;
-        if (inlineLinksPresent && referenceLinksPresent && consistentStyle || style === "inline" && !isInlineLink(_link) || style === "reference" && isInlineLink(_link)) {
-          addErrorContext(onError, _link.startLine, _link.text, null, null, [_link.startColumn, _link.endColumn - _link.startColumn], fixInfo(parsers.micromark.tokens, _link));
-        }
-      }
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
     }
   }
 };

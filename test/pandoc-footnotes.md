@@ -6,12 +6,12 @@
 
 A sentence with footnotes: [^1] [^2]
 A sentence with named footnotes: [^name] [^name2]
-A sentence with a link reference: [Pandoc's User Guide][Pandoc1]
+A sentence with a link reference: [Pandoc's User Guide][Pandoc1] {MD054}
 
 [^1]: I am a footnote!
-[^2]: I reference a [PCW][PCW1] article!
+[^2]: I reference a [PCW][PCW1] article! {MD054}
 [^name]: I am a footnote with name!
-[^name2]: I am also a named footnote! I also reference the [PCW][PCW1] article!
+[^name2]: I am also a named footnote! I also reference the [PCW][PCW1] article! {MD054}
 
 [PCW1]: https://www.example.com/article.html
 [Pandoc1]: https://pandoc.org/MANUAL.html#extension-footnotes
@@ -22,11 +22,11 @@ A sentence with a long footnotes: [^long] [^longer] [^longest]
 
 [^long]: I am a long footnote!
     I don't do any harm :)
-[^longer]: I am a longer footnote. I do reference the [PCW][PCW2] article.
-    I do harm. Though, not here: [Pandoc's User Guide][Pandoc2]
-[^longest]: I am the longest footnote. I also reference the [PCW][PCW2] article.
+[^longer]: I am a longer footnote. I do reference the [PCW][PCW2] article. {MD054}
+    I do harm. Though, not here: [Pandoc's User Guide][Pandoc2] {MD054}
+[^longest]: I am the longest footnote. I also reference the [PCW][PCW2] article. {MD054}
 
-    I am a harmful new block of text: [Another][Another2]
+    I am a harmful new block of text: [Another][Another2] {MD054}
 
 > The previous line of text is treated by CommonMark as an indented code block.
 > To handle it as a Pandoc footnote, consider the `markdown-it-footnote` plugin.

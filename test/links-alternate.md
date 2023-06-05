@@ -29,11 +29,11 @@ Text https://example.com/first more text https://example.com/second still more t
 
 (Incorrect link syntax)[https://www.example.com/] {MD011}
 
-Text [link ](https://example.com/) text. {MD039}
+Text [link ](https://example.com/) text. {MD039} {MD054}
 
-Text [ link](https://example.com/) text. {MD039}
+Text [ link](https://example.com/) text. {MD039} {MD054}
 
-Text [ link ](https://example.com/) text. {MD039}
+Text [ link ](https://example.com/) text. {MD039} {MD054}
 
 Text [link ][reference] text. {MD039}
 

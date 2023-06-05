@@ -1,14 +1,17 @@
 # Reference Link Style
 
-[url {MD054}](http://example.com)
-![url {MD054}](http://example.com)
+[url {MD054}](https://example.com)
+![url {MD054}](https://example.com)
 [url]
 ![url]
 [text][url]
 ![text][url]
-<http://example.com>
+<https://example.com>
 
-[url]: http://example.com
+[url]: https://example.com
+
 <!-- markdownlint-configure-file {
-  "MD054": {"style": "reference"}
+  "MD054": {
+    "style": "reference"
+  }
 } -->

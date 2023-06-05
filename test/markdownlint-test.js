@@ -482,13 +482,14 @@ test("styleAll", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 123 ],
+        "MD047": [ 120 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
         "MD051": [ 96 ],
         "MD052": [ 98 ],
-        "MD053": [ 100 ]
+        "MD053": [ 100 ],
+        "MD054": [ 71, 81, 85, 96 ]
       }
     };
     // @ts-ignore
@@ -531,13 +532,14 @@ test("styleRelaxed", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 123 ],
+        "MD047": [ 120 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
         "MD051": [ 96 ],
         "MD052": [ 98 ],
-        "MD053": [ 100 ]
+        "MD053": [ 100 ],
+        "MD054": [ 71, 81, 85, 96 ]
       }
     };
     // @ts-ignore
@@ -706,7 +708,8 @@ test("filesArrayAsString", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "config": {
       "MD013": { "line_length": 150 },
-      "MD024": false
+      "MD024": false,
+      "MD054": false
     }
   }, function callback(err, actual) {
     t.falsy(err);
@@ -926,7 +929,7 @@ test("readme", (t) => new Promise((resolve) => {
 }));
 
 test("validateJsonUsingConfigSchemaStrict", (t) => {
-  t.plan(159);
+  t.plan(162);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([

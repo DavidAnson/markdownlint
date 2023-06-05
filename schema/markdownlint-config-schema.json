@@ -956,7 +956,7 @@
       "$ref": "#/properties/MD053"
     },
     "MD054": {
-      "description": "MD054/link-style - Link style",
+      "description": "MD054/link-image-style - Link and image style",
       "type": [
         "boolean",
         "object"
@@ -964,7 +964,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Link style should be consistent",
+          "description": "Link or image style should be consistent",
           "type": "string",
           "enum": [
             "consistent",
@@ -976,7 +976,7 @@
       },
       "additionalProperties": false
     },
-    "link-style": {
+    "link-image-style": {
       "$ref": "#/properties/MD054"
     },
     "headings": {

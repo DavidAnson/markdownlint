@@ -87,3 +87,7 @@ But not if the [link [is-not-a-valid] link](https://example.com)
 
 Escaping both inner square brackets avoids confusion:
 [link \[is-not-a-valid\] link](https://example.com)
+
+<!-- markdownlint-configure-file {
+  "MD054": false
+} -->

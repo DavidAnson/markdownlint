@@ -13,7 +13,7 @@
 
 	{MD009} {MD010} 
 
-(name)[link] {MD011} {MD054}
+(name)[link] {MD011}
 
 
 {MD012:18}
@@ -95,7 +95,7 @@ Strong **with** different style {MD050}
 
 [Missing link fragment](#missing) {MD051} {MD054}
 
-[Missing link][label] {MD052} {MD054}
+[Missing link][label] {MD052}
 
 [unused]: link-destination
 {MD053:100}
@@ -114,9 +114,6 @@ Strong **with** different style {MD050}
     "names": [
       "markdownlint"
     ]
-  },
-  "MD054": {
-    "style": "consistent"
   }
 } -->
 

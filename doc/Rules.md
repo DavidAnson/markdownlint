@@ -2271,16 +2271,16 @@ Markdown:
 
 <a name="md054"></a>
 
-## `MD054` - Link style
+## `MD054` - Link and image style
 
 Tags: `images`, `links`
 
-Aliases: `link-style`
+Aliases: `link-image-style`
 
 Parameters:
 
-- `style`: Link style should be consistent (`string`, default `consistent`,
-  values `consistent` / `inline` / `reference`)
+- `style`: Link or image style should be consistent (`string`, default
+  `consistent`, values `consistent` / `inline` / `reference`)
 
 Fixable: Some violations can be fixed by tooling
 
@@ -2289,7 +2289,7 @@ at the time of use or can define it elsewhere and use a label for reference.
 The reference format is convenient for keeping paragraph text clutter-free
 and makes it easy to reuse the same URL in multiple places.
 
-This rule can be used to enforce a link style that is either:
+This rule can be used to enforce a link or image style that is either:
 
 - provides the link destination or image source at the time of use (`inline`)
 - defines the link destination or image source elsewhere to be referenced by
