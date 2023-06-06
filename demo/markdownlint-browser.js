@@ -6480,22 +6480,25 @@ var isInlineLink = function isInlineLink(_ref) {
     return type === "resource";
   });
 };
-var getNestedTokenByType = function getNestedTokenByType(tokens, type) {
+var getNestedTokenTextByType = function getNestedTokenTextByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
 var fixInfo = function fixInfo(tokens, link) {
   if (isInlineLink(link)) {
     return null;
   }
-  var label = getNestedTokenByType([link], "labelText");
+  var reference = getNestedTokenTextByType([link], "reference");
+  var emptyReference = reference === "[]";
+  var label = getNestedTokenTextByType([link], "labelText");
   var definitions = filterByTypes(tokens, ["definition"]);
   var definition = filterByPredicate(definitions, function (d) {
-    return getNestedTokenByType([d], "definitionLabelString") === label;
+    return getNestedTokenTextByType([d], "definitionLabelString") === label;
   });
   if (definition.length > 0) {
-    var destination = getNestedTokenByType(definition, "definitionDestination");
+    var destination = getNestedTokenTextByType(definition, "definitionDestination");
     return {
-      "editColumn": link.endColumn,
+      "editColumn": emptyReference ? link.endColumn - 2 : link.endColumn,
+      "deleteCount": emptyReference ? 2 : 0,
       "insertText": "(".concat(destination, ")")
     };
   }
