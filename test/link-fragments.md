@@ -56,7 +56,7 @@
 
 [Valid](#id-after-name)
 
-[Valid][goodref] {MD054}
+[Valid][goodref]
 
 ### Valid H3 Heading
 
@@ -157,7 +157,7 @@ Text
 
 [Invalid](#not-an-id-should-be-ignored) {MD051}
 
-[Invalid][badref] {MD051} {MD054}
+[Invalid][badref] {MD051}
 
 [badref]: #missing
 
@@ -167,7 +167,7 @@ Text
 
 [ALL CAPS](#NAMEDLINK) {MD051}
 
-[MiXeD][mixedref] {MD051} {MD054}
+[MiXeD][mixedref] {MD051}
 
 [mixedref]: #idLINK
 
@@ -175,5 +175,6 @@ Text
   "emphasis-style": false,
   "heading-style": false,
   "no-duplicate-heading": false,
+  "MD054": false,
   "no-inline-html": false
 } -->

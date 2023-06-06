@@ -72,3 +72,7 @@ Long lines inside HTML comments should also produce a violation of the line-leng
 <!-- Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013} -->
 
 Long lines inside HTML comments should also <!-- produce a violation of the line-length rule. {MD013} -->
+
+<!-- markdownlint-configure-file {
+  "MD053": false
+} -->

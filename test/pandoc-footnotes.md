@@ -45,3 +45,7 @@ Sample footnotes [^3] [^note3]
 [^note3]:
     I am a new block of text
     With a new line as well
+
+<!-- markdownlint-configure-file {
+  "MD053": false
+} -->

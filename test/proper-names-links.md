@@ -34,6 +34,7 @@ Learn about [javascript]. {MD044} {MD054}
     [javascript]: https://example.com/js {MD044} {MD054}
 
 <!-- markdownlint-configure-file {
+  "MD053": false,
   "proper-names": {
     "names": [
       "JavaScript"

@@ -6483,22 +6483,29 @@ var isInlineLink = function isInlineLink(_ref) {
 var getNestedTokenTextByType = function getNestedTokenTextByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
+var definitionDestinationForId = function definitionDestinationForId(tokens, id) {
+  var definitions = filterByTypes(tokens, ["definition"]);
+  var definition = filterByPredicate(definitions, function (d) {
+    return getNestedTokenTextByType([d], "definitionLabelString") === id;
+  });
+  if (definition.length > 0) {
+    return getNestedTokenTextByType(definition, "definitionDestination");
+  }
+  return null;
+};
 var fixInfo = function fixInfo(tokens, link) {
   if (isInlineLink(link)) {
     return null;
   }
   var reference = getNestedTokenTextByType([link], "reference");
-  var emptyReference = reference === "[]";
   var label = getNestedTokenTextByType([link], "labelText");
-  var definitions = filterByTypes(tokens, ["definition"]);
-  var definition = filterByPredicate(definitions, function (d) {
-    return getNestedTokenTextByType([d], "definitionLabelString") === label;
-  });
-  if (definition.length > 0) {
-    var destination = getNestedTokenTextByType(definition, "definitionDestination");
+  // parser incorrectly calls ID a label when parsing [id] without label
+  var id = reference && reference !== "[]" ? reference.replace(/^\[|\]$/g, "") : label;
+  var destination = definitionDestinationForId(tokens, id);
+  if (destination) {
     return {
-      "editColumn": emptyReference ? link.endColumn - 2 : link.endColumn,
-      "deleteCount": emptyReference ? 2 : 0,
+      "editColumn": reference ? link.endColumn - reference.length : link.endColumn,
+      "deleteCount": reference ? reference.length : 0,
       "insertText": "(".concat(destination, ")")
     };
   }

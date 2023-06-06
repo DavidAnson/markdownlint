@@ -14,6 +14,7 @@ Text [link text][url] text {MD054}
 
 <!-- markdownlint-configure-file {
   "MD034": false,
+  "MD053": false,
   "MD054": {
     "style": "inline"
   }
