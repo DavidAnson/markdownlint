@@ -1,12 +1,12 @@
 # Reference Link Style
 
-[url {MD054}](https://example.com)
-![url {MD054}](https://example.com)
-[url]
-![url]
-[text][url]
-![text][url]
-<https://example.com>
+Text [url {MD054}](https://example.com) text
+Text ![url {MD054}](https://example.com) text
+Text [url] text
+Text ![url] text
+Text [text][url] text
+Text ![text][url] text
+Text <https://example.com> text
 
 [url]: https://example.com
 

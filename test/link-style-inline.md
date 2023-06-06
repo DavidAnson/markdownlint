@@ -1,12 +1,12 @@
 # Inline Link Style
 
-[url](https://example.com)
-![url](https://example.com)
-[url] {MD054}
-![url] {MD054}
-[text][url] {MD054}
-![text][url] {MD054}
-<https://example.com>
+Text [url](https://example.com) text
+Text ![url](https://example.com) text
+Text [url] {MD054} text
+Text ![url] {MD054} text
+Text [text][url] {MD054} text
+Text ![text][url] {MD054} text
+Text <https://example.com> text
 
 [url]: https://example.com
 
