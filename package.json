@@ -33,7 +33,7 @@
     "ci": "npm-run-all --continue-on-error --parallel lint serial-config-docs serial-declaration-demo test-cover && git diff --exit-code",
     "clone-test-repos-apache-airflow": "cd test-repos && git clone https://github.com/apache/airflow apache-airflow --depth 1 --no-tags --quiet",
     "clone-test-repos-dotnet-docs": "cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
-    "clone-test-repos-electron-electron": "cd test-repos && git clone https://github.com/electron/electron electron-electron --depth 1 --no-tags --quiet && cd electron-electron && npm install --ignore-scripts @electron/lint-roller",
+    "clone-test-repos-electron-electron": "cd test-repos && git clone https://github.com/electron/electron electron-electron --depth 1 --no-tags --quiet && cd electron-electron && npm install --ignore-scripts @electron/lint-roller typescript@4",
     "clone-test-repos-eslint-eslint": "cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet",
     "clone-test-repos-mdn-content": "cd test-repos && git clone https://github.com/mdn/content mdn-content --depth 1 --no-tags --quiet",
     "clone-test-repos-mkdocs-mkdocs": "cd test-repos && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet",
