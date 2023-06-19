@@ -79,7 +79,7 @@
     "eslint-plugin-n": "16.0.0",
     "eslint-plugin-regexp": "1.15.0",
     "eslint-plugin-unicorn": "47.0.0",
-    "globby": "13.1.4",
+    "globby": "13.2.0",
     "js-yaml": "4.1.0",
     "markdown-it-for-inline": "0.1.1",
     "markdown-it-sub": "1.0.0",
