@@ -2,6 +2,10 @@
 
 "use strict";
 
+const webpack = require("webpack");
+const TerserPlugin = require("terser-webpack-plugin");
+const { name, version, homepage } = require("./package.json");
+
 const htmlEntry = "./exports-html.mjs";
 const htmlName = "micromarkHtmlBrowser";
 
@@ -9,7 +13,12 @@ const base = {
   "entry": "./exports.mjs",
   "output": {
     "path": __dirname
-  }
+  },
+  "plugins": [
+    new webpack.BannerPlugin({
+      "banner": `${name} ${version} ${homepage}`
+    })
+  ]
 };
 
 const commonjs = {
@@ -36,7 +45,19 @@ const web = {
 };
 
 const production = {
-  "mode": "production"
+  "mode": "production",
+  "optimization": {
+    "minimizer": [
+      new TerserPlugin({
+        "extractComments": false,
+        "terserOptions": {
+          "compress": {
+            "passes": 2
+          }
+        }
+      })
+    ]
+  }
 };
 
 const development = {
