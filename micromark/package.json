@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "scripts": {
-    "build": "webpack --no-stats"
+    "build": "webpack --stats minimal"
   },
   "engines": {
     "node": ">=16"
