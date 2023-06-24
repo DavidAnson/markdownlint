@@ -81,6 +81,16 @@ module.exports.blockquotePrefixRe = blockquotePrefixRe;
 var linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
 
+// Regular expression for identifying an HTML entity at the end of a line
+module.exports.endOfLineHtmlEntityRe =
+// eslint-disable-next-line max-len
+/&(?:#\d+|#[xX][\da-fA-F]+|[a-zA-Z]{2,31}|blk\d{2}|emsp1[34]|frac\d{2}|sup\d|there4);$/;
+
+// Regular expression for identifying a GitHub emoji code at the end of a line
+module.exports.endOfLineGemojiCodeRe =
+// eslint-disable-next-line max-len
+/:(?:[abmovx]|[-+]1|100|1234|(?:1st|2nd|3rd)_place_medal|8ball|clock\d{1,4}|e-mail|non-potable_water|o2|t-rex|u5272|u5408|u55b6|u6307|u6708|u6709|u6e80|u7121|u7533|u7981|u7a7a|[a-z]{2,15}2?|[a-z]{1,14}(?:_[a-z\d]{1,16})+):$/;
+
 // All punctuation characters (normal and full-width)
 var allPunctuation = ".,;:!?。，；：！？";
 module.exports.allPunctuation = allPunctuation;
@@ -4434,12 +4444,17 @@ module.exports = {
 
 
 
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
   allPunctuationNoQuestion = _require.allPunctuationNoQuestion,
-  escapeForRegExp = _require.escapeForRegExp,
-  forEachHeading = _require.forEachHeading;
-var endOfLineHtmlEntityRe = /&#?[\da-zA-Z]+;$/;
+  endOfLineGemojiCodeRe = _require.endOfLineGemojiCodeRe,
+  endOfLineHtmlEntityRe = _require.endOfLineHtmlEntityRe,
+  escapeForRegExp = _require.escapeForRegExp;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes;
 module.exports = {
   "names": ["MD026", "no-trailing-punctuation"],
   "description": "Trailing punctuation in heading",
@@ -4448,21 +4463,31 @@ module.exports = {
     var punctuation = params.config.punctuation;
     punctuation = String(punctuation === undefined ? allPunctuationNoQuestion : punctuation);
     var trailingPunctuationRe = new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
-    forEachHeading(params, function (heading) {
-      var line = heading.line,
-        lineNumber = heading.lineNumber;
-      var trimmedLine = line.replace(/([^\s#])[\s#]+$/, "$1");
-      var match = trailingPunctuationRe.exec(trimmedLine);
-      if (match && !endOfLineHtmlEntityRe.test(trimmedLine)) {
-        var fullMatch = match[0];
-        var column = match.index + 1;
-        var length = fullMatch.length;
-        addError(onError, lineNumber, "Punctuation: '".concat(fullMatch, "'"), null, [column, length], {
-          "editColumn": column,
-          "deleteCount": length
-        });
+    var headings = filterByTypes(params.parsers.micromark.tokens, ["atxHeadingText", "setextHeadingText"]);
+    var _iterator = _createForOfIteratorHelper(headings),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var heading = _step.value;
+        var endLine = heading.endLine,
+          startColumn = heading.startColumn,
+          text = heading.text;
+        var match = trailingPunctuationRe.exec(text);
+        if (match && !endOfLineHtmlEntityRe.test(text) && !endOfLineGemojiCodeRe.test(text)) {
+          var fullMatch = match[0];
+          var column = startColumn + match.index;
+          var length = fullMatch.length;
+          addError(onError, endLine, "Punctuation: '".concat(fullMatch, "'"), undefined, [column, length], {
+            "editColumn": column,
+            "deleteCount": length
+          });
+        }
       }
-    });
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
   }
 };
 

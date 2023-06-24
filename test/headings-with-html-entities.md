@@ -12,6 +12,8 @@
 
 ## Copyright 2004 &#x000A9;
 
+## Copyright 2004 &#X000A9;
+
 ## Copyright 2005 &#169;
 
 ## Copyright 2006 &#169; ##

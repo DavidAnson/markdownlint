@@ -1283,3 +1283,21 @@ Empty bracket pairs: [text3[]][]
   };
   return markdownlint(options).then(() => null);
 });
+
+test("endOfLineHtmlEntityRe", async(t) => {
+  const { characterEntities } = await import("character-entities");
+  const entities = Object.keys(characterEntities);
+  t.plan(entities.length);
+  for (const entity of entities) {
+    t.true(helpers.endOfLineHtmlEntityRe.test(`-&${entity};`), entity);
+  }
+});
+
+test("endOfLineGemojiCodeRe", async(t) => {
+  const { gemoji } = await import("gemoji");
+  const emojis = gemoji.flatMap((i) => i.names);
+  t.plan(emojis.length);
+  for (const emoji of emojis) {
+    t.true(helpers.endOfLineGemojiCodeRe.test(`-:${emoji}:`), emoji);
+  }
+});
