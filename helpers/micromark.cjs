@@ -33,7 +33,7 @@ function getMicromarkEvents(markdown, options = {}, refsDefined = true) {
 
   // Customize options object to add useful extensions
   options.extensions = options.extensions || [];
-  options.extensions.push(gfmAutolinkLiteral, gfmFootnote(), gfmTable);
+  options.extensions.push(gfmAutolinkLiteral(), gfmFootnote(), gfmTable());
 
   // Use micromark to parse document into Events
   const encoding = undefined;
