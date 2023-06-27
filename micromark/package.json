@@ -20,7 +20,7 @@
   },
   "devDependencies": {
     "micromark": "4.0.0",
-    "micromark-extension-gfm-autolink-literal": "1.0.5",
+    "micromark-extension-gfm-autolink-literal": "2.0.0",
     "micromark-extension-gfm-footnote": "2.0.0",
     "micromark-extension-gfm-table": "1.0.7",
     "terser-webpack-plugin": "5.3.9",
