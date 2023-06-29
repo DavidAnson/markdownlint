@@ -24,7 +24,7 @@
     "micromark-extension-gfm-footnote": "2.0.0",
     "micromark-extension-gfm-table": "2.0.0",
     "terser-webpack-plugin": "5.3.9",
-    "webpack": "5.88.0",
+    "webpack": "5.88.1",
     "webpack-cli": "5.1.4"
   }
 }
