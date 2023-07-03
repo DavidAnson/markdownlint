@@ -42,9 +42,9 @@
     } else if (renderer === "micromark") {
       const parseOptions = {
         "extensions": [
-          micromark.gfmAutolinkLiteral,
+          micromark.gfmAutolinkLiteral(),
           micromark.gfmFootnote(),
-          micromark.gfmTable
+          micromark.gfmTable()
         ]
       };
       const context = micromark.parse(parseOptions);
@@ -53,9 +53,9 @@
       const compileOptions = {
         "allowDangerousHtml": true,
         "htmlExtensions": [
-          micromarkHtml.gfmAutolinkLiteralHtml,
+          micromarkHtml.gfmAutolinkLiteralHtml(),
           micromarkHtml.gfmFootnoteHtml(),
-          micromarkHtml.gfmTableHtml
+          micromarkHtml.gfmTableHtml()
         ]
       };
       return micromarkHtml.compile(compileOptions)(events);
