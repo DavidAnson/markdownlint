@@ -69,7 +69,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.22.6",
-    "@babel/preset-env": "7.22.5",
+    "@babel/preset-env": "7.22.6",
     "ava": "5.3.1",
     "babel-loader": "9.1.2",
     "c8": "8.0.0",
