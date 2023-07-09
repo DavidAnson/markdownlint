@@ -6225,6 +6225,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
 // Regular expression for identifying HTML anchor names
 var idRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]id[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
 var nameRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]name[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
+var anchorRe = /\{(#[0-9a-z]+(?:[\x2D_][0-9a-z]+)*)\}/g;
 
 /**
  * Converts a Markdown heading into an HTML fragment according to the rules
@@ -6260,15 +6261,24 @@ module.exports = {
         fragments.set("".concat(fragment, "-").concat(count), 0);
       }
       fragments.set(fragment, count + 1);
+      var match = null;
+      while ((match = anchorRe.exec(content)) !== null) {
+        var _match = match,
+          _match2 = _slicedToArray(_match, 2),
+          anchor = _match2[1];
+        if (!fragments.has(anchor)) {
+          fragments.set(anchor, 1);
+        }
+      }
     });
     // Process HTML anchors
     var processHtmlToken = function processHtmlToken(token) {
       var match = null;
       while ((match = htmlElementRe.exec(token.content)) !== null) {
-        var _match = match,
-          _match2 = _slicedToArray(_match, 3),
-          tag = _match2[0],
-          element = _match2[2];
+        var _match3 = match,
+          _match4 = _slicedToArray(_match3, 3),
+          tag = _match4[0],
+          element = _match4[2];
         var anchorMatch = idRe.exec(tag) || element.toLowerCase() === "a" && nameRe.exec(tag);
         if (anchorMatch) {
           fragments.set("#".concat(anchorMatch[1]), 0);
@@ -6292,8 +6302,8 @@ module.exports = {
         var fixInfo = null;
         var match = line.match(new RegExp("\\[.*?\\]\\(".concat(escapeForRegExp(context), "\\)")));
         if (match) {
-          var _match3 = _slicedToArray(match, 1);
-          context = _match3[0];
+          var _match5 = _slicedToArray(match, 1);
+          context = _match5[0];
           var index = match.index;
           var length = context.length;
           range = [index + 1, length];

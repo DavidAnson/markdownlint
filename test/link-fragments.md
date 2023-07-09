@@ -171,6 +171,55 @@ Text
 
 [mixedref]: #idLINK
 
+## Valid Named Fragments
+
+[Valid](#named-fragment)
+
+[Valid](#valid-heading-with-named-fragment-named-fragment)
+
+[Valid](#another_fragment_123)
+
+[Valid](#valid-heading-with-another-named-fragment-another_fragment_123)
+
+[Valid](#closed-atx)
+
+[Valid](#setext)
+
+### Valid Heading with Named Fragment {#named-fragment}
+
+### Valid Heading with Another Named Fragment {#another_fragment_123}
+
+### Valid Closed ATX Heading with Named Fragment {#closed-atx} ###
+
+Valid Setext Heading with Named Fragment {#setext}
+--------------------------------------------------
+
+## Invalid Named Fragments
+
+### Invalid Heading with Named Fragment {#embedded space}
+
+### Invalid Heading with Named Fragment {#hyphen--run}
+
+### Invalid Heading with Named Fragment {#UpperCase}
+
+{#named-fragment-outside-heading}
+
+[Invalid](#embedded-space) {MD051}
+
+[Invalid](#embedded_space) {MD051}
+
+[Invalid](#embedded) {MD051}
+
+[Invalid](#hyphen--run) {MD051}
+
+[Invalid](#hyphen-run) {MD051}
+
+[Invalid](#named-fragment-outside-heading) {MD051}
+
+[Invalid](#UpperCase) {MD051}
+
+[Invalid](#uppercase) {MD051}
+
 <!-- markdownlint-configure-file {
   "emphasis-style": false,
   "heading-style": false,
