@@ -123,7 +123,7 @@
 
   // MD024/no-duplicate-heading/no-duplicate-header - Multiple headings with the same content
   "MD024": {
-    // Only check sibling headings
+    // Allow duplicate headings if in different nesting
     "allow_different_nesting": false,
     // Only check sibling headings
     "siblings_only": false
