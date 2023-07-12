@@ -648,31 +648,30 @@ test("customRulesOnErrorNullSync", (t) => {
 });
 
 test("customRulesOnErrorBad", (t) => {
-  t.plan(21);
+  t.plan(25);
   for (const testCase of [
     {
       "propertyName": "lineNumber",
-      "subPropertyName": null,
       "propertyValues": [ null, "string" ]
     },
     {
       "propertyName": "detail",
-      "subPropertyName": null,
       "propertyValues": [ 10, [] ]
     },
     {
       "propertyName": "context",
-      "subPropertyName": null,
       "propertyValues": [ 10, [] ]
     },
     {
+      "propertyName": "information",
+      "propertyValues": [ 10, [], "string", "https://example.com" ]
+    },
+    {
       "propertyName": "range",
-      "subPropertyName": null,
       "propertyValues": [ 10, [], [ 10 ], [ 10, null ], [ 10, 11, 12 ] ]
     },
     {
       "propertyName": "fixInfo",
-      "subPropertyName": null,
       "propertyValues": [ 10, "string" ]
     },
     {
@@ -744,12 +743,10 @@ test("customRulesOnErrorInvalid", (t) => {
   for (const testCase of [
     {
       "propertyName": "lineNumber",
-      "subPropertyName": null,
       "propertyValues": [ -1, 0, 3, 4 ]
     },
     {
       "propertyName": "range",
-      "subPropertyName": null,
       "propertyValues": [ [ 0, 1 ], [ 1, 0 ], [ 5, 1 ], [ 1, 5 ], [ 4, 2 ] ]
     },
     {
@@ -816,12 +813,10 @@ test("customRulesOnErrorValid", (t) => {
   for (const testCase of [
     {
       "propertyName": "lineNumber",
-      "subPropertyName": null,
       "propertyValues": [ 1, 2 ]
     },
     {
       "propertyName": "range",
-      "subPropertyName": null,
       "propertyValues": [ [ 1, 1 ], [ 1, 4 ], [ 2, 2 ], [ 3, 2 ], [ 4, 1 ] ]
     },
     {
@@ -927,6 +922,7 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
     "lineNumber": 1,
     "detail": "detail",
     "context": "context",
+    "information": new URL("https://example.com/information"),
     "range": [ 1, 2 ],
     "fixInfo": {
       "editColumn": 1,
@@ -945,6 +941,7 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
           errorObject.lineNumber = 2;
           errorObject.detail = "changed";
           errorObject.context = "changed";
+          errorObject.information = new URL("https://example.com/changed");
           errorObject.range[1] = 3;
           errorObject.fixInfo.editColumn = 2;
           errorObject.fixInfo.deleteCount = 3;
@@ -964,7 +961,7 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
           "lineNumber": 1,
           "ruleNames": [ "name" ],
           "ruleDescription": "description",
-          "ruleInformation": null,
+          "ruleInformation": "https://example.com/information",
           "errorDetail": "detail",
           "errorContext": "context",
           "errorRange": [ 1, 2 ],
@@ -1104,6 +1101,198 @@ test("customRulesStringName", (t) => new Promise((resolve) => {
     resolve();
   });
 }));
+
+test("customRulesOnErrorInformationNotRuleNotError", (t) => {
+  t.plan(1);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": (params, onError) => {
+          onError({
+            "lineNumber": 1
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  });
+  t.true(actualResult.string[0].ruleInformation === null, "Unexpected URL.");
+});
+
+test("customRulesOnErrorInformationRuleNotError", (t) => {
+  t.plan(1);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "information": new URL("https://example.com/rule"),
+        "function": (params, onError) => {
+          onError({
+            "lineNumber": 1
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  });
+  t.is(
+    actualResult.string[0].ruleInformation,
+    "https://example.com/rule",
+    "Unexpected URL."
+  );
+});
+
+test("customRulesOnErrorInformationNotRuleError", (t) => {
+  t.plan(1);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function": (params, onError) => {
+          onError({
+            "lineNumber": 1,
+            "information": new URL("https://example.com/error")
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  });
+  t.is(
+    actualResult.string[0].ruleInformation,
+    "https://example.com/error",
+    "Unexpected URL."
+  );
+});
+
+test("customRulesOnErrorInformationRuleError", (t) => {
+  t.plan(1);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "information": new URL("https://example.com/rule"),
+        "function": (params, onError) => {
+          onError({
+            "lineNumber": 1,
+            "information": new URL("https://example.com/error")
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  });
+  t.is(
+    actualResult.string[0].ruleInformation,
+    "https://example.com/error",
+    "Unexpected URL."
+  );
+});
+
+test("customRulesOnErrorInformationRuleErrorUndefined", (t) => {
+  t.plan(1);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "information": new URL("https://example.com/rule"),
+        "function": (params, onError) => {
+          onError({
+            "lineNumber": 1,
+            "information": undefined
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  });
+  t.is(
+    actualResult.string[0].ruleInformation,
+    "https://example.com/rule",
+    "Unexpected URL."
+  );
+});
+
+test("customRulesOnErrorInformationRuleErrorMultiple", (t) => {
+  t.plan(6);
+  const actualResult = markdownlint.sync({
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "information": new URL("https://example.com/rule"),
+        "function": (params, onError) => {
+          onError({
+            "lineNumber": 1,
+            "information": new URL("https://example.com/errorA")
+          });
+          onError({
+            "lineNumber": 3,
+            "information": new URL("https://example.com/errorB")
+          });
+          onError({
+            "lineNumber": 5
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n\nText\n\nText\n"
+    }
+  });
+  t.is(
+    actualResult.string[0].lineNumber,
+    1,
+    "Unexpected line number."
+  );
+  t.is(
+    actualResult.string[0].ruleInformation,
+    "https://example.com/errorA",
+    "Unexpected URL."
+  );
+  t.is(
+    actualResult.string[1].lineNumber,
+    3,
+    "Unexpected line number."
+  );
+  t.is(
+    actualResult.string[1].ruleInformation,
+    "https://example.com/errorB",
+    "Unexpected URL."
+  );
+  t.is(
+    actualResult.string[2].lineNumber,
+    5,
+    "Unexpected line number."
+  );
+  t.is(
+    actualResult.string[2].ruleInformation,
+    "https://example.com/rule",
+    "Unexpected URL."
+  );
+});
 
 test("customRulesDoc", (t) => new Promise((resolve) => {
   t.plan(2);

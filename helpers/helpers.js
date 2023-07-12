@@ -73,7 +73,12 @@ module.exports.isEmptyString = function isEmptyString(str) {
 
 // Returns true iff the input is an object
 module.exports.isObject = function isObject(obj) {
-  return (obj !== null) && (typeof obj === "object") && !Array.isArray(obj);
+  return !!obj && (typeof obj === "object") && !Array.isArray(obj);
+};
+
+// Returns true iff the input is a URL
+module.exports.isUrl = function isUrl(obj) {
+  return !!obj && (Object.getPrototypeOf(obj) === URL.prototype);
 };
 
 /**

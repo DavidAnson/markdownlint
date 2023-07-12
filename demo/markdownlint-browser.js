@@ -115,7 +115,12 @@ module.exports.isEmptyString = function isEmptyString(str) {
 
 // Returns true iff the input is an object
 module.exports.isObject = function isObject(obj) {
-  return obj !== null && _typeof(obj) === "object" && !Array.isArray(obj);
+  return !!obj && _typeof(obj) === "object" && !Array.isArray(obj);
+};
+
+// Returns true iff the input is a URL
+module.exports.isUrl = function isUrl(obj) {
+  return !!obj && Object.getPrototypeOf(obj) === URL.prototype;
 };
 
 /**
@@ -1712,7 +1717,7 @@ function validateRuleList(ruleList, synchronous) {
           result = newError(_property);
         }
       }
-      if (!result && rule.information && Object.getPrototypeOf(rule.information) !== URL.prototype) {
+      if (!result && rule.information && !helpers.isUrl(rule.information)) {
         result = newError("information");
       }
       if (!result && rule.asynchronous !== undefined && typeof rule.asynchronous !== "boolean") {
@@ -2401,6 +2406,9 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
       if (errorInfo.context && !helpers.isString(errorInfo.context)) {
         throwError("context");
       }
+      if (errorInfo.information && !helpers.isUrl(errorInfo.information)) {
+        throwError("information");
+      }
       if (errorInfo.range && (!Array.isArray(errorInfo.range) || errorInfo.range.length !== 2 || !helpers.isNumber(errorInfo.range[0]) || errorInfo.range[0] < 1 || !helpers.isNumber(errorInfo.range[1]) || errorInfo.range[1] < 1 || errorInfo.range[0] + errorInfo.range[1] - 1 > lines[errorInfo.lineNumber - 1].length)) {
         throwError("range");
       }
@@ -2436,12 +2444,13 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
           cleanFixInfo.insertText = fixInfo.insertText;
         }
       }
+      var information = errorInfo.information || rule.information;
       results.push({
         lineNumber: lineNumber,
         "ruleName": rule.names[0],
         "ruleNames": rule.names,
         "ruleDescription": rule.description,
-        "ruleInformation": rule.information ? rule.information.href : null,
+        "ruleInformation": information ? information.href : null,
         "errorDetail": errorInfo.detail || null,
         "errorContext": errorInfo.context || null,
         "errorRange": errorInfo.range ? _toConsumableArray(errorInfo.range) : null,
@@ -3036,6 +3045,7 @@ module.exports = markdownlint;
  * @property {number} lineNumber Line number (1-based).
  * @property {string} [detail] Detail about the error.
  * @property {string} [context] Context for the error.
+ * @property {URL} [information] Link to more information.
  * @property {number[]} [range] Column number (1-based) and length.
  * @property {RuleOnErrorFixInfo} [fixInfo] Fix information.
  */

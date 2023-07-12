@@ -82,6 +82,8 @@ properties:
       error.
     - `context` is an optional `String` with relevant text surrounding the error
       location.
+    - `information` is an optional (absolute) `URL` of a link to override the
+      same-named value provided by the rule definition. (Uncommon)
     - `range` is an optional `Array` with two `Number` values identifying the
       1-based column and length of the error.
     - `fixInfo` is an optional `Object` with information about how to fix the

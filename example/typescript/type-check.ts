@@ -112,7 +112,7 @@ markdownlint(options, assertLintResultsCallback);
 const testRule = {
   "names": [ "test-rule" ],
   "description": "Test rule",
-  "information": new URL("https://example.com/test-rule"),
+  "information": new URL("https://example.com/rule-information"),
   "tags": [ "test-tag" ],
   "function": function rule(params: markdownlint.RuleParams, onError: markdownlint.RuleOnError) {
     assert(!!params);
@@ -136,6 +136,7 @@ const testRule = {
       "lineNumber": 1,
       "detail": "detail",
       "context": "context",
+      "information": new URL("https://example.com/error-information"),
       "range": [ 1, 2 ],
       "fixInfo": {
         "lineNumber": 1,

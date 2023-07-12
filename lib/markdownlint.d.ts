@@ -219,6 +219,10 @@ type RuleOnErrorInfo = {
      */
     context?: string;
     /**
+     * Link to more information.
+     */
+    information?: URL;
+    /**
      * Column number (1-based) and length.
      */
     range?: number[];
