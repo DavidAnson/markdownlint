@@ -2628,8 +2628,11 @@ function lintInput(options, synchronous, callback) {
   // Normalize inputs
   options = options || {};
   callback = callback || function noop() {};
+  var customRuleList = [options.customRules || []].flat().map(function (rule) {
+    return _objectSpread({}, rule);
+  });
   // eslint-disable-next-line unicorn/prefer-spread
-  var ruleList = rules.concat(options.customRules || []);
+  var ruleList = rules.concat(customRuleList);
   var ruleErr = validateRuleList(ruleList, synchronous);
   if (ruleErr) {
     callback(ruleErr);

@@ -479,6 +479,51 @@ test("customRulesUsedTagName", (t) => new Promise((resolve) => {
   });
 }));
 
+test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
+  t.plan(2);
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "information": new URL("https://example.com/information"),
+        "tags": [ "tag" ],
+        "function": (params, onError) => {
+          const definition = options.customRules[0];
+          definition.names = [ "changed" ];
+          definition.description = "changed";
+          definition.information = new URL("https://example.com/changed");
+          onError({
+            "lineNumber": 1
+          });
+        }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  markdownlint(options, (err, actualResult) => {
+    t.falsy(err);
+    const expectedResult = {
+      "string": [
+        {
+          "lineNumber": 1,
+          "ruleNames": [ "name" ],
+          "ruleDescription": "description",
+          "ruleInformation": "https://example.com/information",
+          "errorDetail": null,
+          "errorContext": null,
+          "errorRange": null,
+          "fixInfo": null
+        }
+      ]
+    };
+    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+    resolve();
+  });
+}));
+
 test("customRulesThrowForFile", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
