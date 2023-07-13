@@ -490,9 +490,9 @@ test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
         "tags": [ "tag" ],
         "function": (params, onError) => {
           const definition = options.customRules[0];
-          definition.names = [ "changed" ];
+          definition.names[0] = "changed";
           definition.description = "changed";
-          definition.information = new URL("https://example.com/changed");
+          definition.information.pathname = "changed";
           onError({
             "lineNumber": 1
           });

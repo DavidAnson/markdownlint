@@ -56,30 +56,82 @@ module.exports.allPunctuation = allPunctuation;
 // All punctuation characters without question mark (normal and full-width)
 module.exports.allPunctuationNoQuestion = allPunctuation.replace(/[?？]/gu, "");
 
-// Returns true iff the input is a number
-module.exports.isNumber = function isNumber(obj) {
+/**
+ * Returns true iff the input is a Number.
+ *
+ * @param {Object} obj Object of unknown type.
+ * @returns {boolean} True iff obj is a Number.
+ */
+function isNumber(obj) {
   return typeof obj === "number";
-};
+}
+module.exports.isNumber = isNumber;
 
-// Returns true iff the input is a string
-module.exports.isString = function isString(obj) {
+/**
+ * Returns true iff the input is a String.
+ *
+ * @param {Object} obj Object of unknown type.
+ * @returns {boolean} True iff obj is a String.
+ */
+function isString(obj) {
   return typeof obj === "string";
-};
+}
+module.exports.isString = isString;
 
-// Returns true iff the input string is empty
-module.exports.isEmptyString = function isEmptyString(str) {
+/**
+ * Returns true iff the input String is empty.
+ *
+ * @param {string} str String of unknown length.
+ * @returns {boolean} True iff the input String is empty.
+ */
+function isEmptyString(str) {
   return str.length === 0;
-};
+}
+module.exports.isEmptyString = isEmptyString;
 
-// Returns true iff the input is an object
-module.exports.isObject = function isObject(obj) {
+/**
+ * Returns true iff the input is an Object.
+ *
+ * @param {Object} obj Object of unknown type.
+ * @returns {boolean} True iff obj is an Object.
+ */
+function isObject(obj) {
   return !!obj && (typeof obj === "object") && !Array.isArray(obj);
-};
+}
+module.exports.isObject = isObject;
 
-// Returns true iff the input is a URL
-module.exports.isUrl = function isUrl(obj) {
+/**
+ * Returns true iff the input is a URL.
+ *
+ * @param {Object} obj Object of unknown type.
+ * @returns {boolean} True iff obj is a URL.
+ */
+function isUrl(obj) {
   return !!obj && (Object.getPrototypeOf(obj) === URL.prototype);
-};
+}
+module.exports.isUrl = isUrl;
+
+/**
+ * Clones the input if it is an Array.
+ *
+ * @param {Object} arr Object of unknown type.
+ * @returns {Object} Clone of obj iff obj is an Array.
+ */
+function cloneIfArray(arr) {
+  return Array.isArray(arr) ? [ ...arr ] : arr;
+}
+module.exports.cloneIfArray = cloneIfArray;
+
+/**
+ * Clones the input if it is a URL.
+ *
+ * @param {Object} url Object of unknown type.
+ * @returns {Object} Clone of obj iff obj is a URL.
+ */
+function cloneIfUrl(url) {
+  return isUrl(url) ? new URL(url) : url;
+}
+module.exports.cloneIfUrl = cloneIfUrl;
 
 /**
  * Returns true iff the input line is blank (contains nothing, whitespace, or
