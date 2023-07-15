@@ -100,25 +100,6 @@ function micromarkParse(markdown, options = {}, refsDefined = true) {
   return document;
 }
 
-// /**
-//  * Log the structure of a Micromark token list.
-//  *
-//  * @param {Token[]} tokens Micromark tokens.
-//  * @param {number} depth Tree depth.
-//  * @returns {void}
-//  */
-// function consoleLogTokens(tokens, depth = 0) {
-//   for (const token of tokens) {
-//     const { children, text, type } = token;
-//     console.log(
-//       `${" ".repeat(depth * 2)}${type} ${text.replace(/\n/g, "\\n")}`
-//     );
-//     if (children.length > 0) {
-//       consoleLogTokens(children, depth + 1);
-//     }
-//   }
-// }
-
 /**
  * Filter a list of Micromark tokens by predicate.
  *
