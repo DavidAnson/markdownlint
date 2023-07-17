@@ -4,7 +4,8 @@
 
 // @ts-ignore
 const {
-  gfmAutolinkLiteral, gfmFootnote, gfmTable, parse, postprocess, preprocess
+  gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse, postprocess,
+  preprocess
   // @ts-ignore
 } = require("markdownlint-micromark");
 
@@ -33,7 +34,12 @@ function getMicromarkEvents(markdown, options = {}, refsDefined = true) {
 
   // Customize options object to add useful extensions
   options.extensions = options.extensions || [];
-  options.extensions.push(gfmAutolinkLiteral(), gfmFootnote(), gfmTable());
+  options.extensions.push(
+    gfmAutolinkLiteral(),
+    gfmFootnote(),
+    gfmTable(),
+    math()
+  );
 
   // Use micromark to parse document into Events
   const encoding = undefined;

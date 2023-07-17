@@ -44,7 +44,8 @@
         "extensions": [
           micromark.gfmAutolinkLiteral(),
           micromark.gfmFootnote(),
-          micromark.gfmTable()
+          micromark.gfmTable(),
+          micromark.math()
         ]
       };
       const context = micromark.parse(parseOptions);
@@ -55,7 +56,8 @@
         "htmlExtensions": [
           micromarkHtml.gfmAutolinkLiteralHtml(),
           micromarkHtml.gfmFootnoteHtml(),
-          micromarkHtml.gfmTableHtml()
+          micromarkHtml.gfmTableHtml(),
+          micromarkHtml.mathHtml()
         ]
       };
       return micromarkHtml.compile(compileOptions)(events);

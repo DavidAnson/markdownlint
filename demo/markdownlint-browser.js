@@ -1364,6 +1364,7 @@ var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-m
   gfmAutolinkLiteral = _require.gfmAutolinkLiteral,
   gfmFootnote = _require.gfmFootnote,
   gfmTable = _require.gfmTable,
+  math = _require.math,
   parse = _require.parse,
   postprocess = _require.postprocess,
   preprocess = _require.preprocess;
@@ -1394,7 +1395,7 @@ function getMicromarkEvents(markdown) {
   var refsDefined = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   // Customize options object to add useful extensions
   options.extensions = options.extensions || [];
-  options.extensions.push(gfmAutolinkLiteral(), gfmFootnote(), gfmTable());
+  options.extensions.push(gfmAutolinkLiteral(), gfmFootnote(), gfmTable(), math());
 
   // Use micromark to parse document into Events
   var encoding = undefined;
