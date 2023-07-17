@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-micromark",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "A trivial package that re-exports some micromark functionality as a CommonJS module",
   "type": "commonjs",
   "exports": "./micromark.cjs",
@@ -23,6 +23,7 @@
     "micromark-extension-gfm-autolink-literal": "2.0.0",
     "micromark-extension-gfm-footnote": "2.0.0",
     "micromark-extension-gfm-table": "2.0.0",
+    "micromark-extension-math": "3.0.0",
     "terser-webpack-plugin": "5.3.9",
     "webpack": "5.88.1",
     "webpack-cli": "5.1.4"
