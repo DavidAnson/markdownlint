@@ -146,6 +146,23 @@ function filterByTypes(tokens, allowed) {
 }
 
 /**
+ * Returns a list of all nested child tokens.
+ *
+ * @param {Token} parent Micromark token.
+ * @returns {Token[]} Flattened children.
+ */
+function flattenedChildren(parent) {
+  const result = [];
+  const pending = [ ...parent.children ];
+  let token = null;
+  while ((token = pending.shift())) {
+    result.push(token);
+    pending.unshift(...token.children);
+  }
+  return result;
+}
+
+/**
  * Gets information about the tag in an HTML token.
  *
  * @param {Token} token Micromark token.
@@ -219,6 +236,7 @@ module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
   filterByTypes,
+  flattenedChildren,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenTextByType,

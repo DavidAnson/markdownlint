@@ -1518,6 +1518,23 @@ function filterByTypes(tokens, allowed) {
 }
 
 /**
+ * Returns a list of all nested child tokens.
+ *
+ * @param {Token} parent Micromark token.
+ * @returns {Token[]} Flattened children.
+ */
+function flattenedChildren(parent) {
+  var result = [];
+  var pending = _toConsumableArray(parent.children);
+  var token = null;
+  while (token = pending.shift()) {
+    result.push(token);
+    pending.unshift.apply(pending, _toConsumableArray(token.children));
+  }
+  return result;
+}
+
+/**
  * Gets information about the tag in an HTML token.
  *
  * @param {Token} token Micromark token.
@@ -1592,6 +1609,7 @@ module.exports = {
   "parse": micromarkParse,
   filterByPredicate: filterByPredicate,
   filterByTypes: filterByTypes,
+  flattenedChildren: flattenedChildren,
   getHtmlTagInfo: getHtmlTagInfo,
   getMicromarkEvents: getMicromarkEvents,
   getTokenTextByType: getTokenTextByType,
@@ -4922,38 +4940,66 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext,
   blockquotePrefixRe = _require.blockquotePrefixRe,
   isBlankLine = _require.isBlankLine;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  flattenedLists = _require2.flattenedLists;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByPredicate = _require2.filterByPredicate,
+  flattenedChildren = _require2.flattenedChildren;
+var nonContentTokens = new Set(["blockQuoteMarker", "blockQuotePrefix", "blockQuotePrefixWhitespace", "lineEnding", "lineEndingBlank", "linePrefix", "listItemIndent"]);
+var isList = function isList(token) {
+  return token.type === "listOrdered" || token.type === "listUnordered";
+};
+var addBlankLineError = function addBlankLineError(onError, lines, lineIndex, lineNumber) {
+  var line = lines[lineIndex];
+  var quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
+  addErrorContext(onError, lineIndex + 1, line.trim(), null, null, null, {
+    lineNumber: lineNumber,
+    "insertText": "".concat(quotePrefix, "\n")
+  });
+};
 module.exports = {
   "names": ["MD032", "blanks-around-lists"],
   "description": "Lists should be surrounded by blank lines",
   "tags": ["bullet", "ul", "ol", "blank_lines"],
   "function": function MD032(params, onError) {
-    var lines = params.lines;
-    var filteredLists = flattenedLists().filter(function (list) {
-      return !list.nesting;
+    var lines = params.lines,
+      parsers = params.parsers;
+
+    // For every top-level list...
+    var topLevelLists = filterByPredicate(parsers.micromark.tokens, isList, function (token) {
+      return isList(token) ? [] : token.children;
     });
-    var _iterator = _createForOfIteratorHelper(filteredLists),
+    var _iterator = _createForOfIteratorHelper(topLevelLists),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var list = _step.value;
-        var firstIndex = list.open.map[0];
+        // Look for a blank line above the list
+        var firstIndex = list.startLine - 1;
         if (!isBlankLine(lines[firstIndex - 1])) {
-          var line = lines[firstIndex];
-          var quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
-          addErrorContext(onError, firstIndex + 1, line.trim(), null, null, null, {
-            "insertText": "".concat(quotePrefix, "\n")
-          });
+          addBlankLineError(onError, lines, firstIndex);
         }
-        var lastIndex = list.lastLineIndex - 1;
+
+        // Find the "visual" end of the list
+        var endLine = list.endLine;
+        var _iterator2 = _createForOfIteratorHelper(flattenedChildren(list).reverse()),
+          _step2;
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var child = _step2.value;
+            if (!nonContentTokens.has(child.type)) {
+              endLine = child.endLine;
+              break;
+            }
+          }
+
+          // Look for a blank line below the list
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+        var lastIndex = endLine - 1;
         if (!isBlankLine(lines[lastIndex + 1])) {
-          var _line = lines[lastIndex];
-          var _quotePrefix = _line.match(blockquotePrefixRe)[0].trimEnd();
-          addErrorContext(onError, lastIndex + 1, _line.trim(), null, null, null, {
-            "lineNumber": lastIndex + 2,
-            "insertText": "".concat(_quotePrefix, "\n")
-          });
+          addBlankLineError(onError, lines, lastIndex, lastIndex + 2);
         }
       }
     } catch (err) {
