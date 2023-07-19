@@ -504,11 +504,12 @@ for (const rule of rules) {
           "description": "Link or image style should be consistent",
           "type": "string",
           "enum": [
+	    "mixed",
             "consistent",
             "inline",
             "reference"
           ],
-          "default": "consistent"
+          "default": "mixed"
         }
       };
       break;

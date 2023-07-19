@@ -45,6 +45,5 @@ Text [ link ][reference] text. {MD039}
 
 <!-- markdownlint-configure-file {
   "MD013": false,
-  "MD046": false,
-  "MD054": false
+  "MD046": false
 } -->

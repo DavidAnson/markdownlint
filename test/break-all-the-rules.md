@@ -68,7 +68,7 @@ Emphasis _with _ space {MD037}
 
 Code `with ` space {MD038}
 
-[link with space ](link) {MD039} {MD054}
+[link with space ](link) {MD039}
 
 ```
 code fence without language {MD040:73} {MD046:73}
@@ -78,11 +78,11 @@ code fence without language {MD040:73} {MD046:73}
 code fence with different style {MD048:77} {MD046:77}
 ~~~
 
-[empty link]() {MD042} {MD054}
+[empty link]() {MD042}
 
 markdownLint {MD044}
 
-![](image.jpg) {MD045} {MD054}
+![](image.jpg) {MD045}
 ## Heading 10 {MD022}
 
 Emphasis _with_ underscore style
@@ -93,7 +93,7 @@ Strong __with__ underscore style
 
 Strong **with** different style {MD050}
 
-[Missing link fragment](#missing) {MD051} {MD054}
+[Missing link fragment](#missing) {MD051}
 
 [Missing link][label] {MD052}
 

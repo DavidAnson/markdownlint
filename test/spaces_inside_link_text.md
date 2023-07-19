@@ -53,17 +53,14 @@ Wrapped [ link with leading space
 
 Non-wrapped [ link with leading space](https://example.com) {MD039}
 
-[][ref] {MD054}
+[][ref]
 
-[link][ref] {MD054}
+[link][ref]
 
-[link ][ref] {MD039} {MD054}
+[link ][ref] {MD039}
 
-[ link][ref] {MD039} {MD054}
+[ link][ref] {MD039}
 
-[ link ][ref] {MD039} {MD054}
+[ link ][ref] {MD039}
 
 [ref]: https://example.com
-<!-- markdownlint-configure-file {
-  "MD053": false
-} -->

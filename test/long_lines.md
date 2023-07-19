@@ -18,13 +18,13 @@ This [long line is comprised mostly of a link](https://example.com "This is the 
 
 [This long line is comprised mostly of a link](https://example.com "This is the long link's title") text {MD013}
 
-This long line includes a simple [reference][label] link and is long enough to violate the rule. {MD013} {MD054}
+This long line includes a simple [reference][label] link and is long enough to violate the rule. {MD013}
 
-[This long line is comprised entirely of a reference link and is long enough to violate the rule {MD054}][label]
+[This long line is comprised entirely of a reference link and is long enough to violate the rule][label]
 
 [label]: https://example.org "Title for a link reference that is itself long enough to violate the rule"
 
-[Link to broken label][notlabel] {MD052} {MD054}
+[Link to broken label][notlabel] {MD052}
 
 [notlabel\]: notlink "Invalid syntax for a link label because the right bracket is backslash-escaped {MD013}"
 
@@ -52,11 +52,11 @@ _**[This long line is comprised of an emphasized and bolded link {MD049}](https:
 
 **![Alternate text for long line image example](https://example.com "Title text for long line image example")**
 
-![Reference style for long line image which is itself an example of a long line with content {MD054}][image]
+![Reference style for long line image which is itself an example of a long line with content][image]
 
-*![Reference style for long line image which is itself an example of a long line with content {MD054}][image]*
+*![Reference style for long line image which is itself an example of a long line with content][image]*
 
-**![Reference style for long line image which is itself an example of a long line with content {MD054}][image]**
+**![Reference style for long line image which is itself an example of a long line with content][image]**
 
 [image]: https://example.com "Title text for long line image example using reference style for image details"
 
@@ -72,7 +72,3 @@ Long lines inside HTML comments should also produce a violation of the line-leng
 <!-- Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013} -->
 
 Long lines inside HTML comments should also <!-- produce a violation of the line-length rule. {MD013} -->
-
-<!-- markdownlint-configure-file {
-  "MD053": false
-} -->

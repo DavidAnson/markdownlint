@@ -175,6 +175,5 @@ Text
   "emphasis-style": false,
   "heading-style": false,
   "no-duplicate-heading": false,
-  "MD054": false,
   "no-inline-html": false
 } -->

@@ -292,6 +292,6 @@
   // MD054/link-image-style - Link and image style
   "MD054": {
     // Link or image style should be consistent
-    "style": "consistent"
+    "style": "mixed"
   }
 }

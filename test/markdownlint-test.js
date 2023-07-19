@@ -488,8 +488,7 @@ test("styleAll", (t) => new Promise((resolve) => {
         "MD050": [ 94 ],
         "MD051": [ 96 ],
         "MD052": [ 98 ],
-        "MD053": [ 100 ],
-        "MD054": [ 71, 81, 85, 96 ]
+        "MD053": [ 100 ]
       }
     };
     // @ts-ignore
@@ -538,8 +537,7 @@ test("styleRelaxed", (t) => new Promise((resolve) => {
         "MD050": [ 94 ],
         "MD051": [ 96 ],
         "MD052": [ 98 ],
-        "MD053": [ 100 ],
-        "MD054": [ 71, 81, 85, 96 ]
+        "MD053": [ 100 ]
       }
     };
     // @ts-ignore
@@ -708,8 +706,7 @@ test("filesArrayAsString", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "config": {
       "MD013": { "line_length": 150 },
-      "MD024": false,
-      "MD054": false
+      "MD024": false
     }
   }, function callback(err, actual) {
     t.falsy(err);
@@ -929,7 +926,7 @@ test("readme", (t) => new Promise((resolve) => {
 }));
 
 test("validateJsonUsingConfigSchemaStrict", (t) => {
-  t.plan(162);
+  t.plan(156);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([

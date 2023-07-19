@@ -80,7 +80,3 @@
 [text](link-3)
 [text]() {MD042}
 [text](link-5)
-
-<!-- markdownlint-configure-file {
-  "MD054": false
-} -->
