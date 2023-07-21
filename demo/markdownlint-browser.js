@@ -6488,7 +6488,7 @@ var getNestedTokenTextByType = function getNestedTokenTextByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
 var escapeParentheses = function escapeParentheses(unescaped) {
-  return unescaped.replace(/\)/g, '\\)');
+  return unescaped.replace(/\)/g, "\\)");
 };
 var definitionDestinationForId = function definitionDestinationForId(tokens, id) {
   var definitions = filterByTypes(tokens, ["definition"]);
@@ -6534,8 +6534,8 @@ module.exports = {
         var link = _step.value;
         var inlineLink = isInlineLink(link);
         var autolink = isAutolink(link);
-        if (style === "autolink_only" && !autolink || style === "inline_only" && (!inlineLink || autolink) || style === "reference_only" && (inlineLink || autolink)) {
-          // fixInfo(parsers.micromark.tokens, link)
+        if (style === "autolink_only" && !autolink || style === "inline_only" && (!inlineLink || autolink) || style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !inlineLink && !autolink || style === "reference_or_autolink" && inlineLink) {
+          fixInfo(parsers.micromark.tokens, link);
           addErrorContext(onError, link.startLine, link.text, null, null, null, null);
         }
       }

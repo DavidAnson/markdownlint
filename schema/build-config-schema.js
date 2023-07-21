@@ -504,10 +504,13 @@ for (const rule of rules) {
           "description": "Link or image style should be consistent",
           "type": "string",
           "enum": [
-	    "mixed",
-	    "autolink_only",
+            "mixed",
+            "autolink_only",
             "inline_only",
-            "reference_only"
+            "reference_only",
+            "inline_or_reference",
+            "inline_or_autolink",
+            "reference_or_autolink"
           ],
           "default": "mixed"
         }
