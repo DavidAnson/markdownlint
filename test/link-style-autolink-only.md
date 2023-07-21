@@ -13,9 +13,9 @@ Text [link text][url] text {MD054}
 [url]: https://example.com
 
 <!-- markdownlint-configure-file {
-  "MD034": false,
-  "MD053": false,
-  "MD054": {
+  "no-bare-urls": false,
+  "link-image-reference-definitions": false,
+  "link-image-style": {
     "style": "autolink_only"
   }
 } -->

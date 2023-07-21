@@ -13,7 +13,7 @@ Text [link text][url] text
 [url]: https://example.com
 
 <!-- markdownlint-configure-file {
-  "MD054": {
+  "link-image-style": {
     "style": "reference_only"
   }
 } -->
