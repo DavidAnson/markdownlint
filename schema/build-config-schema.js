@@ -505,9 +505,9 @@ for (const rule of rules) {
           "type": "string",
           "enum": [
 	    "mixed",
-            "consistent",
-            "inline",
-            "reference"
+	    "autolink_only",
+            "inline_only",
+            "reference_only"
           ],
           "default": "mixed"
         }

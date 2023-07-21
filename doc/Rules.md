@@ -2280,7 +2280,7 @@ Aliases: `link-image-style`
 Parameters:
 
 - `style`: Link or image style should be consistent (`string`, default `mixed`,
-  values `consistent` / `inline` / `mixed` / `reference`)
+  values `autolink_only` / `inline_only` / `mixed` / `reference_only`)
 
 Fixable: Some violations can be fixed by tooling
 
