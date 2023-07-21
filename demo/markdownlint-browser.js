@@ -6480,6 +6480,9 @@ var isInlineLink = function isInlineLink(_ref) {
 var getNestedTokenTextByType = function getNestedTokenTextByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
+var escapeParentheses = function escapeParentheses(unescaped) {
+  return unescaped.replace(/\)/g, '\\)');
+};
 var definitionDestinationForId = function definitionDestinationForId(tokens, id) {
   var definitions = filterByTypes(tokens, ["definition"]);
   var definition = filterByPredicate(definitions, function (d) {
@@ -6503,7 +6506,7 @@ var fixInfo = function fixInfo(tokens, link) {
     return {
       "editColumn": reference ? link.endColumn - reference.length : link.endColumn,
       "deleteCount": reference ? reference.length : 0,
-      "insertText": "(".concat(destination, ")")
+      "insertText": "(".concat(escapeParentheses(destination), ")")
     };
   }
   return null;
