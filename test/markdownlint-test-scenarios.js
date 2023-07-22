@@ -9,6 +9,8 @@ const { markdownlint } = require("../lib/markdownlint").promises;
 const helpers = require("../helpers");
 const constants = require("../lib/constants");
 
+const numericalSortCompareFn = (a, b) => a - b;
+
 /**
  * Create a test function for the specified test file.
  *
@@ -53,7 +55,7 @@ function createTestForFile(file) {
           }
         }
         for (const list of Object.values(expected)) {
-          list.sort();
+          list.sort(numericalSortCompareFn);
         }
         const actual = {};
         for (const error of errors) {
@@ -69,7 +71,7 @@ function createTestForFile(file) {
           );
         }
         for (const list of Object.values(actual)) {
-          list.sort();
+          list.sort(numericalSortCompareFn);
         }
         t.deepEqual(actual, expected, "Too few or too many issues found.");
         // Create snapshot

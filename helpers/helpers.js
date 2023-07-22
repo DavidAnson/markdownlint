@@ -3,10 +3,10 @@
 "use strict";
 
 const micromark = require("./micromark.cjs");
+const { newLineRe } = require("./shared.js");
 
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
-const newLineRe = /\r\n?|\n/g;
 module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)

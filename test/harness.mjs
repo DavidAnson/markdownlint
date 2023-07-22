@@ -26,7 +26,7 @@ function consoleLogTokens(tokens, depth = 0) {
 
 const files = process.argv.slice(2);
 for (const file of files) {
-  const content = await readFile(file);
+  const content = await readFile(file, "utf8");
   consoleLogTokens(parse(content));
   const results = await markdownlint({
     "files": [ file ]
