@@ -6488,7 +6488,13 @@ var getNestedTokenTextByType = function getNestedTokenTextByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
 var escapeParentheses = function escapeParentheses(unescaped) {
-  return unescaped.replace(/\)/g, "\\)");
+  return unescaped.replace(/([()])/g, "\\$1");
+};
+var escapeSquares = function escapeSquares(unescaped) {
+  return unescaped.replace(/([[\]])/g, "\\$1");
+};
+var escapeAngles = function escapeAngles(unescaped) {
+  return unescaped.replace(/([<>])/g, "\\$1");
 };
 var definitionDestinationForId = function definitionDestinationForId(tokens, id) {
   var definitions = filterByTypes(tokens, ["definition"]);
@@ -6500,51 +6506,96 @@ var definitionDestinationForId = function definitionDestinationForId(tokens, id)
   }
   return null;
 };
+var autolinkFixInfo = function autolinkFixInfo(tokens, link) {
+  if (isAutolink(link)) {
+    return null;
+  }
+  if (isInlineLink(link)) {
+    var destination = getNestedTokenTextByType([link], "resourceDestination");
+    if (destination) {
+      return {
+        "insertText": "<".concat(escapeAngles(destination), ">"),
+        "deleteCount": link.endColumn - link.startColumn
+      };
+    }
+  } else {
+    var reference = getNestedTokenTextByType([link], "reference");
+    var label = getNestedTokenTextByType([link], "labelText");
+    // parser incorrectly calls ID a label when parsing [id] without label
+    var id = reference && reference !== "[]" ? reference.replace(/^\[|\]$/g, "") : label;
+    var _destination = definitionDestinationForId(tokens, id);
+    if (_destination) {
+      return {
+        "editColumn": link.startColumn,
+        "deleteCount": link.endColumn - link.startColumn,
+        "insertText": "<".concat(escapeAngles(_destination), ">")
+      };
+    }
+  }
+  return null;
+};
 var fixInfo = function fixInfo(tokens, link) {
   if (isInlineLink(link)) {
     return null;
   }
-  var reference = getNestedTokenTextByType([link], "reference");
-  var label = getNestedTokenTextByType([link], "labelText");
-  // parser incorrectly calls ID a label when parsing [id] without label
-  var id = reference && reference !== "[]" ? reference.replace(/^\[|\]$/g, "") : label;
-  var destination = definitionDestinationForId(tokens, id);
-  if (destination) {
-    return {
-      "editColumn": reference ? link.endColumn - reference.length : link.endColumn,
-      "deleteCount": reference ? reference.length : 0,
-      "insertText": "(".concat(escapeParentheses(destination), ")")
-    };
+  if (isAutolink(link)) {
+    var destination = getNestedTokenTextByType([link], "autolinkProtocol");
+    if (destination) {
+      return {
+        "insertText": "[".concat(escapeSquares(destination), "](").concat(escapeParentheses(destination), ")"),
+        "deleteCount": link.endColumn - link.startColumn
+      };
+    }
+  } else {
+    var reference = getNestedTokenTextByType([link], "reference");
+    var label = getNestedTokenTextByType([link], "labelText");
+    // parser incorrectly calls ID a label when parsing [id] without label
+    var id = reference && reference !== "[]" ? reference.replace(/^\[|\]$/g, "") : label;
+    var _destination2 = definitionDestinationForId(tokens, id);
+    if (_destination2) {
+      return {
+        "editColumn": reference ? link.endColumn - reference.length : link.endColumn,
+        "deleteCount": reference ? reference.length : 0,
+        "insertText": "(".concat(escapeParentheses(_destination2), ")")
+      };
+    }
   }
   return null;
+};
+var forLink = function forLink(style, tokens, onError, link) {
+  var inlineLink = isInlineLink(link);
+  var autolink = isAutolink(link);
+  if (style === "autolink_only" && !autolink) {
+    addErrorContext(onError, link.startLine, link.text, null, null, null, autolinkFixInfo(tokens, link));
+  } else if (style === "inline_only" && (!inlineLink || autolink)) {
+    addErrorContext(onError, link.startLine, link.text, null, null, null, fixInfo(tokens, link));
+  } else if (style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !inlineLink && !autolink || style === "reference_or_autolink" && inlineLink) {
+    addErrorContext(onError, link.startLine, link.text, null, null, null, null);
+  }
+};
+var MD054 = function MD054(_ref4, onError) {
+  var parsers = _ref4.parsers,
+    config = _ref4.config;
+  var style = String(config.style || "mixed");
+  var links = filterByTypes(parsers.micromark.tokens, ["autolink", "link", "image"]);
+  var _iterator = _createForOfIteratorHelper(links),
+    _step;
+  try {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      var link = _step.value;
+      forLink(style, parsers.micromark.tokens, onError, link);
+    }
+  } catch (err) {
+    _iterator.e(err);
+  } finally {
+    _iterator.f();
+  }
 };
 module.exports = {
   "names": ["MD054", "link-image-style"],
   "description": "Link and image style",
   "tags": ["images", "links"],
-  "function": function MD054(_ref4, onError) {
-    var parsers = _ref4.parsers,
-      config = _ref4.config;
-    var style = String(config.style || "mixed");
-    var links = filterByTypes(parsers.micromark.tokens, ["autolink", "link", "image"]);
-    var _iterator = _createForOfIteratorHelper(links),
-      _step;
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var link = _step.value;
-        var inlineLink = isInlineLink(link);
-        var autolink = isAutolink(link);
-        if (style === "autolink_only" && !autolink || style === "inline_only" && (!inlineLink || autolink) || style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !inlineLink && !autolink || style === "reference_or_autolink" && inlineLink) {
-          fixInfo(parsers.micromark.tokens, link);
-          addErrorContext(onError, link.startLine, link.text, null, null, null, null);
-        }
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
-    }
-  }
+  "function": MD054
 };
 
 /***/ }),
