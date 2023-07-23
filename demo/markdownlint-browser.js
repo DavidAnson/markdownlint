@@ -6488,19 +6488,19 @@ var getNestedTokenTextByType = function getNestedTokenTextByType(tokens, type) {
   return getTokenTextByType(filterByTypes(tokens, [type]), type);
 };
 var escapeParentheses = function escapeParentheses(unescaped) {
-  return unescaped.replace(/([()])/g, "\\$1");
+  return unescaped.replaceAll("(", "\\(").replaceAll(")", "\\)");
 };
 var escapeSquares = function escapeSquares(unescaped) {
-  return unescaped.replace(/([[\]])/g, "\\$1");
+  return unescaped.replaceAll("[", "\\[").replaceAll("]", "\\]");
 };
 var escapeAngles = function escapeAngles(unescaped) {
-  return unescaped.replace(/([<>])/g, "\\$1");
+  return unescaped.replaceAll("<", "\\<").replaceAll(">", "\\>");
 };
 var unescapeParentheses = function unescapeParentheses(escaped) {
-  return escaped.replace(/\\([()])/g, "$1");
+  return escaped.replaceAll("\\(", "(").replaceAll("\\)", ")");
 };
 var unescapeAngles = function unescapeAngles(escaped) {
-  return escaped.replace(/\\([<>])/g, "$1");
+  return escaped.replaceAll("\\<", "<").replaceAll("\\>", ">");
 };
 var referenceLinkDestination = function referenceLinkDestination(link, tokens) {
   var reference = getNestedTokenTextByType([link], "reference");
@@ -6540,40 +6540,39 @@ var inlineFixInfo = function inlineFixInfo(tokens, link) {
     "deleteCount": link.endColumn - link.startColumn
   };
 };
-var MD054 = function MD054(_ref4, onError) {
-  var parsers = _ref4.parsers,
-    config = _ref4.config;
-  var style = String(config.style || "mixed");
-  var links = filterByTypes(parsers.micromark.tokens, ["autolink", "link", "image"]);
-  var _iterator = _createForOfIteratorHelper(links),
-    _step;
-  try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      var link = _step.value;
-      var inlineLink = isInlineLink(link);
-      var autolink = isAutolink(link);
-      var range = [link.startColumn, link.endColumn - link.startColumn];
-      var fixInfo = null;
-      if (style === "autolink_only") {
-        fixInfo = autolinkFixInfo(parsers.micromark.tokens, link);
-      } else if (style === "inline_only") {
-        fixInfo = inlineFixInfo(parsers.micromark.tokens, link);
-      }
-      if (fixInfo || style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !(inlineLink || autolink) || style === "reference_or_autolink" && inlineLink) {
-        addErrorContext(onError, link.startLine, link.text, null, null, range, fixInfo);
-      }
-    }
-  } catch (err) {
-    _iterator.e(err);
-  } finally {
-    _iterator.f();
-  }
-};
 module.exports = {
   "names": ["MD054", "link-image-style"],
   "description": "Link and image style",
   "tags": ["images", "links"],
-  "function": MD054
+  "function": function _function(_ref4, onError) {
+    var parsers = _ref4.parsers,
+      config = _ref4.config;
+    var style = String(config.style || "mixed");
+    var links = filterByTypes(parsers.micromark.tokens, ["autolink", "link", "image"]);
+    var _iterator = _createForOfIteratorHelper(links),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var link = _step.value;
+        var inlineLink = isInlineLink(link);
+        var autolink = isAutolink(link);
+        var range = [link.startColumn, link.endColumn - link.startColumn];
+        var fixInfo = null;
+        if (style === "autolink_only") {
+          fixInfo = autolinkFixInfo(parsers.micromark.tokens, link);
+        } else if (style === "inline_only") {
+          fixInfo = inlineFixInfo(parsers.micromark.tokens, link);
+        }
+        if (fixInfo || style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !(inlineLink || autolink) || style === "reference_or_autolink" && inlineLink) {
+          addErrorContext(onError, link.startLine, link.text, null, null, range, fixInfo);
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  }
 };
 
 /***/ }),
