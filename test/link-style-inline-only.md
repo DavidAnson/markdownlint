@@ -8,7 +8,6 @@ Text [text][url] {MD054} text
 Text ![text][url] {MD054} text
 Text <https://example.com> {MD054} text
 Text [url][] text {MD054}
-Text [link text][url] text {MD054}
 
 [url]: https://example.com
 

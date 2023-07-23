@@ -8,7 +8,6 @@ Text [text][url] text
 Text ![text][url] text
 Text <https://example.com> text
 Text [url][] text
-Text [link text][url] text
 
 [url]: https://example.com
 
