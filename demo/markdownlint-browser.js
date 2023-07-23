@@ -6496,6 +6496,12 @@ var escapeSquares = function escapeSquares(unescaped) {
 var escapeAngles = function escapeAngles(unescaped) {
   return unescaped.replace(/([<>])/g, "\\$1");
 };
+var unescapeParentheses = function unescapeParentheses(escaped) {
+  return escaped.replace(/\\([()])/g, "$1");
+};
+var unescapeAngles = function unescapeAngles(escaped) {
+  return escaped.replace(/\\([<>])/g, "$1");
+};
 var definitionDestinationForId = function definitionDestinationForId(tokens, id) {
   var definitions = filterByTypes(tokens, ["definition"]);
   var definition = filterByPredicate(definitions, function (d) {
@@ -6514,7 +6520,7 @@ var autolinkFixInfo = function autolinkFixInfo(tokens, link) {
     var destination = getNestedTokenTextByType([link], "resourceDestination");
     if (destination) {
       return {
-        "insertText": "<".concat(escapeAngles(destination), ">"),
+        "insertText": "<".concat(escapeAngles(unescapeParentheses(destination)), ">"),
         "deleteCount": link.endColumn - link.startColumn
       };
     }
@@ -6541,21 +6547,23 @@ var fixInfo = function fixInfo(tokens, link) {
   if (isAutolink(link)) {
     var destination = getNestedTokenTextByType([link], "autolinkProtocol");
     if (destination) {
+      var label = escapeSquares(unescapeAngles(destination));
+      var reference = escapeParentheses(unescapeAngles(destination));
       return {
-        "insertText": "[".concat(escapeSquares(destination), "](").concat(escapeParentheses(destination), ")"),
+        "insertText": "[".concat(label, "](").concat(reference, ")"),
         "deleteCount": link.endColumn - link.startColumn
       };
     }
   } else {
-    var reference = getNestedTokenTextByType([link], "reference");
-    var label = getNestedTokenTextByType([link], "labelText");
+    var _reference = getNestedTokenTextByType([link], "reference");
+    var _label = getNestedTokenTextByType([link], "labelText");
     // parser incorrectly calls ID a label when parsing [id] without label
-    var id = reference && reference !== "[]" ? reference.replace(/^\[/, "").replace(/\]$/, "") : label;
+    var id = _reference && _reference !== "[]" ? _reference.replace(/^\[/, "").replace(/\]$/, "") : _label;
     var _destination2 = definitionDestinationForId(tokens, id);
     if (_destination2) {
       return {
-        "editColumn": reference ? link.endColumn - reference.length : link.endColumn,
-        "deleteCount": reference ? reference.length : 0,
+        "editColumn": _reference ? link.endColumn - _reference.length : link.endColumn,
+        "deleteCount": _reference ? _reference.length : 0,
         "insertText": "(".concat(escapeParentheses(_destination2), ")")
       };
     }
