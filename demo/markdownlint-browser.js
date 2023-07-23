@@ -6565,12 +6565,13 @@ var fixInfo = function fixInfo(tokens, link) {
 var forLink = function forLink(style, tokens, onError, link) {
   var inlineLink = isInlineLink(link);
   var autolink = isAutolink(link);
+  var range = [link.startColumn, link.endColumn - link.startColumn];
   if (style === "autolink_only" && !autolink) {
-    addErrorContext(onError, link.startLine, link.text, null, null, null, autolinkFixInfo(tokens, link));
+    addErrorContext(onError, link.startLine, link.text, null, null, range, autolinkFixInfo(tokens, link));
   } else if (style === "inline_only" && (!inlineLink || autolink)) {
-    addErrorContext(onError, link.startLine, link.text, null, null, null, fixInfo(tokens, link));
+    addErrorContext(onError, link.startLine, link.text, null, null, range, fixInfo(tokens, link));
   } else if (style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !inlineLink && !autolink || style === "reference_or_autolink" && inlineLink) {
-    addErrorContext(onError, link.startLine, link.text, null, null, null, null);
+    addErrorContext(onError, link.startLine, link.text, null, null, range, null);
   }
 };
 var MD054 = function MD054(_ref4, onError) {
