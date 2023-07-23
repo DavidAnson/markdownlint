@@ -6522,7 +6522,7 @@ var autolinkFixInfo = function autolinkFixInfo(tokens, link) {
     var reference = getNestedTokenTextByType([link], "reference");
     var label = getNestedTokenTextByType([link], "labelText");
     // parser incorrectly calls ID a label when parsing [id] without label
-    var id = reference && reference !== "[]" ? reference.replace(/^\[|\]$/g, "") : label;
+    var id = reference && reference !== "[]" ? reference.replace(/^\[/, "").replace(/\]$/, "") : label;
     var _destination = definitionDestinationForId(tokens, id);
     if (_destination) {
       return {
@@ -6550,7 +6550,7 @@ var fixInfo = function fixInfo(tokens, link) {
     var reference = getNestedTokenTextByType([link], "reference");
     var label = getNestedTokenTextByType([link], "labelText");
     // parser incorrectly calls ID a label when parsing [id] without label
-    var id = reference && reference !== "[]" ? reference.replace(/^\[|\]$/g, "") : label;
+    var id = reference && reference !== "[]" ? reference.replace(/^\[/, "").replace(/\]$/, "") : label;
     var _destination2 = definitionDestinationForId(tokens, id);
     if (_destination2) {
       return {
