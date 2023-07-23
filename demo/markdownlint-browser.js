@@ -6502,85 +6502,43 @@ var unescapeParentheses = function unescapeParentheses(escaped) {
 var unescapeAngles = function unescapeAngles(escaped) {
   return escaped.replace(/\\([<>])/g, "$1");
 };
-var definitionDestinationForId = function definitionDestinationForId(tokens, id) {
-  var definitions = filterByTypes(tokens, ["definition"]);
-  var definition = filterByPredicate(definitions, function (d) {
+var referenceLinkDestination = function referenceLinkDestination(link, tokens) {
+  var reference = getNestedTokenTextByType([link], "reference");
+  var id = reference && reference !== "[]" ? reference.replace(/^\[/, "").replace(/\]$/, "") : getNestedTokenTextByType([link], "labelText");
+  var definition = filterByPredicate(filterByTypes(tokens, ["definition"]), function (d) {
     return getNestedTokenTextByType([d], "definitionLabelString") === id;
   });
-  if (definition.length > 0) {
-    return getNestedTokenTextByType(definition, "definitionDestination");
-  }
-  return null;
+  return getNestedTokenTextByType(definition, "definitionDestination");
+};
+var inlineLinkDestination = function inlineLinkDestination(link) {
+  var text = getNestedTokenTextByType([link], "resourceDestination");
+  return text && unescapeParentheses(text);
+};
+var autolinkDestination = function autolinkDestination(link) {
+  var text = getNestedTokenTextByType([link], "autolinkProtocol");
+  return text && unescapeAngles(text);
 };
 var autolinkFixInfo = function autolinkFixInfo(tokens, link) {
   if (isAutolink(link)) {
     return null;
   }
-  if (isInlineLink(link)) {
-    var destination = getNestedTokenTextByType([link], "resourceDestination");
-    if (destination) {
-      return {
-        "insertText": "<".concat(escapeAngles(unescapeParentheses(destination)), ">"),
-        "deleteCount": link.endColumn - link.startColumn
-      };
-    }
-  } else {
-    var reference = getNestedTokenTextByType([link], "reference");
-    var label = getNestedTokenTextByType([link], "labelText");
-    // parser incorrectly calls ID a label when parsing [id] without label
-    var id = reference && reference !== "[]" ? reference.replace(/^\[/, "").replace(/\]$/, "") : label;
-    var _destination = definitionDestinationForId(tokens, id);
-    if (_destination) {
-      return {
-        "editColumn": link.startColumn,
-        "deleteCount": link.endColumn - link.startColumn,
-        "insertText": "<".concat(escapeAngles(_destination), ">")
-      };
-    }
-  }
-  return null;
+  var destination = isInlineLink(link) ? inlineLinkDestination(link) : referenceLinkDestination(link, tokens);
+  return {
+    "editColumn": link.startColumn,
+    "insertText": "<".concat(escapeAngles(destination), ">"),
+    "deleteCount": link.endColumn - link.startColumn
+  };
 };
-var fixInfo = function fixInfo(tokens, link) {
+var inlineFixInfo = function inlineFixInfo(tokens, link) {
   if (isInlineLink(link)) {
     return null;
   }
-  if (isAutolink(link)) {
-    var destination = getNestedTokenTextByType([link], "autolinkProtocol");
-    if (destination) {
-      var label = escapeSquares(unescapeAngles(destination));
-      var reference = escapeParentheses(unescapeAngles(destination));
-      return {
-        "insertText": "[".concat(label, "](").concat(reference, ")"),
-        "deleteCount": link.endColumn - link.startColumn
-      };
-    }
-  } else {
-    var _reference = getNestedTokenTextByType([link], "reference");
-    var _label = getNestedTokenTextByType([link], "labelText");
-    // parser incorrectly calls ID a label when parsing [id] without label
-    var id = _reference && _reference !== "[]" ? _reference.replace(/^\[/, "").replace(/\]$/, "") : _label;
-    var _destination2 = definitionDestinationForId(tokens, id);
-    if (_destination2) {
-      return {
-        "editColumn": _reference ? link.endColumn - _reference.length : link.endColumn,
-        "deleteCount": _reference ? _reference.length : 0,
-        "insertText": "(".concat(escapeParentheses(_destination2), ")")
-      };
-    }
-  }
-  return null;
-};
-var forLink = function forLink(style, tokens, onError, link) {
-  var inlineLink = isInlineLink(link);
-  var autolink = isAutolink(link);
-  var range = [link.startColumn, link.endColumn - link.startColumn];
-  if (style === "autolink_only" && !autolink) {
-    addErrorContext(onError, link.startLine, link.text, null, null, range, autolinkFixInfo(tokens, link));
-  } else if (style === "inline_only" && (!inlineLink || autolink)) {
-    addErrorContext(onError, link.startLine, link.text, null, null, range, fixInfo(tokens, link));
-  } else if (style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !inlineLink && !autolink || style === "reference_or_autolink" && inlineLink) {
-    addErrorContext(onError, link.startLine, link.text, null, null, range, null);
-  }
+  var destination = isAutolink(link) ? autolinkDestination(link) : referenceLinkDestination(link, tokens);
+  return {
+    "editColumn": link.startColumn,
+    "insertText": "[".concat(escapeSquares(destination), "](").concat(escapeParentheses(destination), ")"),
+    "deleteCount": link.endColumn - link.startColumn
+  };
 };
 var MD054 = function MD054(_ref4, onError) {
   var parsers = _ref4.parsers,
@@ -6592,7 +6550,18 @@ var MD054 = function MD054(_ref4, onError) {
   try {
     for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var link = _step.value;
-      forLink(style, parsers.micromark.tokens, onError, link);
+      var inlineLink = isInlineLink(link);
+      var autolink = isAutolink(link);
+      var range = [link.startColumn, link.endColumn - link.startColumn];
+      var fixInfo = null;
+      if (style === "autolink_only") {
+        fixInfo = autolinkFixInfo(parsers.micromark.tokens, link);
+      } else if (style === "inline_only") {
+        fixInfo = inlineFixInfo(parsers.micromark.tokens, link);
+      }
+      if (fixInfo || style === "reference_only" && (inlineLink || autolink) || style === "inline_or_reference" && autolink || style === "inline_or_autolink" && !(inlineLink || autolink) || style === "reference_or_autolink" && inlineLink) {
+        addErrorContext(onError, link.startLine, link.text, null, null, range, fixInfo);
+      }
     }
   } catch (err) {
     _iterator.e(err);
