@@ -42,8 +42,8 @@ emphasis * text {MD037}
 Text * emphasis {MD037}
 emphasis * text {MD037}
 
-Text *emphasis * *emphasis {MD037}
-emphasis* * emphasis* text {MD037}
+Text *emphasis * *emphasis
+emphasis* * emphasis* text
 
 Text *emphasis* * emphasis {MD037}
 emphasis * *emphasis* text {MD037}

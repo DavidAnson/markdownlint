@@ -47,9 +47,6 @@ function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" =
 var micromark = __webpack_require__(/*! ./micromark.cjs */ "../helpers/micromark.cjs");
 var _require = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js"),
   newLineRe = _require.newLineRe;
-
-// Regular expression for matching common newline characters
-// See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
@@ -70,9 +67,6 @@ module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-
-// Regular expression for all instances of emphasis markers
-var emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for blockquote prefixes
 var blockquotePrefixRe = /^[>\s]*/;
@@ -383,21 +377,10 @@ function filterTokens(params, type, handler) {
 }
 module.exports.filterTokens = filterTokens;
 
-/**
- * Returns whether a token is a math block (created by markdown-it-texmath).
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {boolean} True iff token is a math block.
- */
-function isMathBlock(token) {
-  return (token.tag === "$$" || token.tag === "math") && token.type.startsWith("math_block") && !token.type.endsWith("_end");
-}
-module.exports.isMathBlock = isMathBlock;
-
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
   var lineMetadata = params.lines.map(function (line, index) {
-    return [line, index, false, 0, false, false, false, false];
+    return [line, index, false, 0, false, false, false];
   });
   filterTokens(params, "fence", function (token) {
     lineMetadata[token.map[0]][3] = 1;
@@ -426,20 +409,6 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   filterTokens(params, "hr", function (token) {
     lineMetadata[token.map[0]][6] = true;
   });
-  var _iterator2 = _createForOfIteratorHelper(params.parsers.markdownit.tokens.filter(isMathBlock)),
-    _step2;
-  try {
-    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-      var token = _step2.value;
-      for (var i = token.map[0]; i < token.map[1]; i++) {
-        lineMetadata[i][7] = true;
-      }
-    }
-  } catch (err) {
-    _iterator2.e(err);
-  } finally {
-    _iterator2.f();
-  }
   return lineMetadata;
 };
 
@@ -448,21 +417,21 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
  *
  * @param {Object} lineMetadata Line metadata object.
  * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
- * inTable, inItem, inBreak, inMath).
+ * inTable, inItem, inBreak).
  * @returns {void}
  */
 function forEachLine(lineMetadata, handler) {
-  var _iterator3 = _createForOfIteratorHelper(lineMetadata),
-    _step3;
+  var _iterator2 = _createForOfIteratorHelper(lineMetadata),
+    _step2;
   try {
-    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-      var metadata = _step3.value;
+    for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+      var metadata = _step2.value;
       handler.apply(void 0, _toConsumableArray(metadata));
     }
   } catch (err) {
-    _iterator3.e(err);
+    _iterator2.e(err);
   } finally {
-    _iterator3.f();
+    _iterator2.f();
   }
 }
 module.exports.forEachLine = forEachLine;
@@ -477,11 +446,11 @@ module.exports.flattenLists = function flattenLists(tokens) {
   var lastWithMap = {
     "map": [0, 1]
   };
-  var _iterator4 = _createForOfIteratorHelper(tokens),
-    _step4;
+  var _iterator3 = _createForOfIteratorHelper(tokens),
+    _step3;
   try {
-    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-      var token = _step4.value;
+    for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+      var token = _step3.value;
       if (token.type === "bullet_list_open" || token.type === "ordered_list_open") {
         // Save current context and start a new one
         stack.push(current);
@@ -519,9 +488,9 @@ module.exports.flattenLists = function flattenLists(tokens) {
       }
     }
   } catch (err) {
-    _iterator4.e(err);
+    _iterator3.e(err);
   } finally {
-    _iterator4.f();
+    _iterator3.f();
   }
   return flattenedLists;
 };
@@ -536,19 +505,19 @@ module.exports.flattenLists = function flattenLists(tokens) {
  */
 function forEachInlineChild(params, type, handler) {
   filterTokens(params, "inline", function (token) {
-    var _iterator5 = _createForOfIteratorHelper(token.children.filter(function (c) {
+    var _iterator4 = _createForOfIteratorHelper(token.children.filter(function (c) {
         return c.type === type;
       })),
-      _step5;
+      _step4;
     try {
-      for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-        var child = _step5.value;
+      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+        var child = _step4.value;
         handler(child, token);
       }
     } catch (err) {
-      _iterator5.e(err);
+      _iterator4.e(err);
     } finally {
-      _iterator5.f();
+      _iterator4.f();
     }
   });
 }
@@ -557,11 +526,11 @@ module.exports.forEachInlineChild = forEachInlineChild;
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
   var heading = null;
-  var _iterator6 = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
-    _step6;
+  var _iterator5 = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
+    _step5;
   try {
-    for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-      var token = _step6.value;
+    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+      var token = _step5.value;
       if (token.type === "heading_open") {
         heading = token;
       } else if (token.type === "heading_close") {
@@ -571,9 +540,9 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
       }
     }
   } catch (err) {
-    _iterator6.e(err);
+    _iterator5.e(err);
   } finally {
-    _iterator6.f();
+    _iterator5.f();
   }
 };
 
@@ -708,68 +677,23 @@ module.exports.codeBlockAndSpanRanges = function (params, lineMetadata) {
       var tokenLines = params.lines.slice(token.map[0], token.map[1]);
       forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, columnIndex) {
         var codeLines = code.split(newLineRe);
-        var _iterator7 = _createForOfIteratorHelper(codeLines.entries()),
-          _step7;
+        var _iterator6 = _createForOfIteratorHelper(codeLines.entries()),
+          _step6;
         try {
-          for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-            var _step7$value = _slicedToArray(_step7.value, 2),
-              i = _step7$value[0],
-              line = _step7$value[1];
+          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+            var _step6$value = _slicedToArray(_step6.value, 2),
+              i = _step6$value[0],
+              line = _step6$value[1];
             exclusions.push([token.lineNumber - 1 + lineIndex + i, i ? 0 : columnIndex, line.length]);
           }
         } catch (err) {
-          _iterator7.e(err);
+          _iterator6.e(err);
         } finally {
-          _iterator7.f();
+          _iterator6.f();
         }
       });
     }
   });
-  return exclusions;
-};
-
-/**
- * Returns an array of HTML element ranges.
- *
- * @param {Object} params RuleParams instance.
- * @param {Object} lineMetadata Line metadata object.
- * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
- */
-module.exports.htmlElementRanges = function (params, lineMetadata) {
-  var exclusions = [];
-  // Match with htmlElementRe
-  forEachLine(lineMetadata, function (line, lineIndex, inCode) {
-    var match = null;
-    // eslint-disable-next-line no-unmodified-loop-condition
-    while (!inCode && (match = htmlElementRe.exec(line)) !== null) {
-      exclusions.push([lineIndex, match.index, match[0].length]);
-    }
-  });
-  // Match with html_inline
-  forEachInlineChild(params, "html_inline", function (token, parent) {
-    var parentContent = parent.content;
-    var tokenContent = token.content;
-    var parentIndex = parentContent.indexOf(tokenContent);
-    var deltaLines = 0;
-    var indent = 0;
-    for (var i = parentIndex - 1; i >= 0; i--) {
-      if (parentContent[i] === "\n") {
-        deltaLines++;
-      } else if (deltaLines === 0) {
-        indent++;
-      }
-    }
-    var lineIndex = token.lineNumber - 1 + deltaLines;
-    do {
-      var index = tokenContent.indexOf("\n");
-      var length = index === -1 ? tokenContent.length : index;
-      exclusions.push([lineIndex, indent, length]);
-      tokenContent = tokenContent.slice(length + 1);
-      lineIndex++;
-      indent = 0;
-    } while (tokenContent.length > 0);
-  });
-  // Return results
   return exclusions;
 };
 
@@ -811,155 +735,6 @@ module.exports.frontMatterHasTitle = function frontMatterHasTitle(frontMatterLin
 };
 
 /**
- * Calls the provided function for each link.
- *
- * @param {string} line Line of Markdown input.
- * @param {Function} handler Function taking (index, link, text, destination).
- * @returns {void}
- */
-function forEachLink(line, handler) {
-  // Helper to find matching close symbol for link text/destination
-  var findClosingSymbol = function findClosingSymbol(index) {
-    var begin = line[index];
-    var end = begin === "[" ? "]" : ")";
-    var nesting = 0;
-    var escaping = false;
-    var pointy = false;
-    for (var i = index + 1; i < line.length; i++) {
-      var current = line[i];
-      if (current === "\\") {
-        escaping = !escaping;
-      } else if (!escaping && current === begin) {
-        nesting++;
-      } else if (!escaping && current === end) {
-        if (nesting > 0) {
-          nesting--;
-        } else if (!pointy) {
-          // Return index after matching close symbol
-          return i + 1;
-        }
-      } else if (i === index + 1 && begin === "(" && current === "<") {
-        pointy = true;
-      } else if (!escaping && pointy && current === ">") {
-        pointy = false;
-        nesting = 0;
-      } else {
-        escaping = false;
-      }
-    }
-    // No match found
-    return -1;
-  };
-  // Scan line for unescaped "[" character
-  var escaping = false;
-  for (var i = 0; i < line.length; i++) {
-    var current = line[i];
-    if (current === "\\") {
-      escaping = !escaping;
-    } else if (!escaping && current === "[") {
-      // Scan for matching close "]" of link text
-      var textEnd = findClosingSymbol(i);
-      if (textEnd !== -1) {
-        if (line[textEnd] === "(" || line[textEnd] === "[") {
-          // Scan for matching close ")" or "]" of link destination
-          var destEnd = findClosingSymbol(textEnd);
-          if (destEnd !== -1) {
-            // Call handler with link text and destination
-            var link = line.slice(i, destEnd);
-            var text = line.slice(i, textEnd);
-            var dest = line.slice(textEnd, destEnd);
-            handler(i, link, text, dest);
-            i = destEnd;
-          }
-        }
-        if (i < textEnd) {
-          // Call handler with link text only
-          var _text = line.slice(i, textEnd);
-          handler(i, _text, _text);
-          i = textEnd;
-        }
-      }
-    } else {
-      escaping = false;
-    }
-  }
-}
-module.exports.forEachLink = forEachLink;
-
-/**
- * Returns a list of emphasis markers in code spans and links.
- *
- * @param {Object} params RuleParams instance.
- * @returns {number[][]} List of markers.
- */
-function emphasisMarkersInContent(params) {
-  var lines = params.lines;
-  var byLine = new Array(lines.length);
-  // Search links
-  var _iterator8 = _createForOfIteratorHelper(lines.entries()),
-    _step8;
-  try {
-    var _loop = function _loop() {
-      var _step8$value = _slicedToArray(_step8.value, 2),
-        tokenLineIndex = _step8$value[0],
-        tokenLine = _step8$value[1];
-      var inLine = [];
-      forEachLink(tokenLine, function (index, match) {
-        var markerMatch = null;
-        while (markerMatch = emphasisMarkersRe.exec(match)) {
-          inLine.push(index + markerMatch.index);
-        }
-      });
-      byLine[tokenLineIndex] = inLine;
-    };
-    for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-      _loop();
-    }
-    // Search code spans
-  } catch (err) {
-    _iterator8.e(err);
-  } finally {
-    _iterator8.f();
-  }
-  filterTokens(params, "inline", function (token) {
-    var children = token.children,
-      lineNumber = token.lineNumber,
-      map = token.map;
-    if (children.some(function (child) {
-      return child.type === "code_inline";
-    })) {
-      var tokenLines = lines.slice(map[0], map[1]);
-      forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, column, tickCount) {
-        var codeLines = code.split(newLineRe);
-        var _iterator9 = _createForOfIteratorHelper(codeLines.entries()),
-          _step9;
-        try {
-          for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-            var _step9$value = _slicedToArray(_step9.value, 2),
-              codeLineIndex = _step9$value[0],
-              codeLine = _step9$value[1];
-            var byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
-            var inLine = byLine[byLineIndex];
-            var codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
-            var match = null;
-            while (match = emphasisMarkersRe.exec(codeLine)) {
-              inLine.push(codeLineOffset + match.index);
-            }
-            byLine[byLineIndex] = inLine;
-          }
-        } catch (err) {
-          _iterator9.e(err);
-        } finally {
-          _iterator9.f();
-        }
-      });
-    }
-  });
-  return byLine;
-}
-module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
-
-/**
  * Returns an object with information about reference links and images.
  *
  * @param {Object} params RuleParams instance.
@@ -981,11 +756,11 @@ function getReferenceLinkImageData(params) {
   "definitionLabelString", "gfmFootnoteDefinitionLabelString",
   // references and shortcuts
   "gfmFootnoteCall", "image", "link"]);
-  var _iterator10 = _createForOfIteratorHelper(filteredTokens),
-    _step10;
+  var _iterator7 = _createForOfIteratorHelper(filteredTokens),
+    _step7;
   try {
-    for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-      var token = _step10.value;
+    for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+      var token = _step7.value;
       var labelPrefix = "";
       // eslint-disable-next-line default-case
       switch (token.type) {
@@ -1052,9 +827,9 @@ function getReferenceLinkImageData(params) {
       }
     }
   } catch (err) {
-    _iterator10.e(err);
+    _iterator7.e(err);
   } finally {
-    _iterator10.f();
+    _iterator7.f();
   }
   return {
     references: references,
@@ -1078,11 +853,11 @@ function getPreferredLineEnding(input, os) {
   var lf = 0;
   var crlf = 0;
   var endings = input.match(newLineRe) || [];
-  var _iterator11 = _createForOfIteratorHelper(endings),
-    _step11;
+  var _iterator8 = _createForOfIteratorHelper(endings),
+    _step8;
   try {
-    for (_iterator11.s(); !(_step11 = _iterator11.n()).done;) {
-      var ending = _step11.value;
+    for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+      var ending = _step8.value;
       // eslint-disable-next-line default-case
       switch (ending) {
         case "\r":
@@ -1097,9 +872,9 @@ function getPreferredLineEnding(input, os) {
       }
     }
   } catch (err) {
-    _iterator11.e(err);
+    _iterator8.e(err);
   } finally {
-    _iterator11.f();
+    _iterator8.f();
   }
   var preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
@@ -1182,11 +957,11 @@ function applyFixes(input, errors) {
   lastFixInfo = {
     "lineNumber": -1
   };
-  var _iterator12 = _createForOfIteratorHelper(fixInfos),
-    _step12;
+  var _iterator9 = _createForOfIteratorHelper(fixInfos),
+    _step9;
   try {
-    for (_iterator12.s(); !(_step12 = _iterator12.n()).done;) {
-      var fixInfo = _step12.value;
+    for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+      var fixInfo = _step9.value;
       if (fixInfo.lineNumber === lastFixInfo.lineNumber && fixInfo.editColumn === lastFixInfo.editColumn && !fixInfo.insertText && fixInfo.deleteCount > 0 && lastFixInfo.insertText && !lastFixInfo.deleteCount) {
         fixInfo.insertText = lastFixInfo.insertText;
         lastFixInfo.lineNumber = 0;
@@ -1194,9 +969,9 @@ function applyFixes(input, errors) {
       lastFixInfo = fixInfo;
     }
   } catch (err) {
-    _iterator12.e(err);
+    _iterator9.e(err);
   } finally {
-    _iterator12.f();
+    _iterator9.f();
   }
   fixInfos = fixInfos.filter(function (fixInfo) {
     return fixInfo.lineNumber;
@@ -1204,11 +979,11 @@ function applyFixes(input, errors) {
   // Apply all (remaining/updated) fixes
   var lastLineIndex = -1;
   var lastEditIndex = -1;
-  var _iterator13 = _createForOfIteratorHelper(fixInfos),
-    _step13;
+  var _iterator10 = _createForOfIteratorHelper(fixInfos),
+    _step10;
   try {
-    for (_iterator13.s(); !(_step13 = _iterator13.n()).done;) {
-      var _fixInfo = _step13.value;
+    for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
+      var _fixInfo = _step10.value;
       var lineNumber = _fixInfo.lineNumber,
         editColumn = _fixInfo.editColumn,
         deleteCount = _fixInfo.deleteCount;
@@ -1223,9 +998,9 @@ function applyFixes(input, errors) {
     }
     // Return corrected input
   } catch (err) {
-    _iterator13.e(err);
+    _iterator10.e(err);
   } finally {
-    _iterator13.f();
+    _iterator10.f();
   }
   return lines.filter(function (line) {
     return line !== null;
@@ -1709,9 +1484,6 @@ module.exports.codeBlockAndSpanRanges = function () {
 };
 module.exports.flattenedLists = function () {
   return map.get("flattenedLists");
-};
-module.exports.htmlElementRanges = function () {
-  return map.get("htmlElementRanges");
 };
 module.exports.lineMetadata = function () {
   return map.get("lineMetadata");
@@ -2477,12 +2249,10 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
   var lineMetadata = helpers.getLineMetadata(paramsBase);
   var codeBlockAndSpanRanges = helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
   var flattenedLists = helpers.flattenLists(paramsBase.parsers.markdownit.tokens);
-  var htmlElementRanges = helpers.htmlElementRanges(paramsBase, lineMetadata);
   var referenceLinkImageData = helpers.getReferenceLinkImageData(paramsBase);
   cache.set({
     codeBlockAndSpanRanges: codeBlockAndSpanRanges,
     flattenedLists: flattenedLists,
-    htmlElementRanges: htmlElementRanges,
     lineMetadata: lineMetadata,
     referenceLinkImageData: referenceLinkImageData
   });
@@ -5346,6 +5116,11 @@ module.exports = {
 
 
 
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5353,154 +5128,113 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addErrorContext = _require.addErrorContext,
-  emphasisMarkersInContent = _require.emphasisMarkersInContent,
-  forEachLine = _require.forEachLine,
-  isBlankLine = _require.isBlankLine,
-  withinAnyRange = _require.withinAnyRange;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  htmlElementRanges = _require2.htmlElementRanges,
-  lineMetadata = _require2.lineMetadata;
-var emphasisRe = /(^|[^\\]|\\\\)(?:(\*{1,3})|(_{1,3}))/g;
-var embeddedUnderscoreRe = /([A-Za-z\d])(_([A-Za-z\d]))+/g;
-var asteriskListItemMarkerRe = /^([\s>]*)\*(\s+)/;
-var leftSpaceRe = /^\s+/;
-var rightSpaceRe = /\s+$/;
-var tablePipeRe = /\|/;
-var allUnderscoresRe = /_/g;
+  addError = _require.addError;
+var emphasisStartTextRe = /^(\S{1,3})(\s+)\S/;
+var emphasisEndTextRe = /\S(\s+)(\S{1,3})$/;
 module.exports = {
   "names": ["MD037", "no-space-in-emphasis"],
   "description": "Spaces inside emphasis markers",
   "tags": ["whitespace", "emphasis"],
   "function": function MD037(params, onError) {
-    var exclusions = htmlElementRanges();
-    // eslint-disable-next-line init-declarations
-    var effectiveEmphasisLength,
-      emphasisIndex,
-      emphasisKind,
-      emphasisLength,
-      pendingError = null;
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function resetRunTracking() {
-      emphasisIndex = -1;
-      emphasisLength = 0;
-      emphasisKind = "";
-      effectiveEmphasisLength = 0;
-      pendingError = null;
+    // Initialize variables
+    var lines = params.lines,
+      parsers = params.parsers;
+    var emphasisTokensByMarker = new Map();
+    for (var _i = 0, _arr = ["_", "__", "___", "*", "**", "***"]; _i < _arr.length; _i++) {
+      var marker = _arr[_i];
+      emphasisTokensByMarker.set(marker, []);
     }
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function handleRunEnd(line, lineIndex, contextLength, match, matchIndex, inTable) {
-      // Close current run
-      var content = line.substring(emphasisIndex, matchIndex);
-      if (!emphasisLength) {
-        content = content.trimStart();
+    var pending = _toConsumableArray(parsers.micromark.tokens);
+    var token = null;
+    while (token = pending.shift()) {
+      // Use reparsed children of htmlFlow tokens
+      if (token.type === "htmlFlow") {
+        pending.unshift.apply(pending, _toConsumableArray(token.htmlFlowChildren));
+        continue;
       }
-      if (!match) {
-        content = content.trimEnd();
-      }
-      var leftSpace = leftSpaceRe.test(content);
-      var rightSpace = rightSpaceRe.test(content);
-      if ((leftSpace || rightSpace) && (!inTable || !tablePipeRe.test(content))) {
-        // Report the violation
-        var contextStart = emphasisIndex - emphasisLength;
-        var contextEnd = matchIndex + contextLength;
-        var column = contextStart + 1;
-        var length = contextEnd - contextStart;
-        if (!withinAnyRange(exclusions, lineIndex, column, length)) {
-          var context = line.substring(contextStart, contextEnd);
-          var leftMarker = line.substring(contextStart, emphasisIndex);
-          var rightMarker = match ? match[2] || match[3] : "";
-          var fixedText = "".concat(leftMarker).concat(content.trim()).concat(rightMarker);
-          return [onError, lineIndex + 1, context, leftSpace, rightSpace, [column, length], {
-            "editColumn": column,
-            "deleteCount": length,
-            "insertText": fixedText
-          }];
+      pending.push.apply(pending, _toConsumableArray(token.children));
+
+      // Build lists of bare tokens for each emphasis marker type
+      var _iterator = _createForOfIteratorHelper(emphasisTokensByMarker.values()),
+        _step;
+      try {
+        for (_iterator.s(); !(_step = _iterator.n()).done;) {
+          var emphasisTokens = _step.value;
+          emphasisTokens.length = 0;
         }
+      } catch (err) {
+        _iterator.e(err);
+      } finally {
+        _iterator.f();
       }
-      return null;
+      var _iterator2 = _createForOfIteratorHelper(token.children),
+        _step2;
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var child = _step2.value;
+          var text = child.text,
+            type = child.type;
+          if (type === "data" && text.length <= 3) {
+            var _emphasisTokens = emphasisTokensByMarker.get(text);
+            if (_emphasisTokens) {
+              _emphasisTokens.push(child);
+            }
+          }
+        }
+
+        // Process bare tokens for each emphasis marker type
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+      var _iterator3 = _createForOfIteratorHelper(emphasisTokensByMarker.values()),
+        _step3;
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var _emphasisTokens2 = _step3.value;
+          for (var i = 0; i + 1 < _emphasisTokens2.length; i += 2) {
+            // Process start token of start/end pair
+            var startToken = _emphasisTokens2[i];
+            var startText = lines[startToken.startLine - 1].slice(startToken.startColumn - 1);
+            var startMatch = startText.match(emphasisStartTextRe);
+            if (startMatch) {
+              var _startMatch = _slicedToArray(startMatch, 3),
+                startContext = _startMatch[0],
+                startMarker = _startMatch[1],
+                startSpaces = _startMatch[2];
+              if (startMarker === startToken.text && startSpaces.length > 0) {
+                addError(onError, startToken.startLine, undefined, startContext, [startToken.startColumn, startContext.length], {
+                  "editColumn": startToken.endColumn,
+                  "deleteCount": startSpaces.length
+                });
+              }
+            }
+
+            // Process end token of start/end pair
+            var endToken = _emphasisTokens2[i + 1];
+            var endText = lines[endToken.startLine - 1].slice(0, endToken.endColumn - 1);
+            var endMatch = endText.match(emphasisEndTextRe);
+            if (endMatch) {
+              var _endMatch = _slicedToArray(endMatch, 3),
+                endContext = _endMatch[0],
+                endSpace = _endMatch[1],
+                endMarker = _endMatch[2];
+              if (endMarker === endToken.text && endSpace.length > 0) {
+                addError(onError, endToken.startLine, undefined, endContext, [endToken.endColumn - endContext.length, endContext.length], {
+                  "editColumn": endToken.startColumn - endSpace.length,
+                  "deleteCount": endSpace.length
+                });
+              }
+            }
+          }
+        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
+      }
     }
-    // Initialize
-    var ignoreMarkersByLine = emphasisMarkersInContent(params);
-    resetRunTracking();
-    forEachLine(lineMetadata(), function (line, lineIndex, inCode, onFence, inTable, inItem, onBreak, inMath) {
-      var onItemStart = inItem === 1;
-      if (inCode || onFence || inTable || onBreak || onItemStart || isBlankLine(line)) {
-        // Emphasis resets when leaving a block
-        resetRunTracking();
-      }
-      if (inCode || onFence || onBreak || inMath) {
-        // Emphasis has no meaning here
-        return;
-      }
-      var patchedLine = line.replace(embeddedUnderscoreRe, function (match) {
-        return match.replace(allUnderscoresRe, " ");
-      });
-      if (onItemStart) {
-        // Trim overlapping '*' list item marker
-        patchedLine = patchedLine.replace(asteriskListItemMarkerRe, "$1 $2");
-      }
-      var match = null;
-      // Match all emphasis-looking runs in the line...
-      while (match = emphasisRe.exec(patchedLine)) {
-        var ignoreMarkersForLine = ignoreMarkersByLine[lineIndex];
-        var matchIndex = match.index + match[1].length;
-        if (ignoreMarkersForLine.includes(matchIndex)) {
-          // Ignore emphasis markers inside code spans and links
-          continue;
-        }
-        var matchLength = match[0].length - match[1].length;
-        var matchKind = (match[2] || match[3])[0];
-        if (emphasisIndex === -1) {
-          // New run
-          emphasisIndex = matchIndex + matchLength;
-          emphasisLength = matchLength;
-          emphasisKind = matchKind;
-          effectiveEmphasisLength = matchLength;
-        } else if (matchKind === emphasisKind) {
-          // Matching emphasis markers
-          if (matchLength === effectiveEmphasisLength) {
-            // Ending an existing run, report any pending error
-            if (pendingError) {
-              // @ts-ignore
-              addErrorContext.apply(void 0, _toConsumableArray(pendingError));
-              pendingError = null;
-            }
-            var error = handleRunEnd(line, lineIndex, effectiveEmphasisLength, match, matchIndex, inTable);
-            if (error) {
-              // @ts-ignore
-              addErrorContext.apply(void 0, _toConsumableArray(error));
-            }
-            // Reset
-            resetRunTracking();
-          } else if (matchLength === 3) {
-            // Swap internal run length (1->2 or 2->1)
-            effectiveEmphasisLength = matchLength - effectiveEmphasisLength;
-          } else if (effectiveEmphasisLength === 3) {
-            // Downgrade internal run (3->1 or 3->2)
-            effectiveEmphasisLength -= matchLength;
-          } else {
-            // Upgrade to internal run (1->3 or 2->3)
-            effectiveEmphasisLength += matchLength;
-          }
-          // Back up one character so RegExp has a chance to match the
-          // next marker (ex: "**star**_underscore_")
-          if (emphasisRe.lastIndex > 1) {
-            emphasisRe.lastIndex--;
-          }
-        } else if (emphasisRe.lastIndex > 1) {
-          // Back up one character so RegExp has a chance to match the
-          // mis-matched marker (ex: "*text_*")
-          emphasisRe.lastIndex--;
-        }
-      }
-      if (emphasisIndex !== -1) {
-        pendingError = pendingError || handleRunEnd(line, lineIndex, 0, null, line.length, inTable);
-        // Adjust for pending run on new line
-        emphasisIndex = 0;
-        emphasisLength = 0;
-      }
-    });
   }
 };
 

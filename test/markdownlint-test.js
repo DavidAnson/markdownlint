@@ -9,7 +9,6 @@ const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
-const pluginTexMath = require("markdown-it-texmath");
 const test = require("ava").default;
 const tv4 = require("tv4");
 const { "exports": packageExports, homepage, version } =
@@ -20,11 +19,6 @@ const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
 
-const pluginTexMathOptions = {
-  "engine": {
-    "renderToString": () => ""
-  }
-};
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const configSchemaStrict = {
   ...configSchema,
@@ -1099,77 +1093,6 @@ test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
   }, function callback(err, actual) {
     t.falsy(err);
     const expected = { "string": [] };
-    t.deepEqual(actual, expected, "Unexpected issues.");
-    resolve();
-  });
-}));
-
-test("markdownItPluginsMathjax", (t) => new Promise((resolve) => {
-  t.plan(2);
-  markdownlint({
-    "strings": {
-      "string":
-        "# Heading\n" +
-        "\n" +
-        "$1 *2* 3$\n" +
-        "\n" +
-        "$$1 *2* 3$$\n" +
-        "\n" +
-        "$$1\n" +
-        "+ 2\n" +
-        "+ 3$$\n"
-    },
-    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ]
-  }, function callback(err, actual) {
-    t.falsy(err);
-    const expected = { "string": [] };
-    t.deepEqual(actual, expected, "Unexpected issues.");
-    resolve();
-  });
-}));
-
-test("markdownItPluginsMathjaxIssue166", (t) => new Promise((resolve) => {
-  t.plan(2);
-  markdownlint({
-    "strings": {
-      "string":
-`## Heading
-
-$$
-1
-$$$$
-2
-$$\n`
-    },
-    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ],
-    "resultVersion": 0
-  }, function callback(err, actual) {
-    t.falsy(err);
-    const expected = {
-      "string": {
-        "MD041": [ 1 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actual, expected, "Unexpected issues.");
-    resolve();
-  });
-}));
-
-test("texmath test files with texmath plugin", (t) => new Promise((resolve) => {
-  t.plan(2);
-  markdownlint({
-    "files": [
-      "./test/texmath-content-in-lists.md",
-      "./test/texmath-content-violating-md037.md"
-    ],
-    "markdownItPlugins": [ [ pluginTexMath, pluginTexMathOptions ] ]
-  }, function callback(err, actual) {
-    t.falsy(err);
-    const expected = {
-      "./test/texmath-content-in-lists.md": [],
-      "./test/texmath-content-violating-md037.md": []
-    };
     t.deepEqual(actual, expected, "Unexpected issues.");
     resolve();
   });

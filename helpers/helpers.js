@@ -3,10 +3,8 @@
 "use strict";
 
 const micromark = require("./micromark.cjs");
-const { newLineRe } = require("./shared.js");
 
-// Regular expression for matching common newline characters
-// See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
+const { newLineRe } = require("./shared.js");
 module.exports.newLineRe = newLineRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
@@ -27,9 +25,6 @@ module.exports.htmlElementRe = htmlElementRe;
 // Regular expressions for range matching
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-
-// Regular expression for all instances of emphasis markers
-const emphasisMarkersRe = /[_*]/g;
 
 // Regular expression for blockquote prefixes
 const blockquotePrefixRe = /^[>\s]*/;
@@ -348,25 +343,10 @@ function filterTokens(params, type, handler) {
 }
 module.exports.filterTokens = filterTokens;
 
-/**
- * Returns whether a token is a math block (created by markdown-it-texmath).
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {boolean} True iff token is a math block.
- */
-function isMathBlock(token) {
-  return (
-    ((token.tag === "$$") || (token.tag === "math")) &&
-    token.type.startsWith("math_block") &&
-    !token.type.endsWith("_end")
-  );
-}
-module.exports.isMathBlock = isMathBlock;
-
 // Get line metadata array
 module.exports.getLineMetadata = function getLineMetadata(params) {
   const lineMetadata = params.lines.map(
-    (line, index) => [ line, index, false, 0, false, false, false, false ]
+    (line, index) => [ line, index, false, 0, false, false, false ]
   );
   filterTokens(params, "fence", (token) => {
     lineMetadata[token.map[0]][3] = 1;
@@ -395,11 +375,6 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
   filterTokens(params, "hr", (token) => {
     lineMetadata[token.map[0]][6] = true;
   });
-  for (const token of params.parsers.markdownit.tokens.filter(isMathBlock)) {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][7] = true;
-    }
-  }
   return lineMetadata;
 };
 
@@ -408,7 +383,7 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
  *
  * @param {Object} lineMetadata Line metadata object.
  * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
- * inTable, inItem, inBreak, inMath).
+ * inTable, inItem, inBreak).
  * @returns {void}
  */
 function forEachLine(lineMetadata, handler) {
@@ -656,51 +631,6 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
 };
 
 /**
- * Returns an array of HTML element ranges.
- *
- * @param {Object} params RuleParams instance.
- * @param {Object} lineMetadata Line metadata object.
- * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
- */
-module.exports.htmlElementRanges = (params, lineMetadata) => {
-  const exclusions = [];
-  // Match with htmlElementRe
-  forEachLine(lineMetadata, (line, lineIndex, inCode) => {
-    let match = null;
-    // eslint-disable-next-line no-unmodified-loop-condition
-    while (!inCode && ((match = htmlElementRe.exec(line)) !== null)) {
-      exclusions.push([ lineIndex, match.index, match[0].length ]);
-    }
-  });
-  // Match with html_inline
-  forEachInlineChild(params, "html_inline", (token, parent) => {
-    const parentContent = parent.content;
-    let tokenContent = token.content;
-    const parentIndex = parentContent.indexOf(tokenContent);
-    let deltaLines = 0;
-    let indent = 0;
-    for (let i = parentIndex - 1; i >= 0; i--) {
-      if (parentContent[i] === "\n") {
-        deltaLines++;
-      } else if (deltaLines === 0) {
-        indent++;
-      }
-    }
-    let lineIndex = token.lineNumber - 1 + deltaLines;
-    do {
-      const index = tokenContent.indexOf("\n");
-      const length = (index === -1) ? tokenContent.length : index;
-      exclusions.push([ lineIndex, indent, length ]);
-      tokenContent = tokenContent.slice(length + 1);
-      lineIndex++;
-      indent = 0;
-    } while (tokenContent.length > 0);
-  });
-  // Return results
-  return exclusions;
-};
-
-/**
  * Determines whether the specified range is within another range.
  *
  * @param {number[][]} ranges Array of ranges (line, index, length).
@@ -743,129 +673,6 @@ module.exports.frontMatterHasTitle =
     return !ignoreFrontMatter &&
       frontMatterLines.some((line) => frontMatterTitleRe.test(line));
   };
-
-/**
- * Calls the provided function for each link.
- *
- * @param {string} line Line of Markdown input.
- * @param {Function} handler Function taking (index, link, text, destination).
- * @returns {void}
- */
-function forEachLink(line, handler) {
-  // Helper to find matching close symbol for link text/destination
-  const findClosingSymbol = (index) => {
-    const begin = line[index];
-    const end = (begin === "[") ? "]" : ")";
-    let nesting = 0;
-    let escaping = false;
-    let pointy = false;
-    for (let i = index + 1; i < line.length; i++) {
-      const current = line[i];
-      if (current === "\\") {
-        escaping = !escaping;
-      } else if (!escaping && (current === begin)) {
-        nesting++;
-      } else if (!escaping && (current === end)) {
-        if (nesting > 0) {
-          nesting--;
-        } else if (!pointy) {
-          // Return index after matching close symbol
-          return i + 1;
-        }
-      } else if ((i === index + 1) && (begin === "(") && (current === "<")) {
-        pointy = true;
-      } else if (!escaping && pointy && current === ">") {
-        pointy = false;
-        nesting = 0;
-      } else {
-        escaping = false;
-      }
-    }
-    // No match found
-    return -1;
-  };
-  // Scan line for unescaped "[" character
-  let escaping = false;
-  for (let i = 0; i < line.length; i++) {
-    const current = line[i];
-    if (current === "\\") {
-      escaping = !escaping;
-    } else if (!escaping && (current === "[")) {
-      // Scan for matching close "]" of link text
-      const textEnd = findClosingSymbol(i);
-      if (textEnd !== -1) {
-        if ((line[textEnd] === "(") || (line[textEnd] === "[")) {
-          // Scan for matching close ")" or "]" of link destination
-          const destEnd = findClosingSymbol(textEnd);
-          if (destEnd !== -1) {
-            // Call handler with link text and destination
-            const link = line.slice(i, destEnd);
-            const text = line.slice(i, textEnd);
-            const dest = line.slice(textEnd, destEnd);
-            handler(i, link, text, dest);
-            i = destEnd;
-          }
-        }
-        if (i < textEnd) {
-          // Call handler with link text only
-          const text = line.slice(i, textEnd);
-          handler(i, text, text);
-          i = textEnd;
-        }
-      }
-    } else {
-      escaping = false;
-    }
-  }
-}
-module.exports.forEachLink = forEachLink;
-
-/**
- * Returns a list of emphasis markers in code spans and links.
- *
- * @param {Object} params RuleParams instance.
- * @returns {number[][]} List of markers.
- */
-function emphasisMarkersInContent(params) {
-  const { lines } = params;
-  const byLine = new Array(lines.length);
-  // Search links
-  for (const [ tokenLineIndex, tokenLine ] of lines.entries()) {
-    const inLine = [];
-    forEachLink(tokenLine, (index, match) => {
-      let markerMatch = null;
-      while ((markerMatch = emphasisMarkersRe.exec(match))) {
-        inLine.push(index + markerMatch.index);
-      }
-    });
-    byLine[tokenLineIndex] = inLine;
-  }
-  // Search code spans
-  filterTokens(params, "inline", (token) => {
-    const { children, lineNumber, map } = token;
-    if (children.some((child) => child.type === "code_inline")) {
-      const tokenLines = lines.slice(map[0], map[1]);
-      forEachInlineCodeSpan(
-        tokenLines.join("\n"),
-        (code, lineIndex, column, tickCount) => {
-          const codeLines = code.split(newLineRe);
-          for (const [ codeLineIndex, codeLine ] of codeLines.entries()) {
-            const byLineIndex = lineNumber - 1 + lineIndex + codeLineIndex;
-            const inLine = byLine[byLineIndex];
-            const codeLineOffset = codeLineIndex ? 0 : column - 1 + tickCount;
-            let match = null;
-            while ((match = emphasisMarkersRe.exec(codeLine))) {
-              inLine.push(codeLineOffset + match.index);
-            }
-            byLine[byLineIndex] = inLine;
-          }
-        }
-      );
-    }
-  });
-  return byLine;
-}
-module.exports.emphasisMarkersInContent = emphasisMarkersInContent;
 
 /**
  * Returns an object with information about reference links and images.

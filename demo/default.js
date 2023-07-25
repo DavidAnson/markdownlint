@@ -60,7 +60,11 @@
           micromarkHtml.mathHtml()
         ]
       };
-      return micromarkHtml.compile(compileOptions)(events);
+      try {
+        return micromarkHtml.compile(compileOptions)(events);
+      } catch (error) {
+        return `[Exception: "${error}"]`;
+      }
     }
     return `[Unsupported renderer "${renderer}"]`;
   }

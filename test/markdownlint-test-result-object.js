@@ -406,12 +406,24 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "ruleDescription": "Spaces inside emphasis markers",
           "ruleInformation": `${homepage}/blob/v${version}/doc/md037.md`,
           "errorDetail": null,
-          "errorContext": "* emphasis *",
-          "errorRange": [ 6, 12 ],
+          "errorContext": "* e",
+          "errorRange": [ 6, 3 ],
           "fixInfo": {
-            "editColumn": 6,
-            "deleteCount": 12,
-            "insertText": "*emphasis*"
+            "editColumn": 7,
+            "deleteCount": 1
+          }
+        },
+        {
+          "lineNumber": 4,
+          "ruleNames": [ "MD037", "no-space-in-emphasis" ],
+          "ruleDescription": "Spaces inside emphasis markers",
+          "ruleInformation": `${homepage}/blob/v${version}/doc/md037.md`,
+          "errorDetail": null,
+          "errorContext": "s *",
+          "errorRange": [ 15, 3 ],
+          "fixInfo": {
+            "editColumn": 16,
+            "deleteCount": 1
           }
         },
         {
@@ -439,7 +451,9 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
       "input: 3: MD010/no-hard-tabs" +
       " Hard tabs [Column: 10]\n" +
       "input: 4: MD037/no-space-in-emphasis" +
-      " Spaces inside emphasis markers [Context: \"* emphasis *\"]\n" +
+      " Spaces inside emphasis markers [Context: \"* e\"]\n" +
+      "input: 4: MD037/no-space-in-emphasis" +
+      " Spaces inside emphasis markers [Context: \"s *\"]\n" +
       "input: 4: MD047/single-trailing-newline" +
       " Files should end with a single newline character";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
