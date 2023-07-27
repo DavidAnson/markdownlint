@@ -75,9 +75,9 @@ code
 text
 
 <!-- markdownlint-configure-file {
-  "MD004": false,
-  "MD029": false,
-  "MD040": false
+  "ul-style": false,
+  "ol-prefix": false,
+  "fenced-code-language": false
 } -->
 
 * list (on last line without newline) {MD047}

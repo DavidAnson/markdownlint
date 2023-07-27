@@ -13,7 +13,7 @@
 ## Heading ?
 
 <!-- markdownlint-configure-file {
-  "MD026": {
+  "no-trailing-punctuation": {
     "punctuation": ""
   }
 } -->

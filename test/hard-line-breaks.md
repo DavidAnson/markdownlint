@@ -88,7 +88,7 @@ text text
 {MD009:71}
 
 <!-- markdownlint-configure-file {
-  "MD009": {
+  "no-trailing-spaces": {
     "strict": true
   }
 } -->

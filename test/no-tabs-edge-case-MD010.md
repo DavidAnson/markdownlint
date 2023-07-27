@@ -3,9 +3,9 @@ text		 and text 2 {MD010}
 texts with trailing spaces{MD010}			
 
 <!-- markdownlint-configure-file {
-  "MD009": false,
-  "MD010": {
+  "no-trailing-spaces": false,
+  "no-hard-tabs": {
     "spaces_per_tab": 0
   },
-  "MD041": false
+  "first-line-heading": false
 } -->

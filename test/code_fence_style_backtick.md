@@ -21,7 +21,7 @@ This is not {MD048:17}
 ~~~
 
 <!-- markdownlint-configure-file {
-  "MD048": {
+  "code-fence-style": {
     "style": "backtick"
   }
 } -->

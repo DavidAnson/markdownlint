@@ -21,7 +21,7 @@ Text
 Text text text text text text text text text text text text text text text text text text text text text text text text {MD013}
 
 <!-- markdownlint-configure-file {
-  "MD013": {
+  "line-length": {
     "headings": false
   }
 } -->

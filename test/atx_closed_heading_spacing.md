@@ -19,6 +19,6 @@
 ## Heading 10 {MD003}  \#
 
 <!-- markdownlint-configure-file {
-  "MD002": false,
-  "MD041": false
+  "first-heading-h1": false,
+  "first-line-heading": false
 } -->

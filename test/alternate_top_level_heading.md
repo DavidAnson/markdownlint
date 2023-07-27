@@ -3,13 +3,13 @@
 ## Another one {MD025}
 
 <!-- markdownlint-configure-file {
-  "MD002": {
+  "first-heading-h1": {
     "level": 2
   },
-  "MD025": {
+  "single-title": {
     "level": 2
   },
-  "MD041": {
+  "first-line-heading": {
     "level": 2
   }
 } -->

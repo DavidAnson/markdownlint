@@ -9,7 +9,7 @@ apple**banana**cherry, apple**banana**, **banana**cherry
 apple__banana__cherry, apple__banana__, __banana__cherry
 
 <!-- markdownlint-configure-file {
-  "MD050": {
+  "strong-style": {
     "style": "underscore"
   }
 } -->

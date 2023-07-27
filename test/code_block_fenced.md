@@ -19,7 +19,7 @@ But we'll do another:
 Final text is here
 
 <!-- markdownlint-configure-file {
-  "MD046": {
+  "code-block-style": {
     "style": "fenced"
   }
 } -->

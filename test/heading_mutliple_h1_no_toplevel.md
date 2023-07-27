@@ -5,5 +5,5 @@ Some introductory text
 # Heading 2
 
 <!-- markdownlint-configure-file {
-  "MD041": false
+  "first-line-heading": false
 } -->

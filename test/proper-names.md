@@ -121,8 +121,8 @@ javascript {MD044}
 {MD044:107} {MD044:109} {MD044:112} {MD044:117}
 
 <!-- markdownlint-configure-file {
-  "MD033": false,
-  "MD044": {
+  "no-inline-html": false,
+  "proper-names": {
     "names": [
       "HTTPS",
       "Internet Explorer",

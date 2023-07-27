@@ -5,7 +5,7 @@
   + Item
 
 <!-- markdownlint-configure-file {
-  "MD004": {
+  "ul-style": {
     "style": "plus"
   }
 } -->

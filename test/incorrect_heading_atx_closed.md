@@ -6,7 +6,7 @@ Heading 3 {MD003}
 -----------------
 
 <!-- markdownlint-configure-file {
-  "MD003": {
+  "heading-style": {
     "style": "atx_closed"
   }
 } -->

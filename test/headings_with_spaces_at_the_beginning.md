@@ -20,6 +20,6 @@ Some text
     # Test {MD022} {MD023} Also valid heading for CommonMark
 
 <!-- markdownlint-configure-file {
-  "MD003": false,
-  "MD041": false
+  "heading-style": false,
+  "first-line-heading": false
 } -->

@@ -5,7 +5,7 @@
   + Item {MD004}
 
 <!-- markdownlint-configure-file {
-  "MD004": {
+  "ul-style": {
     "style": "dash"
   }
 } -->

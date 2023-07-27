@@ -43,7 +43,7 @@ text javascript text `javascript` text {MD044}
 text `javascript` text javascript text {MD044}
 
 <!-- markdownlint-configure-file {
-  "MD044": {
+  "proper-names": {
     "names": [
       "Internet Explorer",
       "markdownlint",

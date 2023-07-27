@@ -1,5 +1,5 @@
 --
 <!-- markdownlint-configure-file {
-  "MD041": false,
-  "MD047": false
+  "first-line-heading": false,
+  "single-trailing-newline": false
 } -->

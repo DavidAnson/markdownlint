@@ -5,7 +5,7 @@
 #### Four ####
 
 <!-- markdownlint-configure-file {
-  "MD043": {
+  "required-headings": {
     "headings": [
       "# One",
       "## Two",

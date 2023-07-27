@@ -16,7 +16,7 @@ The rule has been customized to allow exclamation point while disallowing
 everything else.
 
 <!-- markdownlint-configure-file {
-  "MD026": {
+  "no-trailing-punctuation": {
     "punctuation": ".,;:?]"
   }
 } -->

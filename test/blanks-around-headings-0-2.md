@@ -24,9 +24,9 @@ Text
 ## Fig
 
 <!-- markdownlint-configure-file {
-  "MD003": false,
-  "MD012": false,
-  "MD022": {
+  "heading-style": false,
+  "no-multiple-blanks": false,
+  "blanks-around-headings": {
     "lines_above": 0,
     "lines_below": 2
   }

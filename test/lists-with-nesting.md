@@ -99,5 +99,5 @@
  * 3. Item {MD004} {MD006} {MD007}
 
 <!-- markdownlint-configure-file {
-  "MD006": true
+  "ul-start-left": true
 } -->

@@ -13,7 +13,7 @@ Text net. text. {MD044}
 Text .net. text. {MD044}
 
 <!-- markdownlint-configure-file {
-  "MD044": {
+  "proper-names": {
     "names": [
       ".NET.",
       ".NET",

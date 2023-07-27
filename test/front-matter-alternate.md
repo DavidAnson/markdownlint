@@ -6,7 +6,7 @@ Text {MD041}
 Text {MD009} 
 
 <!-- markdownlint-configure-file {
-  "MD009": {
+  "no-trailing-spaces": {
     "br_spaces": 0
   }
 } -->

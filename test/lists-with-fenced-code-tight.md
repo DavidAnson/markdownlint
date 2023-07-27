@@ -59,7 +59,7 @@ Text
 1. Item
 
 <!-- markdownlint-configure-file {
-  "MD031": {
+  "blanks-around-fences": {
     "list_items": false
   }
 } -->

@@ -25,7 +25,7 @@ a {}
 ```
 
 <!-- markdownlint-configure-file {
-  "MD040": {
+  "fenced-code-language": {
     "allowed_languages": [
       "html",
       "css"

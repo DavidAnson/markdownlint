@@ -3,31 +3,31 @@
 Long line long line long line long line long line long line long line long line long line long line {MD013}
 
 <!-- markdownlint-configure-file {
-  "MD002": {
+  "first-heading-h1": {
     "level": "1"
   },
-  "MD003": {
+  "heading-style": {
     "style": 0
   },
-  "MD004": {
+  "ul-style": {
     "style": 0
   },
-  "MD007": {
+  "ul-indent": {
     "indent": "2",
     "start_indented": 0
   },
-  "MD009": {
+  "no-trailing-spaces": {
     "br_spaces": "2",
     "list_item_empty_lines": 0,
     "strict": 0
   },
-  "MD010": {
+  "no-hard-tabs": {
     "code_blocks": 1
   },
-  "MD012": {
+  "no-multiple-blanks": {
     "maximum": "1"
   },
-  "MD013": {
+  "line-length": {
     "code_block_line_length": "80",
     "code_blocks": 1,
     "headers": 1,
@@ -37,58 +37,58 @@ Long line long line long line long line long line long line long line long line 
     "strict": 0,
     "tables": 1
   },
-  "MD022": {
+  "blanks-around-headings": {
     "lines_above": "1",
     "lines_below": "1"
   },
-  "MD024": {
+  "no-duplicate-heading": {
     "allow_different_nesting": 0,
     "siblings_only": 0
   },
-  "MD025": {
+  "single-title": {
     "front_matter_title": 0,
     "level": "1"
   },
-  "MD026": {
+  "no-trailing-punctuation": {
     "punctuation": 0
   },
-  "MD029": {
+  "ol-prefix": {
     "style": 0
   },
-  "MD030": {
+  "list-marker-space": {
     "ol_multi": "1",
     "ol_single": "1",
     "ul_multi": "1",
     "ul_single": "1"
   },
-  "MD031": {
+  "blanks-around-fences": {
     "list_items": 1
   },
-  "MD033": {
+  "no-inline-html": {
     "allowed_elements": 0
   },
-  "MD035": {
+  "hr-style": {
     "style": 0
   },
-  "MD036": {
+  "no-emphasis-as-heading": {
     "punctuation": 0
   },
-  "MD041": {
+  "first-line-heading": {
     "front_matter_title": 0,
     "level": "1"
   },
-  "MD043": {
+  "required-headings": {
     "headers": 0,
     "headings": 0
   },
-  "MD044": {
+  "proper-names": {
     "code_blocks": 1,
     "names": 0
   },
-  "MD046": {
+  "code-block-style": {
     "style": 0
   },
-  "MD048": {
+  "code-fence-style": {
     "style": 0
   },
   "$schema": "../schema/markdownlint-config-schema.json"

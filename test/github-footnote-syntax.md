@@ -16,5 +16,5 @@ You can also use words, to fit your writing style more closely[^note].
     This footnote also has been made with a different syntax using 4 spaces for new lines.
 
 <!-- markdownlint-configure-file {
-  "MD013": false
+  "line-length": false
 } -->

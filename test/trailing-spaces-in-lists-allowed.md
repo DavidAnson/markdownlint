@@ -52,7 +52,7 @@
 {MD009:50}
 
 <!-- markdownlint-configure-file {
-  "MD009": {
+  "no-trailing-spaces": {
     "list_item_empty_lines": true
   }
 } -->

@@ -44,6 +44,6 @@ Text [ link ][reference] text. {MD039}
 [reference]: https://example.com/
 
 <!-- markdownlint-configure-file {
-  "MD013": false,
-  "MD046": false
+  "line-length": false,
+  "code-block-style": false
 } -->

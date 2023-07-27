@@ -7,5 +7,5 @@ categories: jekyll update
 Front matter from [Jekyll documentation](https://jekyllrb.com/docs/posts/#a-typical-post). {MD041}
 
 <!-- markdownlint-configure-file {
-  "MD013": false
+  "line-length": false
 } -->

@@ -47,7 +47,7 @@ Another line.
 {: rules="groups"}
 
 <!-- markdownlint-configure-file {
-  "MD013": {
+  "line-length": {
     "code_blocks": false,
     "tables": false
   }
