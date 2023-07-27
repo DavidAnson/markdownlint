@@ -98,7 +98,6 @@
     "yaml": "2.3.1"
   },
   "overrides": {
-    "yargs": "^16.2.0",
     "yargs-parser": "^20.2.9"
   },
   "keywords": [
