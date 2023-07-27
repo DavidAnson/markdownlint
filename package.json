@@ -97,6 +97,9 @@
     "webpack-cli": "5.1.4",
     "yaml": "2.3.1"
   },
+  "overrides": {
+    "make-dir": "3.1.0"
+  },
   "keywords": [
     "markdown",
     "lint",
