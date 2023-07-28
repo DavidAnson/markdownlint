@@ -6,7 +6,7 @@
 Some plain text here.
 
 <!-- markdownlint-configure-file {
-  "MD041": {
+  "first-line-heading": {
     "front_matter_title": "^\\s*\"alternate\"\\s*:"
   }
 } -->

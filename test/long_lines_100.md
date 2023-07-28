@@ -9,7 +9,7 @@ This is a very very very very very very very very very long line that is exactly
 This line however, while very long, doesn't have whitespace after the 100th columnwhichallowsforURLsandotherlongthings.
 
 <!-- markdownlint-configure-file {
-  "MD013": {
+  "line-length": {
     "line_length": 100
   }
 } -->

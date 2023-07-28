@@ -5,8 +5,8 @@ Text
 {MD043:15}
 
 <!-- markdownlint-configure-file {
-  "MD041": false,
-  "MD043": {
+  "first-line-heading": false,
+  "required-headings": {
     "headings": [
       "+"
     ]

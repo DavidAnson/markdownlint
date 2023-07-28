@@ -50,11 +50,11 @@ if (true) {
 ```
 
 <!-- markdownlint-configure-file {
-  "MD010": {
+  "no-hard-tabs": {
     "ignore_code_languages": [
       "js",
       "text"
     ]
   },
-  "MD046": false
+  "code-block-style": false
 } -->

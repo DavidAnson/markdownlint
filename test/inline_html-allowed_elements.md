@@ -55,7 +55,7 @@ This is not allowed.
 </P>
 
 <!-- markdownlint-configure-file {
-  "MD033": {
+  "no-inline-html": {
     "allowed_elements": [
       "h1",
       "h3",

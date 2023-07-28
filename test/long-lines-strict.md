@@ -31,7 +31,7 @@ This code is short.
 {MD013:22}
 
 <!-- markdownlint-configure-file {
-  "MD013": {
+  "line-length": {
     "strict": true,
     "heading_line_length": 30,
     "code_block_line_length": 20

@@ -9,8 +9,8 @@ apple*banana*cherry, apple*banana*, *banana*cherry
 apple_banana_cherry, apple_banana_, _banana_cherry
 
 <!-- markdownlint-configure-file {
-  "MD037": false,
-  "MD049": {
+  "no-space-in-emphasis": false,
+  "emphasis-style": {
     "style": "underscore"
   }
 } -->

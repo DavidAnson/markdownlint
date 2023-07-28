@@ -6,7 +6,7 @@ Heading 3
 ---------
 
 <!-- markdownlint-configure-file {
-  "MD003": {
+  "heading-style": {
     "style": "setext"
   }
 } -->

@@ -125,11 +125,11 @@ Text
 Text <!-- <commented-out html="tag"> --> text.
 
 <!-- markdownlint-configure-file {
-  "MD010": false,
-  "MD033": {
+  "no-hard-tabs": false,
+  "no-inline-html": {
     "allowed_elements": [
       "strong"
     ]
   },
-  "MD046": false
+  "code-block-style": false
 } -->

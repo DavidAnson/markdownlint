@@ -15,7 +15,7 @@ Bad list:
 1) Failed! {MD029}
 
 <!-- markdownlint-configure-file {
-  "MD029": {
+  "ol-prefix": {
     "style": "ordered"
   }
 } -->

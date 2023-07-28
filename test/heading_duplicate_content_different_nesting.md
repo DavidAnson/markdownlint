@@ -11,7 +11,7 @@
 ### Bug fixes
 
 <!-- markdownlint-configure-file {
-  "MD024": {
+  "no-duplicate-heading": {
     "allow_different_nesting": true
   }
 } -->

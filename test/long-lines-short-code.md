@@ -25,8 +25,8 @@ Code code code code code code code code {MD013}
 ```
 
 <!-- markdownlint-configure-file {
-  "MD013": {
+  "line-length": {
     "code_block_line_length": 30
   },
-  "MD046": false
+  "code-block-style": false
 } -->

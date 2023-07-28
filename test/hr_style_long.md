@@ -24,7 +24,7 @@ _____
 {MD035:17} {MD035:21}
 
 <!-- markdownlint-configure-file {
-  "MD035": {
+  "hr-style": {
     "style": "_____"
   }
 } -->

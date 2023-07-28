@@ -14,7 +14,7 @@
 ```
 
 <!-- markdownlint-configure-file {
-  "MD009": {
+  "no-trailing-spaces": {
     "br_spaces": 2
   }
 } -->

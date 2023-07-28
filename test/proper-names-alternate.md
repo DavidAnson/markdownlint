@@ -33,7 +33,7 @@ node.JS {MD044}
 example.net {MD044}
 
 <!-- markdownlint-configure-file {
-  "MD044": {
+  "proper-names": {
     "names": [
       "markdownlint",
       "Node.js",

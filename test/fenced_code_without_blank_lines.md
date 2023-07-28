@@ -38,8 +38,8 @@ code
 text
 
 <!-- markdownlint-configure-file {
-  "MD040": false,
-  "MD041": false
+  "fenced-code-language": false,
+  "first-line-heading": false
 } -->
 
 ```

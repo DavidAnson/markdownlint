@@ -20,5 +20,5 @@ Heading 3
 * list
 
 <!-- markdownlint-configure-file {
-  "MD041": false
+  "first-line-heading": false
 } -->

@@ -2162,7 +2162,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     var disableNextLine = action === "DISABLE-NEXT-LINE";
     if (disableLine || disableNextLine) {
       var nextLineNumber = frontMatterLines.length + lineNumber + (disableNextLine ? 1 : 0);
-      enabledRulesPerLineNumber[nextLineNumber] = applyEnableDisable(action, parameter, enabledRulesPerLineNumber[nextLineNumber] || {});
+      enabledRulesPerLineNumber[nextLineNumber] = applyEnableDisable(action, parameter, enabledRulesPerLineNumber[nextLineNumber]);
     }
   }
   // Handle inline comments

@@ -101,16 +101,16 @@ Strong **with** different style {MD050}
 {MD053:100}
 
 <!-- markdownlint-configure-file {
-  "MD002": true,
-  "MD006": true,
-  "MD043": {
+  "first-heading-h1": true,
+  "ul-start-left": true,
+  "required-headings": {
     "headings": [
       "## Heading 1 {MD002:1} {MD041:1}",
       "#### Heading 2 {MD001:3}",
       "# Broken"
     ]
   },
-  "MD044": {
+  "proper-names": {
     "names": [
       "markdownlint"
     ]

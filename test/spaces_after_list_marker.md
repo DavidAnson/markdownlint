@@ -76,10 +76,10 @@ the first item determining that the entire list has children:
 1.  Baz
 
 <!-- markdownlint-configure-file {
-  "MD007": {
+  "ul-indent": {
     "indent": 4
   },
-  "MD030": {
+  "list-marker-space": {
     "ul_multi": 3,
     "ol_multi": 2
   }

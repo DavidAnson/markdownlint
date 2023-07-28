@@ -8,7 +8,7 @@ title = "Good to Great Book Review"
 # Heading 1
 
 <!-- markdownlint-configure-file {
-  "MD025": {
+  "single-title": {
     "front_matter_title": ""
   }
 } -->

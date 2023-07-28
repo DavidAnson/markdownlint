@@ -96,8 +96,8 @@ BB
 {MD024:94}
 
 <!-- markdownlint-configure-file {
-  "MD003": false,
-  "MD024": {
+  "heading-style": false,
+  "no-duplicate-heading": {
     "siblings_only": true
   }
 } -->

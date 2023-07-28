@@ -74,7 +74,7 @@ text
 3. Item {MD029}
 
 <!-- markdownlint-configure-file {
-  "MD029": {
+  "ol-prefix": {
     "style": "zero"
   }
 } -->

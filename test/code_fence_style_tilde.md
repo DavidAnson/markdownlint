@@ -21,7 +21,7 @@ This is
 ~~~
 
 <!-- markdownlint-configure-file {
-  "MD048": {
+  "code-fence-style": {
     "style": "tilde"
   }
 } -->

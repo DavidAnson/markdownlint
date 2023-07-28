@@ -23,7 +23,7 @@ One last one:
     with an empty indented line.
 
 <!-- markdownlint-configure-file {
-  "MD046": {
+  "code-block-style": {
     "style": "indented"
   }
 } -->

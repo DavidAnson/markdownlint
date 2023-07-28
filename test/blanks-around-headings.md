@@ -22,5 +22,5 @@ Text
 ## Fig
 
 <!-- markdownlint-configure-file {
-  "MD003": false
+  "heading-style": false
 } -->

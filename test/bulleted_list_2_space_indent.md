@@ -8,7 +8,7 @@ set to 4 space indents for lists:
     * Test Z {MD007}
 
 <!-- markdownlint-configure-file {
-  "MD007": {
+  "ul-indent": {
     "indent": 4
   }
 } -->

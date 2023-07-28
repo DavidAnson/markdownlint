@@ -43,8 +43,8 @@ javascript
 </div>
 
 <!-- markdownlint-configure-file {
-  "MD033": false,
-  "MD044": {
+  "no-inline-html": false,
+  "proper-names": {
     "names": [
       "HTTPS",
       "JavaScript"

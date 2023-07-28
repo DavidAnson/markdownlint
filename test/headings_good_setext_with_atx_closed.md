@@ -11,7 +11,7 @@ Heading 2
 #### Heading 4 {MD003}
 
 <!-- markdownlint-configure-file {
-  "MD003": {
+  "heading-style": {
     "style": "setext_with_atx_closed"
   }
 } -->

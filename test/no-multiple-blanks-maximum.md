@@ -46,7 +46,7 @@ Text
 Text
 
 <!-- markdownlint-configure-file {
-  "MD012": {
+  "no-multiple-blanks": {
     "maximum": 3
   }
 } -->
