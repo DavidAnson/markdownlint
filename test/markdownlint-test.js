@@ -237,10 +237,9 @@ test("disableRules", (t) => new Promise((resolve) => {
   const options = {
     "files": [
       "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
+      "./test/no_first_line_heading.md"
     ],
     "config": {
-      "MD002": false,
       "default": true,
       "MD019": false,
       "first-line-h1": false
@@ -253,7 +252,7 @@ test("disableRules", (t) => new Promise((resolve) => {
       "./test/atx_heading_spacing.md": {
         "MD018": [ 1 ]
       },
-      "./test/first_heading_bad_atx.md": {}
+      "./test/no_first_line_heading.md": {}
     };
     // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
