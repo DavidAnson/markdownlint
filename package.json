@@ -98,7 +98,7 @@
     "yaml": "2.3.1"
   },
   "overrides": {
-    "yargs-parser": "21.0.0"
+    "yargs-parser": "20.2.9"
   },
   "keywords": [
     "markdown",
