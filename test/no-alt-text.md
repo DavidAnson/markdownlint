@@ -22,5 +22,11 @@ Link to image with alternate text [![Alternate text](image.jpg)](image.jpg)
 
 Link to image without alternate text [![](image.jpg)](image.jpg) {MD045}
 
+Multi-line image with alternate text ![Alternate text](image.jpg "Title"
+)
+
+Multi-line image without alternate text ![](image.jpg "Title"
+) {MD045:28}
+
 [notitle]: image.jpg
 [title]: image.jpg "Title"
