@@ -456,7 +456,7 @@
       "default": true,
       "properties": {
         "punctuation": {
-          "description": "Punctuation characters not allowed at end of headings",
+          "description": "Punctuation characters",
           "type": "string",
           "default": ".,;:!。，；：！"
         }
@@ -876,7 +876,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Emphasis style should be consistent",
+          "description": "Emphasis style",
           "type": "string",
           "enum": [
             "consistent",
@@ -900,7 +900,7 @@
       "default": true,
       "properties": {
         "style": {
-          "description": "Strong style should be consistent",
+          "description": "Strong style",
           "type": "string",
           "enum": [
             "consistent",

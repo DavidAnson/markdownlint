@@ -127,7 +127,7 @@ MD025:
 
 # MD026/no-trailing-punctuation - Trailing punctuation in heading
 MD026:
-  # Punctuation characters not allowed at end of headings
+  # Punctuation characters
   punctuation: ".,;:!。，；：！"
 
 # MD027/no-multiple-space-blockquote - Multiple spaces after blockquote symbol
@@ -240,12 +240,12 @@ MD048:
 
 # MD049/emphasis-style - Emphasis style should be consistent
 MD049:
-  # Emphasis style should be consistent
+  # Emphasis style
   style: "consistent"
 
 # MD050/strong-style - Strong style should be consistent
 MD050:
-  # Strong style should be consistent
+  # Strong style
   style: "consistent"
 
 # MD051/link-fragments - Link fragments should be valid

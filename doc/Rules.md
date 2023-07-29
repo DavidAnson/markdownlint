@@ -986,8 +986,7 @@ Aliases: `no-trailing-punctuation`
 
 Parameters:
 
-- `punctuation`: Punctuation characters not allowed at end of headings
-  (`string`, default `.,;:!。，；：！`)
+- `punctuation`: Punctuation characters (`string`, default `.,;:!。，；：！`)
 
 Fixable: Some violations can be fixed by tooling
 
@@ -2079,8 +2078,8 @@ Aliases: `emphasis-style`
 
 Parameters:
 
-- `style`: Emphasis style should be consistent (`string`, default `consistent`,
-  values `asterisk` / `consistent` / `underscore`)
+- `style`: Emphasis style (`string`, default `consistent`, values `asterisk` /
+  `consistent` / `underscore`)
 
 Fixable: Some violations can be fixed by tooling
 
@@ -2114,8 +2113,8 @@ Aliases: `strong-style`
 
 Parameters:
 
-- `style`: Strong style should be consistent (`string`, default `consistent`,
-  values `asterisk` / `consistent` / `underscore`)
+- `style`: Strong style (`string`, default `consistent`, values `asterisk` /
+  `consistent` / `underscore`)
 
 Fixable: Some violations can be fixed by tooling
 

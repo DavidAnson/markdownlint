@@ -258,8 +258,7 @@ for (const rule of rules) {
     case "MD026":
       scheme.properties = {
         "punctuation": {
-          "description":
-            "Punctuation characters not allowed at end of headings",
+          "description": "Punctuation characters",
           "type": "string",
           "default": ".,;:!。，；：！"
         }
@@ -461,7 +460,7 @@ for (const rule of rules) {
     case "MD049":
       scheme.properties = {
         "style": {
-          "description": "Emphasis style should be consistent",
+          "description": "Emphasis style",
           "type": "string",
           "enum": [
             "consistent",
@@ -475,7 +474,7 @@ for (const rule of rules) {
     case "MD050":
       scheme.properties = {
         "style": {
-          "description": "Strong style should be consistent",
+          "description": "Strong style",
           "type": "string",
           "enum": [
             "consistent",
