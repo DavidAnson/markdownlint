@@ -60,10 +60,6 @@ var inlineCommentStartRe =
 /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expression for matching HTML elements
-var htmlElementRe = /<(([A-Za-z][A-Za-z\d-]*)(?:\s[^`>]*)?)\/?>/g;
-module.exports.htmlElementRe = htmlElementRe;
-
 // Regular expressions for range matching
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
@@ -495,42 +491,14 @@ module.exports.flattenLists = function flattenLists(tokens) {
   return flattenedLists;
 };
 
-/**
- * Calls the provided function for each specified inline child token.
- *
- * @param {Object} params RuleParams instance.
- * @param {string} type Token type identifier.
- * @param {Function} handler Callback function.
- * @returns {void}
- */
-function forEachInlineChild(params, type, handler) {
-  filterTokens(params, "inline", function (token) {
-    var _iterator4 = _createForOfIteratorHelper(token.children.filter(function (c) {
-        return c.type === type;
-      })),
-      _step4;
-    try {
-      for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
-        var child = _step4.value;
-        handler(child, token);
-      }
-    } catch (err) {
-      _iterator4.e(err);
-    } finally {
-      _iterator4.f();
-    }
-  });
-}
-module.exports.forEachInlineChild = forEachInlineChild;
-
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
   var heading = null;
-  var _iterator5 = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
-    _step5;
+  var _iterator4 = _createForOfIteratorHelper(params.parsers.markdownit.tokens),
+    _step4;
   try {
-    for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
-      var token = _step5.value;
+    for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+      var token = _step4.value;
       if (token.type === "heading_open") {
         heading = token;
       } else if (token.type === "heading_close") {
@@ -540,9 +508,9 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
       }
     }
   } catch (err) {
-    _iterator5.e(err);
+    _iterator4.e(err);
   } finally {
-    _iterator5.f();
+    _iterator4.f();
   }
 };
 
@@ -677,19 +645,19 @@ module.exports.codeBlockAndSpanRanges = function (params, lineMetadata) {
       var tokenLines = params.lines.slice(token.map[0], token.map[1]);
       forEachInlineCodeSpan(tokenLines.join("\n"), function (code, lineIndex, columnIndex) {
         var codeLines = code.split(newLineRe);
-        var _iterator6 = _createForOfIteratorHelper(codeLines.entries()),
-          _step6;
+        var _iterator5 = _createForOfIteratorHelper(codeLines.entries()),
+          _step5;
         try {
-          for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
-            var _step6$value = _slicedToArray(_step6.value, 2),
-              i = _step6$value[0],
-              line = _step6$value[1];
+          for (_iterator5.s(); !(_step5 = _iterator5.n()).done;) {
+            var _step5$value = _slicedToArray(_step5.value, 2),
+              i = _step5$value[0],
+              line = _step5$value[1];
             exclusions.push([token.lineNumber - 1 + lineIndex + i, i ? 0 : columnIndex, line.length]);
           }
         } catch (err) {
-          _iterator6.e(err);
+          _iterator5.e(err);
         } finally {
-          _iterator6.f();
+          _iterator5.f();
         }
       });
     }
@@ -756,11 +724,11 @@ function getReferenceLinkImageData(params) {
   "definitionLabelString", "gfmFootnoteDefinitionLabelString",
   // references and shortcuts
   "gfmFootnoteCall", "image", "link"]);
-  var _iterator7 = _createForOfIteratorHelper(filteredTokens),
-    _step7;
+  var _iterator6 = _createForOfIteratorHelper(filteredTokens),
+    _step6;
   try {
-    for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
-      var token = _step7.value;
+    for (_iterator6.s(); !(_step6 = _iterator6.n()).done;) {
+      var token = _step6.value;
       var labelPrefix = "";
       // eslint-disable-next-line default-case
       switch (token.type) {
@@ -827,9 +795,9 @@ function getReferenceLinkImageData(params) {
       }
     }
   } catch (err) {
-    _iterator7.e(err);
+    _iterator6.e(err);
   } finally {
-    _iterator7.f();
+    _iterator6.f();
   }
   return {
     references: references,
@@ -853,11 +821,11 @@ function getPreferredLineEnding(input, os) {
   var lf = 0;
   var crlf = 0;
   var endings = input.match(newLineRe) || [];
-  var _iterator8 = _createForOfIteratorHelper(endings),
-    _step8;
+  var _iterator7 = _createForOfIteratorHelper(endings),
+    _step7;
   try {
-    for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
-      var ending = _step8.value;
+    for (_iterator7.s(); !(_step7 = _iterator7.n()).done;) {
+      var ending = _step7.value;
       // eslint-disable-next-line default-case
       switch (ending) {
         case "\r":
@@ -872,9 +840,9 @@ function getPreferredLineEnding(input, os) {
       }
     }
   } catch (err) {
-    _iterator8.e(err);
+    _iterator7.e(err);
   } finally {
-    _iterator8.f();
+    _iterator7.f();
   }
   var preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
@@ -957,11 +925,11 @@ function applyFixes(input, errors) {
   lastFixInfo = {
     "lineNumber": -1
   };
-  var _iterator9 = _createForOfIteratorHelper(fixInfos),
-    _step9;
+  var _iterator8 = _createForOfIteratorHelper(fixInfos),
+    _step8;
   try {
-    for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
-      var fixInfo = _step9.value;
+    for (_iterator8.s(); !(_step8 = _iterator8.n()).done;) {
+      var fixInfo = _step8.value;
       if (fixInfo.lineNumber === lastFixInfo.lineNumber && fixInfo.editColumn === lastFixInfo.editColumn && !fixInfo.insertText && fixInfo.deleteCount > 0 && lastFixInfo.insertText && !lastFixInfo.deleteCount) {
         fixInfo.insertText = lastFixInfo.insertText;
         lastFixInfo.lineNumber = 0;
@@ -969,9 +937,9 @@ function applyFixes(input, errors) {
       lastFixInfo = fixInfo;
     }
   } catch (err) {
-    _iterator9.e(err);
+    _iterator8.e(err);
   } finally {
-    _iterator9.f();
+    _iterator8.f();
   }
   fixInfos = fixInfos.filter(function (fixInfo) {
     return fixInfo.lineNumber;
@@ -979,11 +947,11 @@ function applyFixes(input, errors) {
   // Apply all (remaining/updated) fixes
   var lastLineIndex = -1;
   var lastEditIndex = -1;
-  var _iterator10 = _createForOfIteratorHelper(fixInfos),
-    _step10;
+  var _iterator9 = _createForOfIteratorHelper(fixInfos),
+    _step9;
   try {
-    for (_iterator10.s(); !(_step10 = _iterator10.n()).done;) {
-      var _fixInfo = _step10.value;
+    for (_iterator9.s(); !(_step9 = _iterator9.n()).done;) {
+      var _fixInfo = _step9.value;
       var lineNumber = _fixInfo.lineNumber,
         editColumn = _fixInfo.editColumn,
         deleteCount = _fixInfo.deleteCount;
@@ -998,9 +966,9 @@ function applyFixes(input, errors) {
     }
     // Return corrected input
   } catch (err) {
-    _iterator10.e(err);
+    _iterator9.e(err);
   } finally {
-    _iterator10.f();
+    _iterator9.f();
   }
   return lines.filter(function (line) {
     return line !== null;
@@ -1349,6 +1317,39 @@ function filterByTypes(tokens, allowed) {
 }
 
 /**
+ * Filter a list of Micromark tokens for HTML tokens.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @returns {Token[]} Filtered tokens.
+ */
+function filterByHtmlTokens(tokens) {
+  var result = [];
+  var pending = [tokens];
+  var current = null;
+  while (current = pending.shift()) {
+    var _iterator2 = _createForOfIteratorHelper(filterByTypes(current, ["htmlFlow", "htmlText"])),
+      _step2;
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var token = _step2.value;
+        if (token.type === "htmlText") {
+          result.push(token);
+        } else {
+          // token.type === "htmlFlow"
+          // @ts-ignore
+          pending.push(token.htmlFlowChildren);
+        }
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+  }
+  return result;
+}
+
+/**
  * Returns a list of all nested child tokens.
  *
  * @param {Token} parent Micromark token.
@@ -1438,6 +1439,7 @@ function tokenIfType(token, type) {
 }
 module.exports = {
   "parse": micromarkParse,
+  filterByHtmlTokens: filterByHtmlTokens,
   filterByPredicate: filterByPredicate,
   filterByTypes: filterByTypes,
   flattenedChildren: flattenedChildren,
@@ -4855,7 +4857,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes,
+  filterByHtmlTokens = _require2.filterByHtmlTokens,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
 var nextLinesRe = /[\r\n][\s\S]*$/;
 module.exports = {
@@ -4868,31 +4870,21 @@ module.exports = {
     allowedElements = allowedElements.map(function (element) {
       return element.toLowerCase();
     });
-    var pending = [params.parsers.micromark.tokens];
-    var current = null;
-    while (current = pending.shift()) {
-      var tokens = current;
-      var _iterator = _createForOfIteratorHelper(filterByTypes(tokens, ["htmlFlow", "htmlText"])),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var token = _step.value;
-          if (token.type === "htmlText") {
-            var htmlTagInfo = getHtmlTagInfo(token);
-            if (htmlTagInfo && !htmlTagInfo.close && !allowedElements.includes(htmlTagInfo.name.toLowerCase())) {
-              var range = [token.startColumn, token.text.replace(nextLinesRe, "").length];
-              addError(onError, token.startLine, "Element: " + htmlTagInfo.name, undefined, range);
-            }
-          } else {
-            // token.type === "htmlFlow"
-            pending.push(token.htmlFlowChildren);
-          }
+    var _iterator = _createForOfIteratorHelper(filterByHtmlTokens(params.parsers.micromark.tokens)),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var token = _step.value;
+        var htmlTagInfo = getHtmlTagInfo(token);
+        if (htmlTagInfo && !htmlTagInfo.close && !allowedElements.includes(htmlTagInfo.name.toLowerCase())) {
+          var range = [token.startColumn, token.text.replace(nextLinesRe, "").length];
+          addError(onError, token.startLine, "Element: " + htmlTagInfo.name, undefined, range);
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
       }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
     }
   }
 };
@@ -6098,18 +6090,18 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
-  addErrorDetailIf = _require.addErrorDetailIf,
-  escapeForRegExp = _require.escapeForRegExp,
-  filterTokens = _require.filterTokens,
-  forEachInlineChild = _require.forEachInlineChild,
-  forEachHeading = _require.forEachHeading,
-  htmlElementRe = _require.htmlElementRe;
+  addErrorDetailIf = _require.addErrorDetailIf;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByHtmlTokens = _require2.filterByHtmlTokens,
+  filterByTypes = _require2.filterByTypes,
+  getHtmlTagInfo = _require2.getHtmlTagInfo;
 
 // Regular expression for identifying HTML anchor names
 var idRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]id[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
@@ -6120,14 +6112,12 @@ var anchorRe = /\{(#[0-9a-z]+(?:[\x2D_][0-9a-z]+)*)\}/g;
  * Converts a Markdown heading into an HTML fragment according to the rules
  * used by GitHub.
  *
- * @param {Object} inline Inline token for heading.
+ * @param {Object} headingText Heading text token.
  * @returns {string} Fragment string for heading.
  */
-function convertHeadingToHTMLFragment(inline) {
-  var inlineText = inline.children.filter(function (token) {
-    return token.type !== "html_inline";
-  }).map(function (token) {
-    return token.content;
+function convertHeadingToHTMLFragment(headingText) {
+  var inlineText = filterByTypes(headingText.children, ["codeTextData", "data"]).map(function (token) {
+    return token.text;
   }).join("");
   return "#" + encodeURIComponent(inlineText.toLowerCase()
   // RegExp source with Ruby's \p{Word} expanded into its General Categories
@@ -6141,81 +6131,116 @@ module.exports = {
   "description": "Link fragments should be valid",
   "tags": ["links"],
   "function": function MD051(params, onError) {
+    var tokens = params.parsers.micromark.tokens;
     var fragments = new Map();
+
     // Process headings
-    forEachHeading(params, function (heading, content, inline) {
-      var fragment = convertHeadingToHTMLFragment(inline);
-      var count = fragments.get(fragment) || 0;
-      if (count) {
-        fragments.set("".concat(fragment, "-").concat(count), 0);
-      }
-      fragments.set(fragment, count + 1);
-      var match = null;
-      while ((match = anchorRe.exec(content)) !== null) {
-        var _match = match,
-          _match2 = _slicedToArray(_match, 2),
-          anchor = _match2[1];
-        if (!fragments.has(anchor)) {
-          fragments.set(anchor, 1);
+    var headingTexts = filterByTypes(tokens, ["atxHeadingText", "setextHeadingText"]);
+    var _iterator = _createForOfIteratorHelper(headingTexts),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var headingText = _step.value;
+        var fragment = convertHeadingToHTMLFragment(headingText);
+        var count = fragments.get(fragment) || 0;
+        if (count) {
+          fragments.set("".concat(fragment, "-").concat(count), 0);
+        }
+        fragments.set(fragment, count + 1);
+        var match = null;
+        while ((match = anchorRe.exec(headingText.text)) !== null) {
+          var _match = match,
+            _match2 = _slicedToArray(_match, 2),
+            anchor = _match2[1];
+          if (!fragments.has(anchor)) {
+            fragments.set(anchor, 1);
+          }
         }
       }
-    });
-    // Process HTML anchors
-    var processHtmlToken = function processHtmlToken(token) {
-      var match = null;
-      while ((match = htmlElementRe.exec(token.content)) !== null) {
-        var _match3 = match,
-          _match4 = _slicedToArray(_match3, 3),
-          tag = _match4[0],
-          element = _match4[2];
-        var anchorMatch = idRe.exec(tag) || element.toLowerCase() === "a" && nameRe.exec(tag);
-        if (anchorMatch) {
-          fragments.set("#".concat(anchorMatch[1]), 0);
+
+      // Process HTML anchors
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+    var _iterator2 = _createForOfIteratorHelper(filterByHtmlTokens(tokens)),
+      _step2;
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var token = _step2.value;
+        var htmlTagInfo = getHtmlTagInfo(token);
+        if (htmlTagInfo && !htmlTagInfo.close) {
+          var anchorMatch = idRe.exec(token.text) || htmlTagInfo.name.toLowerCase() === "a" && nameRe.exec(token.text);
+          if (anchorMatch) {
+            fragments.set("#".concat(anchorMatch[1]), 0);
+          }
         }
       }
-    };
-    filterTokens(params, "html_block", processHtmlToken);
-    forEachInlineChild(params, "html_inline", processHtmlToken);
-    // Process link fragments
-    forEachInlineChild(params, "link_open", function (token) {
-      var attrs = token.attrs,
-        lineNumber = token.lineNumber,
-        line = token.line;
-      var href = attrs.find(function (attr) {
-        return attr[0] === "href";
-      });
-      var id = href && href[1];
-      if (id && id.length > 1 && id[0] === "#" && !fragments.has(id)) {
-        var context = id;
-        var range = null;
-        var fixInfo = null;
-        var match = line.match(new RegExp("\\[.*?\\]\\(".concat(escapeForRegExp(context), "\\)")));
-        if (match) {
-          var _match5 = _slicedToArray(match, 1);
-          context = _match5[0];
-          var index = match.index;
-          var length = context.length;
-          range = [index + 1, length];
-          fixInfo = {
-            "editColumn": index + (length - id.length),
-            "deleteCount": id.length,
-            "insertText": null
-          };
+
+      // Process link and definition fragments
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
+    }
+    var parentChilds = [["link", "resourceDestinationString"], ["definition", "definitionDestinationString"]];
+    for (var _i = 0, _parentChilds = parentChilds; _i < _parentChilds.length; _i++) {
+      var _parentChilds$_i = _slicedToArray(_parentChilds[_i], 2),
+        parentType = _parentChilds$_i[0],
+        definitionType = _parentChilds$_i[1];
+      var links = filterByTypes(tokens, [parentType]);
+      var _iterator3 = _createForOfIteratorHelper(links),
+        _step3;
+      try {
+        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          var link = _step3.value;
+          var definitions = filterByTypes(link.children, [definitionType]);
+          var _iterator4 = _createForOfIteratorHelper(definitions),
+            _step4;
+          try {
+            var _loop = function _loop() {
+              var definition = _step4.value;
+              if (definition.text.length > 1 && definition.text.startsWith("#") && !fragments.has(definition.text)) {
+                // eslint-disable-next-line no-undef-init
+                var range = undefined;
+                // eslint-disable-next-line no-undef-init
+                var fixInfo = undefined;
+                if (link.startLine === link.endLine) {
+                  range = [link.startColumn, link.endColumn - link.startColumn];
+                  fixInfo = {
+                    "editColumn": definition.startColumn,
+                    "deleteCount": definition.endColumn - definition.startColumn
+                  };
+                }
+                var definitionTextLower = definition.text.toLowerCase();
+                var mixedCaseKey = _toConsumableArray(fragments.keys()).find(function (key) {
+                  return definitionTextLower === key.toLowerCase();
+                });
+                if (mixedCaseKey) {
+                  // @ts-ignore
+                  (fixInfo || {}).insertText = mixedCaseKey;
+                  addErrorDetailIf(onError, link.startLine, mixedCaseKey, definition.text, undefined, link.text, range, fixInfo);
+                } else {
+                  addError(onError, link.startLine, undefined, link.text, range);
+                }
+              }
+            };
+            for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+              _loop();
+            }
+          } catch (err) {
+            _iterator4.e(err);
+          } finally {
+            _iterator4.f();
+          }
         }
-        var idLower = id.toLowerCase();
-        var mixedCaseKey = _toConsumableArray(fragments.keys()).find(function (key) {
-          return idLower === key.toLowerCase();
-        });
-        if (mixedCaseKey) {
-          (fixInfo || {}).insertText = mixedCaseKey;
-          addErrorDetailIf(onError, lineNumber, mixedCaseKey, id, undefined, context, range, fixInfo);
-        } else {
-          addError(onError, lineNumber, undefined, context,
-          // @ts-ignore
-          range);
-        }
+      } catch (err) {
+        _iterator3.e(err);
+      } finally {
+        _iterator3.f();
       }
-    });
+    }
   }
 };
 

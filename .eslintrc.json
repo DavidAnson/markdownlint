@@ -223,6 +223,7 @@
     "unicorn/no-new-array": "off",
     "unicorn/no-null": "off",
     "unicorn/no-unsafe-regex": "off",
+    "unicorn/no-useless-undefined": "off",
     "unicorn/prefer-at": "off",
     "unicorn/prefer-module": "off",
     "unicorn/prefer-string-replace-all": "off",

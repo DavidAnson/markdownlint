@@ -205,6 +205,30 @@ function filterByTypes(tokens, allowed) {
 }
 
 /**
+ * Filter a list of Micromark tokens for HTML tokens.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @returns {Token[]} Filtered tokens.
+ */
+function filterByHtmlTokens(tokens) {
+  const result = [];
+  const pending = [ tokens ];
+  let current = null;
+  while ((current = pending.shift())) {
+    for (const token of filterByTypes(current, [ "htmlFlow", "htmlText" ])) {
+      if (token.type === "htmlText") {
+        result.push(token);
+      } else {
+        // token.type === "htmlFlow"
+        // @ts-ignore
+        pending.push(token.htmlFlowChildren);
+      }
+    }
+  }
+  return result;
+}
+
+/**
  * Returns a list of all nested child tokens.
  *
  * @param {Token} parent Micromark token.
@@ -293,6 +317,7 @@ function tokenIfType(token, type) {
 
 module.exports = {
   "parse": micromarkParse,
+  filterByHtmlTokens,
   filterByPredicate,
   filterByTypes,
   flattenedChildren,

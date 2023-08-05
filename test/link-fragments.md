@@ -12,6 +12,8 @@
 
 [Valid](#valid-heading-with-emphasis)
 
+[Valid](#valid-heading-with-code)
+
 [Valid](#valid-heading-with-quotes--and-double-quotes-)
 
 [Valid](#-valid-heading-with-emoji)
@@ -67,6 +69,10 @@ Text
 Text
 
 ### Valid *Heading* With _Emphasis_
+
+Text
+
+### Valid Heading With `Code`
 
 Text
 
@@ -157,9 +163,12 @@ Text
 
 [Invalid](#not-an-id-should-be-ignored) {MD051}
 
-[Invalid][badref] {MD051}
+[Invalid {MD051}](#multi-line
+"Title")
 
-[badref]: #missing
+[Invalid][badref]
+
+[badref]: #missing "{MD051}"
 
 ## Inconsistent Case Fragments
 
@@ -167,9 +176,12 @@ Text
 
 [ALL CAPS](#NAMEDLINK) {MD051}
 
-[MiXeD][mixedref] {MD051}
+[Multi-line {MD051}](#NAMEDLINK
+"Title")
 
-[mixedref]: #idLINK
+[MiXeD][mixedref]
+
+[mixedref]: #idLINK "{MD051}"
 
 ## Valid Named Fragments
 

@@ -18,10 +18,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expression for matching HTML elements
-const htmlElementRe = /<(([A-Za-z][A-Za-z\d-]*)(?:\s[^`>]*)?)\/?>/g;
-module.exports.htmlElementRe = htmlElementRe;
-
 // Regular expressions for range matching
 module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
 module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
@@ -443,23 +439,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
   }
   return flattenedLists;
 };
-
-/**
- * Calls the provided function for each specified inline child token.
- *
- * @param {Object} params RuleParams instance.
- * @param {string} type Token type identifier.
- * @param {Function} handler Callback function.
- * @returns {void}
- */
-function forEachInlineChild(params, type, handler) {
-  filterTokens(params, "inline", (token) => {
-    for (const child of token.children.filter((c) => c.type === type)) {
-      handler(child, token);
-    }
-  });
-}
-module.exports.forEachInlineChild = forEachInlineChild;
 
 // Calls the provided function for each heading's content
 module.exports.forEachHeading = function forEachHeading(params, handler) {
