@@ -6203,10 +6203,13 @@ module.exports = {
               var definition = _step4.value;
               if (definition.text.length > 1 && definition.text.startsWith("#") && !fragments.has(definition.text)) {
                 // eslint-disable-next-line no-undef-init
+                var context = undefined;
+                // eslint-disable-next-line no-undef-init
                 var range = undefined;
                 // eslint-disable-next-line no-undef-init
                 var fixInfo = undefined;
                 if (link.startLine === link.endLine) {
+                  context = link.text;
                   range = [link.startColumn, link.endColumn - link.startColumn];
                   fixInfo = {
                     "editColumn": definition.startColumn,
@@ -6220,9 +6223,9 @@ module.exports = {
                 if (mixedCaseKey) {
                   // @ts-ignore
                   (fixInfo || {}).insertText = mixedCaseKey;
-                  addErrorDetailIf(onError, link.startLine, mixedCaseKey, definition.text, undefined, link.text, range, fixInfo);
+                  addErrorDetailIf(onError, link.startLine, mixedCaseKey, definition.text, undefined, context, range, fixInfo);
                 } else {
-                  addError(onError, link.startLine, undefined, link.text, range);
+                  addError(onError, link.startLine, undefined, context, range);
                 }
               }
             };
