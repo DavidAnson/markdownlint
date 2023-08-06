@@ -836,7 +836,9 @@ Some more text
 ```
 
 The `lines_above` and `lines_below` parameters can be used to specify a
-different number of blank lines (including 0) above or below each heading.
+different number of blank lines (including `0`) above or below each heading. If
+the value `-1` is used for either parameter, any number of blank lines is
+allowed.
 
 Note: If `lines_above` or `lines_below` are configured to require more than one
 blank line, [MD012/no-multiple-blanks](md012.md) should also be customized.

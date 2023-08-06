@@ -230,13 +230,13 @@ for (const rule of rules) {
         "lines_above": {
           "description": "Blank lines above heading",
           "type": "integer",
-          "minimum": 0,
+          "minimum": -1,
           "default": 1
         },
         "lines_below": {
           "description": "Blank lines below heading",
           "type": "integer",
-          "minimum": 0,
+          "minimum": -1,
           "default": 1
         }
       };

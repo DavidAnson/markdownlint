@@ -4177,25 +4177,33 @@ module.exports = {
         var startLine = heading.startLine,
           endLine = heading.endLine;
         var line = lines[startLine - 1].trim();
-        var actualAbove = 0;
-        for (var i = 0; i < linesAbove; i++) {
-          if (isBlankLine(lines[startLine - 2 - i])) {
-            actualAbove++;
+
+        // Check lines above
+        if (linesAbove >= 0) {
+          var actualAbove = 0;
+          for (var i = 0; i < linesAbove; i++) {
+            if (isBlankLine(lines[startLine - 2 - i])) {
+              actualAbove++;
+            }
           }
+          addErrorDetailIf(onError, startLine, linesAbove, actualAbove, "Above", line, null, {
+            "insertText": getBlockQuote(lines[startLine - 2], linesAbove - actualAbove)
+          });
         }
-        addErrorDetailIf(onError, startLine, linesAbove, actualAbove, "Above", line, null, {
-          "insertText": getBlockQuote(lines[startLine - 2], linesAbove - actualAbove)
-        });
-        var actualBelow = 0;
-        for (var _i = 0; _i < linesBelow; _i++) {
-          if (isBlankLine(lines[endLine + _i])) {
-            actualBelow++;
+
+        // Check lines below
+        if (linesBelow >= 0) {
+          var actualBelow = 0;
+          for (var _i = 0; _i < linesBelow; _i++) {
+            if (isBlankLine(lines[endLine + _i])) {
+              actualBelow++;
+            }
           }
+          addErrorDetailIf(onError, startLine, linesBelow, actualBelow, "Below", line, null, {
+            "lineNumber": endLine + 1,
+            "insertText": getBlockQuote(lines[endLine], linesBelow - actualBelow)
+          });
         }
-        addErrorDetailIf(onError, startLine, linesBelow, actualBelow, "Below", line, null, {
-          "lineNumber": endLine + 1,
-          "insertText": getBlockQuote(lines[endLine], linesBelow - actualBelow)
-        });
       }
     } catch (err) {
       _iterator.e(err);
