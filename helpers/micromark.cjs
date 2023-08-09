@@ -246,6 +246,27 @@ function flattenedChildren(parent) {
 }
 
 /**
+ * Gets the heading level of a Micromark heading tokan.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {number} Heading level.
+ */
+function getHeadingLevel(heading) {
+  const headingSequence = filterByTypes(
+    heading.children,
+    [ "atxHeadingSequence", "setextHeadingLineSequence" ]
+  );
+  let level = 1;
+  const { text } = headingSequence[0];
+  if (text[0] === "#") {
+    level = Math.min(text.length, 6);
+  } else if (text[0] === "-") {
+    level = 2;
+  }
+  return level;
+}
+
+/**
  * Gets information about the tag in an HTML token.
  *
  * @param {Token} token Micromark token.
@@ -321,6 +342,7 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   flattenedChildren,
+  getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenTextByType,

@@ -68,9 +68,10 @@ for (const rule of rules) {
     );
     for (const property of Object.keys(ruleData.properties).sort()) {
       const propData = ruleData.properties[property];
-      const propType = (propData.type === "array") ?
-        `${propData.items.type}[]` :
-        propData.type;
+      const propType = [ propData.type ]
+        .flat()
+        .map((type) => ((type === "array") ? `${propData.items.type}[]` : type))
+        .join("|");
       const defaultValue = Array.isArray(propData.default) ?
         JSON.stringify(propData.default) :
         propData.default;

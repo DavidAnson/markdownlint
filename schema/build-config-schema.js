@@ -229,13 +229,25 @@ for (const rule of rules) {
       scheme.properties = {
         "lines_above": {
           "description": "Blank lines above heading",
-          "type": "integer",
+          "type": [
+            "integer",
+            "array"
+          ],
+          "items": {
+            "type": "integer"
+          },
           "minimum": -1,
           "default": 1
         },
         "lines_below": {
           "description": "Blank lines below heading",
-          "type": "integer",
+          "type": [
+            "integer",
+            "array"
+          ],
+          "items": {
+            "type": "integer"
+          },
           "minimum": -1,
           "default": 1
         }

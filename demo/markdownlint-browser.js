@@ -1367,6 +1367,24 @@ function flattenedChildren(parent) {
 }
 
 /**
+ * Gets the heading level of a Micromark heading tokan.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {number} Heading level.
+ */
+function getHeadingLevel(heading) {
+  var headingSequence = filterByTypes(heading.children, ["atxHeadingSequence", "setextHeadingLineSequence"]);
+  var level = 1;
+  var text = headingSequence[0].text;
+  if (text[0] === "#") {
+    level = Math.min(text.length, 6);
+  } else if (text[0] === "-") {
+    level = 2;
+  }
+  return level;
+}
+
+/**
  * Gets information about the tag in an HTML token.
  *
  * @param {Token} token Micromark token.
@@ -1443,6 +1461,7 @@ module.exports = {
   filterByPredicate: filterByPredicate,
   filterByTypes: filterByTypes,
   flattenedChildren: flattenedChildren,
+  getHeadingLevel: getHeadingLevel,
   getHtmlTagInfo: getHtmlTagInfo,
   getMicromarkEvents: getMicromarkEvents,
   getTokenTextByType: getTokenTextByType,
@@ -4143,7 +4162,15 @@ module.exports = {
 
 
 
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArrayLimit(arr, i) { var _i = null == arr ? null : "undefined" != typeof Symbol && arr[Symbol.iterator] || arr["@@iterator"]; if (null != _i) { var _s, _e, _x, _r, _arr = [], _n = !0, _d = !1; try { if (_x = (_i = _i.call(arr)).next, 0 === i) { if (Object(_i) !== _i) return; _n = !1; } else for (; !(_n = (_s = _x.call(_i)).done) && (_arr.push(_s.value), _arr.length !== i); _n = !0); } catch (err) { _d = !0, _e = err; } finally { try { if (!_n && null != _i["return"] && (_r = _i["return"](), Object(_r) !== _r)) return; } finally { if (_d) throw _e; } } return _arr; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
@@ -4151,7 +4178,36 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   blockquotePrefixRe = _require.blockquotePrefixRe,
   isBlankLine = _require.isBlankLine;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  getHeadingLevel = _require2.getHeadingLevel;
+var defaultLines = 1;
+var getLinesFunction = function getLinesFunction(linesParam) {
+  if (Array.isArray(linesParam)) {
+    var linesArray = new Array(6).fill(defaultLines);
+    var _iterator = _createForOfIteratorHelper(_toConsumableArray(linesParam.entries()).slice(0, 6)),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var _step$value = _slicedToArray(_step.value, 2),
+          index = _step$value[0],
+          value = _step$value[1];
+        linesArray[index] = value;
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+    return function (heading) {
+      return linesArray[getHeadingLevel(heading) - 1];
+    };
+  }
+  // Coerce linesParam to a number
+  var lines = linesParam === undefined ? defaultLines : Number(linesParam);
+  return function () {
+    return lines;
+  };
+};
 var getBlockQuote = function getBlockQuote(str, count) {
   return (str || "").match(blockquotePrefixRe)[0].trimEnd()
   // eslint-disable-next-line unicorn/prefer-spread
@@ -4162,29 +4218,26 @@ module.exports = {
   "description": "Headings should be surrounded by blank lines",
   "tags": ["headings", "headers", "blank_lines"],
   "function": function MD022(params, onError) {
-    var linesAbove = params.config.lines_above;
-    linesAbove = Number(linesAbove === undefined ? 1 : linesAbove);
-    var linesBelow = params.config.lines_below;
-    linesBelow = Number(linesBelow === undefined ? 1 : linesBelow);
+    var getLinesAbove = getLinesFunction(params.config.lines_above);
+    var getLinesBelow = getLinesFunction(params.config.lines_below);
     var lines = params.lines,
       parsers = params.parsers;
     var headings = filterByTypes(parsers.micromark.tokens, ["atxHeading", "setextHeading"]);
-    var _iterator = _createForOfIteratorHelper(headings),
-      _step;
+    var _iterator2 = _createForOfIteratorHelper(headings),
+      _step2;
     try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var heading = _step.value;
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var heading = _step2.value;
         var startLine = heading.startLine,
           endLine = heading.endLine;
         var line = lines[startLine - 1].trim();
 
         // Check lines above
+        var linesAbove = getLinesAbove(heading);
         if (linesAbove >= 0) {
           var actualAbove = 0;
-          for (var i = 0; i < linesAbove; i++) {
-            if (isBlankLine(lines[startLine - 2 - i])) {
-              actualAbove++;
-            }
+          for (var i = 0; i < linesAbove && isBlankLine(lines[startLine - 2 - i]); i++) {
+            actualAbove++;
           }
           addErrorDetailIf(onError, startLine, linesAbove, actualAbove, "Above", line, null, {
             "insertText": getBlockQuote(lines[startLine - 2], linesAbove - actualAbove)
@@ -4192,12 +4245,11 @@ module.exports = {
         }
 
         // Check lines below
+        var linesBelow = getLinesBelow(heading);
         if (linesBelow >= 0) {
           var actualBelow = 0;
-          for (var _i = 0; _i < linesBelow; _i++) {
-            if (isBlankLine(lines[endLine + _i])) {
-              actualBelow++;
-            }
+          for (var _i2 = 0; _i2 < linesBelow && isBlankLine(lines[endLine + _i2]); _i2++) {
+            actualBelow++;
           }
           addErrorDetailIf(onError, startLine, linesBelow, actualBelow, "Below", line, null, {
             "lineNumber": endLine + 1,
@@ -4206,9 +4258,9 @@ module.exports = {
         }
       }
     } catch (err) {
-      _iterator.e(err);
+      _iterator2.e(err);
     } finally {
-      _iterator.f();
+      _iterator2.f();
     }
   }
 };
