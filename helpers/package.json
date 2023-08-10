@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-rule-helpers",
-  "version": "0.20.0",
+  "version": "0.21.0",
   "description": "A collection of markdownlint helper functions for custom rules",
   "main": "./helpers.js",
   "exports": "./helpers.js",
@@ -13,7 +13,7 @@
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "engines": {
-    "node": ">=14.18.0"
+    "node": ">=16"
   },
   "dependencies": {
     "markdownlint-micromark": "0.1.2"

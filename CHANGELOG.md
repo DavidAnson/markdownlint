@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.30.0
+
+- Use `micromark` in MD022/MD026/MD032/MD037/MD045/MD051
+- Incorporate `micromark-extension-math` for math syntax
+- Allow custom rules to override information URL
+- Update dependencies
+
 ## 0.29.0
 
 - Update `micromark` parser dependencies for better performance
