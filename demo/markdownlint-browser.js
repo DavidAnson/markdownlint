@@ -2807,6 +2807,7 @@ function readConfig(file, parsers, fs, callback) {
   }
   // Read file
   file = helpers.expandTildePath(file, __webpack_require__(/*! node:os */ "?e6c4"));
+  // eslint-disable-next-line n/prefer-promises/fs
   fs.readFile(file, "utf8", function (err, content) {
     if (err) {
       // @ts-ignore
