@@ -412,19 +412,16 @@ test("enableTagMixedCase", (t) => new Promise((resolve) => {
   });
 }));
 
-test("styleFiles", (t) => new Promise((resolve) => {
-  t.plan(9);
-  fs.readdir("./style", function readdir(err, files) {
-    t.falsy(err);
-    for (const file of files) {
-      t.truthy(require(path.join("../style", file)), "Unable to load/parse.");
-      const exportValue = `./style/${file}`;
-      const exportKey = exportValue.replace(/\.json$/, "");
-      t.is(packageExports[exportKey], exportValue);
-    }
-    resolve();
-  });
-}));
+test("styleFiles", async(t) => {
+  t.plan(8);
+  const files = await fs.promises.readdir("./style");
+  for (const file of files) {
+    t.truthy(require(path.join("../style", file)), "Unable to load/parse.");
+    const exportValue = `./style/${file}`;
+    const exportKey = exportValue.replace(/\.json$/, "");
+    t.is(packageExports[exportKey], exportValue);
+  }
+});
 
 test("styleAll", (t) => new Promise((resolve) => {
   t.plan(2);
@@ -839,8 +836,8 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
   });
 }));
 
-test("readme", (t) => new Promise((resolve) => {
-  t.plan(125);
+test("readme", async(t) => {
+  t.plan(124);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -849,74 +846,70 @@ test("readme", (t) => new Promise((resolve) => {
       tagToRules[tag] = tagRules;
     }
   }
-  fs.readFile("README.md", "utf8",
-    function readFile(err, contents) {
-      t.falsy(err);
-      const rulesLeft = [ ...rules ];
-      let seenRelated = false;
-      let seenReferences = false;
-      let seenRules = false;
-      let inRules = false;
-      let seenTags = false;
-      let inTags = false;
-      // @ts-ignore
-      for (const token of md.parse(contents, {})) {
-        if (
-          (token.type === "bullet_list_open") &&
-          (token.level === 0)
-        ) {
-          if (!seenRelated) {
-            seenRelated = true;
-          } else if (!seenReferences) {
-            seenReferences = true;
-          } else if (!seenRules) {
-            seenRules = true;
-            inRules = true;
-          } else if (!seenTags) {
-            seenTags = true;
-            inTags = true;
-          }
-        } else if (
-          (token.type === "bullet_list_close") &&
-          (token.level === 0)
-        ) {
-          inRules = false;
-          inTags = false;
-        } else if (token.type === "inline") {
-          if (inRules) {
-            const rule = rulesLeft.shift();
-            t.truthy(rule,
-              "Missing rule implementation for " + token.content + ".");
-            if (rule) {
-              const ruleName = rule.names[0];
-              const ruleAliases = rule.names.slice(1);
-              let expected = "**[" + ruleName + "](doc/" +
-                ruleName.toLowerCase() + ".md)** *" +
-                ruleAliases.join("/") + "* - " + rule.description;
-              if (deprecatedRuleNames.has(ruleName)) {
-                expected = "~~" + expected + "~~";
-              }
-              t.is(token.content, expected, "Rule mismatch.");
-            }
-          } else if (inTags) {
-            const parts =
-              token.content.replace(/[`*]/g, "").split(/ - |, |,\n/);
-            const tag = parts.shift();
-            t.deepEqual(parts, tagToRules[tag] || [],
-              "Rule mismatch for tag " + tag + ".");
-            delete tagToRules[tag];
-          }
-        }
+  const contents = await fs.promises.readFile("README.md", "utf8");
+  const rulesLeft = [ ...rules ];
+  let seenRelated = false;
+  let seenReferences = false;
+  let seenRules = false;
+  let inRules = false;
+  let seenTags = false;
+  let inTags = false;
+  // @ts-ignore
+  for (const token of md.parse(contents, {})) {
+    if (
+      (token.type === "bullet_list_open") &&
+      (token.level === 0)
+    ) {
+      if (!seenRelated) {
+        seenRelated = true;
+      } else if (!seenReferences) {
+        seenReferences = true;
+      } else if (!seenRules) {
+        seenRules = true;
+        inRules = true;
+      } else if (!seenTags) {
+        seenTags = true;
+        inTags = true;
       }
-      const ruleLeft = rulesLeft.shift();
-      t.true(!ruleLeft,
-        "Missing rule documentation for " +
-          (ruleLeft || "[NO RULE]").toString() + ".");
-      const tagLeft = Object.keys(tagToRules).shift();
-      t.true(!tagLeft, "Undocumented tag " + tagLeft + ".");
-      resolve();
-    });
-}));
+    } else if (
+      (token.type === "bullet_list_close") &&
+      (token.level === 0)
+    ) {
+      inRules = false;
+      inTags = false;
+    } else if (token.type === "inline") {
+      if (inRules) {
+        const rule = rulesLeft.shift();
+        t.truthy(rule,
+          "Missing rule implementation for " + token.content + ".");
+        if (rule) {
+          const ruleName = rule.names[0];
+          const ruleAliases = rule.names.slice(1);
+          let expected = "**[" + ruleName + "](doc/" +
+            ruleName.toLowerCase() + ".md)** *" +
+            ruleAliases.join("/") + "* - " + rule.description;
+          if (deprecatedRuleNames.has(ruleName)) {
+            expected = "~~" + expected + "~~";
+          }
+          t.is(token.content, expected, "Rule mismatch.");
+        }
+      } else if (inTags) {
+        const parts =
+          token.content.replace(/[`*]/g, "").split(/ - |, |,\n/);
+        const tag = parts.shift();
+        t.deepEqual(parts, tagToRules[tag] || [],
+          "Rule mismatch for tag " + tag + ".");
+        delete tagToRules[tag];
+      }
+    }
+  }
+  const ruleLeft = rulesLeft.shift();
+  t.true(!ruleLeft,
+    "Missing rule documentation for " +
+      (ruleLeft || "[NO RULE]").toString() + ".");
+  const tagLeft = Object.keys(tagToRules).shift();
+  t.true(!tagLeft, "Undocumented tag " + tagLeft + ".");
+});
 
 test("validateJsonUsingConfigSchemaStrict", (t) => {
   t.plan(159);
