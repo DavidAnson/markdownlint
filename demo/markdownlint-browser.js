@@ -5725,21 +5725,20 @@ module.exports = {
 
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf,
   escapeForRegExp = _require.escapeForRegExp,
-  newLineRe = _require.newLineRe,
   withinAnyRange = _require.withinAnyRange;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByPredicate = _require2.filterByPredicate,
@@ -5756,6 +5755,10 @@ module.exports = {
     names.sort(function (a, b) {
       return b.length - a.length || a.localeCompare(b);
     });
+    if (names.length === 0) {
+      // Nothing to check; avoid doing any work
+      return;
+    }
     var codeBlocks = params.config.code_blocks;
     var includeCodeBlocks = codeBlocks === undefined ? true : !!codeBlocks;
     var htmlElements = params.config.html_elements;
@@ -5765,39 +5768,19 @@ module.exports = {
       scannedTypes.add("codeFlowValue");
       scannedTypes.add("codeTextData");
     }
-    var tokenAdjustments = new Map();
     var contentTokens = filterByPredicate(params.parsers.micromark.tokens, function (token) {
       return scannedTypes.has(token.type);
     }, function (token) {
       var children = token.children;
-      var startLine = token.startLine,
-        text = token.text;
-      if (!includeHtmlElements && token.type === "htmlFlow") {
-        if (text.startsWith("<!--")) {
-          // Remove comment content
-          children = [];
-        } else {
-          // Re-parse to get htmlText elements for detailed tokenization
-          var htmlTextLines = "<md044>\n".concat(text, "\n</md044>").split(newLineRe);
-          children = parse(htmlTextLines.join(""));
-          var reTokens = _toConsumableArray(children);
-          var _iterator = _createForOfIteratorHelper(reTokens),
-            _step;
-          try {
-            for (_iterator.s(); !(_step = _iterator.n()).done;) {
-              var reToken = _step.value;
-              tokenAdjustments.set(reToken, {
-                htmlTextLines: htmlTextLines,
-                startLine: startLine
-              });
-              reTokens.push.apply(reTokens, _toConsumableArray(reToken.children));
-            }
-          } catch (err) {
-            _iterator.e(err);
-          } finally {
-            _iterator.f();
-          }
-        }
+      var htmlFlowChildren = token.htmlFlowChildren,
+        text = token.text,
+        type = token.type;
+      if (!includeHtmlElements && type === "htmlFlow") {
+        children = text.startsWith("<!--") ?
+        // Remove comment content
+        [] :
+        // Examine htmlText content
+        htmlFlowChildren;
       }
       return children.filter(function (t) {
         return !ignoredChildTypes.has(t.type);
@@ -5805,21 +5788,21 @@ module.exports = {
     });
     var exclusions = [];
     var autoLinked = new Set();
-    var _iterator2 = _createForOfIteratorHelper(names),
-      _step2;
+    var _iterator = _createForOfIteratorHelper(names),
+      _step;
     try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var name = _step2.value;
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var name = _step.value;
         var escapedName = escapeForRegExp(name);
         var startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
         var endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
         var namePattern = "(".concat(startNamePattern, ")(").concat(escapedName, ")").concat(endNamePattern);
         var nameRe = new RegExp(namePattern, "gi");
-        var _iterator3 = _createForOfIteratorHelper(contentTokens),
-          _step3;
+        var _iterator2 = _createForOfIteratorHelper(contentTokens),
+          _step2;
         try {
           var _loop = function _loop() {
-            var token = _step3.value;
+            var token = _step2.value;
             var match = null;
             var _loop2 = function _loop2() {
               var _match = match,
@@ -5839,21 +5822,8 @@ module.exports = {
                   autoLinked.add(token);
                 }
                 if (!withinAnyRange(urlRanges, lineIndex, index, length)) {
-                  var lineNumber = token.startLine;
-                  var column = index;
-                  if (tokenAdjustments.has(token)) {
-                    var _tokenAdjustments$get = tokenAdjustments.get(token),
-                      htmlTextLines = _tokenAdjustments$get.htmlTextLines,
-                      startLine = _tokenAdjustments$get.startLine;
-                    var lineDelta = 0;
-                    while (htmlTextLines[lineDelta].length <= column) {
-                      column -= htmlTextLines[lineDelta].length;
-                      lineDelta++;
-                    }
-                    lineNumber = startLine + lineDelta - 1;
-                  }
-                  column++;
-                  addErrorDetailIf(onError, lineNumber, name, nameMatch, null, null, [column, length], {
+                  var column = index + 1;
+                  addErrorDetailIf(onError, token.startLine, name, nameMatch, null, null, [column, length], {
                     "editColumn": column,
                     "deleteCount": length,
                     "insertText": name
@@ -5866,19 +5836,19 @@ module.exports = {
               _loop2();
             }
           };
-          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
             _loop();
           }
         } catch (err) {
-          _iterator3.e(err);
+          _iterator2.e(err);
         } finally {
-          _iterator3.f();
+          _iterator2.f();
         }
       }
     } catch (err) {
-      _iterator2.e(err);
+      _iterator.e(err);
     } finally {
-      _iterator2.f();
+      _iterator.f();
     }
   }
 };
