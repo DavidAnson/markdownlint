@@ -1137,6 +1137,7 @@ var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-m
   preprocess = _require.preprocess;
 var _require2 = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js"),
   newLineRe = _require2.newLineRe;
+var flatTokensSymbol = Symbol("flat-tokens");
 
 /**
  * Markdown token.
@@ -1197,6 +1198,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
 
   // Create Token objects
   var document = [];
+  var flatTokens = [];
   var current = {
     "children": document
   };
@@ -1247,6 +1249,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
           current.htmlFlowChildren = micromarkParseWithOffset(reparseMarkdown, reparseOptions, referencesDefined, current.startLine - 1);
         }
         previous.children.push(current);
+        flatTokens.push(current);
       } else if (kind === "exit") {
         Object.freeze(current.children);
         Object.freeze(current);
@@ -1261,6 +1264,9 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
   } finally {
     _iterator.f();
   }
+  Object.defineProperty(document, flatTokensSymbol, {
+    "value": flatTokens
+  });
   Object.freeze(document);
   return document;
 }
@@ -1311,9 +1317,14 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, allowed) {
-  return filterByPredicate(tokens, function (token) {
+  var predicate = function predicate(token) {
     return allowed.includes(token.type);
-  });
+  };
+  var flatTokens = tokens[flatTokensSymbol];
+  if (flatTokens) {
+    return flatTokens.filter(predicate);
+  }
+  return filterByPredicate(tokens, predicate);
 }
 
 /**

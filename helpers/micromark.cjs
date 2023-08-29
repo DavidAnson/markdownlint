@@ -10,6 +10,8 @@ const {
 } = require("markdownlint-micromark");
 const { newLineRe } = require("./shared.js");
 
+const flatTokensSymbol = Symbol("flat-tokens");
+
 /**
  * Markdown token.
  *
@@ -82,6 +84,7 @@ function micromarkParseWithOffset(
 
   // Create Token objects
   const document = [];
+  const flatTokens = [];
   let current = {
     "children": document
   };
@@ -131,6 +134,7 @@ function micromarkParseWithOffset(
         );
       }
       previous.children.push(current);
+      flatTokens.push(current);
     } else if (kind === "exit") {
       Object.freeze(current.children);
       Object.freeze(current);
@@ -140,6 +144,7 @@ function micromarkParseWithOffset(
   }
 
   // Return document
+  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
   Object.freeze(document);
   return document;
 }
@@ -198,10 +203,12 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, allowed) {
-  return filterByPredicate(
-    tokens,
-    (token) => allowed.includes(token.type)
-  );
+  const predicate = (token) => allowed.includes(token.type);
+  const flatTokens = tokens[flatTokensSymbol];
+  if (flatTokens) {
+    return flatTokens.filter(predicate);
+  }
+  return filterByPredicate(tokens, predicate);
 }
 
 /**
