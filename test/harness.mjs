@@ -24,12 +24,33 @@ function consoleLogTokens(tokens, depth = 0) {
   }
 }
 
-const files = process.argv.slice(2);
+let profile = false;
+let count = 1;
+const files = process.argv.slice(2).filter((arg) => {
+  if (arg === "--profile") {
+    profile = true;
+    count = 1000;
+    return false;
+  }
+  return true;
+});
+
 for (const file of files) {
-  const content = await readFile(file, "utf8");
-  consoleLogTokens(parse(content));
-  const results = await markdownlint({
-    "files": [ file ]
-  });
-  console.dir(results, { "depth": null });
+  if (!profile) {
+    const content = await readFile(file, "utf8");
+    consoleLogTokens(parse(content));
+  }
+  let results = null;
+  performance.mark("profile-start");
+  for (let i = 0; i < count; i++) {
+    results = await markdownlint({
+      "files": [ file ]
+    });
+  }
+  const measure = performance.measure("profile", "profile-start");
+  if (profile) {
+    console.log(Math.round(measure.duration));
+  } else {
+    console.dir(results, { "depth": null });
+  }
 }
