@@ -5635,52 +5635,54 @@ module.exports = {
   "tags": ["headings", "headers"],
   "function": function MD043(params, onError) {
     var requiredHeadings = params.config.headings || params.config.headers;
+    if (!Array.isArray(requiredHeadings)) {
+      // Nothing to check; avoid doing any work
+      return;
+    }
     var matchCase = params.config.match_case || false;
-    if (Array.isArray(requiredHeadings)) {
-      var levels = {};
-      for (var _i = 0, _arr = [1, 2, 3, 4, 5, 6]; _i < _arr.length; _i++) {
-        var level = _arr[_i];
-        levels["h" + level] = "######".substr(-level);
-      }
-      var i = 0;
-      var matchAny = false;
-      var hasError = false;
-      var anyHeadings = false;
-      var getExpected = function getExpected() {
-        return requiredHeadings[i++] || "[None]";
-      };
-      var handleCase = function handleCase(str) {
-        return matchCase ? str : str.toLowerCase();
-      };
-      forEachHeading(params, function (heading, content) {
-        if (!hasError) {
-          anyHeadings = true;
-          var actual = levels[heading.tag] + " " + content;
-          var expected = getExpected();
-          if (expected === "*") {
-            var nextExpected = getExpected();
-            if (handleCase(nextExpected) !== handleCase(actual)) {
-              matchAny = true;
-              i--;
-            }
-          } else if (expected === "+") {
+    var levels = {};
+    for (var _i = 0, _arr = [1, 2, 3, 4, 5, 6]; _i < _arr.length; _i++) {
+      var level = _arr[_i];
+      levels["h" + level] = "######".substr(-level);
+    }
+    var i = 0;
+    var matchAny = false;
+    var hasError = false;
+    var anyHeadings = false;
+    var getExpected = function getExpected() {
+      return requiredHeadings[i++] || "[None]";
+    };
+    var handleCase = function handleCase(str) {
+      return matchCase ? str : str.toLowerCase();
+    };
+    forEachHeading(params, function (heading, content) {
+      if (!hasError) {
+        anyHeadings = true;
+        var actual = levels[heading.tag] + " " + content;
+        var expected = getExpected();
+        if (expected === "*") {
+          var nextExpected = getExpected();
+          if (handleCase(nextExpected) !== handleCase(actual)) {
             matchAny = true;
-          } else if (handleCase(expected) === handleCase(actual)) {
-            matchAny = false;
-          } else if (matchAny) {
             i--;
-          } else {
-            addErrorDetailIf(onError, heading.lineNumber, expected, actual);
-            hasError = true;
           }
+        } else if (expected === "+") {
+          matchAny = true;
+        } else if (handleCase(expected) === handleCase(actual)) {
+          matchAny = false;
+        } else if (matchAny) {
+          i--;
+        } else {
+          addErrorDetailIf(onError, heading.lineNumber, expected, actual);
+          hasError = true;
         }
-      });
-      var extraHeadings = requiredHeadings.length - i;
-      if (!hasError && (extraHeadings > 1 || extraHeadings === 1 && requiredHeadings[i] !== "*") && (anyHeadings || !requiredHeadings.every(function (heading) {
-        return heading === "*";
-      }))) {
-        addErrorContext(onError, params.lines.length, requiredHeadings[i]);
       }
+    });
+    var extraHeadings = requiredHeadings.length - i;
+    if (!hasError && (extraHeadings > 1 || extraHeadings === 1 && requiredHeadings[i] !== "*") && (anyHeadings || !requiredHeadings.every(function (heading) {
+      return heading === "*";
+    }))) {
+      addErrorContext(onError, params.lines.length, requiredHeadings[i]);
     }
   }
 };
