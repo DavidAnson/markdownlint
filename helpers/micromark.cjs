@@ -236,23 +236,6 @@ function filterByHtmlTokens(tokens) {
 }
 
 /**
- * Returns a list of all nested child tokens.
- *
- * @param {Token} parent Micromark token.
- * @returns {Token[]} Flattened children.
- */
-function flattenedChildren(parent) {
-  const result = [];
-  const pending = [ ...parent.children ];
-  let token = null;
-  while ((token = pending.shift())) {
-    result.push(token);
-    pending.unshift(...token.children);
-  }
-  return result;
-}
-
-/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -348,7 +331,6 @@ module.exports = {
   filterByHtmlTokens,
   filterByPredicate,
   filterByTypes,
-  flattenedChildren,
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,

@@ -1361,23 +1361,6 @@ function filterByHtmlTokens(tokens) {
 }
 
 /**
- * Returns a list of all nested child tokens.
- *
- * @param {Token} parent Micromark token.
- * @returns {Token[]} Flattened children.
- */
-function flattenedChildren(parent) {
-  var result = [];
-  var pending = _toConsumableArray(parent.children);
-  var token = null;
-  while (token = pending.shift()) {
-    result.push(token);
-    pending.unshift.apply(pending, _toConsumableArray(token.children));
-  }
-  return result;
-}
-
-/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -1471,7 +1454,6 @@ module.exports = {
   filterByHtmlTokens: filterByHtmlTokens,
   filterByPredicate: filterByPredicate,
   filterByTypes: filterByTypes,
-  flattenedChildren: flattenedChildren,
   getHeadingLevel: getHeadingLevel,
   getHtmlTagInfo: getHtmlTagInfo,
   getMicromarkEvents: getMicromarkEvents,
@@ -4850,8 +4832,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   blockquotePrefixRe = _require.blockquotePrefixRe,
   isBlankLine = _require.isBlankLine;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByPredicate = _require2.filterByPredicate,
-  flattenedChildren = _require2.flattenedChildren;
+  filterByPredicate = _require2.filterByPredicate;
 var nonContentTokens = new Set(["blockQuoteMarker", "blockQuotePrefix", "blockQuotePrefixWhitespace", "lineEnding", "lineEndingBlank", "linePrefix", "listItemIndent"]);
 var isList = function isList(token) {
   return token.type === "listOrdered" || token.type === "listUnordered";
@@ -4889,7 +4870,10 @@ module.exports = {
 
         // Find the "visual" end of the list
         var endLine = list.endLine;
-        var _iterator2 = _createForOfIteratorHelper(flattenedChildren(list).reverse()),
+        var flattenedChildren = filterByPredicate(list.children, function () {
+          return true;
+        });
+        var _iterator2 = _createForOfIteratorHelper(flattenedChildren.reverse()),
           _step2;
         try {
           for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
