@@ -218,21 +218,11 @@ function filterByTypes(tokens, allowed) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByHtmlTokens(tokens) {
-  const result = [];
-  const pending = [ tokens ];
-  let current = null;
-  while ((current = pending.shift())) {
-    for (const token of filterByTypes(current, [ "htmlFlow", "htmlText" ])) {
-      if (token.type === "htmlText") {
-        result.push(token);
-      } else {
-        // token.type === "htmlFlow"
-        // @ts-ignore
-        pending.push(token.htmlFlowChildren);
-      }
-    }
-  }
-  return result;
+  return filterByPredicate(
+    tokens,
+    (token) => token.type === "htmlText",
+    (token) => token.htmlFlowChildren || token.children
+  );
 }
 
 /**

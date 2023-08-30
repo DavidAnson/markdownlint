@@ -1334,30 +1334,11 @@ function filterByTypes(tokens, allowed) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByHtmlTokens(tokens) {
-  var result = [];
-  var pending = [tokens];
-  var current = null;
-  while (current = pending.shift()) {
-    var _iterator2 = _createForOfIteratorHelper(filterByTypes(current, ["htmlFlow", "htmlText"])),
-      _step2;
-    try {
-      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var token = _step2.value;
-        if (token.type === "htmlText") {
-          result.push(token);
-        } else {
-          // token.type === "htmlFlow"
-          // @ts-ignore
-          pending.push(token.htmlFlowChildren);
-        }
-      }
-    } catch (err) {
-      _iterator2.e(err);
-    } finally {
-      _iterator2.f();
-    }
-  }
-  return result;
+  return filterByPredicate(tokens, function (token) {
+    return token.type === "htmlText";
+  }, function (token) {
+    return token.htmlFlowChildren || token.children;
+  });
 }
 
 /**
