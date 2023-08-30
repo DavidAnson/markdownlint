@@ -5202,8 +5202,6 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError;
-var emphasisStartTextRe = /^(\S{1,3})(\s+)\S/;
-var emphasisEndTextRe = /\S(\s+)(\S{1,3})$/;
 module.exports = {
   "names": ["MD037", "no-space-in-emphasis"],
   "description": "Spaces inside emphasis markers",
@@ -5261,44 +5259,43 @@ module.exports = {
       } finally {
         _iterator2.f();
       }
-      var _iterator3 = _createForOfIteratorHelper(emphasisTokensByMarker.values()),
+      var _iterator3 = _createForOfIteratorHelper(emphasisTokensByMarker.entries()),
         _step3;
       try {
         for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var _emphasisTokens2 = _step3.value;
+          var entry = _step3.value;
+          var _entry = _slicedToArray(entry, 2),
+            _marker = _entry[0],
+            _emphasisTokens2 = _entry[1];
           for (var i = 0; i + 1 < _emphasisTokens2.length; i += 2) {
             // Process start token of start/end pair
             var startToken = _emphasisTokens2[i];
-            var startText = lines[startToken.startLine - 1].slice(startToken.startColumn - 1);
-            var startMatch = startText.match(emphasisStartTextRe);
+            var startLine = lines[startToken.startLine - 1];
+            var startSlice = startLine.slice(startToken.endColumn - 1);
+            var startMatch = startSlice.match(/^\s+\S/);
             if (startMatch) {
-              var _startMatch = _slicedToArray(startMatch, 3),
-                startContext = _startMatch[0],
-                startMarker = _startMatch[1],
-                startSpaces = _startMatch[2];
-              if (startMarker === startToken.text && startSpaces.length > 0) {
-                addError(onError, startToken.startLine, undefined, startContext, [startToken.startColumn, startContext.length], {
-                  "editColumn": startToken.endColumn,
-                  "deleteCount": startSpaces.length
-                });
-              }
+              var _startMatch = _slicedToArray(startMatch, 1),
+                startSpaceCharacter = _startMatch[0];
+              var startContext = "".concat(_marker).concat(startSpaceCharacter);
+              addError(onError, startToken.startLine, undefined, startContext, [startToken.startColumn, startContext.length], {
+                "editColumn": startToken.endColumn,
+                "deleteCount": startSpaceCharacter.length - 1
+              });
             }
 
             // Process end token of start/end pair
             var endToken = _emphasisTokens2[i + 1];
-            var endText = lines[endToken.startLine - 1].slice(0, endToken.endColumn - 1);
-            var endMatch = endText.match(emphasisEndTextRe);
+            var endLine = lines[endToken.startLine - 1];
+            var endSlice = endLine.slice(0, endToken.startColumn - 1);
+            var endMatch = endSlice.match(/\S\s+$/);
             if (endMatch) {
-              var _endMatch = _slicedToArray(endMatch, 3),
-                endContext = _endMatch[0],
-                endSpace = _endMatch[1],
-                endMarker = _endMatch[2];
-              if (endMarker === endToken.text && endSpace.length > 0) {
-                addError(onError, endToken.startLine, undefined, endContext, [endToken.endColumn - endContext.length, endContext.length], {
-                  "editColumn": endToken.startColumn - endSpace.length,
-                  "deleteCount": endSpace.length
-                });
-              }
+              var _endMatch = _slicedToArray(endMatch, 1),
+                endSpaceCharacter = _endMatch[0];
+              var endContext = "".concat(endSpaceCharacter).concat(_marker);
+              addError(onError, endToken.startLine, undefined, endContext, [endToken.endColumn - endContext.length, endContext.length], {
+                "editColumn": endToken.startColumn - (endSpaceCharacter.length - 1),
+                "deleteCount": endSpaceCharacter.length - 1
+              });
             }
           }
         }
