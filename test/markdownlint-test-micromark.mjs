@@ -26,17 +26,28 @@ test("getMicromarkEvents/filterByPredicate", async(t) => {
   t.plan(1);
   const content = await testContent;
   const events = getMicromarkEvents(content);
+  let inHtmlFlow = false;
   const eventTypes = events
-    .filter((event) => event[0] === "enter")
+    .filter((event) => {
+      const result = !inHtmlFlow && (event[0] === "enter");
+      if (event[1].type === "htmlFlow") {
+        inHtmlFlow = !inHtmlFlow;
+      }
+      return result;
+    })
     .map((event) => event[1].type);
   const tokens = parse(content);
-  const filtered = filterByPredicate(tokens, () => true);
+  const filtered = filterByPredicate(
+    tokens,
+    () => true,
+    (token) => ((token.type === "htmlFlow") ? [] : token.children)
+  );
   const tokenTypes = filtered.map((token) => token.type);
   t.deepEqual(tokenTypes, eventTypes);
 });
 
 test("filterByTypes", async(t) => {
-  t.plan(6);
+  t.plan(8);
   const filtered = filterByTypes(
     await testTokens,
     [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ]

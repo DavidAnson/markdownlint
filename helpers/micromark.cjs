@@ -23,8 +23,31 @@ const flatTokensSymbol = Symbol("flat-tokens");
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
  * @property {Token[]} children Child tokens.
- * @property {Token[]} [htmlFlowChildren] Child tokens for htmlFlow.
  */
+
+/**
+ * Returns whether a token is an htmlFlow type containing an HTML comment.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff token is htmlFlow containing a comment.
+ */
+function isHtmlFlowComment(token) {
+  const { text, type } = token;
+  if (
+    (type === "htmlFlow") &&
+    text.startsWith("<!--") &&
+    text.endsWith("-->")
+  ) {
+    const comment = text.slice(4, -3);
+    return (
+      !comment.startsWith(">") &&
+      !comment.startsWith("->") &&
+      !comment.endsWith("-") &&
+      !comment.includes("--")
+    );
+  }
+  return false;
+}
 
 /**
  * Parses a Markdown document and returns Micromark events.
@@ -91,13 +114,14 @@ function micromarkParseWithOffset(
   const history = [ current ];
   let reparseOptions = null;
   let lines = null;
+  let skipHtmlFlowChildren = false;
   for (const event of events) {
     const [ kind, token, context ] = event;
     const { type, start, end } = token;
     const { "column": startColumn, "line": startLine } = start;
     const { "column": endColumn, "line": endLine } = end;
     const text = context.sliceSerialize(token);
-    if (kind === "enter") {
+    if ((kind === "enter") && !skipHtmlFlowChildren) {
       const previous = current;
       history.push(previous);
       current = {
@@ -109,7 +133,11 @@ function micromarkParseWithOffset(
         text,
         "children": []
       };
-      if (current.type === "htmlFlow") {
+      previous.children.push(current);
+      flatTokens.push(current);
+      // @ts-ignore
+      if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
+        skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
           reparseOptions = {
             ...micromarkOptions,
@@ -126,20 +154,25 @@ function micromarkParseWithOffset(
         const reparseMarkdown = lines
           .slice(current.startLine - 1, current.endLine)
           .join("\n");
-        current.htmlFlowChildren = micromarkParseWithOffset(
+        const tokens = micromarkParseWithOffset(
           reparseMarkdown,
           reparseOptions,
           referencesDefined,
           current.startLine - 1
         );
+        current.children = tokens;
+        flatTokens.push(...tokens[flatTokensSymbol]);
       }
-      previous.children.push(current);
-      flatTokens.push(current);
     } else if (kind === "exit") {
-      Object.freeze(current.children);
-      Object.freeze(current);
-      // @ts-ignore
-      current = history.pop();
+      if (type === "htmlFlow") {
+        skipHtmlFlowChildren = false;
+      }
+      if (!skipHtmlFlowChildren) {
+        Object.freeze(current.children);
+        Object.freeze(current);
+        // @ts-ignore
+        current = history.pop();
+      }
     }
   }
 
@@ -209,20 +242,6 @@ function filterByTypes(tokens, allowed) {
     return flatTokens.filter(predicate);
   }
   return filterByPredicate(tokens, predicate);
-}
-
-/**
- * Filter a list of Micromark tokens for HTML tokens.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @returns {Token[]} Filtered tokens.
- */
-function filterByHtmlTokens(tokens) {
-  return filterByPredicate(
-    tokens,
-    (token) => token.type === "htmlText",
-    (token) => token.htmlFlowChildren || token.children
-  );
 }
 
 /**
@@ -318,7 +337,6 @@ function tokenIfType(token, type) {
 
 module.exports = {
   "parse": micromarkParse,
-  filterByHtmlTokens,
   filterByPredicate,
   filterByTypes,
   getHeadingLevel,

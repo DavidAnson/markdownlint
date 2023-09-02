@@ -1150,8 +1150,23 @@ var flatTokensSymbol = Symbol("flat-tokens");
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
  * @property {Token[]} children Child tokens.
- * @property {Token[]} [htmlFlowChildren] Child tokens for htmlFlow.
  */
+
+/**
+ * Returns whether a token is an htmlFlow type containing an HTML comment.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff token is htmlFlow containing a comment.
+ */
+function isHtmlFlowComment(token) {
+  var text = token.text,
+    type = token.type;
+  if (type === "htmlFlow" && text.startsWith("<!--") && text.endsWith("-->")) {
+    var comment = text.slice(4, -3);
+    return !comment.startsWith(">") && !comment.startsWith("->") && !comment.endsWith("-") && !comment.includes("--");
+  }
+  return false;
+}
 
 /**
  * Parses a Markdown document and returns Micromark events.
@@ -1205,6 +1220,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
   var history = [current];
   var reparseOptions = null;
   var lines = null;
+  var skipHtmlFlowChildren = false;
   var _iterator = _createForOfIteratorHelper(events),
     _step;
   try {
@@ -1222,7 +1238,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
       var endColumn = end["column"],
         endLine = end["line"];
       var text = context.sliceSerialize(token);
-      if (kind === "enter") {
+      if (kind === "enter" && !skipHtmlFlowChildren) {
         var previous = current;
         history.push(previous);
         current = {
@@ -1234,7 +1250,11 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
           text: text,
           "children": []
         };
-        if (current.type === "htmlFlow") {
+        previous.children.push(current);
+        flatTokens.push(current);
+        // @ts-ignore
+        if (current.type === "htmlFlow" && !isHtmlFlowComment(current)) {
+          skipHtmlFlowChildren = true;
           if (!reparseOptions || !lines) {
             reparseOptions = _objectSpread(_objectSpread({}, micromarkOptions), {}, {
               "extensions": [{
@@ -1246,15 +1266,20 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
             lines = markdown.split(newLineRe);
           }
           var reparseMarkdown = lines.slice(current.startLine - 1, current.endLine).join("\n");
-          current.htmlFlowChildren = micromarkParseWithOffset(reparseMarkdown, reparseOptions, referencesDefined, current.startLine - 1);
+          var tokens = micromarkParseWithOffset(reparseMarkdown, reparseOptions, referencesDefined, current.startLine - 1);
+          current.children = tokens;
+          flatTokens.push.apply(flatTokens, _toConsumableArray(tokens[flatTokensSymbol]));
         }
-        previous.children.push(current);
-        flatTokens.push(current);
       } else if (kind === "exit") {
-        Object.freeze(current.children);
-        Object.freeze(current);
-        // @ts-ignore
-        current = history.pop();
+        if (type === "htmlFlow") {
+          skipHtmlFlowChildren = false;
+        }
+        if (!skipHtmlFlowChildren) {
+          Object.freeze(current.children);
+          Object.freeze(current);
+          // @ts-ignore
+          current = history.pop();
+        }
       }
     }
 
@@ -1325,20 +1350,6 @@ function filterByTypes(tokens, allowed) {
     return flatTokens.filter(predicate);
   }
   return filterByPredicate(tokens, predicate);
-}
-
-/**
- * Filter a list of Micromark tokens for HTML tokens.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @returns {Token[]} Filtered tokens.
- */
-function filterByHtmlTokens(tokens) {
-  return filterByPredicate(tokens, function (token) {
-    return token.type === "htmlText";
-  }, function (token) {
-    return token.htmlFlowChildren || token.children;
-  });
 }
 
 /**
@@ -1432,7 +1443,6 @@ function tokenIfType(token, type) {
 }
 module.exports = {
   "parse": micromarkParse,
-  filterByHtmlTokens: filterByHtmlTokens,
   filterByPredicate: filterByPredicate,
   filterByTypes: filterByTypes,
   getHeadingLevel: getHeadingLevel,
@@ -4836,7 +4846,7 @@ module.exports = {
 
     // For every top-level list...
     var topLevelLists = filterByPredicate(parsers.micromark.tokens, isList, function (token) {
-      return isList(token) ? [] : token.children;
+      return isList(token) || token.type === "htmlFlow" ? [] : token.children;
     });
     var _iterator = _createForOfIteratorHelper(topLevelLists),
       _step;
@@ -4903,7 +4913,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByHtmlTokens = _require2.filterByHtmlTokens,
+  filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
 var nextLinesRe = /[\r\n][\s\S]*$/;
 module.exports = {
@@ -4916,7 +4926,8 @@ module.exports = {
     allowedElements = allowedElements.map(function (element) {
       return element.toLowerCase();
     });
-    var _iterator = _createForOfIteratorHelper(filterByHtmlTokens(params.parsers.micromark.tokens)),
+    var tokens = params.parsers.micromark.tokens;
+    var _iterator = _createForOfIteratorHelper(filterByTypes(tokens, ["htmlText"])),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
@@ -5159,14 +5170,12 @@ function _nonIterableRest() { throw new TypeError("Invalid attempt to destructur
 function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByPredicate = _require2.filterByPredicate;
 module.exports = {
   "names": ["MD037", "no-space-in-emphasis"],
   "description": "Spaces inside emphasis markers",
@@ -5180,95 +5189,100 @@ module.exports = {
       var marker = _arr[_i];
       emphasisTokensByMarker.set(marker, []);
     }
-    var pending = _toConsumableArray(parsers.micromark.tokens);
-    var token = null;
-    while (token = pending.shift()) {
-      // Use reparsed children of htmlFlow tokens
-      if (token.type === "htmlFlow") {
-        pending.unshift.apply(pending, _toConsumableArray(token.htmlFlowChildren));
-        continue;
-      }
-      pending.push.apply(pending, _toConsumableArray(token.children));
-
-      // Build lists of bare tokens for each emphasis marker type
-      var _iterator = _createForOfIteratorHelper(emphasisTokensByMarker.values()),
-        _step;
-      try {
-        for (_iterator.s(); !(_step = _iterator.n()).done;) {
-          var emphasisTokens = _step.value;
-          emphasisTokens.length = 0;
+    var tokens = filterByPredicate(parsers.micromark.tokens, function (token) {
+      return token.children.some(function (child) {
+        return child.type === "data";
+      });
+    });
+    var _iterator = _createForOfIteratorHelper(tokens),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var token = _step.value;
+        // Build lists of bare tokens for each emphasis marker type
+        var _iterator2 = _createForOfIteratorHelper(emphasisTokensByMarker.values()),
+          _step2;
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var emphasisTokens = _step2.value;
+            emphasisTokens.length = 0;
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
         }
-      } catch (err) {
-        _iterator.e(err);
-      } finally {
-        _iterator.f();
-      }
-      var _iterator2 = _createForOfIteratorHelper(token.children),
-        _step2;
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var child = _step2.value;
-          var text = child.text,
-            type = child.type;
-          if (type === "data" && text.length <= 3) {
-            var _emphasisTokens = emphasisTokensByMarker.get(text);
-            if (_emphasisTokens) {
-              _emphasisTokens.push(child);
+        var _iterator3 = _createForOfIteratorHelper(token.children),
+          _step3;
+        try {
+          for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+            var child = _step3.value;
+            var text = child.text,
+              type = child.type;
+            if (type === "data" && text.length <= 3) {
+              var _emphasisTokens = emphasisTokensByMarker.get(text);
+              if (_emphasisTokens) {
+                _emphasisTokens.push(child);
+              }
             }
           }
+
+          // Process bare tokens for each emphasis marker type
+        } catch (err) {
+          _iterator3.e(err);
+        } finally {
+          _iterator3.f();
         }
+        var _iterator4 = _createForOfIteratorHelper(emphasisTokensByMarker.entries()),
+          _step4;
+        try {
+          for (_iterator4.s(); !(_step4 = _iterator4.n()).done;) {
+            var entry = _step4.value;
+            var _entry = _slicedToArray(entry, 2),
+              _marker = _entry[0],
+              _emphasisTokens2 = _entry[1];
+            for (var i = 0; i + 1 < _emphasisTokens2.length; i += 2) {
+              // Process start token of start/end pair
+              var startToken = _emphasisTokens2[i];
+              var startLine = lines[startToken.startLine - 1];
+              var startSlice = startLine.slice(startToken.endColumn - 1);
+              var startMatch = startSlice.match(/^\s+\S/);
+              if (startMatch) {
+                var _startMatch = _slicedToArray(startMatch, 1),
+                  startSpaceCharacter = _startMatch[0];
+                var startContext = "".concat(_marker).concat(startSpaceCharacter);
+                addError(onError, startToken.startLine, undefined, startContext, [startToken.startColumn, startContext.length], {
+                  "editColumn": startToken.endColumn,
+                  "deleteCount": startSpaceCharacter.length - 1
+                });
+              }
 
-        // Process bare tokens for each emphasis marker type
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
-      }
-      var _iterator3 = _createForOfIteratorHelper(emphasisTokensByMarker.entries()),
-        _step3;
-      try {
-        for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
-          var entry = _step3.value;
-          var _entry = _slicedToArray(entry, 2),
-            _marker = _entry[0],
-            _emphasisTokens2 = _entry[1];
-          for (var i = 0; i + 1 < _emphasisTokens2.length; i += 2) {
-            // Process start token of start/end pair
-            var startToken = _emphasisTokens2[i];
-            var startLine = lines[startToken.startLine - 1];
-            var startSlice = startLine.slice(startToken.endColumn - 1);
-            var startMatch = startSlice.match(/^\s+\S/);
-            if (startMatch) {
-              var _startMatch = _slicedToArray(startMatch, 1),
-                startSpaceCharacter = _startMatch[0];
-              var startContext = "".concat(_marker).concat(startSpaceCharacter);
-              addError(onError, startToken.startLine, undefined, startContext, [startToken.startColumn, startContext.length], {
-                "editColumn": startToken.endColumn,
-                "deleteCount": startSpaceCharacter.length - 1
-              });
-            }
-
-            // Process end token of start/end pair
-            var endToken = _emphasisTokens2[i + 1];
-            var endLine = lines[endToken.startLine - 1];
-            var endSlice = endLine.slice(0, endToken.startColumn - 1);
-            var endMatch = endSlice.match(/\S\s+$/);
-            if (endMatch) {
-              var _endMatch = _slicedToArray(endMatch, 1),
-                endSpaceCharacter = _endMatch[0];
-              var endContext = "".concat(endSpaceCharacter).concat(_marker);
-              addError(onError, endToken.startLine, undefined, endContext, [endToken.endColumn - endContext.length, endContext.length], {
-                "editColumn": endToken.startColumn - (endSpaceCharacter.length - 1),
-                "deleteCount": endSpaceCharacter.length - 1
-              });
+              // Process end token of start/end pair
+              var endToken = _emphasisTokens2[i + 1];
+              var endLine = lines[endToken.startLine - 1];
+              var endSlice = endLine.slice(0, endToken.startColumn - 1);
+              var endMatch = endSlice.match(/\S\s+$/);
+              if (endMatch) {
+                var _endMatch = _slicedToArray(endMatch, 1),
+                  endSpaceCharacter = _endMatch[0];
+                var endContext = "".concat(endSpaceCharacter).concat(_marker);
+                addError(onError, endToken.startLine, undefined, endContext, [endToken.endColumn - endContext.length, endContext.length], {
+                  "editColumn": endToken.startColumn - (endSpaceCharacter.length - 1),
+                  "deleteCount": endSpaceCharacter.length - 1
+                });
+              }
             }
           }
+        } catch (err) {
+          _iterator4.e(err);
+        } finally {
+          _iterator4.f();
         }
-      } catch (err) {
-        _iterator3.e(err);
-      } finally {
-        _iterator3.f();
       }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
     }
   }
 };
@@ -5738,26 +5752,19 @@ module.exports = {
     var includeCodeBlocks = codeBlocks === undefined ? true : !!codeBlocks;
     var htmlElements = params.config.html_elements;
     var includeHtmlElements = htmlElements === undefined ? true : !!htmlElements;
-    var scannedTypes = new Set(["data", "htmlFlowData"]);
+    var scannedTypes = new Set(["data"]);
     if (includeCodeBlocks) {
       scannedTypes.add("codeFlowValue");
       scannedTypes.add("codeTextData");
     }
+    if (includeHtmlElements) {
+      scannedTypes.add("htmlFlowData");
+      scannedTypes.add("htmlTextData");
+    }
     var contentTokens = filterByPredicate(params.parsers.micromark.tokens, function (token) {
       return scannedTypes.has(token.type);
     }, function (token) {
-      var children = token.children;
-      var htmlFlowChildren = token.htmlFlowChildren,
-        text = token.text,
-        type = token.type;
-      if (!includeHtmlElements && type === "htmlFlow") {
-        children = text.startsWith("<!--") ?
-        // Remove comment content
-        [] :
-        // Examine htmlText content
-        htmlFlowChildren;
-      }
-      return children.filter(function (t) {
+      return token.children.filter(function (t) {
         return !ignoredChildTypes.has(t.type);
       });
     });
@@ -6027,14 +6034,18 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
   emphasisOrStrongStyleFor = _require.emphasisOrStrongStyleFor;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes,
+  filterByPredicate = _require2.filterByPredicate,
   tokenIfType = _require2.tokenIfType;
 var intrawordRe = /\w/;
 var impl = function impl(params, onError, type, asterisk, underline) {
   var style = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "consistent";
   var lines = params.lines,
     parsers = params.parsers;
-  var emphasisTokens = filterByTypes(parsers.micromark.tokens, [type]);
+  var emphasisTokens = filterByPredicate(parsers.micromark.tokens, function (token) {
+    return token.type === type;
+  }, function (token) {
+    return token.type === "htmlFlow" ? [] : token.children;
+  });
   var _iterator = _createForOfIteratorHelper(emphasisTokens),
     _step;
   try {
@@ -6114,7 +6125,6 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
   addErrorDetailIf = _require.addErrorDetailIf;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByHtmlTokens = _require2.filterByHtmlTokens,
   filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
 
@@ -6179,7 +6189,7 @@ module.exports = {
     } finally {
       _iterator.f();
     }
-    var _iterator2 = _createForOfIteratorHelper(filterByHtmlTokens(tokens)),
+    var _iterator2 = _createForOfIteratorHelper(filterByTypes(tokens, ["htmlText"])),
       _step2;
     try {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {

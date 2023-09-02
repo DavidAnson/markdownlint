@@ -74,7 +74,22 @@ code
 
 text
 
+<p>
+1. Not a
+2. list
+</p>
+
+<p>1. Not a list</p>
+
+<p>
+* Not a
+* list
+</p>
+
+<p>* Not a list</p>
+
 <!-- markdownlint-configure-file {
+  "no-inline-html": false,
   "ul-style": false,
   "ol-prefix": false,
   "fenced-code-language": false

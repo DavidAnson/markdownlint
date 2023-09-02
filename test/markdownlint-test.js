@@ -912,7 +912,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", (t) => {
-  t.plan(159);
+  t.plan(160);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([

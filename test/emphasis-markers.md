@@ -19,3 +19,11 @@ also` __bad__ {MD050}
 This `is
 also
 very` __bad__ {MD050}
+
+<p>HTML __should__ *be* ignored</p>
+
+<p>
+HTML __should__ *be* ignored
+</p>
+
+<!-- markdownlint-configure-file { "no-inline-html": false } -->
