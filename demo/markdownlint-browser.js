@@ -1320,15 +1320,29 @@ function micromarkParse(markdown) {
  */
 function filterByPredicate(tokens, allowed, transformChildren) {
   var result = [];
-  var pending = _toConsumableArray(tokens);
-  var token = null;
-  while (token = pending.shift()) {
-    if (allowed(token)) {
-      result.push(token);
-    }
-    if (token.children.length > 0) {
-      var transformed = transformChildren ? transformChildren(token) : token.children;
-      pending.unshift.apply(pending, _toConsumableArray(transformed));
+  var queue = [{
+    "array": tokens,
+    "index": 0
+  }];
+  while (queue.length > 0) {
+    var current = queue[queue.length - 1];
+    var array = current.array,
+      index = current.index;
+    if (index < array.length) {
+      var token = array[current.index++];
+      if (allowed(token)) {
+        result.push(token);
+      }
+      var children = token.children;
+      if (children.length > 0) {
+        var transformed = transformChildren ? transformChildren(token) : children;
+        queue.push({
+          "array": transformed,
+          "index": 0
+        });
+      }
+    } else {
+      queue.pop();
     }
   }
   return result;
