@@ -6139,6 +6139,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
   addErrorDetailIf = _require.addErrorDetailIf;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByPredicate = _require2.filterByPredicate,
   filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
 
@@ -6146,6 +6147,10 @@ var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/
 var idRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]id[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
 var nameRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]name[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
 var anchorRe = /\{(#[0-9a-z]+(?:[\x2D_][0-9a-z]+)*)\}/g;
+
+// Sets for filtering heading tokens during conversion
+var childrenExclude = new Set(["image", "reference", "resource"]);
+var tokensInclude = new Set(["codeTextData", "data"]);
 
 /**
  * Converts a Markdown heading into an HTML fragment according to the rules
@@ -6155,7 +6160,11 @@ var anchorRe = /\{(#[0-9a-z]+(?:[\x2D_][0-9a-z]+)*)\}/g;
  * @returns {string} Fragment string for heading.
  */
 function convertHeadingToHTMLFragment(headingText) {
-  var inlineText = filterByTypes(headingText.children, ["codeTextData", "data"]).map(function (token) {
+  var inlineText = filterByPredicate(headingText.children, function (token) {
+    return tokensInclude.has(token.type);
+  }, function (token) {
+    return childrenExclude.has(token.type) ? [] : token.children;
+  }).map(function (token) {
     return token.text;
   }).join("");
   return "#" + encodeURIComponent(inlineText.toLowerCase()
@@ -6181,18 +6190,20 @@ module.exports = {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var headingText = _step.value;
         var fragment = convertHeadingToHTMLFragment(headingText);
-        var count = fragments.get(fragment) || 0;
-        if (count) {
-          fragments.set("".concat(fragment, "-").concat(count), 0);
-        }
-        fragments.set(fragment, count + 1);
-        var match = null;
-        while ((match = anchorRe.exec(headingText.text)) !== null) {
-          var _match = match,
-            _match2 = _slicedToArray(_match, 2),
-            anchor = _match2[1];
-          if (!fragments.has(anchor)) {
-            fragments.set(anchor, 1);
+        if (fragment !== "#") {
+          var count = fragments.get(fragment) || 0;
+          if (count) {
+            fragments.set("".concat(fragment, "-").concat(count), 0);
+          }
+          fragments.set(fragment, count + 1);
+          var match = null;
+          while ((match = anchorRe.exec(headingText.text)) !== null) {
+            var _match = match,
+              _match2 = _slicedToArray(_match, 2),
+              anchor = _match2[1];
+            if (!fragments.has(anchor)) {
+              fragments.set(anchor, 1);
+            }
           }
         }
       }

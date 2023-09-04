@@ -46,6 +46,16 @@
 
 [Valid](#en-t%C3%AAte-valide-dans-fran%C3%A7ais-pour-v%C3%A9rification)
 
+[Valid](#valid-heading-is-a-link)
+
+[Valid](#valid-heading-has-a-link)
+
+[Valid](#valid-heading-is-a-reference-link)
+
+[Valid](#valid-heading-has-a-reference-link)
+
+[Valid](#valid-heading-has-)
+
 [Valid](#namedlink)
 
 [Valid](#idlink)
@@ -127,6 +137,18 @@ Text
 
 ### En-tête Valide Dans Français Pour Vérification
 
+### [Valid Heading Is a Link](https://example.com)
+
+### Valid Heading [Has a Link](https://example.com)
+
+### [Valid Heading Is a Reference Link][goodref]
+
+### Valid Heading [Has a Reference Link][goodref]
+
+### ![Valid Heading Is an Image](https://example.com)
+
+### Valid Heading Has ![an Image](https://example.com)
+
 <a name="namedlink"></a>
 
 <a id = idlink></a>
@@ -146,6 +168,8 @@ Text
 [goodref]: #namedlink
 
 ## Invalid Fragments
+
+[Invalid](#valid-heading-is-an-image) {MD051}
 
 [Invalid](#valid-heading-2004-) {MD051}
 
