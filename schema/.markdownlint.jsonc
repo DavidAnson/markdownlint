@@ -279,7 +279,10 @@
   "MD051": true,
 
   // MD052/reference-links-images - Reference links and images should use a label that is defined
-  "MD052": true,
+  "MD052": {
+    // Include shortcut syntax
+    "shortcut_syntax": false
+  },
 
   // MD053/link-image-reference-definitions - Link and image reference definitions should be needed
   "MD053": {

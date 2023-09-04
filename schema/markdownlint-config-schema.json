@@ -937,8 +937,19 @@
     },
     "MD052": {
       "description": "MD052/reference-links-images - Reference links and images should use a label that is defined",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "shortcut_syntax": {
+          "description": "Include shortcut syntax",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     },
     "reference-links-images": {
       "$ref": "#/properties/MD052"

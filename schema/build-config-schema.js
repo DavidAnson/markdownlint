@@ -497,6 +497,15 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD052":
+      scheme.properties = {
+        "shortcut_syntax": {
+          "description": "Include shortcut syntax",
+          "type": "boolean",
+          "default": false
+        }
+      };
+      break;
     case "MD053":
       scheme.properties = {
         "ignored_definitions": {

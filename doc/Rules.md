@@ -2216,6 +2216,10 @@ Tags: `images`, `links`
 
 Aliases: `reference-links-images`
 
+Parameters:
+
+- `shortcut_syntax`: Include shortcut syntax (`boolean`, default `false`)
+
 Links and images in Markdown can provide the link destination or image source
 at the time of use or can define it elsewhere and use a label for reference.
 The reference format is convenient for keeping paragraph text clutter-free
@@ -2236,13 +2240,16 @@ Shortcut: ![image]
 [image]: https://example.com/image
 ```
 
-A link or image renders correctly when a corresponding label is defined, but
-the text displays with brackets if the label is not present. This rule warns
-of undefined labels for "full" and "collapsed" reference syntax.
+A link or image renders correctly when the corresponding label is defined, but
+displays as text with brackets when the label is not present. By default, this
+rule warns of undefined labels for "full" and "collapsed" reference syntax but
+not for "shortcut" syntax because it is ambiguous.
 
-> "Shortcut" syntax is ambiguous and a missing label will not generate an
-  error. For example, `[shortcut]` could be a shortcut link or the text
-  "shortcut" in brackets.
+The text `[example]` could be a shortcut link or the text "example" in brackets,
+so "shortcut" syntax is ignored by default. To include "shortcut" syntax, set
+the `include_shortcut` parameter to `true`. Note that doing so produces warnings
+for *all* text in the document that *could* be a shortcut. If bracketed text is
+intentional, brackets can be escaped with the `\` character: `\[example\]`.
 
 <a name="md053"></a>
 
