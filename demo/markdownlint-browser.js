@@ -348,11 +348,17 @@ module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
 };
 
 /**
+ * @callback TokenCallback
+ * @param {MarkdownItToken} token Current token.
+ * @returns {void}
+ */
+
+/**
  * Calls the provided function for each matching token.
  *
  * @param {Object} params RuleParams instance.
  * @param {string} type Token type identifier.
- * @param {Function} handler Callback function.
+ * @param {TokenCallback} handler Callback function.
  * @returns {void}
  */
 function filterTokens(params, type, handler) {
@@ -373,8 +379,17 @@ function filterTokens(params, type, handler) {
 }
 module.exports.filterTokens = filterTokens;
 
-// Get line metadata array
-module.exports.getLineMetadata = function getLineMetadata(params) {
+/**
+ * @typedef {Array} LineMetadata
+ */
+
+/**
+ * Gets a line metadata array.
+ *
+ * @param {Object} params RuleParams instance.
+ * @returns {LineMetadata} Line metadata.
+ */
+function getLineMetadata(params) {
   var lineMetadata = params.lines.map(function (line, index) {
     return [line, index, false, 0, false, false, false];
   });
@@ -406,14 +421,27 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
     lineMetadata[token.map[0]][6] = true;
   });
   return lineMetadata;
-};
+}
+module.exports.getLineMetadata = getLineMetadata;
+
+/**
+ * @callback EachLineCallback
+ * @param {string} line Line content.
+ * @param {number} lineIndex Line index (0-based).
+ * @param {boolean} inCode Iff in a code block.
+ * @param {number} onFence + if open, - if closed, 0 otherwise.
+ * @param {boolean} inTable Iff in a table.
+ * @param {boolean} inItem Iff in a list item.
+ * @param {boolean} inBreak Iff in semantic break.
+ * @returns {void}
+ */
 
 /**
  * Calls the provided function for each line.
  *
- * @param {Object} lineMetadata Line metadata object.
- * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
- * inTable, inItem, inBreak).
+ * @param {LineMetadata} lineMetadata Line metadata object.
+ * @param {EachLineCallback} handler Function taking (line, lineIndex, inCode,
+ * onFence, inTable, inItem, inBreak).
  * @returns {void}
  */
 function forEachLine(lineMetadata, handler) {
@@ -422,6 +450,7 @@ function forEachLine(lineMetadata, handler) {
   try {
     for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
       var metadata = _step2.value;
+      // @ts-ignore
       handler.apply(void 0, _toConsumableArray(metadata));
     }
   } catch (err) {
@@ -515,11 +544,20 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
 };
 
 /**
+ * @callback InlineCodeSpanCallback
+ * @param {string} code Code content.
+ * @param {number} lineIndex Line index (0-based).
+ * @param {number} columnIndex Column index (0-based).
+ * @param {number} ticks Count of backticks.
+ * @returns {void}
+ */
+
+/**
  * Calls the provided function for each inline code span's content.
  *
  * @param {string} input Markdown content.
- * @param {Function} handler Callback function taking (code, lineIndex,
- * columnIndex, ticks).
+ * @param {InlineCodeSpanCallback} handler Callback function taking (code,
+ * lineIndex, columnIndex, ticks).
  * @returns {void}
  */
 function forEachInlineCodeSpan(input, handler) {
@@ -989,6 +1027,26 @@ function expandTildePath(file, os) {
 }
 module.exports.expandTildePath = expandTildePath;
 
+// Copied from markdownlint.js to avoid TypeScript compiler import() issue.
+/**
+ * @typedef {Object} MarkdownItToken
+ * @property {string[][]} attrs HTML attributes.
+ * @property {boolean} block Block-level token.
+ * @property {MarkdownItToken[]} children Child nodes.
+ * @property {string} content Tag contents.
+ * @property {boolean} hidden Ignore element.
+ * @property {string} info Fence info.
+ * @property {number} level Nesting level.
+ * @property {number[]} map Beginning/ending line numbers.
+ * @property {string} markup Markup text.
+ * @property {Object} meta Arbitrary data.
+ * @property {number} nesting Level change.
+ * @property {string} tag HTML tag name.
+ * @property {string} type Token type.
+ * @property {number} lineNumber Line number (1-based).
+ * @property {string} line Line content.
+ */
+
 /***/ }),
 
 /***/ "../helpers/shared.js":
@@ -1311,11 +1369,23 @@ function micromarkParse(markdown) {
 }
 
 /**
+ * @callback AllowedPredicate
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff allowed.
+ */
+
+/**
+ * @callback TransformPredicate
+ * @param {Token} token Micromark token.
+ * @returns {Token[]} Child tokens.
+ */
+
+/**
  * Filter a list of Micromark tokens by predicate.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {Function} allowed Allowed token predicate.
- * @param {Function} [transformChildren] Transform children predicate.
+ * @param {AllowedPredicate} allowed Allowed token predicate.
+ * @param {TransformPredicate} [transformChildren] Transform predicate.
  * @returns {Token[]} Filtered tokens.
  */
 function filterByPredicate(tokens, allowed, transformChildren) {
@@ -2227,7 +2297,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {boolean} handleRuleFailures Whether to handle exceptions in rules.
  * @param {boolean} noInlineConfig Whether to allow inline configuration.
  * @param {number} resultVersion Version of the LintResults object to return.
- * @param {Function} callback Callback (err, result) function.
+ * @param {LintContentCallback} callback Callback (err, result) function.
  * @returns {void}
  */
 function lintContent(ruleList, aliasToRuleNames, name, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback) {
@@ -2494,7 +2564,7 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
  * @param {number} resultVersion Version of the LintResults object to return.
  * @param {Object} fs File system implementation.
  * @param {boolean} synchronous Whether to execute synchronously.
- * @param {Function} callback Callback (err, result) function.
+ * @param {LintContentCallback} callback Callback (err, result) function.
  * @returns {void}
  */
 function lintFile(ruleList, aliasToRuleNames, file, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
@@ -2518,7 +2588,7 @@ function lintFile(ruleList, aliasToRuleNames, file, md, config, configParsers, f
  *
  * @param {Options | null} options Options object.
  * @param {boolean} synchronous Whether to execute synchronously.
- * @param {Function} callback Callback (err, result) function.
+ * @param {LintCallback} callback Callback (err, result) function.
  * @returns {void}
  */
 function lintInput(options, synchronous, callback) {
@@ -2663,7 +2733,7 @@ function markdownlintPromise(options) {
  * @returns {LintResults} Results object.
  */
 function markdownlintSync(options) {
-  var results = {};
+  var results = null;
   lintInput(options, true, function callback(error, res) {
     if (error) {
       throw error;
@@ -3043,11 +3113,20 @@ module.exports = markdownlint;
  */
 
 /**
+ * Called with the result of linting a string or document.
+ *
+ * @callback LintContentCallback
+ * @param {Error | null} error Error iff failed.
+ * @param {LintError[]} [result] Result iff successful.
+ * @returns {void}
+ */
+
+/**
  * Called with the result of the lint function.
  *
  * @callback LintCallback
- * @param {Error | null} err Error object or null.
- * @param {LintResults} [results] Lint results.
+ * @param {Error | null} error Error object iff failed.
+ * @param {LintResults} [results] Lint results iff succeeded.
  * @returns {void}
  */
 

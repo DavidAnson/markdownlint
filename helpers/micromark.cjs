@@ -204,11 +204,23 @@ function micromarkParse(
 }
 
 /**
+ * @callback AllowedPredicate
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff allowed.
+ */
+
+/**
+ * @callback TransformPredicate
+ * @param {Token} token Micromark token.
+ * @returns {Token[]} Child tokens.
+ */
+
+/**
  * Filter a list of Micromark tokens by predicate.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {Function} allowed Allowed token predicate.
- * @param {Function} [transformChildren] Transform children predicate.
+ * @param {AllowedPredicate} allowed Allowed token predicate.
+ * @param {TransformPredicate} [transformChildren] Transform predicate.
  * @returns {Token[]} Filtered tokens.
  */
 function filterByPredicate(tokens, allowed, transformChildren) {

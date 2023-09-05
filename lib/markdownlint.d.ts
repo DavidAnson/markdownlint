@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -64,7 +64,7 @@ type Options = {
 /**
  * Called with the result of the lint function.
  */
-type LintCallback = (err: Error | null, results?: LintResults) => void;
+type LintCallback = (error: Error | null, results?: LintResults) => void;
 /**
  * Lint specified Markdown files synchronously.
  *
@@ -353,6 +353,10 @@ type FixInfo = {
      */
     insertText?: string;
 };
+/**
+ * Called with the result of linting a string or document.
+ */
+type LintContentCallback = (error: Error | null, result?: LintError[]) => void;
 /**
  * Configuration object for linting rules. For a detailed schema, see
  * {@link  ../schema/markdownlint-config-schema.json}.

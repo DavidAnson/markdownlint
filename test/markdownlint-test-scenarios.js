@@ -15,7 +15,7 @@ const numericalSortCompareFn = (a, b) => a - b;
  * Create a test function for the specified test file.
  *
  * @param {string} file Test file relative path.
- * @returns {Function} Test function.
+ * @returns {import("ava").Implementation<unknown[]>} Test function.
  */
 function createTestForFile(file) {
   return (t) => (
@@ -92,7 +92,6 @@ function createTestForFile(file) {
         });
       })
       .catch()
-      .then(t.done)
   );
 }
 

@@ -323,11 +323,17 @@ module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
 };
 
 /**
+ * @callback TokenCallback
+ * @param {MarkdownItToken} token Current token.
+ * @returns {void}
+ */
+
+/**
  * Calls the provided function for each matching token.
  *
  * @param {Object} params RuleParams instance.
  * @param {string} type Token type identifier.
- * @param {Function} handler Callback function.
+ * @param {TokenCallback} handler Callback function.
  * @returns {void}
  */
 function filterTokens(params, type, handler) {
@@ -339,8 +345,17 @@ function filterTokens(params, type, handler) {
 }
 module.exports.filterTokens = filterTokens;
 
-// Get line metadata array
-module.exports.getLineMetadata = function getLineMetadata(params) {
+/**
+ * @typedef {Array} LineMetadata
+ */
+
+/**
+ * Gets a line metadata array.
+ *
+ * @param {Object} params RuleParams instance.
+ * @returns {LineMetadata} Line metadata.
+ */
+function getLineMetadata(params) {
   const lineMetadata = params.lines.map(
     (line, index) => [ line, index, false, 0, false, false, false ]
   );
@@ -372,18 +387,32 @@ module.exports.getLineMetadata = function getLineMetadata(params) {
     lineMetadata[token.map[0]][6] = true;
   });
   return lineMetadata;
-};
+}
+module.exports.getLineMetadata = getLineMetadata;
+
+/**
+ * @callback EachLineCallback
+ * @param {string} line Line content.
+ * @param {number} lineIndex Line index (0-based).
+ * @param {boolean} inCode Iff in a code block.
+ * @param {number} onFence + if open, - if closed, 0 otherwise.
+ * @param {boolean} inTable Iff in a table.
+ * @param {boolean} inItem Iff in a list item.
+ * @param {boolean} inBreak Iff in semantic break.
+ * @returns {void}
+ */
 
 /**
  * Calls the provided function for each line.
  *
- * @param {Object} lineMetadata Line metadata object.
- * @param {Function} handler Function taking (line, lineIndex, inCode, onFence,
- * inTable, inItem, inBreak).
+ * @param {LineMetadata} lineMetadata Line metadata object.
+ * @param {EachLineCallback} handler Function taking (line, lineIndex, inCode,
+ * onFence, inTable, inItem, inBreak).
  * @returns {void}
  */
 function forEachLine(lineMetadata, handler) {
   for (const metadata of lineMetadata) {
+    // @ts-ignore
     handler(...metadata);
   }
 }
@@ -455,11 +484,20 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
 };
 
 /**
+ * @callback InlineCodeSpanCallback
+ * @param {string} code Code content.
+ * @param {number} lineIndex Line index (0-based).
+ * @param {number} columnIndex Column index (0-based).
+ * @param {number} ticks Count of backticks.
+ * @returns {void}
+ */
+
+/**
  * Calls the provided function for each inline code span's content.
  *
  * @param {string} input Markdown content.
- * @param {Function} handler Callback function taking (code, lineIndex,
- * columnIndex, ticks).
+ * @param {InlineCodeSpanCallback} handler Callback function taking (code,
+ * lineIndex, columnIndex, ticks).
  * @returns {void}
  */
 function forEachInlineCodeSpan(input, handler) {
@@ -945,3 +983,23 @@ function expandTildePath(file, os) {
   return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
 }
 module.exports.expandTildePath = expandTildePath;
+
+// Copied from markdownlint.js to avoid TypeScript compiler import() issue.
+/**
+ * @typedef {Object} MarkdownItToken
+ * @property {string[][]} attrs HTML attributes.
+ * @property {boolean} block Block-level token.
+ * @property {MarkdownItToken[]} children Child nodes.
+ * @property {string} content Tag contents.
+ * @property {boolean} hidden Ignore element.
+ * @property {string} info Fence info.
+ * @property {number} level Nesting level.
+ * @property {number[]} map Beginning/ending line numbers.
+ * @property {string} markup Markup text.
+ * @property {Object} meta Arbitrary data.
+ * @property {number} nesting Level change.
+ * @property {string} tag HTML tag name.
+ * @property {string} type Token type.
+ * @property {number} lineNumber Line number (1-based).
+ * @property {string} line Line content.
+ */
