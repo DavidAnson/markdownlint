@@ -107,7 +107,7 @@ function micromarkParseWithOffset(
 
   // Create Token objects
   const document = [];
-  const flatTokens = [];
+  let flatTokens = [];
   let current = {
     "children": document
   };
@@ -161,7 +161,9 @@ function micromarkParseWithOffset(
           current.startLine - 1
         );
         current.children = tokens;
-        flatTokens.push(...tokens[flatTokensSymbol]);
+        // Avoid stack overflow of Array.push(...spread)
+        // eslint-disable-next-line unicorn/prefer-spread
+        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
       }
     } else if (kind === "exit") {
       if (type === "htmlFlow") {
