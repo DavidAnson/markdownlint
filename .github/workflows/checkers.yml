@@ -12,7 +12,7 @@ jobs:
   linkcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: JustinBeckwith/linkinator-action@v1.10.4
       with:
         linksToSkip: '^https://github.com/.*/search\?q= ^https://opensource.org/'
@@ -22,7 +22,7 @@ jobs:
   spellcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - uses: tbroadley/spellchecker-cli-action@v1
       with:
         dictionaries: '.github/dictionary.txt'
