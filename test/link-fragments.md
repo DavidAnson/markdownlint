@@ -44,7 +44,15 @@
 
 [Valid](#valid-heading-about-lh%C3%B4pitals-rule)
 
+[Valid](#valid-heading-about-lhôpitals-rule)
+
 [Valid](#en-t%C3%AAte-valide-dans-fran%C3%A7ais-pour-v%C3%A9rification)
+
+[Valid](#en-tête-valide-dans-français-pour-vérification)
+
+[Valid](#%E6%A0%87%E9%A2%98)
+
+[Valid](#标题)
 
 [Valid](#valid-heading-is-a-link)
 
@@ -136,6 +144,8 @@ Text
 ### Valid Heading About L'Hôpital's Rule
 
 ### En-tête Valide Dans Français Pour Vérification
+
+### 标题
 
 ### [Valid Heading Is a Link](https://example.com)
 

@@ -6328,7 +6328,10 @@ module.exports = {
           try {
             var _loop = function _loop() {
               var definition = _step4.value;
-              if (definition.text.length > 1 && definition.text.startsWith("#") && !fragments.has(definition.text)) {
+              var endColumn = definition.endColumn,
+                startColumn = definition.startColumn,
+                text = definition.text;
+              if (text.length > 1 && text.startsWith("#") && !fragments.has(text) && !fragments.has("#".concat(encodeURIComponent(text.slice(1))))) {
                 // eslint-disable-next-line no-undef-init
                 var context = undefined;
                 // eslint-disable-next-line no-undef-init
@@ -6339,18 +6342,18 @@ module.exports = {
                   context = link.text;
                   range = [link.startColumn, link.endColumn - link.startColumn];
                   fixInfo = {
-                    "editColumn": definition.startColumn,
-                    "deleteCount": definition.endColumn - definition.startColumn
+                    "editColumn": startColumn,
+                    "deleteCount": endColumn - startColumn
                   };
                 }
-                var definitionTextLower = definition.text.toLowerCase();
+                var textLower = text.toLowerCase();
                 var mixedCaseKey = _toConsumableArray(fragments.keys()).find(function (key) {
-                  return definitionTextLower === key.toLowerCase();
+                  return textLower === key.toLowerCase();
                 });
                 if (mixedCaseKey) {
                   // @ts-ignore
                   (fixInfo || {}).insertText = mixedCaseKey;
-                  addErrorDetailIf(onError, link.startLine, mixedCaseKey, definition.text, undefined, context, range, fixInfo);
+                  addErrorDetailIf(onError, link.startLine, mixedCaseKey, text, undefined, context, range, fixInfo);
                 } else {
                   addError(onError, link.startLine, undefined, context, range);
                 }
