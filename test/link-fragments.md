@@ -64,6 +64,10 @@
 
 [Valid](#valid-heading-has-)
 
+[Valid](#valid_heading-escaped_underscores)
+
+[Valid](#valid\_heading\-escaped\_underscores)
+
 [Valid](#namedlink)
 
 [Valid](#idlink)
@@ -77,6 +81,8 @@
 [Valid](#id-after-name)
 
 [Valid][goodref]
+
+[Valid][escapedref]
 
 ### Valid H3 Heading
 
@@ -159,6 +165,8 @@ Text
 
 ### Valid Heading Has ![an Image](https://example.com)
 
+### Valid_Heading Escaped_Underscores
+
 <a name="namedlink"></a>
 
 <a id = idlink></a>
@@ -176,6 +184,8 @@ Text
 <a data-id="not-an-id-should-be-ignored">
 
 [goodref]: #namedlink
+
+[escapedref]: #valid\_heading\-escaped\_underscores
 
 ## Invalid Fragments
 
