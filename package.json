@@ -18,7 +18,7 @@
   "homepage": "https://github.com/DavidAnson/markdownlint",
   "repository": {
     "type": "git",
-    "url": "https://github.com/DavidAnson/markdownlint.git"
+    "url": "git+https://github.com/DavidAnson/markdownlint.git"
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "scripts": {
