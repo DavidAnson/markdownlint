@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.31.0
+
+- Improve MD032/MD037/MD043/MD044/MD051/MD052
+- Improve performance
+- Update dependencies
+
 ## 0.30.0
 
 - Use `micromark` in MD022/MD026/MD032/MD037/MD045/MD051
