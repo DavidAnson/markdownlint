@@ -354,13 +354,11 @@ line with the start of the content of the parent list when a single space is
 used after the list marker. Indenting by 4 spaces is consistent with code blocks
 and simpler for editors to implement. Additionally, this can be a compatibility
 issue for other Markdown parsers, which require 4-space indents. More
-information: [Markdown Style Guide][markdown-style-guide] and [Marked app\
-support][marked-app-support].
+information: [Markdown Style Guide][markdown-style-guide].
 
 Note: See [Prettier.md](Prettier.md) for compatibility information.
 
 [markdown-style-guide]: https://cirosantilli.com/markdown-style-guide#indentation-of-content-inside-lists
-[marked-app-support]: http://support.markedapp.com/discussions/problems/21-sub-lists-not-indenting
 
 <a name="md009"></a>
 
