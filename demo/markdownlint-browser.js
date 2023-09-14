@@ -5057,6 +5057,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByPredicate = _require2.filterByPredicate,
+  filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo,
   parse = _require2.parse;
 module.exports = {
@@ -5065,39 +5066,40 @@ module.exports = {
   "tags": ["links", "url"],
   "function": function MD034(params, onError) {
     var literalAutolinks = function literalAutolinks(tokens) {
-      return filterByPredicate(tokens, function (token) {
-        return token.type === "literalAutolink";
-      }, function (token) {
-        var children = token.children;
-        var result = [];
-        for (var i = 0; i < children.length; i++) {
-          var openToken = children[i];
-          var openTagInfo = getHtmlTagInfo(openToken);
-          if (openTagInfo && !openTagInfo.close) {
-            var count = 1;
-            for (var j = i + 1; j < children.length; j++) {
-              var closeToken = children[j];
-              var closeTagInfo = getHtmlTagInfo(closeToken);
-              if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
-                if (closeTagInfo.close) {
-                  count--;
-                  if (count === 0) {
-                    i = j;
-                    break;
-                  }
-                } else {
-                  count++;
+      var flattened = filterByPredicate(tokens, function () {
+        return true;
+      });
+      var result = [];
+      for (var i = 0; i < flattened.length; i++) {
+        var current = flattened[i];
+        var openTagInfo = getHtmlTagInfo(current);
+        if (openTagInfo && !openTagInfo.close) {
+          var count = 1;
+          for (var j = i + 1; j < flattened.length; j++) {
+            var candidate = flattened[j];
+            var closeTagInfo = getHtmlTagInfo(candidate);
+            if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
+              if (closeTagInfo.close) {
+                count--;
+                if (count === 0) {
+                  i = j;
+                  break;
                 }
+              } else {
+                count++;
               }
             }
-          } else {
-            result.push(openToken);
           }
+        } else {
+          result.push(current);
         }
-        return result;
+      }
+      return result.filter(function (token) {
+        return token.type === "literalAutolink";
       });
     };
-    if (literalAutolinks(params.parsers.micromark.tokens).length > 0) {
+    var autoLinks = filterByTypes(params.parsers.micromark.tokens, ["literalAutolink"]);
+    if (autoLinks.length > 0) {
       // Re-parse with correct link/image reference definition handling
       var document = params.lines.join("\n");
       var tokens = parse(document, undefined, false);

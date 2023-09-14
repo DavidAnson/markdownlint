@@ -59,6 +59,26 @@ https://example.com
 <pre>https://example.com</pre>
 </p>
 
+<div>
+https://example.com
+</div>
+
+<div>
+https://example.com
+
+</div>
+
+<div>
+
+https://example.com
+</div>
+
+<div>
+
+https://example.com
+
+</div>
+
 URLs in link and image text are not bare:
 
 Text [link to https://example.com site](https://example.com) text.
