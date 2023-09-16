@@ -5,8 +5,8 @@
 [![npm version][npm-image]][npm-url]
 [![License][license-image]][license-url]
 
-## Install
-
+## Install 
+u
 ```bash
 npm install markdownlint --save-dev
 ```
