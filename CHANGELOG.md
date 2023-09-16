@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.31.1
+
+- Improve MD032/MD034
+- Update dependencies
+
 ## 0.31.0
 
 - Improve MD032/MD037/MD043/MD044/MD051/MD052
