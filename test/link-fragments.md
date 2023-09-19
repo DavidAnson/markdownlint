@@ -68,6 +68,8 @@
 
 [Valid](#valid\_heading\-escaped\_underscores)
 
+[Valid](#valid-heading-with_embedded_escaping)
+
 [Valid](#namedlink)
 
 [Valid](#idlink)
@@ -166,6 +168,8 @@ Text
 ### Valid Heading Has ![an Image](https://example.com)
 
 ### Valid_Heading Escaped_Underscores
+
+### Valid Heading\-With\_Embedded\_Escaping
 
 <a name="namedlink"></a>
 

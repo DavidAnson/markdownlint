@@ -6229,7 +6229,7 @@ var anchorRe = /\{(#[0-9a-z]+(?:[\x2D_][0-9a-z]+)*)\}/g;
 
 // Sets for filtering heading tokens during conversion
 var childrenExclude = new Set(["image", "reference", "resource"]);
-var tokensInclude = new Set(["codeTextData", "data"]);
+var tokensInclude = new Set(["characterEscapeValue", "codeTextData", "data"]);
 
 /**
  * @typedef {import("../helpers/micromark.cjs").Token} Token
