@@ -74,7 +74,7 @@
     "babel-loader": "9.1.3",
     "c8": "8.0.1",
     "character-entities": "2.0.2",
-    "eslint": "8.49.0",
+    "eslint": "8.50.0",
     "eslint-plugin-es": "4.1.0",
     "eslint-plugin-jsdoc": "46.8.2",
     "eslint-plugin-n": "16.1.0",
