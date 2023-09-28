@@ -8,7 +8,8 @@ const rules = require("../lib/rules");
 
 // Schema scaffolding
 const schema = {
-  "title": "Markdownlint configuration schema",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "markdownlint configuration schema",
   "type": "object",
   "properties": {
     "default": {

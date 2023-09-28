@@ -10,7 +10,6 @@ const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const test = require("ava").default;
-const tv4 = require("tv4");
 const { "exports": packageExports, homepage, version } =
   require("../package.json");
 const markdownlint = require("../lib/markdownlint");
@@ -19,6 +18,9 @@ const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
 
+const jsonSchemaVersion = "http://json-schema.org/draft-07/schema#";
+// eslint-disable-next-line max-len
+const markdownlintConfigSchemaUri = "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json";
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const configSchemaStrict = {
   ...configSchema,
@@ -911,8 +913,13 @@ test("readme", async(t) => {
   t.true(!tagLeft, "Undocumented tag " + tagLeft + ".");
 });
 
-test("validateJsonUsingConfigSchemaStrict", (t) => {
+test("validateJsonUsingConfigSchemaStrict", async(t) => {
   t.plan(161);
+  const { addSchema, validate } =
+    // eslint-disable-next-line n/file-extension-in-import
+    await import("@hyperjump/json-schema/draft-07");
+  addSchema(configSchemaStrict, markdownlintConfigSchemaUri);
+  const validateConfigSchema = await validate(markdownlintConfigSchemaUri);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([
@@ -922,32 +929,38 @@ test("validateJsonUsingConfigSchemaStrict", (t) => {
     "test/invalid-ul-style-style.md",
     "test/wrong-types-in-config-file.md"
   ]);
-  return import("globby")
-    .then((module) => module.globby([
-      "*.md",
-      "doc/*.md",
-      "helpers/*.md",
-      "micromark/*.md",
-      "schema/*.md",
-      "test/*.md"
-    ]))
-    .then((files) => {
-      const testFiles = files.filter((file) => !ignoreFiles.has(file));
-      for (const file of testFiles) {
-        const data = fs.readFileSync(file, "utf8");
-        if (configRe.test(data)) {
-          const config = data.replace(configRe, "$1");
-          t.true(
-            // @ts-ignore
-            tv4.validate(JSON.parse(config), configSchemaStrict),
-            file + "\n" + JSON.stringify(tv4.error, null, 2));
-        }
-      }
-    });
+  const { globby } = await import("globby");
+  const files = await globby([
+    "*.md",
+    "doc/*.md",
+    "helpers/*.md",
+    "micromark/*.md",
+    "schema/*.md",
+    "test/*.md"
+  ]);
+  const testFiles = files.filter((file) => !ignoreFiles.has(file));
+  for (const file of testFiles) {
+    const data = fs.readFileSync(file, "utf8");
+    if (configRe.test(data)) {
+      const config = data.replace(configRe, "$1");
+      const result = validateConfigSchema(JSON.parse(config), "BASIC");
+      t.true(
+        result.valid,
+        `${file}\n${JSON.stringify(result, null, 2)}`
+      );
+    }
+  }
 });
 
-test("validateConfigSchemaAllowsUnknownProperties", (t) => {
+test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
   t.plan(4);
+  const { addSchema, validate } =
+    // eslint-disable-next-line n/file-extension-in-import
+    await import("@hyperjump/json-schema/draft-07");
+  const configSchemaUri = "https://example.com/configSchema";
+  addSchema(configSchema, configSchemaUri);
+  const configSchemaStrictUri = "https://example.com/configSchemaStrict";
+  addSchema(configSchemaStrict, configSchemaStrictUri);
   const testCases = [
     {
       "property": true
@@ -959,36 +972,56 @@ test("validateConfigSchemaAllowsUnknownProperties", (t) => {
     }
   ];
   for (const testCase of testCases) {
+    const defaultResult =
+      // eslint-disable-next-line no-await-in-loop
+      await validate(configSchemaUri, testCase, "BASIC");
     t.true(
-      // @ts-ignore
-      tv4.validate(testCase, configSchema),
-      "Unknown property blocked by default: " + JSON.stringify(testCase));
+      defaultResult.valid,
+      "Unknown property blocked by default: " + JSON.stringify(testCase)
+    );
+    const strictResult =
+      // eslint-disable-next-line no-await-in-loop
+      await validate(configSchemaStrictUri, testCase, "BASIC");
     t.false(
-      // @ts-ignore
-      tv4.validate(testCase, configSchemaStrict),
-      "Unknown property allowed when strict: " + JSON.stringify(testCase));
+      strictResult.valid,
+      "Unknown property allowed when strict: " + JSON.stringify(testCase)
+    );
   }
 });
 
-test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
+test("validateConfigSchemaAppliesToUnknownProperties", async(t) => {
   t.plan(4);
+  const { addSchema, validate } =
+    // eslint-disable-next-line n/file-extension-in-import
+    await import("@hyperjump/json-schema/draft-07");
+  addSchema(configSchema, markdownlintConfigSchemaUri);
+  const validateConfigSchema = await validate(markdownlintConfigSchemaUri);
   for (const allowed of [ true, {} ]) {
     t.true(
-      // @ts-ignore
-      tv4.validate({ "property": allowed }, configSchema),
-      `Unknown property value ${allowed} blocked`);
+      validateConfigSchema({ "property": allowed }, "BASIC").valid,
+      `Unknown property value ${allowed} blocked`
+    );
   }
   for (const blocked of [ 2, "string" ]) {
     t.false(
-      // @ts-ignore
-      tv4.validate({ "property": blocked }, configSchema),
-      `Unknown property value ${blocked} allowed`);
+      validateConfigSchema({ "property": blocked }, "BASIC").valid,
+      `Unknown property value ${blocked} allowed`
+    );
   }
 });
 
 test("validateConfigExampleJson", async(t) => {
-  t.plan(2);
+  t.plan(3);
   const { "default": stripJsonComments } = await import("strip-json-comments");
+
+  // Validate schema
+  const { addSchema, validate } =
+    // eslint-disable-next-line n/file-extension-in-import
+    await import("@hyperjump/json-schema/draft-07");
+  const schemaResult =
+    await validate(jsonSchemaVersion, configSchema, "BASIC");
+  t.true(schemaResult.valid);
+
   // Validate JSONC
   const fileJson = ".markdownlint.jsonc";
   const dataJson = fs.readFileSync(
@@ -996,10 +1029,14 @@ test("validateConfigExampleJson", async(t) => {
     "utf8"
   );
   const jsonObject = JSON.parse(stripJsonComments(dataJson));
+  addSchema(configSchemaStrict, markdownlintConfigSchemaUri);
+  const result =
+    await validate(markdownlintConfigSchemaUri, jsonObject, "BASIC");
   t.true(
-    // @ts-ignore
-    tv4.validate(jsonObject, configSchemaStrict),
-    fileJson + "\n" + JSON.stringify(tv4.error, null, 2));
+    result.valid,
+    `${fileJson}\n${JSON.stringify(result, null, 2)}`
+  );
+
   // Validate YAML
   const fileYaml = ".markdownlint.yaml";
   const dataYaml = fs.readFileSync(
