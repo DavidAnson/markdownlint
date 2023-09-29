@@ -18,10 +18,10 @@ const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
 
-const jsonSchemaVersion = "http://json-schema.org/draft-07/schema#";
-// eslint-disable-next-line max-len
-const markdownlintConfigSchemaUri = "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json";
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
+const jsonSchemaVersion = "http://json-schema.org/draft-07/schema#";
+const configSchemaUri = "https://example.com/configSchema";
+const configSchemaStrictUri = "https://example.com/configSchemaStrict";
 const configSchemaStrict = {
   ...configSchema,
   "additionalProperties": false
@@ -918,8 +918,8 @@ test("validateJsonUsingConfigSchemaStrict", async(t) => {
   const { addSchema, validate } =
     // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchemaStrict, markdownlintConfigSchemaUri);
-  const validateConfigSchema = await validate(markdownlintConfigSchemaUri);
+  addSchema(configSchemaStrict, configSchemaStrictUri);
+  const validateConfigSchema = await validate(configSchemaStrictUri);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([
@@ -957,9 +957,7 @@ test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
   const { addSchema, validate } =
     // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
-  const configSchemaUri = "https://example.com/configSchema";
   addSchema(configSchema, configSchemaUri);
-  const configSchemaStrictUri = "https://example.com/configSchemaStrict";
   addSchema(configSchemaStrict, configSchemaStrictUri);
   const testCases = [
     {
@@ -994,8 +992,8 @@ test("validateConfigSchemaAppliesToUnknownProperties", async(t) => {
   const { addSchema, validate } =
     // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchema, markdownlintConfigSchemaUri);
-  const validateConfigSchema = await validate(markdownlintConfigSchemaUri);
+  addSchema(configSchema, configSchemaUri);
+  const validateConfigSchema = await validate(configSchemaUri);
   for (const allowed of [ true, {} ]) {
     t.true(
       validateConfigSchema({ "property": allowed }, "BASIC").valid,
@@ -1029,9 +1027,8 @@ test("validateConfigExampleJson", async(t) => {
     "utf8"
   );
   const jsonObject = JSON.parse(stripJsonComments(dataJson));
-  addSchema(configSchemaStrict, markdownlintConfigSchemaUri);
-  const result =
-    await validate(markdownlintConfigSchemaUri, jsonObject, "BASIC");
+  addSchema(configSchemaStrict, configSchemaStrictUri);
+  const result = await validate(configSchemaStrictUri, jsonObject, "BASIC");
   t.true(
     result.valid,
     `${fileJson}\n${JSON.stringify(result, null, 2)}`
