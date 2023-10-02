@@ -21,6 +21,7 @@
     "url": "git+https://github.com/DavidAnson/markdownlint.git"
   },
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
+  "funding": "https://github.com/sponsors/DavidAnson",
   "scripts": {
     "build-config": "npm run build-config-schema && npm run build-config-example",
     "build-config-example": "node schema/build-config-example.js",
