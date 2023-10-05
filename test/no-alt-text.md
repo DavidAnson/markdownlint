@@ -40,5 +40,14 @@ Image tag with alt attribute set to an empty string
 Image tag with no alt attribute
 <img src="image.png"> {MD045}{MD033}
 
+Multi-line image tag with no alt text
+<img
+  src="image.png"> {MD045:44}{MD033:44}
+
+Multi-line image tag with alt attribute not set
+<img
+  alt
+  src="image.png"> {MD045:48}{MD033:48}
+
 [notitle]: image.jpg
 [title]: image.jpg "Title"
