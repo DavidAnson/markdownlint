@@ -49,5 +49,11 @@ Multi-line image tag with alt attribute not set
   alt
   src="image.png"> {MD045:48} {MD033:48}
 
+Uppercase image tag with alt attribute set
+<IMG SRC="cat.png" ALT="Descriptive text"> {MD033}
+
+Uppercase image tag with no alt set
+<IMG SRC="cat.png">{MD045} {MD033}
+
 [notitle]: image.jpg
 [title]: image.jpg "Title"
