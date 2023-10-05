@@ -5988,7 +5988,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  getHtmlTagInfo = _require2.getHtmlTagInfo;
+var nextLinesRe = /[\r\n][\s\S]*$/;
 module.exports = {
   "names": ["MD045", "no-alt-text"],
   "description": "Images should have alternate text (alt text)",
@@ -6012,6 +6014,26 @@ module.exports = {
       _iterator.e(err);
     } finally {
       _iterator.f();
+    }
+    var html = filterByTypes(params.parsers.micromark.tokens, ["htmlText"]);
+    var _iterator2 = _createForOfIteratorHelper(html),
+      _step2;
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var token = _step2.value;
+        var htmlTagInfo = getHtmlTagInfo(token);
+        if (htmlTagInfo && htmlTagInfo.name.toLowerCase() === "img") {
+          var hasAltAttribute = new RegExp(/alt=/i);
+          if (!hasAltAttribute.test(token.text)) {
+            var _range = [token.startColumn, token.text.replace(nextLinesRe, "").length];
+            addError(onError, token.startLine, "Element: " + htmlTagInfo.name, undefined, _range);
+          }
+        }
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
     }
   }
 };
