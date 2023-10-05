@@ -32,22 +32,22 @@ Image tag with alt attribute set to text
 <img src="image.png" alt="Descriptive text"> {MD033}
 
 Image tag with alt attribute not set
-<img src="image.png" alt> {MD045}{MD033}
+<img src="image.png" alt> {MD045} {MD033}
 
 Image tag with alt attribute set to an empty string
 <img src="image.png" alt=""> {MD033}
 
 Image tag with no alt attribute
-<img src="image.png"> {MD045}{MD033}
+<img src="image.png"> {MD045} {MD033}
 
 Multi-line image tag with no alt text
 <img
-  src="image.png"> {MD045:44}{MD033:44}
+  src="image.png"> {MD045:44} {MD033:44}
 
 Multi-line image tag with alt attribute not set
 <img
   alt
-  src="image.png"> {MD045:48}{MD033:48}
+  src="image.png"> {MD045:48} {MD033:48}
 
 [notitle]: image.jpg
 [title]: image.jpg "Title"
