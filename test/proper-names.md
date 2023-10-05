@@ -89,7 +89,7 @@ Text referencing MultipleCase name.
 Text referencing MULTIPLECASE name. {MD044}
 Text referencing mULTIPLEcASE name.
 
-<img src="img/javascript/image.png" error="{MD044}"> {MD045}
+<img alt="Description" src="img/javascript/image.png" error="{MD044}">
 
 <script type="text/javascript">
 {MD044:94}
