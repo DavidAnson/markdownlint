@@ -42,8 +42,13 @@ function isHtmlFlowComment(token) {
     return (
       !comment.startsWith(">") &&
       !comment.startsWith("->") &&
-      !comment.endsWith("-") &&
-      !comment.includes("--")
+      !comment.endsWith("-")
+      // The following condition from the CommonMark specification is commented
+      // to avoid parsing HTML comments that include "--" because that is NOT a
+      // condition of the HTML specification.
+      // https://spec.commonmark.org/0.30/#raw-html
+      // https://html.spec.whatwg.org/multipage/syntax.html#comments
+      // && !comment.includes("--")
     );
   }
   return false;
