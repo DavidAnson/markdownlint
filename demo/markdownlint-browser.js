@@ -2354,7 +2354,8 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
     });
     // eslint-disable-next-line jsdoc/require-jsdoc
     function throwError(property) {
-      throw new Error("Property '" + property + "' of onError parameter is incorrect.");
+      throw new Error( // eslint-disable-next-line max-len
+      "Value of '".concat(property, "' passed to onError by '").concat(ruleName, "' is incorrect for '").concat(name, "'."));
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function onError(errorInfo) {
