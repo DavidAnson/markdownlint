@@ -4786,17 +4786,13 @@ module.exports = {
 
 
 
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  flattenedLists = _require2.flattenedLists;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes;
 module.exports = {
   "names": ["MD030", "list-marker-space"],
   "description": "Spaces after list markers",
@@ -4806,35 +4802,47 @@ module.exports = {
     var olSingle = Number(params.config.ol_single || 1);
     var ulMulti = Number(params.config.ul_multi || 1);
     var olMulti = Number(params.config.ol_multi || 1);
-    var _iterator = _createForOfIteratorHelper(flattenedLists()),
+    var lists = filterByTypes(params.parsers.micromark.tokens, ["listOrdered", "listUnordered"]);
+    var _iterator = _createForOfIteratorHelper(lists),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var list = _step.value;
-        var lineCount = list.lastLineIndex - list.open.map[0];
-        var allSingle = lineCount === list.items.length;
-        var expectedSpaces = list.unordered ? allSingle ? ulSingle : ulMulti : allSingle ? olSingle : olMulti;
-        var _iterator2 = _createForOfIteratorHelper(list.items),
+        var ordered = list.type === "listOrdered";
+        var listItemPrefixes = list.children.filter(function (token) {
+          return token.type === "listItemPrefix";
+        });
+        var allSingleLine = list.endLine - list.startLine + 1 === listItemPrefixes.length;
+        var expectedSpaces = ordered ? allSingleLine ? olSingle : olMulti : allSingleLine ? ulSingle : ulMulti;
+        var _iterator2 = _createForOfIteratorHelper(listItemPrefixes),
           _step2;
         try {
           for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var item = _step2.value;
-            var line = item.line,
-              lineNumber = item.lineNumber;
-            var match = /^[\s>]*\S+(\s*)/.exec(line);
-            var _match = _slicedToArray(match, 2),
-              matchLength = _match[0]["length"],
-              actualSpaces = _match[1]["length"];
-            if (matchLength < line.length) {
-              var fixInfo = null;
-              if (expectedSpaces !== actualSpaces) {
-                fixInfo = {
-                  "editColumn": matchLength - actualSpaces + 1,
+            var listItemPrefix = _step2.value;
+            var range = [listItemPrefix.startColumn, listItemPrefix.endColumn - listItemPrefix.startColumn];
+            var listItemPrefixWhitespaces = listItemPrefix.children.filter(function (token) {
+              return token.type === "listItemPrefixWhitespace";
+            });
+            var _iterator3 = _createForOfIteratorHelper(listItemPrefixWhitespaces),
+              _step3;
+            try {
+              for (_iterator3.s(); !(_step3 = _iterator3.n()).done;) {
+                var listItemPrefixWhitespace = _step3.value;
+                var endColumn = listItemPrefixWhitespace.endColumn,
+                  startColumn = listItemPrefixWhitespace.startColumn,
+                  startLine = listItemPrefixWhitespace.startLine;
+                var actualSpaces = endColumn - startColumn;
+                var fixInfo = {
+                  "editColumn": startColumn,
                   "deleteCount": actualSpaces,
                   "insertText": "".padEnd(expectedSpaces)
                 };
+                addErrorDetailIf(onError, startLine, expectedSpaces, actualSpaces, null, null, range, fixInfo);
               }
-              addErrorDetailIf(onError, lineNumber, expectedSpaces, actualSpaces, null, null, [1, matchLength], fixInfo);
+            } catch (err) {
+              _iterator3.e(err);
+            } finally {
+              _iterator3.f();
             }
           }
         } catch (err) {
