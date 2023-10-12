@@ -69,7 +69,7 @@
     "markdownlint-micromark": "0.1.7"
   },
   "devDependencies": {
-    "@babel/core": "7.23.0",
+    "@babel/core": "7.23.2",
     "@babel/preset-env": "7.23.2",
     "@hyperjump/json-schema": "1.6.1",
     "ava": "5.3.1",
