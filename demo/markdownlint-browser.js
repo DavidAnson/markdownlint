@@ -3400,44 +3400,42 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
-  addErrorDetailIf = _require.addErrorDetailIf,
-  indentFor = _require.indentFor,
-  listItemMarkerRe = _require.listItemMarkerRe,
-  orderedListItemMarkerRe = _require.orderedListItemMarkerRe,
-  rangeFromRegExp = _require.rangeFromRegExp;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  flattenedLists = _require2.flattenedLists;
+  addErrorDetailIf = _require.addErrorDetailIf;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes;
 module.exports = {
   "names": ["MD005", "list-indent"],
   "description": "Inconsistent indentation for list items at the same level",
   "tags": ["bullet", "ul", "indentation"],
   "function": function MD005(params, onError) {
-    var _iterator = _createForOfIteratorHelper(flattenedLists()),
+    var lists = filterByTypes(params.parsers.micromark.tokens, ["listOrdered", "listUnordered"]);
+    var _iterator = _createForOfIteratorHelper(lists),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var list = _step.value;
-        var expectedIndent = list.indent;
+        var expectedIndent = list.startColumn - 1;
         var expectedEnd = 0;
-        var actualEnd = -1;
         var endMatching = false;
-        var _iterator2 = _createForOfIteratorHelper(list.items),
+        var listItemPrefixes = list.children.filter(function (token) {
+          return token.type === "listItemPrefix";
+        });
+        var _iterator2 = _createForOfIteratorHelper(listItemPrefixes),
           _step2;
         try {
           for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-            var item = _step2.value;
-            var line = item.line,
-              lineNumber = item.lineNumber;
-            var actualIndent = indentFor(item);
-            var match = null;
-            if (list.unordered) {
-              addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, rangeFromRegExp(line, listItemMarkerRe)
+            var listItemPrefix = _step2.value;
+            var lineNumber = listItemPrefix.startLine;
+            var actualIndent = listItemPrefix.startColumn - 1;
+            var markerLength = listItemPrefix.text.trim().length;
+            var range = [1, listItemPrefix.startColumn + markerLength];
+            if (list.type === "listUnordered") {
+              addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, range
               // No fixInfo; MD007 handles this scenario better
               );
-            } else if (match = orderedListItemMarkerRe.exec(line)) {
-              actualEnd = match[0].length;
+            } else {
+              var actualEnd = range[1] - 1;
               expectedEnd = expectedEnd || actualEnd;
-              var markerLength = match[1].length + 1;
               if (expectedIndent !== actualIndent || endMatching) {
                 if (expectedEnd === actualEnd) {
                   endMatching = true;
@@ -3445,7 +3443,7 @@ module.exports = {
                   var detail = endMatching ? "Expected: (".concat(expectedEnd, "); Actual: (").concat(actualEnd, ")") : "Expected: ".concat(expectedIndent, "; Actual: ").concat(actualIndent);
                   var expected = endMatching ? expectedEnd - markerLength : expectedIndent;
                   var actual = endMatching ? actualEnd - markerLength : actualIndent;
-                  addError(onError, lineNumber, detail, null, rangeFromRegExp(line, listItemMarkerRe), {
+                  addError(onError, lineNumber, detail, undefined, range, {
                     "editColumn": Math.min(actual, expected) + 1,
                     "deleteCount": Math.max(actual - expected, 0),
                     "insertText": "".padEnd(Math.max(expected - actual, 0))
