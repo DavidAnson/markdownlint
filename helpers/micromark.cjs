@@ -23,6 +23,14 @@ const flatTokensSymbol = Symbol("flat-tokens");
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
  * @property {Token[]} children Child tokens.
+ * @property {GetTokenParent} parent Parent token.
+ */
+
+/**
+ * Returns parent Token of a Token.
+ *
+ * @typedef {Function} GetTokenParent
+ * @returns {Token} Parent token.
  */
 
 /**
@@ -113,10 +121,11 @@ function micromarkParseWithOffset(
   // Create Token objects
   const document = [];
   let flatTokens = [];
-  let current = {
+  const root = {
     "children": document
   };
-  const history = [ current ];
+  const history = [ root ];
+  let current = root;
   let reparseOptions = null;
   let lines = null;
   let skipHtmlFlowChildren = false;
@@ -136,7 +145,8 @@ function micromarkParseWithOffset(
         "endLine": endLine + lineDelta,
         endColumn,
         text,
-        "children": []
+        "children": [],
+        "parent": () => (previous === root ? null : previous)
       };
       previous.children.push(current);
       flatTokens.push(current);

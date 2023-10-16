@@ -1204,6 +1204,14 @@ var flatTokensSymbol = Symbol("flat-tokens");
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
  * @property {Token[]} children Child tokens.
+ * @property {GetTokenParent} parent Parent token.
+ */
+
+/**
+ * Returns parent Token of a Token.
+ *
+ * @typedef {Function} GetTokenParent
+ * @returns {Token} Parent token.
  */
 
 /**
@@ -1276,17 +1284,18 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
   // Create Token objects
   var document = [];
   var flatTokens = [];
-  var current = {
+  var root = {
     "children": document
   };
-  var history = [current];
+  var history = [root];
+  var current = root;
   var reparseOptions = null;
   var lines = null;
   var skipHtmlFlowChildren = false;
   var _iterator = _createForOfIteratorHelper(events),
     _step;
   try {
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+    var _loop = function _loop() {
       var event = _step.value;
       var _event = _slicedToArray(event, 3),
         kind = _event[0],
@@ -1310,7 +1319,10 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
           "endLine": endLine + lineDelta,
           endColumn: endColumn,
           text: text,
-          "children": []
+          "children": [],
+          "parent": function parent() {
+            return previous === root ? null : previous;
+          }
         };
         previous.children.push(current);
         flatTokens.push(current);
@@ -1345,6 +1357,9 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
           current = history.pop();
         }
       }
+    };
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
+      _loop();
     }
 
     // Return document
@@ -3542,11 +3557,9 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addErrorDetailIf = _require.addErrorDetailIf,
-  indentFor = _require.indentFor,
-  listItemMarkerRe = _require.listItemMarkerRe;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  flattenedLists = _require2.flattenedLists;
+  addErrorDetailIf = _require.addErrorDetailIf;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes;
 module.exports = {
   "names": ["MD007", "ul-indent"],
   "description": "Unordered list indentation",
@@ -3555,38 +3568,51 @@ module.exports = {
     var indent = Number(params.config.indent || 2);
     var startIndented = !!params.config.start_indented;
     var startIndent = Number(params.config.start_indent || indent);
-    var _iterator = _createForOfIteratorHelper(flattenedLists()),
+    var unorderedListNesting = new Map();
+    var lastBlockQuotePrefix = null;
+    var tokens = filterByTypes(params.parsers.micromark.tokens, ["blockQuotePrefix", "listItemPrefix", "listUnordered"]);
+    var _iterator = _createForOfIteratorHelper(tokens),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var list = _step.value;
-        if (list.unordered && list.parentsUnordered) {
-          var _iterator2 = _createForOfIteratorHelper(list.items),
-            _step2;
-          try {
-            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-              var item = _step2.value;
-              var lineNumber = item.lineNumber,
-                line = item.line;
-              var expectedIndent = (startIndented ? startIndent : 0) + list.nesting * indent;
-              var actualIndent = indentFor(item);
-              var range = null;
-              var editColumn = 1;
-              var match = line.match(listItemMarkerRe);
-              if (match) {
-                range = [1, match[0].length];
-                editColumn += match[1].length - actualIndent;
-              }
-              addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, range, {
-                editColumn: editColumn,
-                "deleteCount": actualIndent,
-                "insertText": "".padEnd(expectedIndent)
-              });
+        var token = _step.value;
+        var startColumn = token.startColumn,
+          startLine = token.startLine,
+          type = token.type;
+        if (type === "blockQuotePrefix") {
+          lastBlockQuotePrefix = token;
+        } else if (type === "listUnordered") {
+          var nesting = 0;
+          var current = token;
+          while (current = current.parent()) {
+            if (current.type === "listUnordered") {
+              nesting++;
+            } else if (current.type === "listOrdered") {
+              nesting = -1;
+              break;
+            } else if (current.type === "blockQuote") {
+              break;
             }
-          } catch (err) {
-            _iterator2.e(err);
-          } finally {
-            _iterator2.f();
+          }
+          if (nesting >= 0) {
+            unorderedListNesting.set(token, nesting);
+          }
+        } else {
+          // listItemPrefix
+          var _nesting = unorderedListNesting.get(token.parent());
+          if (_nesting !== undefined) {
+            var _lastBlockQuotePrefix;
+            // listItemPrefix for listUnordered
+            var expectedIndent = (startIndented ? startIndent : 0) + _nesting * indent;
+            var blockQuoteAdjustment = ((_lastBlockQuotePrefix = lastBlockQuotePrefix) === null || _lastBlockQuotePrefix === void 0 ? void 0 : _lastBlockQuotePrefix.endLine) === startLine ? lastBlockQuotePrefix.endColumn - 1 : 0;
+            var actualIndent = startColumn - 1 - blockQuoteAdjustment;
+            var range = [1, startColumn + 1];
+            var fixInfo = {
+              "editColumn": startColumn - actualIndent,
+              "deleteCount": Math.max(actualIndent - expectedIndent, 0),
+              "insertText": "".padEnd(Math.max(expectedIndent - actualIndent, 0))
+            };
+            addErrorDetailIf(onError, startLine, expectedIndent, actualIndent, undefined, undefined, range, fixInfo);
           }
         }
       }

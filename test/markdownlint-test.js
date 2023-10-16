@@ -914,7 +914,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(161);
+  t.plan(162);
   const { addSchema, validate } =
     // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
