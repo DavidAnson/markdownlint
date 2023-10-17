@@ -36,19 +36,22 @@ Image tag with alt attribute set to text
 Image tag with alt attribute not set
 <img src="image.png" alt> {MD045}
 
-Image tag with alt attribute set to an empty string
+Image tag with alt attribute set to decorative with an empty double-quote string
 <img src="image.png" alt="" />
+
+Image tag with alt attribute set to decorative with an empty single-quote string
+<img src="image.png" alt='' />
 
 Image tag with no alt attribute <img src="image.png" /> {MD045}
 
 Multi-line image tag with no alt text
 <img
-  src="image.png"> {MD045:45}
+  src="image.png"> {MD045:48}
 
 Multi-line image tag with alt attribute not set
 <img
   src="image.png"
-  alt> {MD045:49}
+  alt> {MD045:52}
 
 Multi-line image tag with alt text
 <img
