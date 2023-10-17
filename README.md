@@ -518,7 +518,7 @@ specify a custom `RegExp` or use the value `null` to disable the feature.
 The default value:
 
 ```javascript
-/((^---\s*$[\s\S]*?^---\s*)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]*?^\}\s*))(\r\n|\r|\n|$)/m
+/((^---\s*$[\s\S]+?^---\s*)|(^\+\+\+\s*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m
 ```
 
 Ignores [YAML](https://en.wikipedia.org/wiki/YAML),
