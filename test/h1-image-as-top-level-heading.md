@@ -1,4 +1,4 @@
-<h1 align="center"><img alt="Cats" src="https://placekitten.com/300/150"/></h1>
+<h1 align="center"><img alt="A kitten" src="https://placekitten.com/300/150"/></h1>
 
 Text
 
