@@ -52,7 +52,7 @@ module.exports.newLineRe = newLineRe;
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
 // eslint-disable-next-line max-len
-/((^---\s*$[\s\S]*?^---\s*)|(^\+\+\+\s*$[\s\S]*?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]*?^\}\s*))(\r\n|\r|\n|$)/m;
+/((^---\s*$[\s\S]+?^---\s*)|(^\+\+\+\s*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching the start of inline disable/enable comments
 var inlineCommentStartRe =
