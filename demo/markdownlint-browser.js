@@ -46,9 +46,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var micromark = __webpack_require__(/*! ./micromark.cjs */ "../helpers/micromark.cjs");
 var _require = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js"),
-  newLineRe = _require.newLineRe;
-var _require2 = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js"),
-  nextLinesRe = _require2.nextLinesRe;
+  newLineRe = _require.newLineRe,
+  nextLinesRe = _require.nextLinesRe;
 module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
@@ -6006,6 +6005,8 @@ module.exports = {
   "tags": ["accessibility", "images"],
   "function": function MD045(params, onError) {
     var tokens = params.parsers.micromark.tokens;
+
+    // Process Markdown images
     var images = filterByTypes(tokens, ["image"]);
     var _iterator = _createForOfIteratorHelper(images),
       _step;
@@ -6020,22 +6021,26 @@ module.exports = {
           addError(onError, image.startLine, undefined, undefined, range);
         }
       }
+
+      // Process HTML images
     } catch (err) {
       _iterator.e(err);
     } finally {
       _iterator.f();
     }
-    var htmls = filterByTypes(tokens, ["htmlText"]);
-    var _iterator2 = _createForOfIteratorHelper(htmls),
+    var htmlTexts = filterByTypes(tokens, ["htmlText"]);
+    var _iterator2 = _createForOfIteratorHelper(htmlTexts),
       _step2;
     try {
       for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-        var html = _step2.value;
-        var htmlTagInfo = getHtmlTagInfo(html);
-        var isImage = htmlTagInfo && htmlTagInfo.name.toLowerCase() === "img";
-        if (isImage && !altRe.test(html.text)) {
-          var _range = [html.startColumn, html.text.replace(nextLinesRe, "").length];
-          addError(onError, html.startLine, undefined, undefined, _range);
+        var htmlText = _step2.value;
+        var startColumn = htmlText.startColumn,
+          startLine = htmlText.startLine,
+          text = htmlText.text;
+        var htmlTagInfo = getHtmlTagInfo(htmlText);
+        if (htmlTagInfo && htmlTagInfo.name.toLowerCase() === "img" && !altRe.test(text)) {
+          var _range = [startColumn, text.replace(nextLinesRe, "").length];
+          addError(onError, startLine, undefined, undefined, _range);
         }
       }
     } catch (err) {
