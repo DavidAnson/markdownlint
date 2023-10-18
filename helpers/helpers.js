@@ -4,8 +4,7 @@
 
 const micromark = require("./micromark.cjs");
 
-const { newLineRe } = require("./shared.js");
-const { nextLinesRe } = require("./shared.js");
+const { newLineRe, nextLinesRe } = require("./shared.js");
 
 module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
