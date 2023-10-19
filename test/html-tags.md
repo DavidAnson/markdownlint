@@ -88,7 +88,7 @@ Text ``text <em> text`` text
 Text
 
 Text <a href="#anchor">inline {MD033}</a> text
-text <img src="src.png"/> text {MD033}
+text <img src="src.png" alt="Description" /> text {MD033}
 
 Text
 

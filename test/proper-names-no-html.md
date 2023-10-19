@@ -6,7 +6,7 @@ Bad text javascript. {MD044}
 
 Bad code `javascript`. {MD044}
 
-<img src="img/javascript/image.png">
+<img src="img/javascript/image.png" alt="Description">
 
 <script type="text/javascript">
 javascript {MD044}

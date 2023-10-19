@@ -46,8 +46,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 var micromark = __webpack_require__(/*! ./micromark.cjs */ "../helpers/micromark.cjs");
 var _require = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js"),
-  newLineRe = _require.newLineRe;
+  newLineRe = _require.newLineRe,
+  nextLinesRe = _require.nextLinesRe;
 module.exports.newLineRe = newLineRe;
+module.exports.nextLinesRe = nextLinesRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
@@ -1063,6 +1065,9 @@ module.exports.expandTildePath = expandTildePath;
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 module.exports.newLineRe = /\r\n?|\n/g;
+
+// Regular expression for matching next lines
+module.exports.nextLinesRe = /[\r\n][\s\S]*$/;
 
 /***/ }),
 
@@ -5043,11 +5048,11 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addError = _require.addError;
+  addError = _require.addError,
+  nextLinesRe = _require.nextLinesRe;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
-var nextLinesRe = /[\r\n][\s\S]*$/;
 module.exports = {
   "names": ["MD033", "no-inline-html"],
   "description": "Inline HTML",
@@ -5986,15 +5991,23 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addError = _require.addError;
+  addError = _require.addError,
+  nextLinesRe = _require.nextLinesRe;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  getHtmlTagInfo = _require2.getHtmlTagInfo;
+
+// Regular expression for identifying alt attribute
+var altRe = /\salt=/i;
 module.exports = {
   "names": ["MD045", "no-alt-text"],
   "description": "Images should have alternate text (alt text)",
   "tags": ["accessibility", "images"],
   "function": function MD045(params, onError) {
-    var images = filterByTypes(params.parsers.micromark.tokens, ["image"]);
+    var tokens = params.parsers.micromark.tokens;
+
+    // Process Markdown images
+    var images = filterByTypes(tokens, ["image"]);
     var _iterator = _createForOfIteratorHelper(images),
       _step;
     try {
@@ -6008,10 +6021,32 @@ module.exports = {
           addError(onError, image.startLine, undefined, undefined, range);
         }
       }
+
+      // Process HTML images
     } catch (err) {
       _iterator.e(err);
     } finally {
       _iterator.f();
+    }
+    var htmlTexts = filterByTypes(tokens, ["htmlText"]);
+    var _iterator2 = _createForOfIteratorHelper(htmlTexts),
+      _step2;
+    try {
+      for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+        var htmlText = _step2.value;
+        var startColumn = htmlText.startColumn,
+          startLine = htmlText.startLine,
+          text = htmlText.text;
+        var htmlTagInfo = getHtmlTagInfo(htmlText);
+        if (htmlTagInfo && htmlTagInfo.name.toLowerCase() === "img" && !altRe.test(text)) {
+          var _range = [startColumn, text.replace(nextLinesRe, "").length];
+          addError(onError, startLine, undefined, undefined, _range);
+        }
+      }
+    } catch (err) {
+      _iterator2.e(err);
+    } finally {
+      _iterator2.f();
     }
   }
 };
