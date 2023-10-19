@@ -127,6 +127,16 @@ function cloneIfUrl(url) {
 module.exports.cloneIfUrl = cloneIfUrl;
 
 /**
+ * Gets a Regular Expression for matching the specified HTML attribute.
+ *
+ * @param {string} name HTML attribute name.
+ * @returns {RegExp} Regular Expression for matching.
+ */
+module.exports.getHtmlAttributeRe = function getHtmlAttributeRe(name) {
+  return new RegExp(`\\s${name}\\s*=\\s*['"]?([^'"\\s>]*)`, "iu");
+};
+
+/**
  * Returns true iff the input line is blank (contains nothing, whitespace, or
  * comments (unclosed start/end comments allowed)).
  *

@@ -169,6 +169,16 @@ function cloneIfUrl(url) {
 module.exports.cloneIfUrl = cloneIfUrl;
 
 /**
+ * Gets a Regular Expression for matching the specified HTML attribute.
+ *
+ * @param {string} name HTML attribute name.
+ * @returns {RegExp} Regular Expression for matching.
+ */
+module.exports.getHtmlAttributeRe = function getHtmlAttributeRe(name) {
+  return new RegExp("\\s".concat(name, "\\s*=\\s*['\"]?([^'\"\\s>]*)"), "iu");
+};
+
+/**
  * Returns true iff the input line is blank (contains nothing, whitespace, or
  * comments (unclosed start/end comments allowed)).
  *
@@ -5992,13 +6002,12 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
+  getHtmlAttributeRe = _require.getHtmlAttributeRe,
   nextLinesRe = _require.nextLinesRe;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
-
-// Regular expression for identifying alt attribute
-var altRe = /\salt=/i;
+var altRe = getHtmlAttributeRe("alt");
 module.exports = {
   "names": ["MD045", "no-alt-text"],
   "description": "Images should have alternate text (alt text)",
@@ -6038,7 +6047,7 @@ module.exports = {
           startLine = htmlText.startLine,
           text = htmlText.text;
         var htmlTagInfo = getHtmlTagInfo(htmlText);
-        if (htmlTagInfo && htmlTagInfo.name.toLowerCase() === "img" && !altRe.test(text)) {
+        if (htmlTagInfo && !htmlTagInfo.close && htmlTagInfo.name.toLowerCase() === "img" && !altRe.test(text)) {
           var _range = [startColumn, text.replace(nextLinesRe, "").length];
           addError(onError, startLine, undefined, undefined, _range);
         }
@@ -6292,15 +6301,16 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
-  addErrorDetailIf = _require.addErrorDetailIf;
+  addErrorDetailIf = _require.addErrorDetailIf,
+  getHtmlAttributeRe = _require.getHtmlAttributeRe;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByPredicate = _require2.filterByPredicate,
   filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo;
 
 // Regular expression for identifying HTML anchor names
-var idRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]id[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
-var nameRe = /[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]name[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*=[\t-\r \xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uFEFF]*["']?((?:(?![\t-\r "'>\xA0\u1680\u2000-\u200A\u2028\u2029\u202F\u205F\u3000\uD800-\uDFFF\uFEFF])[\s\S]|[\uD800-\uDBFF][\uDC00-\uDFFF])+)/i;
+var idRe = getHtmlAttributeRe("id");
+var nameRe = getHtmlAttributeRe("name");
 var anchorRe = /\{(#[0-9a-z]+(?:[\x2D_][0-9a-z]+)*)\}/g;
 
 // Sets for filtering heading tokens during conversion
@@ -6393,7 +6403,7 @@ module.exports = {
         var htmlTagInfo = getHtmlTagInfo(token);
         if (htmlTagInfo && !htmlTagInfo.close) {
           var anchorMatch = idRe.exec(token.text) || htmlTagInfo.name.toLowerCase() === "a" && nameRe.exec(token.text);
-          if (anchorMatch) {
+          if (anchorMatch && anchorMatch.length > 0) {
             fragments.set("#".concat(anchorMatch[1]), 0);
           }
         }
