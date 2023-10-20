@@ -23,14 +23,7 @@ const flatTokensSymbol = Symbol("flat-tokens");
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
  * @property {Token[]} children Child tokens.
- * @property {GetTokenParent} parent Parent token.
- */
-
-/**
- * Returns parent Token of a Token.
- *
- * @typedef {Function} GetTokenParent
- * @returns {Token} Parent token.
+ * @property {Token | null} parent Parent token.
  */
 
 /**
@@ -105,13 +98,15 @@ function getMicromarkEvents(
  * @param {Object} micromarkOptions Options for micromark.
  * @param {boolean} referencesDefined Treat references as defined.
  * @param {number} lineDelta Offset to apply to start/end line.
+ * @param {Token} [ancestor] Parent of top-most tokens.
  * @returns {Token[]} Micromark tokens (frozen).
  */
 function micromarkParseWithOffset(
   markdown,
   micromarkOptions,
   referencesDefined,
-  lineDelta
+  lineDelta,
+  ancestor
 ) {
   // Use micromark to parse document into Events
   const events = getMicromarkEvents(
@@ -121,8 +116,16 @@ function micromarkParseWithOffset(
   // Create Token objects
   const document = [];
   let flatTokens = [];
+  /** @type {Token} */
   const root = {
-    "children": document
+    "type": "ROOT",
+    "startLine": -1,
+    "startColumn": -1,
+    "endLine": -1,
+    "endColumn": -1,
+    "text": "ROOT",
+    "children": document,
+    "parent": null
   };
   const history = [ root ];
   let current = root;
@@ -146,11 +149,10 @@ function micromarkParseWithOffset(
         endColumn,
         text,
         "children": [],
-        "parent": () => (previous === root ? null : previous)
+        "parent": ((previous === root) ? (ancestor || null) : previous)
       };
       previous.children.push(current);
       flatTokens.push(current);
-      // @ts-ignore
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
@@ -173,7 +175,8 @@ function micromarkParseWithOffset(
           reparseMarkdown,
           reparseOptions,
           referencesDefined,
-          current.startLine - 1
+          current.startLine - 1,
+          current
         );
         current.children = tokens;
         // Avoid stack overflow of Array.push(...spread)

@@ -1489,7 +1489,11 @@ test("customRulesParamsAreFrozen", (t) => {
               t.true(Object.isFrozen(current) || (current === params));
               for (const name of Object.getOwnPropertyNames(current)) {
                 const value = current[name];
-                if (value && (typeof value === "object")) {
+                if (
+                  value &&
+                  (typeof value === "object") &&
+                  (name !== "parent")
+                ) {
                   pending.push(value);
                 }
               }

@@ -87,6 +87,7 @@
     "id-length": "off",
     "indent": ["error", 2, { "SwitchCase": 1 }],
     "linebreak-style": "off",
+    "lines-around-comment": "off",
     "logical-assignment-operators": "off",
     "max-depth": "off",
     "max-lines": "off",

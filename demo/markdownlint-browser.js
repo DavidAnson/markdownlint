@@ -1219,14 +1219,7 @@ var flatTokensSymbol = Symbol("flat-tokens");
  * @property {number} endColumn End column (1-based).
  * @property {string} text Token text.
  * @property {Token[]} children Child tokens.
- * @property {GetTokenParent} parent Parent token.
- */
-
-/**
- * Returns parent Token of a Token.
- *
- * @typedef {Function} GetTokenParent
- * @returns {Token} Parent token.
+ * @property {Token | null} parent Parent token.
  */
 
 /**
@@ -1290,17 +1283,26 @@ function getMicromarkEvents(markdown) {
  * @param {Object} micromarkOptions Options for micromark.
  * @param {boolean} referencesDefined Treat references as defined.
  * @param {number} lineDelta Offset to apply to start/end line.
+ * @param {Token} [ancestor] Parent of top-most tokens.
  * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined, lineDelta) {
+function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined, lineDelta, ancestor) {
   // Use micromark to parse document into Events
   var events = getMicromarkEvents(markdown, micromarkOptions, referencesDefined);
 
   // Create Token objects
   var document = [];
   var flatTokens = [];
+  /** @type {Token} */
   var root = {
-    "children": document
+    "type": "ROOT",
+    "startLine": -1,
+    "startColumn": -1,
+    "endLine": -1,
+    "endColumn": -1,
+    "text": "ROOT",
+    "children": document,
+    "parent": null
   };
   var history = [root];
   var current = root;
@@ -1310,7 +1312,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
   var _iterator = _createForOfIteratorHelper(events),
     _step;
   try {
-    var _loop = function _loop() {
+    for (_iterator.s(); !(_step = _iterator.n()).done;) {
       var event = _step.value;
       var _event = _slicedToArray(event, 3),
         kind = _event[0],
@@ -1335,13 +1337,10 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
           endColumn: endColumn,
           text: text,
           "children": [],
-          "parent": function parent() {
-            return previous === root ? null : previous;
-          }
+          "parent": previous === root ? ancestor || null : previous
         };
         previous.children.push(current);
         flatTokens.push(current);
-        // @ts-ignore
         if (current.type === "htmlFlow" && !isHtmlFlowComment(current)) {
           skipHtmlFlowChildren = true;
           if (!reparseOptions || !lines) {
@@ -1355,7 +1354,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
             lines = markdown.split(newLineRe);
           }
           var reparseMarkdown = lines.slice(current.startLine - 1, current.endLine).join("\n");
-          var tokens = micromarkParseWithOffset(reparseMarkdown, reparseOptions, referencesDefined, current.startLine - 1);
+          var tokens = micromarkParseWithOffset(reparseMarkdown, reparseOptions, referencesDefined, current.startLine - 1, current);
           current.children = tokens;
           // Avoid stack overflow of Array.push(...spread)
           // eslint-disable-next-line unicorn/prefer-spread
@@ -1372,9 +1371,6 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
           current = history.pop();
         }
       }
-    };
-    for (_iterator.s(); !(_step = _iterator.n()).done;) {
-      _loop();
     }
 
     // Return document
@@ -3575,6 +3571,11 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes;
+
+/**
+ * @typedef {import("../helpers/micromark.cjs").Token} Token
+ */
+
 module.exports = {
   "names": ["MD007", "ul-indent"],
   "description": "Unordered list indentation",
@@ -3591,15 +3592,17 @@ module.exports = {
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var token = _step.value;
-        var startColumn = token.startColumn,
+        var parent = token.parent,
+          startColumn = token.startColumn,
           startLine = token.startLine,
           type = token.type;
         if (type === "blockQuotePrefix") {
           lastBlockQuotePrefix = token;
         } else if (type === "listUnordered") {
           var nesting = 0;
+          /** @type {Token | null} */
           var current = token;
-          while (current = current.parent()) {
+          while (current = current.parent) {
             if (current.type === "listUnordered") {
               nesting++;
             } else if (current.type === "listOrdered") {
@@ -3614,7 +3617,7 @@ module.exports = {
           }
         } else {
           // listItemPrefix
-          var _nesting = unorderedListNesting.get(token.parent());
+          var _nesting = unorderedListNesting.get(parent);
           if (_nesting !== undefined) {
             var _lastBlockQuotePrefix;
             // listItemPrefix for listUnordered
