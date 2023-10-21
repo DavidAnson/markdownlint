@@ -87,7 +87,7 @@ test("projectFiles", (t) => {
         files,
         "config": require("../.markdownlint.json")
       };
-      // @ts-ignore the `require`-ed config does' have the correct ts type
+      // @ts-ignore the `require`-ed config doesn't have the correct ts type
       return markdownlint.promises.markdownlint(options).then((actual) => {
         const expected = {};
         for (const file of files) {
