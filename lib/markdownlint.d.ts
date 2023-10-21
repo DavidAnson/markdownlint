@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, ParserInfo, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -129,9 +129,30 @@ type RuleParams = {
      */
     frontMatterLines: string[];
     /**
+     * Tokens parsed by different parsers.
+     */
+    parsers: ParserInfo;
+    /**
      * Rule configuration.
      */
     config: RuleConfiguration;
+};
+/**
+ * Parser related information passed to rules.
+ */
+type ParserInfo = {
+    /**
+     * Markdownit parser info.
+     */
+    markdownit: {
+        tokens: MarkdownItToken[];
+    };
+    /**
+     * Micromark parser info.
+     */
+    micromark: {
+        tokens: micromark.Token[];
+    };
 };
 /**
  * Markdown-It token.
@@ -406,3 +427,4 @@ declare function extendConfigPromise(config: Configuration, file: string, parser
  * @returns {Promise<Configuration>} Configuration object.
  */
 declare function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;
+import micromark = require("../helpers/micromark.cjs");
