@@ -87,6 +87,7 @@ test("projectFiles", (t) => {
         files,
         "config": require("../.markdownlint.json")
       };
+      // @ts-ignore the `require`-ed config does' have the correct ts type
       return markdownlint.promises.markdownlint(options).then((actual) => {
         const expected = {};
         for (const file of files) {
@@ -1298,6 +1299,15 @@ test("getVersion", (t) => {
   const actual = markdownlint.getVersion();
   const expected = version;
   t.is(actual, expected, "Version string not correct.");
+});
+
+test("defineConfig", (t) => {
+  t.plan(1);
+  const expected = {
+    "MD001": true
+  };
+  const actual = markdownlint.defineConfig(expected);
+  t.is(actual, expected, "defineConfig does not return the same config.");
 });
 
 test("constants", (t) => {

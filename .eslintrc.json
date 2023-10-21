@@ -55,6 +55,14 @@
     },
     {
       "files": [
+        "schema/*.js"
+      ],
+      "rules": {
+        "unicorn/prefer-top-level-await": "off"
+      }
+    },
+    {
+      "files": [
         "**/*.mjs"
       ],
       "parserOptions": {

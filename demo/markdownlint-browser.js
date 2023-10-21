@@ -2986,11 +2986,23 @@ function getVersion() {
   return (__webpack_require__(/*! ./constants */ "../lib/constants.js").version);
 }
 
+/**
+ * See the full markdownlint configuration API documentation at
+ * https://github.com/DavidAnson/markdownlint#optionsconfig.
+ *
+ * @param {Configuration} config Markdownlint configuration.
+ * @returns {Configuration} Markdownlint configuration.
+ */
+function defineConfig(config) {
+  return config;
+}
+
 // Export a/synchronous/Promise APIs
 markdownlint.sync = markdownlintSync;
 markdownlint.readConfig = readConfig;
 markdownlint.readConfigSync = readConfigSync;
 markdownlint.getVersion = getVersion;
+markdownlint.defineConfig = defineConfig;
 markdownlint.promises = {
   "markdownlint": markdownlintPromise,
   "extendConfig": extendConfigPromise,
@@ -3018,6 +3030,12 @@ module.exports = markdownlint;
  * @property {string[]} lines File/string lines.
  * @property {string[]} frontMatterLines Front matter lines.
  * @property {RuleConfiguration} config Rule configuration.
+ */
+
+/**
+ * Rule configuration object.
+ *
+ * @typedef {boolean | Object} RuleConfiguration Rule configuration.
  */
 
 /**
@@ -3167,13 +3185,7 @@ module.exports = markdownlint;
  * Configuration object for linting rules. For a detailed schema, see
  * {@link ../schema/markdownlint-config-schema.json}.
  *
- * @typedef {Object.<string, RuleConfiguration>} Configuration
- */
-
-/**
- * Rule configuration object.
- *
- * @typedef {boolean | Object} RuleConfiguration Rule configuration.
+ * @typedef {import("../schema/markdownlint-config").Config} Configuration
  */
 
 /**

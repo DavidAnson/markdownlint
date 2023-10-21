@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, defineConfig, promises, RuleFunction, RuleParams, RuleConfiguration, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -99,6 +99,14 @@ declare function readConfigSync(file: string, parsers?: ConfigurationParser[], f
  * @returns {string} SemVer string.
  */
 declare function getVersion(): string;
+/**
+ * See the full markdownlint configuration API documentation at
+ * https://github.com/DavidAnson/markdownlint#optionsconfig.
+ *
+ * @param {Configuration} config Markdownlint configuration.
+ * @returns {Configuration} Markdownlint configuration.
+ */
+declare function defineConfig(config: Configuration): Configuration;
 declare namespace promises {
     export { markdownlintPromise as markdownlint };
     export { extendConfigPromise as extendConfig };
@@ -133,6 +141,10 @@ type RuleParams = {
      */
     config: RuleConfiguration;
 };
+/**
+ * Rule configuration.
+ */
+type RuleConfiguration = boolean | any;
 /**
  * Markdown-It token.
  */
@@ -361,13 +373,7 @@ type LintContentCallback = (error: Error | null, result?: LintError[]) => void;
  * Configuration object for linting rules. For a detailed schema, see
  * {@link  ../schema/markdownlint-config-schema.json}.
  */
-type Configuration = {
-    [x: string]: RuleConfiguration;
-};
-/**
- * Rule configuration.
- */
-type RuleConfiguration = boolean | any;
+type Configuration = import("../schema/markdownlint-config").Config;
 /**
  * Parses a configuration string and returns a configuration object.
  */
