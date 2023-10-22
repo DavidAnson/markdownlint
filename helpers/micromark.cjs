@@ -281,11 +281,11 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * Filter a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string[]} allowed Types to allow.
+ * @param {string[]} types Types to allow.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByTypes(tokens, allowed) {
-  const predicate = (token) => allowed.includes(token.type);
+function filterByTypes(tokens, types) {
+  const predicate = (token) => types.includes(token.type);
   const flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
@@ -337,6 +337,22 @@ function getHtmlTagInfo(token) {
 }
 
 /**
+ * Gets the nearest parent of the specified type for a Micromark token.
+ *
+ * @param {Token} token Micromark token.
+ * @param {string[]} types Types to allow.
+ * @returns {Token | null} Parent token.
+ */
+function getTokenParentOfType(token, types) {
+  /** @type {Token | null} */
+  let current = token;
+  while ((current = current.parent) && !types.includes(current.type)) {
+    // Empty
+  }
+  return current;
+}
+
+/**
  * Get the text of a single token from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
@@ -346,6 +362,16 @@ function getHtmlTagInfo(token) {
 function getTokenTextByType(tokens, type) {
   const filtered = tokens.filter((token) => token.type === type);
   return (filtered.length === 1) ? filtered[0].text : null;
+}
+
+/**
+ * Determines if a Micromark token has an htmlFlow-type parent.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff the token has an htmlFlow-type parent.
+ */
+function inHtmlFlow(token) {
+  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
 }
 
 /**
@@ -391,7 +417,9 @@ module.exports = {
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
+  getTokenParentOfType,
   getTokenTextByType,
+  inHtmlFlow,
   matchAndGetTokensByType,
   tokenIfType
 };

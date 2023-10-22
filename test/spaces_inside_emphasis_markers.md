@@ -380,7 +380,7 @@ Partial *em*phasis of a *wo*rd.
 Emphasis <b>inside * HTML * content</b> {MD033} {MD037}
 
 <p> {MD033}
-Emphasis inside * HTML * content {MD037}
+Emphasis inside * HTML * content
 </p>
 
 Emphasis <p data="inside * attribute * content"></p> {MD033}

@@ -1454,12 +1454,12 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * Filter a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string[]} allowed Types to allow.
+ * @param {string[]} types Types to allow.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByTypes(tokens, allowed) {
+function filterByTypes(tokens, types) {
   var predicate = function predicate(token) {
-    return allowed.includes(token.type);
+    return types.includes(token.type);
   };
   var flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
@@ -1509,6 +1509,22 @@ function getHtmlTagInfo(token) {
 }
 
 /**
+ * Gets the nearest parent of the specified type for a Micromark token.
+ *
+ * @param {Token} token Micromark token.
+ * @param {string[]} types Types to allow.
+ * @returns {Token | null} Parent token.
+ */
+function getTokenParentOfType(token, types) {
+  /** @type {Token | null} */
+  var current = token;
+  while ((current = current.parent) && !types.includes(current.type)) {
+    // Empty
+  }
+  return current;
+}
+
+/**
  * Get the text of a single token from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
@@ -1520,6 +1536,16 @@ function getTokenTextByType(tokens, type) {
     return token.type === type;
   });
   return filtered.length === 1 ? filtered[0].text : null;
+}
+
+/**
+ * Determines if a Micromark token has an htmlFlow-type parent.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff the token has an htmlFlow-type parent.
+ */
+function inHtmlFlow(token) {
+  return getTokenParentOfType(token, ["htmlFlow"]) !== null;
 }
 
 /**
@@ -1564,7 +1590,9 @@ module.exports = {
   getHeadingLevel: getHeadingLevel,
   getHtmlTagInfo: getHtmlTagInfo,
   getMicromarkEvents: getMicromarkEvents,
+  getTokenParentOfType: getTokenParentOfType,
   getTokenTextByType: getTokenTextByType,
+  inHtmlFlow: inHtmlFlow,
   matchAndGetTokensByType: matchAndGetTokensByType,
   tokenIfType: tokenIfType
 };
@@ -3428,13 +3456,16 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError,
   addErrorDetailIf = _require.addErrorDetailIf;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  inHtmlFlow = _require2.inHtmlFlow;
 module.exports = {
   "names": ["MD005", "list-indent"],
   "description": "Inconsistent indentation for list items at the same level",
   "tags": ["bullet", "ul", "indentation"],
   "function": function MD005(params, onError) {
-    var lists = filterByTypes(params.parsers.micromark.tokens, ["listOrdered", "listUnordered"]);
+    var lists = filterByTypes(params.parsers.micromark.tokens, ["listOrdered", "listUnordered"]).filter(function (list) {
+      return !inHtmlFlow(list);
+    });
     var _iterator = _createForOfIteratorHelper(lists),
       _step;
     try {
@@ -3570,12 +3601,16 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByTypes = _require2.filterByTypes;
+  filterByTypes = _require2.filterByTypes,
+  getTokenParentOfType = _require2.getTokenParentOfType,
+  inHtmlFlow = _require2.inHtmlFlow;
 
 /**
  * @typedef {import("../helpers/micromark.cjs").Token} Token
  */
 
+var unorderedListTypes = ["blockQuotePrefix", "listItemPrefix", "listUnordered"];
+var unorderedParentTypes = ["blockQuote", "listOrdered", "listUnordered"];
 module.exports = {
   "names": ["MD007", "ul-indent"],
   "description": "Unordered list indentation",
@@ -3586,7 +3621,7 @@ module.exports = {
     var startIndent = Number(params.config.start_indent || indent);
     var unorderedListNesting = new Map();
     var lastBlockQuotePrefix = null;
-    var tokens = filterByTypes(params.parsers.micromark.tokens, ["blockQuotePrefix", "listItemPrefix", "listUnordered"]);
+    var tokens = filterByTypes(params.parsers.micromark.tokens, unorderedListTypes);
     var _iterator = _createForOfIteratorHelper(tokens),
       _step;
     try {
@@ -3602,20 +3637,19 @@ module.exports = {
           var nesting = 0;
           /** @type {Token | null} */
           var current = token;
-          while (current = current.parent) {
+          while (current = getTokenParentOfType(current, unorderedParentTypes)) {
             if (current.type === "listUnordered") {
               nesting++;
+              continue;
             } else if (current.type === "listOrdered") {
               nesting = -1;
-              break;
-            } else if (current.type === "blockQuote") {
-              break;
             }
+            break;
           }
           if (nesting >= 0) {
             unorderedListNesting.set(token, nesting);
           }
-        } else {
+        } else if (!inHtmlFlow(token)) {
           // listItemPrefix
           var _nesting = unorderedListNesting.get(parent);
           if (_nesting !== undefined) {
@@ -4306,7 +4340,8 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   isBlankLine = _require.isBlankLine;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes,
-  getHeadingLevel = _require2.getHeadingLevel;
+  getHeadingLevel = _require2.getHeadingLevel,
+  inHtmlFlow = _require2.inHtmlFlow;
 var defaultLines = 1;
 var getLinesFunction = function getLinesFunction(linesParam) {
   if (Array.isArray(linesParam)) {
@@ -4349,7 +4384,9 @@ module.exports = {
     var getLinesBelow = getLinesFunction(params.config.lines_below);
     var lines = params.lines,
       parsers = params.parsers;
-    var headings = filterByTypes(parsers.micromark.tokens, ["atxHeading", "setextHeading"]);
+    var headings = filterByTypes(parsers.micromark.tokens, ["atxHeading", "setextHeading"]).filter(function (heading) {
+      return !inHtmlFlow(heading);
+    });
     var _iterator2 = _createForOfIteratorHelper(headings),
       _step2;
     try {
@@ -5327,7 +5364,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addError = _require.addError;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
-  filterByPredicate = _require2.filterByPredicate;
+  filterByPredicate = _require2.filterByPredicate,
+  inHtmlFlow = _require2.inHtmlFlow;
 module.exports = {
   "names": ["MD037", "no-space-in-emphasis"],
   "description": "Spaces inside emphasis markers",
@@ -5373,7 +5411,7 @@ module.exports = {
               type = child.type;
             if (type === "data" && text.length <= 3) {
               var _emphasisTokens = emphasisTokensByMarker.get(text);
-              if (_emphasisTokens) {
+              if (_emphasisTokens && !inHtmlFlow(child)) {
                 _emphasisTokens.push(child);
               }
             }
@@ -5459,6 +5497,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext;
 var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
   filterByTypes = _require2.filterByTypes,
+  inHtmlFlow = _require2.inHtmlFlow,
   tokenIfType = _require2.tokenIfType;
 var leftSpaceRe = /^\s(?:[^`]|$)/;
 var rightSpaceRe = /[^`]\s$/;
@@ -5477,13 +5516,15 @@ module.exports = {
   "description": "Spaces inside code span elements",
   "tags": ["whitespace", "code"],
   "function": function MD038(params, onError) {
-    var codeTextTokens = filterByTypes(params.parsers.micromark.tokens, ["codeText"]);
-    var _iterator = _createForOfIteratorHelper(codeTextTokens),
+    var codeTexts = filterByTypes(params.parsers.micromark.tokens, ["codeText"]).filter(function (codeText) {
+      return !inHtmlFlow(codeText);
+    });
+    var _iterator = _createForOfIteratorHelper(codeTexts),
       _step;
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var token = _step.value;
-        var children = token.children;
+        var codeText = _step.value;
+        var children = codeText.children;
         var first = 0;
         var last = children.length - 1;
         var startSequence = tokenIfType(children[first], "codeTextSequence");
