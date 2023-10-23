@@ -67,7 +67,7 @@ and test cases came directly from that project.
 [nodejs-extensions]: https://github.com/Lombiq/NodeJs-Extensions
 [rubygems-mdl]: https://rubygems.org/gems/mdl
 [sublimelinter]: https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint
-[super-linter]: https://github.com/github/super-linter
+[super-linter]: https://github.com/super-linter/super-linter
 [vscode-markdownlint]: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
 
 ### References
