@@ -5155,6 +5155,7 @@ var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/
   filterByPredicate = _require2.filterByPredicate,
   filterByTypes = _require2.filterByTypes,
   getHtmlTagInfo = _require2.getHtmlTagInfo,
+  inHtmlFlow = _require2.inHtmlFlow,
   parse = _require2.parse;
 module.exports = {
   "names": ["MD034", "no-bare-urls"],
@@ -5162,36 +5163,36 @@ module.exports = {
   "tags": ["links", "url"],
   "function": function MD034(params, onError) {
     var literalAutolinks = function literalAutolinks(tokens) {
-      var flattened = filterByPredicate(tokens, function () {
-        return true;
-      });
-      var result = [];
-      for (var i = 0; i < flattened.length; i++) {
-        var current = flattened[i];
-        var openTagInfo = getHtmlTagInfo(current);
-        if (openTagInfo && !openTagInfo.close) {
-          var count = 1;
-          for (var j = i + 1; j < flattened.length; j++) {
-            var candidate = flattened[j];
-            var closeTagInfo = getHtmlTagInfo(candidate);
-            if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
-              if (closeTagInfo.close) {
-                count--;
-                if (count === 0) {
-                  i = j;
-                  break;
+      return filterByPredicate(tokens, function (token) {
+        return token.type === "literalAutolink" && !inHtmlFlow(token);
+      }, function (token) {
+        var children = token.children;
+        var result = [];
+        for (var i = 0; i < children.length; i++) {
+          var current = children[i];
+          var openTagInfo = getHtmlTagInfo(current);
+          if (openTagInfo && !openTagInfo.close) {
+            var count = 1;
+            for (var j = i + 1; j < children.length; j++) {
+              var candidate = children[j];
+              var closeTagInfo = getHtmlTagInfo(candidate);
+              if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
+                if (closeTagInfo.close) {
+                  count--;
+                  if (count === 0) {
+                    i = j;
+                    break;
+                  }
+                } else {
+                  count++;
                 }
-              } else {
-                count++;
               }
             }
+          } else {
+            result.push(current);
           }
-        } else {
-          result.push(current);
         }
-      }
-      return result.filter(function (token) {
-        return token.type === "literalAutolink";
+        return result;
       });
     };
     var autoLinks = filterByTypes(params.parsers.micromark.tokens, ["literalAutolink"]);

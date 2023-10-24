@@ -23,7 +23,7 @@ Text
 
 ##  Heading 2b {MD019} {MD022}
  - Text *text* text * text * text ** text ** text `text` text `  text  ` text {MD004} {MD007} {MD032} {MD037} {MD038}
-- Text https://example.com/ [ link ](https://example.com/) {MD004} {MD005} {MD039}
+- Text https://example.com/ [ link ](https://example.com/) {MD004} {MD005} {MD034} {MD039}
 
 </p>
 
