@@ -135,6 +135,7 @@ playground for learning and exploring.
 - **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
 - **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
 - **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
+- **[MD054](doc/md054.md)** *link-image-style* - Link and image style
 
 <!-- markdownlint-restore -->
 
@@ -176,11 +177,12 @@ rules at once.
   `MD043`
 - **`hr`** - `MD035`
 - **`html`** - `MD033`
-- **`images`** - `MD045`, `MD052`, `MD053`
+- **`images`** - `MD045`, `MD052`, `MD053`, `MD054`
 - **`indentation`** - `MD005`, `MD006`, `MD007`, `MD027`
 - **`language`** - `MD040`
 - **`line_length`** - `MD013`
-- **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`
+- **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`,
+  `MD054`
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`

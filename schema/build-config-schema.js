@@ -519,6 +519,24 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD054":
+      scheme.properties = {
+        "style": {
+          "description": "Link or image style should be consistent",
+          "type": "string",
+          "enum": [
+            "mixed",
+            "autolink_only",
+            "inline_only",
+            "reference_only",
+            "inline_or_reference",
+            "inline_or_autolink",
+            "reference_or_autolink"
+          ],
+          "default": "mixed"
+        }
+      };
+      break;
     default:
       custom = false;
       break;

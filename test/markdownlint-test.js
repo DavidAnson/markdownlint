@@ -82,7 +82,7 @@ test("projectFiles", (t) => {
       "schema/*.md"
     ]))
     .then((files) => {
-      t.is(files.length, 58);
+      t.is(files.length, 59);
       const options = {
         files,
         "config": require("../.markdownlint.json")
@@ -839,7 +839,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(124);
+  t.plan(126);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -914,7 +914,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(162);
+  t.plan(168);
   const { addSchema, validate } =
     // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
@@ -1046,7 +1046,7 @@ test("validateConfigExampleJson", async(t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(147);
+  t.plan(150);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);
