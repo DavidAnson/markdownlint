@@ -1,4 +1,4 @@
-# Link Style reference_only
+# Link Style autolink_or_reference
 
 Text [url](https://example.com) text {MD054}
 
@@ -30,7 +30,7 @@ Text [url] text
 
 Text ![url] text
 
-Text <https://example.com> text {MD054}
+Text <https://example.com> text
 
 [url]: https://example.com "title"
 
@@ -44,9 +44,9 @@ Text [embedded-backslash] text
 
 Text [backslash-escape] text
 
-Text <https://example.com/embedded\3backslash> text {MD054}
+Text <https://example.com/embedded\3backslash> text
 
-Text <https://example.com/backslash[no-escape> text {MD054}
+Text <https://example.com/backslash[no-escape> text
 
 [embedded-backslash]: https://example.com/embedded\3backslash
 
@@ -64,14 +64,13 @@ Text [url](relative/path) text {MD054}
 
 Text [url](#fragment) text {MD054}
 
-Text <https://example.com/pa)re(ns> text {MD054}
+Text <https://example.com/pa)re(ns> text
 
 Text [url](https://example.com/an>g<le>) text {MD054}
 
 <!-- markdownlint-configure-file {
   "link-fragments": false,
   "link-image-style": {
-    "autolink": false,
     "inline": false
   }
 } -->

@@ -521,19 +521,20 @@ for (const rule of rules) {
       break;
     case "MD054":
       scheme.properties = {
-        "style": {
-          "description": "Link or image style should be consistent",
-          "type": "string",
-          "enum": [
-            "mixed",
-            "autolink_only",
-            "inline_only",
-            "reference_only",
-            "inline_or_reference",
-            "inline_or_autolink",
-            "reference_or_autolink"
-          ],
-          "default": "mixed"
+        "autolink": {
+          "description": "Allow autolinks",
+          "type": "boolean",
+          "default": true
+        },
+        "inline": {
+          "description": "Allow inline links and images",
+          "type": "boolean",
+          "default": true
+        },
+        "reference": {
+          "description": "Allow reference links and images",
+          "type": "boolean",
+          "default": true
         }
       };
       break;

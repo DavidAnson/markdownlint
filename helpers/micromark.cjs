@@ -239,11 +239,12 @@ function micromarkParse(
  * Filter a list of Micromark tokens by predicate.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {AllowedPredicate} allowed Allowed token predicate.
+ * @param {AllowedPredicate} [allowed] Allowed token predicate.
  * @param {TransformPredicate} [transformChildren] Transform predicate.
  * @returns {Token[]} Filtered tokens.
  */
 function filterByPredicate(tokens, allowed, transformChildren) {
+  allowed = allowed || (() => true);
   const result = [];
   const queue = [
     {
@@ -353,7 +354,7 @@ function getTokenParentOfType(token, types) {
 }
 
 /**
- * Get the text of a single token from a list of Micromark tokens by type.
+ * Get the text of the first match from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {string} type Types to match.
@@ -361,7 +362,7 @@ function getTokenParentOfType(token, types) {
  */
 function getTokenTextByType(tokens, type) {
   const filtered = tokens.filter((token) => token.type === type);
-  return (filtered.length === 1) ? filtered[0].text : null;
+  return (filtered.length > 0) ? filtered[0].text : null;
 }
 
 /**

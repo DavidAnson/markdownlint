@@ -100,6 +100,11 @@ Strong **with** different style {MD050}
 [unused]: link-destination
 {MD053:100}
 
+[text][url] {MD054}
+
+<!-- markdownlint-disable-next-line MD053 -->
+[url]: https://example.com/page
+
 <!-- markdownlint-configure-file {
   "first-heading-h1": true,
   "ul-start-left": true,
@@ -114,6 +119,9 @@ Strong **with** different style {MD050}
     "names": [
       "markdownlint"
     ]
+  },
+  "link-image-style": {
+    "reference": false
   }
 } -->
 

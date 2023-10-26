@@ -5,6 +5,8 @@ atx
 ATX
 atx_closed
 ATX-style
+Autolinks
+autolinks
 axibase
 backtick
 backticks

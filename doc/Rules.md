@@ -2104,7 +2104,7 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md049"></a>
 
-## `MD049` - Emphasis style should be consistent
+## `MD049` - Emphasis style
 
 Tags: `emphasis`
 
@@ -2139,7 +2139,7 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md050"></a>
 
-## `MD050` - Strong style should be consistent
+## `MD050` - Strong style
 
 Tags: `emphasis`
 
@@ -2294,9 +2294,9 @@ Parameters:
 Fixable: Some violations can be fixed by tooling
 
 Links and images in Markdown can provide the link destination or image source
-at the time of use or can define it elsewhere and use a label for reference.
-The reference format is convenient for keeping paragraph text clutter-free
-and makes it easy to reuse the same URL in multiple places.
+at the time of use or can use a label to reference a definition elsewhere in
+the document. The latter reference format is convenient for keeping paragraph
+text clutter-free and makes it easy to reuse the same URL in multiple places.
 
 Because link and image reference definitions are located separately from
 where they are used, there are two scenarios where a definition can be
@@ -2319,6 +2319,77 @@ Markdown:
 ```markdown
 [//]: # (This behaves like a comment)
 ```
+
+<a name="md054"></a>
+
+## `MD054` - Link and image style
+
+Tags: `images`, `links`
+
+Aliases: `link-image-style`
+
+Parameters:
+
+- `autolink`: Allow autolinks (`boolean`, default `true`)
+- `inline`: Allow inline links and images (`boolean`, default `true`)
+- `reference`: Allow reference links and images (`boolean`, default `true`)
+
+Fixable: Some violations can be fixed by tooling
+
+Links and images in Markdown can provide the link destination or image source at
+the time of use or can use a label to reference a definition elsewhere in the
+document. The reference format is convenient for keeping paragraph text
+clutter-free and makes it easy to reuse the same URL in multiple places.
+
+By default, this rule allows all link/image styles. It is possible to disable
+one or more of those styles.
+
+Setting the `autolink` parameter to `false` disables autolinks:
+
+```markdown
+<https://example.com>
+```
+
+Setting the `inline` parameter to `false` disables inline links and images:
+
+```markdown
+[link](https://example.com)
+
+![image](https://example.com)
+```
+
+Setting the `reference` parameter to `false` disables full, collapsed, and
+shortcut reference links and images:
+
+```markdown
+[link][url]
+
+[url][]
+
+[url]
+
+![image][url]
+
+![url][]
+
+![url]
+
+[url]: https://example.com
+```
+
+To fix violations of this rule, change the link or image to use an allowed
+style. This rule can automatically fix violations when a link or image can be
+converted to the `inline` style (preferred) or a link can be converted to the
+`autolink` style (which does not support images and must be an absolute URL).
+This rule does not fix scenarios that require converting a link or image to the
+`reference` style because that involves naming the reference and knowing where
+in the document to insert it.
+
+Rationale: Consistent formatting makes it easier to understand a document.
+Autolinks are concise, but appear as URLs which can be long and confusing.
+Inline links and images can include descriptive text, but take up more space in
+Markdown form. Reference links and images can be easier to read and manipulate
+in Markdown form, but require editing two locations.
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {

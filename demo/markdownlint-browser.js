@@ -799,7 +799,12 @@ function getReferenceLinkImageData(params) {
             if (definitions.has(reference)) {
               duplicateDefinitions.push([reference, token.startLine - 1]);
             } else {
-              definitions.set(reference, token.startLine - 1);
+              var destinationString = null;
+              var parent = micromark.getTokenParentOfType(token, ["definition"]);
+              if (parent) {
+                destinationString = micromark.getTokenTextByType(micromark.filterByPredicate(parent.children), "definitionDestinationString");
+              }
+              definitions.set(reference, [token.startLine - 1, destinationString]);
             }
           }
           break;
@@ -1416,11 +1421,14 @@ function micromarkParse(markdown) {
  * Filter a list of Micromark tokens by predicate.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {AllowedPredicate} allowed Allowed token predicate.
+ * @param {AllowedPredicate} [allowed] Allowed token predicate.
  * @param {TransformPredicate} [transformChildren] Transform predicate.
  * @returns {Token[]} Filtered tokens.
  */
 function filterByPredicate(tokens, allowed, transformChildren) {
+  allowed = allowed || function () {
+    return true;
+  };
   var result = [];
   var queue = [{
     "array": tokens,
@@ -1525,7 +1533,7 @@ function getTokenParentOfType(token, types) {
 }
 
 /**
- * Get the text of a single token from a list of Micromark tokens by type.
+ * Get the text of the first match from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {string} type Types to match.
@@ -1535,7 +1543,7 @@ function getTokenTextByType(tokens, type) {
   var filtered = tokens.filter(function (token) {
     return token.type === type;
   });
-  return filtered.length === 1 ? filtered[0].text : null;
+  return filtered.length > 0 ? filtered[0].text : null;
 }
 
 /**
@@ -1655,7 +1663,7 @@ module.exports.referenceLinkImageData = function () {
 
 
 module.exports.deprecatedRuleNames = ["MD002", "MD006"];
-module.exports.fixableRuleNames = ["MD004", "MD005", "MD006", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053"];
+module.exports.fixableRuleNames = ["MD004", "MD005", "MD006", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.31.1";
 
@@ -5048,9 +5056,7 @@ module.exports = {
 
         // Find the "visual" end of the list
         var endLine = list.endLine;
-        var flattenedChildren = filterByPredicate(list.children, function () {
-          return true;
-        });
+        var flattenedChildren = filterByPredicate(list.children);
         var _iterator2 = _createForOfIteratorHelper(flattenedChildren.reverse()),
           _step2;
         try {
@@ -6306,14 +6312,14 @@ var impl = function impl(params, onError, type, asterisk, underline) {
 };
 module.exports = [{
   "names": ["MD049", "emphasis-style"],
-  "description": "Emphasis style should be consistent",
+  "description": "Emphasis style",
   "tags": ["emphasis"],
   "function": function MD049(params, onError) {
     return impl(params, onError, "emphasis", "*", "_", params.config.style || undefined);
   }
 }, {
   "names": ["MD050", "strong-style"],
-  "description": "Strong style should be consistent",
+  "description": "Strong style",
   "tags": ["emphasis"],
   "function": function MD050(params, onError) {
     return impl(params, onError, "strong", "**", "__", params.config.style || undefined);
@@ -6657,7 +6663,8 @@ module.exports = {
         var definition = _step.value;
         var _definition = _slicedToArray(definition, 2),
           label = _definition[0],
-          lineIndex = _definition[1];
+          _definition$ = _slicedToArray(_definition[1], 1),
+          lineIndex = _definition$[0];
         if (!ignored.has(label) && !references.has(label) && !shortcuts.has(label)) {
           var line = lines[lineIndex];
           addError(onError, lineIndex + 1, "Unused link or image reference definition: \"".concat(label, "\""), ellipsify(line), [1, line.length], singleLineDefinition(line) ? deleteFixInfo : 0);
@@ -6692,6 +6699,135 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md054.js":
+/*!***********************!*\
+  !*** ../lib/md054.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
+  addErrorContext = _require.addErrorContext,
+  nextLinesRe = _require.nextLinesRe;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes,
+  filterByPredicate = _require2.filterByPredicate,
+  getTokenTextByType = _require2.getTokenTextByType;
+var _require3 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
+  referenceLinkImageData = _require3.referenceLinkImageData;
+var backslashEscapeRe = /\\([!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g;
+var removeBackslashEscapes = function removeBackslashEscapes(text) {
+  return text.replace(backslashEscapeRe, "$1");
+};
+var autolinkDisallowedRe = /[ <>]/;
+var autolinkAble = function autolinkAble(destination) {
+  try {
+    // eslint-disable-next-line no-new
+    new URL(destination);
+  } catch (_unused) {
+    // Not an absolute URL
+    return false;
+  }
+  return !autolinkDisallowedRe.test(destination);
+};
+module.exports = {
+  "names": ["MD054", "link-image-style"],
+  "description": "Link and image style",
+  "tags": ["images", "links"],
+  "function": function _function(_ref, onError) {
+    var parsers = _ref.parsers,
+      config = _ref.config;
+    var autolink = config.autolink === undefined || !!config.autolink;
+    var inline = config.inline === undefined || !!config.inline;
+    var reference = config.reference === undefined || !!config.reference;
+    if (autolink && inline && reference) {
+      // Everything allowed, nothing to check
+      return;
+    }
+    var _referenceLinkImageDa = referenceLinkImageData(),
+      definitions = _referenceLinkImageDa.definitions;
+    var links = filterByTypes(parsers.micromark.tokens, ["autolink", "image", "link"]);
+    var _iterator = _createForOfIteratorHelper(links),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var link = _step.value;
+        var label = null;
+        var destination = null;
+        var children = link.children,
+          endColumn = link.endColumn,
+          endLine = link.endLine,
+          startColumn = link.startColumn,
+          startLine = link.startLine,
+          text = link.text,
+          type = link.type;
+        var image = type === "image";
+        var isError = false;
+        if (type === "autolink") {
+          // link kind is an autolink
+          destination = getTokenTextByType(children, "autolinkProtocol");
+          label = destination;
+          isError = !autolink;
+        } else {
+          // link type is "image" or "link"
+          var descendents = filterByPredicate(children);
+          label = getTokenTextByType(descendents, "labelText");
+          destination = getTokenTextByType(descendents, "resourceDestinationString");
+          if (destination) {
+            // link kind is an inline link
+            isError = !inline;
+          } else {
+            // link kind is a reference link
+            var referenceLabel = getTokenTextByType(descendents, "referenceString") || label;
+            var definition = definitions.get(referenceLabel);
+            destination = definition && definition[1];
+            isError = !reference && destination;
+          }
+        }
+        if (isError) {
+          var range = null;
+          var fixInfo = null;
+          if (startLine === endLine) {
+            range = [startColumn, endColumn - startColumn];
+            var insertText = null;
+            if (inline && label) {
+              // Most useful form
+              var prefix = image ? "!" : "";
+              var escapedLabel = label.replace(/[[\]]/g, "\\$&");
+              var escapedDestination = destination.replace(/[()]/g, "\\$&");
+              insertText = "".concat(prefix, "[").concat(escapedLabel, "](").concat(escapedDestination, ")");
+            } else if (autolink && !image && autolinkAble(destination)) {
+              // Simplest form
+              insertText = "<".concat(removeBackslashEscapes(destination), ">");
+            }
+            if (insertText) {
+              fixInfo = {
+                "editColumn": range[0],
+                insertText: insertText,
+                "deleteCount": range[1]
+              };
+            }
+          }
+          addErrorContext(onError, startLine, text.replace(nextLinesRe, ""), null, null, range, fixInfo);
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  }
+};
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -6713,7 +6849,11 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ./constants */ "../lib/constants.js"),
   homepage = _require.homepage,
   version = _require.version;
-var rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"), __webpack_require__(/*! ./md002 */ "../lib/md002.js"), __webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"), __webpack_require__(/*! ./md006 */ "../lib/md006.js"), __webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js")].concat(_toConsumableArray(__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js")), [__webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js")]);
+var rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"), __webpack_require__(/*! ./md002 */ "../lib/md002.js"), __webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"), __webpack_require__(/*! ./md006 */ "../lib/md006.js"), __webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js")].concat(_toConsumableArray(__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js")), [__webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js"), __webpack_require__(/*! ./md054 */ "../lib/md054.js")
+// md055: See https://github.com/markdownlint/markdownlint
+// md056: See https://github.com/markdownlint/markdownlint
+// md057: See https://github.com/markdownlint/markdownlint
+]);
 var _iterator = _createForOfIteratorHelper(rules),
   _step;
 try {

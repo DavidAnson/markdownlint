@@ -263,13 +263,13 @@
     "style": "consistent"
   },
 
-  // MD049/emphasis-style - Emphasis style should be consistent
+  // MD049/emphasis-style - Emphasis style
   "MD049": {
     // Emphasis style
     "style": "consistent"
   },
 
-  // MD050/strong-style - Strong style should be consistent
+  // MD050/strong-style - Strong style
   "MD050": {
     // Strong style
     "style": "consistent"
@@ -290,5 +290,15 @@
     "ignored_definitions": [
       "//"
     ]
+  },
+
+  // MD054/link-image-style - Link and image style
+  "MD054": {
+    // Allow autolinks
+    "autolink": true,
+    // Allow inline links and images
+    "inline": true,
+    // Allow reference links and images
+    "reference": true
   }
 }

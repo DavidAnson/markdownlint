@@ -881,7 +881,7 @@
       "$ref": "#/properties/MD048"
     },
     "MD049": {
-      "description": "MD049/emphasis-style - Emphasis style should be consistent",
+      "description": "MD049/emphasis-style - Emphasis style",
       "type": [
         "boolean",
         "object"
@@ -905,7 +905,7 @@
       "$ref": "#/properties/MD049"
     },
     "MD050": {
-      "description": "MD050/strong-style - Strong style should be consistent",
+      "description": "MD050/strong-style - Strong style",
       "type": [
         "boolean",
         "object"
@@ -979,6 +979,35 @@
     "link-image-reference-definitions": {
       "$ref": "#/properties/MD053"
     },
+    "MD054": {
+      "description": "MD054/link-image-style - Link and image style",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "autolink": {
+          "description": "Allow autolinks",
+          "type": "boolean",
+          "default": true
+        },
+        "inline": {
+          "description": "Allow inline links and images",
+          "type": "boolean",
+          "default": true
+        },
+        "reference": {
+          "description": "Allow reference links and images",
+          "type": "boolean",
+          "default": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "link-image-style": {
+      "$ref": "#/properties/MD054"
+    },
     "headings": {
       "description": "headings - MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1015,7 +1044,7 @@
       "default": true
     },
     "links": {
-      "description": "links - MD011, MD034, MD039, MD042, MD051, MD052, MD053",
+      "description": "links - MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054",
       "type": "boolean",
       "default": true
     },
@@ -1095,7 +1124,7 @@
       "default": true
     },
     "images": {
-      "description": "images - MD045, MD052, MD053",
+      "description": "images - MD045, MD052, MD053, MD054",
       "type": "boolean",
       "default": true
     }

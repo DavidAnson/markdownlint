@@ -748,7 +748,19 @@ function getReferenceLinkImageData(params) {
           if (definitions.has(reference)) {
             duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
-            definitions.set(reference, token.startLine - 1);
+            let destinationString = null;
+            const parent =
+              micromark.getTokenParentOfType(token, [ "definition" ]);
+            if (parent) {
+              destinationString = micromark.getTokenTextByType(
+                micromark.filterByPredicate(parent.children),
+                "definitionDestinationString"
+              );
+            }
+            definitions.set(
+              reference,
+              [ token.startLine - 1, destinationString ]
+            );
           }
         }
         break;

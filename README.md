@@ -130,8 +130,8 @@ playground for learning and exploring.
 - **[MD046](doc/md046.md)** *code-block-style* - Code block style
 - **[MD047](doc/md047.md)** *single-trailing-newline* - Files should end with a single newline character
 - **[MD048](doc/md048.md)** *code-fence-style* - Code fence style
-- **[MD049](doc/md049.md)** *emphasis-style* - Emphasis style should be consistent
-- **[MD050](doc/md050.md)** *strong-style* - Strong style should be consistent
+- **[MD049](doc/md049.md)** *emphasis-style* - Emphasis style
+- **[MD050](doc/md050.md)** *strong-style* - Strong style
 - **[MD051](doc/md051.md)** *link-fragments* - Link fragments should be valid
 - **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
 - **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
