@@ -73,8 +73,8 @@ In order to maintain the permissive MIT license this project uses, all
 contributions must be your own and released under that license. Code you add
 should be an original work and should not be copied from elsewhere. Taking code
 from a different project, Stack Overflow, or the like is not allowed. The use of
-tools such as GitHub Copilot that generate code from other projects is not
-allowed.
+tools such as GitHub Copilot, ChatGPT, LLMs (large language models), etc. that
+incorporate code from other projects is not allowed.
 
 Thank you!
 
