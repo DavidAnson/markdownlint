@@ -96,7 +96,7 @@
     "typescript": "5.2.2",
     "webpack": "5.89.0",
     "webpack-cli": "5.1.4",
-    "yaml": "2.3.3"
+    "yaml": "2.3.4"
   },
   "keywords": [
     "markdown",
