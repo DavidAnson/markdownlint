@@ -48,6 +48,7 @@ JSON
 JSONC
 kramdown
 linter
+LLMs
 Lombiq
 markdownlint
 markdownlint-cli
