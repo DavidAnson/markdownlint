@@ -49,7 +49,8 @@ for (const rule of rules) {
     tags[tag] = tagRules;
   }
   const scheme = {
-    "description": rule.names.join("/") + " - " + rule.description,
+    "description":
+      `${rule.names.join("/")} : ${rule.description} : ${rule.information}`,
     "type": "boolean",
     "default": true
   };
@@ -557,7 +558,7 @@ for (const rule of rules) {
 // Add tags
 for (const [ tag, tagTags ] of Object.entries(tags)) {
   const scheme = {
-    "description": tag + " - " + tagTags.join(", "),
+    "description": `${tag} : ${tagTags.join(", ")}`,
     "type": "boolean",
     "default": true
   };
