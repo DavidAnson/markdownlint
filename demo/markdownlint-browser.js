@@ -6741,9 +6741,9 @@ module.exports = {
   "names": ["MD054", "link-image-style"],
   "description": "Link and image style",
   "tags": ["images", "links"],
-  "function": function _function(_ref, onError) {
-    var parsers = _ref.parsers,
-      config = _ref.config;
+  "function": function _function(params, onError) {
+    var parsers = params.parsers,
+      config = params.config;
     var autolink = config.autolink === undefined || !!config.autolink;
     var inline = config.inline === undefined || !!config.inline;
     var reference = config.reference === undefined || !!config.reference;
