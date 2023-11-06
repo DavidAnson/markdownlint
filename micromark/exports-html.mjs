@@ -1,6 +1,6 @@
 // @ts-check
 
-/* eslint-disable max-len, n/no-missing-import */
+/* eslint-disable n/no-missing-import */
 
 export { compile } from "micromark";
 export { gfmAutolinkLiteralHtml } from "micromark-extension-gfm-autolink-literal";

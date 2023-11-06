@@ -28,12 +28,9 @@ for (const rule in configSchema.properties) {
 
 const transformComments = (input, commentPrefix) => (
   commentPrefix +
-  // eslint-disable-next-line max-len
   " Example markdownlint configuration with all properties set to their default value\n" +
   input
-    // eslint-disable-next-line max-len
     .replace(/^(\s*)[^-\s]+-sub-description"?: "?([^"\n]+)"?,?$/gm, "$1" + commentPrefix + " $2")
-    // eslint-disable-next-line max-len
     .replace(/^(\s*)[^-\s]+-description"?: "?([^"\n]+)"?,?$/gm, "\n$1" + commentPrefix + " $2")
 );
 

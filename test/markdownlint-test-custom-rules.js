@@ -656,7 +656,6 @@ test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
     t.is(
       // @ts-ignore
       err.message,
-      // eslint-disable-next-line max-len
       "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
       "Did not get correct exception for null object."
     );
@@ -687,7 +686,6 @@ test("customRulesOnErrorNullSync", (t) => {
       markdownlint.sync(options);
     },
     {
-      // eslint-disable-next-line max-len
       "message": "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'."
     },
     "Did not get correct exception for null object."
@@ -777,7 +775,6 @@ test("customRulesOnErrorBad", (t) => {
         },
         {
           "message":
-            // eslint-disable-next-line max-len
             `Value of '${propertyNames}' passed to onError by 'NAME' is incorrect for 'string'.`
         },
         "Did not get correct exception for bad object."
@@ -848,7 +845,6 @@ test("customRulesOnErrorInvalid", (t) => {
         },
         {
           "message":
-            // eslint-disable-next-line max-len
             `Value of '${propertyNames}' passed to onError by 'NAME' is incorrect for 'string'.`
         },
         "Did not get correct exception for invalid object."
@@ -1056,7 +1052,6 @@ test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
           "ruleDescription": "description",
           "ruleInformation": null,
           "errorDetail": "This rule threw an exception: " +
-            // eslint-disable-next-line max-len
             "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
           "errorContext": null,
           "errorRange": null,
@@ -1098,7 +1093,6 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
         "ruleDescription": "description",
         "ruleInformation": null,
         "errorDetail": "This rule threw an exception: " +
-          // eslint-disable-next-line max-len
           "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
         "errorContext": null,
         "errorRange": null,

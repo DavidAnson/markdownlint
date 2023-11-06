@@ -215,7 +215,6 @@
   violations.addEventListener("click", onViolationClick, true);
   copyLink.addEventListener("click", onCopyLinkClick);
 
-  /* eslint-disable max-len */
   markdown.value = [
     "## Introduction",
     "",
@@ -243,7 +242,6 @@
     "[`markdownlint/Ruby`](https://github.com/markdownlint/markdownlint) for the inspiration and [`markdown-it`](https://github.com/markdown-it/markdown-it) for the parser and interactive demo idea!",
     ""
   ].join("\n");
-  /* eslint-enable max-len */
 
   // Update Markdown from hash (if present)
   if (window.location.hash) {
