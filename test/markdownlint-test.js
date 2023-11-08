@@ -916,7 +916,6 @@ test("readme", async(t) => {
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
   t.plan(168);
   const { addSchema, validate } =
-    // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
   addSchema(configSchemaStrict, configSchemaStrictUri);
   const validateConfigSchema = await validate(configSchemaStrictUri);
@@ -955,7 +954,6 @@ test("validateJsonUsingConfigSchemaStrict", async(t) => {
 test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
   t.plan(4);
   const { addSchema, validate } =
-    // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
   addSchema(configSchema, configSchemaUri);
   addSchema(configSchemaStrict, configSchemaStrictUri);
@@ -990,7 +988,6 @@ test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
 test("validateConfigSchemaAppliesToUnknownProperties", async(t) => {
   t.plan(4);
   const { addSchema, validate } =
-    // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
   addSchema(configSchema, configSchemaUri);
   const validateConfigSchema = await validate(configSchemaUri);
@@ -1014,7 +1011,6 @@ test("validateConfigExampleJson", async(t) => {
 
   // Validate schema
   const { addSchema, validate } =
-    // eslint-disable-next-line n/file-extension-in-import
     await import("@hyperjump/json-schema/draft-07");
   const schemaResult =
     await validate(jsonSchemaVersion, configSchema, "BASIC");
