@@ -4,7 +4,9 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+/** @type {import("../lib/markdownlint").Rule[]} */
 const rules = require("../lib/rules");
+const jsonSchemaToTypeScript = require("json-schema-to-typescript");
 
 // Schema scaffolding
 const schema = {
@@ -548,10 +550,12 @@ for (const rule of rules) {
     scheme.type = [ "boolean", "object" ];
     scheme.additionalProperties = false;
   }
-  for (const [ index, name ] of rule.names.entries()) {
-    schema.properties[name] = (index === 0) ? scheme : {
-      "$ref": `#/properties/${rule.names[0]}`
-    };
+  for (const name of rule.names) {
+    schema.properties[name] = scheme;
+    // Using $ref causes rule aliases not to get JSDoc comments
+    // schema.properties[name] = (index === 0) ? scheme : {
+    //   "$ref": `#/properties/${rule.names[0]}`
+    // };
   }
 }
 
@@ -568,3 +572,18 @@ for (const [ tag, tagTags ] of Object.entries(tags)) {
 // Write schema
 const schemaFile = path.join(__dirname, "markdownlint-config-schema.json");
 fs.writeFileSync(schemaFile, JSON.stringify(schema, null, "  "));
+
+// Write TypeScript declaration
+// See https://github.com/bcherny/json-schema-to-typescript/issues/356 for why
+// additionalProperties is deleted
+const schemaDeclaration =
+  path.join(__dirname, "..", "lib", "configuration.d.ts");
+// @ts-ignore
+delete schema.additionalProperties;
+schema.title = "Configuration";
+jsonSchemaToTypeScript.compile(
+  // @ts-ignore
+  schema,
+  "UNUSED"
+  // eslint-disable-next-line unicorn/prefer-top-level-await
+).then((declaration) => fs.writeFileSync(schemaDeclaration, declaration));

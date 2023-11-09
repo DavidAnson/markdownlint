@@ -2106,6 +2106,7 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
     return key.toUpperCase() === "DEFAULT";
   });
   var ruleDefault = defaultKey.length === 0 || !!config[defaultKey[0]];
+  /** @type {Configuration} */
   var effectiveConfig = {};
   var _iterator14 = _createForOfIteratorHelper(ruleList),
     _step14;
@@ -3191,10 +3192,10 @@ module.exports = markdownlint;
  */
 
 /**
- * Configuration object for linting rules. For a detailed schema, see
+ * Configuration object for linting rules. For the JSON schema, see
  * {@link ../schema/markdownlint-config-schema.json}.
  *
- * @typedef {Object.<string, RuleConfiguration>} Configuration
+ * @typedef {import("./configuration").Configuration} Configuration
  */
 
 /**

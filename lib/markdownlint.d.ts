@@ -358,12 +358,10 @@ type FixInfo = {
  */
 type LintContentCallback = (error: Error | null, result?: LintError[]) => void;
 /**
- * Configuration object for linting rules. For a detailed schema, see
+ * Configuration object for linting rules. For the JSON schema, see
  * {@link  ../schema/markdownlint-config-schema.json}.
  */
-type Configuration = {
-    [x: string]: RuleConfiguration;
-};
+type Configuration = import("./configuration").Configuration;
 /**
  * Rule configuration.
  */
