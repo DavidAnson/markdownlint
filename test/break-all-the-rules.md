@@ -1,11 +1,11 @@
-## Heading 1 {MD002:1} {MD041:1}
+## Heading 1 {MD041:1}
 
 #### Heading 2 {MD001:3}
 
 # Heading 3 {MD003} {MD043} #
 
 * list {MD032}
- +  list {MD004} {MD006} {MD007} {MD030} {MD032}
+ +  list {MD004} {MD007} {MD030} {MD032}
 
 * list
    * list {MD007}
@@ -35,7 +35,7 @@ long line long line long line long line long line long line long line long line 
 # Heading 8
 
 {MD024:35}
-Note: Can not break MD025 and MD002 in the same file
+Note: Can not break MD025 and MD041 in the same file
 
  # Heading 9 {MD023} {MD026}.
 
@@ -106,11 +106,9 @@ Strong **with** different style {MD050}
 [url]: https://example.com/page
 
 <!-- markdownlint-configure-file {
-  "first-heading-h1": true,
-  "ul-start-left": true,
   "required-headings": {
     "headings": [
-      "## Heading 1 {MD002:1} {MD041:1}",
+      "## Heading 1 {MD041:1}",
       "#### Heading 2 {MD001:3}",
       "# Broken"
     ]

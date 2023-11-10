@@ -58,17 +58,6 @@ for (const rule of rules) {
   };
   let custom = true;
   switch (rule.names[0]) {
-    case "MD002":
-      scheme.properties = {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 6,
-          "default": 1
-        }
-      };
-      break;
     case "MD003":
       scheme.properties = {
         "style": {

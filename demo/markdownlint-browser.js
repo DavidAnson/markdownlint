@@ -1654,8 +1654,8 @@ module.exports.referenceLinkImageData = function () {
 
 
 
-module.exports.deprecatedRuleNames = ["MD002", "MD006"];
-module.exports.fixableRuleNames = ["MD004", "MD005", "MD006", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"];
+module.exports.deprecatedRuleNames = [];
+module.exports.fixableRuleNames = ["MD004", "MD005", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.31.1";
 
@@ -1694,8 +1694,7 @@ var _require = __webpack_require__(/*! node:util */ "?39e5"),
   promisify = _require.promisify;
 var markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
 var micromark = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-var _require2 = __webpack_require__(/*! ./constants */ "../lib/constants.js"),
-  deprecatedRuleNames = _require2.deprecatedRuleNames;
+// const { deprecatedRuleNames } = require("./constants");
 var rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 var helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 var cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -2116,22 +2115,13 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
       var _ruleName2 = rule.names[0].toUpperCase();
       effectiveConfig[_ruleName2] = ruleDefault;
     }
+    // for (const ruleName of deprecatedRuleNames) {
+    //   effectiveConfig[ruleName] = false;
+    // }
   } catch (err) {
     _iterator14.e(err);
   } finally {
     _iterator14.f();
-  }
-  var _iterator15 = _createForOfIteratorHelper(deprecatedRuleNames),
-    _step15;
-  try {
-    for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
-      var _ruleName3 = _step15.value;
-      effectiveConfig[_ruleName3] = false;
-    }
-  } catch (err) {
-    _iterator15.e(err);
-  } finally {
-    _iterator15.f();
   }
   for (var _i5 = 0, _Object$keys = Object.keys(config); _i5 < _Object$keys.length; _i5++) {
     var key = _Object$keys[_i5];
@@ -2144,17 +2134,17 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
       value = false;
     }
     var keyUpper = key.toUpperCase();
-    var _iterator16 = _createForOfIteratorHelper(aliasToRuleNames[keyUpper] || []),
-      _step16;
+    var _iterator15 = _createForOfIteratorHelper(aliasToRuleNames[keyUpper] || []),
+      _step15;
     try {
-      for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
-        var ruleName = _step16.value;
+      for (_iterator15.s(); !(_step15 = _iterator15.n()).done;) {
+        var ruleName = _step15.value;
         effectiveConfig[ruleName] = value;
       }
     } catch (err) {
-      _iterator16.e(err);
+      _iterator15.e(err);
     } finally {
-      _iterator16.f();
+      _iterator15.f();
     }
   }
   return effectiveConfig;
@@ -2215,13 +2205,13 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   // Helper functions
   // eslint-disable-next-line jsdoc/require-jsdoc
   function handleInlineConfig(input, forEachMatch, forEachLine) {
-    var _iterator17 = _createForOfIteratorHelper(input.entries()),
-      _step17;
+    var _iterator16 = _createForOfIteratorHelper(input.entries()),
+      _step16;
     try {
-      for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
-        var _step17$value = _slicedToArray(_step17.value, 2),
-          lineIndex = _step17$value[0],
-          line = _step17$value[1];
+      for (_iterator16.s(); !(_step16 = _iterator16.n()).done;) {
+        var _step16$value = _slicedToArray(_step16.value, 2),
+          lineIndex = _step16$value[0],
+          line = _step16$value[1];
         if (!noInlineConfig) {
           var match = null;
           while (match = helpers.inlineCommentStartRe.exec(line)) {
@@ -2240,9 +2230,9 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
         }
       }
     } catch (err) {
-      _iterator17.e(err);
+      _iterator16.e(err);
     } finally {
-      _iterator17.f();
+      _iterator16.f();
     }
   }
   // eslint-disable-next-line jsdoc/require-jsdoc
@@ -2261,28 +2251,28 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
     var enabled = action.startsWith("ENABLE");
     var trimmed = parameter && parameter.trim();
     var items = trimmed ? trimmed.toUpperCase().split(/\s+/) : allRuleNames;
-    var _iterator18 = _createForOfIteratorHelper(items),
-      _step18;
+    var _iterator17 = _createForOfIteratorHelper(items),
+      _step17;
     try {
-      for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
-        var nameUpper = _step18.value;
-        var _iterator19 = _createForOfIteratorHelper(aliasToRuleNames[nameUpper] || []),
-          _step19;
+      for (_iterator17.s(); !(_step17 = _iterator17.n()).done;) {
+        var nameUpper = _step17.value;
+        var _iterator18 = _createForOfIteratorHelper(aliasToRuleNames[nameUpper] || []),
+          _step18;
         try {
-          for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
-            var ruleName = _step19.value;
+          for (_iterator18.s(); !(_step18 = _iterator18.n()).done;) {
+            var ruleName = _step18.value;
             state[ruleName] = enabled;
           }
         } catch (err) {
-          _iterator19.e(err);
+          _iterator18.e(err);
         } finally {
-          _iterator19.f();
+          _iterator18.f();
         }
       }
     } catch (err) {
-      _iterator18.e(err);
+      _iterator17.e(err);
     } finally {
-      _iterator18.f();
+      _iterator17.f();
     }
     return state;
   }
@@ -2318,19 +2308,19 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   // Handle inline comments
   handleInlineConfig([lines.join("\n")], configureFile);
   var effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
-  var _iterator20 = _createForOfIteratorHelper(ruleList),
-    _step20;
+  var _iterator19 = _createForOfIteratorHelper(ruleList),
+    _step19;
   try {
-    for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
-      var rule = _step20.value;
+    for (_iterator19.s(); !(_step19 = _iterator19.n()).done;) {
+      var rule = _step19.value;
       var ruleName = rule.names[0].toUpperCase();
       allRuleNames.push(ruleName);
       enabledRules[ruleName] = !!effectiveConfig[ruleName];
     }
   } catch (err) {
-    _iterator20.e(err);
+    _iterator19.e(err);
   } finally {
-    _iterator20.f();
+    _iterator19.f();
   }
   capturedRules = enabledRules;
   handleInlineConfig(lines, enableDisableFile);
@@ -2533,50 +2523,50 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
     if (resultVersion === 0) {
       // Return a dictionary of rule->[line numbers]
       var dictionary = {};
-      var _iterator21 = _createForOfIteratorHelper(results),
-        _step21;
+      var _iterator20 = _createForOfIteratorHelper(results),
+        _step20;
       try {
-        for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
-          var error = _step21.value;
+        for (_iterator20.s(); !(_step20 = _iterator20.n()).done;) {
+          var error = _step20.value;
           var ruleLines = dictionary[error.ruleName] || [];
           ruleLines.push(error.lineNumber);
           dictionary[error.ruleName] = ruleLines;
         }
         // @ts-ignore
       } catch (err) {
-        _iterator21.e(err);
+        _iterator20.e(err);
       } finally {
-        _iterator21.f();
+        _iterator20.f();
       }
       results = dictionary;
     } else if (resultVersion === 1) {
       // Use ruleAlias instead of ruleNames
+      var _iterator21 = _createForOfIteratorHelper(results),
+        _step21;
+      try {
+        for (_iterator21.s(); !(_step21 = _iterator21.n()).done;) {
+          var _error = _step21.value;
+          _error.ruleAlias = _error.ruleNames[1] || _error.ruleName;
+          delete _error.ruleNames;
+        }
+      } catch (err) {
+        _iterator21.e(err);
+      } finally {
+        _iterator21.f();
+      }
+    } else {
+      // resultVersion 2 or 3: Remove unwanted ruleName
       var _iterator22 = _createForOfIteratorHelper(results),
         _step22;
       try {
         for (_iterator22.s(); !(_step22 = _iterator22.n()).done;) {
-          var _error = _step22.value;
-          _error.ruleAlias = _error.ruleNames[1] || _error.ruleName;
-          delete _error.ruleNames;
+          var _error2 = _step22.value;
+          delete _error2.ruleName;
         }
       } catch (err) {
         _iterator22.e(err);
       } finally {
         _iterator22.f();
-      }
-    } else {
-      // resultVersion 2 or 3: Remove unwanted ruleName
-      var _iterator23 = _createForOfIteratorHelper(results),
-        _step23;
-      try {
-        for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
-          var _error2 = _step23.value;
-          delete _error2.ruleName;
-        }
-      } catch (err) {
-        _iterator23.e(err);
-      } finally {
-        _iterator23.f();
       }
     }
     return results;
@@ -2693,18 +2683,18 @@ function lintInput(options, synchronous, callback) {
     "html": true
   });
   var markdownItPlugins = options.markdownItPlugins || [];
-  var _iterator24 = _createForOfIteratorHelper(markdownItPlugins),
-    _step24;
+  var _iterator23 = _createForOfIteratorHelper(markdownItPlugins),
+    _step23;
   try {
-    for (_iterator24.s(); !(_step24 = _iterator24.n()).done;) {
-      var plugin = _step24.value;
+    for (_iterator23.s(); !(_step23 = _iterator23.n()).done;) {
+      var plugin = _step23.value;
       // @ts-ignore
       md.use.apply(md, _toConsumableArray(plugin));
     }
   } catch (err) {
-    _iterator24.e(err);
+    _iterator23.e(err);
   } finally {
-    _iterator24.f();
+    _iterator23.f();
   }
   var fs = options.fs || __webpack_require__(/*! node:fs */ "?d0ee");
   var aliasToRuleNames = mapAliasToRuleNames(ruleList);
@@ -3264,38 +3254,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib/md002.js":
-/*!***********************!*\
-  !*** ../lib/md002.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-// @ts-check
-
-
-
-var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addErrorDetailIf = _require.addErrorDetailIf;
-module.exports = {
-  "names": ["MD002", "first-heading-h1", "first-header-h1"],
-  "description": "First heading should be a top-level heading",
-  "tags": ["headings", "headers"],
-  "function": function MD002(params, onError) {
-    var level = Number(params.config.level || 1);
-    var tag = "h" + level;
-    params.parsers.markdownit.tokens.every(function forToken(token) {
-      if (token.type === "heading_open") {
-        addErrorDetailIf(onError, token.lineNumber, tag, token.tag);
-        return false;
-      }
-      return true;
-    });
-  }
-};
-
-/***/ }),
-
 /***/ "../lib/md003.js":
 /*!***********************!*\
   !*** ../lib/md003.js ***!
@@ -3513,65 +3471,6 @@ module.exports = {
           _iterator2.e(err);
         } finally {
           _iterator2.f();
-        }
-      }
-    } catch (err) {
-      _iterator.e(err);
-    } finally {
-      _iterator.f();
-    }
-  }
-};
-
-/***/ }),
-
-/***/ "../lib/md006.js":
-/*!***********************!*\
-  !*** ../lib/md006.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-// @ts-check
-
-
-
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
-  addErrorDetailIf = _require.addErrorDetailIf,
-  listItemMarkerRe = _require.listItemMarkerRe,
-  rangeFromRegExp = _require.rangeFromRegExp;
-var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
-  flattenedLists = _require2.flattenedLists;
-module.exports = {
-  "names": ["MD006", "ul-start-left"],
-  "description": "Consider starting bulleted lists at the beginning of the line",
-  "tags": ["bullet", "ul", "indentation"],
-  "function": function MD006(params, onError) {
-    var _iterator = _createForOfIteratorHelper(flattenedLists()),
-      _step;
-    try {
-      for (_iterator.s(); !(_step = _iterator.n()).done;) {
-        var list = _step.value;
-        if (list.unordered && !list.nesting && list.indent !== 0) {
-          var _iterator2 = _createForOfIteratorHelper(list.items),
-            _step2;
-          try {
-            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-              var item = _step2.value;
-              var lineNumber = item.lineNumber,
-                line = item.line;
-              addErrorDetailIf(onError, lineNumber, 0, list.indent, null, null, rangeFromRegExp(line, listItemMarkerRe), {
-                "deleteCount": line.length - line.trimStart().length
-              });
-            }
-          } catch (err) {
-            _iterator2.e(err);
-          } finally {
-            _iterator2.f();
-          }
         }
       }
     } catch (err) {
@@ -6840,7 +6739,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ./constants */ "../lib/constants.js"),
   homepage = _require.homepage,
   version = _require.version;
-var rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"), __webpack_require__(/*! ./md002 */ "../lib/md002.js"), __webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"), __webpack_require__(/*! ./md006 */ "../lib/md006.js"), __webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js")].concat(_toConsumableArray(__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js")), [__webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js"), __webpack_require__(/*! ./md054 */ "../lib/md054.js")
+var rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"), __webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"), __webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js")].concat(_toConsumableArray(__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js")), [__webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js"), __webpack_require__(/*! ./md054 */ "../lib/md054.js")
 // md055: See https://github.com/markdownlint/markdownlint
 // md056: See https://github.com/markdownlint/markdownlint
 // md057: See https://github.com/markdownlint/markdownlint

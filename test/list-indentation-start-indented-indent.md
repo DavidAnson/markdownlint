@@ -39,7 +39,6 @@
   * item 3 {MD007}
 
 <!-- markdownlint-configure-file {
-  "ul-start-left": false,
   "ul-indent": {
     "indent": 3,
     "start_indented": true

@@ -3,9 +3,6 @@
 ## Another one {MD025}
 
 <!-- markdownlint-configure-file {
-  "first-heading-h1": {
-    "level": 2
-  },
   "single-title": {
     "level": 2
   },

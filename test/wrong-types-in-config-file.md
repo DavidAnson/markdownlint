@@ -3,9 +3,6 @@
 Long line long line long line long line long line long line long line long line long line long line {MD013}
 
 <!-- markdownlint-configure-file {
-  "first-heading-h1": {
-    "level": "1"
-  },
   "heading-style": {
     "style": 0
   },

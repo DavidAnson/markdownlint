@@ -82,11 +82,12 @@ test("projectFiles", (t) => {
       "schema/*.md"
     ]))
     .then((files) => {
-      t.is(files.length, 59);
+      t.is(files.length, 57);
       const options = {
         files,
         "config": require("../.markdownlint.json")
       };
+      // @ts-ignore
       return markdownlint.promises.markdownlint(options).then((actual) => {
         const expected = {};
         for (const file of files) {
@@ -270,7 +271,7 @@ test("enableRules", (t) => new Promise((resolve) => {
       "./test/first_heading_bad_atx.md"
     ],
     "config": {
-      "MD002": true,
+      "MD041": true,
       "default": false,
       "no-multiple-space-atx": true
     },
@@ -281,11 +282,11 @@ test("enableRules", (t) => new Promise((resolve) => {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
-        "MD002": [ 3 ],
-        "MD019": [ 3, 5 ]
+        "MD019": [ 3, 5 ],
+        "MD041": [ 1 ]
       },
       "./test/first_heading_bad_atx.md": {
-        "MD002": [ 1 ]
+        "MD041": [ 1 ]
       }
     };
     // @ts-ignore
@@ -302,7 +303,7 @@ test("enableRulesMixedCase", (t) => new Promise((resolve) => {
       "./test/first_heading_bad_atx.md"
     ],
     "config": {
-      "Md002": true,
+      "Md041": true,
       "DeFaUlT": false,
       "nO-mUlTiPlE-sPaCe-AtX": true
     },
@@ -313,11 +314,11 @@ test("enableRulesMixedCase", (t) => new Promise((resolve) => {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
-        "MD002": [ 3 ],
-        "MD019": [ 3, 5 ]
+        "MD019": [ 3, 5 ],
+        "MD041": [ 1 ]
       },
       "./test/first_heading_bad_atx.md": {
-        "MD002": [ 1 ]
+        "MD041": [ 1 ]
       }
     };
     // @ts-ignore
@@ -474,7 +475,7 @@ test("styleAll", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 128 ],
+        "MD047": [ 126 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
@@ -523,7 +524,7 @@ test("styleRelaxed", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 128 ],
+        "MD047": [ 126 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
@@ -839,7 +840,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(126);
+  t.plan(122);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -914,7 +915,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(168);
+  t.plan(165);
   const { addSchema, validate } =
     await import("@hyperjump/json-schema/draft-07");
   addSchema(configSchemaStrict, configSchemaStrictUri);
@@ -1042,7 +1043,7 @@ test("validateConfigExampleJson", async(t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(150);
+  t.plan(144);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

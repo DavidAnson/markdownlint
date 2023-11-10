@@ -90,7 +90,7 @@ test("configCustomFileSystem", (t) => new Promise((resolve) => {
   };
   const extendedContent = {
     "MD001": true,
-    "MD002": true
+    "MD041": true
   };
   const fsApi = {
     "access": (p, m, cb) => {
@@ -403,7 +403,7 @@ test("configCustomFileSystemSync", (t) => {
   };
   const extendedContent = {
     "MD001": true,
-    "MD002": true
+    "MD041": true
   };
   const fsApi = {
     "accessSync": (p) => {
@@ -465,7 +465,7 @@ test("configCustomFileSystemPromise", (t) => new Promise((resolve) => {
   };
   const extendedContent = {
     "MD001": true,
-    "MD002": true
+    "MD041": true
   };
   const fsApi = {
     "access": (p, m, cb) => {
@@ -534,7 +534,7 @@ test("extendCustomFileSystemPromise", (t) => new Promise((resolve) => {
   };
   const extendedContent = {
     "MD001": true,
-    "MD002": true
+    "MD041": true
   };
   const fsApi = {
     "access": (p, m, cb) => {

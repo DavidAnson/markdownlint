@@ -5,6 +5,5 @@
 ##   Heading 3 {MD019}
 
 <!-- markdownlint-configure-file {
-  "first-heading-h1": false,
   "first-line-heading": false
 } -->

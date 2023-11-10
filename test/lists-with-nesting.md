@@ -19,7 +19,7 @@
 - three {MD032}
 
 1. one {MD032}
-  - two {MD006} {MD007} {MD032}
+  - two {MD007} {MD032}
 1. three {MD032}
 
 ## Correct nesting, same type
@@ -94,10 +94,6 @@
                1. seven
                   - eight
 
- * 1. Item {MD004} {MD006} {MD007}
- * 2. Item {MD004} {MD006} {MD007}
- * 3. Item {MD004} {MD006} {MD007}
-
-<!-- markdownlint-configure-file {
-  "ul-start-left": true
-} -->
+ * 1. Item {MD004} {MD007}
+ * 2. Item {MD004} {MD007}
+ * 3. Item {MD004} {MD007}

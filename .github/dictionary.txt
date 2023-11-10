@@ -33,8 +33,6 @@ ES2015
 ES6
 ESLint
 eslint-plugin-markdownlint
-first-header-h1
-first-heading-h1
 first-line-h1
 formatter
 fs

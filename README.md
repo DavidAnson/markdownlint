@@ -87,11 +87,9 @@ playground for learning and exploring.
 <!-- markdownlint-disable line-length -->
 
 - **[MD001](doc/md001.md)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
-- ~~**[MD002](doc/md002.md)** *first-heading-h1/first-header-h1* - First heading should be a top-level heading~~
 - **[MD003](doc/md003.md)** *heading-style/header-style* - Heading style
 - **[MD004](doc/md004.md)** *ul-style* - Unordered list style
 - **[MD005](doc/md005.md)** *list-indent* - Inconsistent indentation for list items at the same level
-- ~~**[MD006](doc/md006.md)** *ul-start-left* - Consider starting bulleted lists at the beginning of the line~~
 - **[MD007](doc/md007.md)** *ul-indent* - Unordered list indentation
 - **[MD009](doc/md009.md)** *no-trailing-spaces* - Trailing spaces
 - **[MD010](doc/md010.md)** *no-hard-tabs* - Hard tabs
@@ -141,8 +139,6 @@ playground for learning and exploring.
 
 See [Rules.md](doc/Rules.md) for more details.
 
-~~Struck through~~ rules are deprecated and provided for backward-compatibility.
-
 > All rules with `heading` as part of their name are also available as `header`
 > aliases (e.g. `heading-increment` is also available as `header-increment`).
 > The use of `header` is deprecated and provided for backward-compatibility.
@@ -166,19 +162,18 @@ rules at once.
 - **`atx_closed`** - `MD020`, `MD021`
 - **`blank_lines`** - `MD012`, `MD022`, `MD031`, `MD032`, `MD047`
 - **`blockquote`** - `MD027`, `MD028`
-- **`bullet`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD032`
+- **`bullet`** - `MD004`, `MD005`, `MD007`, `MD032`
 - **`code`** - `MD014`, `MD031`, `MD038`, `MD040`, `MD046`, `MD048`
 - **`emphasis`** - `MD036`, `MD037`, `MD049`, `MD050`
 - **`hard_tab`** - `MD010`
-- **`headers`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
+- **`headers`** - `MD001`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`, `MD022`,
+  `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
+- **`headings`** - `MD001`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
   `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
-- **`headings`** - `MD001`, `MD002`, `MD003`, `MD018`, `MD019`, `MD020`,
-  `MD021`, `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`,
-  `MD043`
 - **`hr`** - `MD035`
 - **`html`** - `MD033`
 - **`images`** - `MD045`, `MD052`, `MD053`, `MD054`
-- **`indentation`** - `MD005`, `MD006`, `MD007`, `MD027`
+- **`indentation`** - `MD005`, `MD007`, `MD027`
 - **`language`** - `MD040`
 - **`line_length`** - `MD013`
 - **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`,
@@ -186,7 +181,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
-- **`ul`** - `MD004`, `MD005`, `MD006`, `MD007`, `MD030`, `MD032`
+- **`ul`** - `MD004`, `MD005`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
   `MD037`, `MD038`, `MD039`

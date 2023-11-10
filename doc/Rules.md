@@ -2,8 +2,7 @@
 
 This document contains a description of all rules, what they are checking for,
 as well as examples of documents that break the rule and corrected
-versions of the examples. Any rule whose heading is ~~struck through~~ is
-deprecated, but still provided for backward-compatibility.
+versions of the examples.
 
 <a name="md001"></a>
 
@@ -44,46 +43,6 @@ level at a time:
 Rationale: Headings represent the structure of a document and can be confusing
 when skipped - especially for accessibility scenarios. More information:
 <https://www.w3.org/WAI/tutorials/page-structure/headings/>.
-
-<a name="md002"></a>
-
-## ~~`MD002` - First heading should be a top-level heading~~
-
-> This rule is deprecated and provided for backward-compatibility
-
-Tags: `headers`, `headings`
-
-Aliases: `first-header-h1`, `first-heading-h1`
-
-Parameters:
-
-- `level`: Heading level (`integer`, default `1`)
-
-> Note: *MD002 has been deprecated and is disabled by default.*
-> [MD041/first-line-heading](md041.md) offers an improved implementation.
-
-This rule is intended to ensure document headings start at the top level and
-is triggered when the first heading in the document isn't an h1 heading:
-
-```markdown
-## This isn't an H1 heading
-
-### Another heading
-```
-
-The first heading in the document should be an h1 heading:
-
-```markdown
-# Start with an H1 heading
-
-## Then use an H2 for subsections
-```
-
-Note: The `level` parameter can be used to change the top-level (ex: to h2) in
-cases where an h1 is added externally.
-
-Rationale: The top-level heading often acts as the title of a document. More
-information: <https://cirosantilli.com/markdown-style-guide#top-level-header>.
 
 <a name="md003"></a>
 
@@ -255,55 +214,6 @@ the same ending column:
 
 Rationale: Violations of this rule can lead to improperly rendered content.
 
-<a name="md006"></a>
-
-## ~~`MD006` - Consider starting bulleted lists at the beginning of the line~~
-
-> This rule is deprecated and provided for backward-compatibility
-
-Tags: `bullet`, `indentation`, `ul`
-
-Aliases: `ul-start-left`
-
-Fixable: Some violations can be fixed by tooling
-
-This rule is triggered when top-level lists don't start at the beginning of a
-line:
-
-```markdown
-Some text
-
-  * List item
-  * List item
-```
-
-To fix, ensure that top-level list items are not indented:
-
-```markdown
-Some test
-
-* List item
-* List item
-```
-
-Note: This rule is triggered for the following scenario because the unordered
-sublist is not recognized as such by the parser. Not being nested 3 characters
-as required by the outer ordered list, it creates a top-level unordered list
-instead.
-
-```markdown
-1. List item
-  - List item
-  - List item
-1. List item
-```
-
-Rationale: Starting lists at the beginning of the line means that nested list
-items can all be indented by the same amount when an editor's indent function
-or the tab key is used to indent. Starting a list 1 space in means that the
-indent of the first nested list is less than the indent of the second level (3
-characters if you use 4 space tabs, or 1 character if you use 2 space tabs).
-
 <a name="md007"></a>
 
 ## `MD007` - Unordered list indentation
@@ -344,10 +254,9 @@ unordered (otherwise, extra indentation of ordered lists interferes with the
 rule).
 
 The `start_indented` parameter allows the first level of lists to be indented by
-the configured number of spaces rather than starting at zero (the inverse of
-MD006). The `start_indent` parameter allows the first level of lists to be
-indented by a different number of spaces than the rest (ignored when
-`start_indented` is not set).
+the configured number of spaces rather than starting at zero. The `start_indent`
+parameter allows the first level of lists to be indented by a different number
+of spaces than the rest (ignored when `start_indented` is not set).
 
 Rationale: Indenting by 2 spaces allows the content of a nested list to be in
 line with the start of the content of the parent list when a single space is

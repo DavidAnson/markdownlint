@@ -4,7 +4,6 @@
   "default": true,
   "whitespace": false,
   "line_length": false,
-  "ul-start-left": false,
   "ul-indent": false,
   "no-inline-html": false,
   "no-bare-urls": false,

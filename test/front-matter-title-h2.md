@@ -9,8 +9,5 @@ categories: jekyll update
 Front matter from [Jekyll documentation](https://jekyllrb.com/docs/posts/#a-typical-post).
 
 <!-- markdownlint-configure-file {
-  "first-heading-h1": {
-    "level": 2
-  },
   "line-length": false
 } -->

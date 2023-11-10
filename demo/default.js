@@ -228,7 +228,6 @@
     "Click a violation for information about it or click its line number to highlighted it in the lower-left box.",
     "",
     "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md) are enabled except [MD013/line-length](https://github.com/DavidAnson/markdownlint/blob/main/doc/md013.md).",
-    "> ([MD002/first-heading-h1](https://github.com/DavidAnson/markdownlint/blob/main/doc/md002.md) and [MD006/ul-start-left](https://github.com/DavidAnson/markdownlint/blob/main/doc/md006.md) are deprecated.)",
     "",
     "",
     "#### Resources",

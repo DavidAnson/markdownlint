@@ -31,39 +31,6 @@ export interface Configuration {
    */
   "header-increment"?: boolean;
   /**
-   * MD002/first-heading-h1/first-header-h1 : First heading should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md002.md
-   */
-  MD002?:
-    | boolean
-    | {
-        /**
-         * Heading level
-         */
-        level?: number;
-      };
-  /**
-   * MD002/first-heading-h1/first-header-h1 : First heading should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md002.md
-   */
-  "first-heading-h1"?:
-    | boolean
-    | {
-        /**
-         * Heading level
-         */
-        level?: number;
-      };
-  /**
-   * MD002/first-heading-h1/first-header-h1 : First heading should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md002.md
-   */
-  "first-header-h1"?:
-    | boolean
-    | {
-        /**
-         * Heading level
-         */
-        level?: number;
-      };
-  /**
    * MD003/heading-style/header-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
    */
   MD003?:
@@ -126,14 +93,6 @@ export interface Configuration {
    * MD005/list-indent : Inconsistent indentation for list items at the same level : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md005.md
    */
   "list-indent"?: boolean;
-  /**
-   * MD006/ul-start-left : Consider starting bulleted lists at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md006.md
-   */
-  MD006?: boolean;
-  /**
-   * MD006/ul-start-left : Consider starting bulleted lists at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md006.md
-   */
-  "ul-start-left"?: boolean;
   /**
    * MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md007.md
    */
@@ -1169,23 +1128,23 @@ export interface Configuration {
         reference?: boolean;
       };
   /**
-   * headings : MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
+   * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
   /**
-   * headers : MD001, MD002, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
+   * headers : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headers?: boolean;
   /**
-   * bullet : MD004, MD005, MD006, MD007, MD032
+   * bullet : MD004, MD005, MD007, MD032
    */
   bullet?: boolean;
   /**
-   * ul : MD004, MD005, MD006, MD007, MD030, MD032
+   * ul : MD004, MD005, MD007, MD030, MD032
    */
   ul?: boolean;
   /**
-   * indentation : MD005, MD006, MD007, MD027
+   * indentation : MD005, MD007, MD027
    */
   indentation?: boolean;
   /**
