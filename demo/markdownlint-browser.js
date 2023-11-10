@@ -3237,9 +3237,9 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf,
   filterTokens = _require.filterTokens;
 module.exports = {
-  "names": ["MD001", "heading-increment", "header-increment"],
+  "names": ["MD001", "heading-increment"],
   "description": "Heading levels should only increment by one level at a time",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD001(params, onError) {
     var prevLevel = 0;
     filterTokens(params, "heading_open", function forToken(token) {
@@ -3270,9 +3270,9 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   filterTokens = _require.filterTokens,
   headingStyleFor = _require.headingStyleFor;
 module.exports = {
-  "names": ["MD003", "heading-style", "header-style"],
+  "names": ["MD003", "heading-style"],
   "description": "Heading style",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD003(params, onError) {
     var style = String(params.config.style || "consistent");
     filterTokens(params, "heading_open", function forToken(token) {
@@ -3887,9 +3887,6 @@ module.exports = {
     var tables = params.config.tables;
     var includeTables = tables === undefined ? true : !!tables;
     var headings = params.config.headings;
-    if (headings === undefined) {
-      headings = params.config.headers;
-    }
     var includeHeadings = headings === undefined ? true : !!headings;
     var headingLineNumbers = [];
     forEachHeading(params, function (heading) {
@@ -4027,7 +4024,7 @@ var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
 module.exports = {
   "names": ["MD018", "no-missing-space-atx"],
   "description": "No space after hash on atx style heading",
-  "tags": ["headings", "headers", "atx", "spaces"],
+  "tags": ["headings", "atx", "spaces"],
   "function": function MD018(params, onError) {
     forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
       if (!inCode && /^#+[^# \t]/.test(line) && !/#\s*$/.test(line) && !line.startsWith("#️⃣")) {
@@ -4067,7 +4064,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
 module.exports = {
   "names": ["MD019", "no-multiple-space-atx"],
   "description": "Multiple spaces after hash on atx style heading",
-  "tags": ["headings", "headers", "atx", "spaces"],
+  "tags": ["headings", "atx", "spaces"],
   "function": function MD019(params, onError) {
     filterTokens(params, "heading_open", function (token) {
       if (headingStyleFor(token) === "atx") {
@@ -4115,7 +4112,7 @@ var _require2 = __webpack_require__(/*! ./cache */ "../lib/cache.js"),
 module.exports = {
   "names": ["MD020", "no-missing-space-closed-atx"],
   "description": "No space inside hashes on closed atx style heading",
-  "tags": ["headings", "headers", "atx_closed", "spaces"],
+  "tags": ["headings", "atx_closed", "spaces"],
   "function": function MD020(params, onError) {
     forEachLine(lineMetadata(), function (line, lineIndex, inCode) {
       if (!inCode) {
@@ -4175,7 +4172,7 @@ var closedAtxRe = /^(#+)([ \t]+)([^ \t]|[^ \t].*[^ \t])([ \t]+)(#+)(\s*)$/;
 module.exports = {
   "names": ["MD021", "no-multiple-space-closed-atx"],
   "description": "Multiple spaces inside hashes on closed atx style heading",
-  "tags": ["headings", "headers", "atx_closed", "spaces"],
+  "tags": ["headings", "atx_closed", "spaces"],
   "function": function MD021(params, onError) {
     filterTokens(params, "heading_open", function (token) {
       if (headingStyleFor(token) === "atx_closed") {
@@ -4275,9 +4272,9 @@ var getBlockQuote = function getBlockQuote(str, count) {
   .concat("\n").repeat(count);
 };
 module.exports = {
-  "names": ["MD022", "blanks-around-headings", "blanks-around-headers"],
+  "names": ["MD022", "blanks-around-headings"],
   "description": "Headings should be surrounded by blank lines",
-  "tags": ["headings", "headers", "blank_lines"],
+  "tags": ["headings", "blank_lines"],
   "function": function MD022(params, onError) {
     var getLinesAbove = getLinesFunction(params.config.lines_above);
     var getLinesBelow = getLinesFunction(params.config.lines_below);
@@ -4352,9 +4349,9 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   filterTokens = _require.filterTokens;
 var spaceBeforeHeadingRe = /^(\s+|[>\s]+\s\s)[^>\s]/;
 module.exports = {
-  "names": ["MD023", "heading-start-left", "header-start-left"],
+  "names": ["MD023", "heading-start-left"],
   "description": "Headings must start at the beginning of the line",
-  "tags": ["headings", "headers", "spaces"],
+  "tags": ["headings", "spaces"],
   "function": function MD023(params, onError) {
     filterTokens(params, "heading_open", function forToken(token) {
       var lineNumber = token.lineNumber,
@@ -4395,9 +4392,9 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext,
   forEachHeading = _require.forEachHeading;
 module.exports = {
-  "names": ["MD024", "no-duplicate-heading", "no-duplicate-header"],
+  "names": ["MD024", "no-duplicate-heading"],
   "description": "Multiple headings with the same content",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD024(params, onError) {
     var siblingsOnly = !!params.config.siblings_only || !!params.config.allow_different_nesting || false;
     var knownContents = [null, []];
@@ -4445,7 +4442,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
 module.exports = {
   "names": ["MD025", "single-title", "single-h1"],
   "description": "Multiple top-level headings in the same document",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD025(params, onError) {
     var level = Number(params.config.level || 1);
     var tag = "h" + level;
@@ -4490,7 +4487,7 @@ var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/
 module.exports = {
   "names": ["MD026", "no-trailing-punctuation"],
   "description": "Trailing punctuation in heading",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD026(params, onError) {
     var punctuation = params.config.punctuation;
     punctuation = String(punctuation === undefined ? allPunctuationNoQuestion : punctuation);
@@ -5186,9 +5183,9 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorContext = _require.addErrorContext,
   allPunctuation = _require.allPunctuation;
 module.exports = {
-  "names": ["MD036", "no-emphasis-as-heading", "no-emphasis-as-header"],
+  "names": ["MD036", "no-emphasis-as-heading"],
   "description": "Emphasis used instead of a heading",
-  "tags": ["headings", "headers", "emphasis"],
+  "tags": ["headings", "emphasis"],
   "function": function MD036(params, onError) {
     var punctuation = params.config.punctuation;
     punctuation = String(punctuation === undefined ? allPunctuation : punctuation);
@@ -5610,7 +5607,7 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
 module.exports = {
   "names": ["MD041", "first-line-heading", "first-line-h1"],
   "description": "First line in a file should be a top-level heading",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD041(params, onError) {
     var level = Number(params.config.level || 1);
     var tag = "h" + level;
@@ -5735,11 +5732,11 @@ var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
   addErrorDetailIf = _require.addErrorDetailIf,
   forEachHeading = _require.forEachHeading;
 module.exports = {
-  "names": ["MD043", "required-headings", "required-headers"],
+  "names": ["MD043", "required-headings"],
   "description": "Required heading structure",
-  "tags": ["headings", "headers"],
+  "tags": ["headings"],
   "function": function MD043(params, onError) {
-    var requiredHeadings = params.config.headings || params.config.headers;
+    var requiredHeadings = params.config.headings;
     if (!Array.isArray(requiredHeadings)) {
       // Nothing to check; avoid doing any work
       return;

@@ -201,11 +201,6 @@ for (const rule of rules) {
           "type": "boolean",
           "default": true
         },
-        "headers": {
-          "description": "Include headings",
-          "type": "boolean",
-          "default": true
-        },
         "strict": {
           "description": "Strict length checking",
           "type": "boolean",
@@ -388,15 +383,6 @@ for (const rule of rules) {
     case "MD043":
       scheme.properties = {
         "headings": {
-          "description": "List of headings",
-          "type": "array",
-          "items": {
-            "type": "string",
-            "pattern": "^(\\*|\\+|#{1,6} .*)$"
-          },
-          "default": []
-        },
-        "headers": {
           "description": "List of headings",
           "type": "array",
           "items": {

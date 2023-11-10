@@ -6,10 +6,10 @@ default: true
 # Path to configuration file to extend
 extends: null
 
-# MD001/heading-increment/header-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
+# MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
 MD001: true
 
-# MD003/heading-style/header-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
+# MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
 MD003:
   # Heading style
   style: "consistent"
@@ -71,8 +71,6 @@ MD013:
   tables: true
   # Include headings
   headings: true
-  # Include headings
-  headers: true
   # Strict length checking
   strict: false
   # Stern length checking
@@ -93,17 +91,17 @@ MD020: true
 # MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md021.md
 MD021: true
 
-# MD022/blanks-around-headings/blanks-around-headers : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
+# MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
 MD022:
   # Blank lines above heading
   lines_above: 1
   # Blank lines below heading
   lines_below: 1
 
-# MD023/heading-start-left/header-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
+# MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
 MD023: true
 
-# MD024/no-duplicate-heading/no-duplicate-header : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
+# MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
 MD024:
   # Only check sibling headings
   allow_different_nesting: false
@@ -165,7 +163,7 @@ MD035:
   # Horizontal rule style
   style: "consistent"
 
-# MD036/no-emphasis-as-heading/no-emphasis-as-header : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
+# MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
 MD036:
   # Punctuation characters
   punctuation: ".,;:!?。，；：！？"
@@ -196,12 +194,10 @@ MD041:
 # MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md042.md
 MD042: true
 
-# MD043/required-headings/required-headers : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
+# MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
 MD043:
   # List of headings
   headings: []
-  # List of headings
-  headers: []
   # Match case of headings
   match_case: false
 

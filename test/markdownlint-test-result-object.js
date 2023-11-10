@@ -606,7 +606,7 @@ test("frontMatterResultVersion3", (t) => new Promise((resolve) => {
         {
           "lineNumber": 3,
           "ruleNames":
-            [ "MD022", "blanks-around-headings", "blanks-around-headers" ],
+            [ "MD022", "blanks-around-headings" ],
           "ruleDescription": "Headings should be surrounded by blank lines",
           "ruleInformation":
             `${homepage}/blob/v${version}/doc/md022.md`,

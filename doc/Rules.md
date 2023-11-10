@@ -8,9 +8,9 @@ versions of the examples.
 
 ## `MD001` - Heading levels should only increment by one level at a time
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
-Aliases: `header-increment`, `heading-increment`
+Aliases: `heading-increment`
 
 This rule is triggered when you skip heading levels in a Markdown document, for
 example:
@@ -48,9 +48,9 @@ when skipped - especially for accessibility scenarios. More information:
 
 ## `MD003` - Heading style
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
-Aliases: `header-style`, `heading-style`
+Aliases: `heading-style`
 
 Parameters:
 
@@ -469,7 +469,6 @@ Parameters:
 - `code_block_line_length`: Number of characters for code blocks (`integer`,
   default `80`)
 - `code_blocks`: Include code blocks (`boolean`, default `true`)
-- `headers`: Include headings (`boolean`, default `true`)
 - `heading_line_length`: Number of characters for headings (`integer`, default
   `80`)
 - `headings`: Include headings (`boolean`, default `true`)
@@ -477,8 +476,6 @@ Parameters:
 - `stern`: Stern length checking (`boolean`, default `false`)
 - `strict`: Strict length checking (`boolean`, default `false`)
 - `tables`: Include tables (`boolean`, default `true`)
-
-> If `headings` is not provided, `headers` (deprecated) will be used.
 
 This rule is triggered when there are lines that are longer than the
 configured `line_length` (default: 80 characters). To fix this, split the line
@@ -580,7 +577,7 @@ for more information.
 
 ## `MD018` - No space after hash on atx style heading
 
-Tags: `atx`, `headers`, `headings`, `spaces`
+Tags: `atx`, `headings`, `spaces`
 
 Aliases: `no-missing-space-atx`
 
@@ -610,7 +607,7 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 ## `MD019` - Multiple spaces after hash on atx style heading
 
-Tags: `atx`, `headers`, `headings`, `spaces`
+Tags: `atx`, `headings`, `spaces`
 
 Aliases: `no-multiple-space-atx`
 
@@ -641,7 +638,7 @@ content.
 
 ## `MD020` - No space inside hashes on closed atx style heading
 
-Tags: `atx_closed`, `headers`, `headings`, `spaces`
+Tags: `atx_closed`, `headings`, `spaces`
 
 Aliases: `no-missing-space-closed-atx`
 
@@ -673,7 +670,7 @@ Rationale: Violations of this rule can lead to improperly rendered content.
 
 ## `MD021` - Multiple spaces inside hashes on closed atx style heading
 
-Tags: `atx_closed`, `headers`, `headings`, `spaces`
+Tags: `atx_closed`, `headings`, `spaces`
 
 Aliases: `no-multiple-space-closed-atx`
 
@@ -707,9 +704,9 @@ content.
 
 ## `MD022` - Headings should be surrounded by blank lines
 
-Tags: `blank_lines`, `headers`, `headings`
+Tags: `blank_lines`, `headings`
 
-Aliases: `blanks-around-headers`, `blanks-around-headings`
+Aliases: `blanks-around-headings`
 
 Parameters:
 
@@ -762,9 +759,9 @@ as regular text.
 
 ## `MD023` - Headings must start at the beginning of the line
 
-Tags: `headers`, `headings`, `spaces`
+Tags: `headings`, `spaces`
 
-Aliases: `header-start-left`, `heading-start-left`
+Aliases: `heading-start-left`
 
 Fixable: Some violations can be fixed by tooling
 
@@ -798,9 +795,9 @@ parsed as headings, and will instead appear as regular text.
 
 ## `MD024` - Multiple headings with the same content
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
-Aliases: `no-duplicate-header`, `no-duplicate-heading`
+Aliases: `no-duplicate-heading`
 
 Parameters:
 
@@ -848,7 +845,7 @@ heading name; headings with the same content can cause problems with that.
 
 ## `MD025` - Multiple top-level headings in the same document
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
 Aliases: `single-h1`, `single-title`
 
@@ -900,7 +897,7 @@ be contained within this heading.
 
 ## `MD026` - Trailing punctuation in heading
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
 Aliases: `no-trailing-punctuation`
 
@@ -1438,9 +1435,9 @@ Rationale: Consistent formatting makes it easier to understand a document.
 
 ## `MD036` - Emphasis used instead of a heading
 
-Tags: `emphasis`, `headers`, `headings`
+Tags: `emphasis`, `headings`
 
-Aliases: `no-emphasis-as-header`, `no-emphasis-as-heading`
+Aliases: `no-emphasis-as-heading`
 
 Parameters:
 
@@ -1648,7 +1645,7 @@ correct syntax highlighting for code. More information:
 
 ## `MD041` - First line in a file should be a top-level heading
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
 Aliases: `first-line-h1`, `first-line-heading`
 
@@ -1735,17 +1732,14 @@ links.
 
 ## `MD043` - Required heading structure
 
-Tags: `headers`, `headings`
+Tags: `headings`
 
-Aliases: `required-headers`, `required-headings`
+Aliases: `required-headings`
 
 Parameters:
 
-- `headers`: List of headings (`string[]`, default `[]`)
 - `headings`: List of headings (`string[]`, default `[]`)
 - `match_case`: Match case of headings (`boolean`, default `false`)
-
-> If `headings` is not provided, `headers` (deprecated) will be used.
 
 This rule is triggered when the headings in a file do not match the array of
 headings passed to the rule. It can be used to enforce a standard heading

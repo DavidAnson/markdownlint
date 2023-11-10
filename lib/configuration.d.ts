@@ -19,19 +19,15 @@ export interface Configuration {
    */
   $schema?: string;
   /**
-   * MD001/heading-increment/header-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
+   * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
    */
   MD001?: boolean;
   /**
-   * MD001/heading-increment/header-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
+   * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
    */
   "heading-increment"?: boolean;
   /**
-   * MD001/heading-increment/header-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md001.md
-   */
-  "header-increment"?: boolean;
-  /**
-   * MD003/heading-style/header-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
+   * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
    */
   MD003?:
     | boolean
@@ -42,20 +38,9 @@ export interface Configuration {
         style?: "consistent" | "atx" | "atx_closed" | "setext" | "setext_with_atx" | "setext_with_atx_closed";
       };
   /**
-   * MD003/heading-style/header-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
+   * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
    */
   "heading-style"?:
-    | boolean
-    | {
-        /**
-         * Heading style
-         */
-        style?: "consistent" | "atx" | "atx_closed" | "setext" | "setext_with_atx" | "setext_with_atx_closed";
-      };
-  /**
-   * MD003/heading-style/header-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md003.md
-   */
-  "header-style"?:
     | boolean
     | {
         /**
@@ -268,10 +253,6 @@ export interface Configuration {
          */
         headings?: boolean;
         /**
-         * Include headings
-         */
-        headers?: boolean;
-        /**
          * Strict length checking
          */
         strict?: boolean;
@@ -310,10 +291,6 @@ export interface Configuration {
          * Include headings
          */
         headings?: boolean;
-        /**
-         * Include headings
-         */
-        headers?: boolean;
         /**
          * Strict length checking
          */
@@ -364,7 +341,7 @@ export interface Configuration {
    */
   "no-multiple-space-closed-atx"?: boolean;
   /**
-   * MD022/blanks-around-headings/blanks-around-headers : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
+   * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
    */
   MD022?:
     | boolean
@@ -379,7 +356,7 @@ export interface Configuration {
         lines_below?: number | number[];
       };
   /**
-   * MD022/blanks-around-headings/blanks-around-headers : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
+   * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
    */
   "blanks-around-headings"?:
     | boolean
@@ -394,34 +371,15 @@ export interface Configuration {
         lines_below?: number | number[];
       };
   /**
-   * MD022/blanks-around-headings/blanks-around-headers : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md022.md
-   */
-  "blanks-around-headers"?:
-    | boolean
-    | {
-        /**
-         * Blank lines above heading
-         */
-        lines_above?: number | number[];
-        /**
-         * Blank lines below heading
-         */
-        lines_below?: number | number[];
-      };
-  /**
-   * MD023/heading-start-left/header-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
+   * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
    */
   MD023?: boolean;
   /**
-   * MD023/heading-start-left/header-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
+   * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
    */
   "heading-start-left"?: boolean;
   /**
-   * MD023/heading-start-left/header-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md023.md
-   */
-  "header-start-left"?: boolean;
-  /**
-   * MD024/no-duplicate-heading/no-duplicate-header : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
+   * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
    */
   MD024?:
     | boolean
@@ -436,24 +394,9 @@ export interface Configuration {
         siblings_only?: boolean;
       };
   /**
-   * MD024/no-duplicate-heading/no-duplicate-header : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
+   * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
    */
   "no-duplicate-heading"?:
-    | boolean
-    | {
-        /**
-         * Only check sibling headings
-         */
-        allow_different_nesting?: boolean;
-        /**
-         * Only check sibling headings
-         */
-        siblings_only?: boolean;
-      };
-  /**
-   * MD024/no-duplicate-heading/no-duplicate-header : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md024.md
-   */
-  "no-duplicate-header"?:
     | boolean
     | {
         /**
@@ -699,7 +642,7 @@ export interface Configuration {
         style?: string;
       };
   /**
-   * MD036/no-emphasis-as-heading/no-emphasis-as-header : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
+   * MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
    */
   MD036?:
     | boolean
@@ -710,20 +653,9 @@ export interface Configuration {
         punctuation?: string;
       };
   /**
-   * MD036/no-emphasis-as-heading/no-emphasis-as-header : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
+   * MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
    */
   "no-emphasis-as-heading"?:
-    | boolean
-    | {
-        /**
-         * Punctuation characters
-         */
-        punctuation?: string;
-      };
-  /**
-   * MD036/no-emphasis-as-heading/no-emphasis-as-header : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md036.md
-   */
-  "no-emphasis-as-header"?:
     | boolean
     | {
         /**
@@ -839,7 +771,7 @@ export interface Configuration {
    */
   "no-empty-links"?: boolean;
   /**
-   * MD043/required-headings/required-headers : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
+   * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
    */
   MD043?:
     | boolean
@@ -849,16 +781,12 @@ export interface Configuration {
          */
         headings?: string[];
         /**
-         * List of headings
-         */
-        headers?: string[];
-        /**
          * Match case of headings
          */
         match_case?: boolean;
       };
   /**
-   * MD043/required-headings/required-headers : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
+   * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
    */
   "required-headings"?:
     | boolean
@@ -867,29 +795,6 @@ export interface Configuration {
          * List of headings
          */
         headings?: string[];
-        /**
-         * List of headings
-         */
-        headers?: string[];
-        /**
-         * Match case of headings
-         */
-        match_case?: boolean;
-      };
-  /**
-   * MD043/required-headings/required-headers : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md043.md
-   */
-  "required-headers"?:
-    | boolean
-    | {
-        /**
-         * List of headings
-         */
-        headings?: string[];
-        /**
-         * List of headings
-         */
-        headers?: string[];
         /**
          * Match case of headings
          */
@@ -1131,10 +1036,6 @@ export interface Configuration {
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
-  /**
-   * headers : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
-   */
-  headers?: boolean;
   /**
    * bullet : MD004, MD005, MD007, MD032
    */

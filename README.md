@@ -86,8 +86,8 @@ playground for learning and exploring.
 
 <!-- markdownlint-disable line-length -->
 
-- **[MD001](doc/md001.md)** *heading-increment/header-increment* - Heading levels should only increment by one level at a time
-- **[MD003](doc/md003.md)** *heading-style/header-style* - Heading style
+- **[MD001](doc/md001.md)** *heading-increment* - Heading levels should only increment by one level at a time
+- **[MD003](doc/md003.md)** *heading-style* - Heading style
 - **[MD004](doc/md004.md)** *ul-style* - Unordered list style
 - **[MD005](doc/md005.md)** *list-indent* - Inconsistent indentation for list items at the same level
 - **[MD007](doc/md007.md)** *ul-indent* - Unordered list indentation
@@ -101,9 +101,9 @@ playground for learning and exploring.
 - **[MD019](doc/md019.md)** *no-multiple-space-atx* - Multiple spaces after hash on atx style heading
 - **[MD020](doc/md020.md)** *no-missing-space-closed-atx* - No space inside hashes on closed atx style heading
 - **[MD021](doc/md021.md)** *no-multiple-space-closed-atx* - Multiple spaces inside hashes on closed atx style heading
-- **[MD022](doc/md022.md)** *blanks-around-headings/blanks-around-headers* - Headings should be surrounded by blank lines
-- **[MD023](doc/md023.md)** *heading-start-left/header-start-left* - Headings must start at the beginning of the line
-- **[MD024](doc/md024.md)** *no-duplicate-heading/no-duplicate-header* - Multiple headings with the same content
+- **[MD022](doc/md022.md)** *blanks-around-headings* - Headings should be surrounded by blank lines
+- **[MD023](doc/md023.md)** *heading-start-left* - Headings must start at the beginning of the line
+- **[MD024](doc/md024.md)** *no-duplicate-heading* - Multiple headings with the same content
 - **[MD025](doc/md025.md)** *single-title/single-h1* - Multiple top-level headings in the same document
 - **[MD026](doc/md026.md)** *no-trailing-punctuation* - Trailing punctuation in heading
 - **[MD027](doc/md027.md)** *no-multiple-space-blockquote* - Multiple spaces after blockquote symbol
@@ -115,14 +115,14 @@ playground for learning and exploring.
 - **[MD033](doc/md033.md)** *no-inline-html* - Inline HTML
 - **[MD034](doc/md034.md)** *no-bare-urls* - Bare URL used
 - **[MD035](doc/md035.md)** *hr-style* - Horizontal rule style
-- **[MD036](doc/md036.md)** *no-emphasis-as-heading/no-emphasis-as-header* - Emphasis used instead of a heading
+- **[MD036](doc/md036.md)** *no-emphasis-as-heading* - Emphasis used instead of a heading
 - **[MD037](doc/md037.md)** *no-space-in-emphasis* - Spaces inside emphasis markers
 - **[MD038](doc/md038.md)** *no-space-in-code* - Spaces inside code span elements
 - **[MD039](doc/md039.md)** *no-space-in-links* - Spaces inside link text
 - **[MD040](doc/md040.md)** *fenced-code-language* - Fenced code blocks should have a language specified
 - **[MD041](doc/md041.md)** *first-line-heading/first-line-h1* - First line in a file should be a top-level heading
 - **[MD042](doc/md042.md)** *no-empty-links* - No empty links
-- **[MD043](doc/md043.md)** *required-headings/required-headers* - Required heading structure
+- **[MD043](doc/md043.md)** *required-headings* - Required heading structure
 - **[MD044](doc/md044.md)** *proper-names* - Proper names should have the correct capitalization
 - **[MD045](doc/md045.md)** *no-alt-text* - Images should have alternate text (alt text)
 - **[MD046](doc/md046.md)** *code-block-style* - Code block style
@@ -138,10 +138,6 @@ playground for learning and exploring.
 <!-- markdownlint-restore -->
 
 See [Rules.md](doc/Rules.md) for more details.
-
-> All rules with `heading` as part of their name are also available as `header`
-> aliases (e.g. `heading-increment` is also available as `header-increment`).
-> The use of `header` is deprecated and provided for backward-compatibility.
 
 ### Custom Rules
 
@@ -166,8 +162,6 @@ rules at once.
 - **`code`** - `MD014`, `MD031`, `MD038`, `MD040`, `MD046`, `MD048`
 - **`emphasis`** - `MD036`, `MD037`, `MD049`, `MD050`
 - **`hard_tab`** - `MD010`
-- **`headers`** - `MD001`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`, `MD022`,
-  `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
 - **`headings`** - `MD001`, `MD003`, `MD018`, `MD019`, `MD020`, `MD021`,
   `MD022`, `MD023`, `MD024`, `MD025`, `MD026`, `MD036`, `MD041`, `MD043`
 - **`hr`** - `MD035`

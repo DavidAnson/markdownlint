@@ -840,7 +840,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(122);
+  t.plan(121);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
