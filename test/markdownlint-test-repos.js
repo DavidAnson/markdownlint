@@ -32,9 +32,14 @@ async function lintTestRepo(t, globPatterns, configPath) {
     // @ts-ignore
     readConfigPromise(configPath, [ jsoncParse, yamlParse ])
   ]).then((globbyAndReadConfigResults) => {
-    const [ files, config ] = globbyAndReadConfigResults;
+    const [ files, rawConfig ] = globbyAndReadConfigResults;
     // eslint-disable-next-line no-console
     console.log(`${t.title}: Linting ${files.length} files...`);
+    const config = Object.fromEntries(
+      // @ts-ignore
+      Object.entries(rawConfig).
+        map(([ k, v ]) => [ k.replace(/header/, "heading"), v ])
+    );
     return markdownlintPromise({
       files,
       config
