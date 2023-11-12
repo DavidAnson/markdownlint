@@ -509,8 +509,18 @@ for (const rule of rules) {
           "type": "boolean",
           "default": true
         },
-        "reference": {
-          "description": "Allow reference links and images",
+        "full": {
+          "description": "Allow full reference links and images",
+          "type": "boolean",
+          "default": true
+        },
+        "collapsed": {
+          "description": "Allow collapsed reference links and images",
+          "type": "boolean",
+          "default": true
+        },
+        "shortcut": {
+          "description": "Allow shortcut reference links and images",
           "type": "boolean",
           "default": true
         }

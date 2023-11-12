@@ -119,7 +119,7 @@ Strong **with** different style {MD050}
     ]
   },
   "link-image-style": {
-    "reference": false
+    "full": false
   }
 } -->
 

@@ -1,4 +1,4 @@
-# Link Style autolink_only
+# Link Style reference_only
 
 Text [url](https://example.com) text {MD054}
 
@@ -26,11 +26,11 @@ Text [url][] text {MD054}
 
 Text ![url][] text {MD054}
 
-Text [url] text {MD054}
+Text [url] text
 
-Text ![url] text {MD054}
+Text ![url] text
 
-Text <https://example.com> text
+Text <https://example.com> text {MD054}
 
 [url]: https://example.com "title"
 
@@ -40,13 +40,13 @@ Text [url](https://example.com/embedded\3backslash) text {MD054}
 
 Text [url](https://example.com/backslash\[escape) text {MD054}
 
-Text [embedded-backslash] text {MD054}
+Text [embedded-backslash] text
 
-Text [backslash-escape] text {MD054}
+Text [backslash-escape] text
 
-Text <https://example.com/embedded\3backslash> text
+Text <https://example.com/embedded\3backslash> text {MD054}
 
-Text <https://example.com/backslash[no-escape> text
+Text <https://example.com/backslash[no-escape> text {MD054}
 
 [embedded-backslash]: https://example.com/embedded\3backslash
 
@@ -64,17 +64,16 @@ Text [url](relative/path) text {MD054}
 
 Text [url](#fragment) text {MD054}
 
-Text <https://example.com/pa)re(ns> text
+Text <https://example.com/pa)re(ns> text {MD054}
 
 Text [url](https://example.com/an>g<le>) text {MD054}
 
 <!-- markdownlint-configure-file {
   "link-fragments": false,
-  "link-image-reference-definitions": false,
   "link-image-style": {
+    "autolink": false,
     "inline": false,
     "full": false,
-    "collapsed": false,
-    "shortcut": false
+    "collapsed": false
   }
 } -->

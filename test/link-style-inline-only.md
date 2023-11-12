@@ -73,6 +73,8 @@ Text [url](https://example.com/an>g<le>) text
   "link-image-reference-definitions": false,
   "link-image-style": {
     "autolink": false,
-    "reference": false
+    "full": false,
+    "collapsed": false,
+    "shortcut": false
   }
 } -->

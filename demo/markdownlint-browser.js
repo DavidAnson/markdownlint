@@ -6633,8 +6633,10 @@ module.exports = {
       config = params.config;
     var autolink = config.autolink === undefined || !!config.autolink;
     var inline = config.inline === undefined || !!config.inline;
-    var reference = config.reference === undefined || !!config.reference;
-    if (autolink && inline && reference) {
+    var full = config.full === undefined || !!config.full;
+    var collapsed = config.collapsed === undefined || !!config.collapsed;
+    var shortcut = config.shortcut === undefined || !!config.shortcut;
+    if (autolink && inline && full && collapsed && shortcut) {
       // Everything allowed, nothing to check
       return;
     }
@@ -6671,11 +6673,15 @@ module.exports = {
             // link kind is an inline link
             isError = !inline;
           } else {
-            // link kind is a reference link
-            var referenceLabel = getTokenTextByType(descendents, "referenceString") || label;
-            var definition = definitions.get(referenceLabel);
+            // link kind is a full/collapsed/shortcut reference link
+            var isShortcut = !children.some(function (t) {
+              return t.type === "reference";
+            });
+            var referenceString = getTokenTextByType(descendents, "referenceString");
+            var isCollapsed = referenceString === null;
+            var definition = definitions.get(referenceString || label);
             destination = definition && definition[1];
-            isError = !reference && destination;
+            isError = destination && (isShortcut ? !shortcut : isCollapsed ? !collapsed : !full);
           }
         }
         if (isError) {

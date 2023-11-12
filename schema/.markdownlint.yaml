@@ -256,5 +256,9 @@ MD054:
   autolink: true
   # Allow inline links and images
   inline: true
-  # Allow reference links and images
-  reference: true
+  # Allow full reference links and images
+  full: true
+  # Allow collapsed reference links and images
+  collapsed: true
+  # Allow shortcut reference links and images
+  shortcut: true

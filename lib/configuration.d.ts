@@ -1009,9 +1009,17 @@ export interface Configuration {
          */
         inline?: boolean;
         /**
-         * Allow reference links and images
+         * Allow full reference links and images
          */
-        reference?: boolean;
+        full?: boolean;
+        /**
+         * Allow collapsed reference links and images
+         */
+        collapsed?: boolean;
+        /**
+         * Allow shortcut reference links and images
+         */
+        shortcut?: boolean;
       };
   /**
    * MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md054.md
@@ -1028,9 +1036,17 @@ export interface Configuration {
          */
         inline?: boolean;
         /**
-         * Allow reference links and images
+         * Allow full reference links and images
          */
-        reference?: boolean;
+        full?: boolean;
+        /**
+         * Allow collapsed reference links and images
+         */
+        collapsed?: boolean;
+        /**
+         * Allow shortcut reference links and images
+         */
+        shortcut?: boolean;
       };
   /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043

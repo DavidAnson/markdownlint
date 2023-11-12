@@ -72,6 +72,8 @@ Text [url](https://example.com/an>g<le>) text
   "link-fragments": false,
   "link-image-reference-definitions": false,
   "link-image-style": {
-    "reference": false
+    "full": false,
+    "collapsed": false,
+    "shortcut": false
   }
 } -->
