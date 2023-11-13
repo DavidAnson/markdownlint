@@ -915,7 +915,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(169);
+  t.plan(171);
   const { addSchema, validate } =
     await import("@hyperjump/json-schema/draft-07");
   addSchema(configSchemaStrict, configSchemaStrictUri);

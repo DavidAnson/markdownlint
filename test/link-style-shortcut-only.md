@@ -1,4 +1,4 @@
-# Link Style reference_only
+# Link Style Shortcut Only
 
 Text [url](https://example.com) text {MD054}
 

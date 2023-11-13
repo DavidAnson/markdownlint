@@ -290,6 +290,8 @@
     // Allow collapsed reference links and images
     "collapsed": true,
     // Allow shortcut reference links and images
-    "shortcut": true
+    "shortcut": true,
+    // Allow URLs as inline links
+    "url_inline": true
   }
 }

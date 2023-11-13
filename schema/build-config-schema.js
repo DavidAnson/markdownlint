@@ -523,7 +523,12 @@ for (const rule of rules) {
           "description": "Allow shortcut reference links and images",
           "type": "boolean",
           "default": true
-        }
+        },
+        "url_inline": {
+          "description": "Allow URLs as inline links",
+          "type": "boolean",
+          "default": true
+        },
       };
       break;
     default:

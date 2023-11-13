@@ -1,4 +1,4 @@
-# Link Style inline_or_reference
+# Link Style Inline or Reference
 
 Text [url](https://example.com) text
 

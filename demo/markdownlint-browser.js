@@ -6636,7 +6636,8 @@ module.exports = {
     var full = config.full === undefined || !!config.full;
     var collapsed = config.collapsed === undefined || !!config.collapsed;
     var shortcut = config.shortcut === undefined || !!config.shortcut;
-    if (autolink && inline && full && collapsed && shortcut) {
+    var urlInline = config.url_inline === undefined || !!config.url_inline;
+    if (autolink && inline && full && collapsed && shortcut && urlInline) {
       // Everything allowed, nothing to check
       return;
     }
@@ -6671,7 +6672,8 @@ module.exports = {
           destination = getTokenTextByType(descendents, "resourceDestinationString");
           if (destination) {
             // link kind is an inline link
-            isError = !inline;
+            var title = getTokenTextByType(descendents, "resourceTitleString");
+            isError = !inline || !urlInline && autolink && !title && !image;
           } else {
             // link kind is a full/collapsed/shortcut reference link
             var isShortcut = !children.some(function (t) {
@@ -6690,13 +6692,16 @@ module.exports = {
           if (startLine === endLine) {
             range = [startColumn, endColumn - startColumn];
             var insertText = null;
-            if (inline && label) {
+            var canInline = inline && label;
+            var canAutolink = autolink && !image && autolinkAble(destination);
+            if (canInline && (urlInline || !canAutolink)) {
               // Most useful form
               var prefix = image ? "!" : "";
+              // @ts-ignore
               var escapedLabel = label.replace(/[[\]]/g, "\\$&");
               var escapedDestination = destination.replace(/[()]/g, "\\$&");
               insertText = "".concat(prefix, "[").concat(escapedLabel, "](").concat(escapedDestination, ")");
-            } else if (autolink && !image && autolinkAble(destination)) {
+            } else if (canAutolink) {
               // Simplest form
               insertText = "<".concat(removeBackslashEscapes(destination), ">");
             }

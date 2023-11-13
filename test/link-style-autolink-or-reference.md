@@ -1,4 +1,4 @@
-# Link Style autolink_or_reference
+# Link Style Autolink or Reference
 
 Text [url](https://example.com) text {MD054}
 

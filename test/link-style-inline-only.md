@@ -1,4 +1,4 @@
-# Link Style inline_only
+# Link Style Inline Only
 
 Text [url](https://example.com) text
 

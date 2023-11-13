@@ -1587,6 +1587,11 @@
           "description": "Allow shortcut reference links and images",
           "type": "boolean",
           "default": true
+        },
+        "url_inline": {
+          "description": "Allow URLs as inline links",
+          "type": "boolean",
+          "default": true
         }
       },
       "additionalProperties": false
@@ -1621,6 +1626,11 @@
         },
         "shortcut": {
           "description": "Allow shortcut reference links and images",
+          "type": "boolean",
+          "default": true
+        },
+        "url_inline": {
+          "description": "Allow URLs as inline links",
           "type": "boolean",
           "default": true
         }

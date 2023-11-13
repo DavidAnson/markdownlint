@@ -1020,6 +1020,10 @@ export interface Configuration {
          * Allow shortcut reference links and images
          */
         shortcut?: boolean;
+        /**
+         * Allow URLs as inline links
+         */
+        url_inline?: boolean;
       };
   /**
    * MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.31.1/doc/md054.md
@@ -1047,6 +1051,10 @@ export interface Configuration {
          * Allow shortcut reference links and images
          */
         shortcut?: boolean;
+        /**
+         * Allow URLs as inline links
+         */
+        url_inline?: boolean;
       };
   /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043

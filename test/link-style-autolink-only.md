@@ -1,4 +1,4 @@
-# Link Style autolink_only
+# Link Style Autolink Only
 
 Text [url](https://example.com) text {MD054}
 

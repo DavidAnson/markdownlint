@@ -1,4 +1,4 @@
-# Link Style autolink_or_inline
+# Link Style Autolink or Inline
 
 Text [url](https://example.com) text
 
