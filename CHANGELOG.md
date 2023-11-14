@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.32.0
+
+- Remove deprecated MD002/MD006
+- Remove rule aliases for "header"
+- Add MD054/link-image-style
+- Use `micromark` in MD005/MD007/MD030
+- Improve MD022/MD026/MD034/MD037/MD038/MD045/MD051
+- Improve JSON schema and related examples
+- Provide type declaration for Configuration object
+- Update dependencies
+
 ## 0.31.1
 
 - Improve MD032/MD034
