@@ -29,6 +29,24 @@ Text <https://example.com> text {MD054}
 [url]: https://example.com
 [url-title]: https://example.com "title"
 
+Text [link](https://example.com) text
+
+Text ![link](https://example.com) text
+
+Text [link][url] text
+
+Text ![link][url] text
+
+Text [url][] text
+
+Text ![url][] text
+
+Text [url] text
+
+Text ![url] text
+
+Text [file.md](file.md) text
+
 <!-- markdownlint-configure-file {
   "link-image-style": {
     "autolink": false,

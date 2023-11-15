@@ -6673,7 +6673,7 @@ module.exports = {
           if (destination) {
             // link kind is an inline link
             var title = getTokenTextByType(descendents, "resourceTitleString");
-            isError = !inline || !urlInline && autolink && !title && !image;
+            isError = !inline || !urlInline && autolink && !image && !title && label === destination && autolinkAble(destination);
           } else {
             // link kind is a full/collapsed/shortcut reference link
             var isShortcut = !children.some(function (t) {

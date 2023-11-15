@@ -29,6 +29,11 @@
     "strict": true,
     "code_blocks": false
   },
+  "link-image-style": {
+    "collapsed": false,
+    "shortcut": false,
+    "url_inline": false
+  },
   "no-duplicate-heading": {
     "siblings_only": true
   },
