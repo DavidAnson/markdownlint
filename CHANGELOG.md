@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.32.1
+
+- Fix behavior of MD054
+
 ## 0.32.0
 
 - Remove deprecated MD002/MD006
