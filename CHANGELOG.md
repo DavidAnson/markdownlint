@@ -13,6 +13,7 @@
 - Improve MD022/MD026/MD034/MD037/MD038/MD045/MD051
 - Improve JSON schema and related examples
 - Provide type declaration for Configuration object
+- Remove support for end-of-life Node version 16
 - Update dependencies
 
 ## 0.31.1
