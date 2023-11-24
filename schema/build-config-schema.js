@@ -7,13 +7,22 @@ const path = require("node:path");
 /** @type {import("../lib/markdownlint").Rule[]} */
 const rules = require("../lib/rules");
 const jsonSchemaToTypeScript = require("json-schema-to-typescript");
+const { version } = require("../lib/constants");
+
+const schemaUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/markdownlint-config-schema.json`;
 
 // Schema scaffolding
 const schema = {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": schemaUri,
   "title": "markdownlint configuration schema",
   "type": "object",
   "properties": {
+    "$schema": {
+      "description": "JSON Schema URI (expected by some editors)",
+      "type": "string",
+      "default": schemaUri
+    },
     "default": {
       "description": "Default state for all rules",
       "type": "boolean",
@@ -26,12 +35,6 @@ const schema = {
         "null"
       ],
       "default": null
-    },
-    "$schema": {
-      "description": "JSON Schema URI (used by some editors)",
-      "type": "string",
-      "default": "https://raw.githubusercontent.com/DavidAnson/markdownlint" +
-        "/main/schema/markdownlint-config-schema.json"
     }
   },
   "additionalProperties": {

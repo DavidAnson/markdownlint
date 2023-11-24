@@ -204,8 +204,8 @@
   }
 
   // Show library version
-  document.getElementById("version").textContent =
-    "(v" + markdownlint.getVersion() + ")";
+  var version = markdownlint.getVersion();
+  document.getElementById("version").textContent = "(v" + version + ")";
 
   // Add event listeners
   document.body.addEventListener("dragover", onDragOver);
@@ -227,7 +227,7 @@
     "Content gets parsed and displayed in the upper-right box; rule violations (if any) show up in the lower-right box.",
     "Click a violation for information about it or click its line number to highlighted it in the lower-left box.",
     "",
-    "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/main/doc/Rules.md) are enabled except [MD013/line-length](https://github.com/DavidAnson/markdownlint/blob/main/doc/md013.md).",
+    "> *Note*: [All rules](https://github.com/DavidAnson/markdownlint/blob/v" + version + "/doc/Rules.md) are enabled except [MD013/line-length](https://github.com/DavidAnson/markdownlint/blob/v" + version + "/doc/md013.md).",
     "",
     "",
     "#### Resources",

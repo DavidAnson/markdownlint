@@ -7,6 +7,10 @@
 
 export interface Configuration {
   /**
+   * JSON Schema URI (expected by some editors)
+   */
+  $schema?: string;
+  /**
    * Default state for all rules
    */
   default?: boolean;
@@ -14,10 +18,6 @@ export interface Configuration {
    * Path to configuration file to extend
    */
   extends?: string | null;
-  /**
-   * JSON Schema URI (used by some editors)
-   */
-  $schema?: string;
   /**
    * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md001.md
    */

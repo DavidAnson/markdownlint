@@ -20,10 +20,9 @@ const configSchema = require("../schema/markdownlint-config-schema.json");
 
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const jsonSchemaVersion = "http://json-schema.org/draft-07/schema#";
-const configSchemaUri = "https://example.com/configSchema";
-const configSchemaStrictUri = "https://example.com/configSchemaStrict";
 const configSchemaStrict = {
   ...configSchema,
+  "$id": `${configSchema.$id}-strict`,
   "additionalProperties": false
 };
 
@@ -918,8 +917,8 @@ test("validateJsonUsingConfigSchemaStrict", async(t) => {
   t.plan(171);
   const { addSchema, validate } =
     await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchemaStrict, configSchemaStrictUri);
-  const validateConfigSchema = await validate(configSchemaStrictUri);
+  addSchema(configSchemaStrict);
+  const validateConfigSchema = await validate(configSchemaStrict.$id);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([
@@ -956,8 +955,8 @@ test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
   t.plan(4);
   const { addSchema, validate } =
     await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchema, configSchemaUri);
-  addSchema(configSchemaStrict, configSchemaStrictUri);
+  addSchema(configSchema);
+  addSchema(configSchemaStrict);
   const testCases = [
     {
       "property": true
@@ -971,14 +970,14 @@ test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
   for (const testCase of testCases) {
     const defaultResult =
       // eslint-disable-next-line no-await-in-loop
-      await validate(configSchemaUri, testCase, "BASIC");
+      await validate(configSchema.$id, testCase, "BASIC");
     t.true(
       defaultResult.valid,
       "Unknown property blocked by default: " + JSON.stringify(testCase)
     );
     const strictResult =
       // eslint-disable-next-line no-await-in-loop
-      await validate(configSchemaStrictUri, testCase, "BASIC");
+      await validate(configSchemaStrict.$id, testCase, "BASIC");
     t.false(
       strictResult.valid,
       "Unknown property allowed when strict: " + JSON.stringify(testCase)
@@ -990,8 +989,8 @@ test("validateConfigSchemaAppliesToUnknownProperties", async(t) => {
   t.plan(4);
   const { addSchema, validate } =
     await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchema, configSchemaUri);
-  const validateConfigSchema = await validate(configSchemaUri);
+  addSchema(configSchema);
+  const validateConfigSchema = await validate(configSchema.$id);
   for (const allowed of [ true, {} ]) {
     t.true(
       validateConfigSchema({ "property": allowed }, "BASIC").valid,
@@ -1024,8 +1023,8 @@ test("validateConfigExampleJson", async(t) => {
     "utf8"
   );
   const jsonObject = JSON.parse(stripJsonComments(dataJson));
-  addSchema(configSchemaStrict, configSchemaStrictUri);
-  const result = await validate(configSchemaStrictUri, jsonObject, "BASIC");
+  addSchema(configSchemaStrict);
+  const result = await validate(configSchemaStrict.$id, jsonObject, "BASIC");
   t.true(
     result.valid,
     `${fileJson}\n${JSON.stringify(result, null, 2)}`

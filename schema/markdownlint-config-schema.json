@@ -1,8 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://raw.githubusercontent.com/DavidAnson/markdownlint/v0.32.1/schema/markdownlint-config-schema.json",
   "title": "markdownlint configuration schema",
   "type": "object",
   "properties": {
+    "$schema": {
+      "description": "JSON Schema URI (expected by some editors)",
+      "type": "string",
+      "default": "https://raw.githubusercontent.com/DavidAnson/markdownlint/v0.32.1/schema/markdownlint-config-schema.json"
+    },
     "default": {
       "description": "Default state for all rules",
       "type": "boolean",
@@ -15,11 +21,6 @@
         "null"
       ],
       "default": null
-    },
-    "$schema": {
-      "description": "JSON Schema URI (used by some editors)",
-      "type": "string",
-      "default": "https://raw.githubusercontent.com/DavidAnson/markdownlint/main/schema/markdownlint-config-schema.json"
     },
     "MD001": {
       "description": "MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md001.md",
