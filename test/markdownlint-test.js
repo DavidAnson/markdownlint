@@ -1002,13 +1002,14 @@ test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
 });
 
 test("validateConfigExampleJson", async(t) => {
-  t.plan(2);
+  t.plan(3);
   const { "default": stripJsonComments } = await import("strip-json-comments");
 
   // Validate schema
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchema = ajv.compile(configSchema);
+  t.is(configSchema.$id, configSchema.properties.$schema.default);
 
   // Validate JSONC
   const fileJson = ".markdownlint.jsonc";
