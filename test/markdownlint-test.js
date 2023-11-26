@@ -4,14 +4,14 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
+const Ajv = require("ajv");
 const jsYaml = require("js-yaml");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const test = require("ava").default;
-const { "exports": packageExports, homepage, version } =
-  require("../package.json");
+const { "exports": packageExports, homepage, version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const constants = require("../lib/constants");
 const rules = require("../lib/rules");
@@ -19,11 +19,13 @@ const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
 
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
-const jsonSchemaVersion = "http://json-schema.org/draft-07/schema#";
 const configSchemaStrict = {
   ...configSchema,
   "$id": `${configSchema.$id}-strict`,
   "additionalProperties": false
+};
+const ajvOptions = {
+  "allowUnionTypes": true
 };
 
 test("simpleAsync", (t) => new Promise((resolve) => {
@@ -915,10 +917,9 @@ test("readme", async(t) => {
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
   t.plan(171);
-  const { addSchema, validate } =
-    await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchemaStrict);
-  const validateConfigSchema = await validate(configSchemaStrict.$id);
+  // @ts-ignore
+  const ajv = new Ajv(ajvOptions);
+  const validateSchemaStrict = ajv.compile(configSchemaStrict);
   const configRe =
     /^[\s\S]*<!-- markdownlint-configure-file ([\s\S]*) -->[\s\S]*$/;
   const ignoreFiles = new Set([
@@ -942,21 +943,21 @@ test("validateJsonUsingConfigSchemaStrict", async(t) => {
     const data = fs.readFileSync(file, "utf8");
     if (configRe.test(data)) {
       const config = data.replace(configRe, "$1");
-      const result = validateConfigSchema(JSON.parse(config), "BASIC");
-      t.true(
-        result.valid,
-        `${file}\n${JSON.stringify(result, null, 2)}`
+      const result = validateSchemaStrict(JSON.parse(config));
+      t.truthy(
+        result,
+        `${file}\n${JSON.stringify(validateSchemaStrict.errors, null, 2)}`
       );
     }
   }
 });
 
-test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
+test("validateConfigSchemaAllowsUnknownProperties", (t) => {
   t.plan(4);
-  const { addSchema, validate } =
-    await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchema);
-  addSchema(configSchemaStrict);
+  // @ts-ignore
+  const ajv = new Ajv(ajvOptions);
+  const validateSchema = ajv.compile(configSchema);
+  const validateSchemaStrict = ajv.compile(configSchemaStrict);
   const testCases = [
     {
       "property": true
@@ -968,53 +969,46 @@ test("validateConfigSchemaAllowsUnknownProperties", async(t) => {
     }
   ];
   for (const testCase of testCases) {
-    const defaultResult =
-      // eslint-disable-next-line no-await-in-loop
-      await validate(configSchema.$id, testCase, "BASIC");
-    t.true(
-      defaultResult.valid,
-      "Unknown property blocked by default: " + JSON.stringify(testCase)
+    const result = validateSchema(testCase);
+    t.truthy(
+      result,
+      "Unknown property blocked by default: " + JSON.stringify(validateSchema.errors, null, 2)
     );
-    const strictResult =
-      // eslint-disable-next-line no-await-in-loop
-      await validate(configSchemaStrict.$id, testCase, "BASIC");
-    t.false(
-      strictResult.valid,
-      "Unknown property allowed when strict: " + JSON.stringify(testCase)
+    const resultStrict = validateSchemaStrict(testCase);
+    t.falsy(
+      resultStrict,
+      "Unknown property allowed when strict: " + JSON.stringify(validateSchemaStrict.errors, null, 2)
     );
   }
 });
 
-test("validateConfigSchemaAppliesToUnknownProperties", async(t) => {
+test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
   t.plan(4);
-  const { addSchema, validate } =
-    await import("@hyperjump/json-schema/draft-07");
-  addSchema(configSchema);
-  const validateConfigSchema = await validate(configSchema.$id);
+  // @ts-ignore
+  const ajv = new Ajv(ajvOptions);
+  const validateSchema = ajv.compile(configSchema);
   for (const allowed of [ true, {} ]) {
-    t.true(
-      validateConfigSchema({ "property": allowed }, "BASIC").valid,
+    t.truthy(
+      validateSchema({ "property": allowed }),
       `Unknown property value ${allowed} blocked`
     );
   }
   for (const blocked of [ 2, "string" ]) {
-    t.false(
-      validateConfigSchema({ "property": blocked }, "BASIC").valid,
+    t.falsy(
+      validateSchema({ "property": blocked }),
       `Unknown property value ${blocked} allowed`
     );
   }
 });
 
 test("validateConfigExampleJson", async(t) => {
-  t.plan(3);
+  t.plan(2);
   const { "default": stripJsonComments } = await import("strip-json-comments");
 
   // Validate schema
-  const { addSchema, validate } =
-    await import("@hyperjump/json-schema/draft-07");
-  const schemaResult =
-    await validate(jsonSchemaVersion, configSchema, "BASIC");
-  t.true(schemaResult.valid);
+  // @ts-ignore
+  const ajv = new Ajv(ajvOptions);
+  const validateSchema = ajv.compile(configSchema);
 
   // Validate JSONC
   const fileJson = ".markdownlint.jsonc";
@@ -1023,11 +1017,10 @@ test("validateConfigExampleJson", async(t) => {
     "utf8"
   );
   const jsonObject = JSON.parse(stripJsonComments(dataJson));
-  addSchema(configSchemaStrict);
-  const result = await validate(configSchemaStrict.$id, jsonObject, "BASIC");
-  t.true(
-    result.valid,
-    `${fileJson}\n${JSON.stringify(result, null, 2)}`
+  const result = validateSchema(jsonObject);
+  t.truthy(
+    result,
+    `${fileJson}\n${JSON.stringify(validateSchema.errors, null, 2)}`
   );
 
   // Validate YAML
