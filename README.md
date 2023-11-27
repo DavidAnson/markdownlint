@@ -377,9 +377,6 @@ See [.markdownlint.jsonc](schema/.markdownlint.jsonc) and/or
 [.markdownlint.yaml](schema/.markdownlint.yaml) for an example
 configuration object with all properties set to the default value.
 
-See [ValidatingConfiguration.md](schema/ValidatingConfiguration.md) for ways to
-validate configuration.
-
 Sets of rules (known as a "style") can be stored separately and loaded
 as [JSON](https://en.wikipedia.org/wiki/JSON).
 
@@ -405,6 +402,9 @@ See the [style](style) directory for more samples.
 See [markdownlint-config-schema.json](schema/markdownlint-config-schema.json)
 for the [JSON Schema](https://json-schema.org/) of the `options.config`
 object.
+
+See [ValidatingConfiguration.md](schema/ValidatingConfiguration.md) for ways to
+use the JSON Schema to validate configuration.
 
 For more advanced scenarios, styles can reference and extend other styles.
 The `readConfig` and `readConfigSync` functions can be used to read such
