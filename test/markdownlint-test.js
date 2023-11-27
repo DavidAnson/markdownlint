@@ -83,7 +83,7 @@ test("projectFiles", (t) => {
       "schema/*.md"
     ]))
     .then((files) => {
-      t.is(files.length, 57);
+      t.is(files.length, 58);
       const options = {
         files,
         "config": require("../.markdownlint.json")

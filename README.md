@@ -377,6 +377,9 @@ See [.markdownlint.jsonc](schema/.markdownlint.jsonc) and/or
 [.markdownlint.yaml](schema/.markdownlint.yaml) for an example
 configuration object with all properties set to the default value.
 
+See [ValidatingConfiguration.md](schema/ValidatingConfiguration.md) for ways to
+validate configuration.
+
 Sets of rules (known as a "style") can be stored separately and loaded
 as [JSON](https://en.wikipedia.org/wiki/JSON).
 
