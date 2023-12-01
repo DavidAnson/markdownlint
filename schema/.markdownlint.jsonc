@@ -293,5 +293,8 @@
     "shortcut": true,
     // Allow URLs as inline links
     "url_inline": true
-  }
+  },
+
+  // MD055/table-missing-border : Table is missing leading or trailing pipe character : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md
+  "MD055": true
 }

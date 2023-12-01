@@ -1638,6 +1638,16 @@
       },
       "additionalProperties": false
     },
+    "MD055": {
+      "description": "MD055/table-missing-border : Table is missing leading or trailing pipe character : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md",
+      "type": "boolean",
+      "default": true
+    },
+    "table-missing-border": {
+      "description": "MD055/table-missing-border : Table is missing leading or trailing pipe character : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md",
+      "type": "boolean",
+      "default": true
+    },
     "headings": {
       "description": "headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1750,6 +1760,11 @@
     },
     "images": {
       "description": "images : MD045, MD052, MD053, MD054",
+      "type": "boolean",
+      "default": true
+    },
+    "table": {
+      "description": "table : MD055",
       "type": "boolean",
       "default": true
     }

@@ -29,7 +29,6 @@ This is a short line.
 | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
 | ============== | ============== | ============== | ============== | ============== | ============== |
 | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |
-{: rules="groups"}
 
 This is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}
 
@@ -44,7 +43,6 @@ Another line.
 | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |
 | ============== | ============== | ============== | ============== | ============== | ============== |
 | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |
-{: rules="groups"}
 
 <!-- markdownlint-configure-file {
   "line-length": {

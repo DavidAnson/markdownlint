@@ -37,6 +37,7 @@ eslint-plugin-markdownlint
 first-line-h1
 formatter
 fs
+GFM
 globbing
 grunt-markdownlint
 h1

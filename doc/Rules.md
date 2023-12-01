@@ -2326,6 +2326,49 @@ Inline links and images can include descriptive text, but take up more space in
 Markdown form. Reference links and images can be easier to read and manipulate
 in Markdown form, but require a separate link reference definition.
 
+<a name="md055"></a>
+
+## `MD055` - Table is missing leading or trailing pipe character
+
+Tags: `table`
+
+Aliases: `table-missing-border`
+
+This rule is triggered when a [GFM table][gfm-table] is missing a leading
+or trailing pipe character `|`.
+
+This table is missing pipes on both sides:
+
+```markdown
+| Heading | Heading |
+|---------|---------
+  Cell    | Cell    |
+```
+
+To fix this, make sure there is a pipe character at the start and end of the
+row:
+
+```markdown
+| Heading | Heading |
+|---------|---------|
+| Cell    | Cell    |
+```
+
+Note that text immediately below a table is treated as part of the table and
+will trigger this rule:
+
+```markdown
+| Heading | Heading |
+|---------|---------|
+| Cell    | Cell    |
+This text will trigger the rule
+```
+
+Rationale: Some parsers have difficulty with tables that are missing their
+leading or trailing pipe characters.
+
+[gfm-table]: https://github.github.com/gfm/#tables-extension-
+
 <!-- markdownlint-configure-file {
   "no-inline-html": {
     "allowed_elements": [

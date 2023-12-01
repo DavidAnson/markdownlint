@@ -6725,6 +6725,66 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md055.js":
+/*!***********************!*\
+  !*** ../lib/md055.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+var _require = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js"),
+  addErrorContext = _require.addErrorContext;
+var _require2 = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs"),
+  filterByTypes = _require2.filterByTypes;
+module.exports = {
+  "names": ["MD055", "table-missing-border"],
+  "description": "Table is missing leading or trailing pipe character",
+  "tags": ["table"],
+  "function": function MD055(params, onError) {
+    var tables = filterByTypes(params.parsers.micromark.tokens, ["table"]);
+    var _iterator = _createForOfIteratorHelper(tables),
+      _step;
+    try {
+      for (_iterator.s(); !(_step = _iterator.n()).done;) {
+        var table = _step.value;
+        var rows = filterByTypes(table.children, ["tableRow", "tableDelimiterRow"]);
+        var _iterator2 = _createForOfIteratorHelper(rows),
+          _step2;
+        try {
+          for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+            var row = _step2.value;
+            var startLine = row.startLine,
+              text = row.text;
+            if (!text.startsWith("|")) {
+              addErrorContext(onError, startLine, text, true);
+            }
+            if (!text.endsWith("|")) {
+              addErrorContext(onError, startLine, text, false, true);
+            }
+          }
+        } catch (err) {
+          _iterator2.e(err);
+        } finally {
+          _iterator2.f();
+        }
+      }
+    } catch (err) {
+      _iterator.e(err);
+    } finally {
+      _iterator.f();
+    }
+  }
+};
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -6746,8 +6806,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 var _require = __webpack_require__(/*! ./constants */ "../lib/constants.js"),
   homepage = _require.homepage,
   version = _require.version;
-var rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"), __webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"), __webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js")].concat(_toConsumableArray(__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js")), [__webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js"), __webpack_require__(/*! ./md054 */ "../lib/md054.js")
-// md055: See https://github.com/markdownlint/markdownlint
+var rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"), __webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"), __webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js")].concat(_toConsumableArray(__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js")), [__webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js"), __webpack_require__(/*! ./md054 */ "../lib/md054.js"), __webpack_require__(/*! ./md055 */ "../lib/md055.js")
 // md056: See https://github.com/markdownlint/markdownlint
 // md057: See https://github.com/markdownlint/markdownlint
 ]);
