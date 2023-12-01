@@ -51,3 +51,7 @@
 | cell  | <!--           \
 | cell  | `{MD038} ` --> |
 | cell  | cell           |
+
+<!-- markdownlint-configure-file {
+  "table-missing-border": false
+} -->
