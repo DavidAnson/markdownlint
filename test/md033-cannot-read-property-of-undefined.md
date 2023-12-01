@@ -9,3 +9,7 @@ Head    | Head
 <br/>   | {MD033}
 text    | text
 {MD033} | <b>text</b>
+
+<!-- markdownlint-configure-file {
+  "table-missing-border": false
+} -->

@@ -83,7 +83,7 @@ test("projectFiles", (t) => {
       "schema/*.md"
     ]))
     .then((files) => {
-      t.is(files.length, 58);
+      t.is(files.length, 59);
       const options = {
         files,
         "config": require("../.markdownlint.json")
@@ -476,13 +476,14 @@ test("styleAll", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 126 ],
+        "MD047": [ 130 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
         "MD051": [ 96 ],
         "MD052": [ 98 ],
-        "MD053": [ 100 ]
+        "MD053": [ 100 ],
+        "MD055": [ 110 ]
       }
     };
     // @ts-ignore
@@ -525,13 +526,14 @@ test("styleRelaxed", (t) => new Promise((resolve) => {
         "MD042": [ 81 ],
         "MD045": [ 85 ],
         "MD046": [ 49, 73, 77 ],
-        "MD047": [ 126 ],
+        "MD047": [ 130 ],
         "MD048": [ 77 ],
         "MD049": [ 90 ],
         "MD050": [ 94 ],
         "MD051": [ 96 ],
         "MD052": [ 98 ],
-        "MD053": [ 100 ]
+        "MD053": [ 100 ],
+        "MD055": [ 110 ]
       }
     };
     // @ts-ignore
@@ -841,7 +843,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(121);
+  t.plan(124);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -916,7 +918,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(171);
+  t.plan(173);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1036,7 +1038,7 @@ test("validateConfigExampleJson", async(t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(144);
+  t.plan(147);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);
