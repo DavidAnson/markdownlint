@@ -1239,7 +1239,6 @@ function isHtmlFlowComment(token) {
     // && !comment.includes("--")
     ;
   }
-
   return false;
 }
 
