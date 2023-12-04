@@ -86,7 +86,7 @@
     "globby": "14.0.0",
     "js-yaml": "4.1.0",
     "json-schema-to-typescript": "13.1.1",
-    "markdown-it-for-inline": "0.1.1",
+    "markdown-it-for-inline": "2.0.0",
     "markdown-it-sub": "1.0.0",
     "markdown-it-sup": "1.0.0",
     "markdownlint-rule-helpers": "0.23.0",
