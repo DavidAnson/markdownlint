@@ -387,10 +387,6 @@ export interface Configuration {
         /**
          * Only check sibling headings
          */
-        allow_different_nesting?: boolean;
-        /**
-         * Only check sibling headings
-         */
         siblings_only?: boolean;
       };
   /**
@@ -399,10 +395,6 @@ export interface Configuration {
   "no-duplicate-heading"?:
     | boolean
     | {
-        /**
-         * Only check sibling headings
-         */
-        allow_different_nesting?: boolean;
         /**
          * Only check sibling headings
          */

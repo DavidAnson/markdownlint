@@ -38,7 +38,6 @@ Long line long line long line long line long line long line long line long line 
     "lines_below": "1"
   },
   "no-duplicate-heading": {
-    "allow_different_nesting": 0,
     "siblings_only": 0
   },
   "single-title": {

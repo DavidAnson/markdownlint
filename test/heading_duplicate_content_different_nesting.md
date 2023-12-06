@@ -12,6 +12,6 @@
 
 <!-- markdownlint-configure-file {
   "no-duplicate-heading": {
-    "allow_different_nesting": true
+    "siblings_only": true
   }
 } -->

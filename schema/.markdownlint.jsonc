@@ -113,8 +113,6 @@
   // MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md024.md
   "MD024": {
     // Only check sibling headings
-    "allow_different_nesting": false,
-    // Only check sibling headings
     "siblings_only": false
   },
 

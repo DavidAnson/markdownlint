@@ -246,11 +246,6 @@ for (const rule of rules) {
       break;
     case "MD024":
       scheme.properties = {
-        "allow_different_nesting": {
-          "description": "Only check sibling headings",
-          "type": "boolean",
-          "default": false
-        },
         "siblings_only": {
           "description": "Only check sibling headings",
           "type": "boolean",

@@ -4395,7 +4395,7 @@ module.exports = {
   "description": "Multiple headings with the same content",
   "tags": ["headings"],
   "function": function MD024(params, onError) {
-    var siblingsOnly = !!params.config.siblings_only || !!params.config.allow_different_nesting || false;
+    var siblingsOnly = !!params.config.siblings_only || false;
     var knownContents = [null, []];
     var lastLevel = 1;
     var knownContent = knownContents[lastLevel];
@@ -4412,9 +4412,11 @@ module.exports = {
         }
         knownContent = knownContents[newLevel];
       }
+      // @ts-ignore
       if (knownContent.includes(content)) {
         addErrorContext(onError, heading.lineNumber, heading.line.trim());
       } else {
+        // @ts-ignore
         knownContent.push(content);
       }
     });
