@@ -38,7 +38,16 @@ async function lintTestRepo(t, globPatterns, configPath) {
     const config = Object.fromEntries(
       // @ts-ignore
       Object.entries(rawConfig).
-        map(([ k, v ]) => [ k.replace(/header/, "heading"), v ])
+        map(([ k, v ]) => [
+          k.replace(/header/, "heading"),
+          typeof v === "object" ?
+            Object.fromEntries(
+              // @ts-ignore
+              Object.entries(v).
+                map(([ kk, vv ]) => [ kk.replace(/^allow_different_nesting$/, "siblings_only"), vv ])
+              ) :
+            v
+        ])
     );
     return markdownlintPromise({
       files,
