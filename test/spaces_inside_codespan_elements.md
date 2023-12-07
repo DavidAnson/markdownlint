@@ -137,3 +137,32 @@ not allowed `  `` text {MD038}
 
 text `` ` leading and trailing
 space allowed for backtick ` `` text
+
+<!-- markdownlint-disable blanks-around-fences fenced-code-language -->
+
+Text
+```
+Code
+```
+
+Text
+    ```
+    Code
+    ```
+
+Text
+    ```
+Code
+    ```
+
+Text
+    ```
+    Code
+    ```
+Text
+
+Text
+    ```
+Code
+    ```
+Text

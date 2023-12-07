@@ -5429,7 +5429,7 @@ module.exports = {
         var endData = tokenIfType(children[last - 1], "codeTextData") || tokenIfType(children[last - 2], "codeTextData");
         if (startSequence && endSequence && startData && endData) {
           var spaceLeft = leftSpaceRe.test(startData.text);
-          var spaceRight = !spaceLeft && rightSpaceRe.test(endData.text);
+          var spaceRight = rightSpaceRe.test(endData.text);
           if (spaceLeft || spaceRight) {
             var lineNumber = startSequence.startLine;
             var range = null;
@@ -5441,14 +5441,14 @@ module.exports = {
                 "deleteCount": endSequence.startColumn - startSequence.endColumn,
                 "insertText": trimCodeText(startData.text, true, true)
               };
-            } else if (spaceLeft) {
+            } else if (spaceLeft && startSequence.endLine === startData.startLine) {
               range = [startSequence.startColumn, startData.endColumn - startSequence.startColumn];
               fixInfo = {
                 "editColumn": startSequence.endColumn,
                 "deleteCount": startData.endColumn - startData.startColumn,
                 "insertText": trimCodeText(startData.text, true, false)
               };
-            } else {
+            } else if (spaceRight && endData.text.trim().length > 0) {
               lineNumber = endSequence.endLine;
               range = [endData.startColumn, endSequence.endColumn - endData.startColumn];
               fixInfo = {
@@ -5457,8 +5457,10 @@ module.exports = {
                 "insertText": trimCodeText(endData.text, false, true)
               };
             }
-            var context = params.lines[lineNumber - 1].substring(range[0] - 1, range[0] - 1 + range[1]);
-            addErrorContext(onError, lineNumber, context, spaceLeft, spaceRight, range, fixInfo);
+            if (range) {
+              var context = params.lines[lineNumber - 1].substring(range[0] - 1, range[0] - 1 + range[1]);
+              addErrorContext(onError, lineNumber, context, spaceLeft, spaceRight, range, fixInfo);
+            }
           }
         }
       }
