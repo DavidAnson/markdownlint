@@ -1,7 +1,7 @@
 name: TestRepos
 
 on:
-  pull_request:
+  pull_request: 
   push:
     branches-ignore:
       - 'dependabot/**'
