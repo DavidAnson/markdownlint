@@ -1,6 +1,6 @@
 # Table Missing Pipes
 
-## Bad Header Row
+## Missing in Heading Row
 
 | Table | {MD055}
 |-------|---------|
@@ -11,130 +11,128 @@
   Table | {MD055}
 |-------|---------|
 
-## Bad Separator Row
+## Missing in Separator Row
 
-| Table | Header |
+| Table | Heading |
 |-------|---------
 
 {MD055:17}
 
-| Table | Header |
- -------|--------|
+| Table | Heading |
+ -------|---------|
 
 {MD055:22}
 
-| Table | Header |
- -------|--------
+| Table | Heading |
+ -------|---------
 
 {MD055:27}
 
-## Missing everything
+## Missing Leading and Trailing
 
- {MD055} | Header
----------|-------
- {MD055} | cell
+ {MD055} | Heading
+---------|---------
+ {MD055} | Cell
 
 {MD055:34}
 
- {MD055} | Header
---------:|:-----:
- {MD055} | cell
+ {MD055} | Heading
+--------:|:-------:
+ {MD055} | Cell
 
 {MD055:40}
 
-## Missing trailing pipe
+| Table   | Heading |
+|--------:|:--------|
+  {MD055} | Cell
 
-| Table   | Header |
-|--------:|:-------|
-| {MD055} | cell
+| Table   | Heading |
+|---------|---------|
+  {MD055} | Cell
+| Cell    | Cell    |
+| Cell    | Cell    |
 
-| Table   | Header |
-|---------|--------|
-| {MD055} | cell
-| cell    | cell   |
-| cell    | cell   |
+| Table   | Heading |
+|---------|---------|
+| Cell    | Cell    |
+  {MD055} | Cell
+| Cell    | Cell    |
 
-| Table   | Header |
-|---------|--------|
-| cell    | cell   |
-| {MD055} | cell
-| cell    | cell   |
+| Table   | Heading |
+|---------|---------|
+| Cell    | Cell    |
+| Cell    | Cell    |
+  {MD055} | Cell
 
-| Table   | Header |
-|---------|--------|
-| cell    | cell   |
-| cell    | cell   |
-| {MD055} | cell
+## Missing Trailing
 
-## Missing leading pipe
+| Table   | Heading |
+|--------:|:--------|
+| {MD055} | Cell
 
-| Table  | Header |
-|-------:|:-------|
- {MD055} | cell   |
+| Table   | Heading |
+|---------|---------|
+| {MD055} | Cell
+| Cell    | Cell    |
+| Cell    | Cell    |
 
-| Table  | Header |
-|--------|--------|
- {MD055} | cell   |
-| cell   | cell   |
-| cell   | cell   |
+| Table   | Heading |
+|---------|---------|
+| Cell    | Cell    |
+| {MD055} | Cell
+| Cell    | Cell    |
 
-| Table  | Header |
-|--------|--------|
-| cell   | cell   |
- {MD055} | cell   |
-| cell   | cell   |
+| Table   | Heading |
+|---------|---------|
+| Cell    | Cell    |
+| Cell    | Cell    |
+| {MD055} | Cell
 
-| Table  | Header |
-|--------|--------|
-| cell   | cell   |
-| cell   | cell   |
- {MD055} | cell   |
+## Missing Leading
 
-## Missing both sides
+| Table   | Heading |
+|--------:|:--------|
+  {MD055} | Cell    |
 
-| Table  | Header |
-|-------:|:-------|
- {MD055} | cell
+| Table   | Heading |
+|---------|---------|
+  {MD055} | Cell    |
+| Cell    | Cell    |
+| Cell    | Cell    |
 
-| Table  | Header |
-|--------|--------|
- {MD055} | cell
-| cell   | cell   |
-| cell   | cell   |
+| Table   | Heading |
+|---------|---------|
+| Cell    | Cell    |
+  {MD055} | Cell    |
+| Cell    | Cell    |
 
-| Table  | Header |
-|--------|--------|
-| cell   | cell   |
- {MD055} | cell
-| cell   | cell   |
+| Table   | Heading |
+|---------|---------|
+| Cell    | Cell    |
+| Cell    | Cell    |
+  {MD055} | Cell    |
 
-| Table  | Header |
-|--------|--------|
-| cell   | cell   |
-| cell   | cell   |
- {MD055} | cell
+## Followed by Text
 
-## No false-positive
-
-| Table | Header |
-|-------|--------|
-| cell  | cell   |
-
-| Table | Header |
-|-------|--------|
-| cell  | cell   |
-| cell  | cell   |
-| cell  | cell   |
-
-## No trailing blank line
-
-| Table | Header |
-|-------|--------|
-| cell  | cell   |
+| Table | Heading |
+|-------|---------|
+| Cell  | Cell    |
 {MD055} Text
 
-## Markdown Combination
+## Table inside Blockquote
 
-> | Table | Header |
-> |-------|--------|
-> -{MD055}| cell   |
+> | Table   | Heading |
+> |---------|---------|
+>   {MD055} | {MD027} |
+
+## Well-Formed
+
+| Table | Heading |
+|-------|---------|
+| Cell  | Cell    |
+
+| Table | Heading |
+|-------|---------|
+| Cell  | Cell    |
+| Cell  | Cell    |
+| Cell  | Cell    |
