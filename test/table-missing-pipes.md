@@ -136,3 +136,9 @@
 | Cell  | Cell    |
 | Cell  | Cell    |
 | Cell  | Cell    |
+
+## Leading and Trailing Spaces
+
+ | Table | {MD009} | 
+ |-------|---------|
+ | Cell  | {MD009} | 
