@@ -37,18 +37,25 @@ function createTestForFile(file) {
               error.ruleInformation.replace(/v\d+\.\d+\.\d+/, "v0.0.0");
         }
         // Match identified issues by MD### markers
-        const marker = /\{(MD\d+)(?::(\d+))?\}/g;
+        const marker = /\{(MD\d+)(?::([-+]?)(\d+))?\}/g;
         const lines = content.split(helpers.newLineRe);
         const expected = {};
         // @ts-ignore
         for (const [ index, line ] of lines.entries()) {
           let match = null;
           while ((match = marker.exec(line))) {
-            const rule = match[1];
+            const [ , rule, delta, value ] = match;
+            let lineNumber = index + 1;
+            if (value) {
+              const valueInt = Number.parseInt(value, 10);
+              if (delta) {
+                lineNumber += ((delta === "+") ? 1 : -1) * valueInt;
+              } else {
+                lineNumber = valueInt;
+              }
+            }
             // eslint-disable-next-line no-multi-assign
             const indices = expected[rule] = expected[rule] || [];
-            const lineNumber =
-              match[2] ? Number.parseInt(match[2], 10) : index + 1;
             if (!indices.includes(lineNumber)) {
               indices.push(lineNumber);
             }

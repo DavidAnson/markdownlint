@@ -16,7 +16,7 @@ Execute `via the node.js engine`
     node.js is runtime
 
 ```js
-javascript is code {MD046:18}
+javascript is code {MD046:-1}
 node.js is runtime
 ```
 

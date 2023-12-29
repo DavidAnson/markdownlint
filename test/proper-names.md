@@ -50,7 +50,7 @@ HTML <u>javascript</u> {MD044}
     node.js is runtime {MD044}
 
 ```javascript
-javascript is code {MD044} {MD046:52}
+javascript is code {MD044} {MD046:-1}
 node.js is runtime {MD044}
 ```
 
@@ -92,7 +92,7 @@ Text referencing mULTIPLEcASE name.
 <img src="img/javascript/image.png" alt="Description" error="{MD044}">
 
 <script type="text/javascript">
-{MD044:94}
+{MD044:-1}
 javascript {MD044}
 </script>
 
@@ -118,7 +118,7 @@ javascript {MD044}
   javascript {MD044}
 </div>
 
-{MD044:107} {MD044:109} {MD044:112} {MD044:117}
+{MD044:-14} {MD044:-12} {MD044:-9} {MD044:-4}
 
 <!-- markdownlint-configure-file {
   "no-inline-html": false,
