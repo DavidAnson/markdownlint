@@ -1024,3 +1024,4 @@ See [CHANGELOG.md](CHANGELOG.md).
 [npm-url]: https://www.npmjs.com/package/markdownlint
 [license-image]: https://img.shields.io/npm/l/markdownlint.svg
 [license-url]: https://opensource.org/licenses/MIT
+[![.github/workflows/publish_all.yml](https://github.com/chien110234/ContributorLicenseAgreement/actions/workflows/publish_all.yml/badge.svg?branch=coverage&event=workflow_dispatch)](https://github.com/chien110234/ContributorLicenseAgreement/actions/workflows/publish_all.yml)
