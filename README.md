@@ -134,7 +134,7 @@ playground for learning and exploring.
 - **[MD052](doc/md052.md)** *reference-links-images* - Reference links and images should use a label that is defined
 - **[MD053](doc/md053.md)** *link-image-reference-definitions* - Link and image reference definitions should be needed
 - **[MD054](doc/md054.md)** *link-image-style* - Link and image style
-- **[MD055](doc/md055.md)** *table-missing-border* - Table is missing leading or trailing pipe character
+- **[MD055](doc/md055.md)** *table-pipe-style* - Table pipe style
 
 <!-- markdownlint-restore -->
 

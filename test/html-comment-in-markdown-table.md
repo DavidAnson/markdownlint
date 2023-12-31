@@ -53,5 +53,5 @@
 | cell  | cell           |
 
 <!-- markdownlint-configure-file {
-  "table-missing-border": false
+  "table-pipe-style": false
 } -->

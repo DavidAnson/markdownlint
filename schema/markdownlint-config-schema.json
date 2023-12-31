@@ -1628,6 +1628,52 @@
       },
       "additionalProperties": false
     },
+    "MD055": {
+      "description": "MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Table pipe style",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "leading_only",
+            "trailing_only",
+            "leading_and_trailing",
+            "no_leading_or_trailing"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
+    "table-pipe-style": {
+      "description": "MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Table pipe style",
+          "type": "string",
+          "enum": [
+            "consistent",
+            "leading_only",
+            "trailing_only",
+            "leading_and_trailing",
+            "no_leading_or_trailing"
+          ],
+          "default": "consistent"
+        }
+      },
+      "additionalProperties": false
+    },
     "headings": {
       "description": "headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1740,6 +1786,11 @@
     },
     "images": {
       "description": "images : MD045, MD052, MD053, MD054",
+      "type": "boolean",
+      "default": true
+    },
+    "table": {
+      "description": "table : MD055",
       "type": "boolean",
       "default": true
     }

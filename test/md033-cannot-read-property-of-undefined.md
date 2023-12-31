@@ -11,5 +11,5 @@ text    | text
 {MD033} | <b>text</b>
 
 <!-- markdownlint-configure-file {
-  "table-missing-border": false
+  "table-pipe-style": false
 } -->

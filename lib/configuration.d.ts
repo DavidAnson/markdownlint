@@ -1049,6 +1049,28 @@ export interface Configuration {
         url_inline?: boolean;
       };
   /**
+   * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md
+   */
+  MD055?:
+    | boolean
+    | {
+        /**
+         * Table pipe style
+         */
+        style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
+      };
+  /**
+   * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md055.md
+   */
+  "table-pipe-style"?:
+    | boolean
+    | {
+        /**
+         * Table pipe style
+         */
+        style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
+      };
+  /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
@@ -1140,5 +1162,9 @@ export interface Configuration {
    * images : MD045, MD052, MD053, MD054
    */
   images?: boolean;
+  /**
+   * table : MD055
+   */
+  table?: boolean;
   [k: string]: unknown;
 }
