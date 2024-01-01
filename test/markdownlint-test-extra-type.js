@@ -18,7 +18,7 @@ for (const file of files) {
     strings[content.length.toString()] = content;
     content = content.slice(0, -1);
   }
-  test(`type ${file}`, (t) => {
+  test.serial(`type ${file}`, (t) => {
     t.plan(1);
     markdownlint.sync({
       // @ts-ignore

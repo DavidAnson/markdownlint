@@ -3441,14 +3441,14 @@ module.exports = {
             var listItemPrefix = _step2.value;
             var lineNumber = listItemPrefix.startLine;
             var actualIndent = listItemPrefix.startColumn - 1;
-            var markerLength = listItemPrefix.text.trim().length;
-            var range = [1, listItemPrefix.startColumn + markerLength];
+            var range = [1, listItemPrefix.endColumn - 1];
             if (list.type === "listUnordered") {
               addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, range
               // No fixInfo; MD007 handles this scenario better
               );
             } else {
-              var actualEnd = range[1] - 1;
+              var markerLength = listItemPrefix.text.trim().length;
+              var actualEnd = listItemPrefix.startColumn + markerLength - 1;
               expectedEnd = expectedEnd || actualEnd;
               if (expectedIndent !== actualIndent || endMatching) {
                 if (expectedEnd === actualEnd) {
@@ -3525,7 +3525,8 @@ module.exports = {
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var token = _step.value;
-        var parent = token.parent,
+        var endColumn = token.endColumn,
+          parent = token.parent,
           startColumn = token.startColumn,
           startLine = token.startLine,
           type = token.type;
@@ -3556,7 +3557,7 @@ module.exports = {
             var expectedIndent = (startIndented ? startIndent : 0) + _nesting * indent;
             var blockQuoteAdjustment = ((_lastBlockQuotePrefix = lastBlockQuotePrefix) === null || _lastBlockQuotePrefix === void 0 ? void 0 : _lastBlockQuotePrefix.endLine) === startLine ? lastBlockQuotePrefix.endColumn - 1 : 0;
             var actualIndent = startColumn - 1 - blockQuoteAdjustment;
-            var range = [1, startColumn + 1];
+            var range = [1, endColumn - 1];
             var fixInfo = {
               "editColumn": startColumn - actualIndent,
               "deleteCount": Math.max(actualIndent - expectedIndent, 0),
@@ -4499,14 +4500,14 @@ module.exports = {
     try {
       for (_iterator.s(); !(_step = _iterator.n()).done;) {
         var heading = _step.value;
-        var endLine = heading.endLine,
-          startColumn = heading.startColumn,
+        var endColumn = heading.endColumn,
+          endLine = heading.endLine,
           text = heading.text;
         var match = trailingPunctuationRe.exec(text);
         if (match && !endOfLineHtmlEntityRe.test(text) && !endOfLineGemojiCodeRe.test(text)) {
           var fullMatch = match[0];
-          var column = startColumn + match.index;
           var length = fullMatch.length;
+          var column = endColumn - length;
           addError(onError, endLine, "Punctuation: '".concat(fullMatch, "'"), undefined, [column, length], {
             "editColumn": column,
             "deleteCount": length
