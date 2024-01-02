@@ -42,6 +42,7 @@
     } else if (renderer === "micromark") {
       const parseOptions = {
         "extensions": [
+          micromark.directive(),
           micromark.gfmAutolinkLiteral(),
           micromark.gfmFootnote(),
           micromark.gfmTable(),
@@ -54,6 +55,7 @@
       const compileOptions = {
         "allowDangerousHtml": true,
         "htmlExtensions": [
+          micromarkHtml.directiveHtml(),
           micromarkHtml.gfmAutolinkLiteralHtml(),
           micromarkHtml.gfmFootnoteHtml(),
           micromarkHtml.gfmTableHtml(),

@@ -4,8 +4,8 @@
 
 // @ts-ignore
 const {
-  gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse, postprocess,
-  preprocess
+  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse,
+  postprocess, preprocess
   // @ts-ignore
 } = require("markdownlint-micromark");
 const { newLineRe } = require("./shared.js");
@@ -72,6 +72,7 @@ function getMicromarkEvents(
   // Customize options object to add useful extensions
   micromarkOptions.extensions = micromarkOptions.extensions || [];
   micromarkOptions.extensions.push(
+    directive(),
     gfmAutolinkLiteral(),
     gfmFootnote(),
     gfmTable(),

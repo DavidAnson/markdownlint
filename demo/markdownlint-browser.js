@@ -1194,6 +1194,7 @@ function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 var _require = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark"),
+  directive = _require.directive,
   gfmAutolinkLiteral = _require.gfmAutolinkLiteral,
   gfmFootnote = _require.gfmFootnote,
   gfmTable = _require.gfmTable,
@@ -1255,7 +1256,7 @@ function getMicromarkEvents(markdown) {
   var referencesDefined = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
   // Customize options object to add useful extensions
   micromarkOptions.extensions = micromarkOptions.extensions || [];
-  micromarkOptions.extensions.push(gfmAutolinkLiteral(), gfmFootnote(), gfmTable(), math());
+  micromarkOptions.extensions.push(directive(), gfmAutolinkLiteral(), gfmFootnote(), gfmTable(), math());
 
   // Use micromark to parse document into Events
   var encoding = undefined;
