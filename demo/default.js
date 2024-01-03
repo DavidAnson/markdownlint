@@ -33,6 +33,22 @@
       .replace(/>/g, "&gt;");
   }
 
+  // Renders directive metadata
+  function handleDirective(directive) {
+    const content = directive.content;
+    delete directive.content;
+    if (content) {
+      this.tag("<blockquote>");
+    }
+    this.tag("<code>");
+    this.raw(this.encode(JSON.stringify(directive)));
+    this.tag("</code>");
+    this.raw(content);
+    if (content) {
+      this.tag("</blockquote>");
+    }
+  }
+
   // Renders Markdown to HTML
   function render(markdown) {
     const match = /^\?renderer=([a-z-]+)$/.exec(window.location.search);
@@ -55,7 +71,7 @@
       const compileOptions = {
         "allowDangerousHtml": true,
         "htmlExtensions": [
-          micromarkHtml.directiveHtml(),
+          micromarkHtml.directiveHtml({ "*": handleDirective }),
           micromarkHtml.gfmAutolinkLiteralHtml(),
           micromarkHtml.gfmFootnoteHtml(),
           micromarkHtml.gfmTableHtml(),

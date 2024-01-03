@@ -36,6 +36,7 @@
         "unicorn/prefer-query-selector": "off",
         "unicorn/prefer-add-event-listener": "off",
         "no-console": "off",
+        "no-invalid-this": "off",
         "no-shadow": "off",
         "no-var": "off"
       }
