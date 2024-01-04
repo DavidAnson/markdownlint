@@ -17,7 +17,7 @@ const languageJavaScript = /js|javascript/i;
 function cleanJsdocRulesFromEslintConfig(config) {
   const cleanedConfig = { ...config };
   for (const rule in config.rules) {
-    if (/^(?:es|jsdoc|n|regexp|unicorn)\//.test(rule)) {
+    if (/^(?:jsdoc|n|regexp|unicorn)\//.test(rule)) {
       delete cleanedConfig.rules[rule];
     }
   }
@@ -37,6 +37,7 @@ module.exports = {
             config = cleanJsdocRulesFromEslintConfig(config);
             const results = linter.verify(fence.content, config);
             for (const result of results) {
+              // @ts-ignore
               const lineNumber = fence.lineNumber + result.line;
               onError({
                 "lineNumber": lineNumber,

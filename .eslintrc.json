@@ -69,9 +69,9 @@
     "sourceType": "script"
   },
   "plugins": [
-    "es",
     "jsdoc",
     "n",
+    "regexp",
     "unicorn"
   ],
   "reportUnusedDisableDirectives": true,
