@@ -267,3 +267,6 @@ MD054:
 MD055:
   # Table pipe style
   style: "consistent"
+
+# MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md056.md
+MD056: true

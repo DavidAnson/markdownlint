@@ -1071,6 +1071,14 @@ export interface Configuration {
         style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
       };
   /**
+   * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md056.md
+   */
+  MD056?: boolean;
+  /**
+   * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.32.1/doc/md056.md
+   */
+  "table-column-count"?: boolean;
+  /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
@@ -1163,7 +1171,7 @@ export interface Configuration {
    */
   images?: boolean;
   /**
-   * table : MD055
+   * table : MD055, MD056
    */
   table?: boolean;
   [k: string]: unknown;

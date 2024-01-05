@@ -109,6 +109,10 @@ Strong **with** different style {MD050}
 |--------|--------|
  {MD055} | cell   |
 
+| table   | header |
+|---------|--------|
+| {MD056} |
+
 <!-- markdownlint-configure-file {
   "required-headings": {
     "headings": [

@@ -83,7 +83,7 @@ test("projectFiles", (t) => {
       "schema/*.md"
     ]))
     .then((files) => {
-      t.is(files.length, 59);
+      t.is(files.length, 60);
       const options = {
         files,
         "config": require("../.markdownlint.json")
@@ -427,120 +427,114 @@ test("styleFiles", async(t) => {
   }
 });
 
-test("styleAll", (t) => new Promise((resolve) => {
-  t.plan(2);
+test("styleAll", async(t) => {
+  t.plan(1);
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/all.json"),
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/break-all-the-rules.md": {
-        "MD001": [ 3 ],
-        "MD003": [ 5, 31 ],
-        "MD004": [ 8 ],
-        "MD005": [ 12 ],
-        "MD007": [ 8, 11 ],
-        "MD009": [ 14 ],
-        "MD010": [ 14 ],
-        "MD011": [ 16 ],
-        "MD012": [ 18 ],
-        "MD013": [ 21 ],
-        "MD014": [ 23 ],
-        "MD018": [ 25 ],
-        "MD019": [ 27 ],
-        "MD020": [ 29 ],
-        "MD021": [ 31 ],
-        "MD022": [ 86 ],
-        "MD023": [ 40 ],
-        "MD024": [ 35 ],
-        "MD026": [ 40 ],
-        "MD027": [ 42 ],
-        "MD028": [ 43 ],
-        "MD029": [ 47 ],
-        "MD030": [ 8 ],
-        "MD031": [ 50 ],
-        "MD032": [ 7, 8, 51 ],
-        "MD033": [ 55 ],
-        "MD034": [ 57 ],
-        "MD035": [ 61 ],
-        "MD036": [ 65 ],
-        "MD037": [ 67 ],
-        "MD038": [ 69 ],
-        "MD039": [ 71 ],
-        "MD040": [ 73 ],
-        "MD041": [ 1 ],
-        "MD042": [ 81 ],
-        "MD045": [ 85 ],
-        "MD046": [ 49, 73, 77 ],
-        "MD047": [ 130 ],
-        "MD048": [ 77 ],
-        "MD049": [ 90 ],
-        "MD050": [ 94 ],
-        "MD051": [ 96 ],
-        "MD052": [ 98 ],
-        "MD053": [ 100 ],
-        "MD055": [ 110 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+  const actualResult = await markdownlint.promises.markdownlint(options);
+  const expectedResult = {
+    "./test/break-all-the-rules.md": {
+      "MD001": [ 3 ],
+      "MD003": [ 5, 31 ],
+      "MD004": [ 8 ],
+      "MD005": [ 12 ],
+      "MD007": [ 8, 11 ],
+      "MD009": [ 14 ],
+      "MD010": [ 14 ],
+      "MD011": [ 16 ],
+      "MD012": [ 18 ],
+      "MD013": [ 21 ],
+      "MD014": [ 23 ],
+      "MD018": [ 25 ],
+      "MD019": [ 27 ],
+      "MD020": [ 29 ],
+      "MD021": [ 31 ],
+      "MD022": [ 86 ],
+      "MD023": [ 40 ],
+      "MD024": [ 35 ],
+      "MD026": [ 40 ],
+      "MD027": [ 42 ],
+      "MD028": [ 43 ],
+      "MD029": [ 47 ],
+      "MD030": [ 8 ],
+      "MD031": [ 50 ],
+      "MD032": [ 7, 8, 51 ],
+      "MD033": [ 55 ],
+      "MD034": [ 57 ],
+      "MD035": [ 61 ],
+      "MD036": [ 65 ],
+      "MD037": [ 67 ],
+      "MD038": [ 69 ],
+      "MD039": [ 71 ],
+      "MD040": [ 73 ],
+      "MD041": [ 1 ],
+      "MD042": [ 81 ],
+      "MD045": [ 85 ],
+      "MD046": [ 49, 73, 77 ],
+      "MD047": [ 134 ],
+      "MD048": [ 77 ],
+      "MD049": [ 90 ],
+      "MD050": [ 94 ],
+      "MD051": [ 96 ],
+      "MD052": [ 98 ],
+      "MD053": [ 100 ],
+      "MD055": [ 110 ],
+      "MD056": [ 114 ]
+    }
+  };
+  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+});
 
-test("styleRelaxed", (t) => new Promise((resolve) => {
-  t.plan(2);
+test("styleRelaxed", async(t) => {
+  t.plan(1);
   const options = {
     "files": [ "./test/break-all-the-rules.md" ],
     "config": require("../style/relaxed.json"),
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/break-all-the-rules.md": {
-        "MD001": [ 3 ],
-        "MD003": [ 5, 31 ],
-        "MD004": [ 8 ],
-        "MD005": [ 12 ],
-        "MD011": [ 16 ],
-        "MD014": [ 23 ],
-        "MD018": [ 25 ],
-        "MD019": [ 27 ],
-        "MD020": [ 29 ],
-        "MD021": [ 31 ],
-        "MD022": [ 86 ],
-        "MD023": [ 40 ],
-        "MD024": [ 35 ],
-        "MD026": [ 40 ],
-        "MD029": [ 47 ],
-        "MD031": [ 50 ],
-        "MD032": [ 7, 8, 51 ],
-        "MD035": [ 61 ],
-        "MD036": [ 65 ],
-        "MD042": [ 81 ],
-        "MD045": [ 85 ],
-        "MD046": [ 49, 73, 77 ],
-        "MD047": [ 130 ],
-        "MD048": [ 77 ],
-        "MD049": [ 90 ],
-        "MD050": [ 94 ],
-        "MD051": [ 96 ],
-        "MD052": [ 98 ],
-        "MD053": [ 100 ],
-        "MD055": [ 110 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+  const actualResult = await markdownlint.promises.markdownlint(options);
+  const expectedResult = {
+    "./test/break-all-the-rules.md": {
+      "MD001": [ 3 ],
+      "MD003": [ 5, 31 ],
+      "MD004": [ 8 ],
+      "MD005": [ 12 ],
+      "MD011": [ 16 ],
+      "MD014": [ 23 ],
+      "MD018": [ 25 ],
+      "MD019": [ 27 ],
+      "MD020": [ 29 ],
+      "MD021": [ 31 ],
+      "MD022": [ 86 ],
+      "MD023": [ 40 ],
+      "MD024": [ 35 ],
+      "MD026": [ 40 ],
+      "MD029": [ 47 ],
+      "MD031": [ 50 ],
+      "MD032": [ 7, 8, 51 ],
+      "MD035": [ 61 ],
+      "MD036": [ 65 ],
+      "MD042": [ 81 ],
+      "MD045": [ 85 ],
+      "MD046": [ 49, 73, 77 ],
+      "MD047": [ 134 ],
+      "MD048": [ 77 ],
+      "MD049": [ 90 ],
+      "MD050": [ 94 ],
+      "MD051": [ 96 ],
+      "MD052": [ 98 ],
+      "MD053": [ 100 ],
+      "MD055": [ 110 ],
+      "MD056": [ 114 ]
+    }
+  };
+  t.deepEqual(actualResult, expectedResult, "Undetected issues.");
+});
 
 test("nullFrontMatter", (t) => new Promise((resolve) => {
   t.plan(2);
@@ -843,7 +837,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(124);
+  t.plan(126);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -1038,7 +1032,7 @@ test("validateConfigExampleJson", async(t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(147);
+  t.plan(150);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

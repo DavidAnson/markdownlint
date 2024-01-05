@@ -2337,8 +2337,8 @@ Parameters:
   `consistent` / `leading_and_trailing` / `leading_only` /
   `no_leading_or_trailing` / `trailing_only`)
 
-This rule is triggered when a [GitHub Flavored Markdown table][gfm-table] is
-inconsistent about its use of leading and trailing pipe characters (`|`).
+This rule is triggered when a [GitHub Flavored Markdown table][gfm-table-055]
+is inconsistent about its use of leading and trailing pipe characters (`|`).
 
 By default (`consistent` style), the header row of the first table in a document
 is used to determine the style that is enforced for all tables in that document.
@@ -2349,18 +2349,18 @@ missing the trailing pipe and its first row of cells is missing the leading
 pipe:
 
 ```markdown
-| Heading | Heading |
-| ------- | -------
-  Cell    | Cell    |
+| Header | Header |
+| ------ | ------
+  Cell   | Cell   |
 ```
 
 To fix these issues, make sure there is a pipe character at the beginning and
 end of every row:
 
 ```markdown
-| Heading | Heading |
-| ------- | ------- |
-| Cell    | Cell    |
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
 ```
 
 Note that text immediately following a table (i.e., not separated by an empty
@@ -2368,9 +2368,9 @@ line) is treated as part of the table (per the specification) and may also
 trigger this rule:
 
 ```markdown
-| Heading | Heading |
-| ------- | ------- |
-| Cell    | Cell    |
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
 This text is part of the table
 ```
 
@@ -2378,7 +2378,47 @@ Rationale: Some parsers have difficulty with tables that are missing their
 leading or trailing pipe characters. The use of leading/trailing pipes can also
 help provide visual clarity.
 
-[gfm-table]: https://github.github.com/gfm/#tables-extension-
+[gfm-table-055]: https://github.github.com/gfm/#tables-extension-
+
+<a name="md056"></a>
+
+## `MD056` - Table column count
+
+Tags: `table`
+
+Aliases: `table-column-count`
+
+This rule is triggered when a [GitHub Flavored Markdown table][gfm-table-056]
+does not have the same number of cells in every row.
+
+This table's second data row has too few cells and its third data row has too
+many cells:
+
+```markdown
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
+| Cell   |
+| Cell   | Cell   | Cell   |
+```
+
+To fix these issues, ensure every row has the same number of cells:
+
+```markdown
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
+| Cell   | Cell   |
+| Cell   | Cell   |
+```
+
+Note that a table's header row and its delimiter row must have the same number
+of cells or it will not be recognized as a table (per specification).
+
+Rationale: Extra cells in a row are usually not shown, so their data is lost.
+Missing cells in a row create holes in the table and suggest an omission.
+
+[gfm-table-056]: https://github.github.com/gfm/#tables-extension-
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {

@@ -6,7 +6,7 @@
   }
 } -->
 
-## Missing in Heading Row
+## Missing in Header Row
 
 | Table | {MD055}
 |-------|---------|
@@ -19,111 +19,111 @@
 
 ## Missing in Separator Row
 
-| Table | Heading |
-|-------|---------
+| Table | Header |
+|-------|--------
 
 {MD055:-2}
 
-| Table | Heading |
- -------|---------|
+| Table | Header |
+ -------|--------|
 
 {MD055:-2}
 
-| Table | Heading |
- -------|---------
+| Table | Header |
+ -------|--------
 
 {MD055:-2}
 
 ## Missing Leading and Trailing
 
- {MD055} | Heading
----------|---------
+ {MD055} | Header
+---------|--------
  {MD055} | Cell
 
 {MD055:-3}
 
- {MD055} | Heading
---------:|:-------:
+ {MD055} | Header
+--------:|:------:
  {MD055} | Cell
 
 {MD055:-3}
 
-| Table   | Heading |
-|--------:|:--------|
+| Table   | Header |
+|--------:|:-------|
   {MD055} | Cell
 
-| Table   | Heading |
-|---------|---------|
+| Table   | Header |
+|---------|--------|
   {MD055} | Cell
-| Cell    | Cell    |
-| Cell    | Cell    |
+| Cell    | Cell   |
+| Cell    | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-| Cell    | Cell    |
+| Table   | Header |
+|---------|--------|
+| Cell    | Cell   |
   {MD055} | Cell
-| Cell    | Cell    |
+| Cell    | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-| Cell    | Cell    |
-| Cell    | Cell    |
+| Table   | Header |
+|---------|--------|
+| Cell    | Cell   |
+| Cell    | Cell   |
   {MD055} | Cell
 
 ## Missing Trailing
 
-| Table   | Heading |
-|--------:|:--------|
+| Table   | Header |
+|--------:|:-------|
 | {MD055} | Cell
 
-| Table   | Heading |
-|---------|---------|
+| Table   | Header |
+|---------|--------|
 | {MD055} | Cell
-| Cell    | Cell    |
-| Cell    | Cell    |
+| Cell    | Cell   |
+| Cell    | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-| Cell    | Cell    |
+| Table   | Header |
+|---------|--------|
+| Cell    | Cell   |
 | {MD055} | Cell
-| Cell    | Cell    |
+| Cell    | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-| Cell    | Cell    |
-| Cell    | Cell    |
+| Table   | Header |
+|---------|--------|
+| Cell    | Cell   |
+| Cell    | Cell   |
 | {MD055} | Cell
 
 ## Missing Leading
 
-| Table   | Heading |
-|--------:|:--------|
-  {MD055} | Cell    |
+| Table   | Header |
+|--------:|:-------|
+  {MD055} | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-  {MD055} | Cell    |
-| Cell    | Cell    |
-| Cell    | Cell    |
+| Table   | Header |
+|---------|--------|
+  {MD055} | Cell   |
+| Cell    | Cell   |
+| Cell    | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-| Cell    | Cell    |
-  {MD055} | Cell    |
-| Cell    | Cell    |
+| Table   | Header |
+|---------|--------|
+| Cell    | Cell   |
+  {MD055} | Cell   |
+| Cell    | Cell   |
 
-| Table   | Heading |
-|---------|---------|
-| Cell    | Cell    |
-| Cell    | Cell    |
-  {MD055} | Cell    |
+| Table   | Header |
+|---------|--------|
+| Cell    | Cell   |
+| Cell    | Cell   |
+  {MD055} | Cell   |
 
 ## Followed by Text
 
-| Table | Heading |
-|-------|---------|
-| Cell  | Cell    |
-{MD055} Text
+| Table | Header |
+|-------|--------|
+| Cell  | Cell   |
+{MD055} {MD056} Text
 
 ## Table inside Blockquote
 
@@ -133,15 +133,15 @@
 
 ## Well-Formed
 
-| Table | Heading |
-|-------|---------|
-| Cell  | Cell    |
+| Table | Header |
+|-------|--------|
+| Cell  | Cell   |
 
-| Table | Heading |
-|-------|---------|
-| Cell  | Cell    |
-| Cell  | Cell    |
-| Cell  | Cell    |
+| Table | Header |
+|-------|--------|
+| Cell  | Cell   |
+| Cell  | Cell   |
+| Cell  | Cell   |
 
 ## Leading and Trailing Spaces
 
