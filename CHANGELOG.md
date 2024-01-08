@@ -1,5 +1,14 @@
 # Changelog
 
+## 0.33.0
+
+- Add MD055/table-pipe-style, MD056/table-column-count
+- Improve MD005/MD007/MD024/MD026/MD038
+- Incorporate `micromark-extension-directive`
+- Improve JSON schema, document validation
+- Reduce size of browser script
+- Update dependencies
+
 ## 0.32.1
 
 - Fix behavior of MD054
