@@ -998,13 +998,18 @@ test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
 });
 
 test("validateConfigExampleJson", async(t) => {
-  t.plan(3);
+  t.plan(4);
   const { "default": stripJsonComments } = await import("strip-json-comments");
 
   // Validate schema
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchema = ajv.compile(configSchema);
+  t.is(
+    // eslint-disable-next-line regexp/optimal-quantifier-concatenation
+    configSchema.$id.replace(/^.*v(?<ver>\d+\.\d+\.\d+).*$/u, "$<ver>"),
+    version
+  );
   t.is(configSchema.$id, configSchema.properties.$schema.default);
 
   // Validate JSONC
