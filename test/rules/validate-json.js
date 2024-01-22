@@ -3,23 +3,26 @@
 "use strict";
 
 const { filterTokens } = require("markdownlint-rule-helpers");
+const { parse, printParseErrorCode } = require("jsonc-parser");
 
 module.exports = {
   "names": [ "validate-json" ],
   "description": "Rule that validates JSON code",
   "tags": [ "test", "validate", "json" ],
   "asynchronous": true,
-  "function": async(params, onError) => {
-    const { "default": stripJsonComments } =
-      await import("strip-json-comments");
+  "function": (params, onError) => {
     filterTokens(params, "fence", (fence) => {
       if (/jsonc?/i.test(fence.info)) {
-        try {
-          JSON.parse(stripJsonComments(fence.content));
-        } catch (error) {
+        const errors = [];
+        parse(fence.content, errors);
+        if (errors.length > 0) {
+          const detail = errors.map(
+            (err) => `${printParseErrorCode(err.error)} (offset ${err.offset}, length ${err.length})`
+          ).join(", ");
           onError({
+            // @ts-ignore
             "lineNumber": fence.lineNumber,
-            "detail": error.message
+            detail
           });
         }
       }

@@ -3,6 +3,7 @@
 "use strict";
 
 const { join } = require("node:path").posix;
+const jsoncParser = require("jsonc-parser");
 const jsYaml = require("js-yaml");
 const markdownlint = require("../lib/markdownlint");
 
@@ -17,9 +18,8 @@ const markdownlint = require("../lib/markdownlint");
 async function lintTestRepo(t, globPatterns, configPath) {
   t.plan(1);
   const { globby } = await import("globby");
-  const { "default": stripJsonComments } = await import("strip-json-comments");
   const jsoncParse = (json) => {
-    const config = JSON.parse(stripJsonComments(json));
+    const config = jsoncParser.parse(json, [], { "allowTrailingComma": true });
     return config.config || config;
   };
   const yamlParse = (yaml) => jsYaml.load(yaml);

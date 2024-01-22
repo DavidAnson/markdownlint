@@ -5,6 +5,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const Ajv = require("ajv");
+const jsoncParser = require("jsonc-parser");
 const jsYaml = require("js-yaml");
 const md = require("markdown-it")();
 const pluginInline = require("markdown-it-for-inline");
@@ -997,9 +998,8 @@ test("validateConfigSchemaAppliesToUnknownProperties", (t) => {
   }
 });
 
-test("validateConfigExampleJson", async(t) => {
+test("validateConfigExampleJson", (t) => {
   t.plan(4);
-  const { "default": stripJsonComments } = await import("strip-json-comments");
 
   // Validate schema
   // @ts-ignore
@@ -1018,7 +1018,7 @@ test("validateConfigExampleJson", async(t) => {
     path.join(__dirname, "../schema", fileJson),
     "utf8"
   );
-  const jsonObject = JSON.parse(stripJsonComments(dataJson));
+  const jsonObject = jsoncParser.parse(dataJson);
   const result = validateSchema(jsonObject);
   t.truthy(
     result,
@@ -1218,7 +1218,6 @@ test("configParsersJSON", async(t) => {
 
 test("configParsersJSONC", async(t) => {
   t.plan(1);
-  const { "default": stripJsonComments } = await import("strip-json-comments");
   const options = {
     "strings": {
       "content": [
@@ -1233,7 +1232,7 @@ test("configParsersJSONC", async(t) => {
         ""
       ].join("\n")
     },
-    "configParsers": [ (content) => JSON.parse(stripJsonComments(content)) ]
+    "configParsers": [ jsoncParser.parse ]
   };
   const actual = await markdownlint.promises.markdownlint(options);
   t.is(actual.toString(), "", "Unexpected results.");
@@ -1262,7 +1261,6 @@ test("configParsersYAML", async(t) => {
 
 test("configParsersTOML", async(t) => {
   t.plan(1);
-  const { "default": stripJsonComments } = await import("strip-json-comments");
   const options = {
     "strings": {
       "content": [
@@ -1276,7 +1274,7 @@ test("configParsersTOML", async(t) => {
       ].join("\n")
     },
     "configParsers": [
-      (content) => JSON.parse(stripJsonComments(content)),
+      jsoncParser.parse,
       require("toml").parse
     ]
   };
