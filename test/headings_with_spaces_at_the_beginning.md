@@ -21,5 +21,6 @@ Some text
 
 <!-- markdownlint-configure-file {
   "heading-style": false,
+  "single-title": false,
   "first-line-heading": false
 } -->

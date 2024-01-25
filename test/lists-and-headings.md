@@ -20,5 +20,6 @@ Heading 3
 * list
 
 <!-- markdownlint-configure-file {
+  "single-title": false,
   "first-line-heading": false
 } -->

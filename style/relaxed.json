@@ -8,5 +8,6 @@
   "no-inline-html": false,
   "no-bare-urls": false,
   "fenced-code-language": false,
+  "single-title": false,
   "first-line-h1": false
 }

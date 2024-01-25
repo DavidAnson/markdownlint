@@ -126,6 +126,7 @@ Strong **with** different style {MD050}
       "markdownlint"
     ]
   },
+  "single-title": false,
   "link-image-style": {
     "full": false
   }
