@@ -47,7 +47,7 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
       "docs/**/*.svg"
     )
   ];
-  const configPath = join(rootDir, ".markdownlintrc");
+  const configPath = join(rootDir, ".markdownlint.yaml");
   return lintTestRepo(t, globPatterns, configPath);
 });
 
