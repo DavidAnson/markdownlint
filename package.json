@@ -94,7 +94,7 @@
     "terser-webpack-plugin": "5.3.10",
     "toml": "3.0.0",
     "typescript": "5.3.3",
-    "webpack": "5.90.0",
+    "webpack": "5.90.1",
     "webpack-cli": "5.1.4",
     "yaml": "2.3.4"
   },
