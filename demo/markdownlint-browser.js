@@ -5470,7 +5470,9 @@ module.exports = {
             startColumn
           } = definition;
           const text = unescapeStringTokenText(definition);
-          if (text.length > 1 && text.startsWith("#") && !fragments.has(text) && !fragments.has(`#${encodeURIComponent(text.slice(1))}`)) {
+          const encodedText = `#${encodeURIComponent(text.slice(1))}`;
+          const lineFragmentRe = /^#L\d+(?:C\d+)?(?:-L\d+(?:C\d+)?)?$/;
+          if (text.length > 1 && text.startsWith("#") && !fragments.has(encodedText) && !lineFragmentRe.test(encodedText)) {
             // eslint-disable-next-line no-undef-init
             let context = undefined;
             // eslint-disable-next-line no-undef-init
