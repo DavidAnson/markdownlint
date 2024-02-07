@@ -86,6 +86,22 @@
 
 [Valid][escapedref]
 
+[Valid](#L7)
+
+[Valid](#L123)
+
+[Valid](#L30C11-L31C9)
+
+[Valid](#L30C11)
+
+[Valid](#L30C11-L31)
+
+[Valid](#L30C11-L31)
+
+[Valid](#L30-L31)
+
+[Valid](#l12-abc)
+
 ### Valid H3 Heading
 
 Text
@@ -170,6 +186,8 @@ Text
 ### Valid_Heading Escaped_Underscores
 
 ### Valid Heading\-With\_Embedded\_Escaping
+
+### L12 ABC
 
 <a name="namedlink"></a>
 
@@ -279,6 +297,22 @@ Valid Setext Heading with Named Fragment {#setext}
 [Invalid](#UpperCase) {MD051}
 
 [Invalid](#uppercase) {MD051}
+
+[Invalid](#l7) {MD051}
+
+[Invalid](#L12-abc) {MD051}
+
+[Invalid](#L7abc) {MD051}
+
+[Invalid](#L) {MD051}
+
+[Invalid](#L30C) {MD051}
+
+[Invalid](#L30L12) {MD051}
+
+[Invalid](#L30C11-) {MD051}
+
+[Invalid](#L30C11-L31C) {MD051}
 
 <!-- markdownlint-configure-file {
   "emphasis-style": false,
