@@ -86,21 +86,17 @@
 
 [Valid][escapedref]
 
+[Valid](#l12-not-a-line-link)
+
 [Valid](#L7)
-
-[Valid](#L123)
-
-[Valid](#L30C11-L31C9)
-
-[Valid](#L30C11)
-
-[Valid](#L30C11-L31)
-
-[Valid](#L30C11-L31)
 
 [Valid](#L30-L31)
 
-[Valid](#l12-abc)
+[Valid](#L3C24-L88)
+
+[Valid](#L304-L314C98)
+
+[Valid](#L200C4-L3244C2)
 
 ### Valid H3 Heading
 
@@ -187,7 +183,7 @@ Text
 
 ### Valid Heading\-With\_Embedded\_Escaping
 
-### L12 ABC
+### L12 Not A Line Link
 
 <a name="namedlink"></a>
 
@@ -298,21 +294,35 @@ Valid Setext Heading with Named Fragment {#setext}
 
 [Invalid](#uppercase) {MD051}
 
+[Invalid](#L12-not-a-line-link) {MD051}
+
 [Invalid](#l7) {MD051}
-
-[Invalid](#L12-abc) {MD051}
-
-[Invalid](#L7abc) {MD051}
 
 [Invalid](#L) {MD051}
 
+[Invalid](#L7extra) {MD051}
+
 [Invalid](#L30C) {MD051}
+
+[Invalid](#L30Cextra) {MD051}
 
 [Invalid](#L30L12) {MD051}
 
+[Invalid](#L30C12) {MD051}
+
 [Invalid](#L30C11-) {MD051}
 
+[Invalid](#L30C11-L) {MD051}
+
 [Invalid](#L30C11-L31C) {MD051}
+
+[Invalid](#L30C11-C31) {MD051}
+
+[Invalid](#C30) {MD051}
+
+[Invalid](#C11-C31) {MD051}
+
+[Invalid](#C11-L4C31) {MD051}
 
 <!-- markdownlint-configure-file {
   "emphasis-style": false,
