@@ -2100,9 +2100,9 @@ generated name (see below):
 [Link](#heading-name)
 ```
 
-Furthermore, this rule mandates the use of lowercase for link fragments.
-Thus, even though the link points to the correct fragment, the following example
-will still trigger this rule:
+Link fragments may be handled case-sensitively, so this rule requires fragments
+to exactly match the [GitHub heading algorithm][github-heading-algorithm].
+Therefore, the following example is reported as a violation:
 
 ```markdown
 # Heading Name
@@ -2132,27 +2132,20 @@ attribute can be used to define a fragment:
 An `a` tag can be useful in scenarios where a heading is not appropriate or for
 control over the text of the fragment identifier.
 
-GitHub supports links to [specific lines][github-lines-links].
+This rule also recognizes the custom fragment syntax used by GitHub to highlight
+[specific content in a document][github-linking-to-content].
 
-For example, to link to line 12 of current Markdown file:
-
-```markdown
-[Go to line 12](#L12)
-```
-
-GitHub also allows to specify a column number:
+For example, this link to line 20:
 
 ```markdown
-[Go to line 12, column 34](#L12-L34)
+[Link](#L20)
 ```
 
-Or a range of lines/columns:
+And this link to content starting within line 19 running into line 21:
 
 ```markdown
-[Go to lines 12-34](#L12-L34)
+[Link](#L19C5-L21C11)
 ```
-
-So this rule will not report violations when this syntax is used.
 
 Rationale: [GitHub section links][github-section-links] are created
 automatically for every heading when Markdown content is displayed on GitHub.
@@ -2167,7 +2160,7 @@ append an incrementing integer as needed for uniqueness.
 
 [github-section-links]: https://docs.github.com/en/get-started/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax#section-links
 [github-heading-algorithm]: https://github.com/gjtorikian/html-pipeline/blob/f13a1534cb650ba17af400d1acd3a22c28004c09/lib/html/pipeline/toc_filter.rb
-[github-lines-links]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-markdown#linking-to-markdown
+[github-linking-to-content]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-markdown#linking-to-markdown
 
 <a name="md052"></a>
 

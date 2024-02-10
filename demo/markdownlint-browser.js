@@ -5383,6 +5383,7 @@ const {
 const idRe = getHtmlAttributeRe("id");
 const nameRe = getHtmlAttributeRe("name");
 const anchorRe = /\{(#[a-z\d]+(?:[-_][a-z\d]+)*)\}/gu;
+const lineFragmentRe = /^#(?:L\d+(?:C\d+)?-L\d+(?:C\d+)?|L\d+)$/;
 
 // Sets for filtering heading tokens during conversion
 const childrenExclude = new Set(["image", "reference", "resource"]);
@@ -5471,7 +5472,6 @@ module.exports = {
           } = definition;
           const text = unescapeStringTokenText(definition);
           const encodedText = `#${encodeURIComponent(text.slice(1))}`;
-          const lineFragmentRe = /^#L\d+(?:C\d+)?(?:-L\d+(?:C\d+)?)?$/;
           if (text.length > 1 && text.startsWith("#") && !fragments.has(encodedText) && !lineFragmentRe.test(encodedText)) {
             // eslint-disable-next-line no-undef-init
             let context = undefined;
