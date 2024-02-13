@@ -122,7 +122,6 @@ exception.
 - [Code for all `markdownlint` built-in rules][lib]
 - [Package configuration for publishing to npm][test-rules-npm]
   - Packages should export a single rule object or an `Array` of rule objects
-- [Custom rules from the axibase/docs-util repository][docs-util]
 - [Custom rules from the webhintio/hint repository][hint]
 
 ## References
@@ -364,7 +363,6 @@ Yields the `params` object:
 ```
 
 [commonmark]: https://commonmark.org/
-[docs-util]: https://github.com/axibase/docs-util/tree/master/linting-rules
 [hint]: https://github.com/webhintio/hint/blob/main/scripts/lint-markdown.js
 [lib]: ../lib
 [markdown-it]: https://github.com/markdown-it/markdown-it
