@@ -21,20 +21,7 @@ function config(options) {
       "rules": [
         {
           "test": /\.[cm]?js$/,
-          "exclude": /node_modules/,
-          "use": {
-            "loader": "babel-loader",
-            "options": {
-              "presets": [
-                [
-                  "@babel/preset-env",
-                  {
-                    "targets": "defaults"
-                  }
-                ]
-              ]
-            }
-          }
+          "exclude": /node_modules/
         }
       ]
     },

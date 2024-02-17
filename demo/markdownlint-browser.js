@@ -3,24 +3,6 @@ var markdownlint;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ "../lib sync recursive":
-/*!********************!*\
-  !*** ../lib/ sync ***!
-  \********************/
-/***/ ((module) => {
-
-function webpackEmptyContext(req) {
-	var e = new Error("Cannot find module '" + req + "'");
-	e.code = 'MODULE_NOT_FOUND';
-	throw e;
-}
-webpackEmptyContext.keys = () => ([]);
-webpackEmptyContext.resolve = webpackEmptyContext;
-webpackEmptyContext.id = "../lib sync recursive";
-module.exports = webpackEmptyContext;
-
-/***/ }),
-
 /***/ "../helpers/helpers.js":
 /*!*****************************!*\
   !*** ../helpers/helpers.js ***!
@@ -33,18 +15,19 @@ module.exports = webpackEmptyContext;
 
 
 const micromark = __webpack_require__(/*! ./micromark.cjs */ "../helpers/micromark.cjs");
-const {
-  newLineRe,
-  nextLinesRe
-} = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+
+const { newLineRe, nextLinesRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+
 module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
-module.exports.frontMatterRe = /((^---\s*$[\s\S]+?^---\s*)|(^\+\+\+\s*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
+module.exports.frontMatterRe =
+  /((^---\s*$[\s\S]+?^---\s*)|(^\+\+\+\s*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching the start of inline disable/enable comments
-const inlineCommentStartRe = /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
+const inlineCommentStartRe =
+  /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
 // Regular expressions for range matching
@@ -60,10 +43,12 @@ const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
 
 // Regular expression for identifying an HTML entity at the end of a line
-module.exports.endOfLineHtmlEntityRe = /&(?:#\d+|#[xX][\da-fA-F]+|[a-zA-Z]{2,31}|blk\d{2}|emsp1[34]|frac\d{2}|sup\d|there4);$/;
+module.exports.endOfLineHtmlEntityRe =
+  /&(?:#\d+|#[xX][\da-fA-F]+|[a-zA-Z]{2,31}|blk\d{2}|emsp1[34]|frac\d{2}|sup\d|there4);$/;
 
 // Regular expression for identifying a GitHub emoji code at the end of a line
-module.exports.endOfLineGemojiCodeRe = /:(?:[abmovx]|[-+]1|100|1234|(?:1st|2nd|3rd)_place_medal|8ball|clock\d{1,4}|e-mail|non-potable_water|o2|t-rex|u5272|u5408|u55b6|u6307|u6708|u6709|u6e80|u7121|u7533|u7981|u7a7a|[a-z]{2,15}2?|[a-z]{1,14}(?:_[a-z\d]{1,16})+):$/;
+module.exports.endOfLineGemojiCodeRe =
+  /:(?:[abmovx]|[-+]1|100|1234|(?:1st|2nd|3rd)_place_medal|8ball|clock\d{1,4}|e-mail|non-potable_water|o2|t-rex|u5272|u5408|u55b6|u6307|u6708|u6709|u6e80|u7121|u7533|u7981|u7a7a|[a-z]{2,15}2?|[a-z]{1,14}(?:_[a-z\d]{1,16})+):$/;
 
 // All punctuation characters (normal and full-width)
 const allPunctuation = ".,;:!?。，；：！？";
@@ -112,7 +97,7 @@ module.exports.isEmptyString = isEmptyString;
  * @returns {boolean} True iff obj is an Object.
  */
 function isObject(obj) {
-  return !!obj && typeof obj === "object" && !Array.isArray(obj);
+  return !!obj && (typeof obj === "object") && !Array.isArray(obj);
 }
 module.exports.isObject = isObject;
 
@@ -123,7 +108,7 @@ module.exports.isObject = isObject;
  * @returns {boolean} True iff obj is a URL.
  */
 function isUrl(obj) {
-  return !!obj && Object.getPrototypeOf(obj) === URL.prototype;
+  return !!obj && (Object.getPrototypeOf(obj) === URL.prototype);
 }
 module.exports.isUrl = isUrl;
 
@@ -134,7 +119,7 @@ module.exports.isUrl = isUrl;
  * @returns {Object} Clone of obj iff obj is an Array.
  */
 function cloneIfArray(arr) {
-  return Array.isArray(arr) ? [...arr] : arr;
+  return Array.isArray(arr) ? [ ...arr ] : arr;
 }
 module.exports.cloneIfArray = cloneIfArray;
 
@@ -169,18 +154,18 @@ module.exports.getHtmlAttributeRe = function getHtmlAttributeRe(name) {
 function isBlankLine(line) {
   const startComment = "<!--";
   const endComment = "-->";
-  const removeComments = s => {
+  const removeComments = (s) => {
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const start = s.indexOf(startComment);
       const end = s.indexOf(endComment);
-      if (end !== -1 && (start === -1 || end < start)) {
+      if ((end !== -1) && ((start === -1) || (end < start))) {
         // Unmatched end comment is first
         s = s.slice(end + endComment.length);
-      } else if (start !== -1 && end !== -1) {
+      } else if ((start !== -1) && (end !== -1)) {
         // Start comment is before end comment
         s = s.slice(0, start) + s.slice(end + endComment.length);
-      } else if (start !== -1 && end === -1) {
+      } else if ((start !== -1) && (end === -1)) {
         // Unmatched start comment is last
         s = s.slice(0, start);
       } else {
@@ -189,7 +174,11 @@ function isBlankLine(line) {
       }
     }
   };
-  return !line || !line.trim() || !removeComments(line).replace(/>/g, "").trim();
+  return (
+    !line ||
+    !line.trim() ||
+    !removeComments(line).replace(/>/g, "").trim()
+  );
 }
 module.exports.isBlankLine = isBlankLine;
 
@@ -210,7 +199,7 @@ module.exports.includesSorted = function includesSorted(array, element) {
   let right = array.length - 1;
   while (left <= right) {
     // eslint-disable-next-line no-bitwise
-    const mid = left + right >> 1;
+    const mid = (left + right) >> 1;
     if (array[mid] < element) {
       left = mid + 1;
     } else if (array[mid] > element) {
@@ -233,7 +222,7 @@ const startsWithPipeRe = /^ *\|/;
 const notCrLfRe = /[^\r\n]/g;
 const notSpaceCrLfRe = /[^ \r\n]/g;
 const trailingSpaceRe = / +[\r\n]/g;
-const replaceTrailingSpace = s => s.replace(notCrLfRe, safeCommentCharacter);
+const replaceTrailingSpace = (s) => s.replace(notCrLfRe, safeCommentCharacter);
 module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
   let i = 0;
   while ((i = text.indexOf(htmlCommentBegin, i)) !== -1) {
@@ -250,11 +239,24 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
       const isBlock = preText.trim().length === 0;
       const couldBeTable = startsWithPipeRe.test(preText);
       const spansTableCells = couldBeTable && content.includes("\n");
-      const isValid = isBlock || !(spansTableCells || content.startsWith(">") || content.startsWith("->") || content.endsWith("-") || content.includes("--"));
+      const isValid =
+        isBlock ||
+        !(
+          spansTableCells ||
+          content.startsWith(">") ||
+          content.startsWith("->") ||
+          content.endsWith("-") ||
+          content.includes("--")
+        );
       // If a valid block/inline comment...
       if (isValid) {
-        const clearedContent = content.replace(notSpaceCrLfRe, safeCommentCharacter).replace(trailingSpaceRe, replaceTrailingSpace);
-        text = text.slice(0, i + htmlCommentBegin.length) + clearedContent + text.slice(j);
+        const clearedContent = content
+          .replace(notSpaceCrLfRe, safeCommentCharacter)
+          .replace(trailingSpaceRe, replaceTrailingSpace);
+        text =
+          text.slice(0, i + htmlCommentBegin.length) +
+          clearedContent +
+          text.slice(j);
       }
     }
     i = j + htmlCommentEnd.length;
@@ -273,14 +275,15 @@ module.exports.escapeForRegExp = function escapeForRegExp(str) {
  * @param {string} markup Fence string.
  * @returns {string} String representation.
  */
-module.exports.fencedCodeBlockStyleFor = function fencedCodeBlockStyleFor(markup) {
-  switch (markup[0]) {
-    case "~":
-      return "tilde";
-    default:
-      return "backtick";
-  }
-};
+module.exports.fencedCodeBlockStyleFor =
+  function fencedCodeBlockStyleFor(markup) {
+    switch (markup[0]) {
+      case "~":
+        return "tilde";
+      default:
+        return "backtick";
+    }
+  };
 
 /**
  * Return the string representation of a emphasis or strong markup character.
@@ -288,14 +291,15 @@ module.exports.fencedCodeBlockStyleFor = function fencedCodeBlockStyleFor(markup
  * @param {string} markup Emphasis or strong string.
  * @returns {string} String representation.
  */
-module.exports.emphasisOrStrongStyleFor = function emphasisOrStrongStyleFor(markup) {
-  switch (markup[0]) {
-    case "*":
-      return "asterisk";
-    default:
-      return "underscore";
-  }
-};
+module.exports.emphasisOrStrongStyleFor =
+  function emphasisOrStrongStyleFor(markup) {
+    switch (markup[0]) {
+      case "*":
+        return "asterisk";
+      default:
+        return "underscore";
+    }
+  };
 
 /**
  * Return the number of characters of indent for a token.
@@ -311,7 +315,7 @@ module.exports.indentFor = indentFor;
 
 // Returns the heading style for a heading token
 module.exports.headingStyleFor = function headingStyleFor(token) {
-  if (token.map[1] - token.map[0] === 1) {
+  if ((token.map[1] - token.map[0]) === 1) {
     if (/[^\\]#\s*$/.test(token.line)) {
       return "atx_closed";
     }
@@ -372,32 +376,34 @@ module.exports.filterTokens = filterTokens;
  * @returns {LineMetadata} Line metadata.
  */
 function getLineMetadata(params) {
-  const lineMetadata = params.lines.map((line, index) => [line, index, false, 0, false, false, false]);
-  filterTokens(params, "fence", token => {
+  const lineMetadata = params.lines.map(
+    (line, index) => [ line, index, false, 0, false, false, false ]
+  );
+  filterTokens(params, "fence", (token) => {
     lineMetadata[token.map[0]][3] = 1;
     lineMetadata[token.map[1] - 1][3] = -1;
     for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
       lineMetadata[i][2] = true;
     }
   });
-  filterTokens(params, "code_block", token => {
+  filterTokens(params, "code_block", (token) => {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][2] = true;
     }
   });
-  filterTokens(params, "table_open", token => {
+  filterTokens(params, "table_open", (token) => {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][4] = true;
     }
   });
-  filterTokens(params, "list_item_open", token => {
+  filterTokens(params, "list_item_open", (token) => {
     let count = 1;
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][5] = count;
       count++;
     }
   });
-  filterTokens(params, "hr", token => {
+  filterTokens(params, "hr", (token) => {
     lineMetadata[token.map[0]][6] = true;
   });
   return lineMetadata;
@@ -439,26 +445,27 @@ module.exports.flattenLists = function flattenLists(tokens) {
   let current = null;
   let nesting = 0;
   const nestingStack = [];
-  let lastWithMap = {
-    "map": [0, 1]
-  };
+  let lastWithMap = { "map": [ 0, 1 ] };
   for (const token of tokens) {
-    if (token.type === "bullet_list_open" || token.type === "ordered_list_open") {
+    if ((token.type === "bullet_list_open") ||
+        (token.type === "ordered_list_open")) {
       // Save current context and start a new one
       stack.push(current);
       current = {
-        "unordered": token.type === "bullet_list_open",
-        "parentsUnordered": !current || current.unordered && current.parentsUnordered,
+        "unordered": (token.type === "bullet_list_open"),
+        "parentsUnordered": !current ||
+          (current.unordered && current.parentsUnordered),
         "open": token,
         "indent": indentFor(token),
-        "parentIndent": current && current.indent || 0,
+        "parentIndent": (current && current.indent) || 0,
         "items": [],
         "nesting": nesting,
         "lastLineIndex": -1,
         "insert": flattenedLists.length
       };
       nesting++;
-    } else if (token.type === "bullet_list_close" || token.type === "ordered_list_close") {
+    } else if ((token.type === "bullet_list_close") ||
+               (token.type === "ordered_list_close")) {
       // Finalize current context and restore previous
       current.lastLineIndex = lastWithMap.map[1];
       flattenedLists.splice(current.insert, 0, current);
@@ -490,7 +497,7 @@ module.exports.forEachHeading = function forEachHeading(params, handler) {
       heading = token;
     } else if (token.type === "heading_close") {
       heading = null;
-    } else if (token.type === "inline" && heading) {
+    } else if ((token.type === "inline") && heading) {
       handler(heading, token.content, token);
     }
   }
@@ -518,7 +525,7 @@ function forEachInlineCodeSpan(input, handler) {
   let match = null;
   const backticksLengthAndIndex = [];
   while ((match = backtickRe.exec(input)) !== null) {
-    backticksLengthAndIndex.push([match[0].length, match.index]);
+    backticksLengthAndIndex.push([ match[0].length, match.index ]);
   }
   const newLinesIndex = [];
   while ((match = newLineRe.exec(input)) !== null) {
@@ -528,10 +535,10 @@ function forEachInlineCodeSpan(input, handler) {
   let lineStartIndex = 0;
   let k = 0;
   for (let i = 0; i < backticksLengthAndIndex.length - 1; i++) {
-    const [startLength, startIndex] = backticksLengthAndIndex[i];
-    if (startIndex === 0 || input[startIndex - 1] !== "\\") {
+    const [ startLength, startIndex ] = backticksLengthAndIndex[i];
+    if ((startIndex === 0) || (input[startIndex - 1] !== "\\")) {
       for (let j = i + 1; j < backticksLengthAndIndex.length; j++) {
-        const [endLength, endIndex] = backticksLengthAndIndex[j];
+        const [ endLength, endIndex ] = backticksLengthAndIndex[j];
         if (startLength === endLength) {
           for (; k < newLinesIndex.length; k++) {
             const newLineIndex = newLinesIndex[k];
@@ -542,7 +549,12 @@ function forEachInlineCodeSpan(input, handler) {
             lineStartIndex = newLineIndex + 1;
           }
           const columnIndex = startIndex - lineStartIndex + startLength;
-          handler(input.slice(startIndex + startLength, endIndex), lineIndex, columnIndex, startLength);
+          handler(
+            input.slice(startIndex + startLength, endIndex),
+            lineIndex,
+            columnIndex,
+            startLength
+          );
           i = j;
           break;
         }
@@ -597,14 +609,23 @@ function addError(onError, lineNumber, detail, context, range, fixInfo) {
 module.exports.addError = addError;
 
 // Adds an error object with details conditionally via the onError callback
-module.exports.addErrorDetailIf = function addErrorDetailIf(onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
+module.exports.addErrorDetailIf = function addErrorDetailIf(
+  onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
-    addError(onError, lineNumber, "Expected: " + expected + "; Actual: " + actual + (detail ? "; " + detail : ""), context, range, fixInfo);
+    addError(
+      onError,
+      lineNumber,
+      "Expected: " + expected + "; Actual: " + actual +
+        (detail ? "; " + detail : ""),
+      context,
+      range,
+      fixInfo);
   }
 };
 
 // Adds an error object with context via the onError callback
-module.exports.addErrorContext = function addErrorContext(onError, lineNumber, context, left, right, range, fixInfo) {
+module.exports.addErrorContext = function addErrorContext(
+  onError, lineNumber, context, left, right, range, fixInfo) {
   context = ellipsify(context, left, right);
   addError(onError, lineNumber, undefined, context, range, fixInfo);
 };
@@ -621,19 +642,26 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
   // Add code block ranges (excludes fences)
   forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
     if (inCode && !onFence) {
-      exclusions.push([lineIndex, 0, line.length]);
+      exclusions.push([ lineIndex, 0, line.length ]);
     }
   });
   // Add code span ranges (excludes ticks)
-  filterTokens(params, "inline", token => {
-    if (token.children.some(child => child.type === "code_inline")) {
+  filterTokens(params, "inline", (token) => {
+    if (token.children.some((child) => child.type === "code_inline")) {
       const tokenLines = params.lines.slice(token.map[0], token.map[1]);
-      forEachInlineCodeSpan(tokenLines.join("\n"), (code, lineIndex, columnIndex) => {
-        const codeLines = code.split(newLineRe);
-        for (const [i, line] of codeLines.entries()) {
-          exclusions.push([token.lineNumber - 1 + lineIndex + i, i ? 0 : columnIndex, line.length]);
+      forEachInlineCodeSpan(
+        tokenLines.join("\n"),
+        (code, lineIndex, columnIndex) => {
+          const codeLines = code.split(newLineRe);
+          for (const [ i, line ] of codeLines.entries()) {
+            exclusions.push([
+              token.lineNumber - 1 + lineIndex + i,
+              i ? 0 : columnIndex,
+              line.length
+            ]);
+          }
         }
-      });
+      );
     }
   });
   return exclusions;
@@ -648,7 +676,13 @@ module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
  * @param {number} length Length to check.
  * @returns {boolean} True iff the specified range is within.
  */
-const withinAnyRange = (ranges, lineIndex, index, length) => !ranges.every(span => lineIndex !== span[0] || index < span[1] || index + length > span[1] + span[2]);
+const withinAnyRange = (ranges, lineIndex, index, length) => (
+  !ranges.every((span) => (
+    (lineIndex !== span[0]) ||
+    (index < span[1]) ||
+    (index + length > span[1] + span[2])
+  ))
+);
 module.exports.withinAnyRange = withinAnyRange;
 
 // Returns a range object for a line by applying a RegExp
@@ -658,17 +692,24 @@ module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
   if (match) {
     const column = match.index + 1;
     const length = match[0].length;
-    range = [column, length];
+    range = [ column, length ];
   }
   return range;
 };
 
 // Determines if the front matter includes a title
-module.exports.frontMatterHasTitle = function frontMatterHasTitle(frontMatterLines, frontMatterTitlePattern) {
-  const ignoreFrontMatter = frontMatterTitlePattern !== undefined && !frontMatterTitlePattern;
-  const frontMatterTitleRe = new RegExp(String(frontMatterTitlePattern || "^\\s*\"?title\"?\\s*[:=]"), "i");
-  return !ignoreFrontMatter && frontMatterLines.some(line => frontMatterTitleRe.test(line));
-};
+module.exports.frontMatterHasTitle =
+  function frontMatterHasTitle(frontMatterLines, frontMatterTitlePattern) {
+    const ignoreFrontMatter =
+      (frontMatterTitlePattern !== undefined) && !frontMatterTitlePattern;
+    const frontMatterTitleRe =
+      new RegExp(
+        String(frontMatterTitlePattern || "^\\s*\"?title\"?\\s*[:=]"),
+        "i"
+      );
+    return !ignoreFrontMatter &&
+      frontMatterLines.some((line) => frontMatterTitleRe.test(line));
+  };
 
 /**
  * Returns an object with information about reference links and images.
@@ -677,19 +718,24 @@ module.exports.frontMatterHasTitle = function frontMatterHasTitle(frontMatterLin
  * @returns {Object} Reference link/image data.
  */
 function getReferenceLinkImageData(params) {
-  const normalizeReference = s => s.toLowerCase().trim().replace(/\s+/g, " ");
+  const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
   const definitions = new Map();
   const definitionLineIndices = [];
   const duplicateDefinitions = [];
   const references = new Map();
   const shortcuts = new Map();
-  const filteredTokens = micromark.filterByTypes(params.parsers.micromark.tokens, [
-  // definitionLineIndices
-  "definition", "gfmFootnoteDefinition",
-  // definitions and definitionLineIndices
-  "definitionLabelString", "gfmFootnoteDefinitionLabelString",
-  // references and shortcuts
-  "gfmFootnoteCall", "image", "link"]);
+  const filteredTokens =
+    micromark.filterByTypes(
+      params.parsers.micromark.tokens,
+      [
+        // definitionLineIndices
+        "definition", "gfmFootnoteDefinition",
+        // definitions and definitionLineIndices
+        "definitionLabelString", "gfmFootnoteDefinitionLabelString",
+        // references and shortcuts
+        "gfmFootnoteCall", "image", "link"
+      ]
+    );
   for (const token of filteredTokens) {
     let labelPrefix = "";
     // eslint-disable-next-line default-case
@@ -703,20 +749,26 @@ function getReferenceLinkImageData(params) {
         break;
       case "gfmFootnoteDefinitionLabelString":
         labelPrefix = "^";
-      case "definitionLabelString":
-        // eslint-disable-line no-fallthrough
+      case "definitionLabelString": // eslint-disable-line no-fallthrough
         {
           // definitions and definitionLineIndices
           const reference = normalizeReference(`${labelPrefix}${token.text}`);
           if (definitions.has(reference)) {
-            duplicateDefinitions.push([reference, token.startLine - 1]);
+            duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
             let destinationString = null;
-            const parent = micromark.getTokenParentOfType(token, ["definition"]);
+            const parent =
+              micromark.getTokenParentOfType(token, [ "definition" ]);
             if (parent) {
-              destinationString = micromark.getTokenTextByType(micromark.filterByPredicate(parent.children), "definitionDestinationString");
+              destinationString = micromark.getTokenTextByType(
+                micromark.filterByPredicate(parent.children),
+                "definitionDestinationString"
+              );
             }
-            definitions.set(reference, [token.startLine - 1, destinationString]);
+            definitions.set(
+              reference,
+              [ token.startLine - 1, destinationString ]
+            );
           }
         }
         break;
@@ -728,18 +780,38 @@ function getReferenceLinkImageData(params) {
           let isFullOrCollapsed = false;
           let labelText = null;
           let referenceStringText = null;
-          const shortcutCandidate = micromark.matchAndGetTokensByType(token.children, ["label"]);
+          const shortcutCandidate =
+            micromark.matchAndGetTokensByType(token.children, [ "label" ]);
           if (shortcutCandidate) {
-            labelText = micromark.getTokenTextByType(shortcutCandidate[0].children, "labelText");
-            isShortcut = labelText !== null;
+            labelText =
+              micromark.getTokenTextByType(
+                shortcutCandidate[0].children, "labelText"
+              );
+            isShortcut = (labelText !== null);
           }
-          const fullAndCollapsedCandidate = micromark.matchAndGetTokensByType(token.children, ["label", "reference"]);
+          const fullAndCollapsedCandidate =
+            micromark.matchAndGetTokensByType(
+              token.children, [ "label", "reference" ]
+            );
           if (fullAndCollapsedCandidate) {
-            labelText = micromark.getTokenTextByType(fullAndCollapsedCandidate[0].children, "labelText");
-            referenceStringText = micromark.getTokenTextByType(fullAndCollapsedCandidate[1].children, "referenceString");
-            isFullOrCollapsed = labelText !== null;
+            labelText =
+              micromark.getTokenTextByType(
+                fullAndCollapsedCandidate[0].children, "labelText"
+              );
+            referenceStringText =
+              micromark.getTokenTextByType(
+                fullAndCollapsedCandidate[1].children, "referenceString"
+              );
+            isFullOrCollapsed = (labelText !== null);
           }
-          const footnote = micromark.matchAndGetTokensByType(token.children, ["gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker", "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"], ["gfmFootnoteCallMarker", "gfmFootnoteCallString"]);
+          const footnote = micromark.matchAndGetTokensByType(
+            token.children,
+            [
+              "gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker",
+              "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"
+            ],
+            [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ]
+          );
           if (footnote) {
             const callMarkerText = footnote[0].text;
             const callString = footnote[1].text;
@@ -748,10 +820,16 @@ function getReferenceLinkImageData(params) {
           }
           // Track shortcuts separately due to ambiguity in "text [text] text"
           if (isShortcut || isFullOrCollapsed) {
-            const referenceDatum = [token.startLine - 1, token.startColumn - 1, token.text.length,
-            // @ts-ignore
-            labelText.length, (referenceStringText || "").length];
-            const reference = normalizeReference(referenceStringText || labelText);
+            const referenceDatum = [
+              token.startLine - 1,
+              token.startColumn - 1,
+              token.text.length,
+              // @ts-ignore
+              labelText.length,
+              (referenceStringText || "").length
+            ];
+            const reference =
+              normalizeReference(referenceStringText || labelText);
             const dictionary = isShortcut ? shortcuts : references;
             const referenceData = dictionary.get(reference) || [];
             referenceData.push(referenceDatum);
@@ -799,8 +877,8 @@ function getPreferredLineEnding(input, os) {
   }
   let preferredLineEnding = null;
   if (!cr && !lf && !crlf) {
-    preferredLineEnding = os && os.EOL || "\n";
-  } else if (lf >= crlf && lf >= cr) {
+    preferredLineEnding = (os && os.EOL) || "\n";
+  } else if ((lf >= crlf) && (lf >= cr)) {
     preferredLineEnding = "\n";
   } else if (crlf >= cr) {
     preferredLineEnding = "\r\n";
@@ -836,13 +914,13 @@ function normalizeFixInfo(fixInfo, lineNumber) {
  * @returns {string | null} Fixed content.
  */
 function applyFix(line, fixInfo, lineEnding) {
-  const {
-    editColumn,
-    deleteCount,
-    insertText
-  } = normalizeFixInfo(fixInfo);
+  const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
   const editIndex = editColumn - 1;
-  return deleteCount === -1 ? null : line.slice(0, editIndex) + insertText.replace(/\n/g, lineEnding || "\n") + line.slice(editIndex + deleteCount);
+  return (deleteCount === -1) ?
+    null :
+    line.slice(0, editIndex) +
+    insertText.replace(/\n/g, lineEnding || "\n") +
+    line.slice(editIndex + deleteCount);
 }
 module.exports.applyFix = applyFix;
 
@@ -857,17 +935,29 @@ function applyFixes(input, errors) {
   const lineEnding = getPreferredLineEnding(input, __webpack_require__(/*! node:os */ "?0176"));
   const lines = input.split(newLineRe);
   // Normalize fixInfo objects
-  let fixInfos = errors.filter(error => error.fixInfo).map(error => normalizeFixInfo(error.fixInfo, error.lineNumber));
+  let fixInfos = errors
+    .filter((error) => error.fixInfo)
+    .map((error) => normalizeFixInfo(error.fixInfo, error.lineNumber));
   // Sort bottom-to-top, line-deletes last, right-to-left, long-to-short
   fixInfos.sort((a, b) => {
-    const aDeletingLine = a.deleteCount === -1;
-    const bDeletingLine = b.deleteCount === -1;
-    return b.lineNumber - a.lineNumber || (aDeletingLine ? 1 : bDeletingLine ? -1 : 0) || b.editColumn - a.editColumn || b.insertText.length - a.insertText.length;
+    const aDeletingLine = (a.deleteCount === -1);
+    const bDeletingLine = (b.deleteCount === -1);
+    return (
+      (b.lineNumber - a.lineNumber) ||
+      (aDeletingLine ? 1 : (bDeletingLine ? -1 : 0)) ||
+      (b.editColumn - a.editColumn) ||
+      (b.insertText.length - a.insertText.length)
+    );
   });
   // Remove duplicate entries (needed for following collapse step)
   let lastFixInfo = {};
-  fixInfos = fixInfos.filter(fixInfo => {
-    const unique = fixInfo.lineNumber !== lastFixInfo.lineNumber || fixInfo.editColumn !== lastFixInfo.editColumn || fixInfo.deleteCount !== lastFixInfo.deleteCount || fixInfo.insertText !== lastFixInfo.insertText;
+  fixInfos = fixInfos.filter((fixInfo) => {
+    const unique = (
+      (fixInfo.lineNumber !== lastFixInfo.lineNumber) ||
+      (fixInfo.editColumn !== lastFixInfo.editColumn) ||
+      (fixInfo.deleteCount !== lastFixInfo.deleteCount) ||
+      (fixInfo.insertText !== lastFixInfo.insertText)
+    );
     lastFixInfo = fixInfo;
     return unique;
   });
@@ -876,25 +966,32 @@ function applyFixes(input, errors) {
     "lineNumber": -1
   };
   for (const fixInfo of fixInfos) {
-    if (fixInfo.lineNumber === lastFixInfo.lineNumber && fixInfo.editColumn === lastFixInfo.editColumn && !fixInfo.insertText && fixInfo.deleteCount > 0 && lastFixInfo.insertText && !lastFixInfo.deleteCount) {
+    if (
+      (fixInfo.lineNumber === lastFixInfo.lineNumber) &&
+      (fixInfo.editColumn === lastFixInfo.editColumn) &&
+      !fixInfo.insertText &&
+      (fixInfo.deleteCount > 0) &&
+      lastFixInfo.insertText &&
+      !lastFixInfo.deleteCount) {
       fixInfo.insertText = lastFixInfo.insertText;
       lastFixInfo.lineNumber = 0;
     }
     lastFixInfo = fixInfo;
   }
-  fixInfos = fixInfos.filter(fixInfo => fixInfo.lineNumber);
+  fixInfos = fixInfos.filter((fixInfo) => fixInfo.lineNumber);
   // Apply all (remaining/updated) fixes
   let lastLineIndex = -1;
   let lastEditIndex = -1;
   for (const fixInfo of fixInfos) {
-    const {
-      lineNumber,
-      editColumn,
-      deleteCount
-    } = fixInfo;
+    const { lineNumber, editColumn, deleteCount } = fixInfo;
     const lineIndex = lineNumber - 1;
     const editIndex = editColumn - 1;
-    if (lineIndex !== lastLineIndex || deleteCount === -1 || editIndex + deleteCount <= lastEditIndex - (deleteCount > 0 ? 0 : 1)) {
+    if (
+      (lineIndex !== lastLineIndex) ||
+      (deleteCount === -1) ||
+      ((editIndex + deleteCount) <=
+        (lastEditIndex - ((deleteCount > 0) ? 0 : 1)))
+    ) {
       // @ts-ignore
       lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
     }
@@ -902,7 +999,7 @@ function applyFixes(input, errors) {
     lastEditIndex = editIndex;
   }
   // Return corrected input
-  return lines.filter(line => line !== null).join(lineEnding);
+  return lines.filter((line) => line !== null).join(lineEnding);
 }
 module.exports.applyFixes = applyFixes;
 
@@ -939,6 +1036,7 @@ module.exports.expandTildePath = expandTildePath;
  * @property {string} line Line content.
  */
 
+
 /***/ }),
 
 /***/ "../helpers/shared.js":
@@ -958,6 +1056,25 @@ module.exports.newLineRe = /\r\n?|\n/g;
 
 // Regular expression for matching next lines
 module.exports.nextLinesRe = /[\r\n][\s\S]*$/;
+
+
+/***/ }),
+
+/***/ "../lib sync recursive":
+/*!********************!*\
+  !*** ../lib/ sync ***!
+  \********************/
+/***/ ((module) => {
+
+function webpackEmptyContext(req) {
+	var e = new Error("Cannot find module '" + req + "'");
+	e.code = 'MODULE_NOT_FOUND';
+	throw e;
+}
+webpackEmptyContext.keys = () => ([]);
+webpackEmptyContext.resolve = webpackEmptyContext;
+webpackEmptyContext.id = "../lib sync recursive";
+module.exports = webpackEmptyContext;
 
 /***/ }),
 
@@ -1049,6 +1166,7 @@ module.exports = {
   "helpers": __webpack_require__(/*! ../helpers */ "../helpers/helpers.js")
 };
 
+
 /***/ }),
 
 /***/ "../helpers/micromark.cjs":
@@ -1064,19 +1182,12 @@ module.exports = {
 
 // @ts-ignore
 const {
-  directive,
-  gfmAutolinkLiteral,
-  gfmFootnote,
-  gfmTable,
-  math,
-  parse,
-  postprocess,
-  preprocess
+  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse,
+  postprocess, preprocess
   // @ts-ignore
 } = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
-const {
-  newLineRe
-} = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+
 const flatTokensSymbol = Symbol("flat-tokens");
 
 /**
@@ -1100,20 +1211,24 @@ const flatTokensSymbol = Symbol("flat-tokens");
  * @returns {boolean} True iff token is htmlFlow containing a comment.
  */
 function isHtmlFlowComment(token) {
-  const {
-    text,
-    type
-  } = token;
-  if (type === "htmlFlow" && text.startsWith("<!--") && text.endsWith("-->")) {
+  const { text, type } = token;
+  if (
+    (type === "htmlFlow") &&
+    text.startsWith("<!--") &&
+    text.endsWith("-->")
+  ) {
     const comment = text.slice(4, -3);
-    return !comment.startsWith(">") && !comment.startsWith("->") && !comment.endsWith("-")
-    // The following condition from the CommonMark specification is commented
-    // to avoid parsing HTML comments that include "--" because that is NOT a
-    // condition of the HTML specification.
-    // https://spec.commonmark.org/0.30/#raw-html
-    // https://html.spec.whatwg.org/multipage/syntax.html#comments
-    // && !comment.includes("--")
-    ;
+    return (
+      !comment.startsWith(">") &&
+      !comment.startsWith("->") &&
+      !comment.endsWith("-")
+      // The following condition from the CommonMark specification is commented
+      // to avoid parsing HTML comments that include "--" because that is NOT a
+      // condition of the HTML specification.
+      // https://spec.commonmark.org/0.30/#raw-html
+      // https://html.spec.whatwg.org/multipage/syntax.html#comments
+      // && !comment.includes("--")
+    );
   }
   return false;
 }
@@ -1126,12 +1241,21 @@ function isHtmlFlowComment(token) {
  * @param {boolean} [referencesDefined] Treat references as defined.
  * @returns {Object[]} Micromark events.
  */
-function getMicromarkEvents(markdown) {
-  let micromarkOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let referencesDefined = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+function getMicromarkEvents(
+  markdown,
+  micromarkOptions = {},
+  referencesDefined = true
+) {
+
   // Customize options object to add useful extensions
   micromarkOptions.extensions = micromarkOptions.extensions || [];
-  micromarkOptions.extensions.push(directive(), gfmAutolinkLiteral(), gfmFootnote(), gfmTable(), math());
+  micromarkOptions.extensions.push(
+    directive(),
+    gfmAutolinkLiteral(),
+    gfmFootnote(),
+    gfmTable(),
+    math()
+  );
 
   // Use micromark to parse document into Events
   const encoding = undefined;
@@ -1139,7 +1263,7 @@ function getMicromarkEvents(markdown) {
   const parseContext = parse(micromarkOptions);
   if (referencesDefined) {
     // Customize ParseContext to treat all references as defined
-    parseContext.defined.includes = searchElement => searchElement.length > 0;
+    parseContext.defined.includes = (searchElement) => searchElement.length > 0;
   }
   const chunks = preprocess()(markdown, encoding, eol);
   const events = postprocess(parseContext.document().write(chunks));
@@ -1156,9 +1280,17 @@ function getMicromarkEvents(markdown) {
  * @param {Token} [ancestor] Parent of top-most tokens.
  * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined, lineDelta, ancestor) {
+function micromarkParseWithOffset(
+  markdown,
+  micromarkOptions,
+  referencesDefined,
+  lineDelta,
+  ancestor
+) {
   // Use micromark to parse document into Events
-  const events = getMicromarkEvents(markdown, micromarkOptions, referencesDefined);
+  const events = getMicromarkEvents(
+    markdown, micromarkOptions, referencesDefined
+  );
 
   // Create Token objects
   const document = [];
@@ -1174,28 +1306,18 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
     "children": document,
     "parent": null
   };
-  const history = [root];
+  const history = [ root ];
   let current = root;
   let reparseOptions = null;
   let lines = null;
   let skipHtmlFlowChildren = false;
   for (const event of events) {
-    const [kind, token, context] = event;
-    const {
-      type,
-      start,
-      end
-    } = token;
-    const {
-      "column": startColumn,
-      "line": startLine
-    } = start;
-    const {
-      "column": endColumn,
-      "line": endLine
-    } = end;
+    const [ kind, token, context ] = event;
+    const { type, start, end } = token;
+    const { "column": startColumn, "line": startLine } = start;
+    const { "column": endColumn, "line": endLine } = end;
     const text = context.sliceSerialize(token);
-    if (kind === "enter" && !skipHtmlFlowChildren) {
+    if ((kind === "enter") && !skipHtmlFlowChildren) {
       const previous = current;
       history.push(previous);
       current = {
@@ -1206,25 +1328,35 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
         endColumn,
         text,
         "children": [],
-        "parent": previous === root ? ancestor || null : previous
+        "parent": ((previous === root) ? (ancestor || null) : previous)
       };
       previous.children.push(current);
       flatTokens.push(current);
-      if (current.type === "htmlFlow" && !isHtmlFlowComment(current)) {
+      if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
           reparseOptions = {
             ...micromarkOptions,
-            "extensions": [{
-              "disable": {
-                "null": ["codeIndented", "htmlFlow"]
+            "extensions": [
+              {
+                "disable": {
+                  "null": [ "codeIndented", "htmlFlow" ]
+                }
               }
-            }]
+            ]
           };
           lines = markdown.split(newLineRe);
         }
-        const reparseMarkdown = lines.slice(current.startLine - 1, current.endLine).join("\n");
-        const tokens = micromarkParseWithOffset(reparseMarkdown, reparseOptions, referencesDefined, current.startLine - 1, current);
+        const reparseMarkdown = lines
+          .slice(current.startLine - 1, current.endLine)
+          .join("\n");
+        const tokens = micromarkParseWithOffset(
+          reparseMarkdown,
+          reparseOptions,
+          referencesDefined,
+          current.startLine - 1,
+          current
+        );
         current.children = tokens;
         // Avoid stack overflow of Array.push(...spread)
         // eslint-disable-next-line unicorn/prefer-spread
@@ -1244,9 +1376,7 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
   }
 
   // Return document
-  Object.defineProperty(document, flatTokensSymbol, {
-    "value": flatTokens
-  });
+  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
   Object.freeze(document);
   return document;
 }
@@ -1259,10 +1389,17 @@ function micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined,
  * @param {boolean} [referencesDefined] Treat references as defined.
  * @returns {Token[]} Micromark tokens (frozen).
  */
-function micromarkParse(markdown) {
-  let micromarkOptions = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-  let referencesDefined = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
-  return micromarkParseWithOffset(markdown, micromarkOptions, referencesDefined, 0);
+function micromarkParse(
+  markdown,
+  micromarkOptions = {},
+  referencesDefined = true
+) {
+  return micromarkParseWithOffset(
+    markdown,
+    micromarkOptions,
+    referencesDefined,
+    0
+  );
 }
 
 /**
@@ -1288,30 +1425,30 @@ function micromarkParse(markdown) {
 function filterByPredicate(tokens, allowed, transformChildren) {
   allowed = allowed || (() => true);
   const result = [];
-  const queue = [{
-    "array": tokens,
-    "index": 0
-  }];
+  const queue = [
+    {
+      "array": tokens,
+      "index": 0
+    }
+  ];
   while (queue.length > 0) {
     const current = queue[queue.length - 1];
-    const {
-      array,
-      index
-    } = current;
+    const { array, index } = current;
     if (index < array.length) {
       const token = array[current.index++];
       if (allowed(token)) {
         result.push(token);
       }
-      const {
-        children
-      } = token;
+      const { children } = token;
       if (children.length > 0) {
-        const transformed = transformChildren ? transformChildren(token) : children;
-        queue.push({
-          "array": transformed,
-          "index": 0
-        });
+        const transformed =
+          transformChildren ? transformChildren(token) : children;
+        queue.push(
+          {
+            "array": transformed,
+            "index": 0
+          }
+        );
       }
     } else {
       queue.pop();
@@ -1328,7 +1465,7 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types) {
-  const predicate = token => types.includes(token.type);
+  const predicate = (token) => types.includes(token.type);
   const flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
@@ -1343,11 +1480,12 @@ function filterByTypes(tokens, types) {
  * @returns {number} Heading level.
  */
 function getHeadingLevel(heading) {
-  const headingSequence = filterByTypes(heading.children, ["atxHeadingSequence", "setextHeadingLineSequence"]);
+  const headingSequence = filterByTypes(
+    heading.children,
+    [ "atxHeadingSequence", "setextHeadingLineSequence" ]
+  );
   let level = 1;
-  const {
-    text
-  } = headingSequence[0];
+  const { text } = headingSequence[0];
   if (text[0] === "#") {
     level = Math.min(text.length, 6);
   } else if (text[0] === "-") {
@@ -1402,8 +1540,8 @@ function getTokenParentOfType(token, types) {
  * @returns {string | null} Text of token.
  */
 function getTokenTextByType(tokens, type) {
-  const filtered = tokens.filter(token => token.type === type);
-  return filtered.length > 0 ? filtered[0].text : null;
+  const filtered = tokens.filter((token) => token.type === type);
+  return (filtered.length > 0) ? filtered[0].text : null;
 }
 
 /**
@@ -1413,7 +1551,7 @@ function getTokenTextByType(tokens, type) {
  * @returns {boolean} True iff the token has an htmlFlow-type parent.
  */
 function inHtmlFlow(token) {
-  return getTokenParentOfType(token, ["htmlFlow"]) !== null;
+  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
 }
 
 /**
@@ -1449,8 +1587,9 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
  * @returns {Token | null} Token instance.
  */
 function tokenIfType(token, type) {
-  return token && token.type === type ? token : null;
+  return (token && (token.type === type)) ? token : null;
 }
+
 module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
@@ -1464,6 +1603,7 @@ module.exports = {
   matchAndGetTokensByType,
   tokenIfType
 };
+
 
 /***/ }),
 
@@ -1479,16 +1619,23 @@ module.exports = {
 
 
 const map = new Map();
-module.exports.set = keyValuePairs => {
-  for (const [key, value] of Object.entries(keyValuePairs)) {
+
+module.exports.set = (keyValuePairs) => {
+  for (const [ key, value ] of Object.entries(keyValuePairs)) {
     map.set(key, value);
   }
 };
 module.exports.clear = () => map.clear();
-module.exports.codeBlockAndSpanRanges = () => map.get("codeBlockAndSpanRanges");
-module.exports.flattenedLists = () => map.get("flattenedLists");
-module.exports.lineMetadata = () => map.get("lineMetadata");
-module.exports.referenceLinkImageData = () => map.get("referenceLinkImageData");
+
+module.exports.codeBlockAndSpanRanges =
+  () => map.get("codeBlockAndSpanRanges");
+module.exports.flattenedLists =
+  () => map.get("flattenedLists");
+module.exports.lineMetadata =
+  () => map.get("lineMetadata");
+module.exports.referenceLinkImageData =
+  () => map.get("referenceLinkImageData");
+
 
 /***/ }),
 
@@ -1504,9 +1651,16 @@ module.exports.referenceLinkImageData = () => map.get("referenceLinkImageData");
 
 
 module.exports.deprecatedRuleNames = [];
-module.exports.fixableRuleNames = ["MD004", "MD005", "MD007", "MD009", "MD010", "MD011", "MD012", "MD014", "MD018", "MD019", "MD020", "MD021", "MD022", "MD023", "MD026", "MD027", "MD030", "MD031", "MD032", "MD034", "MD037", "MD038", "MD039", "MD044", "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"];
+module.exports.fixableRuleNames = [
+  "MD004", "MD005", "MD007", "MD009", "MD010", "MD011",
+  "MD012", "MD014", "MD018", "MD019", "MD020", "MD021",
+  "MD022", "MD023", "MD026", "MD027", "MD030", "MD031",
+  "MD032", "MD034", "MD037", "MD038", "MD039", "MD044",
+  "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"
+];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.33.0";
+
 
 /***/ }),
 
@@ -1522,9 +1676,7 @@ module.exports.version = "0.33.0";
 
 
 const path = __webpack_require__(/*! node:path */ "?9a52");
-const {
-  promisify
-} = __webpack_require__(/*! node:util */ "?39e5");
+const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
 const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
 const micromark = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 // const { deprecatedRuleNames } = require("./constants");
@@ -1534,7 +1686,7 @@ const cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // @ts-ignore
 // eslint-disable-next-line camelcase, no-inline-comments, no-undef
-const dynamicRequire = typeof require === "undefined" ? __webpack_require__("../lib sync recursive") : /* c8 ignore next */require;
+const dynamicRequire = (typeof require === "undefined") ? __webpack_require__("../lib sync recursive") : /* c8 ignore next */ require;
 // Capture native require implementation for dynamic loading of modules
 
 /**
@@ -1551,46 +1703,66 @@ function validateRuleList(ruleList, synchronous) {
     return result;
   }
   const allIds = {};
-  for (const [index, rule] of ruleList.entries()) {
+  for (const [ index, rule ] of ruleList.entries()) {
     const customIndex = index - rules.length;
     // eslint-disable-next-line no-inner-declarations, jsdoc/require-jsdoc
     function newError(property) {
-      return new Error("Property '" + property + "' of custom rule at index " + customIndex + " is incorrect.");
+      return new Error(
+        "Property '" + property + "' of custom rule at index " +
+        customIndex + " is incorrect.");
     }
-    for (const property of ["names", "tags"]) {
+    for (const property of [ "names", "tags" ]) {
       const value = rule[property];
-      if (!result && (!value || !Array.isArray(value) || value.length === 0 || !value.every(helpers.isString) || value.some(helpers.isEmptyString))) {
+      if (!result &&
+        (!value || !Array.isArray(value) || (value.length === 0) ||
+         !value.every(helpers.isString) || value.some(helpers.isEmptyString))) {
         result = newError(property);
       }
     }
-    for (const propertyInfo of [["description", "string"], ["function", "function"]]) {
+    for (const propertyInfo of [
+      [ "description", "string" ],
+      [ "function", "function" ]
+    ]) {
       const property = propertyInfo[0];
       const value = rule[property];
-      if (!result && (!value || typeof value !== propertyInfo[1])) {
+      if (!result && (!value || (typeof value !== propertyInfo[1]))) {
         result = newError(property);
       }
     }
-    if (!result && rule.information && !helpers.isUrl(rule.information)) {
+    if (
+      !result &&
+      rule.information &&
+      !helpers.isUrl(rule.information)
+    ) {
       result = newError("information");
     }
-    if (!result && rule.asynchronous !== undefined && typeof rule.asynchronous !== "boolean") {
+    if (
+      !result &&
+      (rule.asynchronous !== undefined) &&
+      (typeof rule.asynchronous !== "boolean")
+    ) {
       result = newError("asynchronous");
     }
     if (!result && rule.asynchronous && synchronous) {
-      result = new Error("Custom rule " + rule.names.join("/") + " at index " + customIndex + " is asynchronous and can not be used in a synchronous context.");
+      result = new Error(
+        "Custom rule " + rule.names.join("/") + " at index " + customIndex +
+        " is asynchronous and can not be used in a synchronous context."
+      );
     }
     if (!result) {
       for (const name of rule.names) {
         const nameUpper = name.toUpperCase();
-        if (!result && allIds[nameUpper] !== undefined) {
-          result = new Error("Name '" + name + "' of custom rule at index " + customIndex + " is already used as a name or tag.");
+        if (!result && (allIds[nameUpper] !== undefined)) {
+          result = new Error("Name '" + name + "' of custom rule at index " +
+            customIndex + " is already used as a name or tag.");
         }
         allIds[nameUpper] = true;
       }
       for (const tag of rule.tags) {
         const tagUpper = tag.toUpperCase();
         if (!result && allIds[tagUpper]) {
-          result = new Error("Tag '" + tag + "' of custom rule at index " + customIndex + " is already used as a name.");
+          result = new Error("Tag '" + tag + "' of custom rule at index " +
+            customIndex + " is already used as a name.");
         }
         allIds[tagUpper] = false;
       }
@@ -1617,8 +1789,20 @@ function newResults(ruleList) {
       const fileResults = lintResults[file];
       if (Array.isArray(fileResults)) {
         for (const result of fileResults) {
-          const ruleMoniker = result.ruleNames ? result.ruleNames.join("/") : result.ruleName + "/" + result.ruleAlias;
-          results.push(file + ": " + result.lineNumber + ": " + ruleMoniker + " " + result.ruleDescription + (result.errorDetail ? " [" + result.errorDetail + "]" : "") + (result.errorContext ? " [Context: \"" + result.errorContext + "\"]" : ""));
+          const ruleMoniker = result.ruleNames ?
+            result.ruleNames.join("/") :
+            (result.ruleName + "/" + result.ruleAlias);
+          results.push(
+            file + ": " +
+            result.lineNumber + ": " +
+            ruleMoniker + " " +
+            result.ruleDescription +
+            (result.errorDetail ?
+              " [" + result.errorDetail + "]" :
+              "") +
+            (result.errorContext ?
+              " [Context: \"" + result.errorContext + "\"]" :
+              ""));
         }
       } else {
         if (!ruleNameToRule) {
@@ -1628,16 +1812,18 @@ function newResults(ruleList) {
             ruleNameToRule[ruleName] = rule;
           }
         }
-        for (const [ruleName, ruleResults] of Object.entries(fileResults)) {
+        for (const [ ruleName, ruleResults ] of Object.entries(fileResults)) {
           const rule = ruleNameToRule[ruleName.toUpperCase()];
           for (const lineNumber of ruleResults) {
             // @ts-ignore
             const nameIndex = Math.min(useAlias ? 1 : 0, rule.names.length - 1);
-            const result = file + ": " + lineNumber + ": " +
-            // @ts-ignore
-            rule.names[nameIndex] + " " +
-            // @ts-ignore
-            rule.description;
+            const result =
+              file + ": " +
+              lineNumber + ": " +
+              // @ts-ignore
+              rule.names[nameIndex] + " " +
+              // @ts-ignore
+              rule.description;
             results.push(result);
           }
         }
@@ -1645,9 +1831,7 @@ function newResults(ruleList) {
     }
     return results.join("\n");
   }
-  Object.defineProperty(lintResults, "toString", {
-    "value": toString
-  });
+  Object.defineProperty(lintResults, "toString", { "value": toString });
   // @ts-ignore
   return lintResults;
 }
@@ -1667,7 +1851,8 @@ function removeFrontMatter(content, frontMatter) {
       const contentMatched = frontMatterMatch[0];
       content = content.slice(contentMatched.length);
       frontMatterLines = contentMatched.split(helpers.newLineRe);
-      if (frontMatterLines.length > 0 && frontMatterLines[frontMatterLines.length - 1] === "") {
+      if ((frontMatterLines.length > 0) &&
+          (frontMatterLines[frontMatterLines.length - 1] === "")) {
         frontMatterLines.length--;
       }
     }
@@ -1720,22 +1905,22 @@ function annotateAndFreezeTokens(tokens, lines) {
       trMap = null;
     }
     if (!token.map && trMap) {
-      token.map = [...trMap];
+      token.map = [ ...trMap ];
     }
     // Update token metadata
     if (token.map) {
       token.line = lines[token.map[0]];
       token.lineNumber = token.map[0] + 1;
       // Trim bottom of token to exclude whitespace lines
-      while (token.map[1] && !(lines[token.map[1] - 1] || "").trim()) {
+      while (token.map[1] && !((lines[token.map[1] - 1] || "").trim())) {
         token.map[1]--;
       }
     }
     // Annotate children with lineNumber
     if (token.children) {
       const codeSpanExtraLines = [];
-      if (token.children.some(child => child.type === "code_inline")) {
-        helpers.forEachInlineCodeSpan(token.content, code => {
+      if (token.children.some((child) => child.type === "code_inline")) {
+        helpers.forEachInlineCodeSpan(token.content, (code) => {
           codeSpanExtraLines.push(code.split(helpers.newLineRe).length - 1);
         });
       }
@@ -1743,7 +1928,7 @@ function annotateAndFreezeTokens(tokens, lines) {
       for (const child of token.children) {
         child.lineNumber = lineNumber;
         child.line = lines[lineNumber - 1];
-        if (child.type === "softbreak" || child.type === "hardbreak") {
+        if ((child.type === "softbreak") || (child.type === "hardbreak")) {
           lineNumber++;
         } else if (child.type === "code_inline") {
           lineNumber += codeSpanExtraLines.shift();
@@ -1772,7 +1957,7 @@ function mapAliasToRuleNames(ruleList) {
     //    ")** *" + rule.names.slice(1).join("/") + "* - " + rule.description);
     for (const name of rule.names) {
       const nameUpper = name.toUpperCase();
-      aliasToRuleNames[nameUpper] = [ruleName];
+      aliasToRuleNames[nameUpper] = [ ruleName ];
     }
     for (const tag of rule.tags) {
       const tagUpper = tag.toUpperCase();
@@ -1801,8 +1986,10 @@ function mapAliasToRuleNames(ruleList) {
  * @returns {Configuration} Effective configuration.
  */
 function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
-  const defaultKey = Object.keys(config).filter(key => key.toUpperCase() === "DEFAULT");
-  const ruleDefault = defaultKey.length === 0 || !!config[defaultKey[0]];
+  const defaultKey = Object.keys(config).filter(
+    (key) => key.toUpperCase() === "DEFAULT"
+  );
+  const ruleDefault = (defaultKey.length === 0) || !!config[defaultKey[0]];
   /** @type {Configuration} */
   const effectiveConfig = {};
   for (const rule of ruleList) {
@@ -1822,7 +2009,7 @@ function getEffectiveConfig(ruleList, config, aliasToRuleNames) {
       value = false;
     }
     const keyUpper = key.toUpperCase();
-    for (const ruleName of aliasToRuleNames[keyUpper] || []) {
+    for (const ruleName of (aliasToRuleNames[keyUpper] || [])) {
       effectiveConfig[ruleName] = value;
     }
   }
@@ -1843,7 +2030,7 @@ function parseConfiguration(name, content, parsers) {
   const errors = [];
   let index = 0;
   // Try each parser
-  (parsers || [JSON.parse]).every(parser => {
+  (parsers || [ JSON.parse ]).every((parser) => {
     try {
       config = parser(content);
     } catch (error) {
@@ -1875,7 +2062,14 @@ function parseConfiguration(name, content, parsers) {
  * names.
  * @returns {Object} Effective configuration and enabled rules per line number.
  */
-function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlineConfig, config, configParsers, aliasToRuleNames) {
+function getEnabledRulesPerLineNumber(
+  ruleList,
+  lines,
+  frontMatterLines,
+  noInlineConfig,
+  config,
+  configParsers,
+  aliasToRuleNames) {
   // Shared variables
   let enabledRules = {};
   let capturedRules = {};
@@ -1884,10 +2078,10 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   // Helper functions
   // eslint-disable-next-line jsdoc/require-jsdoc
   function handleInlineConfig(input, forEachMatch, forEachLine) {
-    for (const [lineIndex, line] of input.entries()) {
+    for (const [ lineIndex, line ] of input.entries()) {
       if (!noInlineConfig) {
         let match = null;
-        while (match = helpers.inlineCommentStartRe.exec(line)) {
+        while ((match = helpers.inlineCommentStartRe.exec(line))) {
           const action = match[2].toUpperCase();
           const startIndex = match.index + match[1].length;
           const endIndex = line.indexOf("-->", startIndex);
@@ -1906,9 +2100,9 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   // eslint-disable-next-line jsdoc/require-jsdoc
   function configureFile(action, parameter) {
     if (action === "CONFIGURE-FILE") {
-      const {
-        "config": parsed
-      } = parseConfiguration("CONFIGURE-FILE", parameter, configParsers);
+      const { "config": parsed } = parseConfiguration(
+        "CONFIGURE-FILE", parameter, configParsers
+      );
       if (parsed) {
         config = {
           ...config,
@@ -1919,14 +2113,12 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   }
   // eslint-disable-next-line jsdoc/require-jsdoc
   function applyEnableDisable(action, parameter, state) {
-    state = {
-      ...state
-    };
-    const enabled = action.startsWith("ENABLE");
+    state = { ...state };
+    const enabled = (action.startsWith("ENABLE"));
     const trimmed = parameter && parameter.trim();
     const items = trimmed ? trimmed.toUpperCase().split(/\s+/) : allRuleNames;
     for (const nameUpper of items) {
-      for (const ruleName of aliasToRuleNames[nameUpper] || []) {
+      for (const ruleName of (aliasToRuleNames[nameUpper] || [])) {
         state[ruleName] = enabled;
       }
     }
@@ -1934,7 +2126,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   }
   // eslint-disable-next-line jsdoc/require-jsdoc
   function enableDisableFile(action, parameter) {
-    if (action === "ENABLE-FILE" || action === "DISABLE-FILE") {
+    if ((action === "ENABLE-FILE") || (action === "DISABLE-FILE")) {
       enabledRules = applyEnableDisable(action, parameter, enabledRules);
     }
   }
@@ -1944,7 +2136,7 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
       capturedRules = enabledRules;
     } else if (action === "RESTORE") {
       enabledRules = capturedRules;
-    } else if (action === "ENABLE" || action === "DISABLE") {
+    } else if ((action === "ENABLE") || (action === "DISABLE")) {
       enabledRules = applyEnableDisable(action, parameter, enabledRules);
     }
   }
@@ -1954,16 +2146,23 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
   }
   // eslint-disable-next-line jsdoc/require-jsdoc
   function disableLineNextLine(action, parameter, lineNumber) {
-    const disableLine = action === "DISABLE-LINE";
-    const disableNextLine = action === "DISABLE-NEXT-LINE";
+    const disableLine = (action === "DISABLE-LINE");
+    const disableNextLine = (action === "DISABLE-NEXT-LINE");
     if (disableLine || disableNextLine) {
-      const nextLineNumber = frontMatterLines.length + lineNumber + (disableNextLine ? 1 : 0);
-      enabledRulesPerLineNumber[nextLineNumber] = applyEnableDisable(action, parameter, enabledRulesPerLineNumber[nextLineNumber]);
+      const nextLineNumber =
+        frontMatterLines.length + lineNumber + (disableNextLine ? 1 : 0);
+      enabledRulesPerLineNumber[nextLineNumber] =
+        applyEnableDisable(
+          action,
+          parameter,
+          enabledRulesPerLineNumber[nextLineNumber]
+        );
     }
   }
   // Handle inline comments
-  handleInlineConfig([lines.join("\n")], configureFile);
-  const effectiveConfig = getEffectiveConfig(ruleList, config, aliasToRuleNames);
+  handleInlineConfig([ lines.join("\n") ], configureFile);
+  const effectiveConfig = getEffectiveConfig(
+    ruleList, config, aliasToRuleNames);
   for (const rule of ruleList) {
     const ruleName = rule.names[0].toUpperCase();
     allRuleNames.push(ruleName);
@@ -1998,20 +2197,36 @@ function getEnabledRulesPerLineNumber(ruleList, lines, frontMatterLines, noInlin
  * @param {LintContentCallback} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintContent(ruleList, aliasToRuleNames, name, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback) {
+function lintContent(
+  ruleList,
+  aliasToRuleNames,
+  name,
+  content,
+  md,
+  config,
+  configParsers,
+  frontMatter,
+  handleRuleFailures,
+  noInlineConfig,
+  resultVersion,
+  callback) {
   // Remove UTF-8 byte order marker (if present)
   content = content.replace(/^\uFEFF/, "");
   // Remove front matter
   const removeFrontMatterResult = removeFrontMatter(content, frontMatter);
-  const {
-    frontMatterLines
-  } = removeFrontMatterResult;
+  const { frontMatterLines } = removeFrontMatterResult;
   content = removeFrontMatterResult.content;
   // Get enabled rules per line (with HTML comments present)
-  const {
-    effectiveConfig,
-    enabledRulesPerLineNumber
-  } = getEnabledRulesPerLineNumber(ruleList, content.split(helpers.newLineRe), frontMatterLines, noInlineConfig, config, configParsers, aliasToRuleNames);
+  const { effectiveConfig, enabledRulesPerLineNumber } =
+    getEnabledRulesPerLineNumber(
+      ruleList,
+      content.split(helpers.newLineRe),
+      frontMatterLines,
+      noInlineConfig,
+      config,
+      configParsers,
+      aliasToRuleNames
+    );
   // Parse content into parser tokens
   const markdownitTokens = md.parse(content, {});
   const micromarkTokens = micromark.parse(content);
@@ -2036,10 +2251,14 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
-  const lineMetadata = helpers.getLineMetadata(paramsBase);
-  const codeBlockAndSpanRanges = helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
-  const flattenedLists = helpers.flattenLists(paramsBase.parsers.markdownit.tokens);
-  const referenceLinkImageData = helpers.getReferenceLinkImageData(paramsBase);
+  const lineMetadata =
+    helpers.getLineMetadata(paramsBase);
+  const codeBlockAndSpanRanges =
+    helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
+  const flattenedLists =
+    helpers.flattenLists(paramsBase.parsers.markdownit.tokens);
+  const referenceLinkImageData =
+    helpers.getReferenceLinkImageData(paramsBase);
   cache.set({
     codeBlockAndSpanRanges,
     flattenedLists,
@@ -2058,27 +2277,42 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
     };
     // eslint-disable-next-line jsdoc/require-jsdoc
     function throwError(property) {
-      throw new Error(`Value of '${property}' passed to onError by '${ruleName}' is incorrect for '${name}'.`);
+      throw new Error(
+        `Value of '${property}' passed to onError by '${ruleName}' is incorrect for '${name}'.`);
     }
     // eslint-disable-next-line jsdoc/require-jsdoc
     function onError(errorInfo) {
-      if (!errorInfo || !helpers.isNumber(errorInfo.lineNumber) || errorInfo.lineNumber < 1 || errorInfo.lineNumber > lines.length) {
+      if (!errorInfo ||
+        !helpers.isNumber(errorInfo.lineNumber) ||
+        (errorInfo.lineNumber < 1) ||
+        (errorInfo.lineNumber > lines.length)) {
         throwError("lineNumber");
       }
       const lineNumber = errorInfo.lineNumber + frontMatterLines.length;
       if (!enabledRulesPerLineNumber[lineNumber][ruleName]) {
         return;
       }
-      if (errorInfo.detail && !helpers.isString(errorInfo.detail)) {
+      if (errorInfo.detail &&
+        !helpers.isString(errorInfo.detail)) {
         throwError("detail");
       }
-      if (errorInfo.context && !helpers.isString(errorInfo.context)) {
+      if (errorInfo.context &&
+        !helpers.isString(errorInfo.context)) {
         throwError("context");
       }
-      if (errorInfo.information && !helpers.isUrl(errorInfo.information)) {
+      if (errorInfo.information &&
+        !helpers.isUrl(errorInfo.information)) {
         throwError("information");
       }
-      if (errorInfo.range && (!Array.isArray(errorInfo.range) || errorInfo.range.length !== 2 || !helpers.isNumber(errorInfo.range[0]) || errorInfo.range[0] < 1 || !helpers.isNumber(errorInfo.range[1]) || errorInfo.range[1] < 1 || errorInfo.range[0] + errorInfo.range[1] - 1 > lines[errorInfo.lineNumber - 1].length)) {
+      if (errorInfo.range &&
+        (!Array.isArray(errorInfo.range) ||
+          (errorInfo.range.length !== 2) ||
+          !helpers.isNumber(errorInfo.range[0]) ||
+          (errorInfo.range[0] < 1) ||
+          !helpers.isNumber(errorInfo.range[1]) ||
+          (errorInfo.range[1] < 1) ||
+          ((errorInfo.range[0] + errorInfo.range[1] - 1) >
+          lines[errorInfo.lineNumber - 1].length))) {
         throwError("range");
       }
       const fixInfo = errorInfo.fixInfo;
@@ -2088,20 +2322,29 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
           throwError("fixInfo");
         }
         if (fixInfo.lineNumber !== undefined) {
-          if (!helpers.isNumber(fixInfo.lineNumber) || fixInfo.lineNumber < 1 || fixInfo.lineNumber > lines.length) {
+          if ((!helpers.isNumber(fixInfo.lineNumber) ||
+            (fixInfo.lineNumber < 1) ||
+            (fixInfo.lineNumber > lines.length))) {
             throwError("fixInfo.lineNumber");
           }
-          cleanFixInfo.lineNumber = fixInfo.lineNumber + frontMatterLines.length;
+          cleanFixInfo.lineNumber =
+            fixInfo.lineNumber + frontMatterLines.length;
         }
         const effectiveLineNumber = fixInfo.lineNumber || errorInfo.lineNumber;
         if (fixInfo.editColumn !== undefined) {
-          if (!helpers.isNumber(fixInfo.editColumn) || fixInfo.editColumn < 1 || fixInfo.editColumn > lines[effectiveLineNumber - 1].length + 1) {
+          if ((!helpers.isNumber(fixInfo.editColumn) ||
+            (fixInfo.editColumn < 1) ||
+            (fixInfo.editColumn >
+              lines[effectiveLineNumber - 1].length + 1))) {
             throwError("fixInfo.editColumn");
           }
           cleanFixInfo.editColumn = fixInfo.editColumn;
         }
         if (fixInfo.deleteCount !== undefined) {
-          if (!helpers.isNumber(fixInfo.deleteCount) || fixInfo.deleteCount < -1 || fixInfo.deleteCount > lines[effectiveLineNumber - 1].length) {
+          if ((!helpers.isNumber(fixInfo.deleteCount) ||
+            (fixInfo.deleteCount < -1) ||
+            (fixInfo.deleteCount >
+              lines[effectiveLineNumber - 1].length))) {
             throwError("fixInfo.deleteCount");
           }
           cleanFixInfo.deleteCount = fixInfo.deleteCount;
@@ -2122,20 +2365,23 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
         "ruleInformation": information ? information.href : null,
         "errorDetail": errorInfo.detail || null,
         "errorContext": errorInfo.context || null,
-        "errorRange": errorInfo.range ? [...errorInfo.range] : null,
+        "errorRange": errorInfo.range ? [ ...errorInfo.range ] : null,
         "fixInfo": fixInfo ? cleanFixInfo : null
       });
     }
     // Call (possibly external) rule function to report errors
-    const catchCallsOnError = error => onError({
+    const catchCallsOnError = (error) => onError({
       "lineNumber": 1,
       "detail": `This rule threw an exception: ${error.message || error}`
     });
     const invokeRuleFunction = () => rule.function(params, onError);
     if (rule.asynchronous) {
       // Asynchronous rule, ensure it returns a Promise
-      const ruleFunctionPromise = Promise.resolve().then(invokeRuleFunction);
-      return handleRuleFailures ? ruleFunctionPromise.catch(catchCallsOnError) : ruleFunctionPromise;
+      const ruleFunctionPromise =
+        Promise.resolve().then(invokeRuleFunction);
+      return handleRuleFailures ?
+        ruleFunctionPromise.catch(catchCallsOnError) :
+        ruleFunctionPromise;
     }
     // Synchronous rule
     try {
@@ -2152,7 +2398,10 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
   // eslint-disable-next-line jsdoc/require-jsdoc
   function formatResults() {
     // Sort results by rule name by line number
-    results.sort((a, b) => a.ruleName.localeCompare(b.ruleName) || a.lineNumber - b.lineNumber);
+    results.sort((a, b) => (
+      a.ruleName.localeCompare(b.ruleName) ||
+      a.lineNumber - b.lineNumber
+    ));
     if (resultVersion < 3) {
       // Remove fixInfo and multiple errors for the same rule and line number
       const noPrevious = {
@@ -2162,7 +2411,10 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
       results = results.filter((error, index, array) => {
         delete error.fixInfo;
         const previous = array[index - 1] || noPrevious;
-        return error.ruleName !== previous.ruleName || error.lineNumber !== previous.lineNumber;
+        return (
+          (error.ruleName !== previous.ruleName) ||
+          (error.lineNumber !== previous.lineNumber)
+        );
       });
     }
     if (resultVersion === 0) {
@@ -2190,15 +2442,21 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
     return results;
   }
   // Run all rules
-  const ruleListAsync = ruleList.filter(rule => rule.asynchronous);
-  const ruleListSync = ruleList.filter(rule => !rule.asynchronous);
-  const ruleListAsyncFirst = [...ruleListAsync, ...ruleListSync];
+  const ruleListAsync = ruleList.filter((rule) => rule.asynchronous);
+  const ruleListSync = ruleList.filter((rule) => !rule.asynchronous);
+  const ruleListAsyncFirst = [
+    ...ruleListAsync,
+    ...ruleListSync
+  ];
   const callbackSuccess = () => callback(null, formatResults());
-  const callbackError = error => callback(error instanceof Error ? error : new Error(error));
+  const callbackError =
+    (error) => callback(error instanceof Error ? error : new Error(error));
   try {
     const ruleResults = ruleListAsyncFirst.map(forRule);
     if (ruleListAsync.length > 0) {
-      Promise.all(ruleResults.slice(0, ruleListAsync.length)).then(callbackSuccess).catch(callbackError);
+      Promise.all(ruleResults.slice(0, ruleListAsync.length))
+        .then(callbackSuccess)
+        .catch(callbackError);
     } else {
       callbackSuccess();
     }
@@ -2228,13 +2486,39 @@ function lintContent(ruleList, aliasToRuleNames, name, content, md, config, conf
  * @param {LintContentCallback} callback Callback (err, result) function.
  * @returns {void}
  */
-function lintFile(ruleList, aliasToRuleNames, file, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, callback) {
+function lintFile(
+  ruleList,
+  aliasToRuleNames,
+  file,
+  md,
+  config,
+  configParsers,
+  frontMatter,
+  handleRuleFailures,
+  noInlineConfig,
+  resultVersion,
+  fs,
+  synchronous,
+  callback) {
   // eslint-disable-next-line jsdoc/require-jsdoc
   function lintContentWrapper(err, content) {
     if (err) {
       return callback(err);
     }
-    return lintContent(ruleList, aliasToRuleNames, file, content, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, callback);
+    return lintContent(
+      ruleList,
+      aliasToRuleNames,
+      file,
+      content,
+      md,
+      config,
+      configParsers,
+      frontMatter,
+      handleRuleFailures,
+      noInlineConfig,
+      resultVersion,
+      callback
+    );
   }
   // Make a/synchronous call to read file
   if (synchronous) {
@@ -2256,14 +2540,17 @@ function lintInput(options, synchronous, callback) {
   // Normalize inputs
   options = options || {};
   callback = callback || function noop() {};
-  const customRuleList = [options.customRules || []].flat().map(rule => ({
-    "names": helpers.cloneIfArray(rule.names),
-    "description": rule.description,
-    "information": helpers.cloneIfUrl(rule.information),
-    "tags": helpers.cloneIfArray(rule.tags),
-    "asynchronous": rule.asynchronous,
-    "function": rule.function
-  }));
+  const customRuleList =
+    [ options.customRules || [] ]
+      .flat()
+      .map((rule) => ({
+        "names": helpers.cloneIfArray(rule.names),
+        "description": rule.description,
+        "information": helpers.cloneIfUrl(rule.information),
+        "tags": helpers.cloneIfArray(rule.tags),
+        "asynchronous": rule.asynchronous,
+        "function": rule.function
+      }));
   // eslint-disable-next-line unicorn/prefer-spread
   const ruleList = rules.concat(customRuleList);
   const ruleErr = validateRuleList(ruleList, synchronous);
@@ -2273,23 +2560,21 @@ function lintInput(options, synchronous, callback) {
   }
   let files = [];
   if (Array.isArray(options.files)) {
-    files = [...options.files];
+    files = [ ...options.files ];
   } else if (options.files) {
-    files = [String(options.files)];
+    files = [ String(options.files) ];
   }
   const strings = options.strings || {};
   const stringsKeys = Object.keys(strings);
-  const config = options.config || {
-    "default": true
-  };
+  const config = options.config || { "default": true };
   const configParsers = options.configParsers || null;
-  const frontMatter = options.frontMatter === undefined ? helpers.frontMatterRe : options.frontMatter;
+  const frontMatter = (options.frontMatter === undefined) ?
+    helpers.frontMatterRe : options.frontMatter;
   const handleRuleFailures = !!options.handleRuleFailures;
   const noInlineConfig = !!options.noInlineConfig;
-  const resultVersion = options.resultVersion === undefined ? 3 : options.resultVersion;
-  const md = markdownit({
-    "html": true
-  });
+  const resultVersion = (options.resultVersion === undefined) ?
+    3 : options.resultVersion;
+  const md = markdownit({ "html": true });
   const markdownItPlugins = options.markdownItPlugins || [];
   for (const plugin of markdownItPlugins) {
     // @ts-ignore
@@ -2322,11 +2607,38 @@ function lintInput(options, synchronous, callback) {
       // Lint next file
       concurrency++;
       currentItem = files.shift();
-      lintFile(ruleList, aliasToRuleNames, currentItem, md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, fs, synchronous, lintWorkerCallback);
-    } else if (currentItem = stringsKeys.shift()) {
+      lintFile(
+        ruleList,
+        aliasToRuleNames,
+        currentItem,
+        md,
+        config,
+        configParsers,
+        frontMatter,
+        handleRuleFailures,
+        noInlineConfig,
+        resultVersion,
+        fs,
+        synchronous,
+        lintWorkerCallback
+      );
+    } else if ((currentItem = stringsKeys.shift())) {
       // Lint next string
       concurrency++;
-      lintContent(ruleList, aliasToRuleNames, currentItem, strings[currentItem] || "", md, config, configParsers, frontMatter, handleRuleFailures, noInlineConfig, resultVersion, lintWorkerCallback);
+      lintContent(
+        ruleList,
+        aliasToRuleNames,
+        currentItem,
+        strings[currentItem] || "",
+        md,
+        config,
+        configParsers,
+        frontMatter,
+        handleRuleFailures,
+        noInlineConfig,
+        resultVersion,
+        lintWorkerCallback
+      );
     } else if (concurrency === 0) {
       // Finish
       done = true;
@@ -2363,6 +2675,7 @@ function lintInput(options, synchronous, callback) {
 function markdownlint(options, callback) {
   return lintInput(options, false, callback);
 }
+
 const markdownlintPromisify = promisify && promisify(markdownlint);
 
 /**
@@ -2408,13 +2721,14 @@ function markdownlintSync(options) {
 function resolveConfigExtends(configFile, referenceId, fs, callback) {
   const configFileDirname = path.dirname(configFile);
   const resolvedExtendsFile = path.resolve(configFileDirname, referenceId);
-  fs.access(resolvedExtendsFile, err => {
+  fs.access(resolvedExtendsFile, (err) => {
     if (err) {
       // Not a file, try require.resolve
       try {
-        return callback(null, dynamicRequire.resolve(referenceId, {
-          "paths": [configFileDirname]
-        }));
+        return callback(null, dynamicRequire.resolve(
+          referenceId,
+          { "paths": [ configFileDirname ] }
+        ));
       } catch {
         // Unable to resolve, use resolvedExtendsFile
       }
@@ -2442,9 +2756,10 @@ function resolveConfigExtendsSync(configFile, referenceId, fs) {
     // Not a file, try require.resolve
   }
   try {
-    return dynamicRequire.resolve(referenceId, {
-      "paths": [configFileDirname]
-    });
+    return dynamicRequire.resolve(
+      referenceId,
+      { "paths": [ configFileDirname ] }
+    );
   } catch {
     // Unable to resolve, return resolvedExtendsFile
   }
@@ -2465,24 +2780,33 @@ function resolveConfigExtendsSync(configFile, referenceId, fs) {
 function extendConfig(config, file, parsers, fs, callback) {
   const configExtends = config.extends;
   if (configExtends) {
-    return resolveConfigExtends(file, helpers.expandTildePath(configExtends, __webpack_require__(/*! node:os */ "?e6c4")), fs,
-    // eslint-disable-next-line no-use-before-define
-    (_, resolvedExtends) => readConfig(
-    // @ts-ignore
-    resolvedExtends, parsers, fs, (err, extendsConfig) => {
-      if (err) {
-        return callback(err);
-      }
-      const result = {
-        ...extendsConfig,
-        ...config
-      };
-      delete result.extends;
-      return callback(null, result);
-    }));
+    return resolveConfigExtends(
+      file,
+      helpers.expandTildePath(configExtends, __webpack_require__(/*! node:os */ "?e6c4")),
+      fs,
+      // eslint-disable-next-line no-use-before-define
+      (_, resolvedExtends) => readConfig(
+        // @ts-ignore
+        resolvedExtends,
+        parsers,
+        fs,
+        (err, extendsConfig) => {
+          if (err) {
+            return callback(err);
+          }
+          const result = {
+            ...extendsConfig,
+            ...config
+          };
+          delete result.extends;
+          return callback(null, result);
+        }
+      )
+    );
   }
   return callback(null, config);
 }
+
 const extendConfigPromisify = promisify && promisify(extendConfig);
 
 /**
@@ -2533,10 +2857,7 @@ function readConfig(file, parsers, fs, callback) {
     }
     // Try to parse file
     // @ts-ignore
-    const {
-      config,
-      message
-    } = parseConfiguration(file, content, parsers);
+    const { config, message } = parseConfiguration(file, content, parsers);
     if (!config) {
       // @ts-ignore
       return callback(new Error(message));
@@ -2546,6 +2867,7 @@ function readConfig(file, parsers, fs, callback) {
     return extendConfig(config, file, parsers, fs, callback);
   });
 }
+
 const readConfigPromisify = promisify && promisify(readConfig);
 
 /**
@@ -2579,10 +2901,7 @@ function readConfigSync(file, parsers, fs) {
   file = helpers.expandTildePath(file, os);
   const content = fs.readFileSync(file, "utf8");
   // Try to parse file
-  const {
-    config,
-    message
-  } = parseConfiguration(file, content, parsers);
+  const { config, message } = parseConfiguration(file, content, parsers);
   if (!config) {
     throw new Error(message);
   }
@@ -2590,7 +2909,11 @@ function readConfigSync(file, parsers, fs) {
   const configExtends = config.extends;
   if (configExtends) {
     delete config.extends;
-    const resolvedExtends = resolveConfigExtendsSync(file, helpers.expandTildePath(configExtends, os), fs);
+    const resolvedExtends = resolveConfigExtendsSync(
+      file,
+      helpers.expandTildePath(configExtends, os),
+      fs
+    );
     return {
       ...readConfigSync(resolvedExtends, parsers, fs),
       ...config
@@ -2824,6 +3147,7 @@ module.exports = markdownlint;
  * @returns {void}
  */
 
+
 /***/ }),
 
 /***/ "../lib/md001.js":
@@ -2837,25 +3161,25 @@ module.exports = markdownlint;
 
 
 
-const {
-  addErrorDetailIf,
-  filterTokens
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD001", "heading-increment"],
+  "names": [ "MD001", "heading-increment" ],
   "description": "Heading levels should only increment by one level at a time",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD001(params, onError) {
     let prevLevel = 0;
     filterTokens(params, "heading_open", function forToken(token) {
       const level = Number.parseInt(token.tag.slice(1), 10);
-      if (prevLevel && level > prevLevel) {
-        addErrorDetailIf(onError, token.lineNumber, "h" + (prevLevel + 1), "h" + level);
+      if (prevLevel && (level > prevLevel)) {
+        addErrorDetailIf(onError, token.lineNumber,
+          "h" + (prevLevel + 1), "h" + level);
       }
       prevLevel = level;
     });
   }
 };
+
 
 /***/ }),
 
@@ -2870,15 +3194,13 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  filterTokens,
-  headingStyleFor
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf, filterTokens, headingStyleFor } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD003", "heading-style"],
+  "names": [ "MD003", "heading-style" ],
   "description": "Heading style",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD003(params, onError) {
     let style = String(params.config.style || "consistent");
     filterTokens(params, "heading_open", function forToken(token) {
@@ -2888,8 +3210,14 @@ module.exports = {
       }
       if (styleForToken !== style) {
         const h12 = /h[12]/.test(token.tag);
-        const setextWithAtx = style === "setext_with_atx" && (h12 && styleForToken === "setext" || !h12 && styleForToken === "atx");
-        const setextWithAtxClosed = style === "setext_with_atx_closed" && (h12 && styleForToken === "setext" || !h12 && styleForToken === "atx_closed");
+        const setextWithAtx =
+          (style === "setext_with_atx") &&
+            ((h12 && (styleForToken === "setext")) ||
+            (!h12 && (styleForToken === "atx")));
+        const setextWithAtxClosed =
+          (style === "setext_with_atx_closed") &&
+            ((h12 && (styleForToken === "setext")) ||
+            (!h12 && (styleForToken === "atx_closed")));
         if (!setextWithAtx && !setextWithAtxClosed) {
           let expected = style;
           if (style === "setext_with_atx") {
@@ -2897,12 +3225,14 @@ module.exports = {
           } else if (style === "setext_with_atx_closed") {
             expected = h12 ? "setext" : "atx_closed";
           }
-          addErrorDetailIf(onError, token.lineNumber, expected, styleForToken);
+          addErrorDetailIf(onError, token.lineNumber,
+            expected, styleForToken);
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -2917,14 +3247,10 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  listItemMarkerRe,
-  unorderedListStyleFor
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  flattenedLists
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf, listItemMarkerRe, unorderedListStyleFor } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 const expectedStyleToMarker = {
   "dash": "-",
   "plus": "+",
@@ -2936,10 +3262,11 @@ const differentItemStyle = {
   "asterisk": "dash"
 };
 const validStyles = Object.keys(expectedStyleToMarker);
+
 module.exports = {
-  "names": ["MD004", "ul-style"],
+  "names": [ "MD004", "ul-style" ],
   "description": "Unordered list style",
-  "tags": ["bullet", "ul"],
+  "tags": [ "bullet", "ul" ],
   "function": function MD004(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
@@ -2954,7 +3281,10 @@ module.exports = {
           if (style === "sublist") {
             const nesting = list.nesting;
             if (!nestingStyles[nesting]) {
-              nestingStyles[nesting] = itemStyle === nestingStyles[nesting - 1] ? differentItemStyle[itemStyle] : itemStyle;
+              nestingStyles[nesting] =
+                (itemStyle === nestingStyles[nesting - 1]) ?
+                  differentItemStyle[itemStyle] :
+                  itemStyle;
             }
             expectedStyle = nestingStyles[nesting];
           }
@@ -2967,19 +3297,29 @@ module.exports = {
           if (match) {
             const column = match.index + 1;
             const length = match[0].length;
-            range = [column, length];
+            range = [ column, length ];
             fixInfo = {
               "editColumn": match[1].length + 1,
               "deleteCount": 1,
               "insertText": expectedStyleToMarker[expectedStyle]
             };
           }
-          addErrorDetailIf(onError, item.lineNumber, expectedStyle, itemStyle, null, null, range, fixInfo);
+          addErrorDetailIf(
+            onError,
+            item.lineNumber,
+            expectedStyle,
+            itemStyle,
+            null,
+            null,
+            range,
+            fixInfo
+          );
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -2994,49 +3334,68 @@ module.exports = {
 
 
 
-const {
-  addError,
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  inHtmlFlow
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 module.exports = {
-  "names": ["MD005", "list-indent"],
+  "names": [ "MD005", "list-indent" ],
   "description": "Inconsistent indentation for list items at the same level",
-  "tags": ["bullet", "ul", "indentation"],
+  "tags": [ "bullet", "ul", "indentation" ],
   "function": function MD005(params, onError) {
-    const lists = filterByTypes(params.parsers.micromark.tokens, ["listOrdered", "listUnordered"]).filter(list => !inHtmlFlow(list));
+    const lists = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "listOrdered", "listUnordered" ]
+    ).filter((list) => !inHtmlFlow(list));
     for (const list of lists) {
       const expectedIndent = list.startColumn - 1;
       let expectedEnd = 0;
       let endMatching = false;
-      const listItemPrefixes = list.children.filter(token => token.type === "listItemPrefix");
+      const listItemPrefixes =
+        list.children.filter((token) => (token.type === "listItemPrefix"));
       for (const listItemPrefix of listItemPrefixes) {
         const lineNumber = listItemPrefix.startLine;
         const actualIndent = listItemPrefix.startColumn - 1;
-        const range = [1, listItemPrefix.endColumn - 1];
+        const range = [ 1, listItemPrefix.endColumn - 1 ];
         if (list.type === "listUnordered") {
-          addErrorDetailIf(onError, lineNumber, expectedIndent, actualIndent, null, null, range
-          // No fixInfo; MD007 handles this scenario better
+          addErrorDetailIf(
+            onError,
+            lineNumber,
+            expectedIndent,
+            actualIndent,
+            null,
+            null,
+            range
+            // No fixInfo; MD007 handles this scenario better
           );
         } else {
           const markerLength = listItemPrefix.text.trim().length;
           const actualEnd = listItemPrefix.startColumn + markerLength - 1;
           expectedEnd = expectedEnd || actualEnd;
-          if (expectedIndent !== actualIndent || endMatching) {
+          if ((expectedIndent !== actualIndent) || endMatching) {
             if (expectedEnd === actualEnd) {
               endMatching = true;
             } else {
-              const detail = endMatching ? `Expected: (${expectedEnd}); Actual: (${actualEnd})` : `Expected: ${expectedIndent}; Actual: ${actualIndent}`;
-              const expected = endMatching ? expectedEnd - markerLength : expectedIndent;
-              const actual = endMatching ? actualEnd - markerLength : actualIndent;
-              addError(onError, lineNumber, detail, undefined, range, {
-                "editColumn": Math.min(actual, expected) + 1,
-                "deleteCount": Math.max(actual - expected, 0),
-                "insertText": "".padEnd(Math.max(expected - actual, 0))
-              });
+              const detail = endMatching ?
+                `Expected: (${expectedEnd}); Actual: (${actualEnd})` :
+                `Expected: ${expectedIndent}; Actual: ${actualIndent}`;
+              const expected = endMatching ?
+                expectedEnd - markerLength :
+                expectedIndent;
+              const actual = endMatching ?
+                actualEnd - markerLength :
+                actualIndent;
+              addError(
+                onError,
+                lineNumber,
+                detail,
+                undefined,
+                range,
+                {
+                  "editColumn": Math.min(actual, expected) + 1,
+                  "deleteCount": Math.max(actual - expected, 0),
+                  "insertText": "".padEnd(Math.max(expected - actual, 0))
+                }
+              );
             }
           }
         }
@@ -3044,6 +3403,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -3058,47 +3418,44 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  getTokenParentOfType,
-  inHtmlFlow
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getTokenParentOfType, inHtmlFlow } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 /**
  * @typedef {import("../helpers/micromark.cjs").Token} Token
  */
 
-const unorderedListTypes = ["blockQuotePrefix", "listItemPrefix", "listUnordered"];
-const unorderedParentTypes = ["blockQuote", "listOrdered", "listUnordered"];
+const unorderedListTypes =
+  [ "blockQuotePrefix", "listItemPrefix", "listUnordered" ];
+const unorderedParentTypes =
+  [ "blockQuote", "listOrdered", "listUnordered" ];
+
 module.exports = {
-  "names": ["MD007", "ul-indent"],
+  "names": [ "MD007", "ul-indent" ],
   "description": "Unordered list indentation",
-  "tags": ["bullet", "ul", "indentation"],
+  "tags": [ "bullet", "ul", "indentation" ],
   "function": function MD007(params, onError) {
     const indent = Number(params.config.indent || 2);
     const startIndented = !!params.config.start_indented;
     const startIndent = Number(params.config.start_indent || indent);
     const unorderedListNesting = new Map();
     let lastBlockQuotePrefix = null;
-    const tokens = filterByTypes(params.parsers.micromark.tokens, unorderedListTypes);
+    const tokens = filterByTypes(
+      params.parsers.micromark.tokens,
+      unorderedListTypes
+    );
     for (const token of tokens) {
-      const {
-        endColumn,
-        parent,
-        startColumn,
-        startLine,
-        type
-      } = token;
+      const { endColumn, parent, startColumn, startLine, type } = token;
       if (type === "blockQuotePrefix") {
         lastBlockQuotePrefix = token;
       } else if (type === "listUnordered") {
         let nesting = 0;
         /** @type {Token | null} */
         let current = token;
-        while (current = getTokenParentOfType(current, unorderedParentTypes)) {
+        while (
+          (current = getTokenParentOfType(current, unorderedParentTypes))
+        ) {
           if (current.type === "listUnordered") {
             nesting++;
             // eslint-disable-next-line no-continue
@@ -3116,21 +3473,35 @@ module.exports = {
         const nesting = unorderedListNesting.get(parent);
         if (nesting !== undefined) {
           // listItemPrefix for listUnordered
-          const expectedIndent = (startIndented ? startIndent : 0) + nesting * indent;
-          const blockQuoteAdjustment = lastBlockQuotePrefix?.endLine === startLine ? lastBlockQuotePrefix.endColumn - 1 : 0;
+          const expectedIndent =
+            (startIndented ? startIndent : 0) + (nesting * indent);
+          const blockQuoteAdjustment =
+            (lastBlockQuotePrefix?.endLine === startLine) ?
+              (lastBlockQuotePrefix.endColumn - 1) :
+              0;
           const actualIndent = startColumn - 1 - blockQuoteAdjustment;
-          const range = [1, endColumn - 1];
+          const range = [ 1, endColumn - 1 ];
           const fixInfo = {
             "editColumn": startColumn - actualIndent,
             "deleteCount": Math.max(actualIndent - expectedIndent, 0),
             "insertText": "".padEnd(Math.max(expectedIndent - actualIndent, 0))
           };
-          addErrorDetailIf(onError, startLine, expectedIndent, actualIndent, undefined, undefined, range, fixInfo);
+          addErrorDetailIf(
+            onError,
+            startLine,
+            expectedIndent,
+            actualIndent,
+            undefined,
+            undefined,
+            range,
+            fixInfo
+          );
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -3145,28 +3516,22 @@ module.exports = {
 
 
 
-const {
-  addError,
-  filterTokens,
-  forEachLine,
-  includesSorted,
-  numericSortAscending
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, filterTokens, forEachLine, includesSorted,
+  numericSortAscending } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 module.exports = {
-  "names": ["MD009", "no-trailing-spaces"],
+  "names": [ "MD009", "no-trailing-spaces" ],
   "description": "Trailing spaces",
-  "tags": ["whitespace"],
+  "tags": [ "whitespace" ],
   "function": function MD009(params, onError) {
     let brSpaces = params.config.br_spaces;
-    brSpaces = Number(brSpaces === undefined ? 2 : brSpaces);
+    brSpaces = Number((brSpaces === undefined) ? 2 : brSpaces);
     const listItemEmptyLines = !!params.config.list_item_empty_lines;
     const strict = !!params.config.strict;
     const listItemLineNumbers = [];
     if (listItemEmptyLines) {
-      filterTokens(params, "list_item_open", token => {
+      filterTokens(params, "list_item_open", (token) => {
         for (let i = token.map[0]; i < token.map[1]; i++) {
           listItemLineNumbers.push(i + 1);
         }
@@ -3176,7 +3541,7 @@ module.exports = {
     const paragraphLineNumbers = [];
     const codeInlineLineNumbers = [];
     if (strict) {
-      filterTokens(params, "paragraph_open", token => {
+      filterTokens(params, "paragraph_open", (token) => {
         for (let i = token.map[0]; i < token.map[1] - 1; i++) {
           paragraphLineNumbers.push(i + 1);
         }
@@ -3186,7 +3551,7 @@ module.exports = {
           codeInlineLineNumbers.push(i);
         }
       };
-      filterTokens(params, "inline", token => {
+      filterTokens(params, "inline", (token) => {
         let start = 0;
         for (const child of token.children) {
           if (start > 0) {
@@ -3202,20 +3567,38 @@ module.exports = {
         }
       });
     }
-    const expected = brSpaces < 2 ? 0 : brSpaces;
+    const expected = (brSpaces < 2) ? 0 : brSpaces;
     forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
       const lineNumber = lineIndex + 1;
       const trailingSpaces = line.length - line.trimEnd().length;
-      if (trailingSpaces && !inCode && !includesSorted(listItemLineNumbers, lineNumber) && (expected !== trailingSpaces || strict && (!includesSorted(paragraphLineNumbers, lineNumber) || includesSorted(codeInlineLineNumbers, lineNumber)))) {
+      if (
+        trailingSpaces &&
+        !inCode &&
+        !includesSorted(listItemLineNumbers, lineNumber) &&
+        (
+          (expected !== trailingSpaces) ||
+          (strict &&
+            (!includesSorted(paragraphLineNumbers, lineNumber) ||
+             includesSorted(codeInlineLineNumbers, lineNumber)))
+        )
+      ) {
         const column = line.length - trailingSpaces + 1;
-        addError(onError, lineNumber, "Expected: " + (expected === 0 ? "" : "0 or ") + expected + "; Actual: " + trailingSpaces, undefined, [column, trailingSpaces], {
-          "editColumn": column,
-          "deleteCount": trailingSpaces
-        });
+        addError(
+          onError,
+          lineNumber,
+          "Expected: " + (expected === 0 ? "" : "0 or ") +
+            expected + "; Actual: " + trailingSpaces,
+          undefined,
+          [ column, trailingSpaces ],
+          {
+            "editColumn": column,
+            "deleteCount": trailingSpaces
+          });
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3230,33 +3613,33 @@ module.exports = {
 
 
 
-const {
-  addError,
-  filterTokens,
-  forEachLine,
-  withinAnyRange
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  codeBlockAndSpanRanges,
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, filterTokens, forEachLine, withinAnyRange } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 const tabRe = /\t+/g;
+
 module.exports = {
-  "names": ["MD010", "no-hard-tabs"],
+  "names": [ "MD010", "no-hard-tabs" ],
   "description": "Hard tabs",
-  "tags": ["whitespace", "hard_tab"],
+  "tags": [ "whitespace", "hard_tab" ],
   "function": function MD010(params, onError) {
     const codeBlocks = params.config.code_blocks;
-    const includeCode = codeBlocks === undefined ? true : !!codeBlocks;
-    const ignoreCodeLanguages = new Set((params.config.ignore_code_languages || []).map(language => language.toLowerCase()));
+    const includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
+    const ignoreCodeLanguages = new Set(
+      (params.config.ignore_code_languages || [])
+        .map((language) => language.toLowerCase())
+    );
     const spacesPerTab = params.config.spaces_per_tab;
-    const spaceMultiplier = spacesPerTab === undefined ? 1 : Math.max(0, Number(spacesPerTab));
+    const spaceMultiplier = (spacesPerTab === undefined) ?
+      1 :
+      Math.max(0, Number(spacesPerTab));
     const exclusions = includeCode ? [] : codeBlockAndSpanRanges();
-    filterTokens(params, "fence", token => {
+    filterTokens(params, "fence", (token) => {
       const language = token.info.trim().toLowerCase();
       if (ignoreCodeLanguages.has(language)) {
         for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
-          exclusions.push([i, 0, params.lines[i].length]);
+          exclusions.push([ i, 0, params.lines[i].length ]);
         }
       }
     });
@@ -3264,23 +3647,29 @@ module.exports = {
       if (includeCode || !inCode) {
         let match = null;
         while ((match = tabRe.exec(line)) !== null) {
-          const {
-            index
-          } = match;
+          const { index } = match;
           const column = index + 1;
           const length = match[0].length;
           if (!withinAnyRange(exclusions, lineIndex, index, length)) {
-            addError(onError, lineIndex + 1, "Column: " + column, null, [column, length], {
-              "editColumn": column,
-              "deleteCount": length,
-              "insertText": "".padEnd(length * spaceMultiplier)
-            });
+            addError(
+              onError,
+              lineIndex + 1,
+              "Column: " + column,
+              null,
+              [ column, length ],
+              {
+                "editColumn": column,
+                "deleteCount": length,
+                "insertText": "".padEnd(length * spaceMultiplier)
+              }
+            );
           }
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3295,41 +3684,49 @@ module.exports = {
 
 
 
-const {
-  addError,
-  forEachLine,
-  withinAnyRange
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  codeBlockAndSpanRanges,
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const reversedLinkRe = /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
+const { addError, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
+const reversedLinkRe =
+  /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
+
 module.exports = {
-  "names": ["MD011", "no-reversed-links"],
+  "names": [ "MD011", "no-reversed-links" ],
   "description": "Reversed link syntax",
-  "tags": ["links"],
+  "tags": [ "links" ],
   "function": function MD011(params, onError) {
     const exclusions = codeBlockAndSpanRanges();
     forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence) => {
       if (!inCode && !onFence) {
         let match = null;
         while ((match = reversedLinkRe.exec(line)) !== null) {
-          const [reversedLink, preChar, linkText, linkDestination] = match;
+          const [ reversedLink, preChar, linkText, linkDestination ] = match;
           const index = match.index + preChar.length;
           const length = match[0].length - preChar.length;
-          if (!linkText.endsWith("\\") && !linkDestination.endsWith("\\") && !withinAnyRange(exclusions, lineIndex, index, length)) {
-            addError(onError, lineIndex + 1, reversedLink.slice(preChar.length), undefined, [index + 1, length], {
-              "editColumn": index + 1,
-              "deleteCount": length,
-              "insertText": `[${linkText}](${linkDestination})`
-            });
+          if (
+            !linkText.endsWith("\\") &&
+            !linkDestination.endsWith("\\") &&
+            !withinAnyRange(exclusions, lineIndex, index, length)
+          ) {
+            addError(
+              onError,
+              lineIndex + 1,
+              reversedLink.slice(preChar.length),
+              undefined,
+              [ index + 1, length ],
+              {
+                "editColumn": index + 1,
+                "deleteCount": length,
+                "insertText": `[${linkText}](${linkDestination})`
+              }
+            );
           }
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3344,30 +3741,35 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  forEachLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 module.exports = {
-  "names": ["MD012", "no-multiple-blanks"],
+  "names": [ "MD012", "no-multiple-blanks" ],
   "description": "Multiple consecutive blank lines",
-  "tags": ["whitespace", "blank_lines"],
+  "tags": [ "whitespace", "blank_lines" ],
   "function": function MD012(params, onError) {
     const maximum = Number(params.config.maximum || 1);
     let count = 0;
     forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      count = inCode || line.trim().length > 0 ? 0 : count + 1;
+      count = (inCode || (line.trim().length > 0)) ? 0 : count + 1;
       if (maximum < count) {
-        addErrorDetailIf(onError, lineIndex + 1, maximum, count, null, null, null, {
-          "deleteCount": -1
-        });
+        addErrorDetailIf(
+          onError,
+          lineIndex + 1,
+          maximum,
+          count,
+          null,
+          null,
+          null,
+          {
+            "deleteCount": -1
+          });
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3382,17 +3784,10 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  filterTokens,
-  forEachHeading,
-  forEachLine,
-  includesSorted
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  lineMetadata,
-  referenceLinkImageData
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf, filterTokens, forEachHeading, forEachLine,
+  includesSorted } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 const longLineRePrefix = "^.{";
 const longLineRePostfixRelaxed = "}.*\\s.*$";
 const longLineRePostfixStrict = "}.+$";
@@ -3408,32 +3803,39 @@ const tokenTypeMap = {
   "strong_close": "S",
   "text": "T"
 };
+
 module.exports = {
-  "names": ["MD013", "line-length"],
+  "names": [ "MD013", "line-length" ],
   "description": "Line length",
-  "tags": ["line_length"],
+  "tags": [ "line_length" ],
   "function": function MD013(params, onError) {
     const lineLength = Number(params.config.line_length || 80);
-    const headingLineLength = Number(params.config.heading_line_length || lineLength);
-    const codeLineLength = Number(params.config.code_block_line_length || lineLength);
+    const headingLineLength =
+      Number(params.config.heading_line_length || lineLength);
+    const codeLineLength =
+      Number(params.config.code_block_line_length || lineLength);
     const strict = !!params.config.strict;
     const stern = !!params.config.stern;
-    const longLineRePostfix = strict || stern ? longLineRePostfixStrict : longLineRePostfixRelaxed;
-    const longLineRe = new RegExp(longLineRePrefix + lineLength + longLineRePostfix);
-    const longHeadingLineRe = new RegExp(longLineRePrefix + headingLineLength + longLineRePostfix);
-    const longCodeLineRe = new RegExp(longLineRePrefix + codeLineLength + longLineRePostfix);
+    const longLineRePostfix =
+      (strict || stern) ? longLineRePostfixStrict : longLineRePostfixRelaxed;
+    const longLineRe =
+      new RegExp(longLineRePrefix + lineLength + longLineRePostfix);
+    const longHeadingLineRe =
+      new RegExp(longLineRePrefix + headingLineLength + longLineRePostfix);
+    const longCodeLineRe =
+      new RegExp(longLineRePrefix + codeLineLength + longLineRePostfix);
     const codeBlocks = params.config.code_blocks;
-    const includeCodeBlocks = codeBlocks === undefined ? true : !!codeBlocks;
+    const includeCodeBlocks = (codeBlocks === undefined) ? true : !!codeBlocks;
     const tables = params.config.tables;
-    const includeTables = tables === undefined ? true : !!tables;
+    const includeTables = (tables === undefined) ? true : !!tables;
     const headings = params.config.headings;
-    const includeHeadings = headings === undefined ? true : !!headings;
+    const includeHeadings = (headings === undefined) ? true : !!headings;
     const headingLineNumbers = [];
-    forEachHeading(params, heading => {
+    forEachHeading(params, (heading) => {
       headingLineNumbers.push(heading.lineNumber);
     });
     const linkOnlyLineNumbers = [];
-    filterTokens(params, "inline", token => {
+    filterTokens(params, "inline", (token) => {
       let childTokenTypes = "";
       for (const child of token.children) {
         if (child.type !== "text" || child.content !== "") {
@@ -3444,20 +3846,37 @@ module.exports = {
         linkOnlyLineNumbers.push(token.lineNumber);
       }
     });
-    const {
-      definitionLineIndices
-    } = referenceLinkImageData();
+    const { definitionLineIndices } = referenceLinkImageData();
     forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence, inTable) => {
       const lineNumber = lineIndex + 1;
       const isHeading = includesSorted(headingLineNumbers, lineNumber);
-      const length = inCode ? codeLineLength : isHeading ? headingLineLength : lineLength;
-      const lengthRe = inCode ? longCodeLineRe : isHeading ? longHeadingLineRe : longLineRe;
-      if ((includeCodeBlocks || !inCode) && (includeTables || !inTable) && (includeHeadings || !isHeading) && !includesSorted(definitionLineIndices, lineIndex) && (strict || !(stern && sternModeRe.test(line)) && !includesSorted(linkOnlyLineNumbers, lineNumber)) && lengthRe.test(line)) {
-        addErrorDetailIf(onError, lineNumber, length, line.length, null, null, [length + 1, line.length - length]);
+      const length = inCode ?
+        codeLineLength :
+        (isHeading ? headingLineLength : lineLength);
+      const lengthRe = inCode ?
+        longCodeLineRe :
+        (isHeading ? longHeadingLineRe : longLineRe);
+      if ((includeCodeBlocks || !inCode) &&
+          (includeTables || !inTable) &&
+          (includeHeadings || !isHeading) &&
+          !includesSorted(definitionLineIndices, lineIndex) &&
+          (strict ||
+           (!(stern && sternModeRe.test(line)) &&
+            !includesSorted(linkOnlyLineNumbers, lineNumber))) &&
+          lengthRe.test(line)) {
+        addErrorDetailIf(
+          onError,
+          lineNumber,
+          length,
+          line.length,
+          null,
+          null,
+          [ length + 1, line.length - length ]);
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3472,19 +3891,18 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  filterTokens
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 const dollarCommandRe = /^(\s*)(\$\s+)/;
+
 module.exports = {
-  "names": ["MD014", "commands-show-output"],
+  "names": [ "MD014", "commands-show-output" ],
   "description": "Dollar signs used before commands without showing output",
-  "tags": ["code"],
+  "tags": [ "code" ],
   "function": function MD014(params, onError) {
-    for (const type of ["code_block", "fence"]) {
-      filterTokens(params, type, token => {
-        const margin = token.type === "fence" ? 1 : 0;
+    for (const type of [ "code_block", "fence" ]) {
+      filterTokens(params, type, (token) => {
+        const margin = (token.type === "fence") ? 1 : 0;
         const dollarInstances = [];
         let allDollars = true;
         for (let i = token.map[0] + margin; i < token.map[1] - margin; i++) {
@@ -3495,7 +3913,7 @@ module.exports = {
             if (match) {
               const column = match[1].length + 1;
               const length = match[2].length;
-              dollarInstances.push([i, lineTrim, column, length]);
+              dollarInstances.push([ i, lineTrim, column, length ]);
             } else {
               allDollars = false;
             }
@@ -3503,17 +3921,26 @@ module.exports = {
         }
         if (allDollars) {
           for (const instance of dollarInstances) {
-            const [i, lineTrim, column, length] = instance;
-            addErrorContext(onError, i + 1, lineTrim, null, null, [column, length], {
-              "editColumn": column,
-              "deleteCount": length
-            });
+            const [ i, lineTrim, column, length ] = instance;
+            addErrorContext(
+              onError,
+              i + 1,
+              lineTrim,
+              null,
+              null,
+              [ column, length ],
+              {
+                "editColumn": column,
+                "deleteCount": length
+              }
+            );
           }
         }
       });
     }
   }
 };
+
 
 /***/ }),
 
@@ -3528,29 +3955,37 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  forEachLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 module.exports = {
-  "names": ["MD018", "no-missing-space-atx"],
+  "names": [ "MD018", "no-missing-space-atx" ],
   "description": "No space after hash on atx style heading",
-  "tags": ["headings", "atx", "spaces"],
+  "tags": [ "headings", "atx", "spaces" ],
   "function": function MD018(params, onError) {
     forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      if (!inCode && /^#+[^# \t]/.test(line) && !/#\s*$/.test(line) && !line.startsWith("#️⃣")) {
+      if (!inCode &&
+        /^#+[^# \t]/.test(line) &&
+        !/#\s*$/.test(line) &&
+        !line.startsWith("#️⃣")) {
         const hashCount = /^#+/.exec(line)[0].length;
-        addErrorContext(onError, lineIndex + 1, line.trim(), null, null, [1, hashCount + 1], {
-          "editColumn": hashCount + 1,
-          "insertText": " "
-        });
+        addErrorContext(
+          onError,
+          lineIndex + 1,
+          line.trim(),
+          null,
+          null,
+          [ 1, hashCount + 1 ],
+          {
+            "editColumn": hashCount + 1,
+            "insertText": " "
+          }
+        );
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3565,38 +4000,42 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  filterTokens,
-  headingStyleFor
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, filterTokens, headingStyleFor } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD019", "no-multiple-space-atx"],
+  "names": [ "MD019", "no-multiple-space-atx" ],
   "description": "Multiple spaces after hash on atx style heading",
-  "tags": ["headings", "atx", "spaces"],
+  "tags": [ "headings", "atx", "spaces" ],
   "function": function MD019(params, onError) {
-    filterTokens(params, "heading_open", token => {
+    filterTokens(params, "heading_open", (token) => {
       if (headingStyleFor(token) === "atx") {
-        const {
-          line,
-          lineNumber
-        } = token;
+        const { line, lineNumber } = token;
         const match = /^(#+)([ \t]{2,})\S/.exec(line);
         if (match) {
-          const [, {
-            "length": hashLength
-          }, {
-            "length": spacesLength
-          }] = match;
-          addErrorContext(onError, lineNumber, line.trim(), null, null, [1, hashLength + spacesLength + 1], {
-            "editColumn": hashLength + 1,
-            "deleteCount": spacesLength - 1
-          });
+          const [
+            ,
+            { "length": hashLength },
+            { "length": spacesLength }
+          ] = match;
+          addErrorContext(
+            onError,
+            lineNumber,
+            line.trim(),
+            null,
+            null,
+            [ 1, hashLength + spacesLength + 1 ],
+            {
+              "editColumn": hashLength + 1,
+              "deleteCount": spacesLength - 1
+            }
+          );
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3611,47 +4050,65 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  forEachLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 module.exports = {
-  "names": ["MD020", "no-missing-space-closed-atx"],
+  "names": [ "MD020", "no-missing-space-closed-atx" ],
   "description": "No space inside hashes on closed atx style heading",
-  "tags": ["headings", "atx_closed", "spaces"],
+  "tags": [ "headings", "atx_closed", "spaces" ],
   "function": function MD020(params, onError) {
     forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
       if (!inCode) {
-        const match = /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
+        const match =
+          /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
         if (match) {
-          const [, leftHash, {
-            "length": leftSpaceLength
-          }, content, {
-            "length": rightSpaceLength
-          }, rightEscape, rightHash, {
-            "length": trailSpaceLength
-          }] = match;
+          const [
+            ,
+            leftHash,
+            { "length": leftSpaceLength },
+            content,
+            { "length": rightSpaceLength },
+            rightEscape,
+            rightHash,
+            { "length": trailSpaceLength }
+          ] = match;
           const leftHashLength = leftHash.length;
           const rightHashLength = rightHash.length;
           const left = !leftSpaceLength;
           const right = !rightSpaceLength || rightEscape;
           const rightEscapeReplacement = rightEscape ? `${rightEscape} ` : "";
           if (left || right) {
-            const range = left ? [1, leftHashLength + 1] : [line.length - trailSpaceLength - rightHashLength, rightHashLength + 1];
-            addErrorContext(onError, lineIndex + 1, line.trim(), left, right, range, {
-              "editColumn": 1,
-              "deleteCount": line.length,
-              "insertText": `${leftHash} ${content} ${rightEscapeReplacement}${rightHash}`
-            });
+            const range = left ?
+              [
+                1,
+                leftHashLength + 1
+              ] :
+              [
+                line.length - trailSpaceLength - rightHashLength,
+                rightHashLength + 1
+              ];
+            addErrorContext(
+              onError,
+              lineIndex + 1,
+              line.trim(),
+              left,
+              right,
+              range,
+              {
+                "editColumn": 1,
+                "deleteCount": line.length,
+                "insertText":
+                  `${leftHash} ${content} ${rightEscapeReplacement}${rightHash}`
+              }
+            );
           }
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3666,50 +4123,65 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  filterTokens,
-  headingStyleFor
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, filterTokens, headingStyleFor } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 const closedAtxRe = /^(#+)([ \t]+)([^ \t]|[^ \t].*[^ \t])([ \t]+)(#+)(\s*)$/;
+
 module.exports = {
-  "names": ["MD021", "no-multiple-space-closed-atx"],
+  "names": [ "MD021", "no-multiple-space-closed-atx" ],
   "description": "Multiple spaces inside hashes on closed atx style heading",
-  "tags": ["headings", "atx_closed", "spaces"],
+  "tags": [ "headings", "atx_closed", "spaces" ],
   "function": function MD021(params, onError) {
-    filterTokens(params, "heading_open", token => {
+    filterTokens(params, "heading_open", (token) => {
       if (headingStyleFor(token) === "atx_closed") {
-        const {
-          line,
-          lineNumber
-        } = token;
+        const { line, lineNumber } = token;
         const match = closedAtxRe.exec(line);
         if (match) {
-          const [, leftHash, {
-            "length": leftSpaceLength
-          }, content, {
-            "length": rightSpaceLength
-          }, rightHash, {
-            "length": trailSpaceLength
-          }] = match;
+          const [
+            ,
+            leftHash,
+            { "length": leftSpaceLength },
+            content,
+            { "length": rightSpaceLength },
+            rightHash,
+            { "length": trailSpaceLength }
+          ] = match;
           const left = leftSpaceLength > 1;
           const right = rightSpaceLength > 1;
           if (left || right) {
             const length = line.length;
             const leftHashLength = leftHash.length;
             const rightHashLength = rightHash.length;
-            const range = left ? [1, leftHashLength + leftSpaceLength + 1] : [length - trailSpaceLength - rightHashLength - rightSpaceLength, rightSpaceLength + rightHashLength + 1];
-            addErrorContext(onError, lineNumber, line.trim(), left, right, range, {
-              "editColumn": 1,
-              "deleteCount": length,
-              "insertText": `${leftHash} ${content} ${rightHash}`
-            });
+            const range = left ?
+              [
+                1,
+                leftHashLength + leftSpaceLength + 1
+              ] :
+              [
+                length - trailSpaceLength - rightHashLength - rightSpaceLength,
+                rightSpaceLength + rightHashLength + 1
+              ];
+            addErrorContext(
+              onError,
+              lineNumber,
+              line.trim(),
+              left,
+              right,
+              range,
+              {
+                "editColumn": 1,
+                "deleteCount": length,
+                "insertText": `${leftHash} ${content} ${rightHash}`
+              }
+            );
           }
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3724,78 +4196,111 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  blockquotePrefixRe,
-  isBlankLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  getHeadingLevel,
-  inHtmlFlow
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, inHtmlFlow } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 const defaultLines = 1;
-const getLinesFunction = linesParam => {
+
+const getLinesFunction = (linesParam) => {
   if (Array.isArray(linesParam)) {
     const linesArray = new Array(6).fill(defaultLines);
-    for (const [index, value] of [...linesParam.entries()].slice(0, 6)) {
+    for (const [ index, value ] of [ ...linesParam.entries() ].slice(0, 6)) {
       linesArray[index] = value;
     }
-    return heading => linesArray[getHeadingLevel(heading) - 1];
+    return (heading) => linesArray[getHeadingLevel(heading) - 1];
   }
   // Coerce linesParam to a number
-  const lines = linesParam === undefined ? defaultLines : Number(linesParam);
+  const lines = (linesParam === undefined) ? defaultLines : Number(linesParam);
   return () => lines;
 };
-const getBlockQuote = (str, count) => (str || "").match(blockquotePrefixRe)[0].trimEnd()
-// eslint-disable-next-line unicorn/prefer-spread
-.concat("\n").repeat(count);
+
+const getBlockQuote = (str, count) => (
+  (str || "")
+    .match(blockquotePrefixRe)[0]
+    .trimEnd()
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat("\n")
+    .repeat(count)
+);
+
 module.exports = {
-  "names": ["MD022", "blanks-around-headings"],
+  "names": [ "MD022", "blanks-around-headings" ],
   "description": "Headings should be surrounded by blank lines",
-  "tags": ["headings", "blank_lines"],
+  "tags": [ "headings", "blank_lines" ],
   "function": function MD022(params, onError) {
     const getLinesAbove = getLinesFunction(params.config.lines_above);
     const getLinesBelow = getLinesFunction(params.config.lines_below);
-    const {
-      lines,
-      parsers
-    } = params;
-    const headings = filterByTypes(parsers.micromark.tokens, ["atxHeading", "setextHeading"]).filter(heading => !inHtmlFlow(heading));
+    const { lines, parsers } = params;
+    const headings = filterByTypes(
+      parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    ).filter((heading) => !inHtmlFlow(heading));
     for (const heading of headings) {
-      const {
-        startLine,
-        endLine
-      } = heading;
+      const { startLine, endLine } = heading;
       const line = lines[startLine - 1].trim();
 
       // Check lines above
       const linesAbove = getLinesAbove(heading);
       if (linesAbove >= 0) {
         let actualAbove = 0;
-        for (let i = 0; i < linesAbove && isBlankLine(lines[startLine - 2 - i]); i++) {
+        for (
+          let i = 0;
+          (i < linesAbove) && isBlankLine(lines[startLine - 2 - i]);
+          i++
+        ) {
           actualAbove++;
         }
-        addErrorDetailIf(onError, startLine, linesAbove, actualAbove, "Above", line, null, {
-          "insertText": getBlockQuote(lines[startLine - 2], linesAbove - actualAbove)
-        });
+        addErrorDetailIf(
+          onError,
+          startLine,
+          linesAbove,
+          actualAbove,
+          "Above",
+          line,
+          null,
+          {
+            "insertText": getBlockQuote(
+              lines[startLine - 2],
+              linesAbove - actualAbove
+            )
+          }
+        );
       }
 
       // Check lines below
       const linesBelow = getLinesBelow(heading);
       if (linesBelow >= 0) {
         let actualBelow = 0;
-        for (let i = 0; i < linesBelow && isBlankLine(lines[endLine + i]); i++) {
+        for (
+          let i = 0;
+          (i < linesBelow) && isBlankLine(lines[endLine + i]);
+          i++
+        ) {
           actualBelow++;
         }
-        addErrorDetailIf(onError, startLine, linesBelow, actualBelow, "Below", line, null, {
-          "lineNumber": endLine + 1,
-          "insertText": getBlockQuote(lines[endLine], linesBelow - actualBelow)
-        });
+        addErrorDetailIf(
+          onError,
+          startLine,
+          linesBelow,
+          actualBelow,
+          "Below",
+          line,
+          null,
+          {
+            "lineNumber": endLine + 1,
+            "insertText": getBlockQuote(
+              lines[endLine],
+              linesBelow - actualBelow
+            )
+          }
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -3810,37 +4315,41 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  filterTokens
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 const spaceBeforeHeadingRe = /^(\s+|[>\s]+\s\s)[^>\s]/;
+
 module.exports = {
-  "names": ["MD023", "heading-start-left"],
+  "names": [ "MD023", "heading-start-left" ],
   "description": "Headings must start at the beginning of the line",
-  "tags": ["headings", "spaces"],
+  "tags": [ "headings", "spaces" ],
   "function": function MD023(params, onError) {
     filterTokens(params, "heading_open", function forToken(token) {
-      const {
-        lineNumber,
-        line
-      } = token;
+      const { lineNumber, line } = token;
       const match = line.match(spaceBeforeHeadingRe);
       if (match) {
-        const [prefixAndFirstChar, prefix] = match;
+        const [ prefixAndFirstChar, prefix ] = match;
         let deleteCount = prefix.length;
         const prefixLengthNoSpace = prefix.trimEnd().length;
         if (prefixLengthNoSpace) {
           deleteCount -= prefixLengthNoSpace - 1;
         }
-        addErrorContext(onError, lineNumber, line, null, null, [1, prefixAndFirstChar.length], {
-          "editColumn": prefixLengthNoSpace + 1,
-          "deleteCount": deleteCount
-        });
+        addErrorContext(
+          onError,
+          lineNumber,
+          line,
+          null,
+          null,
+          [ 1, prefixAndFirstChar.length ],
+          {
+            "editColumn": prefixLengthNoSpace + 1,
+            "deleteCount": deleteCount
+          });
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -3855,17 +4364,15 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  forEachHeading
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, forEachHeading } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD024", "no-duplicate-heading"],
+  "names": [ "MD024", "no-duplicate-heading" ],
   "description": "Multiple headings with the same content",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD024(params, onError) {
     const siblingsOnly = !!params.config.siblings_only || false;
-    const knownContents = [null, []];
+    const knownContents = [ null, [] ];
     let lastLevel = 1;
     let knownContent = knownContents[lastLevel];
     forEachHeading(params, (heading, content) => {
@@ -3883,7 +4390,11 @@ module.exports = {
       }
       // @ts-ignore
       if (knownContent.includes(content)) {
-        addErrorContext(onError, heading.lineNumber, heading.line.trim());
+        addErrorContext(
+          onError,
+          heading.lineNumber,
+          heading.line.trim()
+        );
       } else {
         // @ts-ignore
         knownContent.push(content);
@@ -3891,6 +4402,7 @@ module.exports = {
     });
   }
 };
+
 
 /***/ }),
 
@@ -3905,24 +4417,27 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  filterTokens,
-  frontMatterHasTitle
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, filterTokens, frontMatterHasTitle } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD025", "single-title", "single-h1"],
+  "names": [ "MD025", "single-title", "single-h1" ],
   "description": "Multiple top-level headings in the same document",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD025(params, onError) {
     const level = Number(params.config.level || 1);
     const tag = "h" + level;
-    const foundFrontMatterTitle = frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title);
+    const foundFrontMatterTitle =
+      frontMatterHasTitle(
+        params.frontMatterLines,
+        params.config.front_matter_title
+      );
     let hasTopLevelHeading = false;
     filterTokens(params, "heading_open", function forToken(token) {
       if (token.tag === tag) {
         if (hasTopLevelHeading || foundFrontMatterTitle) {
-          addErrorContext(onError, token.lineNumber, token.line.trim());
+          addErrorContext(onError, token.lineNumber,
+            token.line.trim());
         } else if (token.lineNumber === 1) {
           hasTopLevelHeading = true;
         }
@@ -3930,6 +4445,7 @@ module.exports = {
     });
   }
 };
+
 
 /***/ }),
 
@@ -3944,44 +4460,53 @@ module.exports = {
 
 
 
-const {
-  addError,
-  allPunctuationNoQuestion,
-  endOfLineGemojiCodeRe,
-  endOfLineHtmlEntityRe,
-  escapeForRegExp
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, allPunctuationNoQuestion, endOfLineGemojiCodeRe,
+  endOfLineHtmlEntityRe, escapeForRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+
 module.exports = {
-  "names": ["MD026", "no-trailing-punctuation"],
+  "names": [ "MD026", "no-trailing-punctuation" ],
   "description": "Trailing punctuation in heading",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD026(params, onError) {
     let punctuation = params.config.punctuation;
-    punctuation = String(punctuation === undefined ? allPunctuationNoQuestion : punctuation);
-    const trailingPunctuationRe = new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
-    const headings = filterByTypes(params.parsers.micromark.tokens, ["atxHeadingText", "setextHeadingText"]);
+    punctuation = String(
+      (punctuation === undefined) ? allPunctuationNoQuestion : punctuation
+    );
+    const trailingPunctuationRe =
+      new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeadingText", "setextHeadingText" ]
+    );
     for (const heading of headings) {
-      const {
-        endColumn,
-        endLine,
-        text
-      } = heading;
+      const { endColumn, endLine, text } = heading;
       const match = trailingPunctuationRe.exec(text);
-      if (match && !endOfLineHtmlEntityRe.test(text) && !endOfLineGemojiCodeRe.test(text)) {
+      if (
+        match &&
+        !endOfLineHtmlEntityRe.test(text) &&
+        !endOfLineGemojiCodeRe.test(text)
+      ) {
         const fullMatch = match[0];
         const length = fullMatch.length;
         const column = endColumn - length;
-        addError(onError, endLine, `Punctuation: '${fullMatch}'`, undefined, [column, length], {
-          "editColumn": column,
-          "deleteCount": length
-        });
+        addError(
+          onError,
+          endLine,
+          `Punctuation: '${fullMatch}'`,
+          undefined,
+          [ column, length ],
+          {
+            "editColumn": column,
+            "deleteCount": length
+          }
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -3996,24 +4521,19 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  newLineRe
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, newLineRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 const spaceAfterBlockQuoteRe = /^((?:\s*>)+)(\s{2,})\S/;
+
 module.exports = {
-  "names": ["MD027", "no-multiple-space-blockquote"],
+  "names": [ "MD027", "no-multiple-space-blockquote" ],
   "description": "Multiple spaces after blockquote symbol",
-  "tags": ["blockquote", "whitespace", "indentation"],
+  "tags": [ "blockquote", "whitespace", "indentation" ],
   "function": function MD027(params, onError) {
     let blockquoteNesting = 0;
     let listItemNesting = 0;
     for (const token of params.parsers.markdownit.tokens) {
-      const {
-        content,
-        lineNumber,
-        type
-      } = token;
+      const { content, lineNumber, type } = token;
       if (type === "blockquote_open") {
         blockquoteNesting++;
       } else if (type === "blockquote_close") {
@@ -4022,22 +4542,30 @@ module.exports = {
         listItemNesting++;
       } else if (type === "list_item_close") {
         listItemNesting--;
-      } else if (type === "inline" && blockquoteNesting) {
+      } else if ((type === "inline") && blockquoteNesting) {
         const lineCount = content.split(newLineRe).length;
         for (let i = 0; i < lineCount; i++) {
           const line = params.lines[lineNumber + i - 1];
           const match = line.match(spaceAfterBlockQuoteRe);
           if (match) {
-            const [fullMatch, {
-              "length": blockquoteLength
-            }, {
-              "length": spaceLength
-            }] = match;
-            if (!listItemNesting || fullMatch[fullMatch.length - 1] === ">") {
-              addErrorContext(onError, lineNumber + i, line, null, null, [1, fullMatch.length], {
-                "editColumn": blockquoteLength + 1,
-                "deleteCount": spaceLength - 1
-              });
+            const [
+              fullMatch,
+              { "length": blockquoteLength },
+              { "length": spaceLength }
+            ] = match;
+            if (!listItemNesting || (fullMatch[fullMatch.length - 1] === ">")) {
+              addErrorContext(
+                onError,
+                lineNumber + i,
+                line,
+                null,
+                null,
+                [ 1, fullMatch.length ],
+                {
+                  "editColumn": blockquoteLength + 1,
+                  "deleteCount": spaceLength - 1
+                }
+              );
             }
           }
         }
@@ -4045,6 +4573,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -4059,19 +4588,22 @@ module.exports = {
 
 
 
-const {
-  addError
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD028", "no-blanks-blockquote"],
+  "names": [ "MD028", "no-blanks-blockquote" ],
   "description": "Blank line inside blockquote",
-  "tags": ["blockquote", "whitespace"],
+  "tags": [ "blockquote", "whitespace" ],
   "function": function MD028(params, onError) {
     let prevToken = {};
     let prevLineNumber = null;
     for (const token of params.parsers.markdownit.tokens) {
-      if (token.type === "blockquote_open" && prevToken.type === "blockquote_close") {
-        for (let lineNumber = prevLineNumber; lineNumber < token.lineNumber; lineNumber++) {
+      if ((token.type === "blockquote_open") &&
+          (prevToken.type === "blockquote_close")) {
+        for (
+          let lineNumber = prevLineNumber;
+          lineNumber < token.lineNumber;
+          lineNumber++) {
           addError(onError, lineNumber);
         }
       }
@@ -4082,6 +4614,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -4096,31 +4629,25 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  listItemMarkerRe,
-  orderedListItemMarkerRe,
-  rangeFromRegExp
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  flattenedLists
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf, listItemMarkerRe, orderedListItemMarkerRe,
+  rangeFromRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 const listStyleExamples = {
   "one": "1/1/1",
   "ordered": "1/2/3",
   "zero": "0/0/0"
 };
+
 module.exports = {
-  "names": ["MD029", "ol-prefix"],
+  "names": [ "MD029", "ol-prefix" ],
   "description": "Ordered list item prefix",
-  "tags": ["ol"],
+  "tags": [ "ol" ],
   "function": function MD029(params, onError) {
     const style = String(params.config.style || "one_or_ordered");
-    const filteredLists = flattenedLists().filter(list => !list.unordered);
+    const filteredLists = flattenedLists().filter((list) => !list.unordered);
     for (const list of filteredLists) {
-      const {
-        items
-      } = list;
+      const { items } = list;
       let current = 1;
       let incrementing = false;
       // Check for incrementing number pattern 1/2/3 or 0/1/2
@@ -4128,9 +4655,9 @@ module.exports = {
         const first = orderedListItemMarkerRe.exec(items[0].line);
         const second = orderedListItemMarkerRe.exec(items[1].line);
         if (first && second) {
-          const [, firstNumber] = first;
-          const [, secondNumber] = second;
-          if (secondNumber !== "1" || firstNumber === "0") {
+          const [ , firstNumber ] = first;
+          const [ , secondNumber ] = second;
+          if ((secondNumber !== "1") || (firstNumber === "0")) {
             incrementing = true;
             if (firstNumber === "0") {
               current = 0;
@@ -4153,7 +4680,10 @@ module.exports = {
       for (const item of items) {
         const match = orderedListItemMarkerRe.exec(item.line);
         if (match) {
-          addErrorDetailIf(onError, item.lineNumber, String(current), match[1], "Style: " + listStyleExamples[listStyle], null, rangeFromRegExp(item.line, listItemMarkerRe));
+          addErrorDetailIf(onError, item.lineNumber,
+            String(current), match[1],
+            "Style: " + listStyleExamples[listStyle], null,
+            rangeFromRegExp(item.line, listItemMarkerRe));
           if (listStyle === "ordered") {
             current++;
           }
@@ -4162,6 +4692,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -4176,48 +4707,64 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 module.exports = {
-  "names": ["MD030", "list-marker-space"],
+  "names": [ "MD030", "list-marker-space" ],
   "description": "Spaces after list markers",
-  "tags": ["ol", "ul", "whitespace"],
+  "tags": [ "ol", "ul", "whitespace" ],
   "function": function MD030(params, onError) {
     const ulSingle = Number(params.config.ul_single || 1);
     const olSingle = Number(params.config.ol_single || 1);
     const ulMulti = Number(params.config.ul_multi || 1);
     const olMulti = Number(params.config.ol_multi || 1);
-    const lists = filterByTypes(params.parsers.micromark.tokens, ["listOrdered", "listUnordered"]);
+    const lists = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "listOrdered", "listUnordered" ]
+    );
     for (const list of lists) {
-      const ordered = list.type === "listOrdered";
-      const listItemPrefixes = list.children.filter(token => token.type === "listItemPrefix");
-      const allSingleLine = list.endLine - list.startLine + 1 === listItemPrefixes.length;
-      const expectedSpaces = ordered ? allSingleLine ? olSingle : olMulti : allSingleLine ? ulSingle : ulMulti;
+      const ordered = (list.type === "listOrdered");
+      const listItemPrefixes =
+        list.children.filter((token) => (token.type === "listItemPrefix"));
+      const allSingleLine =
+        (list.endLine - list.startLine + 1) === listItemPrefixes.length;
+      const expectedSpaces = ordered ?
+        (allSingleLine ? olSingle : olMulti) :
+        (allSingleLine ? ulSingle : ulMulti);
       for (const listItemPrefix of listItemPrefixes) {
-        const range = [listItemPrefix.startColumn, listItemPrefix.endColumn - listItemPrefix.startColumn];
-        const listItemPrefixWhitespaces = listItemPrefix.children.filter(token => token.type === "listItemPrefixWhitespace");
+        const range = [
+          listItemPrefix.startColumn,
+          listItemPrefix.endColumn - listItemPrefix.startColumn
+        ];
+        const listItemPrefixWhitespaces = listItemPrefix.children.filter(
+          (token) => (token.type === "listItemPrefixWhitespace")
+        );
         for (const listItemPrefixWhitespace of listItemPrefixWhitespaces) {
-          const {
-            endColumn,
-            startColumn,
-            startLine
-          } = listItemPrefixWhitespace;
+          const { endColumn, startColumn, startLine } =
+            listItemPrefixWhitespace;
           const actualSpaces = endColumn - startColumn;
           const fixInfo = {
             "editColumn": startColumn,
             "deleteCount": actualSpaces,
             "insertText": "".padEnd(expectedSpaces)
           };
-          addErrorDetailIf(onError, startLine, expectedSpaces, actualSpaces, null, null, range, fixInfo);
+          addErrorDetailIf(
+            onError,
+            startLine,
+            expectedSpaces,
+            actualSpaces,
+            null,
+            null,
+            range,
+            fixInfo
+          );
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -4232,39 +4779,43 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  forEachLine,
-  isBlankLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  lineMetadata
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, forEachLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 const codeFencePrefixRe = /^(.*?)[`~]/;
+
 module.exports = {
-  "names": ["MD031", "blanks-around-fences"],
+  "names": [ "MD031", "blanks-around-fences" ],
   "description": "Fenced code blocks should be surrounded by blank lines",
-  "tags": ["code", "blank_lines"],
+  "tags": [ "code", "blank_lines" ],
   "function": function MD031(params, onError) {
     const listItems = params.config.list_items;
-    const includeListItems = listItems === undefined ? true : !!listItems;
-    const {
-      lines
-    } = params;
+    const includeListItems = (listItems === undefined) ? true : !!listItems;
+    const { lines } = params;
     forEachLine(lineMetadata(), (line, i, inCode, onFence, inTable, inItem) => {
-      const onTopFence = onFence > 0;
-      const onBottomFence = onFence < 0;
-      if ((includeListItems || !inItem) && (onTopFence && !isBlankLine(lines[i - 1]) || onBottomFence && !isBlankLine(lines[i + 1]))) {
-        const [, prefix] = line.match(codeFencePrefixRe) || [];
-        const fixInfo = prefix === undefined ? null : {
+      const onTopFence = (onFence > 0);
+      const onBottomFence = (onFence < 0);
+      if ((includeListItems || !inItem) &&
+          ((onTopFence && !isBlankLine(lines[i - 1])) ||
+           (onBottomFence && !isBlankLine(lines[i + 1])))) {
+        const [ , prefix ] = line.match(codeFencePrefixRe) || [];
+        const fixInfo = (prefix === undefined) ? null : {
           "lineNumber": i + (onTopFence ? 1 : 2),
           "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
         };
-        addErrorContext(onError, i + 1, lines[i].trim(), null, null, null, fixInfo);
+        addErrorContext(
+          onError,
+          i + 1,
+          lines[i].trim(),
+          null,
+          null,
+          null,
+          fixInfo);
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -4279,37 +4830,56 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  blockquotePrefixRe,
-  isBlankLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByPredicate
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const nonContentTokens = new Set(["blockQuoteMarker", "blockQuotePrefix", "blockQuotePrefixWhitespace", "lineEnding", "lineEndingBlank", "linePrefix", "listItemIndent"]);
-const isList = token => token.type === "listOrdered" || token.type === "listUnordered";
+const { addErrorContext, blockquotePrefixRe, isBlankLine } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+const nonContentTokens = new Set([
+  "blockQuoteMarker",
+  "blockQuotePrefix",
+  "blockQuotePrefixWhitespace",
+  "lineEnding",
+  "lineEndingBlank",
+  "linePrefix",
+  "listItemIndent"
+]);
+const isList = (token) => (
+  (token.type === "listOrdered") || (token.type === "listUnordered")
+);
 const addBlankLineError = (onError, lines, lineIndex, lineNumber) => {
   const line = lines[lineIndex];
   const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
-  addErrorContext(onError, lineIndex + 1, line.trim(), null, null, null, {
-    lineNumber,
-    "insertText": `${quotePrefix}\n`
-  });
+  addErrorContext(
+    onError,
+    lineIndex + 1,
+    line.trim(),
+    null,
+    null,
+    null,
+    {
+      lineNumber,
+      "insertText": `${quotePrefix}\n`
+    }
+  );
 };
+
 module.exports = {
-  "names": ["MD032", "blanks-around-lists"],
+  "names": [ "MD032", "blanks-around-lists" ],
   "description": "Lists should be surrounded by blank lines",
-  "tags": ["bullet", "ul", "ol", "blank_lines"],
+  "tags": [ "bullet", "ul", "ol", "blank_lines" ],
   "function": function MD032(params, onError) {
-    const {
-      lines,
-      parsers
-    } = params;
+    const { lines, parsers } = params;
 
     // For every top-level list...
-    const topLevelLists = filterByPredicate(parsers.micromark.tokens, isList, token => isList(token) || token.type === "htmlFlow" ? [] : token.children);
+    const topLevelLists = filterByPredicate(
+      parsers.micromark.tokens,
+      isList,
+      (token) => (
+        (isList(token) || (token.type === "htmlFlow")) ? [] : token.children
+      )
+    );
     for (const list of topLevelLists) {
+
       // Look for a blank line above the list
       const firstIndex = list.startLine - 1;
       if (!isBlankLine(lines[firstIndex - 1])) {
@@ -4335,6 +4905,7 @@ module.exports = {
   }
 };
 
+
 /***/ }),
 
 /***/ "../lib/md033.js":
@@ -4348,34 +4919,42 @@ module.exports = {
 
 
 
-const {
-  addError,
-  nextLinesRe
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  getHtmlTagInfo
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHtmlTagInfo } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 module.exports = {
-  "names": ["MD033", "no-inline-html"],
+  "names": [ "MD033", "no-inline-html" ],
   "description": "Inline HTML",
-  "tags": ["html"],
+  "tags": [ "html" ],
   "function": function MD033(params, onError) {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
-    allowedElements = allowedElements.map(element => element.toLowerCase());
-    const {
-      tokens
-    } = params.parsers.micromark;
-    for (const token of filterByTypes(tokens, ["htmlText"])) {
+    allowedElements = allowedElements.map((element) => element.toLowerCase());
+    const { tokens } = params.parsers.micromark;
+    for (const token of filterByTypes(tokens, [ "htmlText" ])) {
       const htmlTagInfo = getHtmlTagInfo(token);
-      if (htmlTagInfo && !htmlTagInfo.close && !allowedElements.includes(htmlTagInfo.name.toLowerCase())) {
-        const range = [token.startColumn, token.text.replace(nextLinesRe, "").length];
-        addError(onError, token.startLine, "Element: " + htmlTagInfo.name, undefined, range);
+      if (
+        htmlTagInfo &&
+        !htmlTagInfo.close &&
+        !allowedElements.includes(htmlTagInfo.name.toLowerCase())
+      ) {
+        const range = [
+          token.startColumn,
+          token.text.replace(nextLinesRe, "").length
+        ];
+        addError(
+          onError,
+          token.startLine,
+          "Element: " + htmlTagInfo.name,
+          undefined,
+          range
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -4390,69 +4969,82 @@ module.exports = {
 
 
 
-const {
-  addErrorContext
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByPredicate,
-  filterByTypes,
-  getHtmlTagInfo,
-  inHtmlFlow,
-  parse
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, filterByTypes, getHtmlTagInfo, inHtmlFlow, parse } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 module.exports = {
-  "names": ["MD034", "no-bare-urls"],
+  "names": [ "MD034", "no-bare-urls" ],
   "description": "Bare URL used",
-  "tags": ["links", "url"],
+  "tags": [ "links", "url" ],
   "function": function MD034(params, onError) {
-    const literalAutolinks = tokens => filterByPredicate(tokens, token => token.type === "literalAutolink" && !inHtmlFlow(token), token => {
-      const {
-        children
-      } = token;
-      const result = [];
-      for (let i = 0; i < children.length; i++) {
-        const current = children[i];
-        const openTagInfo = getHtmlTagInfo(current);
-        if (openTagInfo && !openTagInfo.close) {
-          let count = 1;
-          for (let j = i + 1; j < children.length; j++) {
-            const candidate = children[j];
-            const closeTagInfo = getHtmlTagInfo(candidate);
-            if (closeTagInfo && openTagInfo.name === closeTagInfo.name) {
-              if (closeTagInfo.close) {
-                count--;
-                if (count === 0) {
-                  i = j;
-                  break;
+    const literalAutolinks = (tokens) => (
+      filterByPredicate(
+        tokens,
+        (token) => (token.type === "literalAutolink") && !inHtmlFlow(token),
+        (token) => {
+          const { children } = token;
+          const result = [];
+          for (let i = 0; i < children.length; i++) {
+            const current = children[i];
+            const openTagInfo = getHtmlTagInfo(current);
+            if (openTagInfo && !openTagInfo.close) {
+              let count = 1;
+              for (let j = i + 1; j < children.length; j++) {
+                const candidate = children[j];
+                const closeTagInfo = getHtmlTagInfo(candidate);
+                if (closeTagInfo && (openTagInfo.name === closeTagInfo.name)) {
+                  if (closeTagInfo.close) {
+                    count--;
+                    if (count === 0) {
+                      i = j;
+                      break;
+                    }
+                  } else {
+                    count++;
+                  }
                 }
-              } else {
-                count++;
               }
+            } else {
+              result.push(current);
             }
           }
-        } else {
-          result.push(current);
+          return result;
         }
-      }
-      return result;
-    });
-    const autoLinks = filterByTypes(params.parsers.micromark.tokens, ["literalAutolink"]);
+      )
+    );
+    const autoLinks = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "literalAutolink" ]
+    );
     if (autoLinks.length > 0) {
       // Re-parse with correct link/image reference definition handling
       const document = params.lines.join("\n");
       const tokens = parse(document, undefined, false);
       for (const token of literalAutolinks(tokens)) {
-        const range = [token.startColumn, token.endColumn - token.startColumn];
+        const range = [
+          token.startColumn,
+          token.endColumn - token.startColumn
+        ];
         const fixInfo = {
           "editColumn": range[0],
           "deleteCount": range[1],
           "insertText": `<${token.text}>`
         };
-        addErrorContext(onError, token.startLine, token.text, null, null, range, fixInfo);
+        addErrorContext(
+          onError,
+          token.startLine,
+          token.text,
+          null,
+          null,
+          range,
+          fixInfo
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -4467,24 +5059,19 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 module.exports = {
-  "names": ["MD035", "hr-style"],
+  "names": [ "MD035", "hr-style" ],
   "description": "Horizontal rule style",
-  "tags": ["hr"],
+  "tags": [ "hr" ],
   "function": function MD035(params, onError) {
     let style = String(params.config.style || "consistent").trim();
-    const thematicBreaks = filterByTypes(params.parsers.micromark.tokens, ["thematicBreak"]);
+    const thematicBreaks =
+      filterByTypes(params.parsers.micromark.tokens, [ "thematicBreak" ]);
     for (const token of thematicBreaks) {
-      const {
-        startLine,
-        text
-      } = token;
+      const { startLine, text } = token;
       if (style === "consistent") {
         style = text;
       }
@@ -4492,6 +5079,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -4506,17 +5094,16 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  allPunctuation
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, allPunctuation } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD036", "no-emphasis-as-heading"],
+  "names": [ "MD036", "no-emphasis-as-heading" ],
   "description": "Emphasis used instead of a heading",
-  "tags": ["headings", "emphasis"],
+  "tags": [ "headings", "emphasis" ],
   "function": function MD036(params, onError) {
     let punctuation = params.config.punctuation;
-    punctuation = String(punctuation === undefined ? allPunctuation : punctuation);
+    punctuation =
+      String((punctuation === undefined) ? allPunctuation : punctuation);
     const re = new RegExp("[" + punctuation + "]$");
     // eslint-disable-next-line jsdoc/require-jsdoc
     function base(token) {
@@ -4524,10 +5111,15 @@ module.exports = {
         return function inParagraph(t) {
           // Always paragraph_open/inline/paragraph_close,
           const children = t.children.filter(function notEmptyText(child) {
-            return child.type !== "text" || child.content !== "";
+            return (child.type !== "text") || (child.content !== "");
           });
-          if (children.length === 3 && (children[0].type === "strong_open" || children[0].type === "em_open") && children[1].type === "text" && !re.test(children[1].content)) {
-            addErrorContext(onError, t.lineNumber, children[1].content);
+          if ((children.length === 3) &&
+              ((children[0].type === "strong_open") ||
+                (children[0].type === "em_open")) &&
+              (children[1].type === "text") &&
+              !re.test(children[1].content)) {
+            addErrorContext(onError, t.lineNumber,
+              children[1].content);
           }
           return base;
         };
@@ -4555,6 +5147,7 @@ module.exports = {
   }
 };
 
+
 /***/ }),
 
 /***/ "../lib/md037.js":
@@ -4568,39 +5161,34 @@ module.exports = {
 
 
 
-const {
-  addError
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByPredicate,
-  inHtmlFlow
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 module.exports = {
-  "names": ["MD037", "no-space-in-emphasis"],
+  "names": [ "MD037", "no-space-in-emphasis" ],
   "description": "Spaces inside emphasis markers",
-  "tags": ["whitespace", "emphasis"],
+  "tags": [ "whitespace", "emphasis" ],
   "function": function MD037(params, onError) {
+
     // Initialize variables
-    const {
-      lines,
-      parsers
-    } = params;
+    const { lines, parsers } = params;
     const emphasisTokensByMarker = new Map();
-    for (const marker of ["_", "__", "___", "*", "**", "***"]) {
+    for (const marker of [ "_", "__", "___", "*", "**", "***" ]) {
       emphasisTokensByMarker.set(marker, []);
     }
-    const tokens = filterByPredicate(parsers.micromark.tokens, token => token.children.some(child => child.type === "data"));
+    const tokens = filterByPredicate(
+      parsers.micromark.tokens,
+      (token) => token.children.some((child) => child.type === "data")
+    );
     for (const token of tokens) {
+
       // Build lists of bare tokens for each emphasis marker type
       for (const emphasisTokens of emphasisTokensByMarker.values()) {
         emphasisTokens.length = 0;
       }
       for (const child of token.children) {
-        const {
-          text,
-          type
-        } = child;
-        if (type === "data" && text.length <= 3) {
+        const { text, type } = child;
+        if ((type === "data") && (text.length <= 3)) {
           const emphasisTokens = emphasisTokensByMarker.get(text);
           if (emphasisTokens && !inHtmlFlow(child)) {
             emphasisTokens.push(child);
@@ -4610,20 +5198,28 @@ module.exports = {
 
       // Process bare tokens for each emphasis marker type
       for (const entry of emphasisTokensByMarker.entries()) {
-        const [marker, emphasisTokens] = entry;
+        const [ marker, emphasisTokens ] = entry;
         for (let i = 0; i + 1 < emphasisTokens.length; i += 2) {
+
           // Process start token of start/end pair
           const startToken = emphasisTokens[i];
           const startLine = lines[startToken.startLine - 1];
           const startSlice = startLine.slice(startToken.endColumn - 1);
           const startMatch = startSlice.match(/^\s+\S/);
           if (startMatch) {
-            const [startSpaceCharacter] = startMatch;
+            const [ startSpaceCharacter ] = startMatch;
             const startContext = `${marker}${startSpaceCharacter}`;
-            addError(onError, startToken.startLine, undefined, startContext, [startToken.startColumn, startContext.length], {
-              "editColumn": startToken.endColumn,
-              "deleteCount": startSpaceCharacter.length - 1
-            });
+            addError(
+              onError,
+              startToken.startLine,
+              undefined,
+              startContext,
+              [ startToken.startColumn, startContext.length ],
+              {
+                "editColumn": startToken.endColumn,
+                "deleteCount": startSpaceCharacter.length - 1
+              }
+            );
           }
 
           // Process end token of start/end pair
@@ -4632,18 +5228,27 @@ module.exports = {
           const endSlice = endLine.slice(0, endToken.startColumn - 1);
           const endMatch = endSlice.match(/\S\s+$/);
           if (endMatch) {
-            const [endSpaceCharacter] = endMatch;
+            const [ endSpaceCharacter ] = endMatch;
             const endContext = `${endSpaceCharacter}${marker}`;
-            addError(onError, endToken.startLine, undefined, endContext, [endToken.endColumn - endContext.length, endContext.length], {
-              "editColumn": endToken.startColumn - (endSpaceCharacter.length - 1),
-              "deleteCount": endSpaceCharacter.length - 1
-            });
+            addError(
+              onError,
+              endToken.startLine,
+              undefined,
+              endContext,
+              [ endToken.endColumn - endContext.length, endContext.length ],
+              {
+                "editColumn":
+                  endToken.startColumn - (endSpaceCharacter.length - 1),
+                "deleteCount": endSpaceCharacter.length - 1
+              }
+            );
           }
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -4658,14 +5263,10 @@ module.exports = {
 
 
 
-const {
-  addErrorContext
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  inHtmlFlow,
-  tokenIfType
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, inHtmlFlow, tokenIfType } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 const leftSpaceRe = /^\s(?:[^`]|$)/;
 const rightSpaceRe = /[^`]\s$/;
 const trimCodeText = (text, start, end) => {
@@ -4678,22 +5279,27 @@ const trimCodeText = (text, start, end) => {
   }
   return text;
 };
+
 module.exports = {
-  "names": ["MD038", "no-space-in-code"],
+  "names": [ "MD038", "no-space-in-code" ],
   "description": "Spaces inside code span elements",
-  "tags": ["whitespace", "code"],
+  "tags": [ "whitespace", "code" ],
   "function": function MD038(params, onError) {
-    const codeTexts = filterByTypes(params.parsers.micromark.tokens, ["codeText"]).filter(codeText => !inHtmlFlow(codeText));
+    const codeTexts =
+      filterByTypes(params.parsers.micromark.tokens, [ "codeText" ])
+        .filter((codeText) => !inHtmlFlow(codeText));
     for (const codeText of codeTexts) {
-      const {
-        children
-      } = codeText;
+      const { children } = codeText;
       const first = 0;
       const last = children.length - 1;
       const startSequence = tokenIfType(children[first], "codeTextSequence");
       const endSequence = tokenIfType(children[last], "codeTextSequence");
-      const startData = tokenIfType(children[first + 1], "codeTextData") || tokenIfType(children[first + 2], "codeTextData");
-      const endData = tokenIfType(children[last - 1], "codeTextData") || tokenIfType(children[last - 2], "codeTextData");
+      const startData =
+        tokenIfType(children[first + 1], "codeTextData") ||
+        tokenIfType(children[first + 2], "codeTextData");
+      const endData =
+        tokenIfType(children[last - 1], "codeTextData") ||
+        tokenIfType(children[last - 2], "codeTextData");
       if (startSequence && endSequence && startData && endData) {
         const spaceLeft = leftSpaceRe.test(startData.text);
         const spaceRight = rightSpaceRe.test(endData.text);
@@ -4702,22 +5308,31 @@ module.exports = {
           let range = null;
           let fixInfo = null;
           if (startSequence.startLine === endSequence.endLine) {
-            range = [startSequence.startColumn, endSequence.endColumn - startSequence.startColumn];
+            range = [
+              startSequence.startColumn,
+              endSequence.endColumn - startSequence.startColumn
+            ];
             fixInfo = {
               "editColumn": startSequence.endColumn,
               "deleteCount": endSequence.startColumn - startSequence.endColumn,
               "insertText": trimCodeText(startData.text, true, true)
             };
-          } else if (spaceLeft && startSequence.endLine === startData.startLine) {
-            range = [startSequence.startColumn, startData.endColumn - startSequence.startColumn];
+          } else if (spaceLeft && (startSequence.endLine === startData.startLine)) {
+            range = [
+              startSequence.startColumn,
+              startData.endColumn - startSequence.startColumn
+            ];
             fixInfo = {
               "editColumn": startSequence.endColumn,
               "deleteCount": startData.endColumn - startData.startColumn,
               "insertText": trimCodeText(startData.text, true, false)
             };
-          } else if (spaceRight && endData.text.trim().length > 0) {
+          } else if (spaceRight && (endData.text.trim().length > 0)) {
             lineNumber = endSequence.endLine;
-            range = [endData.startColumn, endSequence.endColumn - endData.startColumn];
+            range = [
+              endData.startColumn,
+              endSequence.endColumn - endData.startColumn
+            ];
             fixInfo = {
               "editColumn": endData.startColumn,
               "deleteCount": endData.endColumn - endData.startColumn,
@@ -4725,14 +5340,25 @@ module.exports = {
             };
           }
           if (range) {
-            const context = params.lines[lineNumber - 1].substring(range[0] - 1, range[0] - 1 + range[1]);
-            addErrorContext(onError, lineNumber, context, spaceLeft, spaceRight, range, fixInfo);
+            const context = params
+              .lines[lineNumber - 1]
+              .substring(range[0] - 1, range[0] - 1 + range[1]);
+            addErrorContext(
+              onError,
+              lineNumber,
+              context,
+              spaceLeft,
+              spaceRight,
+              range,
+              fixInfo
+            );
           }
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -4747,32 +5373,24 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  filterTokens
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const spaceInLinkRe = /\[(?:\s[^\]]*|[^\]]*?\s)\](?=(\([^)]*\)|\[[^\]]*\]))/;
+const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
+const spaceInLinkRe =
+  /\[(?:\s[^\]]*|[^\]]*?\s)\](?=(\([^)]*\)|\[[^\]]*\]))/;
+
 module.exports = {
-  "names": ["MD039", "no-space-in-links"],
+  "names": [ "MD039", "no-space-in-links" ],
   "description": "Spaces inside link text",
-  "tags": ["whitespace", "links"],
+  "tags": [ "whitespace", "links" ],
   "function": function MD039(params, onError) {
-    filterTokens(params, "inline", token => {
-      const {
-        children
-      } = token;
-      let {
-        lineNumber
-      } = token;
+    filterTokens(params, "inline", (token) => {
+      const { children } = token;
+      let { lineNumber } = token;
       let inLink = false;
       let linkText = "";
       let lineIndex = 0;
       for (const child of children) {
-        const {
-          content,
-          markup,
-          type
-        } = child;
+        const { content, markup, type } = child;
         if (type === "link_open") {
           inLink = true;
           linkText = "";
@@ -4788,7 +5406,7 @@ module.exports = {
             if (match) {
               const column = match.index + lineIndex + 1;
               const length = match[0].length;
-              range = [column, length];
+              range = [ column, length ];
               fixInfo = {
                 "editColumn": column + 1,
                 "deleteCount": length - 2,
@@ -4796,18 +5414,29 @@ module.exports = {
               };
               lineIndex = column + length - 1;
             }
-            addErrorContext(onError, lineNumber, `[${linkText}]`, left, right, range, fixInfo);
+            addErrorContext(
+              onError,
+              lineNumber,
+              `[${linkText}]`,
+              left,
+              right,
+              range,
+              fixInfo
+            );
           }
-        } else if (type === "softbreak" || type === "hardbreak") {
+        } else if ((type === "softbreak") || (type === "hardbreak")) {
           lineNumber++;
           lineIndex = 0;
         } else if (inLink) {
-          linkText += type.endsWith("_inline") ? `${markup}${content}${markup}` : content || markup;
+          linkText += type.endsWith("_inline") ?
+            `${markup}${content}${markup}` :
+            (content || markup);
         }
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -4822,32 +5451,40 @@ module.exports = {
 
 
 
-const {
-  addError,
-  addErrorContext,
-  filterTokens
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD040", "fenced-code-language"],
+  "names": [ "MD040", "fenced-code-language" ],
   "description": "Fenced code blocks should have a language specified",
-  "tags": ["code", "language"],
+  "tags": [ "code", "language" ],
   "function": function MD040(params, onError) {
     let allowed = params.config.allowed_languages;
     allowed = Array.isArray(allowed) ? allowed : [];
     const languageOnly = !!params.config.language_only;
+
     filterTokens(params, "fence", function forToken(token) {
       const lang = token.info.trim().split(/\s+/u).shift();
       if (lang === "") {
         addErrorContext(onError, token.lineNumber, token.line);
-      } else if (allowed.length > 0 && !allowed.includes(lang)) {
-        addError(onError, token.lineNumber, `"${lang}" is not allowed`);
+      } else if ((allowed.length > 0) && !allowed.includes(lang)) {
+        addError(
+          onError,
+          token.lineNumber,
+          `"${lang}" is not allowed`
+        );
       }
-      if (languageOnly && token.info !== lang) {
-        addError(onError, token.lineNumber, `Info string contains more than language: "${token.info}"`);
+
+      if (languageOnly && (token.info !== lang)) {
+        addError(
+          onError,
+          token.lineNumber,
+          `Info string contains more than language: "${token.info}"`
+        );
       }
     });
   }
 };
+
 
 /***/ }),
 
@@ -4862,21 +5499,23 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  frontMatterHasTitle
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD041", "first-line-heading", "first-line-h1"],
+  "names": [ "MD041", "first-line-heading", "first-line-h1" ],
   "description": "First line in a file should be a top-level heading",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD041(params, onError) {
     const level = Number(params.config.level || 1);
     const tag = "h" + level;
-    const foundFrontMatterTitle = frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title);
+    const foundFrontMatterTitle =
+      frontMatterHasTitle(
+        params.frontMatterLines,
+        params.config.front_matter_title
+      );
     if (!foundFrontMatterTitle) {
       const htmlHeadingRe = new RegExp(`^<h${level}[ />]`, "i");
-      params.parsers.markdownit.tokens.every(token => {
+      params.parsers.markdownit.tokens.every((token) => {
         let isError = false;
         if (token.type === "html_block") {
           if (token.content.startsWith("<!--")) {
@@ -4886,7 +5525,7 @@ module.exports = {
             // Something other than an HTML heading
             isError = true;
           }
-        } else if (token.type !== "heading_open" || token.tag !== tag) {
+        } else if ((token.type !== "heading_open") || (token.tag !== tag)) {
           // Something other than a Markdown heading
           isError = true;
         }
@@ -4898,6 +5537,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -4912,15 +5552,13 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  escapeForRegExp,
-  filterTokens
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, escapeForRegExp, filterTokens } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD042", "no-empty-links"],
+  "names": [ "MD042", "no-empty-links" ],
   "description": "No empty links",
-  "tags": ["links"],
+  "tags": [ "links" ],
   "function": function MD042(params, onError) {
     filterTokens(params, "inline", function forToken(token) {
       let inLink = false;
@@ -4931,7 +5569,7 @@ module.exports = {
           inLink = true;
           linkText = "";
           for (const attr of child.attrs) {
-            if (attr[0] === "href" && (!attr[1] || attr[1] === "#")) {
+            if (attr[0] === "href" && (!attr[1] || (attr[1] === "#"))) {
               emptyLink = true;
             }
           }
@@ -4940,12 +5578,16 @@ module.exports = {
           if (emptyLink) {
             let context = `[${linkText}]`;
             let range = null;
-            const match = child.line.match(new RegExp(`${escapeForRegExp(context)}\\((?:|#|<>)\\)`));
+            const match = child.line.match(
+              new RegExp(`${escapeForRegExp(context)}\\((?:|#|<>)\\)`)
+            );
             if (match) {
               context = match[0];
-              range = [match.index + 1, match[0].length];
+              range = [ match.index + 1, match[0].length ];
             }
-            addErrorContext(onError, child.lineNumber, context, null, null, range);
+            addErrorContext(
+              onError, child.lineNumber, context, null, null, range
+            );
             emptyLink = false;
           }
         } else if (inLink) {
@@ -4955,6 +5597,7 @@ module.exports = {
     });
   }
 };
+
 
 /***/ }),
 
@@ -4969,15 +5612,13 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  addErrorDetailIf,
-  forEachHeading
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, addErrorDetailIf, forEachHeading } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD043", "required-headings"],
+  "names": [ "MD043", "required-headings" ],
   "description": "Required heading structure",
-  "tags": ["headings"],
+  "tags": [ "headings" ],
   "function": function MD043(params, onError) {
     const requiredHeadings = params.config.headings;
     if (!Array.isArray(requiredHeadings)) {
@@ -4986,7 +5627,7 @@ module.exports = {
     }
     const matchCase = params.config.match_case || false;
     const levels = {};
-    for (const level of [1, 2, 3, 4, 5, 6]) {
+    for (const level of [ 1, 2, 3, 4, 5, 6 ]) {
       levels["h" + level] = "######".substr(-level);
     }
     let i = 0;
@@ -4994,7 +5635,7 @@ module.exports = {
     let hasError = false;
     let anyHeadings = false;
     const getExpected = () => requiredHeadings[i++] || "[None]";
-    const handleCase = str => matchCase ? str : str.toLowerCase();
+    const handleCase = (str) => (matchCase ? str : str.toLowerCase());
     forEachHeading(params, (heading, content) => {
       if (!hasError) {
         anyHeadings = true;
@@ -5013,17 +5654,25 @@ module.exports = {
         } else if (matchAny) {
           i--;
         } else {
-          addErrorDetailIf(onError, heading.lineNumber, expected, actual);
+          addErrorDetailIf(onError, heading.lineNumber,
+            expected, actual);
           hasError = true;
         }
       }
     });
     const extraHeadings = requiredHeadings.length - i;
-    if (!hasError && (extraHeadings > 1 || extraHeadings === 1 && requiredHeadings[i] !== "*") && (anyHeadings || !requiredHeadings.every(heading => heading === "*"))) {
-      addErrorContext(onError, params.lines.length, requiredHeadings[i]);
+    if (
+      !hasError &&
+      ((extraHeadings > 1) ||
+        ((extraHeadings === 1) && (requiredHeadings[i] !== "*"))) &&
+      (anyHeadings || !requiredHeadings.every((heading) => heading === "*"))
+    ) {
+      addErrorContext(onError, params.lines.length,
+        requiredHeadings[i]);
     }
   }
 };
+
 
 /***/ }),
 
@@ -5038,34 +5687,34 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  escapeForRegExp,
-  withinAnyRange
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByPredicate,
-  filterByTypes,
-  parse
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const ignoredChildTypes = new Set(["codeFencedFence", "definition", "reference", "resource"]);
+const { addErrorDetailIf, escapeForRegExp, withinAnyRange } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, filterByTypes, parse } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+const ignoredChildTypes = new Set(
+  [ "codeFencedFence", "definition", "reference", "resource" ]
+);
+
 module.exports = {
-  "names": ["MD044", "proper-names"],
+  "names": [ "MD044", "proper-names" ],
   "description": "Proper names should have the correct capitalization",
-  "tags": ["spelling"],
+  "tags": [ "spelling" ],
   "function": function MD044(params, onError) {
     let names = params.config.names;
     names = Array.isArray(names) ? names : [];
-    names.sort((a, b) => b.length - a.length || a.localeCompare(b));
+    names.sort((a, b) => (b.length - a.length) || a.localeCompare(b));
     if (names.length === 0) {
       // Nothing to check; avoid doing any work
       return;
     }
     const codeBlocks = params.config.code_blocks;
-    const includeCodeBlocks = codeBlocks === undefined ? true : !!codeBlocks;
+    const includeCodeBlocks =
+      (codeBlocks === undefined) ? true : !!codeBlocks;
     const htmlElements = params.config.html_elements;
-    const includeHtmlElements = htmlElements === undefined ? true : !!htmlElements;
-    const scannedTypes = new Set(["data"]);
+    const includeHtmlElements =
+      (htmlElements === undefined) ? true : !!htmlElements;
+    const scannedTypes = new Set([ "data" ]);
     if (includeCodeBlocks) {
       scannedTypes.add("codeFlowValue");
       scannedTypes.add("codeTextData");
@@ -5074,44 +5723,74 @@ module.exports = {
       scannedTypes.add("htmlFlowData");
       scannedTypes.add("htmlTextData");
     }
-    const contentTokens = filterByPredicate(params.parsers.micromark.tokens, token => scannedTypes.has(token.type), token => token.children.filter(t => !ignoredChildTypes.has(t.type)));
+    const contentTokens =
+      filterByPredicate(
+        params.parsers.micromark.tokens,
+        (token) => scannedTypes.has(token.type),
+        (token) => (
+          token.children.filter((t) => !ignoredChildTypes.has(t.type))
+        )
+      );
     const exclusions = [];
     const autoLinked = new Set();
     for (const name of names) {
       const escapedName = escapeForRegExp(name);
       const startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
       const endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
-      const namePattern = `(${startNamePattern})(${escapedName})${endNamePattern}`;
+      const namePattern =
+        `(${startNamePattern})(${escapedName})${endNamePattern}`;
       const nameRe = new RegExp(namePattern, "gi");
       for (const token of contentTokens) {
         let match = null;
         while ((match = nameRe.exec(token.text)) !== null) {
-          const [, leftMatch, nameMatch] = match;
+          const [ , leftMatch, nameMatch ] = match;
           const index = token.startColumn - 1 + match.index + leftMatch.length;
           const length = nameMatch.length;
           const lineIndex = token.startLine - 1;
-          if (!withinAnyRange(exclusions, lineIndex, index, length) && !names.includes(nameMatch)) {
+          if (
+            !withinAnyRange(exclusions, lineIndex, index, length) &&
+            !names.includes(nameMatch)
+          ) {
             let urlRanges = [];
             if (!autoLinked.has(token)) {
-              urlRanges = filterByTypes(parse(token.text), ["literalAutolink"]).map(t => [lineIndex, token.startColumn - 1 + t.startColumn - 1, t.endColumn - t.startColumn]);
+              urlRanges = filterByTypes(
+                parse(token.text),
+                [ "literalAutolink" ]
+              ).map(
+                (t) => [
+                  lineIndex,
+                  token.startColumn - 1 + t.startColumn - 1,
+                  t.endColumn - t.startColumn
+                ]
+              );
               exclusions.push(...urlRanges);
               autoLinked.add(token);
             }
             if (!withinAnyRange(urlRanges, lineIndex, index, length)) {
               const column = index + 1;
-              addErrorDetailIf(onError, token.startLine, name, nameMatch, null, null, [column, length], {
-                "editColumn": column,
-                "deleteCount": length,
-                "insertText": name
-              });
+              addErrorDetailIf(
+                onError,
+                token.startLine,
+                name,
+                nameMatch,
+                null,
+                null,
+                [ column, length ],
+                {
+                  "editColumn": column,
+                  "deleteCount": length,
+                  "insertText": name
+                }
+              );
             }
           }
-          exclusions.push([lineIndex, index, length]);
+          exclusions.push([ lineIndex, index, length ]);
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -5126,51 +5805,63 @@ module.exports = {
 
 
 
-const {
-  addError,
-  getHtmlAttributeRe,
-  nextLinesRe
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  getHtmlTagInfo
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, getHtmlAttributeRe, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 const altRe = getHtmlAttributeRe("alt");
+
 module.exports = {
-  "names": ["MD045", "no-alt-text"],
+  "names": [ "MD045", "no-alt-text" ],
   "description": "Images should have alternate text (alt text)",
-  "tags": ["accessibility", "images"],
+  "tags": [ "accessibility", "images" ],
   "function": function MD045(params, onError) {
-    const {
-      tokens
-    } = params.parsers.micromark;
+    const { tokens } = params.parsers.micromark;
 
     // Process Markdown images
-    const images = filterByTypes(tokens, ["image"]);
+    const images = filterByTypes(tokens, [ "image" ]);
     for (const image of images) {
-      const labelTexts = filterByTypes(image.children, ["labelText"]);
-      if (labelTexts.some(labelText => labelText.text.length === 0)) {
-        const range = image.startLine === image.endLine ? [image.startColumn, image.endColumn - image.startColumn] : undefined;
-        addError(onError, image.startLine, undefined, undefined, range);
+      const labelTexts = filterByTypes(image.children, [ "labelText" ]);
+      if (labelTexts.some((labelText) => labelText.text.length === 0)) {
+        const range = (image.startLine === image.endLine) ?
+          [ image.startColumn, image.endColumn - image.startColumn ] :
+          undefined;
+        addError(
+          onError,
+          image.startLine,
+          undefined,
+          undefined,
+          range
+        );
       }
     }
 
     // Process HTML images
-    const htmlTexts = filterByTypes(tokens, ["htmlText"]);
+    const htmlTexts = filterByTypes(tokens, [ "htmlText" ]);
     for (const htmlText of htmlTexts) {
-      const {
-        startColumn,
-        startLine,
-        text
-      } = htmlText;
+      const { startColumn, startLine, text } = htmlText;
       const htmlTagInfo = getHtmlTagInfo(htmlText);
-      if (htmlTagInfo && !htmlTagInfo.close && htmlTagInfo.name.toLowerCase() === "img" && !altRe.test(text)) {
-        const range = [startColumn, text.replace(nextLinesRe, "").length];
-        addError(onError, startLine, undefined, undefined, range);
+      if (
+        htmlTagInfo &&
+        !htmlTagInfo.close &&
+        (htmlTagInfo.name.toLowerCase() === "img") &&
+        !altRe.test(text)
+      ) {
+        const range = [
+          startColumn,
+          text.replace(nextLinesRe, "").length
+        ];
+        addError(
+          onError,
+          startLine,
+          undefined,
+          undefined,
+          range
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -5185,32 +5876,36 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 const tokenTypeToStyle = {
   "fence": "fenced",
   "code_block": "indented"
 };
+
 module.exports = {
-  "names": ["MD046", "code-block-style"],
+  "names": [ "MD046", "code-block-style" ],
   "description": "Code block style",
-  "tags": ["code"],
+  "tags": [ "code" ],
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
-    const codeBlocksAndFences = params.parsers.markdownit.tokens.filter(token => token.type === "code_block" || token.type === "fence");
+    const codeBlocksAndFences = params.parsers.markdownit.tokens.filter(
+      (token) => (token.type === "code_block") || (token.type === "fence")
+    );
     for (const token of codeBlocksAndFences) {
-      const {
-        lineNumber,
-        type
-      } = token;
+      const { lineNumber, type } = token;
       if (expectedStyle === "consistent") {
         expectedStyle = tokenTypeToStyle[type];
       }
-      addErrorDetailIf(onError, lineNumber, expectedStyle, tokenTypeToStyle[type]);
+      addErrorDetailIf(
+        onError,
+        lineNumber,
+        expectedStyle,
+        tokenTypeToStyle[type]);
     }
   }
 };
+
 
 /***/ }),
 
@@ -5225,25 +5920,31 @@ module.exports = {
 
 
 
-const {
-  addError,
-  isBlankLine
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD047", "single-trailing-newline"],
+  "names": [ "MD047", "single-trailing-newline" ],
   "description": "Files should end with a single newline character",
-  "tags": ["blank_lines"],
+  "tags": [ "blank_lines" ],
   "function": function MD047(params, onError) {
     const lastLineNumber = params.lines.length;
     const lastLine = params.lines[lastLineNumber - 1];
     if (!isBlankLine(lastLine)) {
-      addError(onError, lastLineNumber, null, null, [lastLine.length, 1], {
-        "insertText": "\n",
-        "editColumn": lastLine.length + 1
-      });
+      addError(
+        onError,
+        lastLineNumber,
+        null,
+        null,
+        [ lastLine.length, 1 ],
+        {
+          "insertText": "\n",
+          "editColumn": lastLine.length + 1
+        }
+      );
     }
   }
 };
+
 
 /***/ }),
 
@@ -5258,30 +5959,33 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf,
-  fencedCodeBlockStyleFor
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf, fencedCodeBlockStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
 module.exports = {
-  "names": ["MD048", "code-fence-style"],
+  "names": [ "MD048", "code-fence-style" ],
   "description": "Code fence style",
-  "tags": ["code"],
+  "tags": [ "code" ],
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
-    const fenceTokens = params.parsers.markdownit.tokens.filter(token => token.type === "fence");
+    const fenceTokens = params.parsers.markdownit.tokens.filter(
+      (token) => token.type === "fence"
+    );
     for (const fenceToken of fenceTokens) {
-      const {
-        lineNumber,
-        markup
-      } = fenceToken;
+      const { lineNumber, markup } = fenceToken;
       if (expectedStyle === "consistent") {
         expectedStyle = fencedCodeBlockStyleFor(markup);
       }
-      addErrorDetailIf(onError, lineNumber, expectedStyle, fencedCodeBlockStyleFor(markup));
+      addErrorDetailIf(
+        onError,
+        lineNumber,
+        expectedStyle,
+        fencedCodeBlockStyleFor(markup)
+      );
     }
   }
 };
+
 
 /***/ }),
 
@@ -5296,64 +6000,92 @@ module.exports = {
 
 
 
-const {
-  addError,
-  emphasisOrStrongStyleFor
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByPredicate,
-  tokenIfType
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, emphasisOrStrongStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
 const intrawordRe = /\w/;
-const impl = function (params, onError, type, asterisk, underline) {
-  let style = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : "consistent";
-  const {
-    lines,
-    parsers
-  } = params;
-  const emphasisTokens = filterByPredicate(parsers.micromark.tokens, token => token.type === type, token => token.type === "htmlFlow" ? [] : token.children);
-  for (const token of emphasisTokens) {
-    const {
-      children
-    } = token;
-    const childType = `${type}Sequence`;
-    const startSequence = tokenIfType(children[0], childType);
-    const endSequence = tokenIfType(children[children.length - 1], childType);
-    if (startSequence && endSequence) {
-      const markupStyle = emphasisOrStrongStyleFor(startSequence.text);
-      if (style === "consistent") {
-        style = markupStyle;
-      }
-      if (style !== markupStyle) {
-        const underscoreIntraword = style === "underscore" && (intrawordRe.test(lines[startSequence.startLine - 1][startSequence.startColumn - 2]) || intrawordRe.test(lines[endSequence.endLine - 1][endSequence.endColumn - 1]));
-        if (!underscoreIntraword) {
-          for (const sequence of [startSequence, endSequence]) {
-            addError(onError, sequence.startLine, `Expected: ${style}; Actual: ${markupStyle}`, undefined, [sequence.startColumn, sequence.text.length], {
-              "editColumn": sequence.startColumn,
-              "deleteCount": sequence.text.length,
-              "insertText": style === "asterisk" ? asterisk : underline
-            });
+
+const impl =
+  (params, onError, type, asterisk, underline, style = "consistent") => {
+    const { lines, parsers } = params;
+    const emphasisTokens = filterByPredicate(
+      parsers.micromark.tokens,
+      (token) => token.type === type,
+      (token) => ((token.type === "htmlFlow") ? [] : token.children)
+    );
+    for (const token of emphasisTokens) {
+      const { children } = token;
+      const childType = `${type}Sequence`;
+      const startSequence = tokenIfType(children[0], childType);
+      const endSequence = tokenIfType(children[children.length - 1], childType);
+      if (startSequence && endSequence) {
+        const markupStyle = emphasisOrStrongStyleFor(startSequence.text);
+        if (style === "consistent") {
+          style = markupStyle;
+        }
+        if (style !== markupStyle) {
+          const underscoreIntraword = (style === "underscore") && (
+            intrawordRe.test(
+              lines[startSequence.startLine - 1][startSequence.startColumn - 2]
+            ) ||
+            intrawordRe.test(
+              lines[endSequence.endLine - 1][endSequence.endColumn - 1]
+            )
+          );
+          if (!underscoreIntraword) {
+            for (const sequence of [ startSequence, endSequence ]) {
+              addError(
+                onError,
+                sequence.startLine,
+                `Expected: ${style}; Actual: ${markupStyle}`,
+                undefined,
+                [ sequence.startColumn, sequence.text.length ],
+                {
+                  "editColumn": sequence.startColumn,
+                  "deleteCount": sequence.text.length,
+                  "insertText": (style === "asterisk") ? asterisk : underline
+                }
+              );
+            }
           }
         }
       }
     }
+  };
+
+module.exports = [
+  {
+    "names": [ "MD049", "emphasis-style" ],
+    "description": "Emphasis style",
+    "tags": [ "emphasis" ],
+    "function": function MD049(params, onError) {
+      return impl(
+        params,
+        onError,
+        "emphasis",
+        "*",
+        "_",
+        params.config.style || undefined
+      );
+    }
+  },
+  {
+    "names": [ "MD050", "strong-style" ],
+    "description": "Strong style",
+    "tags": [ "emphasis" ],
+    "function": function MD050(params, onError) {
+      return impl(
+        params,
+        onError,
+        "strong",
+        "**",
+        "__",
+        params.config.style || undefined
+      );
+    }
   }
-};
-module.exports = [{
-  "names": ["MD049", "emphasis-style"],
-  "description": "Emphasis style",
-  "tags": ["emphasis"],
-  "function": function MD049(params, onError) {
-    return impl(params, onError, "emphasis", "*", "_", params.config.style || undefined);
-  }
-}, {
-  "names": ["MD050", "strong-style"],
-  "description": "Strong style",
-  "tags": ["emphasis"],
-  "function": function MD050(params, onError) {
-    return impl(params, onError, "strong", "**", "__", params.config.style || undefined);
-  }
-}];
+];
+
 
 /***/ }),
 
@@ -5368,16 +6100,10 @@ module.exports = [{
 
 
 
-const {
-  addError,
-  addErrorDetailIf,
-  getHtmlAttributeRe
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByPredicate,
-  filterByTypes,
-  getHtmlTagInfo
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, addErrorDetailIf, getHtmlAttributeRe } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, filterByTypes, getHtmlTagInfo } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // Regular expression for identifying HTML anchor names
 const idRe = getHtmlAttributeRe("id");
@@ -5386,8 +6112,10 @@ const anchorRe = /\{(#[a-z\d]+(?:[-_][a-z\d]+)*)\}/gu;
 const lineFragmentRe = /^#(?:L\d+(?:C\d+)?-L\d+(?:C\d+)?|L\d+)$/;
 
 // Sets for filtering heading tokens during conversion
-const childrenExclude = new Set(["image", "reference", "resource"]);
-const tokensInclude = new Set(["characterEscapeValue", "codeTextData", "data"]);
+const childrenExclude = new Set([ "image", "reference", "resource" ]);
+const tokensInclude = new Set(
+  [ "characterEscapeValue", "codeTextData", "data" ]
+);
 
 /**
  * @typedef {import("../helpers/micromark.cjs").Token} Token
@@ -5401,12 +6129,26 @@ const tokensInclude = new Set(["characterEscapeValue", "codeTextData", "data"]);
  * @returns {string} Fragment string for heading.
  */
 function convertHeadingToHTMLFragment(headingText) {
-  const inlineText = filterByPredicate(headingText.children, token => tokensInclude.has(token.type), token => childrenExclude.has(token.type) ? [] : token.children).map(token => token.text).join("");
-  return "#" + encodeURIComponent(inlineText.toLowerCase()
-  // RegExp source with Ruby's \p{Word} expanded into its General Categories
-  // https://github.com/gjtorikian/html-pipeline/blob/main/lib/html/pipeline/toc_filter.rb
-  // https://ruby-doc.org/core-3.0.2/Regexp.html
-  .replace(/[^\p{Letter}\p{Mark}\p{Number}\p{Connector_Punctuation}\- ]/gu, "").replace(/ /gu, "-"));
+  const inlineText =
+    filterByPredicate(
+      headingText.children,
+      (token) => tokensInclude.has(token.type),
+      (token) => (childrenExclude.has(token.type) ? [] : token.children)
+    )
+      .map((token) => token.text)
+      .join("");
+  return "#" + encodeURIComponent(
+    inlineText
+      .toLowerCase()
+      // RegExp source with Ruby's \p{Word} expanded into its General Categories
+      // https://github.com/gjtorikian/html-pipeline/blob/main/lib/html/pipeline/toc_filter.rb
+      // https://ruby-doc.org/core-3.0.2/Regexp.html
+      .replace(
+        /[^\p{Letter}\p{Mark}\p{Number}\p{Connector_Punctuation}\- ]/gu,
+        ""
+      )
+      .replace(/ /gu, "-")
+  );
 }
 
 /**
@@ -5416,20 +6158,24 @@ function convertHeadingToHTMLFragment(headingText) {
  * @returns {string} Unescaped token text.
  */
 function unescapeStringTokenText(token) {
-  return filterByTypes(token.children, ["characterEscapeValue", "data"]).map(child => child.text).join("");
+  return filterByTypes(token.children, [ "characterEscapeValue", "data" ])
+    .map((child) => child.text)
+    .join("");
 }
+
 module.exports = {
-  "names": ["MD051", "link-fragments"],
+  "names": [ "MD051", "link-fragments" ],
   "description": "Link fragments should be valid",
-  "tags": ["links"],
+  "tags": [ "links" ],
   "function": function MD051(params, onError) {
-    const {
-      tokens
-    } = params.parsers.micromark;
+    const { tokens } = params.parsers.micromark;
     const fragments = new Map();
 
     // Process headings
-    const headingTexts = filterByTypes(tokens, ["atxHeadingText", "setextHeadingText"]);
+    const headingTexts = filterByTypes(
+      tokens,
+      [ "atxHeadingText", "setextHeadingText" ]
+    );
     for (const headingText of headingTexts) {
       const fragment = convertHeadingToHTMLFragment(headingText);
       if (fragment !== "#") {
@@ -5440,7 +6186,7 @@ module.exports = {
         fragments.set(fragment, count + 1);
         let match = null;
         while ((match = anchorRe.exec(headingText.text)) !== null) {
-          const [, anchor] = match;
+          const [ , anchor ] = match;
           if (!fragments.has(anchor)) {
             fragments.set(anchor, 1);
           }
@@ -5449,10 +6195,11 @@ module.exports = {
     }
 
     // Process HTML anchors
-    for (const token of filterByTypes(tokens, ["htmlText"])) {
+    for (const token of filterByTypes(tokens, [ "htmlText" ])) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (htmlTagInfo && !htmlTagInfo.close) {
-        const anchorMatch = idRe.exec(token.text) || htmlTagInfo.name.toLowerCase() === "a" && nameRe.exec(token.text);
+        const anchorMatch = idRe.exec(token.text) ||
+          (htmlTagInfo.name.toLowerCase() === "a" && nameRe.exec(token.text));
         if (anchorMatch && anchorMatch.length > 0) {
           fragments.set(`#${anchorMatch[1]}`, 0);
         }
@@ -5460,19 +6207,24 @@ module.exports = {
     }
 
     // Process link and definition fragments
-    const parentChilds = [["link", "resourceDestinationString"], ["definition", "definitionDestinationString"]];
-    for (const [parentType, definitionType] of parentChilds) {
-      const links = filterByTypes(tokens, [parentType]);
+    const parentChilds = [
+      [ "link", "resourceDestinationString" ],
+      [ "definition", "definitionDestinationString" ]
+    ];
+    for (const [ parentType, definitionType ] of parentChilds) {
+      const links = filterByTypes(tokens, [ parentType ]);
       for (const link of links) {
-        const definitions = filterByTypes(link.children, [definitionType]);
+        const definitions = filterByTypes(link.children, [ definitionType ]);
         for (const definition of definitions) {
-          const {
-            endColumn,
-            startColumn
-          } = definition;
+          const { endColumn, startColumn } = definition;
           const text = unescapeStringTokenText(definition);
           const encodedText = `#${encodeURIComponent(text.slice(1))}`;
-          if (text.length > 1 && text.startsWith("#") && !fragments.has(encodedText) && !lineFragmentRe.test(encodedText)) {
+          if (
+            (text.length > 1) &&
+            text.startsWith("#") &&
+            !fragments.has(encodedText) &&
+            !lineFragmentRe.test(encodedText)
+          ) {
             // eslint-disable-next-line no-undef-init
             let context = undefined;
             // eslint-disable-next-line no-undef-init
@@ -5481,20 +6233,36 @@ module.exports = {
             let fixInfo = undefined;
             if (link.startLine === link.endLine) {
               context = link.text;
-              range = [link.startColumn, link.endColumn - link.startColumn];
+              range = [ link.startColumn, link.endColumn - link.startColumn ];
               fixInfo = {
                 "editColumn": startColumn,
                 "deleteCount": endColumn - startColumn
               };
             }
             const textLower = text.toLowerCase();
-            const mixedCaseKey = [...fragments.keys()].find(key => textLower === key.toLowerCase());
+            const mixedCaseKey = [ ...fragments.keys() ]
+              .find((key) => textLower === key.toLowerCase());
             if (mixedCaseKey) {
               // @ts-ignore
               (fixInfo || {}).insertText = mixedCaseKey;
-              addErrorDetailIf(onError, link.startLine, mixedCaseKey, text, undefined, context, range, fixInfo);
+              addErrorDetailIf(
+                onError,
+                link.startLine,
+                mixedCaseKey,
+                text,
+                undefined,
+                context,
+                range,
+                fixInfo
+              );
             } else {
-              addError(onError, link.startLine, undefined, context, range);
+              addError(
+                onError,
+                link.startLine,
+                undefined,
+                context,
+                range
+              );
             }
           }
         }
@@ -5502,6 +6270,7 @@ module.exports = {
     }
   }
 };
+
 
 /***/ }),
 
@@ -5516,42 +6285,42 @@ module.exports = {
 
 
 
-const {
-  addError
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  referenceLinkImageData
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 module.exports = {
-  "names": ["MD052", "reference-links-images"],
-  "description": "Reference links and images should use a label that is defined",
-  "tags": ["images", "links"],
+  "names": [ "MD052", "reference-links-images" ],
+  "description":
+    "Reference links and images should use a label that is defined",
+  "tags": [ "images", "links" ],
   "function": function MD052(params, onError) {
-    const {
-      config,
-      lines
-    } = params;
+    const { config, lines } = params;
     const shortcutSyntax = config.shortcut_syntax || false;
-    const {
-      definitions,
-      references,
-      shortcuts
-    } = referenceLinkImageData();
-    const entries = shortcutSyntax ? [...references.entries(), ...shortcuts.entries()] : references.entries();
+    const { definitions, references, shortcuts } = referenceLinkImageData();
+    const entries = shortcutSyntax ?
+      [ ...references.entries(), ...shortcuts.entries() ] :
+      references.entries();
     // Look for links/images that use an undefined link reference
     for (const reference of entries) {
-      const [label, datas] = reference;
+      const [ label, datas ] = reference;
       if (!definitions.has(label)) {
         for (const data of datas) {
-          const [lineIndex, index, length] = data;
+          const [ lineIndex, index, length ] = data;
           // Context will be incomplete if reporting for a multi-line link
           const context = lines[lineIndex].slice(index, index + length);
-          addError(onError, lineIndex + 1, `Missing link or image reference definition: "${label}"`, context, [index + 1, context.length]);
+          addError(
+            onError,
+            lineIndex + 1,
+            `Missing link or image reference definition: "${label}"`,
+            context,
+            [ index + 1, context.length ]
+          );
         }
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -5566,49 +6335,62 @@ module.exports = {
 
 
 
-const {
-  addError,
-  ellipsify,
-  linkReferenceDefinitionRe
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  referenceLinkImageData
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, ellipsify, linkReferenceDefinitionRe } =
+  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 module.exports = {
-  "names": ["MD053", "link-image-reference-definitions"],
+  "names": [ "MD053", "link-image-reference-definitions" ],
   "description": "Link and image reference definitions should be needed",
-  "tags": ["images", "links"],
+  "tags": [ "images", "links" ],
   "function": function MD053(params, onError) {
-    const ignored = new Set(params.config.ignored_definitions || ["//"]);
+    const ignored = new Set(params.config.ignored_definitions || [ "//" ]);
     const lines = params.lines;
-    const {
-      references,
-      shortcuts,
-      definitions,
-      duplicateDefinitions
-    } = referenceLinkImageData();
-    const singleLineDefinition = line => line.replace(linkReferenceDefinitionRe, "").trim().length > 0;
+    const { references, shortcuts, definitions, duplicateDefinitions } =
+      referenceLinkImageData();
+    const singleLineDefinition = (line) => (
+      line.replace(linkReferenceDefinitionRe, "").trim().length > 0
+    );
     const deleteFixInfo = {
       "deleteCount": -1
     };
     // Look for unused link references (unreferenced by any link/image)
     for (const definition of definitions.entries()) {
-      const [label, [lineIndex]] = definition;
-      if (!ignored.has(label) && !references.has(label) && !shortcuts.has(label)) {
+      const [ label, [ lineIndex ] ] = definition;
+      if (
+        !ignored.has(label) &&
+        !references.has(label) &&
+        !shortcuts.has(label)
+      ) {
         const line = lines[lineIndex];
-        addError(onError, lineIndex + 1, `Unused link or image reference definition: "${label}"`, ellipsify(line), [1, line.length], singleLineDefinition(line) ? deleteFixInfo : 0);
+        addError(
+          onError,
+          lineIndex + 1,
+          `Unused link or image reference definition: "${label}"`,
+          ellipsify(line),
+          [ 1, line.length ],
+          singleLineDefinition(line) ? deleteFixInfo : 0
+        );
       }
     }
     // Look for duplicate link references (defined more than once)
     for (const duplicateDefinition of duplicateDefinitions) {
-      const [label, lineIndex] = duplicateDefinition;
+      const [ label, lineIndex ] = duplicateDefinition;
       if (!ignored.has(label)) {
         const line = lines[lineIndex];
-        addError(onError, lineIndex + 1, `Duplicate link or image reference definition: "${label}"`, ellipsify(line), [1, line.length], singleLineDefinition(line) ? deleteFixInfo : 0);
+        addError(
+          onError,
+          lineIndex + 1,
+          `Duplicate link or image reference definition: "${label}"`,
+          ellipsify(line),
+          [ 1, line.length ],
+          singleLineDefinition(line) ? deleteFixInfo : 0
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -5623,22 +6405,15 @@ module.exports = {
 
 
 
-const {
-  addErrorContext,
-  nextLinesRe
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes,
-  filterByPredicate,
-  getTokenTextByType
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const {
-  referenceLinkImageData
-} = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, filterByPredicate, getTokenTextByType } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+
 const backslashEscapeRe = /\\([!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g;
-const removeBackslashEscapes = text => text.replace(backslashEscapeRe, "$1");
+const removeBackslashEscapes = (text) => text.replace(backslashEscapeRe, "$1");
 const autolinkDisallowedRe = /[ <>]/;
-const autolinkAble = destination => {
+const autolinkAble = (destination) => {
   try {
     // eslint-disable-next-line no-new
     new URL(destination);
@@ -5648,42 +6423,35 @@ const autolinkAble = destination => {
   }
   return !autolinkDisallowedRe.test(destination);
 };
+
 module.exports = {
-  "names": ["MD054", "link-image-style"],
+  "names": [ "MD054", "link-image-style" ],
   "description": "Link and image style",
-  "tags": ["images", "links"],
+  "tags": [ "images", "links" ],
   "function": (params, onError) => {
-    const {
-      parsers,
-      config
-    } = params;
-    const autolink = config.autolink === undefined || !!config.autolink;
-    const inline = config.inline === undefined || !!config.inline;
-    const full = config.full === undefined || !!config.full;
-    const collapsed = config.collapsed === undefined || !!config.collapsed;
-    const shortcut = config.shortcut === undefined || !!config.shortcut;
-    const urlInline = config.url_inline === undefined || !!config.url_inline;
+    const { parsers, config } = params;
+    const autolink = (config.autolink === undefined) || !!config.autolink;
+    const inline = (config.inline === undefined) || !!config.inline;
+    const full = (config.full === undefined) || !!config.full;
+    const collapsed = (config.collapsed === undefined) || !!config.collapsed;
+    const shortcut = (config.shortcut === undefined) || !!config.shortcut;
+    const urlInline = (config.url_inline === undefined) || !!config.url_inline;
     if (autolink && inline && full && collapsed && shortcut && urlInline) {
       // Everything allowed, nothing to check
       return;
     }
-    const {
-      definitions
-    } = referenceLinkImageData();
-    const links = filterByTypes(parsers.micromark.tokens, ["autolink", "image", "link"]);
+    const { definitions } = referenceLinkImageData();
+    const links = filterByTypes(
+      parsers.micromark.tokens,
+      [ "autolink", "image", "link" ]
+    );
     for (const link of links) {
       let label = null;
       let destination = null;
       const {
-        children,
-        endColumn,
-        endLine,
-        startColumn,
-        startLine,
-        text,
-        type
+        children, endColumn, endLine, startColumn, startLine, text, type
       } = link;
-      const image = type === "image";
+      const image = (type === "image");
       let isError = false;
       if (type === "autolink") {
         // link kind is an autolink
@@ -5694,32 +6462,41 @@ module.exports = {
         // link type is "image" or "link"
         const descendents = filterByPredicate(children);
         label = getTokenTextByType(descendents, "labelText");
-        destination = getTokenTextByType(descendents, "resourceDestinationString");
+        destination =
+          getTokenTextByType(descendents, "resourceDestinationString");
         if (destination) {
           // link kind is an inline link
           const title = getTokenTextByType(descendents, "resourceTitleString");
-          isError = !inline || !urlInline && autolink && !image && !title && label === destination && autolinkAble(destination);
+          isError = !inline || (
+            !urlInline &&
+            autolink &&
+            !image &&
+            !title &&
+            (label === destination) &&
+            autolinkAble(destination)
+          );
         } else {
           // link kind is a full/collapsed/shortcut reference link
-          const isShortcut = !children.some(t => t.type === "reference");
+          const isShortcut = !children.some((t) => t.type === "reference");
           const referenceString = getTokenTextByType(descendents, "referenceString");
-          const isCollapsed = referenceString === null;
+          const isCollapsed = (referenceString === null);
           const definition = definitions.get(referenceString || label);
           destination = definition && definition[1];
-          isError = destination && (isShortcut ? !shortcut : isCollapsed ? !collapsed : !full);
+          isError = destination &&
+            (isShortcut ? !shortcut : (isCollapsed ? !collapsed : !full));
         }
       }
       if (isError) {
         let range = null;
         let fixInfo = null;
         if (startLine === endLine) {
-          range = [startColumn, endColumn - startColumn];
+          range = [ startColumn, endColumn - startColumn ];
           let insertText = null;
-          const canInline = inline && label;
-          const canAutolink = autolink && !image && autolinkAble(destination);
+          const canInline = (inline && label);
+          const canAutolink = (autolink && !image && autolinkAble(destination));
           if (canInline && (urlInline || !canAutolink)) {
             // Most useful form
-            const prefix = image ? "!" : "";
+            const prefix = (image ? "!" : "");
             // @ts-ignore
             const escapedLabel = label.replace(/[[\]]/g, "\\$&");
             const escapedDestination = destination.replace(/[()]/g, "\\$&");
@@ -5736,11 +6513,20 @@ module.exports = {
             };
           }
         }
-        addErrorContext(onError, startLine, text.replace(nextLinesRe, ""), null, null, range, fixInfo);
+        addErrorContext(
+          onError,
+          startLine,
+          text.replace(nextLinesRe, ""),
+          null,
+          null,
+          range,
+          fixInfo
+        );
       }
     }
   }
 };
+
 
 /***/ }),
 
@@ -5755,54 +6541,75 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const whitespaceTypes = new Set(["linePrefix", "whitespace"]);
-const ignoreWhitespace = tokens => tokens.filter(token => !whitespaceTypes.has(token.type));
-const firstOrNothing = items => items[0];
-const lastOrNothing = items => items[items.length - 1];
-const makeRange = (start, end) => [start, end - start + 1];
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+const whitespaceTypes = new Set([ "linePrefix", "whitespace" ]);
+const ignoreWhitespace = (tokens) => tokens.filter(
+  (token) => !whitespaceTypes.has(token.type)
+);
+const firstOrNothing = (items) => items[0];
+const lastOrNothing = (items) => items[items.length - 1];
+const makeRange = (start, end) => [ start, end - start + 1 ];
+
 module.exports = {
-  "names": ["MD055", "table-pipe-style"],
+  "names": [ "MD055", "table-pipe-style" ],
   "description": "Table pipe style",
-  "tags": ["table"],
+  "tags": [ "table" ],
   "function": function MD055(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
-    let expectedLeadingPipe = expectedStyle !== "no_leading_or_trailing" && expectedStyle !== "trailing_only";
-    let expectedTrailingPipe = expectedStyle !== "no_leading_or_trailing" && expectedStyle !== "leading_only";
-    const tables = filterByTypes(params.parsers.micromark.tokens, ["table"]);
+    let expectedLeadingPipe =
+      ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "trailing_only"));
+    let expectedTrailingPipe =
+      ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "leading_only"));
+    const tables = filterByTypes(params.parsers.micromark.tokens, [ "table" ]);
     for (const table of tables) {
-      const rows = filterByTypes(table.children, ["tableDelimiterRow", "tableRow"]);
+      const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
       for (const row of rows) {
         // The following uses of first/lastOrNothing lack fallback handling
         // because it seems not to be possible (i.e., 0% coverage)
         const firstCell = firstOrNothing(row.children);
         const leadingToken = firstOrNothing(ignoreWhitespace(firstCell.children));
-        const actualLeadingPipe = leadingToken.type === "tableCellDivider";
+        const actualLeadingPipe = (leadingToken.type === "tableCellDivider");
         const lastCell = lastOrNothing(row.children);
         const trailingToken = lastOrNothing(ignoreWhitespace(lastCell.children));
-        const actualTrailingPipe = trailingToken.type === "tableCellDivider";
-        const actualStyle = actualLeadingPipe ? actualTrailingPipe ? "leading_and_trailing" : "leading_only" : actualTrailingPipe ? "trailing_only" : "no_leading_or_trailing";
+        const actualTrailingPipe = (trailingToken.type === "tableCellDivider");
+        const actualStyle = actualLeadingPipe ?
+          (actualTrailingPipe ? "leading_and_trailing" : "leading_only") :
+          (actualTrailingPipe ? "trailing_only" : "no_leading_or_trailing");
         if (expectedStyle === "consistent") {
           expectedStyle = actualStyle;
           expectedLeadingPipe = actualLeadingPipe;
           expectedTrailingPipe = actualTrailingPipe;
         }
         if (actualLeadingPipe !== expectedLeadingPipe) {
-          addErrorDetailIf(onError, firstCell.startLine, expectedStyle, actualStyle, `${expectedLeadingPipe ? "Missing" : "Unexpected"} leading pipe`, undefined, makeRange(row.startColumn, firstCell.startColumn));
+          addErrorDetailIf(
+            onError,
+            firstCell.startLine,
+            expectedStyle,
+            actualStyle,
+            `${expectedLeadingPipe ? "Missing" : "Unexpected"} leading pipe`,
+            undefined,
+            makeRange(row.startColumn, firstCell.startColumn)
+          );
         }
         if (actualTrailingPipe !== expectedTrailingPipe) {
-          addErrorDetailIf(onError, lastCell.endLine, expectedStyle, actualStyle, `${expectedTrailingPipe ? "Missing" : "Unexpected"} trailing pipe`, undefined, makeRange(lastCell.endColumn - 1, row.endColumn - 1));
+          addErrorDetailIf(
+            onError,
+            lastCell.endLine,
+            expectedStyle,
+            actualStyle,
+            `${expectedTrailingPipe ? "Missing" : "Unexpected"} trailing pipe`,
+            undefined,
+            makeRange(lastCell.endColumn - 1, row.endColumn - 1)
+          );
         }
       }
     }
   }
-};
+}
+
 
 /***/ }),
 
@@ -5817,40 +6624,47 @@ module.exports = {
 
 
 
-const {
-  addErrorDetailIf
-} = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const {
-  filterByTypes
-} = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const makeRange = (start, end) => [start, end - start + 1];
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+const makeRange = (start, end) => [ start, end - start + 1 ];
+
 module.exports = {
-  "names": ["MD056", "table-column-count"],
+  "names": [ "MD056", "table-column-count" ],
   "description": "Table column count",
-  "tags": ["table"],
+  "tags": [ "table" ],
   "function": function MD056(params, onError) {
-    const tables = filterByTypes(params.parsers.micromark.tokens, ["table"]);
+    const tables = filterByTypes(params.parsers.micromark.tokens, [ "table" ]);
     for (const table of tables) {
-      const rows = filterByTypes(table.children, ["tableDelimiterRow", "tableRow"]);
+      const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
       let expectedCount = 0;
       for (const row of rows) {
-        const cells = filterByTypes(row.children, ["tableData", "tableDelimiter", "tableHeader"]);
+        const cells = filterByTypes(row.children, [ "tableData", "tableDelimiter", "tableHeader" ]);
         const actualCount = cells.length;
         expectedCount ||= actualCount;
         let detail = null;
         let range = null;
         if (actualCount < expectedCount) {
           detail = "Too few cells, row will be missing data";
-          range = [row.endColumn - 1, 1];
+          range = [ row.endColumn - 1, 1 ];
         } else if (expectedCount < actualCount) {
           detail = "Too many cells, extra data will be missing";
           range = makeRange(cells[expectedCount].startColumn, row.endColumn - 1);
         }
-        addErrorDetailIf(onError, row.endLine, expectedCount, actualCount, detail, null, range);
+        addErrorDetailIf(
+          onError,
+          row.endLine,
+          expectedCount,
+          actualCount,
+          detail,
+          null,
+          range
+        );
       }
     }
   }
-};
+}
+
 
 /***/ }),
 
@@ -5865,23 +6679,70 @@ module.exports = {
 
 
 
-const {
-  homepage,
-  version
-} = __webpack_require__(/*! ./constants */ "../lib/constants.js");
-const rules = [__webpack_require__(/*! ./md001 */ "../lib/md001.js"),
-// md002: Deprecated and removed
-__webpack_require__(/*! ./md003 */ "../lib/md003.js"), __webpack_require__(/*! ./md004 */ "../lib/md004.js"), __webpack_require__(/*! ./md005 */ "../lib/md005.js"),
-// md006: Deprecated and removed
-__webpack_require__(/*! ./md007 */ "../lib/md007.js"), __webpack_require__(/*! ./md009 */ "../lib/md009.js"), __webpack_require__(/*! ./md010 */ "../lib/md010.js"), __webpack_require__(/*! ./md011 */ "../lib/md011.js"), __webpack_require__(/*! ./md012 */ "../lib/md012.js"), __webpack_require__(/*! ./md013 */ "../lib/md013.js"), __webpack_require__(/*! ./md014 */ "../lib/md014.js"), __webpack_require__(/*! ./md018 */ "../lib/md018.js"), __webpack_require__(/*! ./md019 */ "../lib/md019.js"), __webpack_require__(/*! ./md020 */ "../lib/md020.js"), __webpack_require__(/*! ./md021 */ "../lib/md021.js"), __webpack_require__(/*! ./md022 */ "../lib/md022.js"), __webpack_require__(/*! ./md023 */ "../lib/md023.js"), __webpack_require__(/*! ./md024 */ "../lib/md024.js"), __webpack_require__(/*! ./md025 */ "../lib/md025.js"), __webpack_require__(/*! ./md026 */ "../lib/md026.js"), __webpack_require__(/*! ./md027 */ "../lib/md027.js"), __webpack_require__(/*! ./md028 */ "../lib/md028.js"), __webpack_require__(/*! ./md029 */ "../lib/md029.js"), __webpack_require__(/*! ./md030 */ "../lib/md030.js"), __webpack_require__(/*! ./md031 */ "../lib/md031.js"), __webpack_require__(/*! ./md032 */ "../lib/md032.js"), __webpack_require__(/*! ./md033 */ "../lib/md033.js"), __webpack_require__(/*! ./md034 */ "../lib/md034.js"), __webpack_require__(/*! ./md035 */ "../lib/md035.js"), __webpack_require__(/*! ./md036 */ "../lib/md036.js"), __webpack_require__(/*! ./md037 */ "../lib/md037.js"), __webpack_require__(/*! ./md038 */ "../lib/md038.js"), __webpack_require__(/*! ./md039 */ "../lib/md039.js"), __webpack_require__(/*! ./md040 */ "../lib/md040.js"), __webpack_require__(/*! ./md041 */ "../lib/md041.js"), __webpack_require__(/*! ./md042 */ "../lib/md042.js"), __webpack_require__(/*! ./md043 */ "../lib/md043.js"), __webpack_require__(/*! ./md044 */ "../lib/md044.js"), __webpack_require__(/*! ./md045 */ "../lib/md045.js"), __webpack_require__(/*! ./md046 */ "../lib/md046.js"), __webpack_require__(/*! ./md047 */ "../lib/md047.js"), __webpack_require__(/*! ./md048 */ "../lib/md048.js"), ...__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"), __webpack_require__(/*! ./md051 */ "../lib/md051.js"), __webpack_require__(/*! ./md052 */ "../lib/md052.js"), __webpack_require__(/*! ./md053 */ "../lib/md053.js"), __webpack_require__(/*! ./md054 */ "../lib/md054.js"), __webpack_require__(/*! ./md055 */ "../lib/md055.js"), __webpack_require__(/*! ./md056 */ "../lib/md056.js")
-// md057: See https://github.com/markdownlint/markdownlint
+const { homepage, version } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
+
+const rules = [
+  __webpack_require__(/*! ./md001 */ "../lib/md001.js"),
+  // md002: Deprecated and removed
+  __webpack_require__(/*! ./md003 */ "../lib/md003.js"),
+  __webpack_require__(/*! ./md004 */ "../lib/md004.js"),
+  __webpack_require__(/*! ./md005 */ "../lib/md005.js"),
+  // md006: Deprecated and removed
+  __webpack_require__(/*! ./md007 */ "../lib/md007.js"),
+  __webpack_require__(/*! ./md009 */ "../lib/md009.js"),
+  __webpack_require__(/*! ./md010 */ "../lib/md010.js"),
+  __webpack_require__(/*! ./md011 */ "../lib/md011.js"),
+  __webpack_require__(/*! ./md012 */ "../lib/md012.js"),
+  __webpack_require__(/*! ./md013 */ "../lib/md013.js"),
+  __webpack_require__(/*! ./md014 */ "../lib/md014.js"),
+  __webpack_require__(/*! ./md018 */ "../lib/md018.js"),
+  __webpack_require__(/*! ./md019 */ "../lib/md019.js"),
+  __webpack_require__(/*! ./md020 */ "../lib/md020.js"),
+  __webpack_require__(/*! ./md021 */ "../lib/md021.js"),
+  __webpack_require__(/*! ./md022 */ "../lib/md022.js"),
+  __webpack_require__(/*! ./md023 */ "../lib/md023.js"),
+  __webpack_require__(/*! ./md024 */ "../lib/md024.js"),
+  __webpack_require__(/*! ./md025 */ "../lib/md025.js"),
+  __webpack_require__(/*! ./md026 */ "../lib/md026.js"),
+  __webpack_require__(/*! ./md027 */ "../lib/md027.js"),
+  __webpack_require__(/*! ./md028 */ "../lib/md028.js"),
+  __webpack_require__(/*! ./md029 */ "../lib/md029.js"),
+  __webpack_require__(/*! ./md030 */ "../lib/md030.js"),
+  __webpack_require__(/*! ./md031 */ "../lib/md031.js"),
+  __webpack_require__(/*! ./md032 */ "../lib/md032.js"),
+  __webpack_require__(/*! ./md033 */ "../lib/md033.js"),
+  __webpack_require__(/*! ./md034 */ "../lib/md034.js"),
+  __webpack_require__(/*! ./md035 */ "../lib/md035.js"),
+  __webpack_require__(/*! ./md036 */ "../lib/md036.js"),
+  __webpack_require__(/*! ./md037 */ "../lib/md037.js"),
+  __webpack_require__(/*! ./md038 */ "../lib/md038.js"),
+  __webpack_require__(/*! ./md039 */ "../lib/md039.js"),
+  __webpack_require__(/*! ./md040 */ "../lib/md040.js"),
+  __webpack_require__(/*! ./md041 */ "../lib/md041.js"),
+  __webpack_require__(/*! ./md042 */ "../lib/md042.js"),
+  __webpack_require__(/*! ./md043 */ "../lib/md043.js"),
+  __webpack_require__(/*! ./md044 */ "../lib/md044.js"),
+  __webpack_require__(/*! ./md045 */ "../lib/md045.js"),
+  __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
+  __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
+  __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
+  ...__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"),
+  __webpack_require__(/*! ./md051 */ "../lib/md051.js"),
+  __webpack_require__(/*! ./md052 */ "../lib/md052.js"),
+  __webpack_require__(/*! ./md053 */ "../lib/md053.js"),
+  __webpack_require__(/*! ./md054 */ "../lib/md054.js"),
+  __webpack_require__(/*! ./md055 */ "../lib/md055.js"),
+  __webpack_require__(/*! ./md056 */ "../lib/md056.js")
+  // md057: See https://github.com/markdownlint/markdownlint
 ];
 for (const rule of rules) {
   const name = rule.names[0].toLowerCase();
   // eslint-disable-next-line dot-notation
-  rule["information"] = new URL(`${homepage}/blob/v${version}/doc/${name}.md`);
+  rule["information"] =
+    new URL(`${homepage}/blob/v${version}/doc/${name}.md`);
 }
 module.exports = rules;
+
 
 /***/ })
 
