@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v4
     - uses: JustinBeckwith/linkinator-action@v1.10.4
       with:
-        linksToSkip: '^https://github.com/.*/search\?q= ^https://opensource.org/'
+        linksToSkip: '^https://github.com/.*/search\?q= ^https://opensource.org/ ^https://unix.stackexchange.com/'
         paths: '*.md doc/*.md helpers/*.md'
         timeout: 60000
 
