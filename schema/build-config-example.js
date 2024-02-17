@@ -4,7 +4,7 @@
 
 const fs = require("node:fs");
 const path = require("node:path");
-const yaml = require("yaml");
+const yaml = require("js-yaml");
 const configSchema = require("./markdownlint-config-schema.json");
 
 const configExample = {};
@@ -41,12 +41,12 @@ fs.writeFileSync(
   "utf8"
 );
 
-const configStringYaml = yaml.stringify(
+const configStringYaml = yaml.dump(
   configExample,
   {
-    "lineWidth": 0,
-    "defaultStringType": "QUOTE_DOUBLE",
-    "defaultKeyType": "PLAIN"
+    "forceQuotes": true,
+    "lineWidth": -1,
+    "quotingType": "\""
   }
 );
 fs.writeFileSync(
