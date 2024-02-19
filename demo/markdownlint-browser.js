@@ -1474,6 +1474,28 @@ function filterByTypes(tokens, types) {
 }
 
 /**
+ * Gets all sibling token groups for a list of Micromark tokens.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @returns {Token[][]} Sibling token groups.
+ */
+function getSiblingTokens(tokens) {
+  const result = [];
+  const queue = [ tokens ];
+  // eslint-disable-next-line init-declarations
+  let current;
+  while ((current = queue.shift())) {
+    result.push(current);
+    for (const token of current) {
+      if (token.children.length > 0) {
+        queue.push(token.children);
+      }
+    }
+  }
+  return result;
+}
+
+/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -1597,6 +1619,7 @@ module.exports = {
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
+  getSiblingLists: getSiblingTokens,
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,
@@ -4464,7 +4487,6 @@ const { addError, allPunctuationNoQuestion, endOfLineGemojiCodeRe,
   endOfLineHtmlEntityRe, escapeForRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
-
 module.exports = {
   "names": [ "MD026", "no-trailing-punctuation" ],
   "description": "Trailing punctuation in heading",
@@ -4589,27 +4611,37 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getSiblingLists } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 module.exports = {
   "names": [ "MD028", "no-blanks-blockquote" ],
   "description": "Blank line inside blockquote",
   "tags": [ "blockquote", "whitespace" ],
   "function": function MD028(params, onError) {
-    let prevToken = {};
-    let prevLineNumber = null;
-    for (const token of params.parsers.markdownit.tokens) {
-      if ((token.type === "blockquote_open") &&
-          (prevToken.type === "blockquote_close")) {
-        for (
-          let lineNumber = prevLineNumber;
-          lineNumber < token.lineNumber;
-          lineNumber++) {
-          addError(onError, lineNumber);
+    for (const siblings of getSiblingLists(params.parsers.micromark.tokens)) {
+      let errorLineNumbers = null;
+      for (const sibling of siblings) {
+        switch (sibling.type) {
+          case "blockQuote":
+            for (const lineNumber of (errorLineNumbers || [])) {
+              addError(onError, lineNumber);
+            }
+            errorLineNumbers = [];
+            break;
+          case "lineEnding":
+          case "linePrefix":
+          case "listItemIndent":
+            // Ignore
+            break;
+          case "lineEndingBlank":
+            if (errorLineNumbers) {
+              errorLineNumbers.push(sibling.startLine);
+            }
+            break;
+          default:
+            errorLineNumbers = null;
+            break;
         }
-      }
-      prevToken = token;
-      if (token.type === "blockquote_open") {
-        prevLineNumber = token.map[1] + 1;
       }
     }
   }
