@@ -1,8 +1,18 @@
 # Strong style asterisk
 
+**This** is fine
+
+This **is** fine
+
 This is **fine**
 
-This is __not__ {MD050}
+__This__ is not
+
+This __is__ not
+
+This is __not__
+
+{MD050:-2} {MD050:-4} {MD050:-6}
 
 Internal emphasis is preserved:
 apple**banana**cherry, apple**banana**, **banana**cherry

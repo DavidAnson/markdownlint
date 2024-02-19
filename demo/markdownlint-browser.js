@@ -6032,7 +6032,7 @@ module.exports = {
 const { addError, emphasisOrStrongStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByPredicate, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
-const intrawordRe = /\w/;
+const intrawordRe = /^\w$/;
 
 const impl =
   (params, onError, type, asterisk, underline, style = "consistent") => {

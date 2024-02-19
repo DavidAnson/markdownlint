@@ -2035,6 +2035,9 @@ To fix this issue, use the configured emphasis style throughout the document:
 The configured emphasis style can be a specific symbol to use ("asterisk",
 "underscore"), or can require that usage be consistent within the document.
 
+Note: Emphasis within a word is restricted to "asterisk" in order to avoid
+unwanted emphasis for words containing internal underscores like_this_one.
+
 Rationale: Consistent formatting makes it easier to understand a document.
 
 <a name="md050"></a>
@@ -2069,6 +2072,9 @@ To fix this issue, use the configured strong style throughout the document:
 
 The configured strong style can be a specific symbol to use ("asterisk",
 "underscore"), or can require that usage be consistent within the document.
+
+Note: Emphasis within a word is restricted to "asterisk" in order to avoid
+unwanted emphasis for words containing internal underscores like_this_one.
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
