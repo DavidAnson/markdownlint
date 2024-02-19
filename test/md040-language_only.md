@@ -3,13 +3,13 @@
 Fence code block information with leading whitespace:
 
 ```  html
-<h1>markdownlint</h1> {MD040:5}
+<h1>markdownlint</h1>
 ```
 
 Fence code block information with trailing whitespace:
 
 ```css 
-body {} {MD040:11} {MD009:11}
+body {} {MD009:11}
 ```
 
 Fence code block information with extra data:
