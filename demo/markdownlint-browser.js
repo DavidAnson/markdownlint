@@ -5906,10 +5906,11 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const tokenTypeToStyle = {
-  "fence": "fenced",
-  "code_block": "indented"
+  "codeFenced": "fenced",
+  "codeIndented": "indented"
 };
 
 module.exports = {
@@ -5918,17 +5919,16 @@ module.exports = {
   "tags": [ "code" ],
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
-    const codeBlocksAndFences = params.parsers.markdownit.tokens.filter(
-      (token) => (token.type === "code_block") || (token.type === "fence")
-    );
+    const codeBlocksAndFences =
+      filterByTypes(params.parsers.micromark.tokens, [ "codeFenced", "codeIndented" ]);
     for (const token of codeBlocksAndFences) {
-      const { lineNumber, type } = token;
+      const { startLine, type } = token;
       if (expectedStyle === "consistent") {
         expectedStyle = tokenTypeToStyle[type];
       }
       addErrorDetailIf(
         onError,
-        lineNumber,
+        startLine,
         expectedStyle,
         tokenTypeToStyle[type]);
     }
