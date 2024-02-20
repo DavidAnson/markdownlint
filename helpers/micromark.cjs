@@ -380,7 +380,7 @@ function getTokenParentOfType(token, types) {
  * Get the text of the first match from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string} type Types to match.
+ * @param {string} type Type to match.
  * @returns {string | null} Text of token.
  */
 function getTokenTextByType(tokens, type) {

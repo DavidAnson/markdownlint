@@ -1558,7 +1558,7 @@ function getTokenParentOfType(token, types) {
  * Get the text of the first match from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string} type Types to match.
+ * @param {string} type Type to match.
  * @returns {string | null} Text of token.
  */
 function getTokenTextByType(tokens, type) {
@@ -5989,6 +5989,7 @@ module.exports = {
 
 
 const { addErrorDetailIf, fencedCodeBlockStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 module.exports = {
   "names": [ "MD048", "code-fence-style" ],
@@ -5997,20 +5998,24 @@ module.exports = {
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
-    const fenceTokens = params.parsers.markdownit.tokens.filter(
-      (token) => token.type === "fence"
-    );
-    for (const fenceToken of fenceTokens) {
-      const { lineNumber, markup } = fenceToken;
-      if (expectedStyle === "consistent") {
-        expectedStyle = fencedCodeBlockStyleFor(markup);
+    const codeFenceds = filterByTypes(params.parsers.micromark.tokens, [ "codeFenced" ]);
+    for (const codeFenced of codeFenceds) {
+      const codeFencedFence = tokenIfType(codeFenced.children[0], "codeFencedFence");
+      if (codeFencedFence) {
+        const codeFencedFenceSequence = tokenIfType(codeFencedFence.children[0], "codeFencedFenceSequence");
+        if (codeFencedFenceSequence) {
+          const { startLine, text } = codeFencedFenceSequence;
+          if (expectedStyle === "consistent") {
+            expectedStyle = fencedCodeBlockStyleFor(text);
+          }
+          addErrorDetailIf(
+            onError,
+            startLine,
+            expectedStyle,
+            fencedCodeBlockStyleFor(text)
+          );
+        }
       }
-      addErrorDetailIf(
-        onError,
-        lineNumber,
-        expectedStyle,
-        fencedCodeBlockStyleFor(markup)
-      );
     }
   }
 };
