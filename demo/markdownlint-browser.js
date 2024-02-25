@@ -1619,7 +1619,7 @@ module.exports = {
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
-  getSiblingLists: getSiblingTokens,
+  getSiblingTokens,
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,
@@ -4543,54 +4543,35 @@ module.exports = {
 
 
 
-const { addErrorContext, newLineRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-
-const spaceAfterBlockQuoteRe = /^((?:\s*>)+)(\s{2,})\S/;
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getSiblingTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 module.exports = {
-  "names": [ "MD027", "no-multiple-space-blockquote" ],
+  "names": ["MD027", "no-multiple-space-blockquote"],
   "description": "Multiple spaces after blockquote symbol",
-  "tags": [ "blockquote", "whitespace", "indentation" ],
+  "tags": ["blockquote", "whitespace", "indentation"],
   "function": function MD027(params, onError) {
-    let blockquoteNesting = 0;
-    let listItemNesting = 0;
-    for (const token of params.parsers.markdownit.tokens) {
-      const { content, lineNumber, type } = token;
-      if (type === "blockquote_open") {
-        blockquoteNesting++;
-      } else if (type === "blockquote_close") {
-        blockquoteNesting--;
-      } else if (type === "list_item_open") {
-        listItemNesting++;
-      } else if (type === "list_item_close") {
-        listItemNesting--;
-      } else if ((type === "inline") && blockquoteNesting) {
-        const lineCount = content.split(newLineRe).length;
-        for (let i = 0; i < lineCount; i++) {
-          const line = params.lines[lineNumber + i - 1];
-          const match = line.match(spaceAfterBlockQuoteRe);
-          if (match) {
-            const [
-              fullMatch,
-              { "length": blockquoteLength },
-              { "length": spaceLength }
-            ] = match;
-            if (!listItemNesting || (fullMatch[fullMatch.length - 1] === ">")) {
-              addErrorContext(
-                onError,
-                lineNumber + i,
-                line,
-                null,
-                null,
-                [ 1, fullMatch.length ],
-                {
-                  "editColumn": blockquoteLength + 1,
-                  "deleteCount": spaceLength - 1
-                }
-              );
+    for (const siblings of getSiblingTokens(params.parsers.micromark.tokens)) {
+      let previousType = null;
+      for (const token of siblings) {
+        const { type } = token;
+        if ((type === "linePrefix") && (previousType === "blockQuotePrefix")) {
+          const { endColumn, startColumn, startLine, text } = token;
+          const line = params.lines[startLine - 1];
+          addErrorContext(
+            onError,
+            startLine,
+            line,
+            null,
+            null,
+            [ 1, Math.min(endColumn, line.length) ],
+            {
+              "editColumn": startColumn,
+              "deleteCount": text.length
             }
-          }
+          );
         }
+        previousType = type;
       }
     }
   }
@@ -4611,14 +4592,14 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getSiblingLists } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getSiblingTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 module.exports = {
   "names": [ "MD028", "no-blanks-blockquote" ],
   "description": "Blank line inside blockquote",
   "tags": [ "blockquote", "whitespace" ],
   "function": function MD028(params, onError) {
-    for (const siblings of getSiblingLists(params.parsers.micromark.tokens)) {
+    for (const siblings of getSiblingTokens(params.parsers.micromark.tokens)) {
       let errorLineNumbers = null;
       for (const sibling of siblings) {
         switch (sibling.type) {

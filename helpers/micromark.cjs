@@ -441,7 +441,7 @@ module.exports = {
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
-  getSiblingLists: getSiblingTokens,
+  getSiblingTokens,
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,

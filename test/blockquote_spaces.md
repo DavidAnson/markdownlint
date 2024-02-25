@@ -39,3 +39,10 @@ Text
 Text
 
    >  Text {MD027}
+
+Test nothing in the blockquote:
+
+<!-- markdownlint-disable no-trailing-spaces -->
+
+>  
+{MD027:-1}

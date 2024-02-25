@@ -30,7 +30,7 @@ Text
 - Item
 - Item
   item
-  >  ## Quoted indented sub-heading in list {MD022} {MD023}
+  >  ## Quoted indented sub-heading in list {MD022} {MD023} {MD027}
 - Item
 
 Text
