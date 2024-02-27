@@ -4556,7 +4556,8 @@ module.exports = {
       for (const token of siblings) {
         const { type } = token;
         if ((type === "linePrefix") && (previousType === "blockQuotePrefix")) {
-          const { endColumn, startColumn, startLine, text } = token;
+          const { startColumn, startLine, text } = token;
+          const { length } = text;
           const line = params.lines[startLine - 1];
           addErrorContext(
             onError,
@@ -4564,10 +4565,10 @@ module.exports = {
             line,
             null,
             null,
-            [ 1, Math.min(endColumn, line.length) ],
+            [ startColumn, length ],
             {
               "editColumn": startColumn,
-              "deleteCount": text.length
+              "deleteCount": length
             }
           );
         }
