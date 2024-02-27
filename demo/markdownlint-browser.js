@@ -1474,28 +1474,6 @@ function filterByTypes(tokens, types) {
 }
 
 /**
- * Gets all sibling token groups for a list of Micromark tokens.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @returns {Token[][]} Sibling token groups.
- */
-function getSiblingTokens(tokens) {
-  const result = [];
-  const queue = [ tokens ];
-  // eslint-disable-next-line init-declarations
-  let current;
-  while ((current = queue.shift())) {
-    result.push(current);
-    for (const token of current) {
-      if (token.children.length > 0) {
-        queue.push(token.children);
-      }
-    }
-  }
-  return result;
-}
-
-/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -1619,7 +1597,6 @@ module.exports = {
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
-  getSiblingTokens,
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,
@@ -4544,35 +4521,32 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getSiblingTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 module.exports = {
   "names": ["MD027", "no-multiple-space-blockquote"],
   "description": "Multiple spaces after blockquote symbol",
   "tags": ["blockquote", "whitespace", "indentation"],
   "function": function MD027(params, onError) {
-    for (const siblings of getSiblingTokens(params.parsers.micromark.tokens)) {
-      let previousType = null;
-      for (const token of siblings) {
-        const { type } = token;
-        if ((type === "linePrefix") && (previousType === "blockQuotePrefix")) {
-          const { startColumn, startLine, text } = token;
-          const { length } = text;
-          const line = params.lines[startLine - 1];
-          addErrorContext(
-            onError,
-            startLine,
-            line,
-            null,
-            null,
-            [ startColumn, length ],
-            {
-              "editColumn": startColumn,
-              "deleteCount": length
-            }
-          );
-        }
-        previousType = type;
+    const { tokens } = params.parsers.micromark;
+    for (const token of filterByTypes(tokens, [ "linePrefix" ])) {
+      const siblings = token.parent?.children || tokens;
+      if (siblings[siblings.indexOf(token) - 1]?.type === "blockQuotePrefix") {
+        const { startColumn, startLine, text } = token;
+        const { length } = text;
+        const line = params.lines[startLine - 1];
+        addErrorContext(
+          onError,
+          startLine,
+          line,
+          null,
+          null,
+          [ startColumn, length ],
+          {
+            "editColumn": startColumn,
+            "deleteCount": length
+          }
+        );
       }
     }
   }
@@ -4593,36 +4567,36 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getSiblingTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+const ignoreTypes = new Set([ "lineEnding", "listItemIndent", "linePrefix" ]);
 
 module.exports = {
   "names": [ "MD028", "no-blanks-blockquote" ],
   "description": "Blank line inside blockquote",
   "tags": [ "blockquote", "whitespace" ],
   "function": function MD028(params, onError) {
-    for (const siblings of getSiblingTokens(params.parsers.micromark.tokens)) {
-      let errorLineNumbers = null;
-      for (const sibling of siblings) {
-        switch (sibling.type) {
-          case "blockQuote":
-            for (const lineNumber of (errorLineNumbers || [])) {
-              addError(onError, lineNumber);
-            }
-            errorLineNumbers = [];
-            break;
-          case "lineEnding":
-          case "linePrefix":
-          case "listItemIndent":
-            // Ignore
-            break;
-          case "lineEndingBlank":
-            if (errorLineNumbers) {
-              errorLineNumbers.push(sibling.startLine);
-            }
-            break;
-          default:
-            errorLineNumbers = null;
-            break;
+    const { tokens } = params.parsers.micromark;
+    for (const token of filterByTypes(tokens, [ "blockQuote" ])) {
+      const errorLineNumbers = [];
+      const siblings = token.parent?.children || tokens;
+      for (let i = siblings.indexOf(token) + 1; i < siblings.length; i++) {
+        const sibling = siblings[i];
+        const { startLine, type } = sibling;
+        if (type === "lineEndingBlank") {
+          // Possible blank between blockquotes
+          errorLineNumbers.push(startLine);
+        } else if (ignoreTypes.has(type)) {
+          // Ignore invisible formatting
+        } else if (type === "blockQuote") {
+          // Blockquote followed by blockquote
+          for (const lineNumber of errorLineNumbers) {
+            addError(onError, lineNumber);
+          }
+          break;
+        } else {
+          // Blockquote not followed by blockquote
+          break;
         }
       }
     }

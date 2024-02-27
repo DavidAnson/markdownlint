@@ -296,28 +296,6 @@ function filterByTypes(tokens, types) {
 }
 
 /**
- * Gets all sibling token groups for a list of Micromark tokens.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @returns {Token[][]} Sibling token groups.
- */
-function getSiblingTokens(tokens) {
-  const result = [];
-  const queue = [ tokens ];
-  // eslint-disable-next-line init-declarations
-  let current;
-  while ((current = queue.shift())) {
-    result.push(current);
-    for (const token of current) {
-      if (token.children.length > 0) {
-        queue.push(token.children);
-      }
-    }
-  }
-  return result;
-}
-
-/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -441,7 +419,6 @@ module.exports = {
   getHeadingLevel,
   getHtmlTagInfo,
   getMicromarkEvents,
-  getSiblingTokens,
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,
