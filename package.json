@@ -26,7 +26,7 @@
     "build-config": "npm run build-config-schema && npm run build-config-example",
     "build-config-example": "node schema/build-config-example.js",
     "build-config-schema": "node schema/build-config-schema.js",
-    "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --module commonjs --resolveJsonModule --target es2015 lib/markdownlint.js && node scripts delete 'lib/{cache,constants,md,r}*.d.ts' 'micromark/*.d.cts' 'helpers/*.d.{cts,ts}'",
+    "build-declaration": "tsc --allowJs --declaration --emitDeclarationOnly --module commonjs --outDir dts --resolveJsonModule --target es2015 lib/markdownlint.js && node scripts copy dts/lib/markdownlint.d.ts lib/markdownlint.d.ts && node scripts remove dts",
     "build-demo": "node scripts copy node_modules/markdown-it/dist/markdown-it.min.js demo/markdown-it.min.js && node scripts copy node_modules/markdownlint-micromark/micromark-browser.js demo/micromark-browser.js && node scripts copy node_modules/markdownlint-micromark/micromark-html-browser.js demo/micromark-html-browser.js && cd demo && webpack --no-stats",
     "build-docs": "node doc-build/build-rules.mjs",
     "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",

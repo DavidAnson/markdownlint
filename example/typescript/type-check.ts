@@ -117,10 +117,16 @@ const testRule = {
   "function": function rule(params: markdownlint.RuleParams, onError: markdownlint.RuleOnError) {
     assert(!!params);
     assert(!!onError);
+    let tokens: markdownlint.MarkdownItToken[] = [];
     let ruleParams: markdownlint.RuleParams;
     ruleParams = {
       "name": "name",
-      "tokens": <markdownlint.MarkdownItToken[]>[],
+      "tokens": tokens,
+      "parsers": {
+        "markdownit": {
+          "tokens": tokens
+        }
+      },
       "lines": [
         "one",
         "two"

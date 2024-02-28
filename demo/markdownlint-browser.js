@@ -2959,14 +2959,29 @@ module.exports = markdownlint;
  *
  * @typedef {Object} RuleParams
  * @property {string} name File/string name.
- * @property {MarkdownItToken[]} tokens Token objects from markdown-it.
+ * @property {MarkdownItToken[]} tokens Token objects from markdown-it (deprecated, use parsers.markdownit.tokens).
+ * @property {MarkdownParsers} parsers Markdown parser data.
  * @property {string[]} lines File/string lines.
  * @property {string[]} frontMatterLines Front matter lines.
  * @property {RuleConfiguration} config Rule configuration.
  */
 
 /**
- * Markdown-It token.
+ * Markdown parser data.
+ *
+ * @typedef {Object} MarkdownParsers
+ * @property {ParserMarkdownIt} markdownit Markdown parser data from markdown-it.
+ */
+
+/**
+ * Markdown parser data from markdown-it.
+ *
+ * @typedef {Object} ParserMarkdownIt
+ * @property {MarkdownItToken[]} tokens Token objects from markdown-it.
+ */
+
+/**
+ * markdown-it token.
  *
  * @typedef {Object} MarkdownItToken
  * @property {string[][]} attrs HTML attributes.
@@ -3163,6 +3178,8 @@ module.exports = markdownlint;
 
 const { addErrorDetailIf, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD001", "heading-increment" ],
   "description": "Heading levels should only increment by one level at a time",
@@ -3197,6 +3214,8 @@ module.exports = {
 const { addErrorDetailIf, filterTokens, headingStyleFor } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD003", "heading-style" ],
   "description": "Heading style",
@@ -3263,6 +3282,8 @@ const differentItemStyle = {
 };
 const validStyles = Object.keys(expectedStyleToMarker);
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD004", "ul-style" ],
   "description": "Unordered list style",
@@ -3337,13 +3358,16 @@ module.exports = {
 const { addError, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD005", "list-indent" ],
   "description": "Inconsistent indentation for list items at the same level",
   "tags": [ "bullet", "ul", "indentation" ],
   "function": function MD005(params, onError) {
     const lists = filterByTypes(
-      params.parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      params.parsers["micromark"].tokens,
       [ "listOrdered", "listUnordered" ]
     ).filter((list) => !inHtmlFlow(list));
     for (const list of lists) {
@@ -3431,6 +3455,8 @@ const unorderedListTypes =
 const unorderedParentTypes =
   [ "blockQuote", "listOrdered", "listUnordered" ];
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD007", "ul-indent" ],
   "description": "Unordered list indentation",
@@ -3442,7 +3468,8 @@ module.exports = {
     const unorderedListNesting = new Map();
     let lastBlockQuotePrefix = null;
     const tokens = filterByTypes(
-      params.parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      params.parsers["micromark"].tokens,
       unorderedListTypes
     );
     for (const token of tokens) {
@@ -3520,6 +3547,8 @@ const { addError, filterTokens, forEachLine, includesSorted,
   numericSortAscending } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD009", "no-trailing-spaces" ],
   "description": "Trailing spaces",
@@ -3619,6 +3648,8 @@ const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache
 
 const tabRe = /\t+/g;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD010", "no-hard-tabs" ],
   "description": "Hard tabs",
@@ -3655,7 +3686,7 @@ module.exports = {
               onError,
               lineIndex + 1,
               "Column: " + column,
-              null,
+              undefined,
               [ column, length ],
               {
                 "editColumn": column,
@@ -3690,6 +3721,8 @@ const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache
 const reversedLinkRe =
   /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD011", "no-reversed-links" ],
   "description": "Reversed link syntax",
@@ -3744,6 +3777,8 @@ module.exports = {
 const { addErrorDetailIf, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD012", "no-multiple-blanks" ],
   "description": "Multiple consecutive blank lines",
@@ -3804,6 +3839,8 @@ const tokenTypeMap = {
   "text": "T"
 };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD013", "line-length" ],
   "description": "Line length",
@@ -3895,6 +3932,8 @@ const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ 
 
 const dollarCommandRe = /^(\s*)(\$\s+)/;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD014", "commands-show-output" ],
   "description": "Dollar signs used before commands without showing output",
@@ -3924,6 +3963,7 @@ module.exports = {
             const [ i, lineTrim, column, length ] = instance;
             addErrorContext(
               onError,
+              // @ts-ignore
               i + 1,
               lineTrim,
               null,
@@ -3958,6 +3998,8 @@ module.exports = {
 const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD018", "no-missing-space-atx" ],
   "description": "No space after hash on atx style heading",
@@ -3968,6 +4010,7 @@ module.exports = {
         /^#+[^# \t]/.test(line) &&
         !/#\s*$/.test(line) &&
         !line.startsWith("#️⃣")) {
+        // @ts-ignore
         const hashCount = /^#+/.exec(line)[0].length;
         addErrorContext(
           onError,
@@ -4003,6 +4046,8 @@ module.exports = {
 const { addErrorContext, filterTokens, headingStyleFor } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD019", "no-multiple-space-atx" ],
   "description": "Multiple spaces after hash on atx style heading",
@@ -4053,6 +4098,8 @@ module.exports = {
 const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD020", "no-missing-space-closed-atx" ],
   "description": "No space inside hashes on closed atx style heading",
@@ -4128,6 +4175,8 @@ const { addErrorContext, filterTokens, headingStyleFor } =
 
 const closedAtxRe = /^(#+)([ \t]+)([^ \t]|[^ \t].*[^ \t])([ \t]+)(#+)(\s*)$/;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD021", "no-multiple-space-closed-atx" ],
   "description": "Multiple spaces inside hashes on closed atx style heading",
@@ -4225,6 +4274,8 @@ const getBlockQuote = (str, count) => (
     .repeat(count)
 );
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD022", "blanks-around-headings" ],
   "description": "Headings should be surrounded by blank lines",
@@ -4234,7 +4285,8 @@ module.exports = {
     const getLinesBelow = getLinesFunction(params.config.lines_below);
     const { lines, parsers } = params;
     const headings = filterByTypes(
-      parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      parsers["micromark"].tokens,
       [ "atxHeading", "setextHeading" ]
     ).filter((heading) => !inHtmlFlow(heading));
     for (const heading of headings) {
@@ -4319,6 +4371,8 @@ const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ 
 
 const spaceBeforeHeadingRe = /^(\s+|[>\s]+\s\s)[^>\s]/;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD023", "heading-start-left" ],
   "description": "Headings must start at the beginning of the line",
@@ -4366,6 +4420,8 @@ module.exports = {
 
 const { addErrorContext, forEachHeading } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD024", "no-duplicate-heading" ],
   "description": "Multiple headings with the same content",
@@ -4420,6 +4476,8 @@ module.exports = {
 const { addErrorContext, filterTokens, frontMatterHasTitle } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD025", "single-title", "single-h1" ],
   "description": "Multiple top-level headings in the same document",
@@ -4464,6 +4522,8 @@ const { addError, allPunctuationNoQuestion, endOfLineGemojiCodeRe,
   endOfLineHtmlEntityRe, escapeForRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD026", "no-trailing-punctuation" ],
   "description": "Trailing punctuation in heading",
@@ -4476,7 +4536,8 @@ module.exports = {
     const trailingPunctuationRe =
       new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
     const headings = filterByTypes(
-      params.parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      params.parsers["micromark"].tokens,
       [ "atxHeadingText", "setextHeadingText" ]
     );
     for (const heading of headings) {
@@ -4523,12 +4584,15 @@ module.exports = {
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": ["MD027", "no-multiple-space-blockquote"],
   "description": "Multiple spaces after blockquote symbol",
   "tags": ["blockquote", "whitespace", "indentation"],
   "function": function MD027(params, onError) {
-    const { tokens } = params.parsers.micromark;
+    // eslint-disable-next-line dot-notation
+    const { tokens } = params.parsers["micromark"];
     for (const token of filterByTypes(tokens, [ "linePrefix" ])) {
       const siblings = token.parent?.children || tokens;
       if (siblings[siblings.indexOf(token) - 1]?.type === "blockQuotePrefix") {
@@ -4571,12 +4635,15 @@ const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ ".
 
 const ignoreTypes = new Set([ "lineEnding", "listItemIndent", "linePrefix" ]);
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD028", "no-blanks-blockquote" ],
   "description": "Blank line inside blockquote",
   "tags": [ "blockquote", "whitespace" ],
   "function": function MD028(params, onError) {
-    const { tokens } = params.parsers.micromark;
+    // eslint-disable-next-line dot-notation
+    const { tokens } = params.parsers["micromark"];
     for (const token of filterByTypes(tokens, [ "blockQuote" ])) {
       const errorLineNumbers = [];
       const siblings = token.parent?.children || tokens;
@@ -4627,6 +4694,8 @@ const listStyleExamples = {
   "zero": "0/0/0"
 };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD029", "ol-prefix" ],
   "description": "Ordered list item prefix",
@@ -4698,6 +4767,8 @@ module.exports = {
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD030", "list-marker-space" ],
   "description": "Spaces after list markers",
@@ -4708,7 +4779,8 @@ module.exports = {
     const ulMulti = Number(params.config.ul_multi || 1);
     const olMulti = Number(params.config.ol_multi || 1);
     const lists = filterByTypes(
-      params.parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      params.parsers["micromark"].tokens,
       [ "listOrdered", "listUnordered" ]
     );
     for (const list of lists) {
@@ -4772,6 +4844,8 @@ const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const codeFencePrefixRe = /^(.*?)[`~]/;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD031", "blanks-around-fences" ],
   "description": "Fenced code blocks should be surrounded by blank lines",
@@ -4851,6 +4925,8 @@ const addBlankLineError = (onError, lines, lineIndex, lineNumber) => {
   );
 };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD032", "blanks-around-lists" ],
   "description": "Lists should be surrounded by blank lines",
@@ -4860,7 +4936,8 @@ module.exports = {
 
     // For every top-level list...
     const topLevelLists = filterByPredicate(
-      parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      parsers["micromark"].tokens,
       isList,
       (token) => (
         (isList(token) || (token.type === "htmlFlow")) ? [] : token.children
@@ -4911,6 +4988,8 @@ const { addError, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../help
 const { filterByTypes, getHtmlTagInfo } =
   __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD033", "no-inline-html" ],
   "description": "Inline HTML",
@@ -4919,7 +4998,8 @@ module.exports = {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
     allowedElements = allowedElements.map((element) => element.toLowerCase());
-    const { tokens } = params.parsers.micromark;
+    // eslint-disable-next-line dot-notation
+    const { tokens } = params.parsers["micromark"];
     for (const token of filterByTypes(tokens, [ "htmlText" ])) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (
@@ -4961,6 +5041,8 @@ const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/he
 const { filterByPredicate, filterByTypes, getHtmlTagInfo, inHtmlFlow, parse } =
   __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD034", "no-bare-urls" ],
   "description": "Bare URL used",
@@ -5002,7 +5084,8 @@ module.exports = {
       )
     );
     const autoLinks = filterByTypes(
-      params.parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      params.parsers["micromark"].tokens,
       [ "literalAutolink" ]
     );
     if (autoLinks.length > 0) {
@@ -5050,6 +5133,8 @@ module.exports = {
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD035", "hr-style" ],
   "description": "Horizontal rule style",
@@ -5057,7 +5142,8 @@ module.exports = {
   "function": function MD035(params, onError) {
     let style = String(params.config.style || "consistent").trim();
     const thematicBreaks =
-      filterByTypes(params.parsers.micromark.tokens, [ "thematicBreak" ]);
+      // eslint-disable-next-line dot-notation
+      filterByTypes(params.parsers["micromark"].tokens, [ "thematicBreak" ]);
     for (const token of thematicBreaks) {
       const { startLine, text } = token;
       if (style === "consistent") {
@@ -5084,6 +5170,8 @@ module.exports = {
 
 const { addErrorContext, allPunctuation } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD036", "no-emphasis-as-heading" ],
   "description": "Emphasis used instead of a heading",
@@ -5152,6 +5240,8 @@ module.exports = {
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByPredicate, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD037", "no-space-in-emphasis" ],
   "description": "Spaces inside emphasis markers",
@@ -5165,7 +5255,8 @@ module.exports = {
       emphasisTokensByMarker.set(marker, []);
     }
     const tokens = filterByPredicate(
-      parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      parsers["micromark"].tokens,
       (token) => token.children.some((child) => child.type === "data")
     );
     for (const token of tokens) {
@@ -5268,13 +5359,16 @@ const trimCodeText = (text, start, end) => {
   return text;
 };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD038", "no-space-in-code" ],
   "description": "Spaces inside code span elements",
   "tags": [ "whitespace", "code" ],
   "function": function MD038(params, onError) {
     const codeTexts =
-      filterByTypes(params.parsers.micromark.tokens, [ "codeText" ])
+      // eslint-disable-next-line dot-notation
+      filterByTypes(params.parsers["micromark"].tokens, [ "codeText" ])
         .filter((codeText) => !inHtmlFlow(codeText));
     for (const codeText of codeTexts) {
       const { children } = codeText;
@@ -5366,6 +5460,8 @@ const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ 
 const spaceInLinkRe =
   /\[(?:\s[^\]]*|[^\]]*?\s)\](?=(\([^)]*\)|\[[^\]]*\]))/;
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD039", "no-space-in-links" ],
   "description": "Spaces inside link text",
@@ -5392,6 +5488,7 @@ module.exports = {
             let fixInfo = null;
             const match = line.slice(lineIndex).match(spaceInLinkRe);
             if (match) {
+              // @ts-ignore
               const column = match.index + lineIndex + 1;
               const length = match[0].length;
               range = [ column, length ];
@@ -5443,6 +5540,8 @@ const { addError, addErrorContext } = __webpack_require__(/*! ../helpers */ "../
 const { filterByTypes, getTokenTextByType, tokenIfType } =
   __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD040", "fenced-code-language" ],
   "description": "Fenced code blocks should have a language specified",
@@ -5451,7 +5550,8 @@ module.exports = {
     let allowed = params.config.allowed_languages;
     allowed = Array.isArray(allowed) ? allowed : [];
     const languageOnly = !!params.config.language_only;
-    const fencedCodes = filterByTypes(params.parsers.micromark.tokens, [ "codeFenced" ]);
+    // eslint-disable-next-line dot-notation
+    const fencedCodes = filterByTypes(params.parsers["micromark"].tokens, [ "codeFenced" ]);
     for (const fencedCode of fencedCodes) {
       const openingFence = tokenIfType(fencedCode.children[0], "codeFencedFence");
       if (openingFence) {
@@ -5486,6 +5586,8 @@ module.exports = {
 
 const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD041", "first-line-heading", "first-line-h1" ],
   "description": "First line in a file should be a top-level heading",
@@ -5540,6 +5642,8 @@ module.exports = {
 const { addErrorContext, escapeForRegExp, filterTokens } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD042", "no-empty-links" ],
   "description": "No empty links",
@@ -5568,6 +5672,7 @@ module.exports = {
             );
             if (match) {
               context = match[0];
+              // @ts-ignore
               range = [ match.index + 1, match[0].length ];
             }
             addErrorContext(
@@ -5600,6 +5705,8 @@ module.exports = {
 const { addErrorContext, addErrorDetailIf, forEachHeading } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD043", "required-headings" ],
   "description": "Required heading structure",
@@ -5681,6 +5788,8 @@ const ignoredChildTypes = new Set(
   [ "codeFencedFence", "definition", "reference", "resource" ]
 );
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD044", "proper-names" ],
   "description": "Proper names should have the correct capitalization",
@@ -5710,7 +5819,8 @@ module.exports = {
     }
     const contentTokens =
       filterByPredicate(
-        params.parsers.micromark.tokens,
+        // eslint-disable-next-line dot-notation
+        params.parsers["micromark"].tokens,
         (token) => scannedTypes.has(token.type),
         (token) => (
           token.children.filter((t) => !ignoredChildTypes.has(t.type))
@@ -5795,12 +5905,15 @@ const { filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/mic
 
 const altRe = getHtmlAttributeRe("alt");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD045", "no-alt-text" ],
   "description": "Images should have alternate text (alt text)",
   "tags": [ "accessibility", "images" ],
   "function": function MD045(params, onError) {
-    const { tokens } = params.parsers.micromark;
+    // eslint-disable-next-line dot-notation
+    const { tokens } = params.parsers["micromark"];
 
     // Process Markdown images
     const images = filterByTypes(tokens, [ "image" ]);
@@ -5869,6 +5982,8 @@ const tokenTypeToStyle = {
   "codeIndented": "indented"
 };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD046", "code-block-style" ],
   "description": "Code block style",
@@ -5876,7 +5991,8 @@ module.exports = {
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
     const codeBlocksAndFences =
-      filterByTypes(params.parsers.micromark.tokens, [ "codeFenced", "codeIndented" ]);
+      // eslint-disable-next-line dot-notation
+      filterByTypes(params.parsers["micromark"].tokens, [ "codeFenced", "codeIndented" ]);
     for (const token of codeBlocksAndFences) {
       const { startLine, type } = token;
       if (expectedStyle === "consistent") {
@@ -5907,6 +6023,8 @@ module.exports = {
 
 const { addError, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD047", "single-trailing-newline" ],
   "description": "Files should end with a single newline character",
@@ -5918,8 +6036,8 @@ module.exports = {
       addError(
         onError,
         lastLineNumber,
-        null,
-        null,
+        undefined,
+        undefined,
         [ lastLine.length, 1 ],
         {
           "insertText": "\n",
@@ -5947,6 +6065,8 @@ module.exports = {
 const { addErrorDetailIf, fencedCodeBlockStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD048", "code-fence-style" ],
   "description": "Code fence style",
@@ -5954,7 +6074,8 @@ module.exports = {
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
-    const codeFenceds = filterByTypes(params.parsers.micromark.tokens, [ "codeFenced" ]);
+    // eslint-disable-next-line dot-notation
+    const codeFenceds = filterByTypes(params.parsers["micromark"].tokens, [ "codeFenced" ]);
     for (const codeFenced of codeFenceds) {
       const codeFencedFence = tokenIfType(codeFenced.children[0], "codeFencedFence");
       if (codeFencedFence) {
@@ -6153,12 +6274,15 @@ function unescapeStringTokenText(token) {
     .join("");
 }
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD051", "link-fragments" ],
   "description": "Link fragments should be valid",
   "tags": [ "links" ],
   "function": function MD051(params, onError) {
-    const { tokens } = params.parsers.micromark;
+    // eslint-disable-next-line dot-notation
+    const { tokens } = params.parsers["micromark"];
     const fragments = new Map();
 
     // Process headings
@@ -6278,6 +6402,8 @@ module.exports = {
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD052", "reference-links-images" ],
   "description":
@@ -6329,6 +6455,8 @@ const { addError, ellipsify, linkReferenceDefinitionRe } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD053", "link-image-reference-definitions" ],
   "description": "Link and image reference definitions should be needed",
@@ -6414,6 +6542,8 @@ const autolinkAble = (destination) => {
   return !autolinkDisallowedRe.test(destination);
 };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD054", "link-image-style" ],
   "description": "Link and image style",
@@ -6432,7 +6562,8 @@ module.exports = {
     }
     const { definitions } = referenceLinkImageData();
     const links = filterByTypes(
-      parsers.micromark.tokens,
+      // eslint-disable-next-line dot-notation
+      parsers["micromark"].tokens,
       [ "autolink", "image", "link" ]
     );
     for (const link of links) {
@@ -6542,6 +6673,8 @@ const firstOrNothing = (items) => items[0];
 const lastOrNothing = (items) => items[items.length - 1];
 const makeRange = (start, end) => [ start, end - start + 1 ];
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD055", "table-pipe-style" ],
   "description": "Table pipe style",
@@ -6553,7 +6686,8 @@ module.exports = {
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "trailing_only"));
     let expectedTrailingPipe =
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "leading_only"));
-    const tables = filterByTypes(params.parsers.micromark.tokens, [ "table" ]);
+    // eslint-disable-next-line dot-notation
+    const tables = filterByTypes(params.parsers["micromark"].tokens, [ "table" ]);
     for (const table of tables) {
       const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
       for (const row of rows) {
@@ -6619,12 +6753,15 @@ const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ ".
 
 const makeRange = (start, end) => [ start, end - start + 1 ];
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD056", "table-column-count" ],
   "description": "Table column count",
   "tags": [ "table" ],
   "function": function MD056(params, onError) {
-    const tables = filterByTypes(params.parsers.micromark.tokens, [ "table" ]);
+    // eslint-disable-next-line dot-notation
+    const tables = filterByTypes(params.parsers["micromark"].tokens, [ "table" ]);
     for (const table of tables) {
       const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
       let expectedCount = 0;

@@ -21,6 +21,8 @@ const [ command, ...args ] = process.argv.slice(2);
           )
       )
     );
+  } else if (command === "remove") {
+    await Promise.all(args.map((dir) => fs.rm(dir, { "recursive": true })));
   } else {
     throw new Error(`Unsupported command: ${command}`);
   }

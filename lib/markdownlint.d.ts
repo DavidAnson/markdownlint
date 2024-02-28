@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -117,9 +117,13 @@ type RuleParams = {
      */
     name: string;
     /**
-     * Token objects from markdown-it.
+     * Token objects from markdown-it (deprecated, use parsers.markdownit.tokens).
      */
     tokens: MarkdownItToken[];
+    /**
+     * Markdown parser data.
+     */
+    parsers: MarkdownParsers;
     /**
      * File/string lines.
      */
@@ -134,7 +138,25 @@ type RuleParams = {
     config: RuleConfiguration;
 };
 /**
- * Markdown-It token.
+ * Markdown parser data.
+ */
+type MarkdownParsers = {
+    /**
+     * Markdown parser data from markdown-it.
+     */
+    markdownit: ParserMarkdownIt;
+};
+/**
+ * Markdown parser data from markdown-it.
+ */
+type ParserMarkdownIt = {
+    /**
+     * Token objects from markdown-it.
+     */
+    tokens: MarkdownItToken[];
+};
+/**
+ * markdown-it token.
  */
 type MarkdownItToken = {
     /**
