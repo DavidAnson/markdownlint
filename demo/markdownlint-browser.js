@@ -3365,9 +3365,13 @@ module.exports = {
   "description": "Inconsistent indentation for list items at the same level",
   "tags": [ "bullet", "ul", "indentation" ],
   "function": function MD005(params, onError) {
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     const lists = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      params.parsers["micromark"].tokens,
+      micromarkTokens,
       [ "listOrdered", "listUnordered" ]
     ).filter((list) => !inHtmlFlow(list));
     for (const list of lists) {
@@ -3465,13 +3469,14 @@ module.exports = {
     const indent = Number(params.config.indent || 2);
     const startIndented = !!params.config.start_indented;
     const startIndent = Number(params.config.start_indent || indent);
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     const unorderedListNesting = new Map();
     let lastBlockQuotePrefix = null;
-    const tokens = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      params.parsers["micromark"].tokens,
-      unorderedListTypes
-    );
+    const tokens = filterByTypes(micromarkTokens, unorderedListTypes);
     for (const token of tokens) {
       const { endColumn, parent, startColumn, startLine, type } = token;
       if (type === "blockQuotePrefix") {
@@ -4283,10 +4288,14 @@ module.exports = {
   "function": function MD022(params, onError) {
     const getLinesAbove = getLinesFunction(params.config.lines_above);
     const getLinesBelow = getLinesFunction(params.config.lines_below);
-    const { lines, parsers } = params;
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const { lines } = params;
     const headings = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      parsers["micromark"].tokens,
+      micromarkTokens,
       [ "atxHeading", "setextHeading" ]
     ).filter((heading) => !inHtmlFlow(heading));
     for (const heading of headings) {
@@ -4535,11 +4544,12 @@ module.exports = {
     );
     const trailingPunctuationRe =
       new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
-    const headings = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      params.parsers["micromark"].tokens,
-      [ "atxHeadingText", "setextHeadingText" ]
-    );
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const headings = filterByTypes(micromarkTokens, [ "atxHeadingText", "setextHeadingText" ]);
     for (const heading of headings) {
       const { endColumn, endLine, text } = heading;
       const match = trailingPunctuationRe.exec(text);
@@ -4591,10 +4601,13 @@ module.exports = {
   "description": "Multiple spaces after blockquote symbol",
   "tags": ["blockquote", "whitespace", "indentation"],
   "function": function MD027(params, onError) {
-    // eslint-disable-next-line dot-notation
-    const { tokens } = params.parsers["micromark"];
-    for (const token of filterByTypes(tokens, [ "linePrefix" ])) {
-      const siblings = token.parent?.children || tokens;
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    for (const token of filterByTypes(micromarkTokens, [ "linePrefix" ])) {
+      const siblings = token.parent?.children || micromarkTokens;
       if (siblings[siblings.indexOf(token) - 1]?.type === "blockQuotePrefix") {
         const { startColumn, startLine, text } = token;
         const { length } = text;
@@ -4642,11 +4655,14 @@ module.exports = {
   "description": "Blank line inside blockquote",
   "tags": [ "blockquote", "whitespace" ],
   "function": function MD028(params, onError) {
-    // eslint-disable-next-line dot-notation
-    const { tokens } = params.parsers["micromark"];
-    for (const token of filterByTypes(tokens, [ "blockQuote" ])) {
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    for (const token of filterByTypes(micromarkTokens, [ "blockQuote" ])) {
       const errorLineNumbers = [];
-      const siblings = token.parent?.children || tokens;
+      const siblings = token.parent?.children || micromarkTokens;
       for (let i = siblings.indexOf(token) + 1; i < siblings.length; i++) {
         const sibling = siblings[i];
         const { startLine, type } = sibling;
@@ -4778,11 +4794,12 @@ module.exports = {
     const olSingle = Number(params.config.ol_single || 1);
     const ulMulti = Number(params.config.ul_multi || 1);
     const olMulti = Number(params.config.ol_multi || 1);
-    const lists = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      params.parsers["micromark"].tokens,
-      [ "listOrdered", "listUnordered" ]
-    );
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const lists = filterByTypes(micromarkTokens, [ "listOrdered", "listUnordered" ]);
     for (const list of lists) {
       const ordered = (list.type === "listOrdered");
       const listItemPrefixes =
@@ -4932,12 +4949,16 @@ module.exports = {
   "description": "Lists should be surrounded by blank lines",
   "tags": [ "bullet", "ul", "ol", "blank_lines" ],
   "function": function MD032(params, onError) {
-    const { lines, parsers } = params;
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const { lines } = params;
 
     // For every top-level list...
     const topLevelLists = filterByPredicate(
-      // eslint-disable-next-line dot-notation
-      parsers["micromark"].tokens,
+      micromarkTokens,
       isList,
       (token) => (
         (isList(token) || (token.type === "htmlFlow")) ? [] : token.children
@@ -4998,9 +5019,12 @@ module.exports = {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
     allowedElements = allowedElements.map((element) => element.toLowerCase());
-    // eslint-disable-next-line dot-notation
-    const { tokens } = params.parsers["micromark"];
-    for (const token of filterByTypes(tokens, [ "htmlText" ])) {
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ])) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (
         htmlTagInfo &&
@@ -5048,6 +5072,11 @@ module.exports = {
   "description": "Bare URL used",
   "tags": [ "links", "url" ],
   "function": function MD034(params, onError) {
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     const literalAutolinks = (tokens) => (
       filterByPredicate(
         tokens,
@@ -5083,11 +5112,7 @@ module.exports = {
         }
       )
     );
-    const autoLinks = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      params.parsers["micromark"].tokens,
-      [ "literalAutolink" ]
-    );
+    const autoLinks = filterByTypes(micromarkTokens, [ "literalAutolink" ]);
     if (autoLinks.length > 0) {
       // Re-parse with correct link/image reference definition handling
       const document = params.lines.join("\n");
@@ -5141,9 +5166,12 @@ module.exports = {
   "tags": [ "hr" ],
   "function": function MD035(params, onError) {
     let style = String(params.config.style || "consistent").trim();
-    const thematicBreaks =
-      // eslint-disable-next-line dot-notation
-      filterByTypes(params.parsers["micromark"].tokens, [ "thematicBreak" ]);
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const thematicBreaks = filterByTypes(micromarkTokens, [ "thematicBreak" ]);
     for (const token of thematicBreaks) {
       const { startLine, text } = token;
       if (style === "consistent") {
@@ -5249,14 +5277,18 @@ module.exports = {
   "function": function MD037(params, onError) {
 
     // Initialize variables
-    const { lines, parsers } = params;
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const { lines } = params;
     const emphasisTokensByMarker = new Map();
     for (const marker of [ "_", "__", "___", "*", "**", "***" ]) {
       emphasisTokensByMarker.set(marker, []);
     }
     const tokens = filterByPredicate(
-      // eslint-disable-next-line dot-notation
-      parsers["micromark"].tokens,
+      micromarkTokens,
       (token) => token.children.some((child) => child.type === "data")
     );
     for (const token of tokens) {
@@ -5366,10 +5398,13 @@ module.exports = {
   "description": "Spaces inside code span elements",
   "tags": [ "whitespace", "code" ],
   "function": function MD038(params, onError) {
-    const codeTexts =
-      // eslint-disable-next-line dot-notation
-      filterByTypes(params.parsers["micromark"].tokens, [ "codeText" ])
-        .filter((codeText) => !inHtmlFlow(codeText));
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const codeTexts = filterByTypes(micromarkTokens, [ "codeText" ])
+      .filter((codeText) => !inHtmlFlow(codeText));
     for (const codeText of codeTexts) {
       const { children } = codeText;
       const first = 0;
@@ -5550,8 +5585,12 @@ module.exports = {
     let allowed = params.config.allowed_languages;
     allowed = Array.isArray(allowed) ? allowed : [];
     const languageOnly = !!params.config.language_only;
-    // eslint-disable-next-line dot-notation
-    const fencedCodes = filterByTypes(params.parsers["micromark"].tokens, [ "codeFenced" ]);
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const fencedCodes = filterByTypes(micromarkTokens, [ "codeFenced" ]);
     for (const fencedCode of fencedCodes) {
       const openingFence = tokenIfType(fencedCode.children[0], "codeFencedFence");
       if (openingFence) {
@@ -5808,6 +5847,11 @@ module.exports = {
     const htmlElements = params.config.html_elements;
     const includeHtmlElements =
       (htmlElements === undefined) ? true : !!htmlElements;
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     const scannedTypes = new Set([ "data" ]);
     if (includeCodeBlocks) {
       scannedTypes.add("codeFlowValue");
@@ -5819,8 +5863,7 @@ module.exports = {
     }
     const contentTokens =
       filterByPredicate(
-        // eslint-disable-next-line dot-notation
-        params.parsers["micromark"].tokens,
+        micromarkTokens,
         (token) => scannedTypes.has(token.type),
         (token) => (
           token.children.filter((t) => !ignoredChildTypes.has(t.type))
@@ -5912,11 +5955,14 @@ module.exports = {
   "description": "Images should have alternate text (alt text)",
   "tags": [ "accessibility", "images" ],
   "function": function MD045(params, onError) {
-    // eslint-disable-next-line dot-notation
-    const { tokens } = params.parsers["micromark"];
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
 
     // Process Markdown images
-    const images = filterByTypes(tokens, [ "image" ]);
+    const images = filterByTypes(micromarkTokens, [ "image" ]);
     for (const image of images) {
       const labelTexts = filterByTypes(image.children, [ "labelText" ]);
       if (labelTexts.some((labelText) => labelText.text.length === 0)) {
@@ -5934,7 +5980,7 @@ module.exports = {
     }
 
     // Process HTML images
-    const htmlTexts = filterByTypes(tokens, [ "htmlText" ]);
+    const htmlTexts = filterByTypes(micromarkTokens, [ "htmlText" ]);
     for (const htmlText of htmlTexts) {
       const { startColumn, startLine, text } = htmlText;
       const htmlTagInfo = getHtmlTagInfo(htmlText);
@@ -5990,9 +6036,12 @@ module.exports = {
   "tags": [ "code" ],
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
-    const codeBlocksAndFences =
-      // eslint-disable-next-line dot-notation
-      filterByTypes(params.parsers["micromark"].tokens, [ "codeFenced", "codeIndented" ]);
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const codeBlocksAndFences = filterByTypes(micromarkTokens, [ "codeFenced", "codeIndented" ]);
     for (const token of codeBlocksAndFences) {
       const { startLine, type } = token;
       if (expectedStyle === "consistent") {
@@ -6073,9 +6122,13 @@ module.exports = {
   "tags": [ "code" ],
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     let expectedStyle = style;
-    // eslint-disable-next-line dot-notation
-    const codeFenceds = filterByTypes(params.parsers["micromark"].tokens, [ "codeFenced" ]);
+    const codeFenceds = filterByTypes(micromarkTokens, [ "codeFenced" ]);
     for (const codeFenced of codeFenceds) {
       const codeFencedFence = tokenIfType(codeFenced.children[0], "codeFencedFence");
       if (codeFencedFence) {
@@ -6281,15 +6334,15 @@ module.exports = {
   "description": "Link fragments should be valid",
   "tags": [ "links" ],
   "function": function MD051(params, onError) {
-    // eslint-disable-next-line dot-notation
-    const { tokens } = params.parsers["micromark"];
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     const fragments = new Map();
 
     // Process headings
-    const headingTexts = filterByTypes(
-      tokens,
-      [ "atxHeadingText", "setextHeadingText" ]
-    );
+    const headingTexts = filterByTypes(micromarkTokens, [ "atxHeadingText", "setextHeadingText" ]);
     for (const headingText of headingTexts) {
       const fragment = convertHeadingToHTMLFragment(headingText);
       if (fragment !== "#") {
@@ -6309,7 +6362,7 @@ module.exports = {
     }
 
     // Process HTML anchors
-    for (const token of filterByTypes(tokens, [ "htmlText" ])) {
+    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ])) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (htmlTagInfo && !htmlTagInfo.close) {
         const anchorMatch = idRe.exec(token.text) ||
@@ -6326,7 +6379,7 @@ module.exports = {
       [ "definition", "definitionDestinationString" ]
     ];
     for (const [ parentType, definitionType ] of parentChilds) {
-      const links = filterByTypes(tokens, [ parentType ]);
+      const links = filterByTypes(micromarkTokens, [ parentType ]);
       for (const link of links) {
         const definitions = filterByTypes(link.children, [ definitionType ]);
         for (const definition of definitions) {
@@ -6549,7 +6602,7 @@ module.exports = {
   "description": "Link and image style",
   "tags": [ "images", "links" ],
   "function": (params, onError) => {
-    const { parsers, config } = params;
+    const config = params.config;
     const autolink = (config.autolink === undefined) || !!config.autolink;
     const inline = (config.inline === undefined) || !!config.inline;
     const full = (config.full === undefined) || !!config.full;
@@ -6560,12 +6613,13 @@ module.exports = {
       // Everything allowed, nothing to check
       return;
     }
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
     const { definitions } = referenceLinkImageData();
-    const links = filterByTypes(
-      // eslint-disable-next-line dot-notation
-      parsers["micromark"].tokens,
-      [ "autolink", "image", "link" ]
-    );
+    const links = filterByTypes(micromarkTokens, [ "autolink", "image", "link" ]);
     for (const link of links) {
       let label = null;
       let destination = null;
@@ -6686,8 +6740,12 @@ module.exports = {
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "trailing_only"));
     let expectedTrailingPipe =
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "leading_only"));
-    // eslint-disable-next-line dot-notation
-    const tables = filterByTypes(params.parsers["micromark"].tokens, [ "table" ]);
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const tables = filterByTypes(micromarkTokens, [ "table" ]);
     for (const table of tables) {
       const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
       for (const row of rows) {
@@ -6760,8 +6818,12 @@ module.exports = {
   "description": "Table column count",
   "tags": [ "table" ],
   "function": function MD056(params, onError) {
-    // eslint-disable-next-line dot-notation
-    const tables = filterByTypes(params.parsers["micromark"].tokens, [ "table" ]);
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const tables = filterByTypes(micromarkTokens, [ "table" ]);
     for (const table of tables) {
       const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
       let expectedCount = 0;
