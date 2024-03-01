@@ -277,7 +277,7 @@ module.exports.fencedCodeBlockStyleFor =
  * Return the string representation of a emphasis or strong markup character.
  *
  * @param {string} markup Emphasis or strong string.
- * @returns {string} String representation.
+ * @returns {"asterisk" | "underscore"} String representation.
  */
 module.exports.emphasisOrStrongStyleFor =
   function emphasisOrStrongStyleFor(markup) {
@@ -316,7 +316,7 @@ module.exports.headingStyleFor = function headingStyleFor(token) {
  * Return the string representation of an unordered list marker.
  *
  * @param {Object} token MarkdownItToken instance.
- * @returns {string} String representation.
+ * @returns {"asterisk" | "dash" | "plus"} String representation.
  */
 module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
   switch (token.markup) {

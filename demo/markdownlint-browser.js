@@ -289,7 +289,7 @@ module.exports.fencedCodeBlockStyleFor =
  * Return the string representation of a emphasis or strong markup character.
  *
  * @param {string} markup Emphasis or strong string.
- * @returns {string} String representation.
+ * @returns {"asterisk" | "underscore"} String representation.
  */
 module.exports.emphasisOrStrongStyleFor =
   function emphasisOrStrongStyleFor(markup) {
@@ -328,7 +328,7 @@ module.exports.headingStyleFor = function headingStyleFor(token) {
  * Return the string representation of an unordered list marker.
  *
  * @param {Object} token MarkdownItToken instance.
- * @returns {string} String representation.
+ * @returns {"asterisk" | "dash" | "plus"} String representation.
  */
 module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
   switch (token.markup) {
@@ -1190,11 +1190,21 @@ const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.
 
 const flatTokensSymbol = Symbol("flat-tokens");
 
+// Reference all micromark extensions from markdownlint-micromark so types like TokenType get merged
+/** @type {import("micromark-extension-directive")} */
+/** @type {import("micromark-extension-gfm-autolink-literal")} */
+/** @type {import("micromark-extension-gfm-footnote")} */
+/** @type {import("micromark-extension-gfm-table")} */
+/** @type {import("micromark-extension-math")} */
+/**
+ * @typedef {import("micromark-util-types").TokenType} TokenType
+ */
+
 /**
  * Markdown token.
  *
  * @typedef {Object} Token
- * @property {string} type Token type.
+ * @property {TokenType} type Token type.
  * @property {number} startLine Start line (1-based).
  * @property {number} startColumn Start column (1-based).
  * @property {number} endLine End line (1-based).
@@ -1297,7 +1307,7 @@ function micromarkParseWithOffset(
   let flatTokens = [];
   /** @type {Token} */
   const root = {
-    "type": "ROOT",
+    "type": "data",
     "startLine": -1,
     "startColumn": -1,
     "endLine": -1,
@@ -1461,7 +1471,7 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * Filter a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string[]} types Types to allow.
+ * @param {TokenType[]} types Types to allow.
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types) {
@@ -1520,7 +1530,7 @@ function getHtmlTagInfo(token) {
  * Gets the nearest parent of the specified type for a Micromark token.
  *
  * @param {Token} token Micromark token.
- * @param {string[]} types Types to allow.
+ * @param {TokenType[]} types Types to allow.
  * @returns {Token | null} Parent token.
  */
 function getTokenParentOfType(token, types) {
@@ -1536,7 +1546,7 @@ function getTokenParentOfType(token, types) {
  * Get the text of the first match from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string} type Type to match.
+ * @param {TokenType} type Type to match.
  * @returns {string | null} Text of token.
  */
 function getTokenTextByType(tokens, type) {
@@ -1583,7 +1593,7 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
  * Returns the specified token iff it is of the desired type.
  *
  * @param {Token} token Micromark token candidate.
- * @param {string} type Desired type.
+ * @param {TokenType} type Desired type.
  * @returns {Token | null} Token instance.
  */
 function tokenIfType(token, type) {
@@ -3450,12 +3460,12 @@ const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/h
 const { filterByTypes, getTokenParentOfType, inHtmlFlow } =
   __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
-/**
- * @typedef {import("../helpers/micromark.cjs").Token} Token
- */
-
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("micromark-util-types").TokenType[] */
 const unorderedListTypes =
   [ "blockQuotePrefix", "listItemPrefix", "listUnordered" ];
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("micromark-util-types").TokenType[] */
 const unorderedParentTypes =
   [ "blockQuote", "listOrdered", "listUnordered" ];
 
@@ -3483,7 +3493,7 @@ module.exports = {
         lastBlockQuotePrefix = token;
       } else if (type === "listUnordered") {
         let nesting = 0;
-        /** @type {Token | null} */
+        /** @type {import("../helpers/micromark.cjs").Token | null} */
         let current = token;
         while (
           (current = getTokenParentOfType(current, unorderedParentTypes))
@@ -6169,19 +6179,32 @@ const { filterByPredicate, tokenIfType } = __webpack_require__(/*! ../helpers/mi
 
 const intrawordRe = /^\w$/;
 
+/**
+ * @param {import("./markdownlint").RuleParams} params Rule parameters.
+ * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
+ * @param {import("micromark-util-types").TokenType} type Token type.
+ * @param {import("micromark-util-types").TokenType} typeSequence Token sequence type.
+ * @param {"*" | "**"} asterisk Asterisk kind.
+ * @param {"_" | "__"} underline Underline kind.
+ * @param {"asterisk" | "consistent" | "underscore"} style Style string.
+ */
 const impl =
-  (params, onError, type, asterisk, underline, style = "consistent") => {
-    const { lines, parsers } = params;
+  (params, onError, type, typeSequence, asterisk, underline, style = "consistent") => {
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const { lines } = params;
     const emphasisTokens = filterByPredicate(
-      parsers.micromark.tokens,
+      micromarkTokens,
       (token) => token.type === type,
       (token) => ((token.type === "htmlFlow") ? [] : token.children)
     );
     for (const token of emphasisTokens) {
       const { children } = token;
-      const childType = `${type}Sequence`;
-      const startSequence = tokenIfType(children[0], childType);
-      const endSequence = tokenIfType(children[children.length - 1], childType);
+      const startSequence = tokenIfType(children[0], typeSequence);
+      const endSequence = tokenIfType(children[children.length - 1], typeSequence);
       if (startSequence && endSequence) {
         const markupStyle = emphasisOrStrongStyleFor(startSequence.text);
         if (style === "consistent") {
@@ -6217,6 +6240,8 @@ const impl =
     }
   };
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule[] */
 module.exports = [
   {
     "names": [ "MD049", "emphasis-style" ],
@@ -6227,6 +6252,7 @@ module.exports = [
         params,
         onError,
         "emphasis",
+        "emphasisSequence",
         "*",
         "_",
         params.config.style || undefined
@@ -6242,6 +6268,7 @@ module.exports = [
         params,
         onError,
         "strong",
+        "strongSequence",
         "**",
         "__",
         params.config.style || undefined
@@ -6282,14 +6309,10 @@ const tokensInclude = new Set(
 );
 
 /**
- * @typedef {import("../helpers/micromark.cjs").Token} Token
- */
-
-/**
  * Converts a Markdown heading into an HTML fragment according to the rules
  * used by GitHub.
  *
- * @param {Token} headingText Heading text token.
+ * @param {import("../helpers/micromark.cjs").Token} headingText Heading text token.
  * @returns {string} Fragment string for heading.
  */
 function convertHeadingToHTMLFragment(headingText) {
@@ -6318,7 +6341,7 @@ function convertHeadingToHTMLFragment(headingText) {
 /**
  * Unescapes the text of a String-type micromark Token.
  *
- * @param {Token} token String-type micromark Token.
+ * @param {import("../helpers/micromark.cjs").Token} token String-type micromark Token.
  * @returns {string} Unescaped token text.
  */
 function unescapeStringTokenText(token) {
@@ -6374,6 +6397,8 @@ module.exports = {
     }
 
     // Process link and definition fragments
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").TokenType[][] */
     const parentChilds = [
       [ "link", "resourceDestinationString" ],
       [ "definition", "definitionDestinationString" ]
