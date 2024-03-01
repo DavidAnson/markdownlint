@@ -17,7 +17,7 @@
     "build": "webpack --stats minimal"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "devDependencies": {
     "micromark": "4.0.0",
