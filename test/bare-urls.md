@@ -97,6 +97,8 @@ Email addresses are treated similarly: user@example.com {MD034}
 
 Angle brackets work the same for email: <user@example.com>
 
+Unusual email addresses are handled: <user@.com>
+
 ---
 
 [is-a-valid]: https://example.com
