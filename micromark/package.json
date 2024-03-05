@@ -1,9 +1,10 @@
 {
   "name": "markdownlint-micromark",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "A trivial package that re-exports some micromark functionality as a CommonJS module",
   "type": "commonjs",
   "exports": "./micromark.cjs",
+  "types": "./micromark.d.ts",
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
@@ -14,18 +15,30 @@
   "bugs": "https://github.com/DavidAnson/markdownlint/issues",
   "funding": "https://github.com/sponsors/DavidAnson",
   "scripts": {
-    "build": "webpack --stats minimal"
+    "build": "webpack --stats minimal",
+    "types": "api-extractor run --local"
   },
   "engines": {
     "node": ">=18"
   },
+  "files": [
+    "LICENSE",
+    "micromark-browser.js",
+    "micromark-html-browser.js",
+    "micromark.cjs",
+    "micromark.d.ts",
+    "package.json",
+    "README.md"
+  ],
   "devDependencies": {
+    "@microsoft/api-extractor": "7.42.3",
     "micromark": "4.0.0",
     "micromark-extension-directive": "3.0.0",
     "micromark-extension-gfm-autolink-literal": "2.0.0",
     "micromark-extension-gfm-footnote": "2.0.0",
     "micromark-extension-gfm-table": "2.0.0",
     "micromark-extension-math": "3.0.0",
+    "micromark-util-types": "2.0.0",
     "terser-webpack-plugin": "5.3.10",
     "webpack": "5.90.3",
     "webpack-cli": "5.1.4"
