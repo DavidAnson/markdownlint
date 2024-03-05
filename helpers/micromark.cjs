@@ -4,23 +4,17 @@
 
 // @ts-ignore
 const {
-  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse,
-  postprocess, preprocess
+  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math,
+  parse, postprocess, preprocess
   // @ts-ignore
 } = require("markdownlint-micromark");
 const { newLineRe } = require("./shared.js");
 
 const flatTokensSymbol = Symbol("flat-tokens");
 
-// Reference all micromark extensions from markdownlint-micromark so types like TokenType get merged
-/** @type {import("micromark-extension-directive")} */
-/** @type {import("micromark-extension-gfm-autolink-literal")} */
-/** @type {import("micromark-extension-gfm-footnote")} */
-/** @type {import("micromark-extension-gfm-table")} */
-/** @type {import("micromark-extension-math")} */
-/**
- * @typedef {import("micromark-util-types").TokenType} TokenType
- */
+/** @typedef {import("markdownlint-micromark").Event} Event */
+/** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
+/** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 
 /**
  * Markdown token.
@@ -69,9 +63,9 @@ function isHtmlFlowComment(token) {
  * Parses a Markdown document and returns Micromark events.
  *
  * @param {string} markdown Markdown document.
- * @param {Object} [micromarkOptions] Options for micromark.
+ * @param {ParseOptions} [micromarkOptions] Options for micromark.
  * @param {boolean} [referencesDefined] Treat references as defined.
- * @returns {Object[]} Micromark events.
+ * @returns {Event[]} Micromark events.
  */
 function getMicromarkEvents(
   markdown,
@@ -106,7 +100,7 @@ function getMicromarkEvents(
  * Parses a Markdown document and returns (frozen) tokens.
  *
  * @param {string} markdown Markdown document.
- * @param {Object} micromarkOptions Options for micromark.
+ * @param {ParseOptions} micromarkOptions Options for micromark.
  * @param {boolean} referencesDefined Treat references as defined.
  * @param {number} lineDelta Offset to apply to start/end line.
  * @param {Token} [ancestor] Parent of top-most tokens.
@@ -140,6 +134,8 @@ function micromarkParseWithOffset(
   };
   const history = [ root ];
   let current = root;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type ParseOptions | null */
   let reparseOptions = null;
   let lines = null;
   let skipHtmlFlowChildren = false;
@@ -217,7 +213,7 @@ function micromarkParseWithOffset(
  * Parses a Markdown document and returns (frozen) tokens.
  *
  * @param {string} markdown Markdown document.
- * @param {Object} [micromarkOptions] Options for micromark.
+ * @param {ParseOptions} [micromarkOptions] Options for micromark.
  * @param {boolean} [referencesDefined] Treat references as defined.
  * @returns {Token[]} Micromark tokens (frozen).
  */

@@ -1182,23 +1182,17 @@ module.exports = {
 
 // @ts-ignore
 const {
-  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse,
-  postprocess, preprocess
+  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math,
+  parse, postprocess, preprocess
   // @ts-ignore
 } = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
 const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
 const flatTokensSymbol = Symbol("flat-tokens");
 
-// Reference all micromark extensions from markdownlint-micromark so types like TokenType get merged
-/** @type {import("micromark-extension-directive")} */
-/** @type {import("micromark-extension-gfm-autolink-literal")} */
-/** @type {import("micromark-extension-gfm-footnote")} */
-/** @type {import("micromark-extension-gfm-table")} */
-/** @type {import("micromark-extension-math")} */
-/**
- * @typedef {import("micromark-util-types").TokenType} TokenType
- */
+/** @typedef {import("markdownlint-micromark").Event} Event */
+/** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
+/** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 
 /**
  * Markdown token.
@@ -1247,9 +1241,9 @@ function isHtmlFlowComment(token) {
  * Parses a Markdown document and returns Micromark events.
  *
  * @param {string} markdown Markdown document.
- * @param {Object} [micromarkOptions] Options for micromark.
+ * @param {ParseOptions} [micromarkOptions] Options for micromark.
  * @param {boolean} [referencesDefined] Treat references as defined.
- * @returns {Object[]} Micromark events.
+ * @returns {Event[]} Micromark events.
  */
 function getMicromarkEvents(
   markdown,
@@ -1284,7 +1278,7 @@ function getMicromarkEvents(
  * Parses a Markdown document and returns (frozen) tokens.
  *
  * @param {string} markdown Markdown document.
- * @param {Object} micromarkOptions Options for micromark.
+ * @param {ParseOptions} micromarkOptions Options for micromark.
  * @param {boolean} referencesDefined Treat references as defined.
  * @param {number} lineDelta Offset to apply to start/end line.
  * @param {Token} [ancestor] Parent of top-most tokens.
@@ -1318,6 +1312,8 @@ function micromarkParseWithOffset(
   };
   const history = [ root ];
   let current = root;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type ParseOptions | null */
   let reparseOptions = null;
   let lines = null;
   let skipHtmlFlowChildren = false;
@@ -1395,7 +1391,7 @@ function micromarkParseWithOffset(
  * Parses a Markdown document and returns (frozen) tokens.
  *
  * @param {string} markdown Markdown document.
- * @param {Object} [micromarkOptions] Options for micromark.
+ * @param {ParseOptions} [micromarkOptions] Options for micromark.
  * @param {boolean} [referencesDefined] Treat references as defined.
  * @returns {Token[]} Micromark tokens (frozen).
  */
@@ -3461,11 +3457,11 @@ const { filterByTypes, getTokenParentOfType, inHtmlFlow } =
   __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
-/** @type import("micromark-util-types").TokenType[] */
+/** @type import("markdownlint-micromark").TokenType[] */
 const unorderedListTypes =
   [ "blockQuotePrefix", "listItemPrefix", "listUnordered" ];
 // eslint-disable-next-line jsdoc/valid-types
-/** @type import("micromark-util-types").TokenType[] */
+/** @type import("markdownlint-micromark").TokenType[] */
 const unorderedParentTypes =
   [ "blockQuote", "listOrdered", "listUnordered" ];
 
@@ -6203,8 +6199,8 @@ const intrawordRe = /^\w$/;
 /**
  * @param {import("./markdownlint").RuleParams} params Rule parameters.
  * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
- * @param {import("micromark-util-types").TokenType} type Token type.
- * @param {import("micromark-util-types").TokenType} typeSequence Token sequence type.
+ * @param {import("markdownlint-micromark").TokenType} type Token type.
+ * @param {import("markdownlint-micromark").TokenType} typeSequence Token sequence type.
  * @param {"*" | "**"} asterisk Asterisk kind.
  * @param {"_" | "__"} underline Underline kind.
  * @param {"asterisk" | "consistent" | "underscore"} style Style string.
