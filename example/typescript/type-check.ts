@@ -109,7 +109,7 @@ markdownlint(options, assertLintResultsCallback);
   assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
 })();
 
-const testRule = {
+const testRule: markdownlint.Rule = {
   "names": [ "test-rule" ],
   "description": "Test rule",
   "information": new URL("https://example.com/rule-information"),

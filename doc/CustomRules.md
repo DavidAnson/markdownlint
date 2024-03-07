@@ -28,6 +28,7 @@ the parsed input and a function to log any violations.
 A simple rule implementation looks like:
 
 ```javascript
+/** @type import("markdownlint").Rule */
 module.exports = {
   "names": [ "any-blockquote" ],
   "description": "Rule that reports an error for any blockquote",

@@ -56,6 +56,14 @@
     },
     {
       "files": [
+        "test/rules/**/*.js"
+      ],
+      "rules": {
+        "jsdoc/valid-types": "off"
+      }
+    },
+    {
+      "files": [
         "**/*.mjs"
       ],
       "parserOptions": {

@@ -4,6 +4,7 @@
 
 const { forEachLine, getLineMetadata } = require("markdownlint-rule-helpers");
 
+/** @type import("../../lib/markdownlint").Rule */
 module.exports = {
   "names": [ "every-n-lines" ],
   "description": "Rule that reports an error every N lines",

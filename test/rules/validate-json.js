@@ -5,6 +5,7 @@
 const { filterTokens } = require("markdownlint-rule-helpers");
 const { parse, printParseErrorCode } = require("jsonc-parser");
 
+/** @type import("../../lib/markdownlint").Rule */
 module.exports = {
   "names": [ "validate-json" ],
   "description": "Rule that validates JSON code",

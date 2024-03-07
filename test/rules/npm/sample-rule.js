@@ -2,6 +2,7 @@
 
 "use strict";
 
+/** @type import("../../../lib/markdownlint").Rule */
 module.exports = {
   "names": [ "sample-rule" ],
   "description": "Sample rule",

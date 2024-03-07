@@ -24,6 +24,7 @@ be useful to custom rule authors and may avoid duplicating code.
 ```javascript
 const { forEachLine, getLineMetadata } = require("markdownlint-rule-helpers");
 
+/** @type import("markdownlint").Rule */
 module.exports = {
   "names": [ "every-n-lines" ],
   "description": "Rule that reports an error every N lines",

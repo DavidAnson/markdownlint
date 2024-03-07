@@ -24,6 +24,7 @@ function cleanJsdocRulesFromEslintConfig(config) {
   return cleanedConfig;
 }
 
+/** @type import("../../lib/markdownlint").Rule */
 module.exports = {
   "names": [ "lint-javascript" ],
   "description": "Rule that lints JavaScript code",
