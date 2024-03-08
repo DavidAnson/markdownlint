@@ -117,10 +117,6 @@ type RuleParams = {
      */
     name: string;
     /**
-     * Token objects from markdown-it (deprecated, use parsers.markdownit.tokens).
-     */
-    tokens: MarkdownItToken[];
-    /**
      * Markdown parser data.
      */
     parsers: MarkdownParsers;
