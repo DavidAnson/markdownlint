@@ -114,6 +114,7 @@ const testRule: markdownlint.Rule = {
   "description": "Test rule",
   "information": new URL("https://example.com/rule-information"),
   "tags": [ "test-tag" ],
+  "parser": "none",
   "function": function rule(params: markdownlint.RuleParams, onError: markdownlint.RuleOnError) {
     assert(!!params);
     assert(!!onError);
@@ -122,6 +123,9 @@ const testRule: markdownlint.Rule = {
       "name": "name",
       "parsers": {
         "markdownit": {
+          "tokens": []
+        },
+        "micromark": {
           "tokens": []
         }
       },

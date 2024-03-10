@@ -34,6 +34,7 @@ module.exports = {
   "description": "Rule that reports an error for any blockquote",
   "information": new URL("https://example.com/rules/any-blockquote"),
   "tags": [ "test" ],
+  "parser": "markdownit",
   "function": function rule(params, onError) {
     params.parsers.markdownit.tokens.filter(function filterToken(token) {
       return token.type === "blockquote_open";
@@ -49,8 +50,7 @@ module.exports = {
 };
 ```
 
-A rule is implemented as an `Object` with one optional and four required
-properties:
+A rule is implemented as an `Object`:
 
 - `names` is a required `Array` of `String` values that identify the rule in
   output messages and config.
@@ -60,6 +60,9 @@ properties:
   about the rule.
 - `tags` is a required `Array` of `String` values that groups related rules for
   easier customization.
+- `parser` is a required `String` value `"markdownit" | "none"` that specifies
+  the parser data used via `params.parsers` (see below).
+  - Note: The value `"micromark"` is valid but is NOT currently supported.
 - `asynchronous` is an optional `Boolean` value that indicates whether the rule
   returns a `Promise` and runs asynchronously.
 - `function` is a required `Function` that implements the rule and is passed two
@@ -67,8 +70,13 @@ properties:
   - `params` is an `Object` with properties that describe the content being
     analyzed:
     - `name` is a `String` that identifies the input file/string.
-    - `tokens` is an `Array` of [`markdown-it` `Token`s][markdown-it-token] with
-      added `line` and `lineNumber` properties.
+    - `parsers` is an `Object` with properties corresponding to the value of
+      `parser` in the rule definition (see above).
+      - `markdownit` is an `Object` that provides access to output from the
+        [`markdown-it`][markdown-it] parser.
+        - `tokens` is an `Array` of [`markdown-it` `Token`s][markdown-it-token]
+          with added `line` and `lineNumber` properties. (This property was
+          previously on the `params` object.)
     - `lines` is an `Array` of `String` values corresponding to the lines of the
       input file/string.
     - `frontMatterLines` is an `Array` of `String` values corresponding to any
@@ -145,7 +153,7 @@ Yields the `params` object:
 ```json
 {
   "name": "doc/example.md",
-  "tokens": [
+  "parsers.markdownit.tokens": [
     {
       "type": "heading_open",
       "tag": "h1",

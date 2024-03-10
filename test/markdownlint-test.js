@@ -1059,12 +1059,12 @@ test("someCustomRulesHaveValidUrl", (t) => {
       (Object.getPrototypeOf(rule.information) === URL.prototype));
     if (rule === customRules.anyBlockquote) {
       t.is(
-        rule.information.href,
+        rule.information?.href,
         `${homepage}/blob/main/test/rules/any-blockquote.js`
       );
     } else if (rule === customRules.lettersEX) {
       t.is(
-        rule.information.href,
+        rule.information?.href,
         `${homepage}/blob/main/test/rules/letters-E-X.js`
       );
     }
@@ -1142,12 +1142,15 @@ Text with: [^footnote]
 
 test("token-map-spans", (t) => {
   t.plan(38);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "token-map-spans" ],
         "description": "token-map-spans",
         "tags": [ "tms" ],
+        "parser": "markdownit",
         "function": function tokenMapSpans(params) {
           const tokenLines = [];
           let lastLineNumber = -1;

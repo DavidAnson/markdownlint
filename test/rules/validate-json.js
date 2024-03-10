@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { filterTokens } = require("markdownlint-rule-helpers");
+const { filterTokens } = require("../../helpers");
 const { parse, printParseErrorCode } = require("jsonc-parser");
 
 /** @type import("../../lib/markdownlint").Rule */
@@ -10,6 +10,7 @@ module.exports = {
   "names": [ "validate-json" ],
   "description": "Rule that validates JSON code",
   "tags": [ "test", "validate", "json" ],
+  "parser": "markdownit",
   "asynchronous": true,
   "function": (params, onError) => {
     filterTokens(params, "fence", (fence) => {

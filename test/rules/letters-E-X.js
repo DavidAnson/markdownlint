@@ -11,6 +11,7 @@ module.exports = {
     "/blob/main/test/rules/letters-E-X.js"
   ),
   "tags": [ "test" ],
+  "parser": "markdownit",
   "function": (params, onError) => {
     for (const inline of params.parsers.markdownit.tokens.filter(
       (token) => token.type === "inline"

@@ -714,10 +714,10 @@ module.exports.frontMatterHasTitle =
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {Object} params RuleParams instance.
+ * @param {import("../helpers/micromark.cjs").Token[]} tokens Micromark tokens.
  * @returns {Object} Reference link/image data.
  */
-function getReferenceLinkImageData(params) {
+function getReferenceLinkImageData(tokens) {
   const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
   const definitions = new Map();
   const definitionLineIndices = [];
@@ -726,7 +726,7 @@ function getReferenceLinkImageData(params) {
   const shortcuts = new Map();
   const filteredTokens =
     micromark.filterByTypes(
-      params.parsers.micromark.tokens,
+      tokens,
       [
         // definitionLineIndices
         "definition", "gfmFootnoteDefinition",
@@ -1193,20 +1193,7 @@ const flatTokensSymbol = Symbol("flat-tokens");
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
-
-/**
- * Markdown token.
- *
- * @typedef {Object} Token
- * @property {TokenType} type Token type.
- * @property {number} startLine Start line (1-based).
- * @property {number} startColumn Start column (1-based).
- * @property {number} endLine End line (1-based).
- * @property {number} endColumn End column (1-based).
- * @property {string} text Token text.
- * @property {Token[]} children Child tokens.
- * @property {Token | null} parent Parent token.
- */
+/** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
 
 /**
  * Returns whether a token is an htmlFlow type containing an HTML comment.
@@ -1712,17 +1699,16 @@ function validateRuleList(ruleList, synchronous) {
   for (const [ index, rule ] of ruleList.entries()) {
     const customIndex = index - rules.length;
     // eslint-disable-next-line no-inner-declarations, jsdoc/require-jsdoc
-    function newError(property) {
+    function newError(property, value) {
       return new Error(
-        "Property '" + property + "' of custom rule at index " +
-        customIndex + " is incorrect.");
+        `Property '${property}' of custom rule at index ${customIndex} is incorrect: '${value}'.`);
     }
     for (const property of [ "names", "tags" ]) {
       const value = rule[property];
       if (!result &&
         (!value || !Array.isArray(value) || (value.length === 0) ||
          !value.every(helpers.isString) || value.some(helpers.isEmptyString))) {
-        result = newError(property);
+        result = newError(property, value);
       }
     }
     for (const propertyInfo of [
@@ -1732,22 +1718,31 @@ function validateRuleList(ruleList, synchronous) {
       const property = propertyInfo[0];
       const value = rule[property];
       if (!result && (!value || (typeof value !== propertyInfo[1]))) {
-        result = newError(property);
+        result = newError(property, value);
       }
+    }
+    if (
+      !result &&
+      (rule.parser !== undefined) &&
+      (rule.parser !== "markdownit") &&
+      !((customIndex < 0) && (rule.parser === "micromark")) &&
+      (rule.parser !== "none")
+    ) {
+      result = newError("parser", rule.parser);
     }
     if (
       !result &&
       rule.information &&
       !helpers.isUrl(rule.information)
     ) {
-      result = newError("information");
+      result = newError("information", rule.information);
     }
     if (
       !result &&
       (rule.asynchronous !== undefined) &&
       (typeof rule.asynchronous !== "boolean")
     ) {
-      result = newError("asynchronous");
+      result = newError("asynchronous", rule.asynchronous);
     }
     if (!result && rule.asynchronous && synchronous) {
       result = new Error(
@@ -2242,18 +2237,26 @@ function lintContent(
   const lines = content.split(helpers.newLineRe);
   annotateAndFreezeTokens(markdownitTokens, lines);
   // Create (frozen) parameters for rules
-  const parsers = Object.freeze({
+  /** @type {MarkdownParsers} */
+  // @ts-ignore
+  const parsersMarkdownIt = Object.freeze({
     "markdownit": Object.freeze({
       "tokens": markdownitTokens
-    }),
+    })
+  });
+  /** @type {MarkdownParsers} */
+  // @ts-ignore
+  const parsersMicromark = Object.freeze({
     "micromark": Object.freeze({
       "tokens": micromarkTokens
     })
   });
+  /** @type {MarkdownParsers} */
+  // @ts-ignore
+  const parsersNone = Object.freeze({});
   const paramsBase = {
     name,
-    parsers,
-    "tokens": markdownitTokens,
+    "parsers": parsersMarkdownIt,
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
@@ -2262,9 +2265,9 @@ function lintContent(
   const codeBlockAndSpanRanges =
     helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
   const flattenedLists =
-    helpers.flattenLists(paramsBase.parsers.markdownit.tokens);
+    helpers.flattenLists(markdownitTokens);
   const referenceLinkImageData =
-    helpers.getReferenceLinkImageData(paramsBase);
+    helpers.getReferenceLinkImageData(micromarkTokens);
   cache.set({
     codeBlockAndSpanRanges,
     flattenedLists,
@@ -2273,12 +2276,27 @@ function lintContent(
   });
   // Function to run for each rule
   let results = [];
-  // eslint-disable-next-line jsdoc/require-jsdoc
-  function forRule(rule) {
+  /**
+   * @param {Rule} rule Rule.
+   * @returns {Promise<void> | null} Promise.
+   */
+  const forRule = (rule) => {
     // Configure rule
     const ruleName = rule.names[0].toUpperCase();
+    const tokens = {};
+    let parsers = parsersNone;
+    if (rule.parser === undefined) {
+      tokens.tokens = markdownitTokens;
+      parsers = parsersMarkdownIt;
+    } else if (rule.parser === "markdownit") {
+      parsers = parsersMarkdownIt;
+    } else if (rule.parser === "micromark") {
+      parsers = parsersMicromark;
+    }
     const params = {
       ...paramsBase,
+      ...tokens,
+      parsers,
       "config": effectiveConfig[ruleName]
     };
     // eslint-disable-next-line jsdoc/require-jsdoc
@@ -2554,6 +2572,7 @@ function lintInput(options, synchronous, callback) {
         "description": rule.description,
         "information": helpers.cloneIfUrl(rule.information),
         "tags": helpers.cloneIfArray(rule.tags),
+        "parser": rule.parser,
         "asynchronous": rule.asynchronous,
         "function": rule.function
       }));
@@ -2960,22 +2979,27 @@ module.exports = markdownlint;
  * @returns {void}
  */
 
+/* eslint-disable jsdoc/valid-types */
+
 /**
  * Rule parameters.
  *
  * @typedef {Object} RuleParams
  * @property {string} name File/string name.
  * @property {MarkdownParsers} parsers Markdown parser data.
- * @property {string[]} lines File/string lines.
- * @property {string[]} frontMatterLines Front matter lines.
+ * @property {readonly string[]} lines File/string lines.
+ * @property {readonly string[]} frontMatterLines Front matter lines.
  * @property {RuleConfiguration} config Rule configuration.
  */
+
+/* eslint-enable jsdoc/valid-types */
 
 /**
  * Markdown parser data.
  *
  * @typedef {Object} MarkdownParsers
- * @property {ParserMarkdownIt} markdownit Markdown parser data from markdown-it.
+ * @property {ParserMarkdownIt} markdownit Markdown parser data from markdown-it (only present when Rule.parser is "markdownit").
+ * @property {ParserMicromark} micromark Markdown parser data from micromark (only present when Rule.parser is "micromark").
  */
 
 /**
@@ -2983,6 +3007,13 @@ module.exports = markdownlint;
  *
  * @typedef {Object} ParserMarkdownIt
  * @property {MarkdownItToken[]} tokens Token objects from markdown-it.
+ */
+
+/**
+ * Markdown parser data from micromark.
+ *
+ * @typedef {Object} ParserMicromark
+ * @property {MicromarkToken[]} tokens Token objects from micromark.
  */
 
 /**
@@ -3004,6 +3035,22 @@ module.exports = markdownlint;
  * @property {string} type Token type.
  * @property {number} lineNumber Line number (1-based).
  * @property {string} line Line content.
+ */
+
+/** @typedef {import("markdownlint-micromark").TokenType} MicromarkTokenType */
+
+/**
+ * micromark token.
+ *
+ * @typedef {Object} MicromarkToken
+ * @property {MicromarkTokenType} type Token type.
+ * @property {number} startLine Start line (1-based).
+ * @property {number} startColumn Start column (1-based).
+ * @property {number} endLine End line (1-based).
+ * @property {number} endColumn End column (1-based).
+ * @property {string} text Token text.
+ * @property {MicromarkToken[]} children Child tokens.
+ * @property {MicromarkToken | null} parent Parent token.
  */
 
 /**
@@ -3044,6 +3091,7 @@ module.exports = markdownlint;
  * @property {string} description Rule description.
  * @property {URL} [information] Link to more information.
  * @property {string[]} tags Rule tag(s).
+ * @property {"markdownit" | "micromark" | "none"} parser Parser used.
  * @property {boolean} [asynchronous] True if asynchronous.
  * @property {RuleFunction} function Rule implementation.
  */
@@ -3189,6 +3237,7 @@ module.exports = {
   "names": [ "MD001", "heading-increment" ],
   "description": "Heading levels should only increment by one level at a time",
   "tags": [ "headings" ],
+  "parser": "markdownit",
   "function": function MD001(params, onError) {
     let prevLevel = 0;
     filterTokens(params, "heading_open", function forToken(token) {
@@ -3225,6 +3274,7 @@ module.exports = {
   "names": [ "MD003", "heading-style" ],
   "description": "Heading style",
   "tags": [ "headings" ],
+  "parser": "markdownit",
   "function": function MD003(params, onError) {
     let style = String(params.config.style || "consistent");
     filterTokens(params, "heading_open", function forToken(token) {
@@ -3293,6 +3343,7 @@ module.exports = {
   "names": [ "MD004", "ul-style" ],
   "description": "Unordered list style",
   "tags": [ "bullet", "ul" ],
+  "parser": "none",
   "function": function MD004(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
@@ -3369,6 +3420,7 @@ module.exports = {
   "names": [ "MD005", "list-indent" ],
   "description": "Inconsistent indentation for list items at the same level",
   "tags": [ "bullet", "ul", "indentation" ],
+  "parser": "micromark",
   "function": function MD005(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -3470,6 +3522,7 @@ module.exports = {
   "names": [ "MD007", "ul-indent" ],
   "description": "Unordered list indentation",
   "tags": [ "bullet", "ul", "indentation" ],
+  "parser": "micromark",
   "function": function MD007(params, onError) {
     const indent = Number(params.config.indent || 2);
     const startIndented = !!params.config.start_indented;
@@ -3563,6 +3616,7 @@ module.exports = {
   "names": [ "MD009", "no-trailing-spaces" ],
   "description": "Trailing spaces",
   "tags": [ "whitespace" ],
+  "parser": "markdownit",
   "function": function MD009(params, onError) {
     let brSpaces = params.config.br_spaces;
     brSpaces = Number((brSpaces === undefined) ? 2 : brSpaces);
@@ -3664,6 +3718,7 @@ module.exports = {
   "names": [ "MD010", "no-hard-tabs" ],
   "description": "Hard tabs",
   "tags": [ "whitespace", "hard_tab" ],
+  "parser": "markdownit",
   "function": function MD010(params, onError) {
     const codeBlocks = params.config.code_blocks;
     const includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
@@ -3737,6 +3792,7 @@ module.exports = {
   "names": [ "MD011", "no-reversed-links" ],
   "description": "Reversed link syntax",
   "tags": [ "links" ],
+  "parser": "none",
   "function": function MD011(params, onError) {
     const exclusions = codeBlockAndSpanRanges();
     forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence) => {
@@ -3793,6 +3849,7 @@ module.exports = {
   "names": [ "MD012", "no-multiple-blanks" ],
   "description": "Multiple consecutive blank lines",
   "tags": [ "whitespace", "blank_lines" ],
+  "parser": "none",
   "function": function MD012(params, onError) {
     const maximum = Number(params.config.maximum || 1);
     let count = 0;
@@ -3855,6 +3912,7 @@ module.exports = {
   "names": [ "MD013", "line-length" ],
   "description": "Line length",
   "tags": [ "line_length" ],
+  "parser": "markdownit",
   "function": function MD013(params, onError) {
     const lineLength = Number(params.config.line_length || 80);
     const headingLineLength =
@@ -3948,6 +4006,7 @@ module.exports = {
   "names": [ "MD014", "commands-show-output" ],
   "description": "Dollar signs used before commands without showing output",
   "tags": [ "code" ],
+  "parser": "markdownit",
   "function": function MD014(params, onError) {
     for (const type of [ "code_block", "fence" ]) {
       filterTokens(params, type, (token) => {
@@ -4014,6 +4073,7 @@ module.exports = {
   "names": [ "MD018", "no-missing-space-atx" ],
   "description": "No space after hash on atx style heading",
   "tags": [ "headings", "atx", "spaces" ],
+  "parser": "none",
   "function": function MD018(params, onError) {
     forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
       if (!inCode &&
@@ -4062,6 +4122,7 @@ module.exports = {
   "names": [ "MD019", "no-multiple-space-atx" ],
   "description": "Multiple spaces after hash on atx style heading",
   "tags": [ "headings", "atx", "spaces" ],
+  "parser": "markdownit",
   "function": function MD019(params, onError) {
     filterTokens(params, "heading_open", (token) => {
       if (headingStyleFor(token) === "atx") {
@@ -4114,6 +4175,7 @@ module.exports = {
   "names": [ "MD020", "no-missing-space-closed-atx" ],
   "description": "No space inside hashes on closed atx style heading",
   "tags": [ "headings", "atx_closed", "spaces" ],
+  "parser": "none",
   "function": function MD020(params, onError) {
     forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
       if (!inCode) {
@@ -4191,6 +4253,7 @@ module.exports = {
   "names": [ "MD021", "no-multiple-space-closed-atx" ],
   "description": "Multiple spaces inside hashes on closed atx style heading",
   "tags": [ "headings", "atx_closed", "spaces" ],
+  "parser": "markdownit",
   "function": function MD021(params, onError) {
     filterTokens(params, "heading_open", (token) => {
       if (headingStyleFor(token) === "atx_closed") {
@@ -4290,6 +4353,7 @@ module.exports = {
   "names": [ "MD022", "blanks-around-headings" ],
   "description": "Headings should be surrounded by blank lines",
   "tags": [ "headings", "blank_lines" ],
+  "parser": "micromark",
   "function": function MD022(params, onError) {
     const getLinesAbove = getLinesFunction(params.config.lines_above);
     const getLinesBelow = getLinesFunction(params.config.lines_below);
@@ -4391,6 +4455,7 @@ module.exports = {
   "names": [ "MD023", "heading-start-left" ],
   "description": "Headings must start at the beginning of the line",
   "tags": [ "headings", "spaces" ],
+  "parser": "markdownit",
   "function": function MD023(params, onError) {
     filterTokens(params, "heading_open", function forToken(token) {
       const { lineNumber, line } = token;
@@ -4440,6 +4505,7 @@ module.exports = {
   "names": [ "MD024", "no-duplicate-heading" ],
   "description": "Multiple headings with the same content",
   "tags": [ "headings" ],
+  "parser": "markdownit",
   "function": function MD024(params, onError) {
     const siblingsOnly = !!params.config.siblings_only || false;
     const knownContents = [ null, [] ];
@@ -4496,6 +4562,7 @@ module.exports = {
   "names": [ "MD025", "single-title", "single-h1" ],
   "description": "Multiple top-level headings in the same document",
   "tags": [ "headings" ],
+  "parser": "markdownit",
   "function": function MD025(params, onError) {
     const level = Number(params.config.level || 1);
     const tag = "h" + level;
@@ -4542,6 +4609,7 @@ module.exports = {
   "names": [ "MD026", "no-trailing-punctuation" ],
   "description": "Trailing punctuation in heading",
   "tags": [ "headings" ],
+  "parser": "micromark",
   "function": function MD026(params, onError) {
     let punctuation = params.config.punctuation;
     punctuation = String(
@@ -4605,6 +4673,7 @@ module.exports = {
   "names": ["MD027", "no-multiple-space-blockquote"],
   "description": "Multiple spaces after blockquote symbol",
   "tags": ["blockquote", "whitespace", "indentation"],
+  "parser": "micromark",
   "function": function MD027(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -4659,6 +4728,7 @@ module.exports = {
   "names": [ "MD028", "no-blanks-blockquote" ],
   "description": "Blank line inside blockquote",
   "tags": [ "blockquote", "whitespace" ],
+  "parser": "micromark",
   "function": function MD028(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -4721,6 +4791,7 @@ module.exports = {
   "names": [ "MD029", "ol-prefix" ],
   "description": "Ordered list item prefix",
   "tags": [ "ol" ],
+  "parser": "none",
   "function": function MD029(params, onError) {
     const style = String(params.config.style || "one_or_ordered");
     const filteredLists = flattenedLists().filter((list) => !list.unordered);
@@ -4794,6 +4865,7 @@ module.exports = {
   "names": [ "MD030", "list-marker-space" ],
   "description": "Spaces after list markers",
   "tags": [ "ol", "ul", "whitespace" ],
+  "parser": "micromark",
   "function": function MD030(params, onError) {
     const ulSingle = Number(params.config.ul_single || 1);
     const olSingle = Number(params.config.ol_single || 1);
@@ -4872,6 +4944,7 @@ module.exports = {
   "names": [ "MD031", "blanks-around-fences" ],
   "description": "Fenced code blocks should be surrounded by blank lines",
   "tags": [ "code", "blank_lines" ],
+  "parser": "none",
   "function": function MD031(params, onError) {
     const listItems = params.config.list_items;
     const includeListItems = (listItems === undefined) ? true : !!listItems;
@@ -4953,6 +5026,7 @@ module.exports = {
   "names": [ "MD032", "blanks-around-lists" ],
   "description": "Lists should be surrounded by blank lines",
   "tags": [ "bullet", "ul", "ol", "blank_lines" ],
+  "parser": "micromark",
   "function": function MD032(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -5020,6 +5094,7 @@ module.exports = {
   "names": [ "MD033", "no-inline-html" ],
   "description": "Inline HTML",
   "tags": [ "html" ],
+  "parser": "micromark",
   "function": function MD033(params, onError) {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
@@ -5076,6 +5151,7 @@ module.exports = {
   "names": [ "MD034", "no-bare-urls" ],
   "description": "Bare URL used",
   "tags": [ "links", "url" ],
+  "parser": "micromark",
   "function": function MD034(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -5190,6 +5266,7 @@ module.exports = {
   "names": [ "MD035", "hr-style" ],
   "description": "Horizontal rule style",
   "tags": [ "hr" ],
+  "parser": "micromark",
   "function": function MD035(params, onError) {
     let style = String(params.config.style || "consistent").trim();
     // eslint-disable-next-line jsdoc/valid-types
@@ -5230,6 +5307,7 @@ module.exports = {
   "names": [ "MD036", "no-emphasis-as-heading" ],
   "description": "Emphasis used instead of a heading",
   "tags": [ "headings", "emphasis" ],
+  "parser": "markdownit",
   "function": function MD036(params, onError) {
     let punctuation = params.config.punctuation;
     punctuation =
@@ -5300,6 +5378,7 @@ module.exports = {
   "names": [ "MD037", "no-space-in-emphasis" ],
   "description": "Spaces inside emphasis markers",
   "tags": [ "whitespace", "emphasis" ],
+  "parser": "micromark",
   "function": function MD037(params, onError) {
 
     // Initialize variables
@@ -5423,6 +5502,7 @@ module.exports = {
   "names": [ "MD038", "no-space-in-code" ],
   "description": "Spaces inside code span elements",
   "tags": [ "whitespace", "code" ],
+  "parser": "micromark",
   "function": function MD038(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -5527,6 +5607,7 @@ module.exports = {
   "names": [ "MD039", "no-space-in-links" ],
   "description": "Spaces inside link text",
   "tags": [ "whitespace", "links" ],
+  "parser": "markdownit",
   "function": function MD039(params, onError) {
     filterTokens(params, "inline", (token) => {
       const { children } = token;
@@ -5607,6 +5688,7 @@ module.exports = {
   "names": [ "MD040", "fenced-code-language" ],
   "description": "Fenced code blocks should have a language specified",
   "tags": [ "code", "language" ],
+  "parser": "micromark",
   "function": function MD040(params, onError) {
     let allowed = params.config.allowed_languages;
     allowed = Array.isArray(allowed) ? allowed : [];
@@ -5657,6 +5739,7 @@ module.exports = {
   "names": [ "MD041", "first-line-heading", "first-line-h1" ],
   "description": "First line in a file should be a top-level heading",
   "tags": [ "headings" ],
+  "parser": "markdownit",
   "function": function MD041(params, onError) {
     const level = Number(params.config.level || 1);
     const tag = "h" + level;
@@ -5713,6 +5796,7 @@ module.exports = {
   "names": [ "MD042", "no-empty-links" ],
   "description": "No empty links",
   "tags": [ "links" ],
+  "parser": "markdownit",
   "function": function MD042(params, onError) {
     filterTokens(params, "inline", function forToken(token) {
       let inLink = false;
@@ -5776,6 +5860,7 @@ module.exports = {
   "names": [ "MD043", "required-headings" ],
   "description": "Required heading structure",
   "tags": [ "headings" ],
+  "parser": "markdownit",
   "function": function MD043(params, onError) {
     const requiredHeadings = params.config.headings;
     if (!Array.isArray(requiredHeadings)) {
@@ -5859,6 +5944,7 @@ module.exports = {
   "names": [ "MD044", "proper-names" ],
   "description": "Proper names should have the correct capitalization",
   "tags": [ "spelling" ],
+  "parser": "micromark",
   "function": function MD044(params, onError) {
     let names = params.config.names;
     names = Array.isArray(names) ? names : [];
@@ -5980,6 +6066,7 @@ module.exports = {
   "names": [ "MD045", "no-alt-text" ],
   "description": "Images should have alternate text (alt text)",
   "tags": [ "accessibility", "images" ],
+  "parser": "micromark",
   "function": function MD045(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -6060,6 +6147,7 @@ module.exports = {
   "names": [ "MD046", "code-block-style" ],
   "description": "Code block style",
   "tags": [ "code" ],
+  "parser": "micromark",
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
     // eslint-disable-next-line jsdoc/valid-types
@@ -6104,6 +6192,7 @@ module.exports = {
   "names": [ "MD047", "single-trailing-newline" ],
   "description": "Files should end with a single newline character",
   "tags": [ "blank_lines" ],
+  "parser": "none",
   "function": function MD047(params, onError) {
     const lastLineNumber = params.lines.length;
     const lastLine = params.lines[lastLineNumber - 1];
@@ -6146,6 +6235,7 @@ module.exports = {
   "names": [ "MD048", "code-fence-style" ],
   "description": "Code fence style",
   "tags": [ "code" ],
+  "parser": "micromark",
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
     // eslint-disable-next-line jsdoc/valid-types
@@ -6263,6 +6353,7 @@ module.exports = [
     "names": [ "MD049", "emphasis-style" ],
     "description": "Emphasis style",
     "tags": [ "emphasis" ],
+    "parser": "micromark",
     "function": function MD049(params, onError) {
       return impl(
         params,
@@ -6279,6 +6370,7 @@ module.exports = [
     "names": [ "MD050", "strong-style" ],
     "description": "Strong style",
     "tags": [ "emphasis" ],
+    "parser": "micromark",
     "function": function MD050(params, onError) {
       return impl(
         params,
@@ -6372,6 +6464,7 @@ module.exports = {
   "names": [ "MD051", "link-fragments" ],
   "description": "Link fragments should be valid",
   "tags": [ "links" ],
+  "parser": "micromark",
   "function": function MD051(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */
@@ -6503,6 +6596,7 @@ module.exports = {
   "description":
     "Reference links and images should use a label that is defined",
   "tags": [ "images", "links" ],
+  "parser": "none",
   "function": function MD052(params, onError) {
     const { config, lines } = params;
     const shortcutSyntax = config.shortcut_syntax || false;
@@ -6555,6 +6649,7 @@ module.exports = {
   "names": [ "MD053", "link-image-reference-definitions" ],
   "description": "Link and image reference definitions should be needed",
   "tags": [ "images", "links" ],
+  "parser": "none",
   "function": function MD053(params, onError) {
     const ignored = new Set(params.config.ignored_definitions || [ "//" ]);
     const lines = params.lines;
@@ -6642,6 +6737,7 @@ module.exports = {
   "names": [ "MD054", "link-image-style" ],
   "description": "Link and image style",
   "tags": [ "images", "links" ],
+  "parser": "micromark",
   "function": (params, onError) => {
     const config = params.config;
     const autolink = (config.autolink === undefined) || !!config.autolink;
@@ -6774,6 +6870,7 @@ module.exports = {
   "names": [ "MD055", "table-pipe-style" ],
   "description": "Table pipe style",
   "tags": [ "table" ],
+  "parser": "micromark",
   "function": function MD055(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
@@ -6858,6 +6955,7 @@ module.exports = {
   "names": [ "MD056", "table-column-count" ],
   "description": "Table column count",
   "tags": [ "table" ],
+  "parser": "micromark",
   "function": function MD056(params, onError) {
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").Token[] */

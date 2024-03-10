@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { filterTokens } = require("markdownlint-rule-helpers");
+const { filterTokens } = require("../../helpers");
 const eslint = require("eslint");
 const eslintInstance = new eslint.ESLint();
 const linter = new eslint.Linter();
@@ -29,6 +29,7 @@ module.exports = {
   "names": [ "lint-javascript" ],
   "description": "Rule that lints JavaScript code",
   "tags": [ "test", "lint", "javascript" ],
+  "parser": "markdownit",
   "asynchronous": true,
   "function": (params, onError) => {
     filterTokens(params, "fence", (fence) => {

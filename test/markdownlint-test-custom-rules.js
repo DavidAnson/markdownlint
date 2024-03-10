@@ -11,6 +11,8 @@ const { homepage, version } = require("../package.json");
 test("customRulesV0", (t) => new Promise((resolve) => {
   t.plan(4);
   const customRulesMd = "./test/custom-rules.md";
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
@@ -77,6 +79,8 @@ test("customRulesV0", (t) => new Promise((resolve) => {
 test("customRulesV1", (t) => new Promise((resolve) => {
   t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
@@ -195,6 +199,8 @@ test("customRulesV1", (t) => new Promise((resolve) => {
 test("customRulesV2", (t) => new Promise((resolve) => {
   t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
@@ -304,6 +310,8 @@ test("customRulesV2", (t) => new Promise((resolve) => {
 test("customRulesConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   const customRulesMd = "./test/custom-rules.md";
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
@@ -332,6 +340,8 @@ test("customRulesConfig", (t) => new Promise((resolve) => {
 
 test("customRulesNpmPackage", (t) => new Promise((resolve) => {
   t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [ require("./rules/npm") ],
     "strings": {
@@ -352,7 +362,7 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
 }));
 
 test("customRulesBadProperty", (t) => {
-  t.plan(27);
+  t.plan(30);
   for (const testCase of [
     {
       "propertyName": "names",
@@ -377,6 +387,11 @@ test("customRulesBadProperty", (t) => {
         [ null, "string", [], [ null ], [ "" ], [ "string", 10 ] ]
     },
     {
+      "propertyName": "parser",
+      "propertyValues":
+        [ 10, "string", [] ]
+    },
+    {
       "propertyName": "function",
       "propertyValues": [ null, "string", [] ]
     }
@@ -385,6 +400,8 @@ test("customRulesBadProperty", (t) => {
     for (const propertyValue of propertyValues) {
       const badRule = { ...customRules.anyBlockquote };
       badRule[propertyName] = propertyValue;
+      // eslint-disable-next-line jsdoc/valid-types
+      /** @type import("../lib/markdownlint").Options */
       const options = {
         "customRules": [ badRule ]
       };
@@ -394,9 +411,9 @@ test("customRulesBadProperty", (t) => {
         },
         {
           "message":
-            `Property '${propertyName}' of custom rule at index 0 is incorrect.`
+            `Property '${propertyName}' of custom rule at index 0 is incorrect: '${propertyValue}'.`
         },
-        "Did not get correct exception for missing property."
+        `Did not get correct exception for property '${propertyName}' value '${propertyValue}'.`
       );
     }
   }
@@ -405,11 +422,14 @@ test("customRulesBadProperty", (t) => {
 test("customRulesUsedNameName", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name", "NO-missing-SPACE-atx" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function noop() {}
       }
     ]
@@ -429,11 +449,14 @@ test("customRulesUsedNameName", (t) => new Promise((resolve) => {
 test("customRulesUsedNameTag", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name", "HtMl" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function noop() {}
       }
     ]
@@ -452,17 +475,21 @@ test("customRulesUsedNameTag", (t) => new Promise((resolve) => {
 test("customRulesUsedTagName", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "filler" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function noop() {}
       },
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag", "NO-missing-SPACE-atx" ],
+        "parser": "none",
         "function": function noop() {}
       }
     ]
@@ -479,8 +506,147 @@ test("customRulesUsedTagName", (t) => new Promise((resolve) => {
   });
 }));
 
+test("customRulesParserUndefined", (t) => {
+  t.plan(5);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      // @ts-ignore
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function":
+          (params) => {
+            t.true(Object.keys(params).includes("tokens"));
+            t.is(Object.keys(params.parsers).length, 1);
+            t.truthy(params.parsers.markdownit);
+            t.is(Object.keys(params.parsers.markdownit).length, 1);
+            t.truthy(params.parsers.markdownit.tokens);
+          }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
+test("customRulesParserNone", (t) => {
+  t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function":
+          (params) => {
+            t.false(Object.keys(params).includes("tokens"));
+            t.is(Object.keys(params.parsers).length, 0);
+          }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
+test("customRulesParserMarkdownIt", (t) => {
+  t.plan(5);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function":
+          (params) => {
+            t.false(Object.keys(params).includes("tokens"));
+            t.is(Object.keys(params.parsers).length, 1);
+            t.truthy(params.parsers.markdownit);
+            t.is(Object.keys(params.parsers.markdownit).length, 1);
+            t.truthy(params.parsers.markdownit.tokens);
+          }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
+test("customRulesParserMicromark", (t) => {
+  t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "micromark",
+        "function":
+          () => {
+            // t.false(Object.keys(params).includes("tokens"));
+            // t.is(Object.keys(params.parsers).length, 1);
+            // t.truthy(params.parsers.micromark);
+            // t.is(Object.keys(params.parsers.micromark).length, 1);
+            // t.truthy(params.parsers.micromark.tokens);
+          }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return markdownlint.promises.markdownlint(options).catch((error) => {
+    // parser "micromark" currently unsupported for custom rules
+    t.is(error.message, "Property 'parser' of custom rule at index 0 is incorrect: 'micromark'.");
+  });
+});
+
+test("customRulesParamsTokensSameObject", (t) => {
+  t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      // @ts-ignore
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "function":
+          (params) => {
+            // @ts-ignore
+            t.is(params.tokens, params.parsers.markdownit.tokens);
+          }
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
 test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
   t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
@@ -488,7 +654,9 @@ test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
         "description": "description",
         "information": new URL("https://example.com/information"),
         "tags": [ "tag" ],
+        "parser": "none",
         "function": (params, onError) => {
+          // @ts-ignore
           const definition = options.customRules[0];
           definition.names[0] = "changed";
           definition.description = "changed";
@@ -528,11 +696,14 @@ test("customRulesThrowForFile", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function throws() {
           throw new Error(exceptionMessage);
         }
@@ -556,11 +727,14 @@ test("customRulesThrowForFileSync", (t) => {
   t.throws(
     function customRuleThrowsCall() {
       markdownlint.sync({
+        // eslint-disable-next-line jsdoc/valid-types
+        /** @type import("../lib/markdownlint").Rule[] */
         "customRules": [
           {
             "names": [ "name" ],
             "description": "description",
             "tags": [ "tag" ],
+            "parser": "none",
             "function": function throws() {
               throw new Error(exceptionMessage);
             }
@@ -580,11 +754,14 @@ test("customRulesThrowForString", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function throws() {
           throw new Error(exceptionMessage);
         }
@@ -610,11 +787,14 @@ test("customRulesThrowForStringSync", (t) => {
   t.throws(
     function customRuleThrowsCall() {
       markdownlint.sync({
+        // eslint-disable-next-line jsdoc/valid-types
+        /** @type import("../lib/markdownlint").Rule[] */
         "customRules": [
           {
             "names": [ "name" ],
             "description": "description",
             "tags": [ "tag" ],
+            "parser": "none",
             "function": function throws() {
               throw new Error(exceptionMessage);
             }
@@ -635,11 +815,14 @@ test("customRulesThrowForStringSync", (t) => {
 test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
   t.plan(4);
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function onErrorNull(params, onError) {
           // @ts-ignore
           onError(null);
@@ -666,13 +849,17 @@ test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
 
 test("customRulesOnErrorNullSync", (t) => {
   t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function onErrorNull(params, onError) {
+          // @ts-ignore
           onError(null);
         }
       }
@@ -754,12 +941,15 @@ test("customRulesOnErrorBad", (t) => {
         badObject[propertyName] = propertyValue;
         propertyNames = propertyName;
       }
+      // eslint-disable-next-line jsdoc/valid-types
+      /** @type import("../lib/markdownlint").Options */
       const options = {
         "customRules": [
           {
             "names": [ "name" ],
             "description": "description",
             "tags": [ "tag" ],
+            "parser": "none",
             "function": function onErrorBad(params, onError) {
               onError(badObject);
             }
@@ -824,12 +1014,15 @@ test("customRulesOnErrorInvalid", (t) => {
         badObject[propertyName] = propertyValue;
         propertyNames = propertyName;
       }
+      // eslint-disable-next-line jsdoc/valid-types
+      /** @type import("../lib/markdownlint").Options */
       const options = {
         "customRules": [
           {
             "names": [ "name" ],
             "description": "description",
             "tags": [ "tag" ],
+            "parser": "none",
             "function": function onErrorInvalid(params, onError) {
               onError(badObject);
             }
@@ -897,12 +1090,15 @@ test("customRulesOnErrorValid", (t) => {
       } else {
         goodObject[propertyName] = propertyValue;
       }
+      // eslint-disable-next-line jsdoc/valid-types
+      /** @type import("../lib/markdownlint").Options */
       const options = {
         "customRules": [
           {
             "names": [ "name" ],
             "description": "description",
             "tags": [ "tag" ],
+            "parser": "none",
             "function": function onErrorValid(params, onError) {
               onError(goodObject);
             }
@@ -920,12 +1116,15 @@ test("customRulesOnErrorValid", (t) => {
 
 test("customRulesOnErrorLazy", (t) => new Promise((resolve) => {
   t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function onErrorLazy(params, onError) {
           onError({
             "lineNumber": 1,
@@ -975,12 +1174,15 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
       "insertText": "text"
     }
   };
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function onErrorModified(params, onError) {
           onError(errorObject);
           errorObject.lineNumber = 2;
@@ -1026,11 +1228,14 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
 test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function onErrorInvalid(params, onError) {
           onError({
             "lineNumber": 13
@@ -1067,11 +1272,14 @@ test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
 test("customRulesOnErrorInvalidHandledSync", (t) => {
   t.plan(1);
   const actualResult = markdownlint.sync({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function onErrorInvalid(params, onError) {
           onError({
             "lineNumber": 13,
@@ -1105,12 +1313,15 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
 
 test("customRulesFileName", (t) => new Promise((resolve) => {
   t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function stringName(params) {
           t.is(params.name, "doc/CustomRules.md", "Incorrect file name");
         }
@@ -1126,12 +1337,15 @@ test("customRulesFileName", (t) => new Promise((resolve) => {
 
 test("customRulesStringName", (t) => new Promise((resolve) => {
   t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": function stringName(params) {
           t.is(params.name, "string", "Incorrect string name");
         }
@@ -1150,11 +1364,14 @@ test("customRulesStringName", (t) => new Promise((resolve) => {
 test("customRulesOnErrorInformationNotRuleNotError", (t) => {
   t.plan(1);
   const actualResult = markdownlint.sync({
+  // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": (params, onError) => {
           onError({
             "lineNumber": 1
@@ -1172,12 +1389,15 @@ test("customRulesOnErrorInformationNotRuleNotError", (t) => {
 test("customRulesOnErrorInformationRuleNotError", (t) => {
   t.plan(1);
   const actualResult = markdownlint.sync({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
         "information": new URL("https://example.com/rule"),
+        "parser": "none",
         "function": (params, onError) => {
           onError({
             "lineNumber": 1
@@ -1199,11 +1419,14 @@ test("customRulesOnErrorInformationRuleNotError", (t) => {
 test("customRulesOnErrorInformationNotRuleError", (t) => {
   t.plan(1);
   const actualResult = markdownlint.sync({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function": (params, onError) => {
           onError({
             "lineNumber": 1,
@@ -1226,12 +1449,15 @@ test("customRulesOnErrorInformationNotRuleError", (t) => {
 test("customRulesOnErrorInformationRuleError", (t) => {
   t.plan(1);
   const actualResult = markdownlint.sync({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
         "information": new URL("https://example.com/rule"),
+        "parser": "none",
         "function": (params, onError) => {
           onError({
             "lineNumber": 1,
@@ -1254,12 +1480,15 @@ test("customRulesOnErrorInformationRuleError", (t) => {
 test("customRulesOnErrorInformationRuleErrorUndefined", (t) => {
   t.plan(1);
   const actualResult = markdownlint.sync({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
         "information": new URL("https://example.com/rule"),
+        "parser": "none",
         "function": (params, onError) => {
           onError({
             "lineNumber": 1,
@@ -1282,12 +1511,15 @@ test("customRulesOnErrorInformationRuleErrorUndefined", (t) => {
 test("customRulesOnErrorInformationRuleErrorMultiple", (t) => {
   t.plan(6);
   const actualResult = markdownlint.sync({
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../lib/markdownlint").Rule[] */
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
         "information": new URL("https://example.com/rule"),
+        "parser": "none",
         "function": (params, onError) => {
           onError({
             "lineNumber": 1,
@@ -1356,6 +1588,8 @@ test("customRulesDoc", (t) => new Promise((resolve) => {
 
 test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
   t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": customRules.lintJavaScript,
     "files": "test/lint-javascript.md"
@@ -1393,6 +1627,8 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
 
 test("customRulesValidateJson", (t) => new Promise((resolve) => {
   t.plan(3);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": customRules.validateJson,
     "files": "test/validate-json.md"
@@ -1425,12 +1661,15 @@ test("customRulesValidateJson", (t) => new Promise((resolve) => {
 
 test("customRulesAsyncThrowsInSyncContext", (t) => {
   t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name1", "name2" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "asynchronous": true,
         "function": () => {}
       }
@@ -1449,32 +1688,16 @@ test("customRulesAsyncThrowsInSyncContext", (t) => {
   );
 });
 
-test("customRulesParamsTokensSameObject", (t) => {
-  t.plan(1);
-  const options = {
-    "customRules": [
-      {
-        "names": [ "name" ],
-        "description": "description",
-        "tags": [ "tag" ],
-        "function":
-          (params) => {
-            t.is(params.tokens, params.parsers.markdownit.tokens);
-          }
-      }
-    ],
-    "files": [ "README.md" ]
-  };
-  return markdownlint.promises.markdownlint(options).then(() => null);
-});
-
 test("customRulesParamsAreFrozen", (t) => {
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "name" ],
         "description": "description",
         "tags": [ "tag" ],
+        "parser": "none",
         "function":
           (params) => {
             const pending = [ params ];
@@ -1504,6 +1727,8 @@ test("customRulesParamsAreStable", (t) => {
   t.plan(4);
   const config1 = { "value1": 10 };
   const config2 = { "value2": 20 };
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "config": {
       "MD010": true,
@@ -1518,18 +1743,20 @@ test("customRulesParamsAreStable", (t) => {
         "description": "description1",
         "tags": [ "tag" ],
         "asynchronous": true,
+        "parser": "none",
         "function":
           (params) => {
+            const { config } = params;
             t.deepEqual(
-              params.config,
+              config,
               config1,
-              `Unexpected config in sync path: ${params.config}.`
+              `Unexpected config in sync path: ${config}.`
             );
             return Promise.resolve().then(() => {
               t.deepEqual(
-                params.config,
+                config,
                 config1,
-                `Unexpected config in async path: ${params.config}.`
+                `Unexpected config in async path: ${config}.`
               );
             });
           }
@@ -1539,6 +1766,7 @@ test("customRulesParamsAreStable", (t) => {
         "description": "description2",
         "tags": [ "tag" ],
         "asynchronous": true,
+        "parser": "none",
         "function":
           (params) => {
             const { config } = params;
@@ -1566,6 +1794,8 @@ test("customRulesParamsAreStable", (t) => {
 
 test("customRulesAsyncReadFiles", (t) => {
   t.plan(3);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
@@ -1574,6 +1804,7 @@ test("customRulesAsyncReadFiles", (t) => {
         "information": new URL("https://example.com/asyncRule1"),
         "tags": [ "tag" ],
         "asynchronous": true,
+        "parser": "none",
         "function":
           (params, onError) => fs.readFile(__filename, "utf8").then(
             (content) => {
@@ -1592,6 +1823,7 @@ test("customRulesAsyncReadFiles", (t) => {
         "description": "description2",
         "tags": [ "tag" ],
         "asynchronous": true,
+        "parser": "none",
         "function":
           async(params, onError) => {
             const content = await fs.readFile(__filename, "utf8");
@@ -1651,6 +1883,8 @@ test("customRulesAsyncReadFiles", (t) => {
 
 test("customRulesAsyncIgnoresSyncReturn", (t) => {
   t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
@@ -1659,6 +1893,7 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "information": new URL("https://example.com/asyncRule"),
         "tags": [ "tag" ],
         "asynchronous": false,
+        "parser": "none",
         "function": () => new Promise(() => {
           // Never resolves
         })
@@ -1669,6 +1904,7 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "information": new URL("https://example.com/asyncRule"),
         "tags": [ "tag" ],
         "asynchronous": true,
+        "parser": "none",
         "function": (params, onError) => new Promise((resolve) => {
           onError({ "lineNumber": 1 });
           resolve(null);
@@ -1739,11 +1975,15 @@ for (const flavor of [
   ]
 ]) {
   const [ name, func ] = flavor;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Rule[] */
   const customRule = [
     {
       "names": [ "name" ],
       "description": "description",
       "tags": [ "tag" ],
+      "parser": "none",
+      // @ts-ignore
       "function": func
     }
   ];
@@ -1873,11 +2113,15 @@ for (const flavor of [
   ]
 ]) {
   const [ name, func ] = flavor;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Rule */
   const customRule = {
     "names": [ "name" ],
     "description": "description",
     "tags": [ "tag" ],
+    "parser": "none",
     "asynchronous": true,
+    // @ts-ignore
     "function": func
   };
   for (const inputs of stringScenarios) {

@@ -15,20 +15,7 @@ const flatTokensSymbol = Symbol("flat-tokens");
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
-
-/**
- * Markdown token.
- *
- * @typedef {Object} Token
- * @property {TokenType} type Token type.
- * @property {number} startLine Start line (1-based).
- * @property {number} startColumn Start column (1-based).
- * @property {number} endLine End line (1-based).
- * @property {number} endColumn End column (1-based).
- * @property {string} text Token text.
- * @property {Token[]} children Child tokens.
- * @property {Token | null} parent Parent token.
- */
+/** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
 
 /**
  * Returns whether a token is an htmlFlow type containing an HTML comment.

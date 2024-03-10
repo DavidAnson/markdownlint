@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, MarkdownItToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Configuration options.
@@ -123,11 +123,11 @@ type RuleParams = {
     /**
      * File/string lines.
      */
-    lines: string[];
+    lines: readonly string[];
     /**
      * Front matter lines.
      */
-    frontMatterLines: string[];
+    frontMatterLines: readonly string[];
     /**
      * Rule configuration.
      */
@@ -138,9 +138,13 @@ type RuleParams = {
  */
 type MarkdownParsers = {
     /**
-     * Markdown parser data from markdown-it.
+     * Markdown parser data from markdown-it (only present when Rule.parser is "markdownit").
      */
     markdownit: ParserMarkdownIt;
+    /**
+     * Markdown parser data from micromark (only present when Rule.parser is "micromark").
+     */
+    micromark: ParserMicromark;
 };
 /**
  * Markdown parser data from markdown-it.
@@ -150,6 +154,15 @@ type ParserMarkdownIt = {
      * Token objects from markdown-it.
      */
     tokens: MarkdownItToken[];
+};
+/**
+ * Markdown parser data from micromark.
+ */
+type ParserMicromark = {
+    /**
+     * Token objects from micromark.
+     */
+    tokens: MicromarkToken[];
 };
 /**
  * markdown-it token.
@@ -215,6 +228,44 @@ type MarkdownItToken = {
      * Line content.
      */
     line: string;
+};
+type MicromarkTokenType = import("markdownlint-micromark").TokenType;
+/**
+ * micromark token.
+ */
+type MicromarkToken = {
+    /**
+     * Token type.
+     */
+    type: MicromarkTokenType;
+    /**
+     * Start line (1-based).
+     */
+    startLine: number;
+    /**
+     * Start column (1-based).
+     */
+    startColumn: number;
+    /**
+     * End line (1-based).
+     */
+    endLine: number;
+    /**
+     * End column (1-based).
+     */
+    endColumn: number;
+    /**
+     * Token text.
+     */
+    text: string;
+    /**
+     * Child tokens.
+     */
+    children: MicromarkToken[];
+    /**
+     * Parent token.
+     */
+    parent: MicromarkToken | null;
 };
 /**
  * Error-reporting callback.
@@ -290,6 +341,10 @@ type Rule = {
      * Rule tag(s).
      */
     tags: string[];
+    /**
+     * Parser used.
+     */
+    parser: "markdownit" | "micromark" | "none";
     /**
      * True if asynchronous.
      */

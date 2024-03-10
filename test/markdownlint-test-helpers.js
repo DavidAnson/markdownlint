@@ -928,16 +928,19 @@ test("expandTildePath", (t) => {
 
 test("getReferenceLinkImageData().shortcuts", (t) => {
   t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
         "names": [ "no-shortcut-links" ],
         "description": "-",
         "tags": [ "-" ],
+        "parser": "none",
         "function":
-          (params) => {
-            const { shortcuts } =
-              helpers.getReferenceLinkImageData(params);
+          () => {
+            const { referenceLinkImageData } = require("../lib/cache");
+            const { shortcuts } = referenceLinkImageData();
             t.is(shortcuts.size, 0, [ ...shortcuts.keys() ].join(", "));
           }
       }

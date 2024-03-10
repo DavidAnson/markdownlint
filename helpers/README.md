@@ -29,6 +29,7 @@ module.exports = {
   "names": [ "every-n-lines" ],
   "description": "Rule that reports an error every N lines",
   "tags": [ "test" ],
+  "parser": "none",
   "function": (params, onError) => {
     const n = params.config.n || 2;
     forEachLine(getLineMetadata(params), (line, lineIndex) => {

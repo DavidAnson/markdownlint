@@ -702,10 +702,10 @@ module.exports.frontMatterHasTitle =
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {Object} params RuleParams instance.
+ * @param {import("../helpers/micromark.cjs").Token[]} tokens Micromark tokens.
  * @returns {Object} Reference link/image data.
  */
-function getReferenceLinkImageData(params) {
+function getReferenceLinkImageData(tokens) {
   const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
   const definitions = new Map();
   const definitionLineIndices = [];
@@ -714,7 +714,7 @@ function getReferenceLinkImageData(params) {
   const shortcuts = new Map();
   const filteredTokens =
     micromark.filterByTypes(
-      params.parsers.micromark.tokens,
+      tokens,
       [
         // definitionLineIndices
         "definition", "gfmFootnoteDefinition",

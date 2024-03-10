@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { filterTokens } = require("markdownlint-rule-helpers");
+const { filterTokens } = require("../../helpers");
 
 /** @typedef {import("../../lib/markdownlint").MarkdownItToken} MarkdownItToken */
 /** @typedef {(MarkdownItToken) => void} FilterTokensCallback */
@@ -16,6 +16,7 @@ module.exports = {
     "/blob/main/test/rules/any-blockquote.js"
   ),
   "tags": [ "test" ],
+  "parser": "markdownit",
   "function": (params, onError) => {
     filterTokens(
       params,
