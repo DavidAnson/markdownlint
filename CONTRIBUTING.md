@@ -19,8 +19,9 @@ project's only dependencies.
 
 Package versions for `dependencies` and `devDependencies` should be specified
 exactly (also known as "pinning"). The short explanation is that doing otherwise
-eventually leads to inconsistent behavior and broken functionality. (See [Pin
-your npm/yarn dependencies][pin-dependencies] for a longer explanation.)
+eventually leads to inconsistent behavior and broken functionality. (See [Why I
+pin dependency versions in Node.js packages][version-pinning] for a longer
+explanation.)
 
 If developing a new rule, start by creating a [custom rule][custom-rules] in its
 own project. Once written, published, and tested in real world scenarios, open
@@ -88,5 +89,5 @@ Thank you!
 [micromark]: https://www.npmjs.com/package/micromark
 [new-rule]: https://github.com/DavidAnson/markdownlint/labels/new%20rule
 [npm-scripts]: https://docs.npmjs.com/misc/scripts
-[pin-dependencies]: https://maxleiter.com/blog/pin-dependencies
 [rewriting-history]: https://git-scm.com/book/en/v2/Git-Tools-Rewriting-History
+[version-pinning]: https://dlaa.me/blog/post/versionpinning
