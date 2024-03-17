@@ -6413,7 +6413,7 @@ const lineFragmentRe = /^#(?:L\d+(?:C\d+)?-L\d+(?:C\d+)?|L\d+)$/;
 // Sets for filtering heading tokens during conversion
 const childrenExclude = new Set([ "image", "reference", "resource" ]);
 const tokensInclude = new Set(
-  [ "characterEscapeValue", "codeTextData", "data" ]
+  [ "characterEscapeValue", "codeTextData", "data", "mathTextData" ]
 );
 
 /**

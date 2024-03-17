@@ -88,6 +88,10 @@
 
 [Valid](#l12-not-a-line-link)
 
+[Valid](#latex-style)
+
+[Valid](#area-pi--r2)
+
 [Valid](#L7)
 
 [Valid](#L30-L31)
@@ -184,6 +188,10 @@ Text
 ### Valid Heading\-With\_Embedded\_Escaping
 
 ### L12 Not A Line Link
+
+## $\LaTeX$ Style
+
+## Area: $\pi * r^2$
 
 <a name="namedlink"></a>
 
