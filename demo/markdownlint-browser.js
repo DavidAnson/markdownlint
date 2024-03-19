@@ -1488,10 +1488,18 @@ function getHeadingLevel(heading) {
 }
 
 /**
+ * HTML tag information.
+ *
+ * @typedef {Object} HtmlTagInfo
+ * @property {boolean} close True iff close tag.
+ * @property {string} name Tag name.
+ */
+
+/**
  * Gets information about the tag in an HTML token.
  *
  * @param {Token} token Micromark token.
- * @returns {Object | null} HTML tag information.
+ * @returns {HtmlTagInfo | null} HTML tag information.
  */
 function getHtmlTagInfo(token) {
   const htmlTagNameRe = /^<([^!>][^/\s>]*)/;
@@ -1583,6 +1591,21 @@ function tokenIfType(token, type) {
   return (token && (token.type === type)) ? token : null;
 }
 
+/**
+ * Set containing token types that do not contain content.
+ *
+ * @type {Set<TokenType>}
+ */
+const nonContentTokens = new Set([
+  "blockQuoteMarker",
+  "blockQuotePrefix",
+  "blockQuotePrefixWhitespace",
+  "lineEnding",
+  "lineEndingBlank",
+  "linePrefix",
+  "listItemIndent"
+]);
+
 module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
@@ -1593,7 +1616,9 @@ module.exports = {
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,
+  isHtmlFlowComment,
   matchAndGetTokensByType,
+  nonContentTokens,
   tokenIfType
 };
 
@@ -4987,19 +5012,9 @@ module.exports = {
 
 
 
-const { addErrorContext, blockquotePrefixRe, isBlankLine } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorContext, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
-const nonContentTokens = new Set([
-  "blockQuoteMarker",
-  "blockQuotePrefix",
-  "blockQuotePrefixWhitespace",
-  "lineEnding",
-  "lineEndingBlank",
-  "linePrefix",
-  "listItemIndent"
-]);
 const isList = (token) => (
   (token.type === "listOrdered") || (token.type === "listUnordered")
 );
@@ -5732,6 +5747,8 @@ module.exports = {
 
 
 const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHtmlTagInfo, isHtmlFlowComment, nonContentTokens } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5739,36 +5756,26 @@ module.exports = {
   "names": [ "MD041", "first-line-heading", "first-line-h1" ],
   "description": "First line in a file should be a top-level heading",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD041(params, onError) {
     const level = Number(params.config.level || 1);
-    const tag = "h" + level;
-    const foundFrontMatterTitle =
-      frontMatterHasTitle(
-        params.frontMatterLines,
-        params.config.front_matter_title
-      );
-    if (!foundFrontMatterTitle) {
-      const htmlHeadingRe = new RegExp(`^<h${level}[ />]`, "i");
-      params.parsers.markdownit.tokens.every((token) => {
-        let isError = false;
-        if (token.type === "html_block") {
-          if (token.content.startsWith("<!--")) {
-            // Ignore leading HTML comments
-            return true;
-          } else if (!htmlHeadingRe.test(token.content)) {
-            // Something other than an HTML heading
-            isError = true;
+    if (!frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title)) {
+      params.parsers.micromark.tokens.
+        filter((token) => !nonContentTokens.has(token.type) && !isHtmlFlowComment(token)).
+        every((token) => {
+          let isError = true;
+          if ((token.type === "atxHeading") || (token.type === "setextHeading")) {
+            isError = (getHeadingLevel(token) !== level);
+          } else if (token.type === "htmlFlow") {
+            const htmlTexts = filterByTypes(token.children, [ "htmlText" ]);
+            const tagInfo = (htmlTexts.length > 0) && getHtmlTagInfo(htmlTexts[0]);
+            isError = !tagInfo || (tagInfo.name.toLowerCase() !== `h${level}`);
           }
-        } else if ((token.type !== "heading_open") || (token.tag !== tag)) {
-          // Something other than a Markdown heading
-          isError = true;
-        }
-        if (isError) {
-          addErrorContext(onError, token.lineNumber, token.line);
-        }
-        return false;
-      });
+          if (isError) {
+            addErrorContext(onError, token.startLine, params.lines[token.startLine - 1]);
+          }
+          return false;
+        });
     }
   }
 };

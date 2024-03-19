@@ -310,10 +310,18 @@ function getHeadingLevel(heading) {
 }
 
 /**
+ * HTML tag information.
+ *
+ * @typedef {Object} HtmlTagInfo
+ * @property {boolean} close True iff close tag.
+ * @property {string} name Tag name.
+ */
+
+/**
  * Gets information about the tag in an HTML token.
  *
  * @param {Token} token Micromark token.
- * @returns {Object | null} HTML tag information.
+ * @returns {HtmlTagInfo | null} HTML tag information.
  */
 function getHtmlTagInfo(token) {
   const htmlTagNameRe = /^<([^!>][^/\s>]*)/;
@@ -405,6 +413,21 @@ function tokenIfType(token, type) {
   return (token && (token.type === type)) ? token : null;
 }
 
+/**
+ * Set containing token types that do not contain content.
+ *
+ * @type {Set<TokenType>}
+ */
+const nonContentTokens = new Set([
+  "blockQuoteMarker",
+  "blockQuotePrefix",
+  "blockQuotePrefixWhitespace",
+  "lineEnding",
+  "lineEndingBlank",
+  "linePrefix",
+  "listItemIndent"
+]);
+
 module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
@@ -415,6 +438,8 @@ module.exports = {
   getTokenParentOfType,
   getTokenTextByType,
   inHtmlFlow,
+  isHtmlFlowComment,
   matchAndGetTokensByType,
+  nonContentTokens,
   tokenIfType
 };
