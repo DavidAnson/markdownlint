@@ -381,8 +381,8 @@ function inHtmlFlow(token) {
  * Determines a list of Micromark tokens matches and returns a subset.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string[]} matchTypes Types to match.
- * @param {string[]} [resultTypes] Types to return.
+ * @param {TokenType[]} matchTypes Types to match.
+ * @param {TokenType[]} [resultTypes] Types to return.
  * @returns {Token[] | null} Matching tokens.
  */
 function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {

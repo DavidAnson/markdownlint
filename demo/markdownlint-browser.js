@@ -1559,8 +1559,8 @@ function inHtmlFlow(token) {
  * Determines a list of Micromark tokens matches and returns a subset.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {string[]} matchTypes Types to match.
- * @param {string[]} [resultTypes] Types to return.
+ * @param {TokenType[]} matchTypes Types to match.
+ * @param {TokenType[]} [resultTypes] Types to return.
  * @returns {Token[] | null} Matching tokens.
  */
 function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
@@ -5315,6 +5315,14 @@ module.exports = {
 
 
 const { addErrorContext, allPunctuation } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, matchAndGetTokensByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+/** @typedef {import("../helpers/micromark.cjs").TokenType} TokenType */
+/** @type {Map<TokenType, TokenType[]>} */
+const emphasisAndChildrenTypes = new Map([
+  [ "emphasis", [ "emphasisSequence", "emphasisText", "emphasisSequence" ] ],
+  [ "strong", [ "strongSequence", "strongText", "strongSequence" ] ]
+]);
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5322,50 +5330,33 @@ module.exports = {
   "names": [ "MD036", "no-emphasis-as-heading" ],
   "description": "Emphasis used instead of a heading",
   "tags": [ "headings", "emphasis" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD036(params, onError) {
     let punctuation = params.config.punctuation;
-    punctuation =
-      String((punctuation === undefined) ? allPunctuation : punctuation);
-    const re = new RegExp("[" + punctuation + "]$");
-    // eslint-disable-next-line jsdoc/require-jsdoc
-    function base(token) {
-      if (token.type === "paragraph_open") {
-        return function inParagraph(t) {
-          // Always paragraph_open/inline/paragraph_close,
-          const children = t.children.filter(function notEmptyText(child) {
-            return (child.type !== "text") || (child.content !== "");
-          });
-          if ((children.length === 3) &&
-              ((children[0].type === "strong_open") ||
-                (children[0].type === "em_open")) &&
-              (children[1].type === "text") &&
-              !re.test(children[1].content)) {
-            addErrorContext(onError, t.lineNumber,
-              children[1].content);
+    punctuation = String((punctuation === undefined) ? allPunctuation : punctuation);
+    const punctuationRe = new RegExp("[" + punctuation + "]$");
+    const paragraphTokens =
+      filterByTypes(params.parsers.micromark.tokens, [ "paragraph" ]).
+        filter((token) =>
+          (token.parent?.type === "content") && !token.parent?.parent && (token.children.length === 1)
+        );
+    for (const paragraphToken of paragraphTokens) {
+      const childToken = paragraphToken.children[0];
+      for (const [ emphasisType, emphasisChildrenTypes ] of emphasisAndChildrenTypes) {
+        if (childToken.type === emphasisType) {
+          const matchingTokens = matchAndGetTokensByType(childToken.children, emphasisChildrenTypes);
+          if (matchingTokens) {
+            const textToken = matchingTokens[1];
+            if (
+              (textToken.children.length === 1) &&
+              (textToken.children[0].type === "data") &&
+              !punctuationRe.test(textToken.text)
+            ) {
+              addErrorContext(onError, textToken.startLine, textToken.text);
+            }
           }
-          return base;
-        };
-      } else if (token.type === "blockquote_open") {
-        return function inBlockquote(t) {
-          if (t.type !== "blockquote_close") {
-            return inBlockquote;
-          }
-          return base;
-        };
-      } else if (token.type === "list_item_open") {
-        return function inListItem(t) {
-          if (t.type !== "list_item_close") {
-            return inListItem;
-          }
-          return base;
-        };
+        }
       }
-      return base;
-    }
-    let state = base;
-    for (const token of params.parsers.markdownit.tokens) {
-      state = state(token);
     }
   }
 };
