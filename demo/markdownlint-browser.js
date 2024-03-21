@@ -2443,7 +2443,7 @@ function lintContent(
       }
     }
     return null;
-  }
+  };
   // eslint-disable-next-line jsdoc/require-jsdoc
   function formatResults() {
     // Sort results by rule name by line number
@@ -5709,7 +5709,7 @@ module.exports = {
       const openingFence = tokenIfType(fencedCode.children[0], "codeFencedFence");
       if (openingFence) {
         const { children, startLine, text } = openingFence;
-        const info = getTokenTextByType(children, "codeFencedFenceInfo")
+        const info = getTokenTextByType(children, "codeFencedFenceInfo");
         if (!info) {
           addErrorContext(onError, startLine, text);
         } else if ((allowed.length > 0) && !allowed.includes(info)) {
