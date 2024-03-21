@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.34.0
+
+- Use `micromark` in MD027/MD028/MD036/MD040/MD041/MD046/MD048
+- Improve MD013/MD034/MD049/MD050/MD051
+- Update custom rule requirements and documentation
+- Improve various TypeScript declarations
+- Update dependencies
+
 ## 0.33.0
 
 - Add MD055/table-pipe-style, MD056/table-column-count
