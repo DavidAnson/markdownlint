@@ -3,7 +3,13 @@
   "version": "0.1.9",
   "description": "A trivial package that re-exports some micromark functionality as a CommonJS module",
   "type": "commonjs",
-  "exports": "./micromark.cjs",
+  "exports": {
+    ".": {
+      "types": "./micromark.d.ts",
+      "default": "./micromark.cjs"
+    }
+  },
+  "main": "./micromark.cjs",
   "types": "./micromark.d.ts",
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
