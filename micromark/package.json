@@ -1,10 +1,10 @@
 {
   "name": "markdownlint-micromark",
-  "version": "0.1.9",
+  "version": "0.1.10",
   "description": "A trivial package that re-exports some micromark functionality as a CommonJS module",
   "type": "commonjs",
   "exports": "./micromark.cjs",
-  "types": "./micromark.d.ts",
+  "types": "./micromark.d.cts",
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
@@ -26,7 +26,7 @@
     "micromark-browser.js",
     "micromark-html-browser.js",
     "micromark.cjs",
-    "micromark.d.ts",
+    "micromark.d.cts",
     "package.json",
     "README.md"
   ],
