@@ -1,4 +1,4 @@
-# gustavo
+# markdownlint
 
 > A Node.js style checker and lint tool for Markdown/CommonMark files.
 
@@ -13,7 +13,7 @@ npm install markdownlint --save-dev
 
 ## Overview
 
-The [Gbash](https://en.wikipedia.org/wiki/Markdown) markup language
+The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language
 is designed to be easy to read, write, and understand. It succeeds -
 and its flexibility is both a benefit and a drawback. Many styles are
 possible, so formatting can be inconsistent. Some constructs don't
@@ -26,7 +26,7 @@ parsers - but not authors.
 tool for [Node.js](https://nodejs.org/) with a library of rules
 to enforce standards and consistency for Markdown files. It was
 inspired by - and heavily influenced by - Mark Harrison's
-[gbashlint](https://github.com/markdownlint/markdownlint) for
+[markdownlint](https://github.com/markdownlint/markdownlint) for
 [Ruby](https://www.ruby-lang.org/). The initial rules, rule documentation,
 and test cases came directly from that project.
 
