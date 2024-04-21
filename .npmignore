@@ -1,5 +1,4 @@
 .eslintignore
-.eslintrc.json
 .github
 .markdownlint.json
 .npmrc
@@ -8,6 +7,7 @@ coverage
 demo/*
 !demo/markdownlint-browser.js
 doc-build
+eslint.config.mjs
 example
 micromark
 npm-debug.log

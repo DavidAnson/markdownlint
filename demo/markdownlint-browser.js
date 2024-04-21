@@ -1723,7 +1723,7 @@ function validateRuleList(ruleList, synchronous) {
   const allIds = {};
   for (const [ index, rule ] of ruleList.entries()) {
     const customIndex = index - rules.length;
-    // eslint-disable-next-line no-inner-declarations, jsdoc/require-jsdoc
+    // eslint-disable-next-line jsdoc/require-jsdoc
     function newError(property, value) {
       return new Error(
         `Property '${property}' of custom rule at index ${customIndex} is incorrect: '${value}'.`);
