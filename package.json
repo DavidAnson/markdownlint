@@ -49,7 +49,7 @@
     "docker-npm-install": "docker run --rm --tty --name npm-install --volume $PWD:/home/workdir --workdir /home/workdir --user node node:latest npm install",
     "docker-npm-run-upgrade": "docker run --rm --tty --name npm-run-upgrade --volume $PWD:/home/workdir --workdir /home/workdir --user node node:latest npm run upgrade",
     "install-micromark": "cd micromark && npm install",
-    "lint": "eslint --ext .js,.cjs,.mjs --max-warnings 0 .",
+    "lint": "eslint --max-warnings 0",
     "lint-test-repos": "ava --timeout=10m test/markdownlint-test-repos-*.js",
     "serial-config-docs": "npm run build-config && npm run build-docs",
     "serial-declaration-demo": "npm run build-declaration && npm-run-all --continue-on-error --parallel build-demo test-declaration",
@@ -69,6 +69,7 @@
     "markdownlint-micromark": "0.1.10"
   },
   "devDependencies": {
+    "@eslint/js": "9.1.1",
     "ajv": "8.12.0",
     "ava": "6.1.2",
     "c8": "9.1.0",

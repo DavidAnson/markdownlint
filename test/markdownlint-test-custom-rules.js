@@ -1599,21 +1599,11 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
     const expected = {
       "test/lint-javascript.md": [
         {
-          "lineNumber": 10,
-          "ruleNames": [ "lint-javascript" ],
-          "ruleDescription": "Rule that lints JavaScript code",
-          "ruleInformation": null,
-          "errorDetail": "Unexpected var, use let or const instead.",
-          "errorContext": "var x = 0;",
-          "errorRange": null,
-          "fixInfo": null
-        },
-        {
           "lineNumber": 12,
           "ruleNames": [ "lint-javascript" ],
           "ruleDescription": "Rule that lints JavaScript code",
           "ruleInformation": null,
-          "errorDetail": "Unexpected console statement.",
+          "errorDetail": "'console' is not defined.",
           "errorContext": "console.log(x);",
           "errorRange": null,
           "fixInfo": null
