@@ -74,7 +74,7 @@
     "ava": "6.1.2",
     "c8": "9.1.0",
     "character-entities": "2.0.2",
-    "eslint": "9.0.0",
+    "eslint": "9.1.0",
     "eslint-plugin-jsdoc": "48.2.3",
     "eslint-plugin-n": "17.2.1",
     "eslint-plugin-regexp": "2.5.0",
