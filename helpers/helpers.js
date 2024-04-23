@@ -143,7 +143,6 @@ function isBlankLine(line) {
   const startComment = "<!--";
   const endComment = "-->";
   const removeComments = (s) => {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const start = s.indexOf(startComment);
       const end = s.indexOf(endComment);
