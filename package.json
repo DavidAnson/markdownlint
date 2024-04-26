@@ -66,22 +66,22 @@
   },
   "dependencies": {
     "markdown-it": "14.1.0",
-    "markdownlint-micromark": "0.1.9"
+    "markdownlint-micromark": "0.1.10"
   },
   "devDependencies": {
     "ajv": "8.12.0",
     "ava": "6.1.2",
     "c8": "9.1.0",
     "character-entities": "2.0.2",
-    "eslint": "8.57.0",
-    "eslint-plugin-jsdoc": "48.2.1",
-    "eslint-plugin-n": "16.6.2",
-    "eslint-plugin-regexp": "2.3.0",
-    "eslint-plugin-unicorn": "51.0.1",
+    "eslint": "9.1.1",
+    "eslint-plugin-jsdoc": "48.2.3",
+    "eslint-plugin-n": "17.3.1",
+    "eslint-plugin-regexp": "2.5.0",
+    "eslint-plugin-unicorn": "52.0.0",
     "gemoji": "8.1.0",
     "globby": "14.0.1",
     "js-yaml": "4.1.0",
-    "json-schema-to-typescript": "13.1.2",
+    "json-schema-to-typescript": "14.0.0",
     "jsonc-parser": "3.2.1",
     "markdown-it-for-inline": "2.0.1",
     "markdown-it-sub": "2.0.0",
@@ -89,7 +89,7 @@
     "npm-run-all": "4.1.5",
     "terser-webpack-plugin": "5.3.10",
     "toml": "3.0.0",
-    "typescript": "5.4.3",
+    "typescript": "5.4.5",
     "webpack": "5.91.0",
     "webpack-cli": "5.1.4"
   },
