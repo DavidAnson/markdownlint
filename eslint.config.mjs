@@ -110,6 +110,7 @@ export default [
     },
     "rules": {
       "jsdoc/require-jsdoc": "off",
+      "n/no-unsupported-features/node-builtins": "off",
       "no-invalid-this": "off",
       "no-shadow": "off",
       "no-var": "off",
