@@ -78,7 +78,7 @@
     "eslint-plugin-jsdoc": "48.2.4",
     "eslint-plugin-n": "17.6.0",
     "eslint-plugin-regexp": "2.5.0",
-    "eslint-plugin-unicorn": "52.0.0",
+    "eslint-plugin-unicorn": "53.0.0",
     "gemoji": "8.1.0",
     "globby": "14.0.1",
     "js-yaml": "4.1.0",
