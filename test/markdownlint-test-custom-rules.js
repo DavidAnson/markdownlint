@@ -343,9 +343,12 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
   // eslint-disable-next-line jsdoc/valid-types
   /** @type import("../lib/markdownlint").Options */
   const options = {
-    "customRules": [ require("./rules/npm") ],
+    "customRules": [
+      require("./rules/npm"),
+      require("markdownlint-rule-extended-ascii")
+    ],
     "strings": {
-      "string": "# Text\n\n---\n\nText\n"
+      "string": "# Text\n\n---\n\nText ✅\n"
     },
     "resultVersion": 0
   };
@@ -353,6 +356,7 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
     t.falsy(err);
     const expectedResult = {};
     expectedResult.string = {
+      "extended-ascii": [ 5 ],
       "sample-rule": [ 3 ]
     };
     // @ts-ignore

@@ -73,21 +73,51 @@ test("simplePromise", (t) => {
   });
 });
 
+const projectFiles = [
+  "*.md",
+  "doc/*.md",
+  "helpers/*.md",
+  "micromark/*.md",
+  "schema/*.md"
+];
+
 test("projectFiles", (t) => {
   t.plan(2);
   return import("globby")
-    .then((module) => module.globby([
-      "*.md",
-      "doc/*.md",
-      "helpers/*.md",
-      "micromark/*.md",
-      "schema/*.md"
-    ]))
+    .then((module) => module.globby(projectFiles))
     .then((files) => {
       t.is(files.length, 60);
       const options = {
         files,
         "config": require("../.markdownlint.json")
+      };
+      // @ts-ignore
+      return markdownlint.promises.markdownlint(options).then((actual) => {
+        const expected = {};
+        for (const file of files) {
+          expected[file] = [];
+        }
+        t.deepEqual(actual, expected, "Issue(s) with project files.");
+      });
+    });
+});
+
+test("projectFilesExtendedAscii", (t) => {
+  t.plan(2);
+  return import("globby")
+    .then((module) => module.globby([
+      ...projectFiles,
+      "!doc/Rules.md",
+      "!doc/md010.md",
+      "!doc/md026.md",
+      "!doc/md036.md"
+    ]))
+    .then((files) => {
+      t.is(files.length, 56);
+      const options = {
+        files,
+        "config": require("../.markdownlint.json"),
+        "customRules": [ require("markdownlint-rule-extended-ascii") ]
       };
       // @ts-ignore
       return markdownlint.promises.markdownlint(options).then((actual) => {
