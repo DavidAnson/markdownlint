@@ -73,6 +73,7 @@ export default [
       "unicorn/no-useless-undefined": "off",
       "unicorn/prefer-at": "off",
       "unicorn/prefer-module": "off",
+      "unicorn/prefer-string-raw": "off",
       "unicorn/prefer-string-replace-all": "off",
       "unicorn/prefer-string-slice": "off",
       "unicorn/prefer-switch": "off",
