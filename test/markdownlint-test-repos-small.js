@@ -21,7 +21,7 @@ test("https://github.com/electron/electron", (t) => {
     join(rootDir, "*.md"),
     join(rootDir, "docs/**/*.md")
   ];
-  const configPath = join(rootDir, ".markdownlint.json");
+  const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
   return lintTestRepo(t, globPatterns, configPath);
 });
 
