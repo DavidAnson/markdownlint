@@ -38,6 +38,7 @@ first-line-h1
 formatter
 fs
 GFM
+github
 globbing
 grunt-markdownlint
 h1
