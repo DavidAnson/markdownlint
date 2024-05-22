@@ -979,6 +979,11 @@ following projects or one of the tools in the [Related section](#related):
 - [webpack][webpack] ([Search repository][webpack-search])
 - [WordPress][wordpress] ([Search repository][wordpress-search])
 
+For more advanced integration scenarios:
+
+- [GitHub Docs content linter][content-linter]
+- [GitHub's `markdownlint-github` repository][markdownlint-github]
+
 [ally-js]: https://allyjs.io/
 [ally-js-search]: https://github.com/medialize/ally.js/search?q=markdownlint
 [airflow]: https://airflow.apache.org
@@ -987,6 +992,7 @@ following projects or one of the tools in the [Related section](#related):
 [boostnote-search]: https://github.com/BoostIO/Boostnote/search?q=markdownlint
 [codimd]: https://github.com/hackmdio/codimd
 [codimd-search]: https://github.com/hackmdio/codimd/search?q=markdownlint
+[content-linter]: https://docs.github.com/en/contributing/collaborating-on-github-docs/using-the-content-linter
 [dot-net-doc]: https://docs.microsoft.com/en-us/dotnet/
 [dot-net-doc-search]: https://github.com/dotnet/docs/search?q=markdownlint
 [electron]: https://www.electronjs.org
@@ -995,6 +1001,7 @@ following projects or one of the tools in the [Related section](#related):
 [eslint-search]: https://github.com/eslint/eslint/search?q=markdownlint
 [garden]: https://zendeskgarden.github.io/react-components/
 [garden-search]: https://github.com/zendeskgarden/react-components/search?q=markdownlint
+[markdownlint-github]: https://github.com/github/markdownlint-github
 [mdn]: https://developer.mozilla.org/
 [mdn-search]: https://github.com/mdn/content/search?q=markdownlint
 [mkdocs]: https://www.mkdocs.org/

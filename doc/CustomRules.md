@@ -132,6 +132,8 @@ exception.
 - [Simple rules used by the project's test cases][test-rules]
 - [Code for all `markdownlint` built-in rules][lib]
 - [Complete example rule including npm configuration][extended-ascii]
+- [Custom rules from the github/docs repository][github-docs]
+- [Custom rules from the electron/lint-roller repository][electron]
 - [Custom rules from the webhintio/hint repository][hint]
 
 ## References
@@ -373,7 +375,9 @@ Yields the `params` object:
 ```
 
 [commonmark]: https://commonmark.org/
+[electron]: https://github.com/electron/lint-roller/tree/main/markdownlint-rules
 [extended-ascii]: https://github.com/DavidAnson/markdownlint-rule-extended-ascii
+[github-docs]: https://github.com/github/docs/tree/main/src/content-linter/lib/linting-rules
 [hint]: https://github.com/webhintio/hint/blob/main/scripts/lint-markdown.js
 [lib]: ../lib
 [markdown-it]: https://github.com/markdown-it/markdown-it
