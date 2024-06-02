@@ -86,7 +86,7 @@ test("projectFiles", (t) => {
   return import("globby")
     .then((module) => module.globby(projectFiles))
     .then((files) => {
-      t.is(files.length, 60);
+      t.is(files.length, 61);
       const options = {
         files,
         "config": require("../.markdownlint.json")
@@ -113,7 +113,7 @@ test("projectFilesExtendedAscii", (t) => {
       "!doc/md036.md"
     ]))
     .then((files) => {
-      t.is(files.length, 56);
+      t.is(files.length, 57);
       const options = {
         files,
         "config": require("../.markdownlint.json"),
@@ -506,7 +506,7 @@ test("styleAll", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 134 ],
+      "MD047": [ 140 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -514,7 +514,8 @@ test("styleAll", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ]
+      "MD056": [ 114 ],
+      "MD058": [ 117, 119 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -553,7 +554,7 @@ test("styleRelaxed", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 134 ],
+      "MD047": [ 140 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -561,7 +562,8 @@ test("styleRelaxed", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ]
+      "MD056": [ 114 ],
+      "MD058": [ 117, 119 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -868,7 +870,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(126);
+  t.plan(128);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -1067,7 +1069,7 @@ test("validateConfigExampleJson", (t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(150);
+  t.plan(153);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

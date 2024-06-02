@@ -300,5 +300,8 @@
   },
 
   // MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md056.md
-  "MD056": true
+  "MD056": true,
+
+  // MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md058.md
+  "MD058": true
 }

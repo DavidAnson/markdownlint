@@ -607,8 +607,20 @@ function addError(onError, lineNumber, detail, context, range, fixInfo) {
 }
 module.exports.addError = addError;
 
-// Adds an error object with details conditionally via the onError callback
-module.exports.addErrorDetailIf = function addErrorDetailIf(
+/**
+ * Adds an error object with details conditionally via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {Object} expected Expected value.
+ * @param {Object} actual Actual value.
+ * @param {string} [detail] Error details.
+ * @param {string} [context] Error context.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
+function addErrorDetailIf(
   onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
@@ -620,14 +632,55 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
       range,
       fixInfo);
   }
-};
+}
+module.exports.addErrorDetailIf = addErrorDetailIf;
 
-// Adds an error object with context via the onError callback
-module.exports.addErrorContext = function addErrorContext(
-  onError, lineNumber, context, left, right, range, fixInfo) {
-  context = ellipsify(context, left, right);
+/**
+ * Adds an error object with context via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {string} context Error context.
+ * @param {boolean} [start] True iff the start of the text is important.
+ * @param {boolean} [end] True iff the end of the text is important.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
+function addErrorContext(
+  onError, lineNumber, context, start, end, range, fixInfo) {
+  context = ellipsify(context, start, end);
   addError(onError, lineNumber, undefined, context, range, fixInfo);
-};
+}
+module.exports.addErrorContext = addErrorContext;
+
+/**
+ * Adds an error object with context for a construct missing a blank line.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index of line.
+ * @param {number} [lineNumber] Line number for override.
+ * @returns {void}
+ */
+function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
+  const line = lines[lineIndex];
+  // @ts-ignore
+  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
+  addErrorContext(
+    onError,
+    lineIndex + 1,
+    line.trim(),
+    undefined,
+    undefined,
+    undefined,
+    {
+      lineNumber,
+      "insertText": `${quotePrefix}\n`
+    }
+  );
+}
+module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
  * Returns an array of code block and span content ranges.
@@ -1673,7 +1726,8 @@ module.exports.fixableRuleNames = [
   "MD012", "MD014", "MD018", "MD019", "MD020", "MD021",
   "MD022", "MD023", "MD026", "MD027", "MD030", "MD031",
   "MD032", "MD034", "MD037", "MD038", "MD039", "MD044",
-  "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"
+  "MD047", "MD049", "MD050", "MD051", "MD053", "MD054",
+  "MD058"
 ];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.34.0";
@@ -4058,6 +4112,7 @@ module.exports = {
               onError,
               // @ts-ignore
               i + 1,
+              // @ts-ignore
               lineTrim,
               null,
               null,
@@ -4219,7 +4274,7 @@ module.exports = {
           const leftHashLength = leftHash.length;
           const rightHashLength = rightHash.length;
           const left = !leftSpaceLength;
-          const right = !rightSpaceLength || rightEscape;
+          const right = !rightSpaceLength || !!rightEscape;
           const rightEscapeReplacement = rightEscape ? `${rightEscape} ` : "";
           if (left || right) {
             const range = left ?
@@ -5011,28 +5066,12 @@ module.exports = {
 
 
 
-const { addErrorContext, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByPredicate, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const isList = (token) => (
   (token.type === "listOrdered") || (token.type === "listUnordered")
 );
-const addBlankLineError = (onError, lines, lineIndex, lineNumber) => {
-  const line = lines[lineIndex];
-  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
-  addErrorContext(
-    onError,
-    lineIndex + 1,
-    line.trim(),
-    null,
-    null,
-    null,
-    {
-      lineNumber,
-      "insertText": `${quotePrefix}\n`
-    }
-  );
-};
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5062,7 +5101,12 @@ module.exports = {
       // Look for a blank line above the list
       const firstIndex = list.startLine - 1;
       if (!isBlankLine(lines[firstIndex - 1])) {
-        addBlankLineError(onError, lines, firstIndex);
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          firstIndex
+        );
       }
 
       // Find the "visual" end of the list
@@ -5078,7 +5122,13 @@ module.exports = {
       // Look for a blank line below the list
       const lastIndex = endLine - 1;
       if (!isBlankLine(lines[lastIndex + 1])) {
-        addBlankLineError(onError, lines, lastIndex, lastIndex + 2);
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          lastIndex,
+          lastIndex + 2
+        );
       }
     }
   }
@@ -6993,6 +7043,65 @@ module.exports = {
 
 /***/ }),
 
+/***/ "../lib/md058.js":
+/*!***********************!*\
+  !*** ../lib/md058.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
+module.exports = {
+  "names": [ "MD058", "blanks-around-tables" ],
+  "description": "Tables should be surrounded by blank lines",
+  "tags": [ "table" ],
+  "parser": "micromark",
+  "function": function MD058(params, onError) {
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").Token[] */
+    const micromarkTokens =
+      // @ts-ignore
+      params.parsers.micromark.tokens;
+    const { lines } = params;
+    // For every table...
+    const tables = filterByTypes(micromarkTokens, [ "table" ]);
+    for (const table of tables) {
+      // Look for a blank line above the table
+      const firstIndex = table.startLine - 1;
+      if (!isBlankLine(lines[firstIndex - 1])) {
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          firstIndex
+        );
+      }
+      // Look for a blank line below the table
+      const lastIndex = table.endLine - 1;
+      if (!isBlankLine(lines[lastIndex + 1])) {
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          lastIndex,
+          lastIndex + 2
+        );
+      }
+    }
+  }
+};
+
+
+/***/ }),
+
 /***/ "../lib/rules.js":
 /*!***********************!*\
   !*** ../lib/rules.js ***!
@@ -7057,8 +7166,9 @@ const rules = [
   __webpack_require__(/*! ./md053 */ "../lib/md053.js"),
   __webpack_require__(/*! ./md054 */ "../lib/md054.js"),
   __webpack_require__(/*! ./md055 */ "../lib/md055.js"),
-  __webpack_require__(/*! ./md056 */ "../lib/md056.js")
+  __webpack_require__(/*! ./md056 */ "../lib/md056.js"),
   // md057: See https://github.com/markdownlint/markdownlint
+  __webpack_require__(/*! ./md058 */ "../lib/md058.js")
 ];
 for (const rule of rules) {
   const name = rule.names[0].toLowerCase();

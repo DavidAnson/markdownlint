@@ -595,8 +595,20 @@ function addError(onError, lineNumber, detail, context, range, fixInfo) {
 }
 module.exports.addError = addError;
 
-// Adds an error object with details conditionally via the onError callback
-module.exports.addErrorDetailIf = function addErrorDetailIf(
+/**
+ * Adds an error object with details conditionally via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {Object} expected Expected value.
+ * @param {Object} actual Actual value.
+ * @param {string} [detail] Error details.
+ * @param {string} [context] Error context.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
+function addErrorDetailIf(
   onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
@@ -608,14 +620,55 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
       range,
       fixInfo);
   }
-};
+}
+module.exports.addErrorDetailIf = addErrorDetailIf;
 
-// Adds an error object with context via the onError callback
-module.exports.addErrorContext = function addErrorContext(
-  onError, lineNumber, context, left, right, range, fixInfo) {
-  context = ellipsify(context, left, right);
+/**
+ * Adds an error object with context via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {string} context Error context.
+ * @param {boolean} [start] True iff the start of the text is important.
+ * @param {boolean} [end] True iff the end of the text is important.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
+function addErrorContext(
+  onError, lineNumber, context, start, end, range, fixInfo) {
+  context = ellipsify(context, start, end);
   addError(onError, lineNumber, undefined, context, range, fixInfo);
-};
+}
+module.exports.addErrorContext = addErrorContext;
+
+/**
+ * Adds an error object with context for a construct missing a blank line.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index of line.
+ * @param {number} [lineNumber] Line number for override.
+ * @returns {void}
+ */
+function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
+  const line = lines[lineIndex];
+  // @ts-ignore
+  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
+  addErrorContext(
+    onError,
+    lineIndex + 1,
+    line.trim(),
+    undefined,
+    undefined,
+    undefined,
+    {
+      lineNumber,
+      "insertText": `${quotePrefix}\n`
+    }
+  );
+}
+module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
  * Returns an array of code block and span content ranges.

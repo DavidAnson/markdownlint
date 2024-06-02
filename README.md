@@ -136,6 +136,7 @@ playground for learning and exploring.
 - **[MD054](doc/md054.md)** *link-image-style* - Link and image style
 - **[MD055](doc/md055.md)** *table-pipe-style* - Table pipe style
 - **[MD056](doc/md056.md)** *table-column-count* - Table column count
+- **[MD058](doc/md058.md)** *blanks-around-tables* - Tables should be surrounded by blank lines
 
 <!-- markdownlint-restore -->
 
@@ -177,7 +178,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
-- **`table`** - `MD055`, `MD056`
+- **`table`** - `MD055`, `MD056`, `MD058`
 - **`ul`** - `MD004`, `MD005`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,

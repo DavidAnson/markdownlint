@@ -1079,6 +1079,14 @@ export interface Configuration {
    */
   "table-column-count"?: boolean;
   /**
+   * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md058.md
+   */
+  MD058?: boolean;
+  /**
+   * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md058.md
+   */
+  "blanks-around-tables"?: boolean;
+  /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
@@ -1171,7 +1179,7 @@ export interface Configuration {
    */
   images?: boolean;
   /**
-   * table : MD055, MD056
+   * table : MD055, MD056, MD058
    */
   table?: boolean;
   [k: string]: unknown;
