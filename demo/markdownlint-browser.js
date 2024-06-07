@@ -3307,7 +3307,8 @@ module.exports = markdownlint;
 
 
 
-const { addErrorDetailIf, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3315,17 +3316,25 @@ module.exports = {
   "names": [ "MD001", "heading-increment" ],
   "description": "Heading levels should only increment by one level at a time",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD001(params, onError) {
-    let prevLevel = 0;
-    filterTokens(params, "heading_open", function forToken(token) {
-      const level = Number.parseInt(token.tag.slice(1), 10);
-      if (prevLevel && (level > prevLevel)) {
-        addErrorDetailIf(onError, token.lineNumber,
-          "h" + (prevLevel + 1), "h" + level);
+    let prevLevel = Number.MAX_SAFE_INTEGER;
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const level = getHeadingLevel(heading);
+      if (level > prevLevel) {
+        addErrorDetailIf(
+          onError,
+          heading.startLine,
+          `h${prevLevel + 1}`,
+          `h${level}`
+        );
       }
       prevLevel = level;
-    });
+    }
   }
 };
 
