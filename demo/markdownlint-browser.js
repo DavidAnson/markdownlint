@@ -1540,6 +1540,26 @@ function getHeadingLevel(heading) {
 }
 
 /**
+ * Gets the heading style of a Micromark heading tokan.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {"atx" | "atx_closed" | "setext"} Heading style.
+ */
+function getHeadingStyle(heading) {
+  if (heading.type === "setextHeading") {
+    return "setext";
+  }
+  const atxHeadingSequenceLength = filterByTypes(
+    heading.children,
+    [ "atxHeadingSequence" ]
+  ).length;
+  if (atxHeadingSequenceLength === 1) {
+    return "atx";
+  }
+  return "atx_closed";
+}
+
+/**
  * HTML tag information.
  *
  * @typedef {Object} HtmlTagInfo
@@ -1663,6 +1683,7 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   getHeadingLevel,
+  getHeadingStyle,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,
@@ -3352,8 +3373,9 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, filterTokens, headingStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHeadingStyle, inHtmlFlow } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3361,16 +3383,20 @@ module.exports = {
   "names": [ "MD003", "heading-style" ],
   "description": "Heading style",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD003(params, onError) {
     let style = String(params.config.style || "consistent");
-    filterTokens(params, "heading_open", function forToken(token) {
-      const styleForToken = headingStyleFor(token);
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const styleForToken = getHeadingStyle(heading);
       if (style === "consistent") {
         style = styleForToken;
       }
-      if (styleForToken !== style) {
-        const h12 = /h[12]/.test(token.tag);
+      if ((styleForToken !== style) && !inHtmlFlow(heading)) {
+        const h12 = getHeadingLevel(heading) <= 2;
         const setextWithAtx =
           (style === "setext_with_atx") &&
             ((h12 && (styleForToken === "setext")) ||
@@ -3386,11 +3412,15 @@ module.exports = {
           } else if (style === "setext_with_atx_closed") {
             expected = h12 ? "setext" : "atx_closed";
           }
-          addErrorDetailIf(onError, token.lineNumber,
-            expected, styleForToken);
+          addErrorDetailIf(
+            onError,
+            heading.startLine,
+            expected,
+            styleForToken
+          );
         }
       }
-    });
+    }
   }
 };
 
@@ -4061,8 +4091,8 @@ module.exports = {
           lineNumber,
           length,
           line.length,
-          null,
-          null,
+          undefined,
+          undefined,
           [ length + 1, line.length - length ]);
       }
     });
@@ -4226,8 +4256,8 @@ module.exports = {
             onError,
             lineNumber,
             line.trim(),
-            null,
-            null,
+            undefined,
+            undefined,
             [ 1, hashLength + spacesLength + 1 ],
             {
               "editColumn": hashLength + 1,

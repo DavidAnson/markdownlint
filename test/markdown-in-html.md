@@ -34,4 +34,4 @@ Text
 
 </p>
 
-<!-- markdownlint-disable-file MD013 MD033 -->
+<!-- markdownlint-disable-file line-length no-inline-html -->

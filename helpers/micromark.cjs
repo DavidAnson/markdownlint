@@ -310,6 +310,26 @@ function getHeadingLevel(heading) {
 }
 
 /**
+ * Gets the heading style of a Micromark heading tokan.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {"atx" | "atx_closed" | "setext"} Heading style.
+ */
+function getHeadingStyle(heading) {
+  if (heading.type === "setextHeading") {
+    return "setext";
+  }
+  const atxHeadingSequenceLength = filterByTypes(
+    heading.children,
+    [ "atxHeadingSequence" ]
+  ).length;
+  if (atxHeadingSequenceLength === 1) {
+    return "atx";
+  }
+  return "atx_closed";
+}
+
+/**
  * HTML tag information.
  *
  * @typedef {Object} HtmlTagInfo
@@ -433,6 +453,7 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   getHeadingLevel,
+  getHeadingStyle,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,
