@@ -4671,8 +4671,9 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens, frontMatterHasTitle } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, inHtmlFlow } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4680,26 +4681,41 @@ module.exports = {
   "names": [ "MD025", "single-title", "single-h1" ],
   "description": "Multiple top-level headings in the same document",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD025(params, onError) {
     const level = Number(params.config.level || 1);
-    const tag = "h" + level;
     const foundFrontMatterTitle =
       frontMatterHasTitle(
         params.frontMatterLines,
         params.config.front_matter_title
       );
     let hasTopLevelHeading = false;
-    filterTokens(params, "heading_open", function forToken(token) {
-      if (token.tag === tag) {
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const headingLevel = getHeadingLevel(heading);
+      if ((headingLevel === level) && !inHtmlFlow(heading)) {
         if (hasTopLevelHeading || foundFrontMatterTitle) {
-          addErrorContext(onError, token.lineNumber,
-            token.line.trim());
-        } else if (token.lineNumber === 1) {
+          const headingTexts = filterByTypes(
+            heading.children,
+            [ "atxHeadingText", "setextHeadingText" ]
+          );
+          const headingText = headingTexts.
+            map((token) => token.text).
+            join(" ").
+            replace(/[\r\n]+/g, " ");
+          addErrorContext(
+            onError,
+            heading.startLine,
+            headingText
+          );
+        } else if (heading.startLine === 1) {
           hasTopLevelHeading = true;
         }
       }
-    });
+    }
   }
 };
 
