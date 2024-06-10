@@ -1240,12 +1240,39 @@ const {
 } = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
 const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
-const flatTokensSymbol = Symbol("flat-tokens");
+const flatTokensWithHtmlFlowSymbol = Symbol("flat-tokens-with-html-flow");
+const flatTokensWithoutHtmlFlowSymbol = Symbol("flat-tokens-without-html-flow");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+
+/**
+ * Gets the nearest parent of the specified type for a Micromark token.
+ *
+ * @param {Token} token Micromark token.
+ * @param {TokenType[]} types Types to allow.
+ * @returns {Token | null} Parent token.
+ */
+function getTokenParentOfType(token, types) {
+  /** @type {Token | null} */
+  let current = token;
+  while ((current = current.parent) && !types.includes(current.type)) {
+    // Empty
+  }
+  return current;
+}
+
+/**
+ * Determines if a Micromark token has an htmlFlow-type parent.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff the token has an htmlFlow-type parent.
+ */
+function inHtmlFlow(token) {
+  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
+}
 
 /**
  * Returns whether a token is an htmlFlow type containing an HTML comment.
@@ -1337,7 +1364,8 @@ function micromarkParseWithOffset(
 
   // Create Token objects
   const document = [];
-  let flatTokens = [];
+  let flatTokensWithHtmlFlow = [];
+  const flatTokensWithoutHtmlFlow = [];
   /** @type {Token} */
   const root = {
     "type": "data",
@@ -1376,7 +1404,8 @@ function micromarkParseWithOffset(
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
       previous.children.push(current);
-      flatTokens.push(current);
+      flatTokensWithHtmlFlow.push(current);
+      flatTokensWithoutHtmlFlow.push(current);
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
@@ -1405,7 +1434,7 @@ function micromarkParseWithOffset(
         current.children = tokens;
         // Avoid stack overflow of Array.push(...spread)
         // eslint-disable-next-line unicorn/prefer-spread
-        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
+        flatTokensWithHtmlFlow = flatTokensWithHtmlFlow.concat(tokens[flatTokensWithHtmlFlowSymbol]);
       }
     } else if (kind === "exit") {
       if (type === "htmlFlow") {
@@ -1421,7 +1450,8 @@ function micromarkParseWithOffset(
   }
 
   // Return document
-  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
+  Object.defineProperty(document, flatTokensWithHtmlFlowSymbol, { "value": flatTokensWithHtmlFlow });
+  Object.defineProperty(document, flatTokensWithoutHtmlFlowSymbol, { "value": flatTokensWithoutHtmlFlow });
   Object.freeze(document);
   return document;
 }
@@ -1507,15 +1537,24 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {TokenType[]} types Types to allow.
+ * @param {boolean} [htmlFlow] Whether to include htmlFlow content.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByTypes(tokens, types) {
+function filterByTypes(tokens, types, htmlFlow) {
   const predicate = (token) => types.includes(token.type);
-  const flatTokens = tokens[flatTokensSymbol];
+  const flatTokens = tokens[
+    htmlFlow ?
+      flatTokensWithHtmlFlowSymbol :
+      flatTokensWithoutHtmlFlowSymbol
+  ];
   if (flatTokens) {
     return flatTokens.filter(predicate);
   }
-  return filterByPredicate(tokens, predicate);
+  const result = filterByPredicate(tokens, predicate);
+  if (htmlFlow) {
+    return result;
+  }
+  return result.filter((token) => !inHtmlFlow(token));
 }
 
 /**
@@ -1590,22 +1629,6 @@ function getHtmlTagInfo(token) {
 }
 
 /**
- * Gets the nearest parent of the specified type for a Micromark token.
- *
- * @param {Token} token Micromark token.
- * @param {TokenType[]} types Types to allow.
- * @returns {Token | null} Parent token.
- */
-function getTokenParentOfType(token, types) {
-  /** @type {Token | null} */
-  let current = token;
-  while ((current = current.parent) && !types.includes(current.type)) {
-    // Empty
-  }
-  return current;
-}
-
-/**
  * Get the text of the first match from a list of Micromark tokens by type.
  *
  * @param {Token[]} tokens Micromark tokens.
@@ -1615,16 +1638,6 @@ function getTokenParentOfType(token, types) {
 function getTokenTextByType(tokens, type) {
   const filtered = tokens.filter((token) => token.type === type);
   return (filtered.length > 0) ? filtered[0].text : null;
-}
-
-/**
- * Determines if a Micromark token has an htmlFlow-type parent.
- *
- * @param {Token} token Micromark token.
- * @returns {boolean} True iff the token has an htmlFlow-type parent.
- */
-function inHtmlFlow(token) {
-  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
 }
 
 /**
@@ -3374,7 +3387,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, getHeadingStyle, inHtmlFlow } =
+const { filterByTypes, getHeadingLevel, getHeadingStyle } =
   __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3395,7 +3408,7 @@ module.exports = {
       if (style === "consistent") {
         style = styleForToken;
       }
-      if ((styleForToken !== style) && !inHtmlFlow(heading)) {
+      if (styleForToken !== style) {
         const h12 = getHeadingLevel(heading) <= 2;
         const setextWithAtx =
           (style === "setext_with_atx") &&
@@ -3529,7 +3542,7 @@ module.exports = {
 
 
 const { addError, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3547,7 +3560,7 @@ module.exports = {
     const lists = filterByTypes(
       micromarkTokens,
       [ "listOrdered", "listUnordered" ]
-    ).filter((list) => !inHtmlFlow(list));
+    );
     for (const list of lists) {
       const expectedIndent = list.startColumn - 1;
       let expectedEnd = 0;
@@ -3564,8 +3577,8 @@ module.exports = {
             lineNumber,
             expectedIndent,
             actualIndent,
-            null,
-            null,
+            undefined,
+            undefined,
             range
             // No fixInfo; MD007 handles this scenario better
           );
@@ -3621,8 +3634,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getTokenParentOfType, inHtmlFlow } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("markdownlint-micromark").TokenType[] */
@@ -3675,7 +3687,7 @@ module.exports = {
         if (nesting >= 0) {
           unorderedListNesting.set(token, nesting);
         }
-      } else if (!inHtmlFlow(token)) {
+      } else {
         // listItemPrefix
         const nesting = unorderedListNesting.get(parent);
         if (nesting !== undefined) {
@@ -4438,8 +4450,7 @@ module.exports = {
 
 const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, inHtmlFlow } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const defaultLines = 1;
 
@@ -4484,7 +4495,7 @@ module.exports = {
     const headings = filterByTypes(
       micromarkTokens,
       [ "atxHeading", "setextHeading" ]
-    ).filter((heading) => !inHtmlFlow(heading));
+    );
     for (const heading of headings) {
       const { startLine, endLine } = heading;
       const line = lines[startLine - 1].trim();
@@ -4507,7 +4518,7 @@ module.exports = {
           actualAbove,
           "Above",
           line,
-          null,
+          undefined,
           {
             "insertText": getBlockQuote(
               lines[startLine - 2],
@@ -4535,7 +4546,7 @@ module.exports = {
           actualBelow,
           "Below",
           line,
-          null,
+          undefined,
           {
             "lineNumber": endLine + 1,
             "insertText": getBlockQuote(
@@ -4672,8 +4683,7 @@ module.exports = {
 
 
 const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, inHtmlFlow } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4696,7 +4706,7 @@ module.exports = {
     );
     for (const heading of headings) {
       const headingLevel = getHeadingLevel(heading);
-      if ((headingLevel === level) && !inHtmlFlow(heading)) {
+      if (headingLevel === level) {
         if (hasTopLevelHeading || foundFrontMatterTitle) {
           const headingTexts = filterByTypes(
             heading.children,
@@ -5223,7 +5233,7 @@ module.exports = {
     const micromarkTokens =
       // @ts-ignore
       params.parsers.micromark.tokens;
-    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ])) {
+    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ], true)) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (
         htmlTagInfo &&
@@ -5352,8 +5362,8 @@ module.exports = {
           onError,
           token.startLine,
           token.text,
-          null,
-          null,
+          undefined,
+          undefined,
           range,
           fixInfo
         );
@@ -5590,8 +5600,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, inHtmlFlow, tokenIfType } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const leftSpaceRe = /^\s(?:[^`]|$)/;
 const rightSpaceRe = /[^`]\s$/;
@@ -5619,8 +5628,7 @@ module.exports = {
     const micromarkTokens =
       // @ts-ignore
       params.parsers.micromark.tokens;
-    const codeTexts = filterByTypes(micromarkTokens, [ "codeText" ])
-      .filter((codeText) => !inHtmlFlow(codeText));
+    const codeTexts = filterByTypes(micromarkTokens, [ "codeText" ]);
     for (const codeText of codeTexts) {
       const { children } = codeText;
       const first = 0;
@@ -5862,7 +5870,7 @@ module.exports = {
           if ((token.type === "atxHeading") || (token.type === "setextHeading")) {
             isError = (getHeadingLevel(token) !== level);
           } else if (token.type === "htmlFlow") {
-            const htmlTexts = filterByTypes(token.children, [ "htmlText" ]);
+            const htmlTexts = filterByTypes(token.children, [ "htmlText" ], true);
             const tagInfo = (htmlTexts.length > 0) && getHtmlTagInfo(htmlTexts[0]);
             isError = !tagInfo || (tagInfo.name.toLowerCase() !== `h${level}`);
           }
@@ -6195,7 +6203,7 @@ module.exports = {
     }
 
     // Process HTML images
-    const htmlTexts = filterByTypes(micromarkTokens, [ "htmlText" ]);
+    const htmlTexts = filterByTypes(micromarkTokens, [ "htmlText" ], true);
     for (const htmlText of htmlTexts) {
       const { startColumn, startLine, text } = htmlText;
       const htmlTagInfo = getHtmlTagInfo(htmlText);
@@ -6596,7 +6604,7 @@ module.exports = {
     }
 
     // Process HTML anchors
-    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ])) {
+    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ], true)) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (htmlTagInfo && !htmlTagInfo.close) {
         const anchorMatch = idRe.exec(token.text) ||

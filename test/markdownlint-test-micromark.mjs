@@ -63,15 +63,40 @@ test("getMicromarkEvents/filterByPredicate", async(t) => {
   t.deepEqual(tokenTypes, eventTypes);
 });
 
-test("filterByTypes", async(t) => {
-  t.plan(8);
-  const filtered = filterByTypes(
-    await testTokens,
-    [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ]
-  );
+test("filterByTypes, htmlFlow false", async(t) => {
+  t.plan(7);
+  const tokens = await testTokens;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../micromark/micromark.cjs").TokenType[] */
+  const types = [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ];
+  const filtered = filterByTypes(tokens, types);
+  // Using flat tokens
   for (const token of filtered) {
     t.true(token.type.endsWith("Text"));
   }
+  // Not using flat tokens
+  t.deepEqual(
+    filtered,
+    filterByTypes([ ...tokens], types)
+  )
+});
+
+test("filterByTypes, htmlFlow true", async(t) => {
+  t.plan(9);
+  const tokens = await testTokens;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../micromark/micromark.cjs").TokenType[] */
+  const types = [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ];
+  // Using flat tokens
+  const filtered = filterByTypes(tokens, types, true);
+  for (const token of filtered) {
+    t.true(token.type.endsWith("Text"));
+  }
+  // Not using flat tokens
+  t.deepEqual(
+    filtered,
+    filterByTypes([ ...tokens], types, true)
+  )
 });
 
 test("filterByPredicate/filterByTypes", async(t) => {
@@ -79,6 +104,6 @@ test("filterByPredicate/filterByTypes", async(t) => {
   const tokens = await testTokens;
   const byPredicate = filterByPredicate(tokens, () => true);
   const allTypes = new Set(byPredicate.map(((token) => token.type)));
-  const byTypes = filterByTypes(tokens, [ ...allTypes.values() ]);
+  const byTypes = filterByTypes(tokens, [ ...allTypes.values() ], true);
   t.deepEqual(byPredicate, byTypes);
 });

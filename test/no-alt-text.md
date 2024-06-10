@@ -64,6 +64,10 @@ Uppercase image tag with alt attribute set
 
 Uppercase image tag with no alt set <IMG SRC="cat.png" /> {MD045}
 
+<p>
+  <img src="image.png" /> {MD045}
+</p>
+
 <!-- markdownlint-restore no-inline-html -->
 
 [notitle]: image.jpg
