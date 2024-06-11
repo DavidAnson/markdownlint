@@ -1240,8 +1240,8 @@ const {
 } = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
 const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
-const flatTokensWithHtmlFlowSymbol = Symbol("flat-tokens-with-html-flow");
-const flatTokensWithoutHtmlFlowSymbol = Symbol("flat-tokens-without-html-flow");
+const flatTokensSymbol = Symbol("flat-tokens");
+const reparseSymbol = Symbol("reparse");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
@@ -1249,29 +1249,13 @@ const flatTokensWithoutHtmlFlowSymbol = Symbol("flat-tokens-without-html-flow");
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
 
 /**
- * Gets the nearest parent of the specified type for a Micromark token.
+ * Determines if a Micromark token is within an htmlFlow.
  *
  * @param {Token} token Micromark token.
- * @param {TokenType[]} types Types to allow.
- * @returns {Token | null} Parent token.
- */
-function getTokenParentOfType(token, types) {
-  /** @type {Token | null} */
-  let current = token;
-  while ((current = current.parent) && !types.includes(current.type)) {
-    // Empty
-  }
-  return current;
-}
-
-/**
- * Determines if a Micromark token has an htmlFlow-type parent.
- *
- * @param {Token} token Micromark token.
- * @returns {boolean} True iff the token has an htmlFlow-type parent.
+ * @returns {boolean} True iff the token is within an htmlFlow.
  */
 function inHtmlFlow(token) {
-  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
+  return token[reparseSymbol];
 }
 
 /**
@@ -1364,8 +1348,7 @@ function micromarkParseWithOffset(
 
   // Create Token objects
   const document = [];
-  let flatTokensWithHtmlFlow = [];
-  const flatTokensWithoutHtmlFlow = [];
+  let flatTokens = [];
   /** @type {Token} */
   const root = {
     "type": "data",
@@ -1403,9 +1386,11 @@ function micromarkParseWithOffset(
         "children": [],
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
+      if (ancestor) {
+        Object.defineProperty(current, reparseSymbol, { "value": true });
+      }
       previous.children.push(current);
-      flatTokensWithHtmlFlow.push(current);
-      flatTokensWithoutHtmlFlow.push(current);
+      flatTokens.push(current);
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
@@ -1434,7 +1419,7 @@ function micromarkParseWithOffset(
         current.children = tokens;
         // Avoid stack overflow of Array.push(...spread)
         // eslint-disable-next-line unicorn/prefer-spread
-        flatTokensWithHtmlFlow = flatTokensWithHtmlFlow.concat(tokens[flatTokensWithHtmlFlowSymbol]);
+        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
       }
     } else if (kind === "exit") {
       if (type === "htmlFlow") {
@@ -1450,8 +1435,7 @@ function micromarkParseWithOffset(
   }
 
   // Return document
-  Object.defineProperty(document, flatTokensWithHtmlFlowSymbol, { "value": flatTokensWithHtmlFlow });
-  Object.defineProperty(document, flatTokensWithoutHtmlFlowSymbol, { "value": flatTokensWithoutHtmlFlow });
+  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
   Object.freeze(document);
   return document;
 }
@@ -1541,20 +1525,13 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types, htmlFlow) {
-  const predicate = (token) => types.includes(token.type);
-  const flatTokens = tokens[
-    htmlFlow ?
-      flatTokensWithHtmlFlowSymbol :
-      flatTokensWithoutHtmlFlowSymbol
-  ];
+  const predicate = (token) =>
+    (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
+  const flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
   }
-  const result = filterByPredicate(tokens, predicate);
-  if (htmlFlow) {
-    return result;
-  }
-  return result.filter((token) => !inHtmlFlow(token));
+  return filterByPredicate(tokens, predicate);
 }
 
 /**
@@ -1626,6 +1603,22 @@ function getHtmlTagInfo(token) {
     }
   }
   return null;
+}
+
+/**
+ * Gets the nearest parent of the specified type for a Micromark token.
+ *
+ * @param {Token} token Micromark token.
+ * @param {TokenType[]} types Types to allow.
+ * @returns {Token | null} Parent token.
+ */
+function getTokenParentOfType(token, types) {
+  /** @type {Token | null} */
+  let current = token;
+  while ((current = current.parent) && !types.includes(current.type)) {
+    // Empty
+  }
+  return current;
 }
 
 /**
