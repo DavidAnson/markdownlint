@@ -4236,8 +4236,8 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens, headingStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4245,33 +4245,35 @@ module.exports = {
   "names": [ "MD019", "no-multiple-space-atx" ],
   "description": "Multiple spaces after hash on atx style heading",
   "tags": [ "headings", "atx", "spaces" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD019(params, onError) {
-    filterTokens(params, "heading_open", (token) => {
-      if (headingStyleFor(token) === "atx") {
-        const { line, lineNumber } = token;
-        const match = /^(#+)([ \t]{2,})\S/.exec(line);
-        if (match) {
-          const [
-            ,
-            { "length": hashLength },
-            { "length": spacesLength }
-          ] = match;
-          addErrorContext(
-            onError,
-            lineNumber,
-            line.trim(),
-            undefined,
-            undefined,
-            [ 1, hashLength + spacesLength + 1 ],
-            {
-              "editColumn": hashLength + 1,
-              "deleteCount": spacesLength - 1
-            }
-          );
-        }
+    const atxHeadings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading" ]
+    ).filter((heading) => getHeadingStyle(heading) === "atx");
+    for (const atxHeading of atxHeadings) {
+      const [ atxHeadingSequence, whitespace ] = atxHeading.children;
+      if (
+        (atxHeadingSequence?.type === "atxHeadingSequence") &&
+        (whitespace?.type === "whitespace") &&
+        (whitespace.text.length > 1)
+      ) {
+        const column = whitespace.startColumn + 1;
+        const length = whitespace.endColumn - column;
+        addErrorContext(
+          onError,
+          atxHeading.startLine,
+          atxHeading.text.trim(),
+          undefined,
+          undefined,
+          [ column, length ],
+          {
+            "editColumn": column,
+            "deleteCount": length
+          }
+        );
       }
-    });
+    }
   }
 };
 
