@@ -75,7 +75,7 @@
     "c8": "10.1.2",
     "character-entities": "2.0.2",
     "eslint": "9.4.0",
-    "eslint-plugin-jsdoc": "48.2.9",
+    "eslint-plugin-jsdoc": "48.2.11",
     "eslint-plugin-n": "17.9.0",
     "eslint-plugin-regexp": "2.6.0",
     "eslint-plugin-unicorn": "53.0.0",
