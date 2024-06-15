@@ -300,17 +300,6 @@ function indentFor(token) {
 }
 module.exports.indentFor = indentFor;
 
-// Returns the heading style for a heading token
-module.exports.headingStyleFor = function headingStyleFor(token) {
-  if ((token.map[1] - token.map[0]) === 1) {
-    if (/[^\\]#\s*$/.test(token.line)) {
-      return "atx_closed";
-    }
-    return "atx";
-  }
-  return "setext";
-};
-
 /**
  * Return the string representation of an unordered list marker.
  *

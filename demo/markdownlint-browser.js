@@ -312,17 +312,6 @@ function indentFor(token) {
 }
 module.exports.indentFor = indentFor;
 
-// Returns the heading style for a heading token
-module.exports.headingStyleFor = function headingStyleFor(token) {
-  if ((token.map[1] - token.map[0]) === 1) {
-    if (/[^\\]#\s*$/.test(token.line)) {
-      return "atx_closed";
-    }
-    return "atx";
-  }
-  return "setext";
-};
-
 /**
  * Return the string representation of an unordered list marker.
  *
@@ -4264,8 +4253,8 @@ module.exports = {
           onError,
           atxHeading.startLine,
           atxHeading.text.trim(),
-          undefined,
-          undefined,
+          true,
+          false,
           [ column, length ],
           {
             "editColumn": column,
@@ -4367,65 +4356,73 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens, headingStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-
-const closedAtxRe = /^(#+)([ \t]+)([^ \t]|[^ \t].*[^ \t])([ \t]+)(#+)(\s*)$/;
-
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+  
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD021", "no-multiple-space-closed-atx" ],
   "description": "Multiple spaces inside hashes on closed atx style heading",
   "tags": [ "headings", "atx_closed", "spaces" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD021(params, onError) {
-    filterTokens(params, "heading_open", (token) => {
-      if (headingStyleFor(token) === "atx_closed") {
-        const { line, lineNumber } = token;
-        const match = closedAtxRe.exec(line);
-        if (match) {
-          const [
-            ,
-            leftHash,
-            { "length": leftSpaceLength },
-            content,
-            { "length": rightSpaceLength },
-            rightHash,
-            { "length": trailSpaceLength }
-          ] = match;
-          const left = leftSpaceLength > 1;
-          const right = rightSpaceLength > 1;
-          if (left || right) {
-            const length = line.length;
-            const leftHashLength = leftHash.length;
-            const rightHashLength = rightHash.length;
-            const range = left ?
-              [
-                1,
-                leftHashLength + leftSpaceLength + 1
-              ] :
-              [
-                length - trailSpaceLength - rightHashLength - rightSpaceLength,
-                rightSpaceLength + rightHashLength + 1
-              ];
-            addErrorContext(
-              onError,
-              lineNumber,
-              line.trim(),
-              left,
-              right,
-              range,
-              {
-                "editColumn": 1,
-                "deleteCount": length,
-                "insertText": `${leftHash} ${content} ${rightHash}`
-              }
-            );
+    const atxHeadings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading" ]
+    ).filter((heading) => getHeadingStyle(heading) === "atx_closed");
+    for (const atxHeading of atxHeadings) {
+      const [ atxHeadingSequenceStart, whitespaceStart ] = atxHeading.children;
+      if (
+        (atxHeadingSequenceStart?.type === "atxHeadingSequence") &&
+        (whitespaceStart?.type === "whitespace") &&
+        (whitespaceStart.text.length > 1)
+      ) {
+        const column = whitespaceStart.startColumn + 1;
+        const length = whitespaceStart.endColumn - column;
+        addErrorContext(
+          onError,
+          atxHeading.startLine,
+          atxHeading.text.trim(),
+          true,
+          false,
+          [ column, length ],
+          {
+            "editColumn": column,
+            "deleteCount": length
           }
-        }
+        );
       }
-    });
+      let endSequenceIndex = atxHeading.children.length - 1;
+      while (
+        (endSequenceIndex > 1) &&
+        (atxHeading.children[endSequenceIndex].type !== "atxHeadingSequence")
+      ) {
+        endSequenceIndex--;
+      }
+      const atxHeadingSequenceEnd = atxHeading.children.at(endSequenceIndex);
+      const whitespaceEnd = atxHeading.children.at(endSequenceIndex - 1);
+      if (
+        (atxHeadingSequenceEnd?.type === "atxHeadingSequence") &&
+        (whitespaceEnd?.type === "whitespace") &&
+        (whitespaceEnd.text.length > 1)
+      ) {
+        const column = whitespaceEnd.startColumn + 1;
+        const length = whitespaceEnd.endColumn - column;
+        addErrorContext(
+          onError,
+          atxHeading.startLine,
+          atxHeading.text.trim(),
+          false,
+          true,
+          [ column, length ],
+          {
+            "editColumn": column,
+            "deleteCount": length
+          }
+        );
+      }
+    }
   }
 };
 

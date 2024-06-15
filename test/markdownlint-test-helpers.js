@@ -977,3 +977,11 @@ test("endOfLineGemojiCodeRe", async(t) => {
     t.true(helpers.endOfLineGemojiCodeRe.test(`-:${emoji}:`), emoji);
   }
 });
+
+test("ellipsify", (t) => {
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), "abcdefghijklmnopqrstuvwxyzABCD...");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", false, false), "abcdefghijklmnopqrstuvwxyzABCD...");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", true, false), "abcdefghijklmnopqrstuvwxyzABCD...");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", false, true), "...wxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", true, true), "abcdefghijklmno...LMNOPQRSTUVWXYZ");
+});
