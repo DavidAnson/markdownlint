@@ -4214,10 +4214,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../lib/md019.js":
-/*!***********************!*\
-  !*** ../lib/md019.js ***!
-  \***********************/
+/***/ "../lib/md019-md021.js":
+/*!*****************************!*\
+  !*** ../lib/md019-md021.js ***!
+  \*****************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4225,46 +4225,85 @@ module.exports = {
 
 
 
-const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers/helpers */ "../helpers/helpers.js");
 const { filterByTypes, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
+/**
+ * Validate heading sequence and whitespace length at start or end.
+ *
+ * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
+ * @param {import("./markdownlint").MicromarkToken} heading ATX heading token.
+ * @param {number} delta Direction to scan.
+ * @returns {void}
+ */
+function validateHeadingSpaces(onError, heading, delta) {
+  const { children, startLine, text } = heading;
+  let index = (delta > 0) ? 0 : (children.length - 1);
+  while (
+    children[index] &&
+    (children[index].type !== "atxHeadingSequence")
+  ) {
+    index += delta;
+  }
+  const headingSequence = children[index];
+  const whitespace = children[index + delta];
+  if (
+    (headingSequence?.type === "atxHeadingSequence") &&
+    (whitespace?.type === "whitespace") &&
+    (whitespace.text.length > 1)
+  ) {
+    const column = whitespace.startColumn + 1;
+    const length = whitespace.endColumn - column;
+    addErrorContext(
+      onError,
+      startLine,
+      text.trim(),
+      delta > 0,
+      delta < 0,
+      [ column, length ],
+      {
+        "editColumn": column,
+        "deleteCount": length
+      }
+    );
+  }
+}
+
 // eslint-disable-next-line jsdoc/valid-types
-/** @type import("./markdownlint").Rule */
-module.exports = {
-  "names": [ "MD019", "no-multiple-space-atx" ],
-  "description": "Multiple spaces after hash on atx style heading",
-  "tags": [ "headings", "atx", "spaces" ],
-  "parser": "micromark",
-  "function": function MD019(params, onError) {
-    const atxHeadings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading" ]
-    ).filter((heading) => getHeadingStyle(heading) === "atx");
-    for (const atxHeading of atxHeadings) {
-      const [ atxHeadingSequence, whitespace ] = atxHeading.children;
-      if (
-        (atxHeadingSequence?.type === "atxHeadingSequence") &&
-        (whitespace?.type === "whitespace") &&
-        (whitespace.text.length > 1)
-      ) {
-        const column = whitespace.startColumn + 1;
-        const length = whitespace.endColumn - column;
-        addErrorContext(
-          onError,
-          atxHeading.startLine,
-          atxHeading.text.trim(),
-          true,
-          false,
-          [ column, length ],
-          {
-            "editColumn": column,
-            "deleteCount": length
-          }
-        );
+/** @type import("./markdownlint").Rule[] */
+module.exports = [
+  {
+    "names": [ "MD019", "no-multiple-space-atx" ],
+    "description": "Multiple spaces after hash on atx style heading",
+    "tags": [ "headings", "atx", "spaces" ],
+    "parser": "micromark",
+    "function": function MD019(params, onError) {
+      const atxHeadings = filterByTypes(
+        params.parsers.micromark.tokens,
+        [ "atxHeading" ]
+      ).filter((heading) => getHeadingStyle(heading) === "atx");
+      for (const atxHeading of atxHeadings) {
+        validateHeadingSpaces(onError, atxHeading, 1);
+      }
+    }
+  },
+  {
+    "names": [ "MD021", "no-multiple-space-closed-atx" ],
+    "description": "Multiple spaces inside hashes on closed atx style heading",
+    "tags": [ "headings", "atx_closed", "spaces" ],
+    "parser": "micromark",
+    "function": function MD021(params, onError) {
+      const atxClosedHeadings = filterByTypes(
+        params.parsers.micromark.tokens,
+        [ "atxHeading" ]
+      ).filter((heading) => getHeadingStyle(heading) === "atx_closed");
+      for (const atxClosedHeading of atxClosedHeadings) {
+        validateHeadingSpaces(onError, atxClosedHeading, 1);
+        validateHeadingSpaces(onError, atxClosedHeading, -1);
       }
     }
   }
-};
+];
 
 
 /***/ }),
@@ -4339,90 +4378,6 @@ module.exports = {
         }
       }
     });
-  }
-};
-
-
-/***/ }),
-
-/***/ "../lib/md021.js":
-/*!***********************!*\
-  !*** ../lib/md021.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-// @ts-check
-
-
-
-const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-  
-// eslint-disable-next-line jsdoc/valid-types
-/** @type import("./markdownlint").Rule */
-module.exports = {
-  "names": [ "MD021", "no-multiple-space-closed-atx" ],
-  "description": "Multiple spaces inside hashes on closed atx style heading",
-  "tags": [ "headings", "atx_closed", "spaces" ],
-  "parser": "micromark",
-  "function": function MD021(params, onError) {
-    const atxHeadings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading" ]
-    ).filter((heading) => getHeadingStyle(heading) === "atx_closed");
-    for (const atxHeading of atxHeadings) {
-      const [ atxHeadingSequenceStart, whitespaceStart ] = atxHeading.children;
-      if (
-        (atxHeadingSequenceStart?.type === "atxHeadingSequence") &&
-        (whitespaceStart?.type === "whitespace") &&
-        (whitespaceStart.text.length > 1)
-      ) {
-        const column = whitespaceStart.startColumn + 1;
-        const length = whitespaceStart.endColumn - column;
-        addErrorContext(
-          onError,
-          atxHeading.startLine,
-          atxHeading.text.trim(),
-          true,
-          false,
-          [ column, length ],
-          {
-            "editColumn": column,
-            "deleteCount": length
-          }
-        );
-      }
-      let endSequenceIndex = atxHeading.children.length - 1;
-      while (
-        (endSequenceIndex > 1) &&
-        (atxHeading.children[endSequenceIndex].type !== "atxHeadingSequence")
-      ) {
-        endSequenceIndex--;
-      }
-      const atxHeadingSequenceEnd = atxHeading.children.at(endSequenceIndex);
-      const whitespaceEnd = atxHeading.children.at(endSequenceIndex - 1);
-      if (
-        (atxHeadingSequenceEnd?.type === "atxHeadingSequence") &&
-        (whitespaceEnd?.type === "whitespace") &&
-        (whitespaceEnd.text.length > 1)
-      ) {
-        const column = whitespaceEnd.startColumn + 1;
-        const length = whitespaceEnd.endColumn - column;
-        addErrorContext(
-          onError,
-          atxHeading.startLine,
-          atxHeading.text.trim(),
-          false,
-          true,
-          [ column, length ],
-          {
-            "editColumn": column,
-            "deleteCount": length
-          }
-        );
-      }
-    }
   }
 };
 
@@ -7170,6 +7125,11 @@ module.exports = {
 
 const { homepage, version } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
 
+// @ts-ignore
+const [ md019, md021 ] = __webpack_require__(/*! ./md019-md021 */ "../lib/md019-md021.js");
+// @ts-ignore
+const [ md049, md050 ] = __webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js");
+
 const rules = [
   __webpack_require__(/*! ./md001 */ "../lib/md001.js"),
   // md002: Deprecated and removed
@@ -7185,9 +7145,9 @@ const rules = [
   __webpack_require__(/*! ./md013 */ "../lib/md013.js"),
   __webpack_require__(/*! ./md014 */ "../lib/md014.js"),
   __webpack_require__(/*! ./md018 */ "../lib/md018.js"),
-  __webpack_require__(/*! ./md019 */ "../lib/md019.js"),
+  md019,
   __webpack_require__(/*! ./md020 */ "../lib/md020.js"),
-  __webpack_require__(/*! ./md021 */ "../lib/md021.js"),
+  md021,
   __webpack_require__(/*! ./md022 */ "../lib/md022.js"),
   __webpack_require__(/*! ./md023 */ "../lib/md023.js"),
   __webpack_require__(/*! ./md024 */ "../lib/md024.js"),
@@ -7215,7 +7175,8 @@ const rules = [
   __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
   __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
   __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
-  ...__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"),
+  md049,
+  md050,
   __webpack_require__(/*! ./md051 */ "../lib/md051.js"),
   __webpack_require__(/*! ./md052 */ "../lib/md052.js"),
   __webpack_require__(/*! ./md053 */ "../lib/md053.js"),
