@@ -4521,9 +4521,8 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-
-const spaceBeforeHeadingRe = /^(\s+|[>\s]+\s\s)[^>\s]/;
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4531,31 +4530,34 @@ module.exports = {
   "names": [ "MD023", "heading-start-left" ],
   "description": "Headings must start at the beginning of the line",
   "tags": [ "headings", "spaces" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD023(params, onError) {
-    filterTokens(params, "heading_open", function forToken(token) {
-      const { lineNumber, line } = token;
-      const match = line.match(spaceBeforeHeadingRe);
-      if (match) {
-        const [ prefixAndFirstChar, prefix ] = match;
-        let deleteCount = prefix.length;
-        const prefixLengthNoSpace = prefix.trimEnd().length;
-        if (prefixLengthNoSpace) {
-          deleteCount -= prefixLengthNoSpace - 1;
-        }
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "linePrefix", "setextHeading" ]
+    );
+    for (let i = 0; i < headings.length - 1; i++) {
+      if (
+        (headings[i].type === "linePrefix") &&
+        (headings[i + 1].type !== "linePrefix") &&
+        (headings[i].startLine === headings[i + 1].startLine)
+      ) {
+        const { endColumn, startColumn, startLine } = headings[i];
+        const length = endColumn - startColumn;
         addErrorContext(
           onError,
-          lineNumber,
-          line,
-          null,
-          null,
-          [ 1, prefixAndFirstChar.length ],
+          startLine,
+          params.lines[startLine - 1],
+          true,
+          false,
+          [ startColumn, length ],
           {
-            "editColumn": prefixLengthNoSpace + 1,
-            "deleteCount": deleteCount
-          });
+            "editColumn": startColumn,
+            "deleteCount": length
+          }
+        );
       }
-    });
+    }
   }
 };
 
