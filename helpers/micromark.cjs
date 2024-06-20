@@ -346,6 +346,20 @@ function getHeadingStyle(heading) {
 }
 
 /**
+ * Gets the heading text of a Micromark heading token.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {string} Heading text.
+ */
+function getHeadingText(heading) {
+  const headingTexts = filterByTypes(
+    heading.children,
+    [ "atxHeadingText", "setextHeadingText" ]
+  );
+  return headingTexts[0]?.text.replace(/[\r\n]+/g, " ") || "";
+}
+
+/**
  * HTML tag information.
  *
  * @typedef {Object} HtmlTagInfo
@@ -460,6 +474,7 @@ module.exports = {
   filterByTypes,
   getHeadingLevel,
   getHeadingStyle,
+  getHeadingText,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,
