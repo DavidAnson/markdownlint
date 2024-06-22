@@ -5878,8 +5878,8 @@ module.exports = {
 
 
 
-const { addErrorContext, addErrorDetailIf, forEachHeading } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5887,7 +5887,7 @@ module.exports = {
   "names": [ "MD043", "required-headings" ],
   "description": "Required heading structure",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD043(params, onError) {
     const requiredHeadings = params.config.headings;
     if (!Array.isArray(requiredHeadings)) {
@@ -5895,20 +5895,22 @@ module.exports = {
       return;
     }
     const matchCase = params.config.match_case || false;
-    const levels = {};
-    for (const level of [ 1, 2, 3, 4, 5, 6 ]) {
-      levels["h" + level] = "######".substr(-level);
-    }
     let i = 0;
     let matchAny = false;
     let hasError = false;
     let anyHeadings = false;
     const getExpected = () => requiredHeadings[i++] || "[None]";
     const handleCase = (str) => (matchCase ? str : str.toLowerCase());
-    forEachHeading(params, (heading, content) => {
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
       if (!hasError) {
+        const headingText = getHeadingText(heading);
+        const headingLevel = getHeadingLevel(heading);
         anyHeadings = true;
-        const actual = levels[heading.tag] + " " + content;
+        const actual = `${"".padEnd(headingLevel, "#")} ${headingText}`;
         const expected = getExpected();
         if (expected === "*") {
           const nextExpected = getExpected();
@@ -5923,12 +5925,16 @@ module.exports = {
         } else if (matchAny) {
           i--;
         } else {
-          addErrorDetailIf(onError, heading.lineNumber,
-            expected, actual);
+          addErrorDetailIf(
+            onError,
+            heading.startLine,
+            expected,
+            actual
+          );
           hasError = true;
         }
       }
-    });
+    }
     const extraHeadings = requiredHeadings.length - i;
     if (
       !hasError &&
@@ -5936,8 +5942,11 @@ module.exports = {
         ((extraHeadings === 1) && (requiredHeadings[i] !== "*"))) &&
       (anyHeadings || !requiredHeadings.every((heading) => heading === "*"))
     ) {
-      addErrorContext(onError, params.lines.length,
-        requiredHeadings[i]);
+      addErrorContext(
+        onError,
+        params.lines.length,
+        requiredHeadings[i]
+      );
     }
   }
 };
