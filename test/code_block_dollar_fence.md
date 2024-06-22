@@ -40,4 +40,8 @@ text
 $ npm install --save multimatch {MD014}
 ```
 
-text
+Space-prefixed command with no output:
+
+```sh
+ $ ls example {MD014}
+```
