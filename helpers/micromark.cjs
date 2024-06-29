@@ -305,6 +305,21 @@ function filterByTypes(tokens, types, htmlFlow) {
 }
 
 /**
+ * Gets a list of nested Micromark token descendants by type path.
+ *
+ * @param {Token|Token[]} parent Micromark token parent or parents.
+ * @param {TokenType[]} typePath Micromark token type path.
+ * @returns {Token[]} Micromark token descendants.
+ */
+function getDescendantsByType(parent, typePath) {
+  let tokens = Array.isArray(parent) ? parent : [ parent ];
+  for (const type of typePath) {
+    tokens = tokens.flatMap((t) => t.children).filter((t) => t.type === type);
+  }
+  return tokens;
+}
+
+/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -472,6 +487,7 @@ module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
   filterByTypes,
+  getDescendantsByType,
   getHeadingLevel,
   getHeadingStyle,
   getHeadingText,

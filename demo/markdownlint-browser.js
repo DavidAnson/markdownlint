@@ -1524,6 +1524,21 @@ function filterByTypes(tokens, types, htmlFlow) {
 }
 
 /**
+ * Gets a list of nested Micromark token descendants by type path.
+ *
+ * @param {Token|Token[]} parent Micromark token parent or parents.
+ * @param {TokenType[]} typePath Micromark token type path.
+ * @returns {Token[]} Micromark token descendants.
+ */
+function getDescendantsByType(parent, typePath) {
+  let tokens = Array.isArray(parent) ? parent : [ parent ];
+  for (const type of typePath) {
+    tokens = tokens.flatMap((t) => t.children).filter((t) => t.type === type);
+  }
+  return tokens;
+}
+
+/**
  * Gets the heading level of a Micromark heading tokan.
  *
  * @param {Token} heading Micromark heading token.
@@ -1691,6 +1706,7 @@ module.exports = {
   "parse": micromarkParse,
   filterByPredicate,
   filterByTypes,
+  getDescendantsByType,
   getHeadingLevel,
   getHeadingStyle,
   getHeadingText,
@@ -5813,8 +5829,9 @@ module.exports = {
 
 
 
-const { addErrorContext, escapeForRegExp, filterTokens } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getDescendantsByType, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5822,44 +5839,56 @@ module.exports = {
   "names": [ "MD042", "no-empty-links" ],
   "description": "No empty links",
   "tags": [ "links" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD042(params, onError) {
-    filterTokens(params, "inline", function forToken(token) {
-      let inLink = false;
-      let linkText = "";
-      let emptyLink = false;
-      for (const child of token.children) {
-        if (child.type === "link_open") {
-          inLink = true;
-          linkText = "";
-          for (const attr of child.attrs) {
-            if (attr[0] === "href" && (!attr[1] || (attr[1] === "#"))) {
-              emptyLink = true;
-            }
-          }
-        } else if (child.type === "link_close") {
-          inLink = false;
-          if (emptyLink) {
-            let context = `[${linkText}]`;
-            let range = null;
-            const match = child.line.match(
-              new RegExp(`${escapeForRegExp(context)}\\((?:|#|<>)\\)`)
-            );
-            if (match) {
-              context = match[0];
-              // @ts-ignore
-              range = [ match.index + 1, match[0].length ];
-            }
-            addErrorContext(
-              onError, child.lineNumber, context, null, null, range
-            );
-            emptyLink = false;
-          }
-        } else if (inLink) {
-          linkText += child.content;
-        }
+    const { definitions } = referenceLinkImageData();
+    const isReferenceDefinitionHash = (token) => {
+      const definition = definitions.get(token.text.trim());
+      return (definition && (definition[1] === "#"));
+    };
+    const links = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "link" ]
+    );
+    for (const link of links) {
+      const labelText = getDescendantsByType(link, [ "label", "labelText" ]);
+      const reference = getDescendantsByType(link, [ "reference" ]);
+      const resource = getDescendantsByType(link, [ "resource" ]);
+      const referenceString = getDescendantsByType(reference, [ "referenceString" ]);
+      const resourceDestination = getDescendantsByType(resource, [ "resourceDestination" ]);
+      const resourceDestinationString = [
+        ...getDescendantsByType(resourceDestination, [ "resourceDestinationRaw", "resourceDestinationString" ]),
+        ...getDescendantsByType(resourceDestination, [ "resourceDestinationLiteral", "resourceDestinationString" ])
+      ];
+      const hasLabelText = labelText.length > 0;
+      const hasReference = reference.length > 0;
+      const hasResource = resource.length > 0;
+      const hasReferenceString = referenceString.length > 0;
+      const hasResourceDestinationString = resourceDestinationString.length > 0;
+      let error = false;
+      if (
+        hasLabelText &&
+        ((!hasReference && !hasResource) || (hasReference && !hasReferenceString))
+      ) {
+        error = isReferenceDefinitionHash(labelText[0]);
+      } else if (hasReferenceString && !hasResourceDestinationString) {
+        error = isReferenceDefinitionHash(referenceString[0]);
+      } else if (!hasReferenceString && hasResourceDestinationString) {
+        error = (resourceDestinationString[0].text.trim() === "#");
+      } else if (!hasReferenceString && !hasResourceDestinationString) {
+        error = true;
       }
-    });
+      if (error) {
+        addErrorContext(
+          onError,
+          link.startLine,
+          link.text,
+          undefined,
+          undefined,
+          [ link.startColumn, link.endColumn - link.startColumn ]
+        );
+      }
+    }
   }
 };
 
