@@ -37,7 +37,7 @@
     "micromark-extension-gfm-autolink-literal": "2.1.0",
     "micromark-extension-gfm-footnote": "2.1.0",
     "micromark-extension-gfm-table": "2.1.0",
-    "micromark-extension-math": "3.0.0",
+    "micromark-extension-math": "3.1.0",
     "micromark-util-types": "2.0.0",
     "terser-webpack-plugin": "5.3.10",
     "webpack": "5.92.1",
