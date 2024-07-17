@@ -367,6 +367,11 @@ function getLineMetadata(params) {
       lineMetadata[i][2] = true;
     }
   });
+  filterTokens(params, "html_block", (token) => {
+    for (let i = token.map[0]; i < token.map[1]; i++) {
+      lineMetadata[i][2] = true;
+    }
+  });
   filterTokens(params, "table_open", (token) => {
     for (let i = token.map[0]; i < token.map[1]; i++) {
       lineMetadata[i][4] = true;
