@@ -4,6 +4,12 @@
 
 ##Title2 {MD018}
 
-<style> {MD033}
-#foo {}
-</style>
+<div> {MD033}
+#foo
+</div>
+
+##Title3 {MD020}##
+
+<div> {MD033}
+#foo#
+</div>

@@ -4359,8 +4359,8 @@ module.exports = {
   "tags": [ "headings", "atx_closed", "spaces" ],
   "parser": "none",
   "function": function MD020(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      if (!inCode) {
+    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHTML) => {
+      if (!inCode && !inHTML) {
         const match =
           /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
         if (match) {
