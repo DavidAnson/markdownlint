@@ -400,7 +400,7 @@ module.exports.getLineMetadata = getLineMetadata;
  * @param {boolean} inTable Iff in a table.
  * @param {boolean} inItem Iff in a list item.
  * @param {boolean} inBreak Iff in semantic break.
- * @param {boolean} inHTML Iff in HTML.
+ * @param {boolean} inHtml Iff in HTML block.
  * @returns {void}
  */
 

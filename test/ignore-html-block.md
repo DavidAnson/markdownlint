@@ -1,15 +1,13 @@
 # ignore-html-block.md
 
-## Title
+<style> {MD033}
 
-##Title2 {MD018}
+##Heading 1
 
-<div> {MD033}
-#foo
-</div>
+##  Heading 2
 
-##Title3 {MD020}##
+##Heading 3##
 
-<div> {MD033}
-#foo#
-</div>
+##  Heading 4  ##
+
+</style>

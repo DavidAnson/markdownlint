@@ -412,7 +412,7 @@ module.exports.getLineMetadata = getLineMetadata;
  * @param {boolean} inTable Iff in a table.
  * @param {boolean} inItem Iff in a list item.
  * @param {boolean} inBreak Iff in semantic break.
- * @param {boolean} inHTML Iff in HTML.
+ * @param {boolean} inHtml Iff in HTML block.
  * @returns {void}
  */
 
@@ -4216,8 +4216,9 @@ module.exports = {
   "tags": [ "headings", "atx", "spaces" ],
   "parser": "none",
   "function": function MD018(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHTML) => {
-      if (!inCode && !inHTML &&
+    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHtml) => {
+      if (!inCode &&
+        !inHtml &&
         /^#+[^# \t]/.test(line) &&
         !/#\s*$/.test(line) &&
         !line.startsWith("#️⃣")) {
@@ -4359,8 +4360,9 @@ module.exports = {
   "tags": [ "headings", "atx_closed", "spaces" ],
   "parser": "none",
   "function": function MD020(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHTML) => {
-      if (!inCode && !inHTML) {
+    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHtml) => {
+      if (!inCode &&
+        !inHtml) {
         const match =
           /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
         if (match) {
