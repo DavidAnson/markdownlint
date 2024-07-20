@@ -353,7 +353,7 @@ module.exports.filterTokens = filterTokens;
  */
 function getLineMetadata(params) {
   const lineMetadata = params.lines.map(
-    (line, index) => [ line, index, false, 0, false, false, false ]
+    (line, index) => [ line, index, false, 0, false, false, false, false ]
   );
   filterTokens(params, "fence", (token) => {
     lineMetadata[token.map[0]][3] = 1;
@@ -382,6 +382,11 @@ function getLineMetadata(params) {
   filterTokens(params, "hr", (token) => {
     lineMetadata[token.map[0]][6] = true;
   });
+  filterTokens(params, "html_block", (token) => {
+    for (let i = token.map[0]; i < token.map[1]; i++) {
+      lineMetadata[i][7] = true;
+    }
+  });
   return lineMetadata;
 }
 module.exports.getLineMetadata = getLineMetadata;
@@ -395,6 +400,7 @@ module.exports.getLineMetadata = getLineMetadata;
  * @param {boolean} inTable Iff in a table.
  * @param {boolean} inItem Iff in a list item.
  * @param {boolean} inBreak Iff in semantic break.
+ * @param {boolean} inHtml Iff in HTML block.
  * @returns {void}
  */
 
