@@ -11,9 +11,23 @@ updates:
       interval: "daily"
     target-branch: "next"
     versioning-strategy: "increase"
+    groups:
+      dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
   - package-ecosystem: "npm"
     directory: "/micromark"
     schedule:
       interval: "daily"
     target-branch: "next"
     versioning-strategy: "increase"
+    groups:
+      micromark:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
