@@ -5656,10 +5656,9 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-
-const spaceInLinkRe =
-  /\[(?:\s[^\]]*|[^\]]*?\s)\](?=(\([^)]*\)|\[[^\]]*\]))/;
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5667,60 +5666,55 @@ module.exports = {
   "names": [ "MD039", "no-space-in-links" ],
   "description": "Spaces inside link text",
   "tags": [ "whitespace", "links" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD039(params, onError) {
-    filterTokens(params, "inline", (token) => {
-      const { children } = token;
-      let { lineNumber } = token;
-      let inLink = false;
-      let linkText = "";
-      let lineIndex = 0;
-      for (const child of children) {
-        const { content, markup, type } = child;
-        if (type === "link_open") {
-          inLink = true;
-          linkText = "";
-        } else if (type === "link_close") {
-          inLink = false;
-          const left = linkText.trimStart().length !== linkText.length;
-          const right = linkText.trimEnd().length !== linkText.length;
-          if (left || right) {
-            const line = params.lines[lineNumber - 1];
-            let range = null;
-            let fixInfo = null;
-            const match = line.slice(lineIndex).match(spaceInLinkRe);
-            if (match) {
-              // @ts-ignore
-              const column = match.index + lineIndex + 1;
-              const length = match[0].length;
-              range = [ column, length ];
-              fixInfo = {
-                "editColumn": column + 1,
-                "deleteCount": length - 2,
-                "insertText": linkText.trim()
-              };
-              lineIndex = column + length - 1;
-            }
-            addErrorContext(
-              onError,
-              lineNumber,
-              `[${linkText}]`,
-              left,
-              right,
-              range,
-              fixInfo
-            );
+    const { definitions } = referenceLinkImageData();
+    const labels = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "label" ]
+    ).filter((label) => label.parent?.type === "link");
+    for (const label of labels) {
+      const labelTexts = filterByTypes(label.children, [ "labelText" ]);
+      for (const labelText of labelTexts) {
+        const leftSpace =
+          labelText.text.trimStart().length !== labelText.text.length;
+        const rightSpace =
+          labelText.text.trimEnd().length !== labelText.text.length;
+        if (
+          (leftSpace || rightSpace) &&
+          // Ignore non-shortcut link content "[ text ]"
+          ((label.parent?.children.length !== 1) || definitions.has(labelText.text.trim()))
+        ) {
+          // eslint-disable-next-line no-undef-init
+          let range = undefined;
+          if (label.startLine === label.endLine) {
+            const labelColumn = label.startColumn;
+            const labelLength = label.endColumn - label.startColumn;
+            range = [ labelColumn, labelLength ];
           }
-        } else if ((type === "softbreak") || (type === "hardbreak")) {
-          lineNumber++;
-          lineIndex = 0;
-        } else if (inLink) {
-          linkText += type.endsWith("_inline") ?
-            `${markup}${content}${markup}` :
-            (content || markup);
+          // eslint-disable-next-line no-undef-init
+          let fixInfo = undefined;
+          if (labelText.startLine === labelText.endLine) {
+            const textColumn = labelText.startColumn;
+            const textLength = labelText.endColumn - labelText.startColumn;
+            fixInfo = {
+              "editColumn": textColumn,
+              "deleteCount": textLength,
+              "insertText": labelText.text.trim()
+            };
+          }
+          addErrorContext(
+            onError,
+            labelText.startLine,
+            label.text.replace(/\s+/g, " "),
+            leftSpace,
+            rightSpace,
+            range,
+            fixInfo
+          );
         }
       }
-    });
+    }
   }
 };
 

@@ -1104,20 +1104,13 @@ test("someCustomRulesHaveValidUrl", (t) => {
 });
 
 test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
-  t.plan(2);
+  t.plan(4);
   markdownlint({
     "strings": {
-      "string": "# Heading\n\nText [ link ](https://example.com)\n"
+      "string": "# Heading\n\nText\n"
     },
     "markdownItPlugins": [
-      [
-        pluginInline,
-        "trim_text_plugin",
-        "text",
-        function iterator(tokens, index) {
-          tokens[index].content = tokens[index].content.trim();
-        }
-      ]
+      [ pluginInline, "check_text_plugin", "text", () => t.true(true) ]
     ]
   }, function callback(err, actual) {
     t.falsy(err);
