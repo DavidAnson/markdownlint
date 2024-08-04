@@ -48,10 +48,31 @@ function MoreCodeButNotCode(input) {
 [with](spaces)  
 [error ]({MD039})
 
-Wrapped [ link with leading space {MD039}
-  ](https://example.com)
-
 Non-wrapped [ link with leading space](https://example.com) {MD039}
+
+Non-wrapped [link with trailing space ](https://example.com) {MD039}
+
+Non-wrapped [ link with leading and trailing space ](https://example.com) {MD039}
+
+Wrapped [
+ link with leading space](https://example.com) {MD039}
+
+Wrapped [ 
+link with leading space](https://example.com) {MD009:-1} {MD039:-1}
+
+Wrapped [link with trailing space 
+](https://example.com) {MD009:-1} {MD039:-1}
+
+Wrapped [link with trailing space
+ ](https://example.com) {MD039}
+
+Wrapped [ 
+link with leading and trailing space
+ ](https://example.com) {MD009:-2} {MD039:-2} {MD039}
+
+Wrapped [
+ link with leading and trailing space 
+](https://example.com) {MD009:-1} {MD039:-1}
 
 [][ref]
 
