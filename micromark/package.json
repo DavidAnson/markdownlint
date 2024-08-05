@@ -31,7 +31,7 @@
     "README.md"
   ],
   "devDependencies": {
-    "@microsoft/api-extractor": "7.47.4",
+    "@microsoft/api-extractor": "7.47.5",
     "micromark": "4.0.0",
     "micromark-extension-directive": "3.0.1",
     "micromark-extension-gfm-autolink-literal": "2.1.0",
