@@ -59,7 +59,11 @@ test("https://github.com/mochajs/mocha", (t) => {
     join(rootDir, ".github/*.md"),
     join(rootDir, "lib/**/*.md"),
     join(rootDir, "test/**/*.md"),
-    join(rootDir, "example/**/*.md")
+    join(rootDir, "example/**/*.md"),
+    ...excludeGlobs(
+      rootDir,
+      "CHANGELOG.md"
+    )
   ];
   const configPath = join(rootDir, ".markdownlint.json");
   return lintTestRepo(t, globPatterns, configPath);
