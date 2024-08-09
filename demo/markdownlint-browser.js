@@ -3847,9 +3847,8 @@ module.exports = {
 
 
 
-const { addError, filterTokens, forEachLine, withinAnyRange } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const tabRe = /\t+/g;
 
@@ -3859,7 +3858,7 @@ module.exports = {
   "names": [ "MD010", "no-hard-tabs" ],
   "description": "Hard tabs",
   "tags": [ "whitespace", "hard_tab" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD010(params, onError) {
     const codeBlocks = params.config.code_blocks;
     const includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
@@ -3871,39 +3870,65 @@ module.exports = {
     const spaceMultiplier = (spacesPerTab === undefined) ?
       1 :
       Math.max(0, Number(spacesPerTab));
-    const exclusions = includeCode ? [] : codeBlockAndSpanRanges();
-    filterTokens(params, "fence", (token) => {
-      const language = token.info.trim().toLowerCase();
-      if (ignoreCodeLanguages.has(language)) {
-        for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
-          exclusions.push([ i, 0, params.lines[i].length ]);
+    const exclusions = [];
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").TokenType[] */
+    const exclusionTypes = [];
+    if (includeCode) {
+      if (ignoreCodeLanguages.size > 0) {
+        exclusionTypes.push("codeFenced");
+      }
+    } else {
+      exclusionTypes.push("codeFenced", "codeIndented", "codeText");
+    }
+    const codeTokens = filterByTypes(
+      params.parsers.micromark.tokens,
+      exclusionTypes
+    ).filter((token) => {
+      if ((token.type === "codeFenced") && (ignoreCodeLanguages.size > 0)) {
+        const fenceInfos = getDescendantsByType(token, [ "codeFencedFence", "codeFencedFenceInfo" ]);
+        return fenceInfos.every((fenceInfo) => ignoreCodeLanguages.has(fenceInfo.text.toLowerCase()));
+      }
+      return true;
+    });
+    for (const codeToken of codeTokens) {
+      const codeFenced = (codeToken.type === "codeFenced");
+      const startLine = codeToken.startLine + (codeFenced ? 1 : 0);
+      const endLine = codeToken.endLine - (codeFenced ? 1 : 0);
+      for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
+        const startColumn =
+          (lineNumber === codeToken.startLine) ? codeToken.startColumn : 1;
+        const endColumn =
+          (lineNumber === codeToken.endLine) ? codeToken.endColumn : params.lines[lineNumber - 1].length;
+        exclusions.push([
+          lineNumber,
+          startColumn,
+          endColumn - startColumn + 1
+        ]);
+      }
+    }
+    for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
+      const line = params.lines[lineIndex];
+      let match = null;
+      while ((match = tabRe.exec(line)) !== null) {
+        const column = match.index + 1;
+        const length = match[0].length;
+        if (!withinAnyRange(exclusions, lineIndex + 1, column, length)) {
+          addError(
+            onError,
+            lineIndex + 1,
+            "Column: " + column,
+            undefined,
+            [ column, length ],
+            {
+              "editColumn": column,
+              "deleteCount": length,
+              "insertText": "".padEnd(length * spaceMultiplier)
+            }
+          );
         }
       }
-    });
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      if (includeCode || !inCode) {
-        let match = null;
-        while ((match = tabRe.exec(line)) !== null) {
-          const { index } = match;
-          const column = index + 1;
-          const length = match[0].length;
-          if (!withinAnyRange(exclusions, lineIndex, index, length)) {
-            addError(
-              onError,
-              lineIndex + 1,
-              "Column: " + column,
-              undefined,
-              [ column, length ],
-              {
-                "editColumn": column,
-                "deleteCount": length,
-                "insertText": "".padEnd(length * spaceMultiplier)
-              }
-            );
-          }
-        }
-      }
-    });
+    }
   }
 };
 
