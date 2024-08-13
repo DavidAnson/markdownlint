@@ -169,17 +169,6 @@ function isBlankLine(line) {
 }
 module.exports.isBlankLine = isBlankLine;
 
-/**
- * Compare function for Array.prototype.sort for ascending order of numbers.
- *
- * @param {number} a First number.
- * @param {number} b Second number.
- * @returns {number} Positive value if a>b, negative value if b<a, 0 otherwise.
- */
-module.exports.numericSortAscending = function numericSortAscending(a, b) {
-  return a - b;
-};
-
 // Returns true iff the sorted array contains the specified element
 module.exports.includesSorted = function includesSorted(array, element) {
   let left = 0;
