@@ -181,24 +181,6 @@ function isBlankLine(line) {
 }
 module.exports.isBlankLine = isBlankLine;
 
-// Returns true iff the sorted array contains the specified element
-module.exports.includesSorted = function includesSorted(array, element) {
-  let left = 0;
-  let right = array.length - 1;
-  while (left <= right) {
-    // eslint-disable-next-line no-bitwise
-    const mid = (left + right) >> 1;
-    if (array[mid] < element) {
-      left = mid + 1;
-    } else if (array[mid] > element) {
-      right = mid - 1;
-    } else {
-      return true;
-    }
-  }
-  return false;
-};
-
 // Replaces the content of properly-formatted CommonMark comments with "."
 // This preserves the line/column information for the rest of the document
 // https://spec.commonmark.org/0.29/#html-blocks
@@ -470,20 +452,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
     }
   }
   return flattenedLists;
-};
-
-// Calls the provided function for each heading's content
-module.exports.forEachHeading = function forEachHeading(params, handler) {
-  let heading = null;
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === "heading_open") {
-      heading = token;
-    } else if (token.type === "heading_close") {
-      heading = null;
-    } else if ((token.type === "inline") && heading) {
-      handler(heading, token.content, token);
-    }
-  }
 };
 
 /**
@@ -1446,6 +1414,20 @@ function micromarkParse(
 }
 
 /**
+ * Adds a range of numbers to a set.
+ *
+ * @param {Set<number>} set Set of numbers.
+ * @param {number} start Starting number.
+ * @param {number} end Ending number.
+ * @returns {void}
+ */
+function addRangeToSet(set, start, end) {
+  for (let i = start; i <= end; i++) {
+    set.add(i);
+  }
+}
+
+/**
  * @callback AllowedPredicate
  * @param {Token} token Micromark token.
  * @returns {boolean} True iff allowed.
@@ -1699,6 +1681,7 @@ const nonContentTokens = new Set([
 
 module.exports = {
   "parse": micromarkParse,
+  addRangeToSet,
   filterByPredicate,
   filterByTypes,
   getDescendantsByType,
@@ -3737,21 +3720,7 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-
-/**
- * Adds a range of numbers to a set.
- *
- * @param {Set<number>} set Set of numbers.
- * @param {number} start Starting number.
- * @param {number} end Ending number.
- * @returns {void}
- */
-function addRangeToSet(set, start, end) {
-  for (let i = start; i <= end; i++) {
-    set.add(i);
-  }
-}
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4061,25 +4030,14 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, filterTokens, forEachHeading, forEachLine,
-  includesSorted } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addRangeToSet, filterByTypes, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const longLineRePrefix = "^.{";
 const longLineRePostfixRelaxed = "}.*\\s.*$";
 const longLineRePostfixStrict = "}.+$";
-const linkOrImageOnlyLineRe = /^[es]*(?:lT?L|I)[ES]*$/;
 const sternModeRe = /^(?:[#>\s]*\s)?\S*$/;
-const tokenTypeMap = {
-  "em_open": "e",
-  "em_close": "E",
-  "image": "I",
-  "link_open": "l",
-  "link_close": "L",
-  "strong_open": "s",
-  "strong_close": "S",
-  "text": "T"
-};
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4087,7 +4045,7 @@ module.exports = {
   "names": [ "MD013", "line-length" ],
   "description": "Line length",
   "tags": [ "line_length" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD013(params, onError) {
     const lineLength = Number(params.config.line_length || 80);
     const headingLineLength =
@@ -4110,26 +4068,42 @@ module.exports = {
     const includeTables = (tables === undefined) ? true : !!tables;
     const headings = params.config.headings;
     const includeHeadings = (headings === undefined) ? true : !!headings;
-    const headingLineNumbers = [];
-    forEachHeading(params, (heading) => {
-      headingLineNumbers.push(heading.lineNumber);
-    });
-    const linkOnlyLineNumbers = [];
-    filterTokens(params, "inline", (token) => {
-      let childTokenTypes = "";
-      for (const child of token.children) {
-        if (child.type !== "text" || child.content !== "") {
-          childTokenTypes += tokenTypeMap[child.type] || "x";
-        }
+    const { tokens } = params.parsers.micromark;
+    const headingLineNumbers = new Set();
+    for (const heading of filterByTypes(tokens, [ "atxHeading", "setextHeading" ])) {
+      addRangeToSet(headingLineNumbers, heading.startLine, heading.endLine);
+    }
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(tokens, [ "codeFenced", "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
+    const tableLineNumbers = new Set();
+    for (const table of filterByTypes(tokens, [ "table" ])) {
+      addRangeToSet(tableLineNumbers, table.startLine, table.endLine);
+    }
+    const linkLineNumbers = new Set();
+    for (const link of filterByTypes(tokens, [ "autolink", "image", "link", "literalAutolink" ])) {
+      addRangeToSet(linkLineNumbers, link.startLine, link.endLine);
+    }
+    const paragraphDataLineNumbers = new Set();
+    for (const paragraph of filterByTypes(tokens, [ "paragraph" ])) {
+      for (const data of getDescendantsByType(paragraph, [ "data" ])) {
+        addRangeToSet(paragraphDataLineNumbers, data.startLine, data.endLine);
       }
-      if (linkOrImageOnlyLineRe.test(childTokenTypes)) {
-        linkOnlyLineNumbers.push(token.lineNumber);
+    }
+    const linkOnlyLineNumbers = new Set();
+    for (const lineNumber of linkLineNumbers) {
+      if (!paragraphDataLineNumbers.has(lineNumber)) {
+        linkOnlyLineNumbers.add(lineNumber);
       }
-    });
-    const { definitionLineIndices } = referenceLinkImageData();
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence, inTable) => {
+    }
+    const definitionLineIndices = new Set(referenceLinkImageData().definitionLineIndices);
+    for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
+      const line = params.lines[lineIndex];
       const lineNumber = lineIndex + 1;
-      const isHeading = includesSorted(headingLineNumbers, lineNumber);
+      const isHeading = headingLineNumbers.has(lineNumber);
+      const inCode = codeBlockLineNumbers.has(lineNumber);
+      const inTable = tableLineNumbers.has(lineNumber);
       const length = inCode ?
         codeLineLength :
         (isHeading ? headingLineLength : lineLength);
@@ -4139,10 +4113,10 @@ module.exports = {
       if ((includeCodeBlocks || !inCode) &&
           (includeTables || !inTable) &&
           (includeHeadings || !isHeading) &&
-          !includesSorted(definitionLineIndices, lineIndex) &&
+          !definitionLineIndices.has(lineIndex) &&
           (strict ||
            (!(stern && sternModeRe.test(line)) &&
-            !includesSorted(linkOnlyLineNumbers, lineNumber))) &&
+            !linkOnlyLineNumbers.has(lineNumber))) &&
           lengthRe.test(line)) {
         addErrorDetailIf(
           onError,
@@ -4151,9 +4125,10 @@ module.exports = {
           line.length,
           undefined,
           undefined,
-          [ length + 1, line.length - length ]);
+          [ length + 1, line.length - length ]
+        );
       }
-    });
+    }
   }
 };
 

@@ -169,24 +169,6 @@ function isBlankLine(line) {
 }
 module.exports.isBlankLine = isBlankLine;
 
-// Returns true iff the sorted array contains the specified element
-module.exports.includesSorted = function includesSorted(array, element) {
-  let left = 0;
-  let right = array.length - 1;
-  while (left <= right) {
-    // eslint-disable-next-line no-bitwise
-    const mid = (left + right) >> 1;
-    if (array[mid] < element) {
-      left = mid + 1;
-    } else if (array[mid] > element) {
-      right = mid - 1;
-    } else {
-      return true;
-    }
-  }
-  return false;
-};
-
 // Replaces the content of properly-formatted CommonMark comments with "."
 // This preserves the line/column information for the rest of the document
 // https://spec.commonmark.org/0.29/#html-blocks
@@ -458,20 +440,6 @@ module.exports.flattenLists = function flattenLists(tokens) {
     }
   }
   return flattenedLists;
-};
-
-// Calls the provided function for each heading's content
-module.exports.forEachHeading = function forEachHeading(params, handler) {
-  let heading = null;
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === "heading_open") {
-      heading = token;
-    } else if (token.type === "heading_close") {
-      heading = null;
-    } else if ((token.type === "inline") && heading) {
-      handler(heading, token.content, token);
-    }
-  }
 };
 
 /**

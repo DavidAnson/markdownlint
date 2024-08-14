@@ -232,6 +232,20 @@ function micromarkParse(
 }
 
 /**
+ * Adds a range of numbers to a set.
+ *
+ * @param {Set<number>} set Set of numbers.
+ * @param {number} start Starting number.
+ * @param {number} end Ending number.
+ * @returns {void}
+ */
+function addRangeToSet(set, start, end) {
+  for (let i = start; i <= end; i++) {
+    set.add(i);
+  }
+}
+
+/**
  * @callback AllowedPredicate
  * @param {Token} token Micromark token.
  * @returns {boolean} True iff allowed.
@@ -485,6 +499,7 @@ const nonContentTokens = new Set([
 
 module.exports = {
   "parse": micromarkParse,
+  addRangeToSet,
   filterByPredicate,
   filterByTypes,
   getDescendantsByType,

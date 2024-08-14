@@ -72,3 +72,15 @@ Long lines inside HTML comments should also produce a violation of the line-leng
 <!-- Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013} -->
 
 Long lines inside HTML comments should also <!-- produce a violation of the line-length rule. {MD013} -->
+
+<https://example.com/long-line-comprised-entirely-of-an-autolink-long-line-comprised-entirely-of-an-autolink>
+
+https://example.com/long-line-comprised-entirely-of-a-bare-link-long-line-comprised-entirely-of-a-bare-link
+
+Long <https://example.com/line-comprised-mostly-of-an-autolink-long-line-comprised-mostly-of-an-autolink> {MD013}
+
+Long https://example.com/long-line-comprised-mostly-of-a-bare-link-long-line-comprised-mostly-of-a-bare-link {MD013}
+
+<!-- markdownlint-configure-file {
+  "no-bare-urls": false
+} -->
