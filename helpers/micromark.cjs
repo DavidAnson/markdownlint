@@ -333,6 +333,31 @@ function getDescendantsByType(parent, typePath) {
   return tokens;
 }
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {readonly string[]} ReadonlyStringArray */
+
+/**
+ * Gets the line/column/length exclusions for a Micromark token.
+ *
+ * @param {ReadonlyStringArray} lines File/string lines.
+ * @param {Token} token Micromark token.
+ * @returns {number[][]} Exclusions (line number, start column, length).
+ */
+function getExclusionsForToken(lines, token) {
+  const exclusions = [];
+  const { endColumn, endLine, startColumn, startLine } = token;
+  for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
+    const start = (lineNumber === startLine) ? startColumn : 1;
+    const end = (lineNumber === endLine) ? endColumn : lines[lineNumber - 1].length;
+    exclusions.push([
+      lineNumber,
+      start,
+      end - start + 1
+    ]);
+  }
+  return exclusions;
+}
+
 /**
  * Gets the heading level of a Micromark heading tokan.
  *
@@ -503,6 +528,7 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   getDescendantsByType,
+  getExclusionsForToken,
   getHeadingLevel,
   getHeadingStyle,
   getHeadingText,

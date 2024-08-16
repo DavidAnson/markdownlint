@@ -623,43 +623,6 @@ function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
 module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
- * Returns an array of code block and span content ranges.
- *
- * @param {Object} params RuleParams instance.
- * @param {Object} lineMetadata Line metadata object.
- * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
- */
-module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
-  const exclusions = [];
-  // Add code block ranges (excludes fences)
-  forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
-    if (inCode && !onFence) {
-      exclusions.push([ lineIndex, 0, line.length ]);
-    }
-  });
-  // Add code span ranges (excludes ticks)
-  filterTokens(params, "inline", (token) => {
-    if (token.children.some((child) => child.type === "code_inline")) {
-      const tokenLines = params.lines.slice(token.map[0], token.map[1]);
-      forEachInlineCodeSpan(
-        tokenLines.join("\n"),
-        (code, lineIndex, columnIndex) => {
-          const codeLines = code.split(newLineRe);
-          for (const [ i, line ] of codeLines.entries()) {
-            exclusions.push([
-              token.lineNumber - 1 + lineIndex + i,
-              i ? 0 : columnIndex,
-              line.length
-            ]);
-          }
-        }
-      );
-    }
-  });
-  return exclusions;
-};
-
-/**
  * Determines whether the specified range is within another range.
  *
  * @param {number[][]} ranges Array of ranges (line, index, length).

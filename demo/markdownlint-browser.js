@@ -635,43 +635,6 @@ function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
 module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
- * Returns an array of code block and span content ranges.
- *
- * @param {Object} params RuleParams instance.
- * @param {Object} lineMetadata Line metadata object.
- * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
- */
-module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
-  const exclusions = [];
-  // Add code block ranges (excludes fences)
-  forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
-    if (inCode && !onFence) {
-      exclusions.push([ lineIndex, 0, line.length ]);
-    }
-  });
-  // Add code span ranges (excludes ticks)
-  filterTokens(params, "inline", (token) => {
-    if (token.children.some((child) => child.type === "code_inline")) {
-      const tokenLines = params.lines.slice(token.map[0], token.map[1]);
-      forEachInlineCodeSpan(
-        tokenLines.join("\n"),
-        (code, lineIndex, columnIndex) => {
-          const codeLines = code.split(newLineRe);
-          for (const [ i, line ] of codeLines.entries()) {
-            exclusions.push([
-              token.lineNumber - 1 + lineIndex + i,
-              i ? 0 : columnIndex,
-              line.length
-            ]);
-          }
-        }
-      );
-    }
-  });
-  return exclusions;
-};
-
-/**
  * Determines whether the specified range is within another range.
  *
  * @param {number[][]} ranges Array of ranges (line, index, length).
@@ -1515,6 +1478,31 @@ function getDescendantsByType(parent, typePath) {
   return tokens;
 }
 
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {readonly string[]} ReadonlyStringArray */
+
+/**
+ * Gets the line/column/length exclusions for a Micromark token.
+ *
+ * @param {ReadonlyStringArray} lines File/string lines.
+ * @param {Token} token Micromark token.
+ * @returns {number[][]} Exclusions (line number, start column, length).
+ */
+function getExclusionsForToken(lines, token) {
+  const exclusions = [];
+  const { endColumn, endLine, startColumn, startLine } = token;
+  for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
+    const start = (lineNumber === startLine) ? startColumn : 1;
+    const end = (lineNumber === endLine) ? endColumn : lines[lineNumber - 1].length;
+    exclusions.push([
+      lineNumber,
+      start,
+      end - start + 1
+    ]);
+  }
+  return exclusions;
+}
+
 /**
  * Gets the heading level of a Micromark heading tokan.
  *
@@ -1685,6 +1673,7 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   getDescendantsByType,
+  getExclusionsForToken,
   getHeadingLevel,
   getHeadingStyle,
   getHeadingText,
@@ -1722,8 +1711,6 @@ module.exports.set = (keyValuePairs) => {
 };
 module.exports.clear = () => map.clear();
 
-module.exports.codeBlockAndSpanRanges =
-  () => map.get("codeBlockAndSpanRanges");
 module.exports.flattenedLists =
   () => map.get("flattenedLists");
 module.exports.lineMetadata =
@@ -2365,14 +2352,11 @@ function lintContent(
   };
   const lineMetadata =
     helpers.getLineMetadata(paramsBase);
-  const codeBlockAndSpanRanges =
-    helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
   const flattenedLists =
     helpers.flattenLists(markdownitTokens);
   const referenceLinkImageData =
     helpers.getReferenceLinkImageData(micromarkTokens);
   cache.set({
-    codeBlockAndSpanRanges,
     flattenedLists,
     lineMetadata,
     referenceLinkImageData
@@ -3826,7 +3810,7 @@ module.exports = {
 
 
 const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getDescendantsByType, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const tabRe = /\t+/g;
 
@@ -3870,20 +3854,12 @@ module.exports = {
       return true;
     });
     for (const codeToken of codeTokens) {
-      const codeFenced = (codeToken.type === "codeFenced");
-      const startLine = codeToken.startLine + (codeFenced ? 1 : 0);
-      const endLine = codeToken.endLine - (codeFenced ? 1 : 0);
-      for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
-        const startColumn =
-          (lineNumber === codeToken.startLine) ? codeToken.startColumn : 1;
-        const endColumn =
-          (lineNumber === codeToken.endLine) ? codeToken.endColumn : params.lines[lineNumber - 1].length;
-        exclusions.push([
-          lineNumber,
-          startColumn,
-          endColumn - startColumn + 1
-        ]);
+      const exclusionsForToken = getExclusionsForToken(params.lines, codeToken);
+      if (codeToken.type === "codeFenced") {
+        exclusionsForToken.pop();
+        exclusionsForToken.shift();
       }
+      exclusions.push(...exclusionsForToken);
     }
     for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
       const line = params.lines[lineIndex];
@@ -3924,8 +3900,8 @@ module.exports = {
 
 
 
-const { addError, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, getExclusionsForToken, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const reversedLinkRe =
   /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
@@ -3936,11 +3912,19 @@ module.exports = {
   "names": [ "MD011", "no-reversed-links" ],
   "description": "Reversed link syntax",
   "tags": [ "links" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD011(params, onError) {
-    const exclusions = codeBlockAndSpanRanges();
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence) => {
-      if (!inCode && !onFence) {
+    const { tokens } = params.parsers.micromark;
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(tokens, [ "codeFenced", "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
+    const exclusions = [];
+    for (const codeText of filterByTypes(tokens, [ "codeText" ])) {
+      exclusions.push(...getExclusionsForToken(params.lines, codeText));
+    }
+    for (const [ lineIndex, line ] of params.lines.entries()) {
+      if (!codeBlockLineNumbers.has(lineIndex + 1)) {
         let match = null;
         while ((match = reversedLinkRe.exec(line)) !== null) {
           const [ reversedLink, preChar, linkText, linkDestination ] = match;
@@ -3949,7 +3933,7 @@ module.exports = {
           if (
             !linkText.endsWith("\\") &&
             !linkDestination.endsWith("\\") &&
-            !withinAnyRange(exclusions, lineIndex, index, length)
+            !withinAnyRange(exclusions, lineIndex + 1, index, length)
           ) {
             addError(
               onError,
@@ -3966,7 +3950,7 @@ module.exports = {
           }
         }
       }
-    });
+    }
   }
 };
 
