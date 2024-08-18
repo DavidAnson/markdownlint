@@ -19,32 +19,6 @@ be useful to custom rule authors and may avoid duplicating code.
 
 ## Examples
 
-### Using Helpers from a Custom Rule
-
-```javascript
-const { forEachLine, getLineMetadata } = require("markdownlint-rule-helpers");
-
-/** @type import("markdownlint").Rule */
-module.exports = {
-  "names": [ "every-n-lines" ],
-  "description": "Rule that reports an error every N lines",
-  "tags": [ "test" ],
-  "parser": "none",
-  "function": (params, onError) => {
-    const n = params.config.n || 2;
-    forEachLine(getLineMetadata(params), (line, lineIndex) => {
-      const lineNumber = lineIndex + 1;
-      if ((lineNumber % n) === 0) {
-        onError({
-          "lineNumber": lineNumber,
-          "detail": "Line number " + lineNumber
-        });
-      }
-    });
-  }
-};
-```
-
 ### Applying Recommended Fixes
 
 ```javascript

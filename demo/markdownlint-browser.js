@@ -324,85 +324,6 @@ function filterTokens(params, type, handler) {
 }
 module.exports.filterTokens = filterTokens;
 
-/**
- * @typedef {Array} LineMetadata
- */
-
-/**
- * Gets a line metadata array.
- *
- * @param {Object} params RuleParams instance.
- * @returns {LineMetadata} Line metadata.
- */
-function getLineMetadata(params) {
-  const lineMetadata = params.lines.map(
-    (line, index) => [ line, index, false, 0, false, false, false, false ]
-  );
-  filterTokens(params, "fence", (token) => {
-    lineMetadata[token.map[0]][3] = 1;
-    lineMetadata[token.map[1] - 1][3] = -1;
-    for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
-      lineMetadata[i][2] = true;
-    }
-  });
-  filterTokens(params, "code_block", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][2] = true;
-    }
-  });
-  filterTokens(params, "table_open", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][4] = true;
-    }
-  });
-  filterTokens(params, "list_item_open", (token) => {
-    let count = 1;
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][5] = count;
-      count++;
-    }
-  });
-  filterTokens(params, "hr", (token) => {
-    lineMetadata[token.map[0]][6] = true;
-  });
-  filterTokens(params, "html_block", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][7] = true;
-    }
-  });
-  return lineMetadata;
-}
-module.exports.getLineMetadata = getLineMetadata;
-
-/**
- * @callback EachLineCallback
- * @param {string} line Line content.
- * @param {number} lineIndex Line index (0-based).
- * @param {boolean} inCode Iff in a code block.
- * @param {number} onFence + if open, - if closed, 0 otherwise.
- * @param {boolean} inTable Iff in a table.
- * @param {boolean} inItem Iff in a list item.
- * @param {boolean} inBreak Iff in semantic break.
- * @param {boolean} inHtml Iff in HTML block.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each line.
- *
- * @param {LineMetadata} lineMetadata Line metadata object.
- * @param {EachLineCallback} handler Function taking (line, lineIndex, inCode,
- * onFence, inTable, inItem, inBreak).
- * @returns {void}
- */
-function forEachLine(lineMetadata, handler) {
-  for (const metadata of lineMetadata) {
-    // @ts-ignore
-    handler(...metadata);
-  }
-}
-module.exports.forEachLine = forEachLine;
-
 // Returns (nested) lists as a flat array (in order)
 module.exports.flattenLists = function flattenLists(tokens) {
   const flattenedLists = [];
@@ -1713,8 +1634,6 @@ module.exports.clear = () => map.clear();
 
 module.exports.flattenedLists =
   () => map.get("flattenedLists");
-module.exports.lineMetadata =
-  () => map.get("lineMetadata");
 module.exports.referenceLinkImageData =
   () => map.get("referenceLinkImageData");
 
@@ -2350,15 +2269,12 @@ function lintContent(
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
-  const lineMetadata =
-    helpers.getLineMetadata(paramsBase);
   const flattenedLists =
     helpers.flattenLists(markdownitTokens);
   const referenceLinkImageData =
     helpers.getReferenceLinkImageData(micromarkTokens);
   cache.set({
     flattenedLists,
-    lineMetadata,
     referenceLinkImageData
   });
   // Function to run for each rule
@@ -3968,8 +3884,8 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3977,11 +3893,17 @@ module.exports = {
   "names": [ "MD012", "no-multiple-blanks" ],
   "description": "Multiple consecutive blank lines",
   "tags": [ "whitespace", "blank_lines" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD012(params, onError) {
     const maximum = Number(params.config.maximum || 1);
+    const { lines, parsers } = params;
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(parsers.micromark.tokens, [ "codeFenced", "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
     let count = 0;
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
+    for (const [ lineIndex, line ] of lines.entries()) {
+      const inCode = codeBlockLineNumbers.has(lineIndex + 1);
       count = (inCode || (line.trim().length > 0)) ? 0 : count + 1;
       if (maximum < count) {
         addErrorDetailIf(
@@ -3989,14 +3911,15 @@ module.exports = {
           lineIndex + 1,
           maximum,
           count,
-          null,
-          null,
-          null,
+          undefined,
+          undefined,
+          undefined,
           {
             "deleteCount": -1
-          });
+          }
+        );
       }
-    });
+    }
   }
 };
 
@@ -4198,8 +4121,8 @@ module.exports = {
 
 
 
-const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4207,22 +4130,28 @@ module.exports = {
   "names": [ "MD018", "no-missing-space-atx" ],
   "description": "No space after hash on atx style heading",
   "tags": [ "headings", "atx", "spaces" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD018(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHtml) => {
-      if (!inCode &&
-        !inHtml &&
+    const { lines, parsers } = params;
+    const ignoreBlockLineNumbers = new Set();
+    for (const ignoreBlock of filterByTypes(parsers.micromark.tokens, [ "codeIndented", "codeFenced", "htmlFlow" ])) {
+      addRangeToSet(ignoreBlockLineNumbers, ignoreBlock.startLine, ignoreBlock.endLine);
+    }
+    for (const [ lineIndex, line ] of lines.entries()) {
+      if (
+        !ignoreBlockLineNumbers.has(lineIndex + 1) &&
         /^#+[^# \t]/.test(line) &&
         !/#\s*$/.test(line) &&
-        !line.startsWith("#️⃣")) {
+        !line.startsWith("#️⃣")
+      ) {
         // @ts-ignore
         const hashCount = /^#+/.exec(line)[0].length;
         addErrorContext(
           onError,
           lineIndex + 1,
           line.trim(),
-          null,
-          null,
+          undefined,
+          undefined,
           [ 1, hashCount + 1 ],
           {
             "editColumn": hashCount + 1,
@@ -4230,7 +4159,7 @@ module.exports = {
           }
         );
       }
-    });
+    }
   }
 };
 
@@ -4342,8 +4271,8 @@ module.exports = [
 
 
 
-const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4351,11 +4280,15 @@ module.exports = {
   "names": [ "MD020", "no-missing-space-closed-atx" ],
   "description": "No space inside hashes on closed atx style heading",
   "tags": [ "headings", "atx_closed", "spaces" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD020(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, inFence, inTable, inItem, inBreak, inHtml) => {
-      if (!inCode &&
-        !inHtml) {
+    const { lines, parsers } = params;
+    const ignoreBlockLineNumbers = new Set();
+    for (const ignoreBlock of filterByTypes(parsers.micromark.tokens, [ "codeIndented", "codeFenced", "htmlFlow" ])) {
+      addRangeToSet(ignoreBlockLineNumbers, ignoreBlock.startLine, ignoreBlock.endLine);
+    }
+    for (const [ lineIndex, line ] of lines.entries()) {
+      if (!ignoreBlockLineNumbers.has(lineIndex + 1)) {
         const match =
           /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
         if (match) {
@@ -4401,7 +4334,7 @@ module.exports = {
           }
         }
       }
-    });
+    }
   }
 };
 
@@ -5033,10 +4966,40 @@ module.exports = {
 
 
 
-const { addErrorContext, forEachLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const codeFencePrefixRe = /^(.*?)[`~]/;
+
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {readonly string[]} ReadonlyStringArray */
+
+/**
+ * Adds an error for the top or bottom of a code fence.
+ *
+ * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
+ * @param {ReadonlyStringArray} lines Lines of Markdown content.
+ * @param {number} lineNumber Line number.
+ * @param {boolean} top True iff top fence.
+ * @returns {void}
+ */
+function addError(onError, lines, lineNumber, top) {
+  const line = lines[lineNumber - 1];
+  const [ , prefix ] = line.match(codeFencePrefixRe) || [];
+  const fixInfo = (prefix === undefined) ? null : {
+    "lineNumber": lineNumber + (top ? 0 : 1),
+    "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
+  };
+  addErrorContext(
+    onError,
+    lineNumber,
+    line.trim(),
+    undefined,
+    undefined,
+    undefined,
+    fixInfo
+  );
+}
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5044,32 +5007,21 @@ module.exports = {
   "names": [ "MD031", "blanks-around-fences" ],
   "description": "Fenced code blocks should be surrounded by blank lines",
   "tags": [ "code", "blank_lines" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD031(params, onError) {
     const listItems = params.config.list_items;
     const includeListItems = (listItems === undefined) ? true : !!listItems;
-    const { lines } = params;
-    forEachLine(lineMetadata(), (line, i, inCode, onFence, inTable, inItem) => {
-      const onTopFence = (onFence > 0);
-      const onBottomFence = (onFence < 0);
-      if ((includeListItems || !inItem) &&
-          ((onTopFence && !isBlankLine(lines[i - 1])) ||
-           (onBottomFence && !isBlankLine(lines[i + 1])))) {
-        const [ , prefix ] = line.match(codeFencePrefixRe) || [];
-        const fixInfo = (prefix === undefined) ? null : {
-          "lineNumber": i + (onTopFence ? 1 : 2),
-          "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
-        };
-        addErrorContext(
-          onError,
-          i + 1,
-          lines[i].trim(),
-          null,
-          null,
-          null,
-          fixInfo);
+    const { lines, parsers } = params;
+    for (const codeBlock of filterByTypes(parsers.micromark.tokens, [ "codeFenced" ])) {
+      if (includeListItems || !(getTokenParentOfType(codeBlock, [ "listOrdered", "listUnordered" ]))) {
+        if (!isBlankLine(lines[codeBlock.startLine - 2])) {
+          addError(onError, lines, codeBlock.startLine, true);
+        }
+        if (!isBlankLine(lines[codeBlock.endLine])) {
+          addError(onError, lines, codeBlock.endLine, false);
+        }
       }
-    });
+    }
   }
 };
 
