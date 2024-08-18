@@ -2,7 +2,6 @@
 
 "use strict";
 
-const { filterTokens } = require("../../helpers");
 const { parse, printParseErrorCode } = require("jsonc-parser");
 
 /** @type import("../../lib/markdownlint").Rule */
@@ -13,7 +12,9 @@ module.exports = {
   "parser": "markdownit",
   "asynchronous": true,
   "function": (params, onError) => {
-    filterTokens(params, "fence", (fence) => {
+    const fences = params.parsers.markdownit.tokens.
+      filter((token => token.type === "fence"));
+    for (const fence of fences) {
       if (/jsonc?/i.test(fence.info)) {
         const errors = [];
         parse(fence.content, errors);
@@ -28,6 +29,6 @@ module.exports = {
           });
         }
       }
-    });
+    }
   }
 };

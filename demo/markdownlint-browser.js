@@ -307,23 +307,6 @@ module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
  * @returns {void}
  */
 
-/**
- * Calls the provided function for each matching token.
- *
- * @param {Object} params RuleParams instance.
- * @param {string} type Token type identifier.
- * @param {TokenCallback} handler Callback function.
- * @returns {void}
- */
-function filterTokens(params, type, handler) {
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === type) {
-      handler(token);
-    }
-  }
-}
-module.exports.filterTokens = filterTokens;
-
 // Returns (nested) lists as a flat array (in order)
 module.exports.flattenLists = function flattenLists(tokens) {
   const flattenedLists = [];

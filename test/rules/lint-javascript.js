@@ -3,7 +3,6 @@
 "use strict";
 
 const js = require("@eslint/js");
-const { filterTokens } = require("../../helpers");
 const eslint = require("eslint");
 const linter = new eslint.Linter();
 const languageJavaScript = /js|javascript/i;
@@ -15,7 +14,9 @@ module.exports = {
   "tags": [ "test", "lint", "javascript" ],
   "parser": "markdownit",
   "function": (params, onError) => {
-    filterTokens(params, "fence", (fence) => {
+    const fences = params.parsers.markdownit.tokens.
+      filter((token => token.type === "fence"));
+    for (const fence of fences) {
       if (languageJavaScript.test(fence.info)) {
         const results = linter.verify(fence.content, js.configs.recommended);
         for (const result of results) {
@@ -27,9 +28,9 @@ module.exports = {
           });
         }
       }
-    });
-    // Unsupported:
-    //   filterTokens("code_block"), language unknown
-    //   filterTokens("code_inline"), too brief
+    }
+    // Unsupported by this sample:
+    //   "code_block": language unknown
+    //   "code_inline": too brief
   }
 };
