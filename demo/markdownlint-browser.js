@@ -30,10 +30,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expressions for range matching
-module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
-module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-
 // Regular expression for blockquote prefixes
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
@@ -272,93 +268,6 @@ module.exports.emphasisOrStrongStyleFor =
   };
 
 /**
- * Return the number of characters of indent for a token.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {number} Characters of indent.
- */
-function indentFor(token) {
-  const line = token.line.replace(/^[\s>]*(> |>)/, "");
-  return line.length - line.trimStart().length;
-}
-module.exports.indentFor = indentFor;
-
-/**
- * Return the string representation of an unordered list marker.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {"asterisk" | "dash" | "plus"} String representation.
- */
-module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
-  switch (token.markup) {
-    case "-":
-      return "dash";
-    case "+":
-      return "plus";
-    // case "*":
-    default:
-      return "asterisk";
-  }
-};
-
-/**
- * @callback TokenCallback
- * @param {MarkdownItToken} token Current token.
- * @returns {void}
- */
-
-// Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(tokens) {
-  const flattenedLists = [];
-  const stack = [];
-  let current = null;
-  let nesting = 0;
-  const nestingStack = [];
-  let lastWithMap = { "map": [ 0, 1 ] };
-  for (const token of tokens) {
-    if ((token.type === "bullet_list_open") ||
-        (token.type === "ordered_list_open")) {
-      // Save current context and start a new one
-      stack.push(current);
-      current = {
-        "unordered": (token.type === "bullet_list_open"),
-        "parentsUnordered": !current ||
-          (current.unordered && current.parentsUnordered),
-        "open": token,
-        "indent": indentFor(token),
-        "parentIndent": (current && current.indent) || 0,
-        "items": [],
-        "nesting": nesting,
-        "lastLineIndex": -1,
-        "insert": flattenedLists.length
-      };
-      nesting++;
-    } else if ((token.type === "bullet_list_close") ||
-               (token.type === "ordered_list_close")) {
-      // Finalize current context and restore previous
-      current.lastLineIndex = lastWithMap.map[1];
-      flattenedLists.splice(current.insert, 0, current);
-      delete current.insert;
-      current = stack.pop();
-      nesting--;
-    } else if (token.type === "list_item_open") {
-      // Add list item
-      current.items.push(token);
-    } else if (token.type === "blockquote_open") {
-      nestingStack.push(nesting);
-      nesting = 0;
-    } else if (token.type === "blockquote_close") {
-      nesting = nestingStack.pop() || 0;
-    }
-    if (token.map) {
-      // Track last token with map
-      lastWithMap = token;
-    }
-  }
-  return flattenedLists;
-};
-
-/**
  * @callback InlineCodeSpanCallback
  * @param {string} code Code content.
  * @param {number} lineIndex Line index (0-based).
@@ -555,18 +464,6 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
   ))
 );
 module.exports.withinAnyRange = withinAnyRange;
-
-// Returns a range object for a line by applying a RegExp
-module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
-  let range = null;
-  const match = line.match(regexp);
-  if (match) {
-    const column = match.index + 1;
-    const length = match[0].length;
-    range = [ column, length ];
-  }
-  return range;
-};
 
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
@@ -1615,8 +1512,6 @@ module.exports.set = (keyValuePairs) => {
 };
 module.exports.clear = () => map.clear();
 
-module.exports.flattenedLists =
-  () => map.get("flattenedLists");
 module.exports.referenceLinkImageData =
   () => map.get("referenceLinkImageData");
 
@@ -2252,12 +2147,9 @@ function lintContent(
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
-  const flattenedLists =
-    helpers.flattenLists(markdownitTokens);
   const referenceLinkImageData =
     helpers.getReferenceLinkImageData(micromarkTokens);
   cache.set({
-    flattenedLists,
     referenceLinkImageData
   });
   // Function to run for each rule
@@ -3325,11 +3217,15 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, listItemMarkerRe, unorderedListStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getDescendantsByType, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
-const expectedStyleToMarker = {
+const markerToStyle = {
+  "-": "dash",
+  "+": "plus",
+  "*": "asterisk"
+};
+const styleToMarker = {
   "dash": "-",
   "plus": "+",
   "asterisk": "*"
@@ -3339,7 +3235,13 @@ const differentItemStyle = {
   "plus": "asterisk",
   "asterisk": "dash"
 };
-const validStyles = Object.keys(expectedStyleToMarker);
+const validStyles = new Set([
+  "asterisk",
+  "consistent",
+  "dash",
+  "plus",
+  "sublist"
+]);
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3347,55 +3249,50 @@ module.exports = {
   "names": [ "MD004", "ul-style" ],
   "description": "Unordered list style",
   "tags": [ "bullet", "ul" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD004(params, onError) {
     const style = String(params.config.style || "consistent");
-    let expectedStyle = style;
+    let expectedStyle = validStyles.has(style) ? style : "dash";
     const nestingStyles = [];
-    for (const list of flattenedLists()) {
-      if (list.unordered) {
-        if (expectedStyle === "consistent") {
-          expectedStyle = unorderedListStyleFor(list.items[0]);
+    for (const listUnordered of filterByTypes(params.parsers.micromark.tokens, [ "listUnordered" ])) {
+      let nesting = 0;
+      if (style === "sublist") {
+        /** @type {import("../helpers/micromark.cjs").Token | null} */
+        let parent = listUnordered;
+        while ((parent = getTokenParentOfType(parent, [ "listOrdered", "listUnordered" ]))) {
+          nesting++;
         }
-        for (const item of list.items) {
-          const itemStyle = unorderedListStyleFor(item);
-          if (style === "sublist") {
-            const nesting = list.nesting;
-            if (!nestingStyles[nesting]) {
-              nestingStyles[nesting] =
-                (itemStyle === nestingStyles[nesting - 1]) ?
-                  differentItemStyle[itemStyle] :
-                  itemStyle;
-            }
-            expectedStyle = nestingStyles[nesting];
+      }
+      const listItemMarkers = getDescendantsByType(listUnordered, [ "listItemPrefix", "listItemMarker" ]);
+      for (const listItemMarker of listItemMarkers) {
+        const itemStyle = markerToStyle[listItemMarker.text];
+        if (style === "sublist") {
+          if (!nestingStyles[nesting]) {
+            nestingStyles[nesting] =
+              (itemStyle === nestingStyles[nesting - 1]) ?
+                differentItemStyle[itemStyle] :
+                itemStyle;
           }
-          if (!validStyles.includes(expectedStyle)) {
-            expectedStyle = validStyles[0];
-          }
-          let range = null;
-          let fixInfo = null;
-          const match = item.line.match(listItemMarkerRe);
-          if (match) {
-            const column = match.index + 1;
-            const length = match[0].length;
-            range = [ column, length ];
-            fixInfo = {
-              "editColumn": match[1].length + 1,
-              "deleteCount": 1,
-              "insertText": expectedStyleToMarker[expectedStyle]
-            };
-          }
-          addErrorDetailIf(
-            onError,
-            item.lineNumber,
-            expectedStyle,
-            itemStyle,
-            null,
-            null,
-            range,
-            fixInfo
-          );
+          expectedStyle = nestingStyles[nesting];
+        } else if (expectedStyle === "consistent") {
+          expectedStyle = itemStyle;
         }
+        const column = listItemMarker.startColumn;
+        const length = listItemMarker.endColumn - listItemMarker.startColumn;
+        addErrorDetailIf(
+          onError,
+          listItemMarker.startLine,
+          expectedStyle,
+          itemStyle,
+          undefined,
+          undefined,
+          [ column, length ],
+          {
+            "editColumn": column,
+            "deleteCount": length,
+            "insertText": styleToMarker[expectedStyle]
+          }
+        );
       }
     }
   }
@@ -4793,9 +4690,8 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, listItemMarkerRe, orderedListItemMarkerRe,
-  rangeFromRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const listStyleExamples = {
   "one": "1/1/1",
@@ -4803,32 +4699,37 @@ const listStyleExamples = {
   "zero": "0/0/0"
 };
 
+/**
+ * Gets the value of an ordered list item prefix token.
+ *
+ * @param {import("../helpers/micromark.cjs").Token} listItemPrefix List item prefix token.
+ * @returns {number} List item value.
+ */
+function getOrderedListItemValue(listItemPrefix) {
+  return Number(getTokenTextByType(listItemPrefix.children, "listItemValue"));
+}
+
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD029", "ol-prefix" ],
   "description": "Ordered list item prefix",
   "tags": [ "ol" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD029(params, onError) {
     const style = String(params.config.style || "one_or_ordered");
-    const filteredLists = flattenedLists().filter((list) => !list.unordered);
-    for (const list of filteredLists) {
-      const { items } = list;
-      let current = 1;
+    for (const listOrdered of filterByTypes(params.parsers.micromark.tokens, [ "listOrdered" ])) {
+      const listItemPrefixes = getDescendantsByType(listOrdered, [ "listItemPrefix" ]);
+      let expected = 1;
       let incrementing = false;
       // Check for incrementing number pattern 1/2/3 or 0/1/2
-      if (items.length >= 2) {
-        const first = orderedListItemMarkerRe.exec(items[0].line);
-        const second = orderedListItemMarkerRe.exec(items[1].line);
-        if (first && second) {
-          const [ , firstNumber ] = first;
-          const [ , secondNumber ] = second;
-          if ((secondNumber !== "1") || (firstNumber === "0")) {
-            incrementing = true;
-            if (firstNumber === "0") {
-              current = 0;
-            }
+      if (listItemPrefixes.length >= 2) {
+        const firstValue = getOrderedListItemValue(listItemPrefixes[0]);
+        const secondValue = getOrderedListItemValue(listItemPrefixes[1]);
+        if ((secondValue !== 1) || (firstValue === 0)) {
+          incrementing = true;
+          if (firstValue === 0) {
+            expected = 0;
           }
         }
       }
@@ -4836,24 +4737,25 @@ module.exports = {
       let listStyle = style;
       if (listStyle === "one_or_ordered") {
         listStyle = incrementing ? "ordered" : "one";
-      }
-      // Force expected value for 0/0/0 and 1/1/1 patterns
-      if (listStyle === "zero") {
-        current = 0;
+      } else if (listStyle === "zero") {
+        expected = 0;
       } else if (listStyle === "one") {
-        current = 1;
+        expected = 1;
       }
       // Validate each list item marker
-      for (const item of items) {
-        const match = orderedListItemMarkerRe.exec(item.line);
-        if (match) {
-          addErrorDetailIf(onError, item.lineNumber,
-            String(current), match[1],
-            "Style: " + listStyleExamples[listStyle], null,
-            rangeFromRegExp(item.line, listItemMarkerRe));
-          if (listStyle === "ordered") {
-            current++;
-          }
+      for (const listItemPrefix of listItemPrefixes) {
+        const actual = getOrderedListItemValue(listItemPrefix);
+        addErrorDetailIf(
+          onError,
+          listItemPrefix.startLine,
+          expected,
+          actual,
+          "Style: " + listStyleExamples[listStyle],
+          undefined,
+          [ listItemPrefix.startColumn, listItemPrefix.endColumn - listItemPrefix.startColumn ]
+        );
+        if (listStyle === "ordered") {
+          expected++;
         }
       }
     }

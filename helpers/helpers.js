@@ -18,10 +18,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expressions for range matching
-module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
-module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-
 // Regular expression for blockquote prefixes
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
@@ -260,93 +256,6 @@ module.exports.emphasisOrStrongStyleFor =
   };
 
 /**
- * Return the number of characters of indent for a token.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {number} Characters of indent.
- */
-function indentFor(token) {
-  const line = token.line.replace(/^[\s>]*(> |>)/, "");
-  return line.length - line.trimStart().length;
-}
-module.exports.indentFor = indentFor;
-
-/**
- * Return the string representation of an unordered list marker.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {"asterisk" | "dash" | "plus"} String representation.
- */
-module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
-  switch (token.markup) {
-    case "-":
-      return "dash";
-    case "+":
-      return "plus";
-    // case "*":
-    default:
-      return "asterisk";
-  }
-};
-
-/**
- * @callback TokenCallback
- * @param {MarkdownItToken} token Current token.
- * @returns {void}
- */
-
-// Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(tokens) {
-  const flattenedLists = [];
-  const stack = [];
-  let current = null;
-  let nesting = 0;
-  const nestingStack = [];
-  let lastWithMap = { "map": [ 0, 1 ] };
-  for (const token of tokens) {
-    if ((token.type === "bullet_list_open") ||
-        (token.type === "ordered_list_open")) {
-      // Save current context and start a new one
-      stack.push(current);
-      current = {
-        "unordered": (token.type === "bullet_list_open"),
-        "parentsUnordered": !current ||
-          (current.unordered && current.parentsUnordered),
-        "open": token,
-        "indent": indentFor(token),
-        "parentIndent": (current && current.indent) || 0,
-        "items": [],
-        "nesting": nesting,
-        "lastLineIndex": -1,
-        "insert": flattenedLists.length
-      };
-      nesting++;
-    } else if ((token.type === "bullet_list_close") ||
-               (token.type === "ordered_list_close")) {
-      // Finalize current context and restore previous
-      current.lastLineIndex = lastWithMap.map[1];
-      flattenedLists.splice(current.insert, 0, current);
-      delete current.insert;
-      current = stack.pop();
-      nesting--;
-    } else if (token.type === "list_item_open") {
-      // Add list item
-      current.items.push(token);
-    } else if (token.type === "blockquote_open") {
-      nestingStack.push(nesting);
-      nesting = 0;
-    } else if (token.type === "blockquote_close") {
-      nesting = nestingStack.pop() || 0;
-    }
-    if (token.map) {
-      // Track last token with map
-      lastWithMap = token;
-    }
-  }
-  return flattenedLists;
-};
-
-/**
  * @callback InlineCodeSpanCallback
  * @param {string} code Code content.
  * @param {number} lineIndex Line index (0-based).
@@ -543,18 +452,6 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
   ))
 );
 module.exports.withinAnyRange = withinAnyRange;
-
-// Returns a range object for a line by applying a RegExp
-module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
-  let range = null;
-  const match = line.match(regexp);
-  if (match) {
-    const column = match.index + 1;
-    const length = match[0].length;
-    range = [ column, length ];
-  }
-  return range;
-};
 
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
