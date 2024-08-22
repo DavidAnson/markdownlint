@@ -1109,6 +1109,8 @@ test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
     "strings": {
       "string": "# Heading\n\nText\n"
     },
+    // Use a markdown-it custom rule so the markdown-it plugin will be run
+    "customRules": customRules.anyBlockquote,
     "markdownItPlugins": [
       [ pluginInline, "check_text_plugin", "text", () => t.true(true) ]
     ]
@@ -1126,11 +1128,30 @@ test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
     "strings": {
       "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
     },
+    // Use a markdown-it custom rule so the markdown-it plugin will be run
+    "customRules": customRules.anyBlockquote,
     "markdownItPlugins": [
       [ pluginSub ],
       [ pluginSup ],
       [ pluginInline, "check_sub_plugin", "sub_open", () => t.true(true) ],
       [ pluginInline, "check_sup_plugin", "sup_open", () => t.true(true) ]
+    ]
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
+
+test("markdownItPluginsNoMarkdownIt", (t) => new Promise((resolve) => {
+  t.plan(2);
+  markdownlint({
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    "markdownItPlugins": [
+      [ pluginInline, "check_text_plugin", "text", () => t.fail() ]
     ]
   }, function callback(err, actual) {
     t.falsy(err);

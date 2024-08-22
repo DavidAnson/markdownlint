@@ -1557,7 +1557,6 @@ module.exports.version = "0.34.0";
 
 const path = __webpack_require__(/*! node:path */ "?9a52");
 const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
-const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
 const micromark = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 // const { deprecatedRuleNames } = require("./constants");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
@@ -1779,13 +1778,17 @@ function freezeToken(token) {
 /**
  * Annotate tokens with line/lineNumber and freeze them.
  *
- * @param {MarkdownItToken[]} tokens Array of markdown-it tokens.
+ * @param {import("markdown-it").Token[]} tokens Array of markdown-it tokens.
  * @param {string[]} lines Lines of Markdown content.
  * @returns {void}
  */
 function annotateAndFreezeTokens(tokens, lines) {
   let trMap = null;
-  for (const token of tokens) {
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type MarkdownItToken[] */
+  // @ts-ignore
+  const markdownItTokens = tokens;
+  for (const token of markdownItTokens) {
     // Provide missing maps for table content
     if (token.type === "tr_open") {
       trMap = token.map;
@@ -2075,7 +2078,7 @@ function getEnabledRulesPerLineNumber(
  * names.
  * @param {string} name Identifier for the content.
  * @param {string} content Markdown content.
- * @param {Object} md Instance of markdown-it.
+ * @param {GetMarkdownIt} getMarkdownIt Getter for instance of markdown-it.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp | null} frontMatter Regular expression for front matter.
@@ -2090,7 +2093,7 @@ function lintContent(
   aliasToRuleNames,
   name,
   content,
-  md,
+  getMarkdownIt,
   config,
   configParsers,
   frontMatter,
@@ -2115,8 +2118,11 @@ function lintContent(
       configParsers,
       aliasToRuleNames
     );
+  const needMarkdownItTokens = ruleList.some(
+    (rule) => (rule.parser === "markdownit") || (rule.parser === undefined)
+  );
   // Parse content into parser tokens
-  const markdownitTokens = md.parse(content, {});
+  const markdownitTokens = needMarkdownItTokens ? getMarkdownIt().parse(content, {}) : [];
   const micromarkTokens = micromark.parse(content);
   // Hide the content of HTML comments from rules
   content = helpers.clearHtmlCommentText(content);
@@ -2376,7 +2382,7 @@ function lintContent(
  * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
  * names.
  * @param {string} file Path of file to lint.
- * @param {Object} md Instance of markdown-it.
+ * @param {GetMarkdownIt} getMarkdownIt Getter for instance of markdown-it.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp | null} frontMatter Regular expression for front matter.
@@ -2392,7 +2398,7 @@ function lintFile(
   ruleList,
   aliasToRuleNames,
   file,
-  md,
+  getMarkdownIt,
   config,
   configParsers,
   frontMatter,
@@ -2412,7 +2418,7 @@ function lintFile(
       aliasToRuleNames,
       file,
       content,
-      md,
+      getMarkdownIt,
       config,
       configParsers,
       frontMatter,
@@ -2477,12 +2483,16 @@ function lintInput(options, synchronous, callback) {
   const noInlineConfig = !!options.noInlineConfig;
   const resultVersion = (options.resultVersion === undefined) ?
     3 : options.resultVersion;
-  const md = markdownit({ "html": true });
-  const markdownItPlugins = options.markdownItPlugins || [];
-  for (const plugin of markdownItPlugins) {
-    // @ts-ignore
-    md.use(...plugin);
-  }
+  const getMarkdownIt = () => {
+    const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
+    const md = markdownit({ "html": true });
+    const markdownItPlugins = options.markdownItPlugins || [];
+    for (const plugin of markdownItPlugins) {
+      // @ts-ignore
+      md.use(...plugin);
+    }
+    return md;
+  };
   const fs = options.fs || __webpack_require__(/*! node:fs */ "?d0ee");
   const aliasToRuleNames = mapAliasToRuleNames(ruleList);
   const results = newResults(ruleList);
@@ -2514,7 +2524,7 @@ function lintInput(options, synchronous, callback) {
         ruleList,
         aliasToRuleNames,
         currentItem,
-        md,
+        getMarkdownIt,
         config,
         configParsers,
         frontMatter,
@@ -2533,7 +2543,7 @@ function lintInput(options, synchronous, callback) {
         aliasToRuleNames,
         currentItem,
         strings[currentItem] || "",
-        md,
+        getMarkdownIt,
         config,
         configParsers,
         frontMatter,
@@ -2847,6 +2857,13 @@ markdownlint.promises = {
 module.exports = markdownlint;
 
 // Type declarations
+
+/**
+ * Function to get an instance of the markdown-it parser.
+ *
+ * @callback GetMarkdownIt
+ * @returns {import("markdown-it")}
+ */
 
 /**
  * Function to implement rule logic.

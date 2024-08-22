@@ -563,7 +563,7 @@ is allowed to continue and report any violations that were found.
 
 Type: `Array` of `Array` of `Function` and plugin parameters
 
-Specifies additional [markdown-it plugins][markdown-it-plugin] to use when
+Specifies additional [`markdown-it` plugins][markdown-it-plugin] to use when
 parsing input. Plugins can be used to support additional syntax and features for
 advanced scenarios.
 
@@ -574,6 +574,13 @@ Each item in the top-level `Array` should be of the form:
 ```javascript
 [ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
 ```
+
+> Note that `markdown-it` plugins are only called when the `markdown-it` parser
+> is invoked. None of the built-in rules use the `markdown-it` parser, so
+> `markdown-it` plugins will only be invoked when one or more
+> [custom rules][custom-rules] that use the `markdown-it` parser are present.
+
+[custom-rules]: #custom-rules
 
 ##### options.noInlineConfig
 
