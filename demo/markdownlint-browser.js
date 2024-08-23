@@ -2063,10 +2063,18 @@ function getEnabledRulesPerLineNumber(
   handleInlineConfig(lines, enableDisableFile);
   handleInlineConfig(lines, captureRestoreEnableDisable, updateLineState);
   handleInlineConfig(lines, disableLineNextLine);
+  // Create the list of rules that are used at least once
+  const enabledRuleList = [];
+  for (const [ index, ruleName ] of allRuleNames.entries()) {
+    if (enabledRulesPerLineNumber.some((enabledRulesForLine) => enabledRulesForLine[ruleName])) {
+      enabledRuleList.push(ruleList[index]);
+    }
+  }
   // Return results
   return {
     effectiveConfig,
-    enabledRulesPerLineNumber
+    enabledRulesPerLineNumber,
+    enabledRuleList
   };
 }
 
@@ -2108,7 +2116,7 @@ function lintContent(
   const { frontMatterLines } = removeFrontMatterResult;
   content = removeFrontMatterResult.content;
   // Get enabled rules per line (with HTML comments present)
-  const { effectiveConfig, enabledRulesPerLineNumber } =
+  const { effectiveConfig, enabledRulesPerLineNumber, enabledRuleList } =
     getEnabledRulesPerLineNumber(
       ruleList,
       content.split(helpers.newLineRe),
@@ -2118,7 +2126,7 @@ function lintContent(
       configParsers,
       aliasToRuleNames
     );
-  const needMarkdownItTokens = ruleList.some(
+  const needMarkdownItTokens = enabledRuleList.some(
     (rule) => (rule.parser === "markdownit") || (rule.parser === undefined)
   );
   // Parse content into parser tokens
@@ -2350,8 +2358,8 @@ function lintContent(
     return results;
   }
   // Run all rules
-  const ruleListAsync = ruleList.filter((rule) => rule.asynchronous);
-  const ruleListSync = ruleList.filter((rule) => !rule.asynchronous);
+  const ruleListAsync = enabledRuleList.filter((rule) => rule.asynchronous);
+  const ruleListSync = enabledRuleList.filter((rule) => !rule.asynchronous);
   const ruleListAsyncFirst = [
     ...ruleListAsync,
     ...ruleListSync

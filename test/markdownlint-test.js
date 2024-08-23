@@ -1161,6 +1161,28 @@ test("markdownItPluginsNoMarkdownIt", (t) => new Promise((resolve) => {
   });
 }));
 
+test("markdownItPluginsUnusedUncalled", (t) => new Promise((resolve) => {
+  t.plan(2);
+  markdownlint({
+    "config": {
+      "default": false
+    },
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    // Use a markdown-it custom rule so the markdown-it plugin will be run
+    "customRules": customRules.anyBlockquote,
+    "markdownItPlugins": [
+      [ pluginInline, "check_text_plugin", "text", () => t.fail() ]
+    ]
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
+
 test("Pandoc footnote", (t) => new Promise((resolve) => {
   t.plan(2);
   markdownlint({
