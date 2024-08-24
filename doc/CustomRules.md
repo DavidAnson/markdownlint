@@ -1,11 +1,13 @@
 # Custom Rules
 
 In addition to its built-in rules, `markdownlint` lets you enhance the linting
-experience by passing a list of custom rules using the [`options.customRules`
+experience by passing an array of custom rules using the [`options.customRules`
 property][options-custom-rules]. Custom rules can do everything the built-in
 rules can and are defined inline or imported from another package ([keyword
-`markdownlint-rule` on npm][markdownlint-rule]). Custom rules can be disabled,
-enabled, and customized using the same syntax as built-in rules.
+`markdownlint-rule` on npm][markdownlint-rule]). When defined by a file or
+package, the export can be a single rule object (see below) or an array of them.
+Custom rules can be disabled, enabled, and customized using the same syntax as
+built-in rules.
 
 ## Implementing Simple Rules
 
@@ -129,8 +131,9 @@ exception.
 
 - [Simple rules used by the project's test cases][test-rules]
 - [Code for all `markdownlint` built-in rules][lib]
-- [Package configuration for publishing to npm][test-rules-npm]
-  - Packages should export a single rule object or an `Array` of rule objects
+- [Complete example rule including npm configuration][extended-ascii]
+- [Custom rules from the github/docs repository][github-docs]
+- [Custom rules from the electron/lint-roller repository][electron]
 - [Custom rules from the webhintio/hint repository][hint]
 
 ## References
@@ -372,6 +375,9 @@ Yields the `params` object:
 ```
 
 [commonmark]: https://commonmark.org/
+[electron]: https://github.com/electron/lint-roller/tree/main/markdownlint-rules
+[extended-ascii]: https://github.com/DavidAnson/markdownlint-rule-extended-ascii
+[github-docs]: https://github.com/github/docs/tree/main/src/content-linter/lib/linting-rules
 [hint]: https://github.com/webhintio/hint/blob/main/scripts/lint-markdown.js
 [lib]: ../lib
 [markdown-it]: https://github.com/markdown-it/markdown-it
@@ -380,4 +386,3 @@ Yields the `params` object:
 [rule-helpers]: https://www.npmjs.com/package/markdownlint-rule-helpers
 [options-custom-rules]: ../README.md#optionscustomrules
 [test-rules]: ../test/rules
-[test-rules-npm]: ../test/rules/npm

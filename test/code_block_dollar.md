@@ -74,3 +74,7 @@ All commands with no output:
     $ mkdir test {MD014}
     $ cd test {MD014}
     $ ls test {MD014}
+
+Space-prefixed command with no output:
+
+     $ ls example {MD014}

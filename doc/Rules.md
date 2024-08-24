@@ -1354,6 +1354,11 @@ To fix this, add angle brackets around the URL or email address:
 For more info, visit <https://www.example.com/> or email <user@example.com>.
 ```
 
+If a URL or email address contains non-ASCII characters, it may be not be
+handled as intended even when angle brackets are present. In such cases,
+[percent-encoding](https://en.m.wikipedia.org/wiki/Percent-encoding) can be used
+to comply with the required syntax for URL and email.
+
 Note: To include a bare URL or email without it being converted into a link,
 wrap it in a code span:
 
@@ -1826,6 +1831,16 @@ enforce the proper capitalization, specify the desired letter case in the
 ```json
 [
     "JavaScript"
+]
+```
+
+Sometimes a proper name is capitalized differently in certain contexts. In such
+cases, add both forms to the `names` array:
+
+```json
+[
+    "GitHub",
+    "github.com"
 ]
 ```
 
@@ -2452,6 +2467,57 @@ Rationale: Extra cells in a row are usually not shown, so their data is lost.
 Missing cells in a row create holes in the table and suggest an omission.
 
 [gfm-table-056]: https://github.github.com/gfm/#tables-extension-
+
+<a name="md058"></a>
+
+## `MD058` - Tables should be surrounded by blank lines
+
+Tags: `table`
+
+Aliases: `blanks-around-tables`
+
+Fixable: Some violations can be fixed by tooling
+
+This rule is triggered when tables are either not preceded or not followed by a
+blank line:
+
+```markdown
+Some text
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
+> Blockquote
+```
+
+To fix violations of this rule, ensure that all tables have a blank line both
+before and after (except when the table is at the very beginning or end of the
+document):
+
+```markdown
+Some text
+
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
+
+> Blockquote
+```
+
+Note that text immediately following a table (i.e., not separated by an empty
+line) is treated as part of the table (per the specification) and will not
+trigger this rule:
+
+```markdown
+| Header | Header |
+| ------ | ------ |
+| Cell   | Cell   |
+This text is part of the table and the next line is blank
+
+Some text
+```
+
+Rationale: In addition to aesthetic reasons, some parsers will incorrectly parse
+tables that don't have blank lines before and after them.
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {

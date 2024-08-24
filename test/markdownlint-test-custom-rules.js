@@ -343,9 +343,12 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
   // eslint-disable-next-line jsdoc/valid-types
   /** @type import("../lib/markdownlint").Options */
   const options = {
-    "customRules": [ require("./rules/npm") ],
+    "customRules": [
+      require("./rules/npm"),
+      require("markdownlint-rule-extended-ascii")
+    ],
     "strings": {
-      "string": "# Text\n\n---\n\nText\n"
+      "string": "# Text\n\n---\n\nText ✅\n"
     },
     "resultVersion": 0
   };
@@ -353,6 +356,7 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
     t.falsy(err);
     const expectedResult = {};
     expectedResult.string = {
+      "extended-ascii": [ 5 ],
       "sample-rule": [ 3 ]
     };
     // @ts-ignore
@@ -1599,21 +1603,11 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
     const expected = {
       "test/lint-javascript.md": [
         {
-          "lineNumber": 10,
-          "ruleNames": [ "lint-javascript" ],
-          "ruleDescription": "Rule that lints JavaScript code",
-          "ruleInformation": null,
-          "errorDetail": "Unexpected var, use let or const instead.",
-          "errorContext": "var x = 0;",
-          "errorRange": null,
-          "fixInfo": null
-        },
-        {
           "lineNumber": 12,
           "ruleNames": [ "lint-javascript" ],
           "ruleDescription": "Rule that lints JavaScript code",
           "ruleInformation": null,
-          "errorDetail": "Unexpected console statement.",
+          "errorDetail": "'console' is not defined.",
           "errorContext": "console.log(x);",
           "errorRange": null,
           "fixInfo": null

@@ -214,24 +214,6 @@ test("isBlankLine", (t) => {
   }
 });
 
-test("includesSorted", (t) => {
-  t.plan(154);
-  const inputs = [
-    [ ],
-    [ 8 ],
-    [ 7, 11 ],
-    [ 0, 1, 2, 3, 5, 8, 13 ],
-    [ 2, 3, 5, 7, 11, 13, 17, 19 ],
-    [ 1, 3, 5, 7, 9, 11, 13, 15, 17, 19 ],
-    [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20 ]
-  ];
-  for (const input of inputs) {
-    for (let i = 0; i <= 21; i++) {
-      t.is(helpers.includesSorted(input, i), input.includes(i));
-    }
-  }
-});
-
 test("forEachInlineCodeSpan", (t) => {
   t.plan(99);
   const testCases =
@@ -976,4 +958,12 @@ test("endOfLineGemojiCodeRe", async(t) => {
   for (const emoji of emojis) {
     t.true(helpers.endOfLineGemojiCodeRe.test(`-:${emoji}:`), emoji);
   }
+});
+
+test("ellipsify", (t) => {
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"), "abcdefghijklmnopqrstuvwxyzABCD...");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", false, false), "abcdefghijklmnopqrstuvwxyzABCD...");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", true, false), "abcdefghijklmnopqrstuvwxyzABCD...");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", false, true), "...wxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
+  t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", true, true), "abcdefghijklmno...LMNOPQRSTUVWXYZ");
 });

@@ -8,63 +8,8 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, GetMarkdownIt, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
-/**
- * Configuration options.
- */
-type Options = {
-    /**
-     * Configuration object.
-     */
-    config?: Configuration;
-    /**
-     * Configuration parsers.
-     */
-    configParsers?: ConfigurationParser[];
-    /**
-     * Custom rules.
-     */
-    customRules?: Rule[] | Rule;
-    /**
-     * Files to lint.
-     */
-    files?: string[] | string;
-    /**
-     * Front matter pattern.
-     */
-    frontMatter?: RegExp | null;
-    /**
-     * File system implementation.
-     */
-    fs?: any;
-    /**
-     * True to catch exceptions.
-     */
-    handleRuleFailures?: boolean;
-    /**
-     * Additional plugins.
-     */
-    markdownItPlugins?: Plugin[];
-    /**
-     * True to ignore HTML directives.
-     */
-    noInlineConfig?: boolean;
-    /**
-     * Results object version.
-     */
-    resultVersion?: number;
-    /**
-     * Strings to lint.
-     */
-    strings?: {
-        [x: string]: string;
-    };
-};
-/**
- * Called with the result of the lint function.
- */
-type LintCallback = (error: Error | null, results?: LintResults) => void;
 /**
  * Lint specified Markdown files synchronously.
  *
@@ -104,6 +49,10 @@ declare namespace promises {
     export { extendConfigPromise as extendConfig };
     export { readConfigPromise as readConfig };
 }
+/**
+ * Function to get an instance of the markdown-it parser.
+ */
+type GetMarkdownIt = () => any;
 /**
  * Function to implement rule logic.
  */
@@ -355,6 +304,57 @@ type Rule = {
     function: RuleFunction;
 };
 /**
+ * Configuration options.
+ */
+type Options = {
+    /**
+     * Configuration object.
+     */
+    config?: Configuration;
+    /**
+     * Configuration parsers.
+     */
+    configParsers?: ConfigurationParser[];
+    /**
+     * Custom rules.
+     */
+    customRules?: Rule[] | Rule;
+    /**
+     * Files to lint.
+     */
+    files?: string[] | string;
+    /**
+     * Front matter pattern.
+     */
+    frontMatter?: RegExp | null;
+    /**
+     * File system implementation.
+     */
+    fs?: any;
+    /**
+     * True to catch exceptions.
+     */
+    handleRuleFailures?: boolean;
+    /**
+     * Additional plugins.
+     */
+    markdownItPlugins?: Plugin[];
+    /**
+     * True to ignore HTML directives.
+     */
+    noInlineConfig?: boolean;
+    /**
+     * Results object version.
+     */
+    resultVersion?: number;
+    /**
+     * Strings to lint.
+     */
+    strings?: {
+        [x: string]: string;
+    };
+};
+/**
  * A markdown-it plugin.
  */
 type Plugin = any[];
@@ -430,6 +430,10 @@ type FixInfo = {
  * Called with the result of linting a string or document.
  */
 type LintContentCallback = (error: Error | null, result?: LintError[]) => void;
+/**
+ * Called with the result of the lint function.
+ */
+type LintCallback = (error: Error | null, results?: LintResults) => void;
 /**
  * Configuration object for linting rules. For the JSON schema, see
  * {@link  ../schema/markdownlint-config-schema.json}.

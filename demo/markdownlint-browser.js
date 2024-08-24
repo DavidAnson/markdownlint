@@ -30,10 +30,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expressions for range matching
-module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
-module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-
 // Regular expression for blockquote prefixes
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
@@ -155,7 +151,6 @@ function isBlankLine(line) {
   const startComment = "<!--";
   const endComment = "-->";
   const removeComments = (s) => {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const start = s.indexOf(startComment);
       const end = s.indexOf(endComment);
@@ -181,35 +176,6 @@ function isBlankLine(line) {
   );
 }
 module.exports.isBlankLine = isBlankLine;
-
-/**
- * Compare function for Array.prototype.sort for ascending order of numbers.
- *
- * @param {number} a First number.
- * @param {number} b Second number.
- * @returns {number} Positive value if a>b, negative value if b<a, 0 otherwise.
- */
-module.exports.numericSortAscending = function numericSortAscending(a, b) {
-  return a - b;
-};
-
-// Returns true iff the sorted array contains the specified element
-module.exports.includesSorted = function includesSorted(array, element) {
-  let left = 0;
-  let right = array.length - 1;
-  while (left <= right) {
-    // eslint-disable-next-line no-bitwise
-    const mid = (left + right) >> 1;
-    if (array[mid] < element) {
-      left = mid + 1;
-    } else if (array[mid] > element) {
-      right = mid - 1;
-    } else {
-      return true;
-    }
-  }
-  return false;
-};
 
 // Replaces the content of properly-formatted CommonMark comments with "."
 // This preserves the line/column information for the rest of the document
@@ -300,208 +266,6 @@ module.exports.emphasisOrStrongStyleFor =
         return "underscore";
     }
   };
-
-/**
- * Return the number of characters of indent for a token.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {number} Characters of indent.
- */
-function indentFor(token) {
-  const line = token.line.replace(/^[\s>]*(> |>)/, "");
-  return line.length - line.trimStart().length;
-}
-module.exports.indentFor = indentFor;
-
-// Returns the heading style for a heading token
-module.exports.headingStyleFor = function headingStyleFor(token) {
-  if ((token.map[1] - token.map[0]) === 1) {
-    if (/[^\\]#\s*$/.test(token.line)) {
-      return "atx_closed";
-    }
-    return "atx";
-  }
-  return "setext";
-};
-
-/**
- * Return the string representation of an unordered list marker.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {"asterisk" | "dash" | "plus"} String representation.
- */
-module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
-  switch (token.markup) {
-    case "-":
-      return "dash";
-    case "+":
-      return "plus";
-    // case "*":
-    default:
-      return "asterisk";
-  }
-};
-
-/**
- * @callback TokenCallback
- * @param {MarkdownItToken} token Current token.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each matching token.
- *
- * @param {Object} params RuleParams instance.
- * @param {string} type Token type identifier.
- * @param {TokenCallback} handler Callback function.
- * @returns {void}
- */
-function filterTokens(params, type, handler) {
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === type) {
-      handler(token);
-    }
-  }
-}
-module.exports.filterTokens = filterTokens;
-
-/**
- * @typedef {Array} LineMetadata
- */
-
-/**
- * Gets a line metadata array.
- *
- * @param {Object} params RuleParams instance.
- * @returns {LineMetadata} Line metadata.
- */
-function getLineMetadata(params) {
-  const lineMetadata = params.lines.map(
-    (line, index) => [ line, index, false, 0, false, false, false ]
-  );
-  filterTokens(params, "fence", (token) => {
-    lineMetadata[token.map[0]][3] = 1;
-    lineMetadata[token.map[1] - 1][3] = -1;
-    for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
-      lineMetadata[i][2] = true;
-    }
-  });
-  filterTokens(params, "code_block", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][2] = true;
-    }
-  });
-  filterTokens(params, "table_open", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][4] = true;
-    }
-  });
-  filterTokens(params, "list_item_open", (token) => {
-    let count = 1;
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][5] = count;
-      count++;
-    }
-  });
-  filterTokens(params, "hr", (token) => {
-    lineMetadata[token.map[0]][6] = true;
-  });
-  return lineMetadata;
-}
-module.exports.getLineMetadata = getLineMetadata;
-
-/**
- * @callback EachLineCallback
- * @param {string} line Line content.
- * @param {number} lineIndex Line index (0-based).
- * @param {boolean} inCode Iff in a code block.
- * @param {number} onFence + if open, - if closed, 0 otherwise.
- * @param {boolean} inTable Iff in a table.
- * @param {boolean} inItem Iff in a list item.
- * @param {boolean} inBreak Iff in semantic break.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each line.
- *
- * @param {LineMetadata} lineMetadata Line metadata object.
- * @param {EachLineCallback} handler Function taking (line, lineIndex, inCode,
- * onFence, inTable, inItem, inBreak).
- * @returns {void}
- */
-function forEachLine(lineMetadata, handler) {
-  for (const metadata of lineMetadata) {
-    // @ts-ignore
-    handler(...metadata);
-  }
-}
-module.exports.forEachLine = forEachLine;
-
-// Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(tokens) {
-  const flattenedLists = [];
-  const stack = [];
-  let current = null;
-  let nesting = 0;
-  const nestingStack = [];
-  let lastWithMap = { "map": [ 0, 1 ] };
-  for (const token of tokens) {
-    if ((token.type === "bullet_list_open") ||
-        (token.type === "ordered_list_open")) {
-      // Save current context and start a new one
-      stack.push(current);
-      current = {
-        "unordered": (token.type === "bullet_list_open"),
-        "parentsUnordered": !current ||
-          (current.unordered && current.parentsUnordered),
-        "open": token,
-        "indent": indentFor(token),
-        "parentIndent": (current && current.indent) || 0,
-        "items": [],
-        "nesting": nesting,
-        "lastLineIndex": -1,
-        "insert": flattenedLists.length
-      };
-      nesting++;
-    } else if ((token.type === "bullet_list_close") ||
-               (token.type === "ordered_list_close")) {
-      // Finalize current context and restore previous
-      current.lastLineIndex = lastWithMap.map[1];
-      flattenedLists.splice(current.insert, 0, current);
-      delete current.insert;
-      current = stack.pop();
-      nesting--;
-    } else if (token.type === "list_item_open") {
-      // Add list item
-      current.items.push(token);
-    } else if (token.type === "blockquote_open") {
-      nestingStack.push(nesting);
-      nesting = 0;
-    } else if (token.type === "blockquote_close") {
-      nesting = nestingStack.pop() || 0;
-    }
-    if (token.map) {
-      // Track last token with map
-      lastWithMap = token;
-    }
-  }
-  return flattenedLists;
-};
-
-// Calls the provided function for each heading's content
-module.exports.forEachHeading = function forEachHeading(params, handler) {
-  let heading = null;
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === "heading_open") {
-      heading = token;
-    } else if (token.type === "heading_close") {
-      heading = null;
-    } else if ((token.type === "inline") && heading) {
-      handler(heading, token.content, token);
-    }
-  }
-};
 
 /**
  * @callback InlineCodeSpanCallback
@@ -608,8 +372,20 @@ function addError(onError, lineNumber, detail, context, range, fixInfo) {
 }
 module.exports.addError = addError;
 
-// Adds an error object with details conditionally via the onError callback
-module.exports.addErrorDetailIf = function addErrorDetailIf(
+/**
+ * Adds an error object with details conditionally via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {Object} expected Expected value.
+ * @param {Object} actual Actual value.
+ * @param {string} [detail] Error details.
+ * @param {string} [context] Error context.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
+function addErrorDetailIf(
   onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
@@ -621,51 +397,55 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
       range,
       fixInfo);
   }
-};
-
-// Adds an error object with context via the onError callback
-module.exports.addErrorContext = function addErrorContext(
-  onError, lineNumber, context, left, right, range, fixInfo) {
-  context = ellipsify(context, left, right);
-  addError(onError, lineNumber, undefined, context, range, fixInfo);
-};
+}
+module.exports.addErrorDetailIf = addErrorDetailIf;
 
 /**
- * Returns an array of code block and span content ranges.
+ * Adds an error object with context via the onError callback.
  *
- * @param {Object} params RuleParams instance.
- * @param {Object} lineMetadata Line metadata object.
- * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {string} context Error context.
+ * @param {boolean} [start] True iff the start of the text is important.
+ * @param {boolean} [end] True iff the end of the text is important.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
  */
-module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
-  const exclusions = [];
-  // Add code block ranges (excludes fences)
-  forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
-    if (inCode && !onFence) {
-      exclusions.push([ lineIndex, 0, line.length ]);
+function addErrorContext(
+  onError, lineNumber, context, start, end, range, fixInfo) {
+  context = ellipsify(context, start, end);
+  addError(onError, lineNumber, undefined, context, range, fixInfo);
+}
+module.exports.addErrorContext = addErrorContext;
+
+/**
+ * Adds an error object with context for a construct missing a blank line.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index of line.
+ * @param {number} [lineNumber] Line number for override.
+ * @returns {void}
+ */
+function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
+  const line = lines[lineIndex];
+  // @ts-ignore
+  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
+  addErrorContext(
+    onError,
+    lineIndex + 1,
+    line.trim(),
+    undefined,
+    undefined,
+    undefined,
+    {
+      lineNumber,
+      "insertText": `${quotePrefix}\n`
     }
-  });
-  // Add code span ranges (excludes ticks)
-  filterTokens(params, "inline", (token) => {
-    if (token.children.some((child) => child.type === "code_inline")) {
-      const tokenLines = params.lines.slice(token.map[0], token.map[1]);
-      forEachInlineCodeSpan(
-        tokenLines.join("\n"),
-        (code, lineIndex, columnIndex) => {
-          const codeLines = code.split(newLineRe);
-          for (const [ i, line ] of codeLines.entries()) {
-            exclusions.push([
-              token.lineNumber - 1 + lineIndex + i,
-              i ? 0 : columnIndex,
-              line.length
-            ]);
-          }
-        }
-      );
-    }
-  });
-  return exclusions;
-};
+  );
+}
+module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
  * Determines whether the specified range is within another range.
@@ -684,18 +464,6 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
   ))
 );
 module.exports.withinAnyRange = withinAnyRange;
-
-// Returns a range object for a line by applying a RegExp
-module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
-  let range = null;
-  const match = line.match(regexp);
-  if (match) {
-    const column = match.index + 1;
-    const length = match[0].length;
-    range = [ column, length ];
-  }
-  return range;
-};
 
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
@@ -1189,11 +957,22 @@ const {
 const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
 const flatTokensSymbol = Symbol("flat-tokens");
+const reparseSymbol = Symbol("reparse");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+
+/**
+ * Determines if a Micromark token is within an htmlFlow.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff the token is within an htmlFlow.
+ */
+function inHtmlFlow(token) {
+  return token[reparseSymbol];
+}
 
 /**
  * Returns whether a token is an htmlFlow type containing an HTML comment.
@@ -1323,6 +1102,9 @@ function micromarkParseWithOffset(
         "children": [],
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
+      if (ancestor) {
+        Object.defineProperty(current, reparseSymbol, { "value": true });
+      }
       previous.children.push(current);
       flatTokens.push(current);
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
@@ -1396,6 +1178,20 @@ function micromarkParse(
 }
 
 /**
+ * Adds a range of numbers to a set.
+ *
+ * @param {Set<number>} set Set of numbers.
+ * @param {number} start Starting number.
+ * @param {number} end Ending number.
+ * @returns {void}
+ */
+function addRangeToSet(set, start, end) {
+  for (let i = start; i <= end; i++) {
+    set.add(i);
+  }
+}
+
+/**
  * @callback AllowedPredicate
  * @param {Token} token Micromark token.
  * @returns {boolean} True iff allowed.
@@ -1455,15 +1251,57 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {TokenType[]} types Types to allow.
+ * @param {boolean} [htmlFlow] Whether to include htmlFlow content.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByTypes(tokens, types) {
-  const predicate = (token) => types.includes(token.type);
+function filterByTypes(tokens, types, htmlFlow) {
+  const predicate = (token) =>
+    (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
   const flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
   }
   return filterByPredicate(tokens, predicate);
+}
+
+/**
+ * Gets a list of nested Micromark token descendants by type path.
+ *
+ * @param {Token|Token[]} parent Micromark token parent or parents.
+ * @param {TokenType[]} typePath Micromark token type path.
+ * @returns {Token[]} Micromark token descendants.
+ */
+function getDescendantsByType(parent, typePath) {
+  let tokens = Array.isArray(parent) ? parent : [ parent ];
+  for (const type of typePath) {
+    tokens = tokens.flatMap((t) => t.children).filter((t) => t.type === type);
+  }
+  return tokens;
+}
+
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {readonly string[]} ReadonlyStringArray */
+
+/**
+ * Gets the line/column/length exclusions for a Micromark token.
+ *
+ * @param {ReadonlyStringArray} lines File/string lines.
+ * @param {Token} token Micromark token.
+ * @returns {number[][]} Exclusions (line number, start column, length).
+ */
+function getExclusionsForToken(lines, token) {
+  const exclusions = [];
+  const { endColumn, endLine, startColumn, startLine } = token;
+  for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
+    const start = (lineNumber === startLine) ? startColumn : 1;
+    const end = (lineNumber === endLine) ? endColumn : lines[lineNumber - 1].length;
+    exclusions.push([
+      lineNumber,
+      start,
+      end - start + 1
+    ]);
+  }
+  return exclusions;
 }
 
 /**
@@ -1485,6 +1323,40 @@ function getHeadingLevel(heading) {
     level = 2;
   }
   return level;
+}
+
+/**
+ * Gets the heading style of a Micromark heading tokan.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {"atx" | "atx_closed" | "setext"} Heading style.
+ */
+function getHeadingStyle(heading) {
+  if (heading.type === "setextHeading") {
+    return "setext";
+  }
+  const atxHeadingSequenceLength = filterByTypes(
+    heading.children,
+    [ "atxHeadingSequence" ]
+  ).length;
+  if (atxHeadingSequenceLength === 1) {
+    return "atx";
+  }
+  return "atx_closed";
+}
+
+/**
+ * Gets the heading text of a Micromark heading token.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {string} Heading text.
+ */
+function getHeadingText(heading) {
+  const headingTexts = filterByTypes(
+    heading.children,
+    [ "atxHeadingText", "setextHeadingText" ]
+  );
+  return headingTexts[0]?.text.replace(/[\r\n]+/g, " ") || "";
 }
 
 /**
@@ -1546,16 +1418,6 @@ function getTokenTextByType(tokens, type) {
 }
 
 /**
- * Determines if a Micromark token has an htmlFlow-type parent.
- *
- * @param {Token} token Micromark token.
- * @returns {boolean} True iff the token has an htmlFlow-type parent.
- */
-function inHtmlFlow(token) {
-  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
-}
-
-/**
  * Determines a list of Micromark tokens matches and returns a subset.
  *
  * @param {Token[]} tokens Micromark tokens.
@@ -1608,9 +1470,14 @@ const nonContentTokens = new Set([
 
 module.exports = {
   "parse": micromarkParse,
+  addRangeToSet,
   filterByPredicate,
   filterByTypes,
+  getDescendantsByType,
+  getExclusionsForToken,
   getHeadingLevel,
+  getHeadingStyle,
+  getHeadingText,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,
@@ -1645,12 +1512,6 @@ module.exports.set = (keyValuePairs) => {
 };
 module.exports.clear = () => map.clear();
 
-module.exports.codeBlockAndSpanRanges =
-  () => map.get("codeBlockAndSpanRanges");
-module.exports.flattenedLists =
-  () => map.get("flattenedLists");
-module.exports.lineMetadata =
-  () => map.get("lineMetadata");
 module.exports.referenceLinkImageData =
   () => map.get("referenceLinkImageData");
 
@@ -1674,7 +1535,8 @@ module.exports.fixableRuleNames = [
   "MD012", "MD014", "MD018", "MD019", "MD020", "MD021",
   "MD022", "MD023", "MD026", "MD027", "MD030", "MD031",
   "MD032", "MD034", "MD037", "MD038", "MD039", "MD044",
-  "MD047", "MD049", "MD050", "MD051", "MD053", "MD054"
+  "MD047", "MD049", "MD050", "MD051", "MD053", "MD054",
+  "MD058"
 ];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
 module.exports.version = "0.34.0";
@@ -1695,7 +1557,6 @@ module.exports.version = "0.34.0";
 
 const path = __webpack_require__(/*! node:path */ "?9a52");
 const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
-const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
 const micromark = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 // const { deprecatedRuleNames } = require("./constants");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
@@ -1723,7 +1584,7 @@ function validateRuleList(ruleList, synchronous) {
   const allIds = {};
   for (const [ index, rule ] of ruleList.entries()) {
     const customIndex = index - rules.length;
-    // eslint-disable-next-line no-inner-declarations, jsdoc/require-jsdoc
+    // eslint-disable-next-line jsdoc/require-jsdoc
     function newError(property, value) {
       return new Error(
         `Property '${property}' of custom rule at index ${customIndex} is incorrect: '${value}'.`);
@@ -1917,13 +1778,17 @@ function freezeToken(token) {
 /**
  * Annotate tokens with line/lineNumber and freeze them.
  *
- * @param {MarkdownItToken[]} tokens Array of markdown-it tokens.
+ * @param {import("markdown-it").Token[]} tokens Array of markdown-it tokens.
  * @param {string[]} lines Lines of Markdown content.
  * @returns {void}
  */
 function annotateAndFreezeTokens(tokens, lines) {
   let trMap = null;
-  for (const token of tokens) {
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type MarkdownItToken[] */
+  // @ts-ignore
+  const markdownItTokens = tokens;
+  for (const token of markdownItTokens) {
     // Provide missing maps for table content
     if (token.type === "tr_open") {
       trMap = token.map;
@@ -2198,10 +2063,18 @@ function getEnabledRulesPerLineNumber(
   handleInlineConfig(lines, enableDisableFile);
   handleInlineConfig(lines, captureRestoreEnableDisable, updateLineState);
   handleInlineConfig(lines, disableLineNextLine);
+  // Create the list of rules that are used at least once
+  const enabledRuleList = [];
+  for (const [ index, ruleName ] of allRuleNames.entries()) {
+    if (enabledRulesPerLineNumber.some((enabledRulesForLine) => enabledRulesForLine[ruleName])) {
+      enabledRuleList.push(ruleList[index]);
+    }
+  }
   // Return results
   return {
     effectiveConfig,
-    enabledRulesPerLineNumber
+    enabledRulesPerLineNumber,
+    enabledRuleList
   };
 }
 
@@ -2213,7 +2086,7 @@ function getEnabledRulesPerLineNumber(
  * names.
  * @param {string} name Identifier for the content.
  * @param {string} content Markdown content.
- * @param {Object} md Instance of markdown-it.
+ * @param {GetMarkdownIt} getMarkdownIt Getter for instance of markdown-it.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp | null} frontMatter Regular expression for front matter.
@@ -2228,7 +2101,7 @@ function lintContent(
   aliasToRuleNames,
   name,
   content,
-  md,
+  getMarkdownIt,
   config,
   configParsers,
   frontMatter,
@@ -2243,7 +2116,7 @@ function lintContent(
   const { frontMatterLines } = removeFrontMatterResult;
   content = removeFrontMatterResult.content;
   // Get enabled rules per line (with HTML comments present)
-  const { effectiveConfig, enabledRulesPerLineNumber } =
+  const { effectiveConfig, enabledRulesPerLineNumber, enabledRuleList } =
     getEnabledRulesPerLineNumber(
       ruleList,
       content.split(helpers.newLineRe),
@@ -2253,8 +2126,11 @@ function lintContent(
       configParsers,
       aliasToRuleNames
     );
+  const needMarkdownItTokens = enabledRuleList.some(
+    (rule) => (rule.parser === "markdownit") || (rule.parser === undefined)
+  );
   // Parse content into parser tokens
-  const markdownitTokens = md.parse(content, {});
+  const markdownitTokens = needMarkdownItTokens ? getMarkdownIt().parse(content, {}) : [];
   const micromarkTokens = micromark.parse(content);
   // Hide the content of HTML comments from rules
   content = helpers.clearHtmlCommentText(content);
@@ -2285,18 +2161,9 @@ function lintContent(
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
-  const lineMetadata =
-    helpers.getLineMetadata(paramsBase);
-  const codeBlockAndSpanRanges =
-    helpers.codeBlockAndSpanRanges(paramsBase, lineMetadata);
-  const flattenedLists =
-    helpers.flattenLists(markdownitTokens);
   const referenceLinkImageData =
     helpers.getReferenceLinkImageData(micromarkTokens);
   cache.set({
-    codeBlockAndSpanRanges,
-    flattenedLists,
-    lineMetadata,
     referenceLinkImageData
   });
   // Function to run for each rule
@@ -2491,8 +2358,8 @@ function lintContent(
     return results;
   }
   // Run all rules
-  const ruleListAsync = ruleList.filter((rule) => rule.asynchronous);
-  const ruleListSync = ruleList.filter((rule) => !rule.asynchronous);
+  const ruleListAsync = enabledRuleList.filter((rule) => rule.asynchronous);
+  const ruleListSync = enabledRuleList.filter((rule) => !rule.asynchronous);
   const ruleListAsyncFirst = [
     ...ruleListAsync,
     ...ruleListSync
@@ -2523,7 +2390,7 @@ function lintContent(
  * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
  * names.
  * @param {string} file Path of file to lint.
- * @param {Object} md Instance of markdown-it.
+ * @param {GetMarkdownIt} getMarkdownIt Getter for instance of markdown-it.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp | null} frontMatter Regular expression for front matter.
@@ -2539,7 +2406,7 @@ function lintFile(
   ruleList,
   aliasToRuleNames,
   file,
-  md,
+  getMarkdownIt,
   config,
   configParsers,
   frontMatter,
@@ -2559,7 +2426,7 @@ function lintFile(
       aliasToRuleNames,
       file,
       content,
-      md,
+      getMarkdownIt,
       config,
       configParsers,
       frontMatter,
@@ -2624,12 +2491,16 @@ function lintInput(options, synchronous, callback) {
   const noInlineConfig = !!options.noInlineConfig;
   const resultVersion = (options.resultVersion === undefined) ?
     3 : options.resultVersion;
-  const md = markdownit({ "html": true });
-  const markdownItPlugins = options.markdownItPlugins || [];
-  for (const plugin of markdownItPlugins) {
-    // @ts-ignore
-    md.use(...plugin);
-  }
+  const getMarkdownIt = () => {
+    const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
+    const md = markdownit({ "html": true });
+    const markdownItPlugins = options.markdownItPlugins || [];
+    for (const plugin of markdownItPlugins) {
+      // @ts-ignore
+      md.use(...plugin);
+    }
+    return md;
+  };
   const fs = options.fs || __webpack_require__(/*! node:fs */ "?d0ee");
   const aliasToRuleNames = mapAliasToRuleNames(ruleList);
   const results = newResults(ruleList);
@@ -2661,7 +2532,7 @@ function lintInput(options, synchronous, callback) {
         ruleList,
         aliasToRuleNames,
         currentItem,
-        md,
+        getMarkdownIt,
         config,
         configParsers,
         frontMatter,
@@ -2680,7 +2551,7 @@ function lintInput(options, synchronous, callback) {
         aliasToRuleNames,
         currentItem,
         strings[currentItem] || "",
-        md,
+        getMarkdownIt,
         config,
         configParsers,
         frontMatter,
@@ -2996,6 +2867,13 @@ module.exports = markdownlint;
 // Type declarations
 
 /**
+ * Function to get an instance of the markdown-it parser.
+ *
+ * @callback GetMarkdownIt
+ * @returns {import("markdown-it")}
+ */
+
+/**
  * Function to implement rule logic.
  *
  * @callback RuleFunction
@@ -3254,7 +3132,8 @@ module.exports = markdownlint;
 
 
 
-const { addErrorDetailIf, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3262,17 +3141,25 @@ module.exports = {
   "names": [ "MD001", "heading-increment" ],
   "description": "Heading levels should only increment by one level at a time",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD001(params, onError) {
-    let prevLevel = 0;
-    filterTokens(params, "heading_open", function forToken(token) {
-      const level = Number.parseInt(token.tag.slice(1), 10);
-      if (prevLevel && (level > prevLevel)) {
-        addErrorDetailIf(onError, token.lineNumber,
-          "h" + (prevLevel + 1), "h" + level);
+    let prevLevel = Number.MAX_SAFE_INTEGER;
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const level = getHeadingLevel(heading);
+      if (level > prevLevel) {
+        addErrorDetailIf(
+          onError,
+          heading.startLine,
+          `h${prevLevel + 1}`,
+          `h${level}`
+        );
       }
       prevLevel = level;
-    });
+    }
   }
 };
 
@@ -3290,8 +3177,9 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, filterTokens, headingStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHeadingStyle } =
+  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3299,16 +3187,20 @@ module.exports = {
   "names": [ "MD003", "heading-style" ],
   "description": "Heading style",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD003(params, onError) {
     let style = String(params.config.style || "consistent");
-    filterTokens(params, "heading_open", function forToken(token) {
-      const styleForToken = headingStyleFor(token);
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const styleForToken = getHeadingStyle(heading);
       if (style === "consistent") {
         style = styleForToken;
       }
       if (styleForToken !== style) {
-        const h12 = /h[12]/.test(token.tag);
+        const h12 = getHeadingLevel(heading) <= 2;
         const setextWithAtx =
           (style === "setext_with_atx") &&
             ((h12 && (styleForToken === "setext")) ||
@@ -3324,11 +3216,15 @@ module.exports = {
           } else if (style === "setext_with_atx_closed") {
             expected = h12 ? "setext" : "atx_closed";
           }
-          addErrorDetailIf(onError, token.lineNumber,
-            expected, styleForToken);
+          addErrorDetailIf(
+            onError,
+            heading.startLine,
+            expected,
+            styleForToken
+          );
         }
       }
-    });
+    }
   }
 };
 
@@ -3346,11 +3242,15 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, listItemMarkerRe, unorderedListStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getDescendantsByType, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
-const expectedStyleToMarker = {
+const markerToStyle = {
+  "-": "dash",
+  "+": "plus",
+  "*": "asterisk"
+};
+const styleToMarker = {
   "dash": "-",
   "plus": "+",
   "asterisk": "*"
@@ -3360,7 +3260,13 @@ const differentItemStyle = {
   "plus": "asterisk",
   "asterisk": "dash"
 };
-const validStyles = Object.keys(expectedStyleToMarker);
+const validStyles = new Set([
+  "asterisk",
+  "consistent",
+  "dash",
+  "plus",
+  "sublist"
+]);
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3368,55 +3274,50 @@ module.exports = {
   "names": [ "MD004", "ul-style" ],
   "description": "Unordered list style",
   "tags": [ "bullet", "ul" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD004(params, onError) {
     const style = String(params.config.style || "consistent");
-    let expectedStyle = style;
+    let expectedStyle = validStyles.has(style) ? style : "dash";
     const nestingStyles = [];
-    for (const list of flattenedLists()) {
-      if (list.unordered) {
-        if (expectedStyle === "consistent") {
-          expectedStyle = unorderedListStyleFor(list.items[0]);
+    for (const listUnordered of filterByTypes(params.parsers.micromark.tokens, [ "listUnordered" ])) {
+      let nesting = 0;
+      if (style === "sublist") {
+        /** @type {import("../helpers/micromark.cjs").Token | null} */
+        let parent = listUnordered;
+        while ((parent = getTokenParentOfType(parent, [ "listOrdered", "listUnordered" ]))) {
+          nesting++;
         }
-        for (const item of list.items) {
-          const itemStyle = unorderedListStyleFor(item);
-          if (style === "sublist") {
-            const nesting = list.nesting;
-            if (!nestingStyles[nesting]) {
-              nestingStyles[nesting] =
-                (itemStyle === nestingStyles[nesting - 1]) ?
-                  differentItemStyle[itemStyle] :
-                  itemStyle;
-            }
-            expectedStyle = nestingStyles[nesting];
+      }
+      const listItemMarkers = getDescendantsByType(listUnordered, [ "listItemPrefix", "listItemMarker" ]);
+      for (const listItemMarker of listItemMarkers) {
+        const itemStyle = markerToStyle[listItemMarker.text];
+        if (style === "sublist") {
+          if (!nestingStyles[nesting]) {
+            nestingStyles[nesting] =
+              (itemStyle === nestingStyles[nesting - 1]) ?
+                differentItemStyle[itemStyle] :
+                itemStyle;
           }
-          if (!validStyles.includes(expectedStyle)) {
-            expectedStyle = validStyles[0];
-          }
-          let range = null;
-          let fixInfo = null;
-          const match = item.line.match(listItemMarkerRe);
-          if (match) {
-            const column = match.index + 1;
-            const length = match[0].length;
-            range = [ column, length ];
-            fixInfo = {
-              "editColumn": match[1].length + 1,
-              "deleteCount": 1,
-              "insertText": expectedStyleToMarker[expectedStyle]
-            };
-          }
-          addErrorDetailIf(
-            onError,
-            item.lineNumber,
-            expectedStyle,
-            itemStyle,
-            null,
-            null,
-            range,
-            fixInfo
-          );
+          expectedStyle = nestingStyles[nesting];
+        } else if (expectedStyle === "consistent") {
+          expectedStyle = itemStyle;
         }
+        const column = listItemMarker.startColumn;
+        const length = listItemMarker.endColumn - listItemMarker.startColumn;
+        addErrorDetailIf(
+          onError,
+          listItemMarker.startLine,
+          expectedStyle,
+          itemStyle,
+          undefined,
+          undefined,
+          [ column, length ],
+          {
+            "editColumn": column,
+            "deleteCount": length,
+            "insertText": styleToMarker[expectedStyle]
+          }
+        );
       }
     }
   }
@@ -3437,7 +3338,7 @@ module.exports = {
 
 
 const { addError, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3447,15 +3348,10 @@ module.exports = {
   "tags": [ "bullet", "ul", "indentation" ],
   "parser": "micromark",
   "function": function MD005(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     const lists = filterByTypes(
-      micromarkTokens,
+      params.parsers.micromark.tokens,
       [ "listOrdered", "listUnordered" ]
-    ).filter((list) => !inHtmlFlow(list));
+    );
     for (const list of lists) {
       const expectedIndent = list.startColumn - 1;
       let expectedEnd = 0;
@@ -3472,8 +3368,8 @@ module.exports = {
             lineNumber,
             expectedIndent,
             actualIndent,
-            null,
-            null,
+            undefined,
+            undefined,
             range
             // No fixInfo; MD007 handles this scenario better
           );
@@ -3529,8 +3425,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getTokenParentOfType, inHtmlFlow } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("markdownlint-micromark").TokenType[] */
@@ -3552,14 +3447,12 @@ module.exports = {
     const indent = Number(params.config.indent || 2);
     const startIndented = !!params.config.start_indented;
     const startIndent = Number(params.config.start_indent || indent);
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     const unorderedListNesting = new Map();
     let lastBlockQuotePrefix = null;
-    const tokens = filterByTypes(micromarkTokens, unorderedListTypes);
+    const tokens = filterByTypes(
+      params.parsers.micromark.tokens,
+      unorderedListTypes
+    );
     for (const token of tokens) {
       const { endColumn, parent, startColumn, startLine, type } = token;
       if (type === "blockQuotePrefix") {
@@ -3583,7 +3476,7 @@ module.exports = {
         if (nesting >= 0) {
           unorderedListNesting.set(token, nesting);
         }
-      } else if (!inHtmlFlow(token)) {
+      } else {
         // listItemPrefix
         const nesting = unorderedListNesting.get(parent);
         if (nesting !== undefined) {
@@ -3631,9 +3524,8 @@ module.exports = {
 
 
 
-const { addError, filterTokens, forEachLine, includesSorted,
-  numericSortAscending } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3641,63 +3533,69 @@ module.exports = {
   "names": [ "MD009", "no-trailing-spaces" ],
   "description": "Trailing spaces",
   "tags": [ "whitespace" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD009(params, onError) {
     let brSpaces = params.config.br_spaces;
     brSpaces = Number((brSpaces === undefined) ? 2 : brSpaces);
     const listItemEmptyLines = !!params.config.list_item_empty_lines;
     const strict = !!params.config.strict;
-    const listItemLineNumbers = [];
-    if (listItemEmptyLines) {
-      filterTokens(params, "list_item_open", (token) => {
-        for (let i = token.map[0]; i < token.map[1]; i++) {
-          listItemLineNumbers.push(i + 1);
-        }
-      });
-      listItemLineNumbers.sort(numericSortAscending);
+    const { tokens } = params.parsers.micromark;
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(tokens, [ "codeFenced" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine + 1, codeBlock.endLine - 1);
     }
-    const paragraphLineNumbers = [];
-    const codeInlineLineNumbers = [];
+    for (const codeBlock of filterByTypes(tokens, [ "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
+    const listItemLineNumbers = new Set();
+    if (listItemEmptyLines) {
+      for (const listBlock of filterByTypes(tokens, [ "listOrdered", "listUnordered" ])) {
+        addRangeToSet(listItemLineNumbers, listBlock.startLine, listBlock.endLine);
+        let trailingIndent = true;
+        for (let i = listBlock.children.length - 1; i >= 0; i--) {
+          const child = listBlock.children[i];
+          switch (child.type) {
+            case "content":
+              trailingIndent = false;
+              break;
+            case "listItemIndent":
+              if (trailingIndent) {
+                listItemLineNumbers.delete(child.startLine);
+              }
+              break;
+            case "listItemPrefix":
+              trailingIndent = true;
+              break;
+            default:
+              break;
+          }
+        }
+      }
+    }
+    const paragraphLineNumbers = new Set();
+    const codeInlineLineNumbers = new Set();
     if (strict) {
-      filterTokens(params, "paragraph_open", (token) => {
-        for (let i = token.map[0]; i < token.map[1] - 1; i++) {
-          paragraphLineNumbers.push(i + 1);
-        }
-      });
-      const addLineNumberRange = (start, end) => {
-        for (let i = start; i < end; i++) {
-          codeInlineLineNumbers.push(i);
-        }
-      };
-      filterTokens(params, "inline", (token) => {
-        let start = 0;
-        for (const child of token.children) {
-          if (start > 0) {
-            addLineNumberRange(start, child.lineNumber);
-            start = 0;
-          }
-          if (child.type === "code_inline") {
-            start = child.lineNumber;
-          }
-        }
-        if (start > 0) {
-          addLineNumberRange(start, token.map[1]);
-        }
-      });
+      for (const paragraph of filterByTypes(tokens, [ "paragraph" ])) {
+        addRangeToSet(paragraphLineNumbers, paragraph.startLine, paragraph.endLine - 1);
+      }
+      for (const codeText of filterByTypes(tokens, [ "codeText" ])) {
+        addRangeToSet(codeInlineLineNumbers, codeText.startLine, codeText.endLine - 1);
+      }
     }
     const expected = (brSpaces < 2) ? 0 : brSpaces;
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
+    for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
+      const line = params.lines[lineIndex];
       const lineNumber = lineIndex + 1;
       const trailingSpaces = line.length - line.trimEnd().length;
       if (
         trailingSpaces &&
-        !inCode &&
-        !includesSorted(listItemLineNumbers, lineNumber) &&
+        !codeBlockLineNumbers.has(lineNumber) &&
+        !listItemLineNumbers.has(lineNumber) &&
         (
           (expected !== trailingSpaces) ||
           (strict &&
-            (!includesSorted(paragraphLineNumbers, lineNumber) ||
-             includesSorted(codeInlineLineNumbers, lineNumber)))
+            (!paragraphLineNumbers.has(lineNumber) ||
+             codeInlineLineNumbers.has(lineNumber)))
         )
       ) {
         const column = line.length - trailingSpaces + 1;
@@ -3711,9 +3609,10 @@ module.exports = {
           {
             "editColumn": column,
             "deleteCount": trailingSpaces
-          });
+          }
+        );
       }
-    });
+    }
   }
 };
 
@@ -3731,9 +3630,8 @@ module.exports = {
 
 
 
-const { addError, filterTokens, forEachLine, withinAnyRange } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getDescendantsByType, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const tabRe = /\t+/g;
 
@@ -3743,7 +3641,7 @@ module.exports = {
   "names": [ "MD010", "no-hard-tabs" ],
   "description": "Hard tabs",
   "tags": [ "whitespace", "hard_tab" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD010(params, onError) {
     const codeBlocks = params.config.code_blocks;
     const includeCode = (codeBlocks === undefined) ? true : !!codeBlocks;
@@ -3755,39 +3653,57 @@ module.exports = {
     const spaceMultiplier = (spacesPerTab === undefined) ?
       1 :
       Math.max(0, Number(spacesPerTab));
-    const exclusions = includeCode ? [] : codeBlockAndSpanRanges();
-    filterTokens(params, "fence", (token) => {
-      const language = token.info.trim().toLowerCase();
-      if (ignoreCodeLanguages.has(language)) {
-        for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
-          exclusions.push([ i, 0, params.lines[i].length ]);
+    const exclusions = [];
+    // eslint-disable-next-line jsdoc/valid-types
+    /** @type import("../helpers/micromark.cjs").TokenType[] */
+    const exclusionTypes = [];
+    if (includeCode) {
+      if (ignoreCodeLanguages.size > 0) {
+        exclusionTypes.push("codeFenced");
+      }
+    } else {
+      exclusionTypes.push("codeFenced", "codeIndented", "codeText");
+    }
+    const codeTokens = filterByTypes(
+      params.parsers.micromark.tokens,
+      exclusionTypes
+    ).filter((token) => {
+      if ((token.type === "codeFenced") && (ignoreCodeLanguages.size > 0)) {
+        const fenceInfos = getDescendantsByType(token, [ "codeFencedFence", "codeFencedFenceInfo" ]);
+        return fenceInfos.every((fenceInfo) => ignoreCodeLanguages.has(fenceInfo.text.toLowerCase()));
+      }
+      return true;
+    });
+    for (const codeToken of codeTokens) {
+      const exclusionsForToken = getExclusionsForToken(params.lines, codeToken);
+      if (codeToken.type === "codeFenced") {
+        exclusionsForToken.pop();
+        exclusionsForToken.shift();
+      }
+      exclusions.push(...exclusionsForToken);
+    }
+    for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
+      const line = params.lines[lineIndex];
+      let match = null;
+      while ((match = tabRe.exec(line)) !== null) {
+        const column = match.index + 1;
+        const length = match[0].length;
+        if (!withinAnyRange(exclusions, lineIndex + 1, column, length)) {
+          addError(
+            onError,
+            lineIndex + 1,
+            "Column: " + column,
+            undefined,
+            [ column, length ],
+            {
+              "editColumn": column,
+              "deleteCount": length,
+              "insertText": "".padEnd(length * spaceMultiplier)
+            }
+          );
         }
       }
-    });
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      if (includeCode || !inCode) {
-        let match = null;
-        while ((match = tabRe.exec(line)) !== null) {
-          const { index } = match;
-          const column = index + 1;
-          const length = match[0].length;
-          if (!withinAnyRange(exclusions, lineIndex, index, length)) {
-            addError(
-              onError,
-              lineIndex + 1,
-              "Column: " + column,
-              undefined,
-              [ column, length ],
-              {
-                "editColumn": column,
-                "deleteCount": length,
-                "insertText": "".padEnd(length * spaceMultiplier)
-              }
-            );
-          }
-        }
-      }
-    });
+    }
   }
 };
 
@@ -3805,8 +3721,8 @@ module.exports = {
 
 
 
-const { addError, forEachLine, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { codeBlockAndSpanRanges, lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, getExclusionsForToken, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const reversedLinkRe =
   /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
@@ -3817,11 +3733,19 @@ module.exports = {
   "names": [ "MD011", "no-reversed-links" ],
   "description": "Reversed link syntax",
   "tags": [ "links" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD011(params, onError) {
-    const exclusions = codeBlockAndSpanRanges();
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence) => {
-      if (!inCode && !onFence) {
+    const { tokens } = params.parsers.micromark;
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(tokens, [ "codeFenced", "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
+    const exclusions = [];
+    for (const codeText of filterByTypes(tokens, [ "codeText" ])) {
+      exclusions.push(...getExclusionsForToken(params.lines, codeText));
+    }
+    for (const [ lineIndex, line ] of params.lines.entries()) {
+      if (!codeBlockLineNumbers.has(lineIndex + 1)) {
         let match = null;
         while ((match = reversedLinkRe.exec(line)) !== null) {
           const [ reversedLink, preChar, linkText, linkDestination ] = match;
@@ -3830,7 +3754,7 @@ module.exports = {
           if (
             !linkText.endsWith("\\") &&
             !linkDestination.endsWith("\\") &&
-            !withinAnyRange(exclusions, lineIndex, index, length)
+            !withinAnyRange(exclusions, lineIndex + 1, index, length)
           ) {
             addError(
               onError,
@@ -3847,7 +3771,7 @@ module.exports = {
           }
         }
       }
-    });
+    }
   }
 };
 
@@ -3865,8 +3789,8 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3874,11 +3798,17 @@ module.exports = {
   "names": [ "MD012", "no-multiple-blanks" ],
   "description": "Multiple consecutive blank lines",
   "tags": [ "whitespace", "blank_lines" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD012(params, onError) {
     const maximum = Number(params.config.maximum || 1);
+    const { lines, parsers } = params;
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(parsers.micromark.tokens, [ "codeFenced", "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
     let count = 0;
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
+    for (const [ lineIndex, line ] of lines.entries()) {
+      const inCode = codeBlockLineNumbers.has(lineIndex + 1);
       count = (inCode || (line.trim().length > 0)) ? 0 : count + 1;
       if (maximum < count) {
         addErrorDetailIf(
@@ -3886,14 +3816,15 @@ module.exports = {
           lineIndex + 1,
           maximum,
           count,
-          null,
-          null,
-          null,
+          undefined,
+          undefined,
+          undefined,
           {
             "deleteCount": -1
-          });
+          }
+        );
       }
-    });
+    }
   }
 };
 
@@ -3911,25 +3842,14 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, filterTokens, forEachHeading, forEachLine,
-  includesSorted } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata, referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addRangeToSet, filterByTypes, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const longLineRePrefix = "^.{";
 const longLineRePostfixRelaxed = "}.*\\s.*$";
 const longLineRePostfixStrict = "}.+$";
-const linkOrImageOnlyLineRe = /^[es]*(?:lT?L|I)[ES]*$/;
 const sternModeRe = /^(?:[#>\s]*\s)?\S*$/;
-const tokenTypeMap = {
-  "em_open": "e",
-  "em_close": "E",
-  "image": "I",
-  "link_open": "l",
-  "link_close": "L",
-  "strong_open": "s",
-  "strong_close": "S",
-  "text": "T"
-};
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3937,7 +3857,7 @@ module.exports = {
   "names": [ "MD013", "line-length" ],
   "description": "Line length",
   "tags": [ "line_length" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD013(params, onError) {
     const lineLength = Number(params.config.line_length || 80);
     const headingLineLength =
@@ -3960,26 +3880,42 @@ module.exports = {
     const includeTables = (tables === undefined) ? true : !!tables;
     const headings = params.config.headings;
     const includeHeadings = (headings === undefined) ? true : !!headings;
-    const headingLineNumbers = [];
-    forEachHeading(params, (heading) => {
-      headingLineNumbers.push(heading.lineNumber);
-    });
-    const linkOnlyLineNumbers = [];
-    filterTokens(params, "inline", (token) => {
-      let childTokenTypes = "";
-      for (const child of token.children) {
-        if (child.type !== "text" || child.content !== "") {
-          childTokenTypes += tokenTypeMap[child.type] || "x";
-        }
+    const { tokens } = params.parsers.micromark;
+    const headingLineNumbers = new Set();
+    for (const heading of filterByTypes(tokens, [ "atxHeading", "setextHeading" ])) {
+      addRangeToSet(headingLineNumbers, heading.startLine, heading.endLine);
+    }
+    const codeBlockLineNumbers = new Set();
+    for (const codeBlock of filterByTypes(tokens, [ "codeFenced", "codeIndented" ])) {
+      addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
+    }
+    const tableLineNumbers = new Set();
+    for (const table of filterByTypes(tokens, [ "table" ])) {
+      addRangeToSet(tableLineNumbers, table.startLine, table.endLine);
+    }
+    const linkLineNumbers = new Set();
+    for (const link of filterByTypes(tokens, [ "autolink", "image", "link", "literalAutolink" ])) {
+      addRangeToSet(linkLineNumbers, link.startLine, link.endLine);
+    }
+    const paragraphDataLineNumbers = new Set();
+    for (const paragraph of filterByTypes(tokens, [ "paragraph" ])) {
+      for (const data of getDescendantsByType(paragraph, [ "data" ])) {
+        addRangeToSet(paragraphDataLineNumbers, data.startLine, data.endLine);
       }
-      if (linkOrImageOnlyLineRe.test(childTokenTypes)) {
-        linkOnlyLineNumbers.push(token.lineNumber);
+    }
+    const linkOnlyLineNumbers = new Set();
+    for (const lineNumber of linkLineNumbers) {
+      if (!paragraphDataLineNumbers.has(lineNumber)) {
+        linkOnlyLineNumbers.add(lineNumber);
       }
-    });
-    const { definitionLineIndices } = referenceLinkImageData();
-    forEachLine(lineMetadata(), (line, lineIndex, inCode, onFence, inTable) => {
+    }
+    const definitionLineIndices = new Set(referenceLinkImageData().definitionLineIndices);
+    for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
+      const line = params.lines[lineIndex];
       const lineNumber = lineIndex + 1;
-      const isHeading = includesSorted(headingLineNumbers, lineNumber);
+      const isHeading = headingLineNumbers.has(lineNumber);
+      const inCode = codeBlockLineNumbers.has(lineNumber);
+      const inTable = tableLineNumbers.has(lineNumber);
       const length = inCode ?
         codeLineLength :
         (isHeading ? headingLineLength : lineLength);
@@ -3989,21 +3925,22 @@ module.exports = {
       if ((includeCodeBlocks || !inCode) &&
           (includeTables || !inTable) &&
           (includeHeadings || !isHeading) &&
-          !includesSorted(definitionLineIndices, lineIndex) &&
+          !definitionLineIndices.has(lineIndex) &&
           (strict ||
            (!(stern && sternModeRe.test(line)) &&
-            !includesSorted(linkOnlyLineNumbers, lineNumber))) &&
+            !linkOnlyLineNumbers.has(lineNumber))) &&
           lengthRe.test(line)) {
         addErrorDetailIf(
           onError,
           lineNumber,
           length,
           line.length,
-          null,
-          null,
-          [ length + 1, line.length - length ]);
+          undefined,
+          undefined,
+          [ length + 1, line.length - length ]
+        );
       }
-    });
+    }
   }
 };
 
@@ -4021,7 +3958,8 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const dollarCommandRe = /^(\s*)(\$\s+)/;
 
@@ -4031,46 +3969,45 @@ module.exports = {
   "names": [ "MD014", "commands-show-output" ],
   "description": "Dollar signs used before commands without showing output",
   "tags": [ "code" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD014(params, onError) {
-    for (const type of [ "code_block", "fence" ]) {
-      filterTokens(params, type, (token) => {
-        const margin = (token.type === "fence") ? 1 : 0;
-        const dollarInstances = [];
-        let allDollars = true;
-        for (let i = token.map[0] + margin; i < token.map[1] - margin; i++) {
-          const line = params.lines[i];
-          const lineTrim = line.trim();
-          if (lineTrim) {
-            const match = dollarCommandRe.exec(line);
-            if (match) {
-              const column = match[1].length + 1;
-              const length = match[2].length;
-              dollarInstances.push([ i, lineTrim, column, length ]);
-            } else {
-              allDollars = false;
+    const codeBlocks = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "codeFenced", "codeIndented" ]
+    );
+    for (const codeBlock of codeBlocks) {
+      const codeFlowValues = filterByTypes(
+        codeBlock.children,
+        [ "codeFlowValue" ]
+      );
+      const dollarMatches = codeFlowValues.
+        map((codeFlowValue) => ({
+          "result": codeFlowValue.text.match(dollarCommandRe),
+          "startColumn": codeFlowValue.startColumn,
+          "startLine": codeFlowValue.startLine,
+          "text": codeFlowValue.text
+        })).
+        filter((dollarMatch) => dollarMatch.result);
+      if (dollarMatches.length === codeFlowValues.length) {
+        for (const dollarMatch of dollarMatches) {
+          // @ts-ignore
+          const column = dollarMatch.startColumn + dollarMatch.result[1].length;
+          // @ts-ignore
+          const length = dollarMatch.result[2].length;
+          addErrorContext(
+            onError,
+            dollarMatch.startLine,
+            dollarMatch.text,
+            undefined,
+            undefined,
+            [ column, length ],
+            {
+              "editColumn": column,
+              "deleteCount": length
             }
-          }
+          );
         }
-        if (allDollars) {
-          for (const instance of dollarInstances) {
-            const [ i, lineTrim, column, length ] = instance;
-            addErrorContext(
-              onError,
-              // @ts-ignore
-              i + 1,
-              lineTrim,
-              null,
-              null,
-              [ column, length ],
-              {
-                "editColumn": column,
-                "deleteCount": length
-              }
-            );
-          }
-        }
-      });
+      }
     }
   }
 };
@@ -4089,8 +4026,8 @@ module.exports = {
 
 
 
-const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4098,21 +4035,28 @@ module.exports = {
   "names": [ "MD018", "no-missing-space-atx" ],
   "description": "No space after hash on atx style heading",
   "tags": [ "headings", "atx", "spaces" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD018(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      if (!inCode &&
+    const { lines, parsers } = params;
+    const ignoreBlockLineNumbers = new Set();
+    for (const ignoreBlock of filterByTypes(parsers.micromark.tokens, [ "codeIndented", "codeFenced", "htmlFlow" ])) {
+      addRangeToSet(ignoreBlockLineNumbers, ignoreBlock.startLine, ignoreBlock.endLine);
+    }
+    for (const [ lineIndex, line ] of lines.entries()) {
+      if (
+        !ignoreBlockLineNumbers.has(lineIndex + 1) &&
         /^#+[^# \t]/.test(line) &&
         !/#\s*$/.test(line) &&
-        !line.startsWith("#️⃣")) {
+        !line.startsWith("#️⃣")
+      ) {
         // @ts-ignore
         const hashCount = /^#+/.exec(line)[0].length;
         addErrorContext(
           onError,
           lineIndex + 1,
           line.trim(),
-          null,
-          null,
+          undefined,
+          undefined,
           [ 1, hashCount + 1 ],
           {
             "editColumn": hashCount + 1,
@@ -4120,17 +4064,17 @@ module.exports = {
           }
         );
       }
-    });
+    }
   }
 };
 
 
 /***/ }),
 
-/***/ "../lib/md019.js":
-/*!***********************!*\
-  !*** ../lib/md019.js ***!
-  \***********************/
+/***/ "../lib/md019-md021.js":
+/*!*****************************!*\
+  !*** ../lib/md019-md021.js ***!
+  \*****************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -4138,44 +4082,85 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens, headingStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers/helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+/**
+ * Validate heading sequence and whitespace length at start or end.
+ *
+ * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
+ * @param {import("./markdownlint").MicromarkToken} heading ATX heading token.
+ * @param {number} delta Direction to scan.
+ * @returns {void}
+ */
+function validateHeadingSpaces(onError, heading, delta) {
+  const { children, startLine, text } = heading;
+  let index = (delta > 0) ? 0 : (children.length - 1);
+  while (
+    children[index] &&
+    (children[index].type !== "atxHeadingSequence")
+  ) {
+    index += delta;
+  }
+  const headingSequence = children[index];
+  const whitespace = children[index + delta];
+  if (
+    (headingSequence?.type === "atxHeadingSequence") &&
+    (whitespace?.type === "whitespace") &&
+    (whitespace.text.length > 1)
+  ) {
+    const column = whitespace.startColumn + 1;
+    const length = whitespace.endColumn - column;
+    addErrorContext(
+      onError,
+      startLine,
+      text.trim(),
+      delta > 0,
+      delta < 0,
+      [ column, length ],
+      {
+        "editColumn": column,
+        "deleteCount": length
+      }
+    );
+  }
+}
 
 // eslint-disable-next-line jsdoc/valid-types
-/** @type import("./markdownlint").Rule */
-module.exports = {
-  "names": [ "MD019", "no-multiple-space-atx" ],
-  "description": "Multiple spaces after hash on atx style heading",
-  "tags": [ "headings", "atx", "spaces" ],
-  "parser": "markdownit",
-  "function": function MD019(params, onError) {
-    filterTokens(params, "heading_open", (token) => {
-      if (headingStyleFor(token) === "atx") {
-        const { line, lineNumber } = token;
-        const match = /^(#+)([ \t]{2,})\S/.exec(line);
-        if (match) {
-          const [
-            ,
-            { "length": hashLength },
-            { "length": spacesLength }
-          ] = match;
-          addErrorContext(
-            onError,
-            lineNumber,
-            line.trim(),
-            null,
-            null,
-            [ 1, hashLength + spacesLength + 1 ],
-            {
-              "editColumn": hashLength + 1,
-              "deleteCount": spacesLength - 1
-            }
-          );
-        }
+/** @type import("./markdownlint").Rule[] */
+module.exports = [
+  {
+    "names": [ "MD019", "no-multiple-space-atx" ],
+    "description": "Multiple spaces after hash on atx style heading",
+    "tags": [ "headings", "atx", "spaces" ],
+    "parser": "micromark",
+    "function": function MD019(params, onError) {
+      const atxHeadings = filterByTypes(
+        params.parsers.micromark.tokens,
+        [ "atxHeading" ]
+      ).filter((heading) => getHeadingStyle(heading) === "atx");
+      for (const atxHeading of atxHeadings) {
+        validateHeadingSpaces(onError, atxHeading, 1);
       }
-    });
+    }
+  },
+  {
+    "names": [ "MD021", "no-multiple-space-closed-atx" ],
+    "description": "Multiple spaces inside hashes on closed atx style heading",
+    "tags": [ "headings", "atx_closed", "spaces" ],
+    "parser": "micromark",
+    "function": function MD021(params, onError) {
+      const atxClosedHeadings = filterByTypes(
+        params.parsers.micromark.tokens,
+        [ "atxHeading" ]
+      ).filter((heading) => getHeadingStyle(heading) === "atx_closed");
+      for (const atxClosedHeading of atxClosedHeadings) {
+        validateHeadingSpaces(onError, atxClosedHeading, 1);
+        validateHeadingSpaces(onError, atxClosedHeading, -1);
+      }
+    }
   }
-};
+];
 
 
 /***/ }),
@@ -4191,8 +4176,8 @@ module.exports = {
 
 
 
-const { addErrorContext, forEachLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4200,10 +4185,15 @@ module.exports = {
   "names": [ "MD020", "no-missing-space-closed-atx" ],
   "description": "No space inside hashes on closed atx style heading",
   "tags": [ "headings", "atx_closed", "spaces" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD020(params, onError) {
-    forEachLine(lineMetadata(), (line, lineIndex, inCode) => {
-      if (!inCode) {
+    const { lines, parsers } = params;
+    const ignoreBlockLineNumbers = new Set();
+    for (const ignoreBlock of filterByTypes(parsers.micromark.tokens, [ "codeIndented", "codeFenced", "htmlFlow" ])) {
+      addRangeToSet(ignoreBlockLineNumbers, ignoreBlock.startLine, ignoreBlock.endLine);
+    }
+    for (const [ lineIndex, line ] of lines.entries()) {
+      if (!ignoreBlockLineNumbers.has(lineIndex + 1)) {
         const match =
           /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
         if (match) {
@@ -4220,7 +4210,7 @@ module.exports = {
           const leftHashLength = leftHash.length;
           const rightHashLength = rightHash.length;
           const left = !leftSpaceLength;
-          const right = !rightSpaceLength || rightEscape;
+          const right = !rightSpaceLength || !!rightEscape;
           const rightEscapeReplacement = rightEscape ? `${rightEscape} ` : "";
           if (left || right) {
             const range = left ?
@@ -4249,83 +4239,7 @@ module.exports = {
           }
         }
       }
-    });
-  }
-};
-
-
-/***/ }),
-
-/***/ "../lib/md021.js":
-/*!***********************!*\
-  !*** ../lib/md021.js ***!
-  \***********************/
-/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
-
-"use strict";
-// @ts-check
-
-
-
-const { addErrorContext, filterTokens, headingStyleFor } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-
-const closedAtxRe = /^(#+)([ \t]+)([^ \t]|[^ \t].*[^ \t])([ \t]+)(#+)(\s*)$/;
-
-// eslint-disable-next-line jsdoc/valid-types
-/** @type import("./markdownlint").Rule */
-module.exports = {
-  "names": [ "MD021", "no-multiple-space-closed-atx" ],
-  "description": "Multiple spaces inside hashes on closed atx style heading",
-  "tags": [ "headings", "atx_closed", "spaces" ],
-  "parser": "markdownit",
-  "function": function MD021(params, onError) {
-    filterTokens(params, "heading_open", (token) => {
-      if (headingStyleFor(token) === "atx_closed") {
-        const { line, lineNumber } = token;
-        const match = closedAtxRe.exec(line);
-        if (match) {
-          const [
-            ,
-            leftHash,
-            { "length": leftSpaceLength },
-            content,
-            { "length": rightSpaceLength },
-            rightHash,
-            { "length": trailSpaceLength }
-          ] = match;
-          const left = leftSpaceLength > 1;
-          const right = rightSpaceLength > 1;
-          if (left || right) {
-            const length = line.length;
-            const leftHashLength = leftHash.length;
-            const rightHashLength = rightHash.length;
-            const range = left ?
-              [
-                1,
-                leftHashLength + leftSpaceLength + 1
-              ] :
-              [
-                length - trailSpaceLength - rightHashLength - rightSpaceLength,
-                rightSpaceLength + rightHashLength + 1
-              ];
-            addErrorContext(
-              onError,
-              lineNumber,
-              line.trim(),
-              left,
-              right,
-              range,
-              {
-                "editColumn": 1,
-                "deleteCount": length,
-                "insertText": `${leftHash} ${content} ${rightHash}`
-              }
-            );
-          }
-        }
-      }
-    });
+    }
   }
 };
 
@@ -4345,8 +4259,7 @@ module.exports = {
 
 const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, inHtmlFlow } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const defaultLines = 1;
 
@@ -4382,16 +4295,12 @@ module.exports = {
   "function": function MD022(params, onError) {
     const getLinesAbove = getLinesFunction(params.config.lines_above);
     const getLinesBelow = getLinesFunction(params.config.lines_below);
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     const { lines } = params;
     const headings = filterByTypes(
-      micromarkTokens,
+      // eslint-disable-next-line unicorn/consistent-destructuring
+      params.parsers.micromark.tokens,
       [ "atxHeading", "setextHeading" ]
-    ).filter((heading) => !inHtmlFlow(heading));
+    );
     for (const heading of headings) {
       const { startLine, endLine } = heading;
       const line = lines[startLine - 1].trim();
@@ -4414,7 +4323,7 @@ module.exports = {
           actualAbove,
           "Above",
           line,
-          null,
+          undefined,
           {
             "insertText": getBlockQuote(
               lines[startLine - 2],
@@ -4442,7 +4351,7 @@ module.exports = {
           actualBelow,
           "Below",
           line,
-          null,
+          undefined,
           {
             "lineNumber": endLine + 1,
             "insertText": getBlockQuote(
@@ -4470,9 +4379,8 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-
-const spaceBeforeHeadingRe = /^(\s+|[>\s]+\s\s)[^>\s]/;
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4480,31 +4388,34 @@ module.exports = {
   "names": [ "MD023", "heading-start-left" ],
   "description": "Headings must start at the beginning of the line",
   "tags": [ "headings", "spaces" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD023(params, onError) {
-    filterTokens(params, "heading_open", function forToken(token) {
-      const { lineNumber, line } = token;
-      const match = line.match(spaceBeforeHeadingRe);
-      if (match) {
-        const [ prefixAndFirstChar, prefix ] = match;
-        let deleteCount = prefix.length;
-        const prefixLengthNoSpace = prefix.trimEnd().length;
-        if (prefixLengthNoSpace) {
-          deleteCount -= prefixLengthNoSpace - 1;
-        }
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "linePrefix", "setextHeading" ]
+    );
+    for (let i = 0; i < headings.length - 1; i++) {
+      if (
+        (headings[i].type === "linePrefix") &&
+        (headings[i + 1].type !== "linePrefix") &&
+        (headings[i].startLine === headings[i + 1].startLine)
+      ) {
+        const { endColumn, startColumn, startLine } = headings[i];
+        const length = endColumn - startColumn;
         addErrorContext(
           onError,
-          lineNumber,
-          line,
-          null,
-          null,
-          [ 1, prefixAndFirstChar.length ],
+          startLine,
+          params.lines[startLine - 1],
+          true,
+          false,
+          [ startColumn, length ],
           {
-            "editColumn": prefixLengthNoSpace + 1,
-            "deleteCount": deleteCount
-          });
+            "editColumn": startColumn,
+            "deleteCount": length
+          }
+        );
       }
-    });
+    }
   }
 };
 
@@ -4522,7 +4433,8 @@ module.exports = {
 
 
 
-const { addErrorContext, forEachHeading } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4530,15 +4442,20 @@ module.exports = {
   "names": [ "MD024", "no-duplicate-heading" ],
   "description": "Multiple headings with the same content",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD024(params, onError) {
     const siblingsOnly = !!params.config.siblings_only || false;
     const knownContents = [ null, [] ];
     let lastLevel = 1;
     let knownContent = knownContents[lastLevel];
-    forEachHeading(params, (heading, content) => {
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const headingText = getHeadingText(heading);
       if (siblingsOnly) {
-        const newLevel = heading.tag.slice(1);
+        const newLevel = getHeadingLevel(heading);
         while (lastLevel < newLevel) {
           lastLevel++;
           knownContents[lastLevel] = [];
@@ -4550,17 +4467,17 @@ module.exports = {
         knownContent = knownContents[newLevel];
       }
       // @ts-ignore
-      if (knownContent.includes(content)) {
+      if (knownContent.includes(headingText)) {
         addErrorContext(
           onError,
-          heading.lineNumber,
-          heading.line.trim()
+          heading.startLine,
+          headingText.trim()
         );
       } else {
         // @ts-ignore
-        knownContent.push(content);
+        knownContent.push(headingText);
       }
-    });
+    }
   }
 };
 
@@ -4578,8 +4495,8 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens, frontMatterHasTitle } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4587,26 +4504,34 @@ module.exports = {
   "names": [ "MD025", "single-title", "single-h1" ],
   "description": "Multiple top-level headings in the same document",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD025(params, onError) {
     const level = Number(params.config.level || 1);
-    const tag = "h" + level;
     const foundFrontMatterTitle =
       frontMatterHasTitle(
         params.frontMatterLines,
         params.config.front_matter_title
       );
     let hasTopLevelHeading = false;
-    filterTokens(params, "heading_open", function forToken(token) {
-      if (token.tag === tag) {
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
+      const headingLevel = getHeadingLevel(heading);
+      if (headingLevel === level) {
         if (hasTopLevelHeading || foundFrontMatterTitle) {
-          addErrorContext(onError, token.lineNumber,
-            token.line.trim());
-        } else if (token.lineNumber === 1) {
+          const headingText = getHeadingText(heading);
+          addErrorContext(
+            onError,
+            heading.startLine,
+            headingText
+          );
+        } else if (heading.startLine === 1) {
           hasTopLevelHeading = true;
         }
       }
-    });
+    }
   }
 };
 
@@ -4642,12 +4567,10 @@ module.exports = {
     );
     const trailingPunctuationRe =
       new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const headings = filterByTypes(micromarkTokens, [ "atxHeadingText", "setextHeadingText" ]);
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeadingText", "setextHeadingText" ]
+    );
     for (const heading of headings) {
       const { endColumn, endLine, text } = heading;
       const match = trailingPunctuationRe.exec(text);
@@ -4700,11 +4623,7 @@ module.exports = {
   "tags": ["blockquote", "whitespace", "indentation"],
   "parser": "micromark",
   "function": function MD027(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
+    const micromarkTokens = params.parsers.micromark.tokens;
     for (const token of filterByTypes(micromarkTokens, [ "linePrefix" ])) {
       const siblings = token.parent?.children || micromarkTokens;
       if (siblings[siblings.indexOf(token) - 1]?.type === "blockQuotePrefix") {
@@ -4715,8 +4634,8 @@ module.exports = {
           onError,
           startLine,
           line,
-          null,
-          null,
+          undefined,
+          undefined,
           [ startColumn, length ],
           {
             "editColumn": startColumn,
@@ -4755,11 +4674,7 @@ module.exports = {
   "tags": [ "blockquote", "whitespace" ],
   "parser": "micromark",
   "function": function MD028(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
+    const micromarkTokens = params.parsers.micromark.tokens;
     for (const token of filterByTypes(micromarkTokens, [ "blockQuote" ])) {
       const errorLineNumbers = [];
       const siblings = token.parent?.children || micromarkTokens;
@@ -4800,9 +4715,8 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, listItemMarkerRe, orderedListItemMarkerRe,
-  rangeFromRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { flattenedLists } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const listStyleExamples = {
   "one": "1/1/1",
@@ -4810,32 +4724,37 @@ const listStyleExamples = {
   "zero": "0/0/0"
 };
 
+/**
+ * Gets the value of an ordered list item prefix token.
+ *
+ * @param {import("../helpers/micromark.cjs").Token} listItemPrefix List item prefix token.
+ * @returns {number} List item value.
+ */
+function getOrderedListItemValue(listItemPrefix) {
+  return Number(getTokenTextByType(listItemPrefix.children, "listItemValue"));
+}
+
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
 module.exports = {
   "names": [ "MD029", "ol-prefix" ],
   "description": "Ordered list item prefix",
   "tags": [ "ol" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD029(params, onError) {
     const style = String(params.config.style || "one_or_ordered");
-    const filteredLists = flattenedLists().filter((list) => !list.unordered);
-    for (const list of filteredLists) {
-      const { items } = list;
-      let current = 1;
+    for (const listOrdered of filterByTypes(params.parsers.micromark.tokens, [ "listOrdered" ])) {
+      const listItemPrefixes = getDescendantsByType(listOrdered, [ "listItemPrefix" ]);
+      let expected = 1;
       let incrementing = false;
       // Check for incrementing number pattern 1/2/3 or 0/1/2
-      if (items.length >= 2) {
-        const first = orderedListItemMarkerRe.exec(items[0].line);
-        const second = orderedListItemMarkerRe.exec(items[1].line);
-        if (first && second) {
-          const [ , firstNumber ] = first;
-          const [ , secondNumber ] = second;
-          if ((secondNumber !== "1") || (firstNumber === "0")) {
-            incrementing = true;
-            if (firstNumber === "0") {
-              current = 0;
-            }
+      if (listItemPrefixes.length >= 2) {
+        const firstValue = getOrderedListItemValue(listItemPrefixes[0]);
+        const secondValue = getOrderedListItemValue(listItemPrefixes[1]);
+        if ((secondValue !== 1) || (firstValue === 0)) {
+          incrementing = true;
+          if (firstValue === 0) {
+            expected = 0;
           }
         }
       }
@@ -4843,24 +4762,25 @@ module.exports = {
       let listStyle = style;
       if (listStyle === "one_or_ordered") {
         listStyle = incrementing ? "ordered" : "one";
-      }
-      // Force expected value for 0/0/0 and 1/1/1 patterns
-      if (listStyle === "zero") {
-        current = 0;
+      } else if (listStyle === "zero") {
+        expected = 0;
       } else if (listStyle === "one") {
-        current = 1;
+        expected = 1;
       }
       // Validate each list item marker
-      for (const item of items) {
-        const match = orderedListItemMarkerRe.exec(item.line);
-        if (match) {
-          addErrorDetailIf(onError, item.lineNumber,
-            String(current), match[1],
-            "Style: " + listStyleExamples[listStyle], null,
-            rangeFromRegExp(item.line, listItemMarkerRe));
-          if (listStyle === "ordered") {
-            current++;
-          }
+      for (const listItemPrefix of listItemPrefixes) {
+        const actual = getOrderedListItemValue(listItemPrefix);
+        addErrorDetailIf(
+          onError,
+          listItemPrefix.startLine,
+          expected,
+          actual,
+          "Style: " + listStyleExamples[listStyle],
+          undefined,
+          [ listItemPrefix.startColumn, listItemPrefix.endColumn - listItemPrefix.startColumn ]
+        );
+        if (listStyle === "ordered") {
+          expected++;
         }
       }
     }
@@ -4896,12 +4816,10 @@ module.exports = {
     const olSingle = Number(params.config.ol_single || 1);
     const ulMulti = Number(params.config.ul_multi || 1);
     const olMulti = Number(params.config.ol_multi || 1);
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const lists = filterByTypes(micromarkTokens, [ "listOrdered", "listUnordered" ]);
+    const lists = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "listOrdered", "listUnordered" ]
+    );
     for (const list of lists) {
       const ordered = (list.type === "listOrdered");
       const listItemPrefixes =
@@ -4933,8 +4851,8 @@ module.exports = {
             startLine,
             expectedSpaces,
             actualSpaces,
-            null,
-            null,
+            undefined,
+            undefined,
             range,
             fixInfo
           );
@@ -4958,10 +4876,40 @@ module.exports = {
 
 
 
-const { addErrorContext, forEachLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { lineMetadata } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const codeFencePrefixRe = /^(.*?)[`~]/;
+
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {readonly string[]} ReadonlyStringArray */
+
+/**
+ * Adds an error for the top or bottom of a code fence.
+ *
+ * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
+ * @param {ReadonlyStringArray} lines Lines of Markdown content.
+ * @param {number} lineNumber Line number.
+ * @param {boolean} top True iff top fence.
+ * @returns {void}
+ */
+function addError(onError, lines, lineNumber, top) {
+  const line = lines[lineNumber - 1];
+  const [ , prefix ] = line.match(codeFencePrefixRe) || [];
+  const fixInfo = (prefix === undefined) ? null : {
+    "lineNumber": lineNumber + (top ? 0 : 1),
+    "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
+  };
+  addErrorContext(
+    onError,
+    lineNumber,
+    line.trim(),
+    undefined,
+    undefined,
+    undefined,
+    fixInfo
+  );
+}
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4969,32 +4917,21 @@ module.exports = {
   "names": [ "MD031", "blanks-around-fences" ],
   "description": "Fenced code blocks should be surrounded by blank lines",
   "tags": [ "code", "blank_lines" ],
-  "parser": "none",
+  "parser": "micromark",
   "function": function MD031(params, onError) {
     const listItems = params.config.list_items;
     const includeListItems = (listItems === undefined) ? true : !!listItems;
-    const { lines } = params;
-    forEachLine(lineMetadata(), (line, i, inCode, onFence, inTable, inItem) => {
-      const onTopFence = (onFence > 0);
-      const onBottomFence = (onFence < 0);
-      if ((includeListItems || !inItem) &&
-          ((onTopFence && !isBlankLine(lines[i - 1])) ||
-           (onBottomFence && !isBlankLine(lines[i + 1])))) {
-        const [ , prefix ] = line.match(codeFencePrefixRe) || [];
-        const fixInfo = (prefix === undefined) ? null : {
-          "lineNumber": i + (onTopFence ? 1 : 2),
-          "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
-        };
-        addErrorContext(
-          onError,
-          i + 1,
-          lines[i].trim(),
-          null,
-          null,
-          null,
-          fixInfo);
+    const { lines, parsers } = params;
+    for (const codeBlock of filterByTypes(parsers.micromark.tokens, [ "codeFenced" ])) {
+      if (includeListItems || !(getTokenParentOfType(codeBlock, [ "listOrdered", "listUnordered" ]))) {
+        if (!isBlankLine(lines[codeBlock.startLine - 2])) {
+          addError(onError, lines, codeBlock.startLine, true);
+        }
+        if (!isBlankLine(lines[codeBlock.endLine]) && !isBlankLine(lines[codeBlock.endLine - 1])) {
+          addError(onError, lines, codeBlock.endLine, false);
+        }
       }
-    });
+    }
   }
 };
 
@@ -5012,28 +4949,12 @@ module.exports = {
 
 
 
-const { addErrorContext, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByPredicate, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const isList = (token) => (
   (token.type === "listOrdered") || (token.type === "listUnordered")
 );
-const addBlankLineError = (onError, lines, lineIndex, lineNumber) => {
-  const line = lines[lineIndex];
-  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
-  addErrorContext(
-    onError,
-    lineIndex + 1,
-    line.trim(),
-    null,
-    null,
-    null,
-    {
-      lineNumber,
-      "insertText": `${quotePrefix}\n`
-    }
-  );
-};
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5043,16 +4964,11 @@ module.exports = {
   "tags": [ "bullet", "ul", "ol", "blank_lines" ],
   "parser": "micromark",
   "function": function MD032(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const { lines } = params;
+    const { lines, parsers } = params;
 
     // For every top-level list...
     const topLevelLists = filterByPredicate(
-      micromarkTokens,
+      parsers.micromark.tokens,
       isList,
       (token) => (
         (isList(token) || (token.type === "htmlFlow")) ? [] : token.children
@@ -5063,7 +4979,12 @@ module.exports = {
       // Look for a blank line above the list
       const firstIndex = list.startLine - 1;
       if (!isBlankLine(lines[firstIndex - 1])) {
-        addBlankLineError(onError, lines, firstIndex);
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          firstIndex
+        );
       }
 
       // Find the "visual" end of the list
@@ -5079,7 +5000,13 @@ module.exports = {
       // Look for a blank line below the list
       const lastIndex = endLine - 1;
       if (!isBlankLine(lines[lastIndex + 1])) {
-        addBlankLineError(onError, lines, lastIndex, lastIndex + 2);
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          lastIndex,
+          lastIndex + 2
+        );
       }
     }
   }
@@ -5114,12 +5041,7 @@ module.exports = {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
     allowedElements = allowedElements.map((element) => element.toLowerCase());
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ])) {
+    for (const token of filterByTypes(params.parsers.micromark.tokens, [ "htmlText" ], true)) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (
         htmlTagInfo &&
@@ -5168,11 +5090,6 @@ module.exports = {
   "tags": [ "links", "url" ],
   "parser": "micromark",
   "function": function MD034(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     const literalAutolinks = (tokens) => (
       filterByPredicate(
         tokens,
@@ -5229,7 +5146,10 @@ module.exports = {
         }
       )
     );
-    const autoLinks = filterByTypes(micromarkTokens, [ "literalAutolink" ]);
+    const autoLinks = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "literalAutolink" ]
+    );
     if (autoLinks.length > 0) {
       // Re-parse with correct link/image reference definition handling
       const document = params.lines.join("\n");
@@ -5248,8 +5168,8 @@ module.exports = {
           onError,
           token.startLine,
           token.text,
-          null,
-          null,
+          undefined,
+          undefined,
           range,
           fixInfo
         );
@@ -5284,12 +5204,10 @@ module.exports = {
   "parser": "micromark",
   "function": function MD035(params, onError) {
     let style = String(params.config.style || "consistent").trim();
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const thematicBreaks = filterByTypes(micromarkTokens, [ "thematicBreak" ]);
+    const thematicBreaks = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "thematicBreak" ]
+    );
     for (const token of thematicBreaks) {
       const { startLine, text } = token;
       if (style === "consistent") {
@@ -5388,18 +5306,13 @@ module.exports = {
   "function": function MD037(params, onError) {
 
     // Initialize variables
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const { lines } = params;
+    const { lines, parsers } = params;
     const emphasisTokensByMarker = new Map();
     for (const marker of [ "_", "__", "___", "*", "**", "***" ]) {
       emphasisTokensByMarker.set(marker, []);
     }
     const tokens = filterByPredicate(
-      micromarkTokens,
+      parsers.micromark.tokens,
       (token) => token.children.some((child) => child.type === "data")
     );
     for (const token of tokens) {
@@ -5486,8 +5399,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, inHtmlFlow, tokenIfType } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const leftSpaceRe = /^\s(?:[^`]|$)/;
 const rightSpaceRe = /[^`]\s$/;
@@ -5510,13 +5422,10 @@ module.exports = {
   "tags": [ "whitespace", "code" ],
   "parser": "micromark",
   "function": function MD038(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const codeTexts = filterByTypes(micromarkTokens, [ "codeText" ])
-      .filter((codeText) => !inHtmlFlow(codeText));
+    const codeTexts = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "codeText" ]
+    );
     for (const codeText of codeTexts) {
       const { children } = codeText;
       const first = 0;
@@ -5602,10 +5511,51 @@ module.exports = {
 
 
 
-const { addErrorContext, filterTokens } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
-const spaceInLinkRe =
-  /\[(?:\s[^\]]*|[^\]]*?\s)\](?=(\([^)]*\)|\[[^\]]*\]))/;
+/**
+ * Adds an error for a label space issue.
+ *
+ * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
+ * @param {import("../helpers/micromark.cjs").Token} label Label token.
+ * @param {import("../helpers/micromark.cjs").Token} labelText LabelText token.
+ * @param {boolean} isStart True iff error is at the start of the link.
+ */
+function addLabelSpaceError(onError, label, labelText, isStart) {
+  const match = labelText.text.match(isStart ? /^[^\S\r\n]+/ : /[^\S\r\n]+$/);
+  const range = match ?
+    [
+      (isStart ? (labelText.startColumn) : (labelText.endColumn - match[0].length)),
+      match[0].length
+    ] :
+    undefined;
+  addErrorContext(
+    onError,
+    isStart ? (labelText.startLine + (match ? 0 : 1)) : (labelText.endLine - (match ? 0 : 1)),
+    label.text.replace(/\s+/g, " "),
+    isStart,
+    !isStart,
+    range,
+    range ? {
+      "editColumn": range[0],
+      "deleteCount": range[1]
+    } : undefined
+  );
+}
+
+/**
+ * Determines if a link is a valid link (and not a fake shortcut link due to parser tricks).
+ *
+ * @param {import("../helpers/micromark.cjs").Token} label Label token.
+ * @param {import("../helpers/micromark.cjs").Token} labelText LabelText token.
+ * @param {Map<string, any>} definitions Map of link definitions.
+ * @returns {boolean} True iff the link is valid.
+ */
+function validLink(label, labelText, definitions) {
+  return (label.parent?.children.length !== 1) || definitions.has(labelText.text.trim());
+}
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5613,60 +5563,33 @@ module.exports = {
   "names": [ "MD039", "no-space-in-links" ],
   "description": "Spaces inside link text",
   "tags": [ "whitespace", "links" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD039(params, onError) {
-    filterTokens(params, "inline", (token) => {
-      const { children } = token;
-      let { lineNumber } = token;
-      let inLink = false;
-      let linkText = "";
-      let lineIndex = 0;
-      for (const child of children) {
-        const { content, markup, type } = child;
-        if (type === "link_open") {
-          inLink = true;
-          linkText = "";
-        } else if (type === "link_close") {
-          inLink = false;
-          const left = linkText.trimStart().length !== linkText.length;
-          const right = linkText.trimEnd().length !== linkText.length;
-          if (left || right) {
-            const line = params.lines[lineNumber - 1];
-            let range = null;
-            let fixInfo = null;
-            const match = line.slice(lineIndex).match(spaceInLinkRe);
-            if (match) {
-              // @ts-ignore
-              const column = match.index + lineIndex + 1;
-              const length = match[0].length;
-              range = [ column, length ];
-              fixInfo = {
-                "editColumn": column + 1,
-                "deleteCount": length - 2,
-                "insertText": linkText.trim()
-              };
-              lineIndex = column + length - 1;
-            }
-            addErrorContext(
-              onError,
-              lineNumber,
-              `[${linkText}]`,
-              left,
-              right,
-              range,
-              fixInfo
-            );
-          }
-        } else if ((type === "softbreak") || (type === "hardbreak")) {
-          lineNumber++;
-          lineIndex = 0;
-        } else if (inLink) {
-          linkText += type.endsWith("_inline") ?
-            `${markup}${content}${markup}` :
-            (content || markup);
+    const { definitions } = referenceLinkImageData();
+    const labels = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "label" ]
+    ).filter((label) => label.parent?.type === "link");
+    for (const label of labels) {
+      const labelTexts = filterByTypes(
+        label.children,
+        [ "labelText" ]
+      );
+      for (const labelText of labelTexts) {
+        if (
+          (labelText.text.trimStart().length !== labelText.text.length) &&
+          validLink(label, labelText, definitions)
+        ) {
+          addLabelSpaceError(onError, label, labelText, true);
+        }
+        if (
+          (labelText.text.trimEnd().length !== labelText.text.length) &&
+          validLink(label, labelText, definitions)
+        ) {
+          addLabelSpaceError(onError, label, labelText, false);
         }
       }
-    });
+    }
   }
 };
 
@@ -5699,12 +5622,10 @@ module.exports = {
     let allowed = params.config.allowed_languages;
     allowed = Array.isArray(allowed) ? allowed : [];
     const languageOnly = !!params.config.language_only;
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const fencedCodes = filterByTypes(micromarkTokens, [ "codeFenced" ]);
+    const fencedCodes = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "codeFenced" ]
+    );
     for (const fencedCode of fencedCodes) {
       const openingFence = tokenIfType(fencedCode.children[0], "codeFencedFence");
       if (openingFence) {
@@ -5758,7 +5679,7 @@ module.exports = {
           if ((token.type === "atxHeading") || (token.type === "setextHeading")) {
             isError = (getHeadingLevel(token) !== level);
           } else if (token.type === "htmlFlow") {
-            const htmlTexts = filterByTypes(token.children, [ "htmlText" ]);
+            const htmlTexts = filterByTypes(token.children, [ "htmlText" ], true);
             const tagInfo = (htmlTexts.length > 0) && getHtmlTagInfo(htmlTexts[0]);
             isError = !tagInfo || (tagInfo.name.toLowerCase() !== `h${level}`);
           }
@@ -5785,8 +5706,9 @@ module.exports = {
 
 
 
-const { addErrorContext, escapeForRegExp, filterTokens } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getDescendantsByType, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5794,44 +5716,56 @@ module.exports = {
   "names": [ "MD042", "no-empty-links" ],
   "description": "No empty links",
   "tags": [ "links" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD042(params, onError) {
-    filterTokens(params, "inline", function forToken(token) {
-      let inLink = false;
-      let linkText = "";
-      let emptyLink = false;
-      for (const child of token.children) {
-        if (child.type === "link_open") {
-          inLink = true;
-          linkText = "";
-          for (const attr of child.attrs) {
-            if (attr[0] === "href" && (!attr[1] || (attr[1] === "#"))) {
-              emptyLink = true;
-            }
-          }
-        } else if (child.type === "link_close") {
-          inLink = false;
-          if (emptyLink) {
-            let context = `[${linkText}]`;
-            let range = null;
-            const match = child.line.match(
-              new RegExp(`${escapeForRegExp(context)}\\((?:|#|<>)\\)`)
-            );
-            if (match) {
-              context = match[0];
-              // @ts-ignore
-              range = [ match.index + 1, match[0].length ];
-            }
-            addErrorContext(
-              onError, child.lineNumber, context, null, null, range
-            );
-            emptyLink = false;
-          }
-        } else if (inLink) {
-          linkText += child.content;
-        }
+    const { definitions } = referenceLinkImageData();
+    const isReferenceDefinitionHash = (token) => {
+      const definition = definitions.get(token.text.trim());
+      return (definition && (definition[1] === "#"));
+    };
+    const links = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "link" ]
+    );
+    for (const link of links) {
+      const labelText = getDescendantsByType(link, [ "label", "labelText" ]);
+      const reference = getDescendantsByType(link, [ "reference" ]);
+      const resource = getDescendantsByType(link, [ "resource" ]);
+      const referenceString = getDescendantsByType(reference, [ "referenceString" ]);
+      const resourceDestination = getDescendantsByType(resource, [ "resourceDestination" ]);
+      const resourceDestinationString = [
+        ...getDescendantsByType(resourceDestination, [ "resourceDestinationRaw", "resourceDestinationString" ]),
+        ...getDescendantsByType(resourceDestination, [ "resourceDestinationLiteral", "resourceDestinationString" ])
+      ];
+      const hasLabelText = labelText.length > 0;
+      const hasReference = reference.length > 0;
+      const hasResource = resource.length > 0;
+      const hasReferenceString = referenceString.length > 0;
+      const hasResourceDestinationString = resourceDestinationString.length > 0;
+      let error = false;
+      if (
+        hasLabelText &&
+        ((!hasReference && !hasResource) || (hasReference && !hasReferenceString))
+      ) {
+        error = isReferenceDefinitionHash(labelText[0]);
+      } else if (hasReferenceString && !hasResourceDestinationString) {
+        error = isReferenceDefinitionHash(referenceString[0]);
+      } else if (!hasReferenceString && hasResourceDestinationString) {
+        error = (resourceDestinationString[0].text.trim() === "#");
+      } else if (!hasReferenceString && !hasResourceDestinationString) {
+        error = true;
       }
-    });
+      if (error) {
+        addErrorContext(
+          onError,
+          link.startLine,
+          link.text,
+          undefined,
+          undefined,
+          [ link.startColumn, link.endColumn - link.startColumn ]
+        );
+      }
+    }
   }
 };
 
@@ -5849,8 +5783,8 @@ module.exports = {
 
 
 
-const { addErrorContext, addErrorDetailIf, forEachHeading } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5858,7 +5792,7 @@ module.exports = {
   "names": [ "MD043", "required-headings" ],
   "description": "Required heading structure",
   "tags": [ "headings" ],
-  "parser": "markdownit",
+  "parser": "micromark",
   "function": function MD043(params, onError) {
     const requiredHeadings = params.config.headings;
     if (!Array.isArray(requiredHeadings)) {
@@ -5866,20 +5800,22 @@ module.exports = {
       return;
     }
     const matchCase = params.config.match_case || false;
-    const levels = {};
-    for (const level of [ 1, 2, 3, 4, 5, 6 ]) {
-      levels["h" + level] = "######".substr(-level);
-    }
     let i = 0;
     let matchAny = false;
     let hasError = false;
     let anyHeadings = false;
     const getExpected = () => requiredHeadings[i++] || "[None]";
     const handleCase = (str) => (matchCase ? str : str.toLowerCase());
-    forEachHeading(params, (heading, content) => {
+    const headings = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "atxHeading", "setextHeading" ]
+    );
+    for (const heading of headings) {
       if (!hasError) {
+        const headingText = getHeadingText(heading);
+        const headingLevel = getHeadingLevel(heading);
         anyHeadings = true;
-        const actual = levels[heading.tag] + " " + content;
+        const actual = `${"".padEnd(headingLevel, "#")} ${headingText}`;
         const expected = getExpected();
         if (expected === "*") {
           const nextExpected = getExpected();
@@ -5894,12 +5830,16 @@ module.exports = {
         } else if (matchAny) {
           i--;
         } else {
-          addErrorDetailIf(onError, heading.lineNumber,
-            expected, actual);
+          addErrorDetailIf(
+            onError,
+            heading.startLine,
+            expected,
+            actual
+          );
           hasError = true;
         }
       }
-    });
+    }
     const extraHeadings = requiredHeadings.length - i;
     if (
       !hasError &&
@@ -5907,8 +5847,11 @@ module.exports = {
         ((extraHeadings === 1) && (requiredHeadings[i] !== "*"))) &&
       (anyHeadings || !requiredHeadings.every((heading) => heading === "*"))
     ) {
-      addErrorContext(onError, params.lines.length,
-        requiredHeadings[i]);
+      addErrorContext(
+        onError,
+        params.lines.length,
+        requiredHeadings[i]
+      );
     }
   }
 };
@@ -5957,11 +5900,6 @@ module.exports = {
     const htmlElements = params.config.html_elements;
     const includeHtmlElements =
       (htmlElements === undefined) ? true : !!htmlElements;
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     const scannedTypes = new Set([ "data" ]);
     if (includeCodeBlocks) {
       scannedTypes.add("codeFlowValue");
@@ -5973,7 +5911,7 @@ module.exports = {
     }
     const contentTokens =
       filterByPredicate(
-        micromarkTokens,
+        params.parsers.micromark.tokens,
         (token) => scannedTypes.has(token.type),
         (token) => (
           token.children.filter((t) => !ignoredChildTypes.has(t.type))
@@ -6021,8 +5959,8 @@ module.exports = {
                 token.startLine,
                 name,
                 nameMatch,
-                null,
-                null,
+                undefined,
+                undefined,
                 [ column, length ],
                 {
                   "editColumn": column,
@@ -6066,14 +6004,13 @@ module.exports = {
   "tags": [ "accessibility", "images" ],
   "parser": "micromark",
   "function": function MD045(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
+    const micromarkTokens = params.parsers.micromark.tokens;
 
     // Process Markdown images
-    const images = filterByTypes(micromarkTokens, [ "image" ]);
+    const images = filterByTypes(
+      micromarkTokens,
+      [ "image" ]
+    );
     for (const image of images) {
       const labelTexts = filterByTypes(image.children, [ "labelText" ]);
       if (labelTexts.some((labelText) => labelText.text.length === 0)) {
@@ -6091,7 +6028,11 @@ module.exports = {
     }
 
     // Process HTML images
-    const htmlTexts = filterByTypes(micromarkTokens, [ "htmlText" ]);
+    const htmlTexts = filterByTypes(
+      micromarkTokens,
+      [ "htmlText" ],
+      true
+    );
     for (const htmlText of htmlTexts) {
       const { startColumn, startLine, text } = htmlText;
       const htmlTagInfo = getHtmlTagInfo(htmlText);
@@ -6148,12 +6089,10 @@ module.exports = {
   "parser": "micromark",
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const codeBlocksAndFences = filterByTypes(micromarkTokens, [ "codeFenced", "codeIndented" ]);
+    const codeBlocksAndFences = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "codeFenced", "codeIndented" ]
+    );
     for (const token of codeBlocksAndFences) {
       const { startLine, type } = token;
       if (expectedStyle === "consistent") {
@@ -6236,13 +6175,11 @@ module.exports = {
   "parser": "micromark",
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     let expectedStyle = style;
-    const codeFenceds = filterByTypes(micromarkTokens, [ "codeFenced" ]);
+    const codeFenceds = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "codeFenced" ]
+    );
     for (const codeFenced of codeFenceds) {
       const codeFencedFence = tokenIfType(codeFenced.children[0], "codeFencedFence");
       if (codeFencedFence) {
@@ -6294,14 +6231,9 @@ const intrawordRe = /^\w$/;
  */
 const impl =
   (params, onError, type, typeSequence, asterisk, underline, style = "consistent") => {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const { lines } = params;
+    const { lines, parsers } = params;
     const emphasisTokens = filterByPredicate(
-      micromarkTokens,
+      parsers.micromark.tokens,
       (token) => token.type === type,
       (token) => ((token.type === "htmlFlow") ? [] : token.children)
     );
@@ -6464,11 +6396,7 @@ module.exports = {
   "tags": [ "links" ],
   "parser": "micromark",
   "function": function MD051(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
+    const micromarkTokens = params.parsers.micromark.tokens;
     const fragments = new Map();
 
     // Process headings
@@ -6492,7 +6420,7 @@ module.exports = {
     }
 
     // Process HTML anchors
-    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ])) {
+    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ], true)) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (htmlTagInfo && !htmlTagInfo.close) {
         const anchorMatch = idRe.exec(token.text) ||
@@ -6748,13 +6676,11 @@ module.exports = {
       // Everything allowed, nothing to check
       return;
     }
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
     const { definitions } = referenceLinkImageData();
-    const links = filterByTypes(micromarkTokens, [ "autolink", "image", "link" ]);
+    const links = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "autolink", "image", "link" ]
+    );
     for (const link of links) {
       let label = null;
       let destination = null;
@@ -6797,7 +6723,8 @@ module.exports = {
         }
       }
       if (isError) {
-        let range = null;
+        // eslint-disable-next-line no-undef-init
+        let range = undefined;
         let fixInfo = null;
         if (startLine === endLine) {
           range = [ startColumn, endColumn - startColumn ];
@@ -6827,8 +6754,8 @@ module.exports = {
           onError,
           startLine,
           text.replace(nextLinesRe, ""),
-          null,
-          null,
+          undefined,
+          undefined,
           range,
           fixInfo
         );
@@ -6876,14 +6803,15 @@ module.exports = {
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "trailing_only"));
     let expectedTrailingPipe =
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "leading_only"));
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const tables = filterByTypes(micromarkTokens, [ "table" ]);
+    const tables = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "table" ]
+    );
     for (const table of tables) {
-      const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
+      const rows = filterByTypes(
+        table.children,
+        [ "tableDelimiterRow", "tableRow" ]
+      );
       for (const row of rows) {
         // The following uses of first/lastOrNothing lack fallback handling
         // because it seems not to be possible (i.e., 0% coverage)
@@ -6955,21 +6883,27 @@ module.exports = {
   "tags": [ "table" ],
   "parser": "micromark",
   "function": function MD056(params, onError) {
-    // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").Token[] */
-    const micromarkTokens =
-      // @ts-ignore
-      params.parsers.micromark.tokens;
-    const tables = filterByTypes(micromarkTokens, [ "table" ]);
+    const tables = filterByTypes(
+      params.parsers.micromark.tokens,
+      [ "table" ]
+    );
     for (const table of tables) {
-      const rows = filterByTypes(table.children, [ "tableDelimiterRow", "tableRow" ]);
+      const rows = filterByTypes(
+        table.children,
+        [ "tableDelimiterRow", "tableRow" ]
+      );
       let expectedCount = 0;
       for (const row of rows) {
-        const cells = filterByTypes(row.children, [ "tableData", "tableDelimiter", "tableHeader" ]);
+        const cells = filterByTypes(
+          row.children,
+          [ "tableData", "tableDelimiter", "tableHeader" ]
+        );
         const actualCount = cells.length;
         expectedCount ||= actualCount;
-        let detail = null;
-        let range = null;
+        // eslint-disable-next-line no-undef-init
+        let detail = undefined;
+        // eslint-disable-next-line no-undef-init
+        let range = undefined;
         if (actualCount < expectedCount) {
           detail = "Too few cells, row will be missing data";
           range = [ row.endColumn - 1, 1 ];
@@ -6983,13 +6917,70 @@ module.exports = {
           expectedCount,
           actualCount,
           detail,
-          null,
+          undefined,
           range
         );
       }
     }
   }
 }
+
+
+/***/ }),
+
+/***/ "../lib/md058.js":
+/*!***********************!*\
+  !*** ../lib/md058.js ***!
+  \***********************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+// eslint-disable-next-line jsdoc/valid-types
+/** @type import("./markdownlint").Rule */
+module.exports = {
+  "names": [ "MD058", "blanks-around-tables" ],
+  "description": "Tables should be surrounded by blank lines",
+  "tags": [ "table" ],
+  "parser": "micromark",
+  "function": function MD058(params, onError) {
+    const { lines, parsers } = params;
+    // For every table...
+    const tables = filterByTypes(
+      parsers.micromark.tokens,
+      [ "table" ]
+    );
+    for (const table of tables) {
+      // Look for a blank line above the table
+      const firstIndex = table.startLine - 1;
+      if (!isBlankLine(lines[firstIndex - 1])) {
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          firstIndex
+        );
+      }
+      // Look for a blank line below the table
+      const lastIndex = table.endLine - 1;
+      if (!isBlankLine(lines[lastIndex + 1])) {
+        addErrorContextForLine(
+          onError,
+          // @ts-ignore
+          lines,
+          lastIndex,
+          lastIndex + 2
+        );
+      }
+    }
+  }
+};
 
 
 /***/ }),
@@ -7007,6 +6998,11 @@ module.exports = {
 
 const { homepage, version } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
 
+// @ts-ignore
+const [ md019, md021 ] = __webpack_require__(/*! ./md019-md021 */ "../lib/md019-md021.js");
+// @ts-ignore
+const [ md049, md050 ] = __webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js");
+
 const rules = [
   __webpack_require__(/*! ./md001 */ "../lib/md001.js"),
   // md002: Deprecated and removed
@@ -7022,9 +7018,9 @@ const rules = [
   __webpack_require__(/*! ./md013 */ "../lib/md013.js"),
   __webpack_require__(/*! ./md014 */ "../lib/md014.js"),
   __webpack_require__(/*! ./md018 */ "../lib/md018.js"),
-  __webpack_require__(/*! ./md019 */ "../lib/md019.js"),
+  md019,
   __webpack_require__(/*! ./md020 */ "../lib/md020.js"),
-  __webpack_require__(/*! ./md021 */ "../lib/md021.js"),
+  md021,
   __webpack_require__(/*! ./md022 */ "../lib/md022.js"),
   __webpack_require__(/*! ./md023 */ "../lib/md023.js"),
   __webpack_require__(/*! ./md024 */ "../lib/md024.js"),
@@ -7052,14 +7048,16 @@ const rules = [
   __webpack_require__(/*! ./md046 */ "../lib/md046.js"),
   __webpack_require__(/*! ./md047 */ "../lib/md047.js"),
   __webpack_require__(/*! ./md048 */ "../lib/md048.js"),
-  ...__webpack_require__(/*! ./md049-md050 */ "../lib/md049-md050.js"),
+  md049,
+  md050,
   __webpack_require__(/*! ./md051 */ "../lib/md051.js"),
   __webpack_require__(/*! ./md052 */ "../lib/md052.js"),
   __webpack_require__(/*! ./md053 */ "../lib/md053.js"),
   __webpack_require__(/*! ./md054 */ "../lib/md054.js"),
   __webpack_require__(/*! ./md055 */ "../lib/md055.js"),
-  __webpack_require__(/*! ./md056 */ "../lib/md056.js")
+  __webpack_require__(/*! ./md056 */ "../lib/md056.js"),
   // md057: See https://github.com/markdownlint/markdownlint
+  __webpack_require__(/*! ./md058 */ "../lib/md058.js")
 ];
 for (const rule of rules) {
   const name = rule.names[0].toLowerCase();

@@ -167,8 +167,8 @@ test("resultFormattingV1", (t) => new Promise((resolve) => {
             "Multiple spaces inside hashes on closed atx style heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/md021.md`,
           "errorDetail": null,
-          "errorContext": "#  Multiple spa...tyle heading  #",
-          "errorRange": [ 1, 4 ] }
+          "errorContext": "#  Multiple spaces inside hash...",
+          "errorRange": [ 3, 1 ] }
       ],
       "./test/atx_heading_spacing.md": [
         { "lineNumber": 1,
@@ -186,7 +186,7 @@ test("resultFormattingV1", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md019.md`,
           "errorDetail": null,
           "errorContext": "##  Heading 2 {MD019}",
-          "errorRange": [ 1, 5 ] },
+          "errorRange": [ 4, 1 ] },
         { "lineNumber": 5,
           "ruleName": "MD019",
           "ruleAlias": "no-multiple-space-atx",
@@ -194,7 +194,7 @@ test("resultFormattingV1", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md019.md`,
           "errorDetail": null,
           "errorContext": "##   Heading 3 {MD019}",
-          "errorRange": [ 1, 6 ] },
+          "errorRange": [ 4, 2 ] },
         { "lineNumber": 1,
           "ruleName": "MD041",
           "ruleAlias": "first-line-heading",
@@ -237,7 +237,7 @@ test("resultFormattingV1", (t) => new Promise((resolve) => {
       " [Context: \"## Heading\"]\n" +
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
       " Multiple spaces inside hashes on closed atx style heading" +
-      " [Context: \"#  Multiple spa...tyle heading  #\"]";
+      " [Context: \"#  Multiple spaces inside hash...\"]";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
     resolve();
   });
@@ -270,8 +270,8 @@ test("resultFormattingV2", (t) => new Promise((resolve) => {
             "Multiple spaces inside hashes on closed atx style heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/md021.md`,
           "errorDetail": null,
-          "errorContext": "#  Multiple spa...tyle heading  #",
-          "errorRange": [ 1, 4 ] }
+          "errorContext": "#  Multiple spaces inside hash...",
+          "errorRange": [ 3, 1 ] }
       ],
       "./test/atx_heading_spacing.md": [
         { "lineNumber": 1,
@@ -287,14 +287,14 @@ test("resultFormattingV2", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md019.md`,
           "errorDetail": null,
           "errorContext": "##  Heading 2 {MD019}",
-          "errorRange": [ 1, 5 ] },
+          "errorRange": [ 4, 1 ] },
         { "lineNumber": 5,
           "ruleNames": [ "MD019", "no-multiple-space-atx" ],
           "ruleDescription": "Multiple spaces after hash on atx style heading",
           "ruleInformation": `${homepage}/blob/v${version}/doc/md019.md`,
           "errorDetail": null,
           "errorContext": "##   Heading 3 {MD019}",
-          "errorRange": [ 1, 6 ] },
+          "errorRange": [ 4, 2 ] },
         { "lineNumber": 1,
           "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
           "ruleDescription": "First line in a file should be a top-level heading",
@@ -336,7 +336,7 @@ test("resultFormattingV2", (t) => new Promise((resolve) => {
       " [Context: \"## Heading\"]\n" +
       "truncate: 1: MD021/no-multiple-space-closed-atx" +
       " Multiple spaces inside hashes on closed atx style heading" +
-      " [Context: \"#  Multiple spa...tyle heading  #\"]";
+      " [Context: \"#  Multiple spaces inside hash...\"]";
     t.is(actualMessage, expectedMessage, "Incorrect message.");
     resolve();
   });

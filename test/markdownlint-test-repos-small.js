@@ -21,7 +21,7 @@ test("https://github.com/electron/electron", (t) => {
     join(rootDir, "*.md"),
     join(rootDir, "docs/**/*.md")
   ];
-  const configPath = join(rootDir, ".markdownlint.json");
+  const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
   return lintTestRepo(t, globPatterns, configPath);
 });
 
@@ -59,7 +59,11 @@ test("https://github.com/mochajs/mocha", (t) => {
     join(rootDir, ".github/*.md"),
     join(rootDir, "lib/**/*.md"),
     join(rootDir, "test/**/*.md"),
-    join(rootDir, "example/**/*.md")
+    join(rootDir, "example/**/*.md"),
+    ...excludeGlobs(
+      rootDir,
+      "CHANGELOG.md"
+    )
   ];
   const configPath = join(rootDir, ".markdownlint.json");
   return lintTestRepo(t, globPatterns, configPath);

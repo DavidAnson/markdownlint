@@ -136,6 +136,7 @@ playground for learning and exploring.
 - **[MD054](doc/md054.md)** *link-image-style* - Link and image style
 - **[MD055](doc/md055.md)** *table-pipe-style* - Table pipe style
 - **[MD056](doc/md056.md)** *table-column-count* - Table column count
+- **[MD058](doc/md058.md)** *blanks-around-tables* - Tables should be surrounded by blank lines
 
 <!-- markdownlint-restore -->
 
@@ -177,7 +178,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
-- **`table`** - `MD055`, `MD056`
+- **`table`** - `MD055`, `MD056`, `MD058`
 - **`ul`** - `MD004`, `MD005`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
@@ -562,7 +563,7 @@ is allowed to continue and report any violations that were found.
 
 Type: `Array` of `Array` of `Function` and plugin parameters
 
-Specifies additional [markdown-it plugins][markdown-it-plugin] to use when
+Specifies additional [`markdown-it` plugins][markdown-it-plugin] to use when
 parsing input. Plugins can be used to support additional syntax and features for
 advanced scenarios.
 
@@ -573,6 +574,13 @@ Each item in the top-level `Array` should be of the form:
 ```javascript
 [ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
 ```
+
+> Note that `markdown-it` plugins are only called when the `markdown-it` parser
+> is invoked. None of the built-in rules use the `markdown-it` parser, so
+> `markdown-it` plugins will only be invoked when one or more
+> [custom rules][custom-rules] that use the `markdown-it` parser are present.
+
+[custom-rules]: #custom-rules
 
 ##### options.noInlineConfig
 
@@ -979,6 +987,11 @@ following projects or one of the tools in the [Related section](#related):
 - [webpack][webpack] ([Search repository][webpack-search])
 - [WordPress][wordpress] ([Search repository][wordpress-search])
 
+For more advanced integration scenarios:
+
+- [GitHub Docs content linter][content-linter]
+- [GitHub's `markdownlint-github` repository][markdownlint-github]
+
 [ally-js]: https://allyjs.io/
 [ally-js-search]: https://github.com/medialize/ally.js/search?q=markdownlint
 [airflow]: https://airflow.apache.org
@@ -987,6 +1000,7 @@ following projects or one of the tools in the [Related section](#related):
 [boostnote-search]: https://github.com/BoostIO/Boostnote/search?q=markdownlint
 [codimd]: https://github.com/hackmdio/codimd
 [codimd-search]: https://github.com/hackmdio/codimd/search?q=markdownlint
+[content-linter]: https://docs.github.com/en/contributing/collaborating-on-github-docs/using-the-content-linter
 [dot-net-doc]: https://docs.microsoft.com/en-us/dotnet/
 [dot-net-doc-search]: https://github.com/dotnet/docs/search?q=markdownlint
 [electron]: https://www.electronjs.org
@@ -995,6 +1009,7 @@ following projects or one of the tools in the [Related section](#related):
 [eslint-search]: https://github.com/eslint/eslint/search?q=markdownlint
 [garden]: https://zendeskgarden.github.io/react-components/
 [garden-search]: https://github.com/zendeskgarden/react-components/search?q=markdownlint
+[markdownlint-github]: https://github.com/github/markdownlint-github
 [mdn]: https://developer.mozilla.org/
 [mdn-search]: https://github.com/mdn/content/search?q=markdownlint
 [mkdocs]: https://www.mkdocs.org/

@@ -10,5 +10,5 @@ test("https://github.com/dotnet/docs", (t) => {
   const rootDir = "./test-repos/dotnet-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  return lintTestRepo(t, globPatterns, configPath);
+  return lintTestRepo(t, globPatterns, configPath, true);
 });

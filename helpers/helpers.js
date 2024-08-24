@@ -18,10 +18,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expressions for range matching
-module.exports.listItemMarkerRe = /^([\s>]*)(?:[*+-]|\d+[.)])\s+/;
-module.exports.orderedListItemMarkerRe = /^[\s>]*0*(\d+)[.)]/;
-
 // Regular expression for blockquote prefixes
 const blockquotePrefixRe = /^[>\s]*/;
 module.exports.blockquotePrefixRe = blockquotePrefixRe;
@@ -143,7 +139,6 @@ function isBlankLine(line) {
   const startComment = "<!--";
   const endComment = "-->";
   const removeComments = (s) => {
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const start = s.indexOf(startComment);
       const end = s.indexOf(endComment);
@@ -169,35 +164,6 @@ function isBlankLine(line) {
   );
 }
 module.exports.isBlankLine = isBlankLine;
-
-/**
- * Compare function for Array.prototype.sort for ascending order of numbers.
- *
- * @param {number} a First number.
- * @param {number} b Second number.
- * @returns {number} Positive value if a>b, negative value if b<a, 0 otherwise.
- */
-module.exports.numericSortAscending = function numericSortAscending(a, b) {
-  return a - b;
-};
-
-// Returns true iff the sorted array contains the specified element
-module.exports.includesSorted = function includesSorted(array, element) {
-  let left = 0;
-  let right = array.length - 1;
-  while (left <= right) {
-    // eslint-disable-next-line no-bitwise
-    const mid = (left + right) >> 1;
-    if (array[mid] < element) {
-      left = mid + 1;
-    } else if (array[mid] > element) {
-      right = mid - 1;
-    } else {
-      return true;
-    }
-  }
-  return false;
-};
 
 // Replaces the content of properly-formatted CommonMark comments with "."
 // This preserves the line/column information for the rest of the document
@@ -288,208 +254,6 @@ module.exports.emphasisOrStrongStyleFor =
         return "underscore";
     }
   };
-
-/**
- * Return the number of characters of indent for a token.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {number} Characters of indent.
- */
-function indentFor(token) {
-  const line = token.line.replace(/^[\s>]*(> |>)/, "");
-  return line.length - line.trimStart().length;
-}
-module.exports.indentFor = indentFor;
-
-// Returns the heading style for a heading token
-module.exports.headingStyleFor = function headingStyleFor(token) {
-  if ((token.map[1] - token.map[0]) === 1) {
-    if (/[^\\]#\s*$/.test(token.line)) {
-      return "atx_closed";
-    }
-    return "atx";
-  }
-  return "setext";
-};
-
-/**
- * Return the string representation of an unordered list marker.
- *
- * @param {Object} token MarkdownItToken instance.
- * @returns {"asterisk" | "dash" | "plus"} String representation.
- */
-module.exports.unorderedListStyleFor = function unorderedListStyleFor(token) {
-  switch (token.markup) {
-    case "-":
-      return "dash";
-    case "+":
-      return "plus";
-    // case "*":
-    default:
-      return "asterisk";
-  }
-};
-
-/**
- * @callback TokenCallback
- * @param {MarkdownItToken} token Current token.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each matching token.
- *
- * @param {Object} params RuleParams instance.
- * @param {string} type Token type identifier.
- * @param {TokenCallback} handler Callback function.
- * @returns {void}
- */
-function filterTokens(params, type, handler) {
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === type) {
-      handler(token);
-    }
-  }
-}
-module.exports.filterTokens = filterTokens;
-
-/**
- * @typedef {Array} LineMetadata
- */
-
-/**
- * Gets a line metadata array.
- *
- * @param {Object} params RuleParams instance.
- * @returns {LineMetadata} Line metadata.
- */
-function getLineMetadata(params) {
-  const lineMetadata = params.lines.map(
-    (line, index) => [ line, index, false, 0, false, false, false ]
-  );
-  filterTokens(params, "fence", (token) => {
-    lineMetadata[token.map[0]][3] = 1;
-    lineMetadata[token.map[1] - 1][3] = -1;
-    for (let i = token.map[0] + 1; i < token.map[1] - 1; i++) {
-      lineMetadata[i][2] = true;
-    }
-  });
-  filterTokens(params, "code_block", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][2] = true;
-    }
-  });
-  filterTokens(params, "table_open", (token) => {
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][4] = true;
-    }
-  });
-  filterTokens(params, "list_item_open", (token) => {
-    let count = 1;
-    for (let i = token.map[0]; i < token.map[1]; i++) {
-      lineMetadata[i][5] = count;
-      count++;
-    }
-  });
-  filterTokens(params, "hr", (token) => {
-    lineMetadata[token.map[0]][6] = true;
-  });
-  return lineMetadata;
-}
-module.exports.getLineMetadata = getLineMetadata;
-
-/**
- * @callback EachLineCallback
- * @param {string} line Line content.
- * @param {number} lineIndex Line index (0-based).
- * @param {boolean} inCode Iff in a code block.
- * @param {number} onFence + if open, - if closed, 0 otherwise.
- * @param {boolean} inTable Iff in a table.
- * @param {boolean} inItem Iff in a list item.
- * @param {boolean} inBreak Iff in semantic break.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each line.
- *
- * @param {LineMetadata} lineMetadata Line metadata object.
- * @param {EachLineCallback} handler Function taking (line, lineIndex, inCode,
- * onFence, inTable, inItem, inBreak).
- * @returns {void}
- */
-function forEachLine(lineMetadata, handler) {
-  for (const metadata of lineMetadata) {
-    // @ts-ignore
-    handler(...metadata);
-  }
-}
-module.exports.forEachLine = forEachLine;
-
-// Returns (nested) lists as a flat array (in order)
-module.exports.flattenLists = function flattenLists(tokens) {
-  const flattenedLists = [];
-  const stack = [];
-  let current = null;
-  let nesting = 0;
-  const nestingStack = [];
-  let lastWithMap = { "map": [ 0, 1 ] };
-  for (const token of tokens) {
-    if ((token.type === "bullet_list_open") ||
-        (token.type === "ordered_list_open")) {
-      // Save current context and start a new one
-      stack.push(current);
-      current = {
-        "unordered": (token.type === "bullet_list_open"),
-        "parentsUnordered": !current ||
-          (current.unordered && current.parentsUnordered),
-        "open": token,
-        "indent": indentFor(token),
-        "parentIndent": (current && current.indent) || 0,
-        "items": [],
-        "nesting": nesting,
-        "lastLineIndex": -1,
-        "insert": flattenedLists.length
-      };
-      nesting++;
-    } else if ((token.type === "bullet_list_close") ||
-               (token.type === "ordered_list_close")) {
-      // Finalize current context and restore previous
-      current.lastLineIndex = lastWithMap.map[1];
-      flattenedLists.splice(current.insert, 0, current);
-      delete current.insert;
-      current = stack.pop();
-      nesting--;
-    } else if (token.type === "list_item_open") {
-      // Add list item
-      current.items.push(token);
-    } else if (token.type === "blockquote_open") {
-      nestingStack.push(nesting);
-      nesting = 0;
-    } else if (token.type === "blockquote_close") {
-      nesting = nestingStack.pop() || 0;
-    }
-    if (token.map) {
-      // Track last token with map
-      lastWithMap = token;
-    }
-  }
-  return flattenedLists;
-};
-
-// Calls the provided function for each heading's content
-module.exports.forEachHeading = function forEachHeading(params, handler) {
-  let heading = null;
-  for (const token of params.parsers.markdownit.tokens) {
-    if (token.type === "heading_open") {
-      heading = token;
-    } else if (token.type === "heading_close") {
-      heading = null;
-    } else if ((token.type === "inline") && heading) {
-      handler(heading, token.content, token);
-    }
-  }
-};
 
 /**
  * @callback InlineCodeSpanCallback
@@ -596,8 +360,20 @@ function addError(onError, lineNumber, detail, context, range, fixInfo) {
 }
 module.exports.addError = addError;
 
-// Adds an error object with details conditionally via the onError callback
-module.exports.addErrorDetailIf = function addErrorDetailIf(
+/**
+ * Adds an error object with details conditionally via the onError callback.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {Object} expected Expected value.
+ * @param {Object} actual Actual value.
+ * @param {string} [detail] Error details.
+ * @param {string} [context] Error context.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
+ */
+function addErrorDetailIf(
   onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
@@ -609,51 +385,55 @@ module.exports.addErrorDetailIf = function addErrorDetailIf(
       range,
       fixInfo);
   }
-};
-
-// Adds an error object with context via the onError callback
-module.exports.addErrorContext = function addErrorContext(
-  onError, lineNumber, context, left, right, range, fixInfo) {
-  context = ellipsify(context, left, right);
-  addError(onError, lineNumber, undefined, context, range, fixInfo);
-};
+}
+module.exports.addErrorDetailIf = addErrorDetailIf;
 
 /**
- * Returns an array of code block and span content ranges.
+ * Adds an error object with context via the onError callback.
  *
- * @param {Object} params RuleParams instance.
- * @param {Object} lineMetadata Line metadata object.
- * @returns {number[][]} Array of ranges (lineIndex, columnIndex, length).
+ * @param {Object} onError RuleOnError instance.
+ * @param {number} lineNumber Line number.
+ * @param {string} context Error context.
+ * @param {boolean} [start] True iff the start of the text is important.
+ * @param {boolean} [end] True iff the end of the text is important.
+ * @param {number[]} [range] Column and length of error.
+ * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @returns {void}
  */
-module.exports.codeBlockAndSpanRanges = (params, lineMetadata) => {
-  const exclusions = [];
-  // Add code block ranges (excludes fences)
-  forEachLine(lineMetadata, (line, lineIndex, inCode, onFence) => {
-    if (inCode && !onFence) {
-      exclusions.push([ lineIndex, 0, line.length ]);
+function addErrorContext(
+  onError, lineNumber, context, start, end, range, fixInfo) {
+  context = ellipsify(context, start, end);
+  addError(onError, lineNumber, undefined, context, range, fixInfo);
+}
+module.exports.addErrorContext = addErrorContext;
+
+/**
+ * Adds an error object with context for a construct missing a blank line.
+ *
+ * @param {Object} onError RuleOnError instance.
+ * @param {string[]} lines Lines of Markdown content.
+ * @param {number} lineIndex Line index of line.
+ * @param {number} [lineNumber] Line number for override.
+ * @returns {void}
+ */
+function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
+  const line = lines[lineIndex];
+  // @ts-ignore
+  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
+  addErrorContext(
+    onError,
+    lineIndex + 1,
+    line.trim(),
+    undefined,
+    undefined,
+    undefined,
+    {
+      lineNumber,
+      "insertText": `${quotePrefix}\n`
     }
-  });
-  // Add code span ranges (excludes ticks)
-  filterTokens(params, "inline", (token) => {
-    if (token.children.some((child) => child.type === "code_inline")) {
-      const tokenLines = params.lines.slice(token.map[0], token.map[1]);
-      forEachInlineCodeSpan(
-        tokenLines.join("\n"),
-        (code, lineIndex, columnIndex) => {
-          const codeLines = code.split(newLineRe);
-          for (const [ i, line ] of codeLines.entries()) {
-            exclusions.push([
-              token.lineNumber - 1 + lineIndex + i,
-              i ? 0 : columnIndex,
-              line.length
-            ]);
-          }
-        }
-      );
-    }
-  });
-  return exclusions;
-};
+  );
+}
+module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
  * Determines whether the specified range is within another range.
@@ -672,18 +452,6 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
   ))
 );
 module.exports.withinAnyRange = withinAnyRange;
-
-// Returns a range object for a line by applying a RegExp
-module.exports.rangeFromRegExp = function rangeFromRegExp(line, regexp) {
-  let range = null;
-  const match = line.match(regexp);
-  if (match) {
-    const column = match.index + 1;
-    const length = match[0].length;
-    range = [ column, length ];
-  }
-  return range;
-};
 
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =

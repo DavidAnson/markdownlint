@@ -8,6 +8,9 @@
   "emphasis-style": {
     "style": "asterisk"
   },
+  "extended-ascii": {
+    "ascii-only": true
+  },
   "fenced-code-language": {
     "allowed_languages": [
       "bash",

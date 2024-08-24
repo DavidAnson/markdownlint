@@ -2,11 +2,6 @@
 
 "use strict";
 
-const { filterTokens } = require("../../helpers");
-
-/** @typedef {import("../../lib/markdownlint").MarkdownItToken} MarkdownItToken */
-/** @typedef {(MarkdownItToken) => void} FilterTokensCallback */
-
 /** @type import("../../lib/markdownlint").Rule */
 module.exports = {
   "names": [ "any-blockquote" ],
@@ -18,18 +13,15 @@ module.exports = {
   "tags": [ "test" ],
   "parser": "markdownit",
   "function": (params, onError) => {
-    filterTokens(
-      params,
-      "blockquote_open",
-      /** @type FilterTokensCallback */
-      (blockquote) => {
-        const lines = blockquote.map[1] - blockquote.map[0];
-        onError({
-          "lineNumber": blockquote.lineNumber,
-          "detail": "Blockquote spans " + lines + " line(s).",
-          "context": blockquote.line.substr(0, 7)
-        });
-      }
-    );
+    const blockquotes = params.parsers.markdownit.tokens.
+      filter((token => token.type === "blockquote_open"));
+    for (const blockquote of blockquotes) {
+      const lines = blockquote.map[1] - blockquote.map[0];
+      onError({
+        "lineNumber": blockquote.lineNumber,
+        "detail": "Blockquote spans " + lines + " line(s).",
+        "context": blockquote.line.substr(0, 7)
+      });
+    }
   }
 };

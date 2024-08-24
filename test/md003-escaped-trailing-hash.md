@@ -14,8 +14,8 @@
 
 ### Heading with trailing hash {MD003} ##
 
-### Heading with trailing hash no space{MD003}{MD020}##
+### Heading with trailing hash no space{MD020}##
 
-### Heading with trailing hash {MD003}{MD020} \##
+### Heading with trailing hash {MD020} \##
 
-### Heading with trailing hash no space{MD003}{MD020}\##
+### Heading with trailing hash no space{MD020}\##

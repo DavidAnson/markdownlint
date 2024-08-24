@@ -73,21 +73,51 @@ test("simplePromise", (t) => {
   });
 });
 
+const projectFiles = [
+  "*.md",
+  "doc/*.md",
+  "helpers/*.md",
+  "micromark/*.md",
+  "schema/*.md"
+];
+
 test("projectFiles", (t) => {
   t.plan(2);
   return import("globby")
-    .then((module) => module.globby([
-      "*.md",
-      "doc/*.md",
-      "helpers/*.md",
-      "micromark/*.md",
-      "schema/*.md"
-    ]))
+    .then((module) => module.globby(projectFiles))
     .then((files) => {
-      t.is(files.length, 60);
+      t.is(files.length, 61);
       const options = {
         files,
         "config": require("../.markdownlint.json")
+      };
+      // @ts-ignore
+      return markdownlint.promises.markdownlint(options).then((actual) => {
+        const expected = {};
+        for (const file of files) {
+          expected[file] = [];
+        }
+        t.deepEqual(actual, expected, "Issue(s) with project files.");
+      });
+    });
+});
+
+test("projectFilesExtendedAscii", (t) => {
+  t.plan(2);
+  return import("globby")
+    .then((module) => module.globby([
+      ...projectFiles,
+      "!doc/Rules.md",
+      "!doc/md010.md",
+      "!doc/md026.md",
+      "!doc/md036.md"
+    ]))
+    .then((files) => {
+      t.is(files.length, 57);
+      const options = {
+        files,
+        "config": require("../.markdownlint.json"),
+        "customRules": [ require("markdownlint-rule-extended-ascii") ]
       };
       // @ts-ignore
       return markdownlint.promises.markdownlint(options).then((actual) => {
@@ -476,7 +506,7 @@ test("styleAll", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 134 ],
+      "MD047": [ 140 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -484,7 +514,8 @@ test("styleAll", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ]
+      "MD056": [ 114 ],
+      "MD058": [ 117, 119 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -523,7 +554,7 @@ test("styleRelaxed", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 134 ],
+      "MD047": [ 140 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -531,7 +562,8 @@ test("styleRelaxed", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ]
+      "MD056": [ 114 ],
+      "MD058": [ 117, 119 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -838,7 +870,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(126);
+  t.plan(128);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -913,7 +945,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(178);
+  t.plan(179);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1037,7 +1069,7 @@ test("validateConfigExampleJson", (t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(150);
+  t.plan(153);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);
@@ -1072,20 +1104,15 @@ test("someCustomRulesHaveValidUrl", (t) => {
 });
 
 test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
-  t.plan(2);
+  t.plan(4);
   markdownlint({
     "strings": {
-      "string": "# Heading\n\nText [ link ](https://example.com)\n"
+      "string": "# Heading\n\nText\n"
     },
+    // Use a markdown-it custom rule so the markdown-it plugin will be run
+    "customRules": customRules.anyBlockquote,
     "markdownItPlugins": [
-      [
-        pluginInline,
-        "trim_text_plugin",
-        "text",
-        function iterator(tokens, index) {
-          tokens[index].content = tokens[index].content.trim();
-        }
-      ]
+      [ pluginInline, "check_text_plugin", "text", () => t.true(true) ]
     ]
   }, function callback(err, actual) {
     t.falsy(err);
@@ -1101,11 +1128,52 @@ test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
     "strings": {
       "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
     },
+    // Use a markdown-it custom rule so the markdown-it plugin will be run
+    "customRules": customRules.anyBlockquote,
     "markdownItPlugins": [
       [ pluginSub ],
       [ pluginSup ],
       [ pluginInline, "check_sub_plugin", "sub_open", () => t.true(true) ],
       [ pluginInline, "check_sup_plugin", "sup_open", () => t.true(true) ]
+    ]
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
+
+test("markdownItPluginsNoMarkdownIt", (t) => new Promise((resolve) => {
+  t.plan(2);
+  markdownlint({
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    "markdownItPlugins": [
+      [ pluginInline, "check_text_plugin", "text", () => t.fail() ]
+    ]
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
+
+test("markdownItPluginsUnusedUncalled", (t) => new Promise((resolve) => {
+  t.plan(2);
+  markdownlint({
+    "config": {
+      "default": false
+    },
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    // Use a markdown-it custom rule so the markdown-it plugin will be run
+    "customRules": customRules.anyBlockquote,
+    "markdownItPlugins": [
+      [ pluginInline, "check_text_plugin", "text", () => t.fail() ]
     ]
   }, function callback(err, actual) {
     t.falsy(err);

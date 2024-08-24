@@ -11,11 +11,22 @@ const {
 const { newLineRe } = require("./shared.js");
 
 const flatTokensSymbol = Symbol("flat-tokens");
+const reparseSymbol = Symbol("reparse");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+
+/**
+ * Determines if a Micromark token is within an htmlFlow.
+ *
+ * @param {Token} token Micromark token.
+ * @returns {boolean} True iff the token is within an htmlFlow.
+ */
+function inHtmlFlow(token) {
+  return token[reparseSymbol];
+}
 
 /**
  * Returns whether a token is an htmlFlow type containing an HTML comment.
@@ -145,6 +156,9 @@ function micromarkParseWithOffset(
         "children": [],
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
+      if (ancestor) {
+        Object.defineProperty(current, reparseSymbol, { "value": true });
+      }
       previous.children.push(current);
       flatTokens.push(current);
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
@@ -218,6 +232,20 @@ function micromarkParse(
 }
 
 /**
+ * Adds a range of numbers to a set.
+ *
+ * @param {Set<number>} set Set of numbers.
+ * @param {number} start Starting number.
+ * @param {number} end Ending number.
+ * @returns {void}
+ */
+function addRangeToSet(set, start, end) {
+  for (let i = start; i <= end; i++) {
+    set.add(i);
+  }
+}
+
+/**
  * @callback AllowedPredicate
  * @param {Token} token Micromark token.
  * @returns {boolean} True iff allowed.
@@ -277,15 +305,57 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  *
  * @param {Token[]} tokens Micromark tokens.
  * @param {TokenType[]} types Types to allow.
+ * @param {boolean} [htmlFlow] Whether to include htmlFlow content.
  * @returns {Token[]} Filtered tokens.
  */
-function filterByTypes(tokens, types) {
-  const predicate = (token) => types.includes(token.type);
+function filterByTypes(tokens, types, htmlFlow) {
+  const predicate = (token) =>
+    (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
   const flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
   }
   return filterByPredicate(tokens, predicate);
+}
+
+/**
+ * Gets a list of nested Micromark token descendants by type path.
+ *
+ * @param {Token|Token[]} parent Micromark token parent or parents.
+ * @param {TokenType[]} typePath Micromark token type path.
+ * @returns {Token[]} Micromark token descendants.
+ */
+function getDescendantsByType(parent, typePath) {
+  let tokens = Array.isArray(parent) ? parent : [ parent ];
+  for (const type of typePath) {
+    tokens = tokens.flatMap((t) => t.children).filter((t) => t.type === type);
+  }
+  return tokens;
+}
+
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {readonly string[]} ReadonlyStringArray */
+
+/**
+ * Gets the line/column/length exclusions for a Micromark token.
+ *
+ * @param {ReadonlyStringArray} lines File/string lines.
+ * @param {Token} token Micromark token.
+ * @returns {number[][]} Exclusions (line number, start column, length).
+ */
+function getExclusionsForToken(lines, token) {
+  const exclusions = [];
+  const { endColumn, endLine, startColumn, startLine } = token;
+  for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
+    const start = (lineNumber === startLine) ? startColumn : 1;
+    const end = (lineNumber === endLine) ? endColumn : lines[lineNumber - 1].length;
+    exclusions.push([
+      lineNumber,
+      start,
+      end - start + 1
+    ]);
+  }
+  return exclusions;
 }
 
 /**
@@ -307,6 +377,40 @@ function getHeadingLevel(heading) {
     level = 2;
   }
   return level;
+}
+
+/**
+ * Gets the heading style of a Micromark heading tokan.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {"atx" | "atx_closed" | "setext"} Heading style.
+ */
+function getHeadingStyle(heading) {
+  if (heading.type === "setextHeading") {
+    return "setext";
+  }
+  const atxHeadingSequenceLength = filterByTypes(
+    heading.children,
+    [ "atxHeadingSequence" ]
+  ).length;
+  if (atxHeadingSequenceLength === 1) {
+    return "atx";
+  }
+  return "atx_closed";
+}
+
+/**
+ * Gets the heading text of a Micromark heading token.
+ *
+ * @param {Token} heading Micromark heading token.
+ * @returns {string} Heading text.
+ */
+function getHeadingText(heading) {
+  const headingTexts = filterByTypes(
+    heading.children,
+    [ "atxHeadingText", "setextHeadingText" ]
+  );
+  return headingTexts[0]?.text.replace(/[\r\n]+/g, " ") || "";
 }
 
 /**
@@ -368,16 +472,6 @@ function getTokenTextByType(tokens, type) {
 }
 
 /**
- * Determines if a Micromark token has an htmlFlow-type parent.
- *
- * @param {Token} token Micromark token.
- * @returns {boolean} True iff the token has an htmlFlow-type parent.
- */
-function inHtmlFlow(token) {
-  return getTokenParentOfType(token, [ "htmlFlow" ]) !== null;
-}
-
-/**
  * Determines a list of Micromark tokens matches and returns a subset.
  *
  * @param {Token[]} tokens Micromark tokens.
@@ -430,9 +524,14 @@ const nonContentTokens = new Set([
 
 module.exports = {
   "parse": micromarkParse,
+  addRangeToSet,
   filterByPredicate,
   filterByTypes,
+  getDescendantsByType,
+  getExclusionsForToken,
   getHeadingLevel,
+  getHeadingStyle,
+  getHeadingText,
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,

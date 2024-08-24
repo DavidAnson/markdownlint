@@ -113,6 +113,12 @@ Strong **with** different style {MD050}
 |---------|--------|
 | {MD056} |
 
+Text
+| table {MD058} |
+|-------|
+| cell  {MD058} |
+> Blockquote
+
 <!-- markdownlint-configure-file {
   "required-headings": {
     "headings": [

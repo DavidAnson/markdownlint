@@ -15,7 +15,7 @@
   },
   "dtsRollup": {
     "enabled": true,
-    "untrimmedFilePath": "<projectFolder>/micromark.d.ts"
+    "untrimmedFilePath": "<projectFolder>/micromark.d.cts"
   },
   "tsdocMetadata": {
     "enabled": false

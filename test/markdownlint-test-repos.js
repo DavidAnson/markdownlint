@@ -5,7 +5,8 @@
 const { join } = require("node:path").posix;
 const jsoncParser = require("jsonc-parser");
 const jsYaml = require("js-yaml");
-const markdownlint = require("../lib/markdownlint");
+const { markdownlint, readConfig } = require("../lib/markdownlint").promises;
+const markdownlintParallel = require("./markdownlint-test-parallel");
 
 /**
  * Lints a test repository.
@@ -13,9 +14,10 @@ const markdownlint = require("../lib/markdownlint");
  * @param {Object} t Test instance.
  * @param {string[]} globPatterns Array of files to in/exclude.
  * @param {string} configPath Path to config file.
+ * @param {boolean} [parallel] True to lint in parallel.
  * @returns {Promise} Test result.
  */
-async function lintTestRepo(t, globPatterns, configPath) {
+async function lintTestRepo(t, globPatterns, configPath, parallel) {
   t.plan(1);
   const { globby } = await import("globby");
   const jsoncParse = (json) => {
@@ -25,7 +27,7 @@ async function lintTestRepo(t, globPatterns, configPath) {
   const yamlParse = (yaml) => jsYaml.load(yaml);
   return Promise.all([
     globby(globPatterns),
-    markdownlint.promises.readConfig(configPath, [ jsoncParse, yamlParse ])
+    readConfig(configPath, [ jsoncParse, yamlParse ])
   ]).then((globbyAndReadConfigResults) => {
     const [ files, rawConfig ] = globbyAndReadConfigResults;
     // eslint-disable-next-line no-console
@@ -34,16 +36,10 @@ async function lintTestRepo(t, globPatterns, configPath) {
       Object.entries(rawConfig).
         map(([ k, v ]) => [
           k.replace(/header/, "heading"),
-          typeof v === "object" ?
-            Object.fromEntries(
-              // @ts-ignore
-              Object.entries(v).
-                map(([ kk, vv ]) => [ kk.replace(/^allow_different_nesting$/, "siblings_only"), vv ])
-              ) :
-            v
+          v
         ])
     );
-    return markdownlint.promises.markdownlint({
+    return (parallel ? markdownlintParallel : markdownlint)({
       files,
       config
     }).then((results) => {

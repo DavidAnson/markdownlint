@@ -1684,6 +1684,16 @@
       "type": "boolean",
       "default": true
     },
+    "MD058": {
+      "description": "MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md058.md",
+      "type": "boolean",
+      "default": true
+    },
+    "blanks-around-tables": {
+      "description": "MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/md058.md",
+      "type": "boolean",
+      "default": true
+    },
     "headings": {
       "description": "headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1800,7 +1810,7 @@
       "default": true
     },
     "table": {
-      "description": "table : MD055, MD056",
+      "description": "table : MD055, MD056, MD058",
       "type": "boolean",
       "default": true
     }
