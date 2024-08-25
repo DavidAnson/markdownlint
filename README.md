@@ -354,16 +354,16 @@ Type: `Object` mapping `String` to `Boolean | Object`
 
 Configures the rules to use.
 
-Object keys are rule names or aliases and values are the rule's configuration.
+Object keys are rule names/aliases; object values are the rule's configuration.
 The value `false` disables a rule, `true` enables its default configuration,
-and passing an object customizes its settings. Setting the special `default`
-rule to `true` or `false` includes/excludes all rules by default. Enabling
-or disabling a tag name (ex: `whitespace`) affects all rules having that
-tag.
+and passing an object value customizes that rule. Setting the special `default`
+rule to `true` or `false` includes/excludes all rules by default. In the absence
+of a configuration object, all rules are enabled. Enabling or disabling a tag
+name (ex: `whitespace`) affects all rules having that tag.
 
-The `default` rule is applied first, then keys are processed in order
-from top to bottom with later values overriding earlier ones. Keys
-(including rule names, aliases, tags, and `default`) are not case-sensitive.
+The `default` rule is applied first, then keys are processed in order from top
+to bottom with later values overriding earlier ones. Keys (including rule names,
+aliases, tags, and `default`) are not case-sensitive.
 
 Example:
 
