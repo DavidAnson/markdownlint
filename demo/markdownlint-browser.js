@@ -1496,24 +1496,79 @@ module.exports = {
 /*!***********************!*\
   !*** ../lib/cache.js ***!
   \***********************/
-/***/ ((module) => {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
 // @ts-check
 
 
 
+const helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+
+/** @type {Map<string, object>} */
 const map = new Map();
+// eslint-disable-next-line no-undef-init
+let params = undefined;
 
-module.exports.set = (keyValuePairs) => {
-  for (const [ key, value ] of Object.entries(keyValuePairs)) {
-    map.set(key, value);
+/**
+ * Initializes (resets) the cache.
+ *
+ * @param {import("./markdownlint").RuleParams} [p] Rule parameters object.
+ * @returns {void}
+ */
+function initialize(p) {
+  map.clear();
+  params = p;
+}
+
+/**
+ * Gets a cached object value - computes it and caches it.
+ *
+ * @param {string} name Cache object name.
+ * @param {Function} getValue Getter for object value.
+ * @returns {Object} Object value.
+ */
+function getCached(name, getValue) {
+  if (map.has(name)) {
+    return map.get(name);
   }
-};
-module.exports.clear = () => map.clear();
+  const value = getValue();
+  map.set(name, value);
+  return value;
+}
 
-module.exports.referenceLinkImageData =
-  () => map.get("referenceLinkImageData");
+/**
+ * Filters a list of Micromark tokens by type and caches the result.
+ *
+ * @param {import("./markdownlint").MicromarkTokenType[]} types Types to allow.
+ * @param {boolean} [htmlFlow] Whether to include htmlFlow content.
+ * @returns {import("./markdownlint").MicromarkToken[]} Filtered tokens.
+ */
+function filterByTypesCached(types, htmlFlow) {
+  return getCached(
+    types.join("|"),
+    () => filterByTypes(params.parsers.micromark.tokens, types, htmlFlow)
+  );
+}
+
+/**
+ * Gets a reference link and image data object.
+ *
+ * @returns {Object} Reference link and image data object.
+ */
+function getReferenceLinkImageData() {
+  return getCached(
+    getReferenceLinkImageData.name,
+    () => helpers.getReferenceLinkImageData(params.parsers.micromark.tokens)
+  );
+}
+
+module.exports = {
+  initialize,
+  filterByTypesCached,
+  getReferenceLinkImageData
+};
 
 
 /***/ }),
@@ -2157,14 +2212,13 @@ function lintContent(
   const parsersNone = Object.freeze({});
   const paramsBase = {
     name,
-    "parsers": parsersMarkdownIt,
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
-  const referenceLinkImageData =
-    helpers.getReferenceLinkImageData(micromarkTokens);
-  cache.set({
-    referenceLinkImageData
+  cache.initialize({
+    ...paramsBase,
+    "parsers": parsersMicromark,
+    "config": null
   });
   // Function to run for each rule
   let results = [];
@@ -2379,7 +2433,7 @@ function lintContent(
   } catch (error) {
     callbackError(error);
   } finally {
-    cache.clear();
+    cache.initialize();
   }
 }
 
@@ -3133,7 +3187,8 @@ module.exports = markdownlint;
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3144,11 +3199,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD001(params, onError) {
     let prevLevel = Number.MAX_SAFE_INTEGER;
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "setextHeading" ]
-    );
-    for (const heading of headings) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       const level = getHeadingLevel(heading);
       if (level > prevLevel) {
         addErrorDetailIf(
@@ -3178,8 +3229,8 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, getHeadingStyle } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3190,11 +3241,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD003(params, onError) {
     let style = String(params.config.style || "consistent");
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "setextHeading" ]
-    );
-    for (const heading of headings) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       const styleForToken = getHeadingStyle(heading);
       if (style === "consistent") {
         style = styleForToken;
@@ -3243,7 +3290,8 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getDescendantsByType, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const markerToStyle = {
   "-": "dash",
@@ -3279,11 +3327,12 @@ module.exports = {
     const style = String(params.config.style || "consistent");
     let expectedStyle = validStyles.has(style) ? style : "dash";
     const nestingStyles = [];
-    for (const listUnordered of filterByTypes(params.parsers.micromark.tokens, [ "listUnordered" ])) {
+    for (const listUnordered of filterByTypesCached([ "listUnordered" ])) {
       let nesting = 0;
       if (style === "sublist") {
         /** @type {import("../helpers/micromark.cjs").Token | null} */
         let parent = listUnordered;
+        // @ts-ignore
         while ((parent = getTokenParentOfType(parent, [ "listOrdered", "listUnordered" ]))) {
           nesting++;
         }
@@ -3338,7 +3387,7 @@ module.exports = {
 
 
 const { addError, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3348,11 +3397,7 @@ module.exports = {
   "tags": [ "bullet", "ul", "indentation" ],
   "parser": "micromark",
   "function": function MD005(params, onError) {
-    const lists = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "listOrdered", "listUnordered" ]
-    );
-    for (const list of lists) {
+    for (const list of filterByTypesCached([ "listOrdered", "listUnordered" ])) {
       const expectedIndent = list.startColumn - 1;
       let expectedEnd = 0;
       let endMatching = false;
@@ -3425,7 +3470,8 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("markdownlint-micromark").TokenType[] */
@@ -3449,10 +3495,7 @@ module.exports = {
     const startIndent = Number(params.config.start_indent || indent);
     const unorderedListNesting = new Map();
     let lastBlockQuotePrefix = null;
-    const tokens = filterByTypes(
-      params.parsers.micromark.tokens,
-      unorderedListTypes
-    );
+    const tokens = filterByTypesCached(unorderedListTypes);
     for (const token of tokens) {
       const { endColumn, parent, startColumn, startLine, type } = token;
       if (type === "blockQuotePrefix") {
@@ -3462,6 +3505,7 @@ module.exports = {
         /** @type {import("../helpers/micromark.cjs").Token | null} */
         let current = token;
         while (
+          // @ts-ignore
           (current = getTokenParentOfType(current, unorderedParentTypes))
         ) {
           if (current.type === "listUnordered") {
@@ -3525,7 +3569,8 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3539,17 +3584,16 @@ module.exports = {
     brSpaces = Number((brSpaces === undefined) ? 2 : brSpaces);
     const listItemEmptyLines = !!params.config.list_item_empty_lines;
     const strict = !!params.config.strict;
-    const { tokens } = params.parsers.micromark;
     const codeBlockLineNumbers = new Set();
-    for (const codeBlock of filterByTypes(tokens, [ "codeFenced" ])) {
+    for (const codeBlock of filterByTypesCached([ "codeFenced" ])) {
       addRangeToSet(codeBlockLineNumbers, codeBlock.startLine + 1, codeBlock.endLine - 1);
     }
-    for (const codeBlock of filterByTypes(tokens, [ "codeIndented" ])) {
+    for (const codeBlock of filterByTypesCached([ "codeIndented" ])) {
       addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
     }
     const listItemLineNumbers = new Set();
     if (listItemEmptyLines) {
-      for (const listBlock of filterByTypes(tokens, [ "listOrdered", "listUnordered" ])) {
+      for (const listBlock of filterByTypesCached([ "listOrdered", "listUnordered" ])) {
         addRangeToSet(listItemLineNumbers, listBlock.startLine, listBlock.endLine);
         let trailingIndent = true;
         for (let i = listBlock.children.length - 1; i >= 0; i--) {
@@ -3575,10 +3619,10 @@ module.exports = {
     const paragraphLineNumbers = new Set();
     const codeInlineLineNumbers = new Set();
     if (strict) {
-      for (const paragraph of filterByTypes(tokens, [ "paragraph" ])) {
+      for (const paragraph of filterByTypesCached([ "paragraph" ])) {
         addRangeToSet(paragraphLineNumbers, paragraph.startLine, paragraph.endLine - 1);
       }
-      for (const codeText of filterByTypes(tokens, [ "codeText" ])) {
+      for (const codeText of filterByTypesCached([ "codeText" ])) {
         addRangeToSet(codeInlineLineNumbers, codeText.startLine, codeText.endLine - 1);
       }
     }
@@ -3631,7 +3675,8 @@ module.exports = {
 
 
 const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getDescendantsByType, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const tabRe = /\t+/g;
 
@@ -3664,10 +3709,7 @@ module.exports = {
     } else {
       exclusionTypes.push("codeFenced", "codeIndented", "codeText");
     }
-    const codeTokens = filterByTypes(
-      params.parsers.micromark.tokens,
-      exclusionTypes
-    ).filter((token) => {
+    const codeTokens = filterByTypesCached(exclusionTypes).filter((token) => {
       if ((token.type === "codeFenced") && (ignoreCodeLanguages.size > 0)) {
         const fenceInfos = getDescendantsByType(token, [ "codeFencedFence", "codeFencedFenceInfo" ]);
         return fenceInfos.every((fenceInfo) => ignoreCodeLanguages.has(fenceInfo.text.toLowerCase()));
@@ -3722,7 +3764,8 @@ module.exports = {
 
 
 const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet, getExclusionsForToken, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const reversedLinkRe =
   /(^|[^\\])\(([^()]+)\)\[([^\]^][^\]]*)\](?!\()/g;
@@ -3735,13 +3778,12 @@ module.exports = {
   "tags": [ "links" ],
   "parser": "micromark",
   "function": function MD011(params, onError) {
-    const { tokens } = params.parsers.micromark;
     const codeBlockLineNumbers = new Set();
-    for (const codeBlock of filterByTypes(tokens, [ "codeFenced", "codeIndented" ])) {
+    for (const codeBlock of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
       addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
     }
     const exclusions = [];
-    for (const codeText of filterByTypes(tokens, [ "codeText" ])) {
+    for (const codeText of filterByTypesCached([ "codeText" ])) {
       exclusions.push(...getExclusionsForToken(params.lines, codeText));
     }
     for (const [ lineIndex, line ] of params.lines.entries()) {
@@ -3790,7 +3832,8 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -3801,9 +3844,9 @@ module.exports = {
   "parser": "micromark",
   "function": function MD012(params, onError) {
     const maximum = Number(params.config.maximum || 1);
-    const { lines, parsers } = params;
+    const { lines } = params;
     const codeBlockLineNumbers = new Set();
-    for (const codeBlock of filterByTypes(parsers.micromark.tokens, [ "codeFenced", "codeIndented" ])) {
+    for (const codeBlock of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
       addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
     }
     let count = 0;
@@ -3843,8 +3886,9 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const { addRangeToSet, filterByTypes, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getReferenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { addRangeToSet, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const longLineRePrefix = "^.{";
 const longLineRePostfixRelaxed = "}.*\\s.*$";
@@ -3880,25 +3924,24 @@ module.exports = {
     const includeTables = (tables === undefined) ? true : !!tables;
     const headings = params.config.headings;
     const includeHeadings = (headings === undefined) ? true : !!headings;
-    const { tokens } = params.parsers.micromark;
     const headingLineNumbers = new Set();
-    for (const heading of filterByTypes(tokens, [ "atxHeading", "setextHeading" ])) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       addRangeToSet(headingLineNumbers, heading.startLine, heading.endLine);
     }
     const codeBlockLineNumbers = new Set();
-    for (const codeBlock of filterByTypes(tokens, [ "codeFenced", "codeIndented" ])) {
+    for (const codeBlock of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
       addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
     }
     const tableLineNumbers = new Set();
-    for (const table of filterByTypes(tokens, [ "table" ])) {
+    for (const table of filterByTypesCached([ "table" ])) {
       addRangeToSet(tableLineNumbers, table.startLine, table.endLine);
     }
     const linkLineNumbers = new Set();
-    for (const link of filterByTypes(tokens, [ "autolink", "image", "link", "literalAutolink" ])) {
+    for (const link of filterByTypesCached([ "autolink", "image", "link", "literalAutolink" ])) {
       addRangeToSet(linkLineNumbers, link.startLine, link.endLine);
     }
     const paragraphDataLineNumbers = new Set();
-    for (const paragraph of filterByTypes(tokens, [ "paragraph" ])) {
+    for (const paragraph of filterByTypesCached([ "paragraph" ])) {
       for (const data of getDescendantsByType(paragraph, [ "data" ])) {
         addRangeToSet(paragraphDataLineNumbers, data.startLine, data.endLine);
       }
@@ -3909,7 +3952,7 @@ module.exports = {
         linkOnlyLineNumbers.add(lineNumber);
       }
     }
-    const definitionLineIndices = new Set(referenceLinkImageData().definitionLineIndices);
+    const definitionLineIndices = new Set(getReferenceLinkImageData().definitionLineIndices);
     for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
       const line = params.lines[lineIndex];
       const lineNumber = lineIndex + 1;
@@ -3960,6 +4003,7 @@ module.exports = {
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const dollarCommandRe = /^(\s*)(\$\s+)/;
 
@@ -3971,11 +4015,7 @@ module.exports = {
   "tags": [ "code" ],
   "parser": "micromark",
   "function": function MD014(params, onError) {
-    const codeBlocks = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "codeFenced", "codeIndented" ]
-    );
-    for (const codeBlock of codeBlocks) {
+    for (const codeBlock of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
       const codeFlowValues = filterByTypes(
         codeBlock.children,
         [ "codeFlowValue" ]
@@ -4027,7 +4067,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4037,9 +4078,9 @@ module.exports = {
   "tags": [ "headings", "atx", "spaces" ],
   "parser": "micromark",
   "function": function MD018(params, onError) {
-    const { lines, parsers } = params;
+    const { lines } = params;
     const ignoreBlockLineNumbers = new Set();
-    for (const ignoreBlock of filterByTypes(parsers.micromark.tokens, [ "codeIndented", "codeFenced", "htmlFlow" ])) {
+    for (const ignoreBlock of filterByTypesCached([ "codeFenced", "codeIndented", "htmlFlow" ])) {
       addRangeToSet(ignoreBlockLineNumbers, ignoreBlock.startLine, ignoreBlock.endLine);
     }
     for (const [ lineIndex, line ] of lines.entries()) {
@@ -4083,7 +4124,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers/helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /**
  * Validate heading sequence and whitespace length at start or end.
@@ -4135,10 +4177,8 @@ module.exports = [
     "tags": [ "headings", "atx", "spaces" ],
     "parser": "micromark",
     "function": function MD019(params, onError) {
-      const atxHeadings = filterByTypes(
-        params.parsers.micromark.tokens,
-        [ "atxHeading" ]
-      ).filter((heading) => getHeadingStyle(heading) === "atx");
+      const atxHeadings = filterByTypesCached([ "atxHeading" ])
+        .filter((heading) => getHeadingStyle(heading) === "atx");
       for (const atxHeading of atxHeadings) {
         validateHeadingSpaces(onError, atxHeading, 1);
       }
@@ -4150,10 +4190,8 @@ module.exports = [
     "tags": [ "headings", "atx_closed", "spaces" ],
     "parser": "micromark",
     "function": function MD021(params, onError) {
-      const atxClosedHeadings = filterByTypes(
-        params.parsers.micromark.tokens,
-        [ "atxHeading" ]
-      ).filter((heading) => getHeadingStyle(heading) === "atx_closed");
+      const atxClosedHeadings = filterByTypesCached([ "atxHeading" ])
+        .filter((heading) => getHeadingStyle(heading) === "atx_closed");
       for (const atxClosedHeading of atxClosedHeadings) {
         validateHeadingSpaces(onError, atxClosedHeading, 1);
         validateHeadingSpaces(onError, atxClosedHeading, -1);
@@ -4177,7 +4215,8 @@ module.exports = [
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4187,9 +4226,9 @@ module.exports = {
   "tags": [ "headings", "atx_closed", "spaces" ],
   "parser": "micromark",
   "function": function MD020(params, onError) {
-    const { lines, parsers } = params;
+    const { lines } = params;
     const ignoreBlockLineNumbers = new Set();
-    for (const ignoreBlock of filterByTypes(parsers.micromark.tokens, [ "codeIndented", "codeFenced", "htmlFlow" ])) {
+    for (const ignoreBlock of filterByTypesCached([ "codeFenced", "codeIndented", "htmlFlow" ])) {
       addRangeToSet(ignoreBlockLineNumbers, ignoreBlock.startLine, ignoreBlock.endLine);
     }
     for (const [ lineIndex, line ] of lines.entries()) {
@@ -4257,9 +4296,9 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const defaultLines = 1;
 
@@ -4296,12 +4335,7 @@ module.exports = {
     const getLinesAbove = getLinesFunction(params.config.lines_above);
     const getLinesBelow = getLinesFunction(params.config.lines_below);
     const { lines } = params;
-    const headings = filterByTypes(
-      // eslint-disable-next-line unicorn/consistent-destructuring
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "setextHeading" ]
-    );
-    for (const heading of headings) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       const { startLine, endLine } = heading;
       const line = lines[startLine - 1].trim();
 
@@ -4380,7 +4414,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4390,10 +4424,7 @@ module.exports = {
   "tags": [ "headings", "spaces" ],
   "parser": "micromark",
   "function": function MD023(params, onError) {
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "linePrefix", "setextHeading" ]
-    );
+    const headings = filterByTypesCached([ "atxHeading", "linePrefix", "setextHeading" ]);
     for (let i = 0; i < headings.length - 1; i++) {
       if (
         (headings[i].type === "linePrefix") &&
@@ -4434,7 +4465,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4448,11 +4480,7 @@ module.exports = {
     const knownContents = [ null, [] ];
     let lastLevel = 1;
     let knownContent = knownContents[lastLevel];
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "setextHeading" ]
-    );
-    for (const heading of headings) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       const headingText = getHeadingText(heading);
       if (siblingsOnly) {
         const newLevel = getHeadingLevel(heading);
@@ -4496,7 +4524,8 @@ module.exports = {
 
 
 const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4513,11 +4542,7 @@ module.exports = {
         params.config.front_matter_title
       );
     let hasTopLevelHeading = false;
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "setextHeading" ]
-    );
-    for (const heading of headings) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       const headingLevel = getHeadingLevel(heading);
       if (headingLevel === level) {
         if (hasTopLevelHeading || foundFrontMatterTitle) {
@@ -4551,7 +4576,7 @@ module.exports = {
 
 const { addError, allPunctuationNoQuestion, endOfLineGemojiCodeRe,
   endOfLineHtmlEntityRe, escapeForRegExp } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4567,10 +4592,7 @@ module.exports = {
     );
     const trailingPunctuationRe =
       new RegExp("\\s*[" + escapeForRegExp(punctuation) + "]+$");
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeadingText", "setextHeadingText" ]
-    );
+    const headings = filterByTypesCached([ "atxHeadingText", "setextHeadingText" ]);
     for (const heading of headings) {
       const { endColumn, endLine, text } = heading;
       const match = trailingPunctuationRe.exec(text);
@@ -4613,7 +4635,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4623,9 +4645,8 @@ module.exports = {
   "tags": ["blockquote", "whitespace", "indentation"],
   "parser": "micromark",
   "function": function MD027(params, onError) {
-    const micromarkTokens = params.parsers.micromark.tokens;
-    for (const token of filterByTypes(micromarkTokens, [ "linePrefix" ])) {
-      const siblings = token.parent?.children || micromarkTokens;
+    for (const token of filterByTypesCached([ "linePrefix" ])) {
+      const siblings = token.parent?.children || params.parsers.micromark.tokens;
       if (siblings[siblings.indexOf(token) - 1]?.type === "blockQuotePrefix") {
         const { startColumn, startLine, text } = token;
         const { length } = text;
@@ -4662,7 +4683,7 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const ignoreTypes = new Set([ "lineEnding", "listItemIndent", "linePrefix" ]);
 
@@ -4674,10 +4695,9 @@ module.exports = {
   "tags": [ "blockquote", "whitespace" ],
   "parser": "micromark",
   "function": function MD028(params, onError) {
-    const micromarkTokens = params.parsers.micromark.tokens;
-    for (const token of filterByTypes(micromarkTokens, [ "blockQuote" ])) {
+    for (const token of filterByTypesCached([ "blockQuote" ])) {
       const errorLineNumbers = [];
-      const siblings = token.parent?.children || micromarkTokens;
+      const siblings = token.parent?.children || params.parsers.micromark.tokens;
       for (let i = siblings.indexOf(token) + 1; i < siblings.length; i++) {
         const sibling = siblings[i];
         const { startLine, type } = sibling;
@@ -4716,7 +4736,8 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const listStyleExamples = {
   "one": "1/1/1",
@@ -4743,7 +4764,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD029(params, onError) {
     const style = String(params.config.style || "one_or_ordered");
-    for (const listOrdered of filterByTypes(params.parsers.micromark.tokens, [ "listOrdered" ])) {
+    for (const listOrdered of filterByTypesCached([ "listOrdered" ])) {
       const listItemPrefixes = getDescendantsByType(listOrdered, [ "listItemPrefix" ]);
       let expected = 1;
       let incrementing = false;
@@ -4802,7 +4823,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -4816,11 +4837,7 @@ module.exports = {
     const olSingle = Number(params.config.ol_single || 1);
     const ulMulti = Number(params.config.ul_multi || 1);
     const olMulti = Number(params.config.ol_multi || 1);
-    const lists = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "listOrdered", "listUnordered" ]
-    );
-    for (const list of lists) {
+    for (const list of filterByTypesCached([ "listOrdered", "listUnordered" ])) {
       const ordered = (list.type === "listOrdered");
       const listItemPrefixes =
         list.children.filter((token) => (token.type === "listItemPrefix"));
@@ -4877,7 +4894,8 @@ module.exports = {
 
 
 const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const codeFencePrefixRe = /^(.*?)[`~]/;
 
@@ -4921,8 +4939,8 @@ module.exports = {
   "function": function MD031(params, onError) {
     const listItems = params.config.list_items;
     const includeListItems = (listItems === undefined) ? true : !!listItems;
-    const { lines, parsers } = params;
-    for (const codeBlock of filterByTypes(parsers.micromark.tokens, [ "codeFenced" ])) {
+    const { lines } = params;
+    for (const codeBlock of filterByTypesCached([ "codeFenced" ])) {
       if (includeListItems || !(getTokenParentOfType(codeBlock, [ "listOrdered", "listUnordered" ]))) {
         if (!isBlankLine(lines[codeBlock.startLine - 2])) {
           addError(onError, lines, codeBlock.startLine, true);
@@ -5027,8 +5045,8 @@ module.exports = {
 
 
 const { addError, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHtmlTagInfo } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5041,7 +5059,7 @@ module.exports = {
     let allowedElements = params.config.allowed_elements;
     allowedElements = Array.isArray(allowedElements) ? allowedElements : [];
     allowedElements = allowedElements.map((element) => element.toLowerCase());
-    for (const token of filterByTypes(params.parsers.micromark.tokens, [ "htmlText" ], true)) {
+    for (const token of filterByTypesCached([ "htmlText" ], true)) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (
         htmlTagInfo &&
@@ -5079,8 +5097,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, filterByTypes, getHtmlTagInfo, inHtmlFlow, parse } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, getHtmlTagInfo, inHtmlFlow, parse } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5146,10 +5164,7 @@ module.exports = {
         }
       )
     );
-    const autoLinks = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "literalAutolink" ]
-    );
+    const autoLinks = filterByTypesCached([ "literalAutolink" ]);
     if (autoLinks.length > 0) {
       // Re-parse with correct link/image reference definition handling
       const document = params.lines.join("\n");
@@ -5193,7 +5208,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5204,10 +5219,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD035(params, onError) {
     let style = String(params.config.style || "consistent").trim();
-    const thematicBreaks = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "thematicBreak" ]
-    );
+    const thematicBreaks = filterByTypesCached([ "thematicBreak" ]);
     for (const token of thematicBreaks) {
       const { startLine, text } = token;
       if (style === "consistent") {
@@ -5233,7 +5245,8 @@ module.exports = {
 
 
 const { addErrorContext, allPunctuation } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, matchAndGetTokensByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { matchAndGetTokensByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /** @typedef {import("../helpers/micromark.cjs").TokenType} TokenType */
 /** @type {Map<TokenType, TokenType[]>} */
@@ -5254,7 +5267,7 @@ module.exports = {
     punctuation = String((punctuation === undefined) ? allPunctuation : punctuation);
     const punctuationRe = new RegExp("[" + punctuation + "]$");
     const paragraphTokens =
-      filterByTypes(params.parsers.micromark.tokens, [ "paragraph" ]).
+      filterByTypesCached([ "paragraph" ]).
         filter((token) =>
           (token.parent?.type === "content") && !token.parent?.parent && (token.children.length === 1)
         );
@@ -5399,7 +5412,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const leftSpaceRe = /^\s(?:[^`]|$)/;
 const rightSpaceRe = /[^`]\s$/;
@@ -5422,10 +5436,7 @@ module.exports = {
   "tags": [ "whitespace", "code" ],
   "parser": "micromark",
   "function": function MD038(params, onError) {
-    const codeTexts = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "codeText" ]
-    );
+    const codeTexts = filterByTypesCached([ "codeText" ]);
     for (const codeText of codeTexts) {
       const { children } = codeText;
       const first = 0;
@@ -5513,7 +5524,7 @@ module.exports = {
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /**
  * Adds an error for a label space issue.
@@ -5565,11 +5576,9 @@ module.exports = {
   "tags": [ "whitespace", "links" ],
   "parser": "micromark",
   "function": function MD039(params, onError) {
-    const { definitions } = referenceLinkImageData();
-    const labels = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "label" ]
-    ).filter((label) => label.parent?.type === "link");
+    const { definitions } = getReferenceLinkImageData();
+    const labels = filterByTypesCached([ "label" ]).
+      filter((label) => label.parent?.type === "link");
     for (const label of labels) {
       const labelTexts = filterByTypes(
         label.children,
@@ -5608,8 +5617,8 @@ module.exports = {
 
 
 const { addError, addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getTokenTextByType, tokenIfType } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getTokenTextByType, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5622,10 +5631,7 @@ module.exports = {
     let allowed = params.config.allowed_languages;
     allowed = Array.isArray(allowed) ? allowed : [];
     const languageOnly = !!params.config.language_only;
-    const fencedCodes = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "codeFenced" ]
-    );
+    const fencedCodes = filterByTypesCached([ "codeFenced" ]);
     for (const fencedCode of fencedCodes) {
       const openingFence = tokenIfType(fencedCode.children[0], "codeFencedFence");
       if (openingFence) {
@@ -5707,8 +5713,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType, filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5718,15 +5724,12 @@ module.exports = {
   "tags": [ "links" ],
   "parser": "micromark",
   "function": function MD042(params, onError) {
-    const { definitions } = referenceLinkImageData();
+    const { definitions } = getReferenceLinkImageData();
     const isReferenceDefinitionHash = (token) => {
       const definition = definitions.get(token.text.trim());
       return (definition && (definition[1] === "#"));
     };
-    const links = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "link" ]
-    );
+    const links = filterByTypesCached([ "link" ]);
     for (const link of links) {
       const labelText = getDescendantsByType(link, [ "label", "labelText" ]);
       const reference = getDescendantsByType(link, [ "reference" ]);
@@ -5784,7 +5787,8 @@ module.exports = {
 
 
 const { addErrorContext, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5806,11 +5810,7 @@ module.exports = {
     let anyHeadings = false;
     const getExpected = () => requiredHeadings[i++] || "[None]";
     const handleCase = (str) => (matchCase ? str : str.toLowerCase());
-    const headings = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "atxHeading", "setextHeading" ]
-    );
-    for (const heading of headings) {
+    for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       if (!hasError) {
         const headingText = getHeadingText(heading);
         const headingLevel = getHeadingLevel(heading);
@@ -5993,6 +5993,7 @@ module.exports = {
 
 const { addError, getHtmlAttributeRe, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const altRe = getHtmlAttributeRe("alt");
 
@@ -6004,13 +6005,8 @@ module.exports = {
   "tags": [ "accessibility", "images" ],
   "parser": "micromark",
   "function": function MD045(params, onError) {
-    const micromarkTokens = params.parsers.micromark.tokens;
-
     // Process Markdown images
-    const images = filterByTypes(
-      micromarkTokens,
-      [ "image" ]
-    );
+    const images = filterByTypesCached([ "image" ]);
     for (const image of images) {
       const labelTexts = filterByTypes(image.children, [ "labelText" ]);
       if (labelTexts.some((labelText) => labelText.text.length === 0)) {
@@ -6028,11 +6024,7 @@ module.exports = {
     }
 
     // Process HTML images
-    const htmlTexts = filterByTypes(
-      micromarkTokens,
-      [ "htmlText" ],
-      true
-    );
+    const htmlTexts = filterByTypesCached([ "htmlText" ], true);
     for (const htmlText of htmlTexts) {
       const { startColumn, startLine, text } = htmlText;
       const htmlTagInfo = getHtmlTagInfo(htmlText);
@@ -6073,7 +6065,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const tokenTypeToStyle = {
   "codeFenced": "fenced",
@@ -6089,11 +6081,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD046(params, onError) {
     let expectedStyle = String(params.config.style || "consistent");
-    const codeBlocksAndFences = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "codeFenced", "codeIndented" ]
-    );
-    for (const token of codeBlocksAndFences) {
+    for (const token of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
       const { startLine, type } = token;
       if (expectedStyle === "consistent") {
         expectedStyle = tokenTypeToStyle[type];
@@ -6164,7 +6152,8 @@ module.exports = {
 
 
 const { addErrorDetailIf, fencedCodeBlockStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -6176,10 +6165,7 @@ module.exports = {
   "function": function MD048(params, onError) {
     const style = String(params.config.style || "consistent");
     let expectedStyle = style;
-    const codeFenceds = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "codeFenced" ]
-    );
+    const codeFenceds = filterByTypesCached([ "codeFenced" ]);
     for (const codeFenced of codeFenceds) {
       const codeFencedFence = tokenIfType(codeFenced.children[0], "codeFencedFence");
       if (codeFencedFence) {
@@ -6329,10 +6315,9 @@ module.exports = [
 
 
 
-const { addError, addErrorDetailIf, getHtmlAttributeRe } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, filterByTypes, getHtmlTagInfo } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, addErrorDetailIf, getHtmlAttributeRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // Regular expression for identifying HTML anchor names
 const idRe = getHtmlAttributeRe("id");
@@ -6396,11 +6381,10 @@ module.exports = {
   "tags": [ "links" ],
   "parser": "micromark",
   "function": function MD051(params, onError) {
-    const micromarkTokens = params.parsers.micromark.tokens;
     const fragments = new Map();
 
     // Process headings
-    const headingTexts = filterByTypes(micromarkTokens, [ "atxHeadingText", "setextHeadingText" ]);
+    const headingTexts = filterByTypesCached([ "atxHeadingText", "setextHeadingText" ]);
     for (const headingText of headingTexts) {
       const fragment = convertHeadingToHTMLFragment(headingText);
       if (fragment !== "#") {
@@ -6420,7 +6404,7 @@ module.exports = {
     }
 
     // Process HTML anchors
-    for (const token of filterByTypes(micromarkTokens, [ "htmlText" ], true)) {
+    for (const token of filterByTypesCached([ "htmlText" ], true)) {
       const htmlTagInfo = getHtmlTagInfo(token);
       if (htmlTagInfo && !htmlTagInfo.close) {
         const anchorMatch = idRe.exec(token.text) ||
@@ -6439,7 +6423,7 @@ module.exports = {
       [ "definition", "definitionDestinationString" ]
     ];
     for (const [ parentType, definitionType ] of parentChilds) {
-      const links = filterByTypes(micromarkTokens, [ parentType ]);
+      const links = filterByTypesCached([ parentType ]);
       for (const link of links) {
         const definitions = filterByTypes(link.children, [ definitionType ]);
         for (const definition of definitions) {
@@ -6513,7 +6497,7 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { getReferenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -6526,7 +6510,7 @@ module.exports = {
   "function": function MD052(params, onError) {
     const { config, lines } = params;
     const shortcutSyntax = config.shortcut_syntax || false;
-    const { definitions, references, shortcuts } = referenceLinkImageData();
+    const { definitions, references, shortcuts } = getReferenceLinkImageData();
     const entries = shortcutSyntax ?
       [ ...references.entries(), ...shortcuts.entries() ] :
       references.entries();
@@ -6567,7 +6551,7 @@ module.exports = {
 
 const { addError, ellipsify, linkReferenceDefinitionRe } =
   __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { getReferenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -6580,7 +6564,7 @@ module.exports = {
     const ignored = new Set(params.config.ignored_definitions || [ "//" ]);
     const lines = params.lines;
     const { references, shortcuts, definitions, duplicateDefinitions } =
-      referenceLinkImageData();
+      getReferenceLinkImageData();
     const singleLineDefinition = (line) => (
       line.replace(linkReferenceDefinitionRe, "").trim().length > 0
     );
@@ -6639,9 +6623,8 @@ module.exports = {
 
 
 const { addErrorContext, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, filterByPredicate, getTokenTextByType } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
-const { referenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
+const { filterByPredicate, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const backslashEscapeRe = /\\([!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g;
 const removeBackslashEscapes = (text) => text.replace(backslashEscapeRe, "$1");
@@ -6676,11 +6659,8 @@ module.exports = {
       // Everything allowed, nothing to check
       return;
     }
-    const { definitions } = referenceLinkImageData();
-    const links = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "autolink", "image", "link" ]
-    );
+    const { definitions } = getReferenceLinkImageData();
+    const links = filterByTypesCached([ "autolink", "image", "link" ]);
     for (const link of links) {
       let label = null;
       let destination = null;
@@ -6780,6 +6760,7 @@ module.exports = {
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const whitespaceTypes = new Set([ "linePrefix", "whitespace" ]);
 const ignoreWhitespace = (tokens) => tokens.filter(
@@ -6803,10 +6784,7 @@ module.exports = {
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "trailing_only"));
     let expectedTrailingPipe =
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "leading_only"));
-    const tables = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "table" ]
-    );
+    const tables = filterByTypesCached([ "table" ]);
     for (const table of tables) {
       const rows = filterByTypes(
         table.children,
@@ -6872,6 +6850,7 @@ module.exports = {
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const makeRange = (start, end) => [ start, end - start + 1 ];
 
@@ -6883,10 +6862,7 @@ module.exports = {
   "tags": [ "table" ],
   "parser": "micromark",
   "function": function MD056(params, onError) {
-    const tables = filterByTypes(
-      params.parsers.micromark.tokens,
-      [ "table" ]
-    );
+    const tables = filterByTypesCached([ "table" ]);
     for (const table of tables) {
       const rows = filterByTypes(
         table.children,
@@ -6940,7 +6916,7 @@ module.exports = {
 
 
 const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -6950,12 +6926,9 @@ module.exports = {
   "tags": [ "table" ],
   "parser": "micromark",
   "function": function MD058(params, onError) {
-    const { lines, parsers } = params;
+    const { lines } = params;
     // For every table...
-    const tables = filterByTypes(
-      parsers.micromark.tokens,
-      [ "table" ]
-    );
+    const tables = filterByTypesCached([ "table" ]);
     for (const table of tables) {
       // Look for a blank line above the table
       const firstIndex = table.startLine - 1;

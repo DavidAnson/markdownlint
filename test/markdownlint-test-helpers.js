@@ -921,8 +921,8 @@ test("getReferenceLinkImageData().shortcuts", (t) => {
         "parser": "none",
         "function":
           () => {
-            const { referenceLinkImageData } = require("../lib/cache");
-            const { shortcuts } = referenceLinkImageData();
+            const { getReferenceLinkImageData } = require("../lib/cache");
+            const { shortcuts } = getReferenceLinkImageData();
             t.is(shortcuts.size, 0, [ ...shortcuts.keys() ].join(", "));
           }
       }
