@@ -1008,7 +1008,7 @@ following projects or one of the tools in the [Related section](#related):
 [v8]: https://v8.dev/
 [v8-search]: https://github.com/v8/v8.dev/search?q=markdownlint
 [webhint]: https://webhint.io/
-[webhint-search]: https://github.com/webhintio/hint/search?q=markdownlint
+[webhintio-search]: https://github.com/webhintio/hint/search?q=markdownlint
 [webpack]: https://webpack.js.org/
 [webpack-search]: https://github.com/webpack/webpack.js.org/search?q=markdownlint
 [wordpress]: https://wordpress.org/gutenberg/
