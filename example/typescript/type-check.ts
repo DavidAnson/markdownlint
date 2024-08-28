@@ -164,3 +164,20 @@ markdownlint(options, assertLintResultsCallback);
 (async () => {
   assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
 })();
+
+const configuration: markdownlint.Configuration = {
+  "custom-rule": true,
+  "no-hard-tabs": false,
+  "heading-style": {
+    "style": "consistent"
+  }
+};
+assert(configuration);
+const configurationStrict: markdownlint.ConfigurationStrict = {
+  // "custom-rule": true,
+  "no-hard-tabs": false,
+  "heading-style": {
+    "style": "consistent"
+  }
+};
+assert(configurationStrict);

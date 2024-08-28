@@ -9,7 +9,10 @@ const rules = require("../lib/rules");
 const jsonSchemaToTypeScript = require("json-schema-to-typescript");
 const { version } = require("../lib/constants");
 
-const schemaUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/markdownlint-config-schema.json`;
+const schemaName = "markdownlint-config-schema.json";
+const schemaUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/${schemaName}`;
+const schemaStrictName = "markdownlint-config-schema-strict.json";
+const schemaStrictUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/${schemaStrictName}`;
 
 // Schema scaffolding
 const schema = {
@@ -574,20 +577,24 @@ for (const [ tag, tagTags ] of Object.entries(tags)) {
 }
 
 // Write schema
-const schemaFile = path.join(__dirname, "markdownlint-config-schema.json");
+const schemaFile = path.join(__dirname, schemaName);
 fs.writeFileSync(schemaFile, JSON.stringify(schema, null, "  "));
 
-// Write TypeScript declaration
-// See https://github.com/bcherny/json-schema-to-typescript/issues/356 for why
-// additionalProperties is deleted
-const schemaDeclaration =
-  path.join(__dirname, "..", "lib", "configuration.d.ts");
-// @ts-ignore
-delete schema.additionalProperties;
-schema.title = "Configuration";
+// Create and write strict schema
+const schemaStrict = {
+  ...schema,
+  "$id": schemaStrictUri,
+  "additionalProperties": false
+};
+const schemaFileStrict = path.join(__dirname, schemaStrictName);
+fs.writeFileSync(schemaFileStrict, JSON.stringify(schemaStrict, null, "  "));
+
+// Write TypeScript declaration file
+const declarationStrictName = path.join(__dirname, "..", "lib", "configuration-strict.d.ts");
+schemaStrict.title = "ConfigurationStrict";
 jsonSchemaToTypeScript.compile(
   // @ts-ignore
-  schema,
+  schemaStrict,
   "UNUSED"
   // eslint-disable-next-line unicorn/prefer-top-level-await
-).then((declaration) => fs.writeFileSync(schemaDeclaration, declaration));
+).then((declaration) => fs.writeFileSync(declarationStrictName, declaration));

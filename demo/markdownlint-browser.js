@@ -3141,6 +3141,13 @@ module.exports = markdownlint;
  */
 
 /**
+ * Configuration object for linting rules strictly. For the JSON schema, see
+ * {@link ../schema/markdownlint-config-schema-strict.json}.
+ *
+ * @typedef {import("./configuration-strict").ConfigurationStrict} ConfigurationStrict
+ */
+
+/**
  * Rule configuration object.
  *
  * @typedef {boolean | Object} RuleConfiguration Rule configuration.

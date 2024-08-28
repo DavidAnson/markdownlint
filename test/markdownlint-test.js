@@ -18,13 +18,9 @@ const constants = require("../lib/constants");
 const rules = require("../lib/rules");
 const customRules = require("./rules/rules.js");
 const configSchema = require("../schema/markdownlint-config-schema.json");
+const configSchemaStrict = require("../schema/markdownlint-config-schema-strict.json");
 
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
-const configSchemaStrict = {
-  ...configSchema,
-  "$id": `${configSchema.$id}-strict`,
-  "additionalProperties": false
-};
 const ajvOptions = {
   "allowUnionTypes": true
 };

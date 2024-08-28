@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, GetMarkdownIt, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, GetMarkdownIt, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, ConfigurationStrict, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Lint specified Markdown files synchronously.
@@ -439,6 +439,11 @@ type LintCallback = (error: Error | null, results?: LintResults) => void;
  * {@link  ../schema/markdownlint-config-schema.json}.
  */
 type Configuration = import("./configuration").Configuration;
+/**
+ * Configuration object for linting rules strictly. For the JSON schema, see
+ * {@link  ../schema/markdownlint-config-schema-strict.json}.
+ */
+type ConfigurationStrict = import("./configuration-strict").ConfigurationStrict;
 /**
  * Rule configuration.
  */
