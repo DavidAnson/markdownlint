@@ -1,6 +1,6 @@
 {
   "name": "markdownlint",
-  "version": "0.34.0",
+  "version": "0.35.0",
   "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
   "type": "commonjs",
   "main": "./lib/markdownlint.js",

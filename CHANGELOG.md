@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.35.0
+
+- Add MD058/blanks-around-tables
+- Use `micromark` in MD001/MD003/MD009/MD010/MD013/MD014/MD019/MD021/MD023/
+  MD024/MD025/MD039/MD042/MD043
+- Improve MD018/MD020/MD031/MD034/MD044
+- `markdown-it` parser no longer invoked by default
+- Add strict version of JSON schema
+- Improve performance
+- Update dependencies
+
 ## 0.34.0
 
 - Use `micromark` in MD027/MD028/MD036/MD040/MD041/MD046/MD048

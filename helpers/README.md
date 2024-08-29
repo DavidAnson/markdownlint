@@ -38,9 +38,9 @@ See also: [`markdownlint` built-in rule implementations][lib].
 *None* - The entire body of code is tested to 100% coverage by the core
 `markdownlint` project, so there are no additional tests here.
 
-[custom-rules]: https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/CustomRules.md
+[custom-rules]: https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/CustomRules.md
 [jsdoc]: https://en.m.wikipedia.org/wiki/JSDoc
-[lib]: https://github.com/DavidAnson/markdownlint/tree/v0.34.0/lib
+[lib]: https://github.com/DavidAnson/markdownlint/tree/v0.35.0/lib
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [markdownlint]: https://github.com/DavidAnson/markdownlint
-[rules]: https://github.com/DavidAnson/markdownlint/blob/v0.34.0/doc/Rules.md
+[rules]: https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/Rules.md
