@@ -12,8 +12,8 @@ module.exports = {
   "parser": "markdownit",
   "asynchronous": true,
   "function": (params, onError) => {
-    const fences = params.parsers.markdownit.tokens.
-      filter((token => token.type === "fence"));
+    const fences = params.parsers.markdownit.tokens
+      .filter(((token) => token.type === "fence"));
     for (const fence of fences) {
       if (/jsonc?/i.test(fence.info)) {
         const errors = [];

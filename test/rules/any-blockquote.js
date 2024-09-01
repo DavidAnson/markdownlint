@@ -13,8 +13,8 @@ module.exports = {
   "tags": [ "test" ],
   "parser": "markdownit",
   "function": (params, onError) => {
-    const blockquotes = params.parsers.markdownit.tokens.
-      filter((token => token.type === "blockquote_open"));
+    const blockquotes = params.parsers.markdownit.tokens
+      .filter(((token) => token.type === "blockquote_open"));
     for (const blockquote of blockquotes) {
       const lines = blockquote.map[1] - blockquote.map[0];
       onError({

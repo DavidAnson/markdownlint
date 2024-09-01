@@ -77,8 +77,8 @@ test("filterByTypes, htmlFlow false", async(t) => {
   // Not using flat tokens
   t.deepEqual(
     filtered,
-    filterByTypes([ ...tokens], types)
-  )
+    filterByTypes([ ...tokens ], types)
+  );
 });
 
 test("filterByTypes, htmlFlow true", async(t) => {
@@ -95,8 +95,8 @@ test("filterByTypes, htmlFlow true", async(t) => {
   // Not using flat tokens
   t.deepEqual(
     filtered,
-    filterByTypes([ ...tokens], types, true)
-  )
+    filterByTypes([ ...tokens ], types, true)
+  );
 });
 
 test("filterByPredicate/filterByTypes", async(t) => {

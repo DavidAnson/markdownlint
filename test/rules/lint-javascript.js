@@ -14,8 +14,8 @@ module.exports = {
   "tags": [ "test", "lint", "javascript" ],
   "parser": "markdownit",
   "function": (params, onError) => {
-    const fences = params.parsers.markdownit.tokens.
-      filter((token => token.type === "fence"));
+    const fences = params.parsers.markdownit.tokens
+      .filter(((token) => token.type === "fence"));
     for (const fence of fences) {
       if (languageJavaScript.test(fence.info)) {
         const results = linter.verify(fence.content, js.configs.recommended);

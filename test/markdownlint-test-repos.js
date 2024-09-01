@@ -33,8 +33,8 @@ async function lintTestRepo(t, globPatterns, configPath, parallel) {
     // eslint-disable-next-line no-console
     console.log(`${t.title}: Linting ${files.length} files...`);
     const config = Object.fromEntries(
-      Object.entries(rawConfig).
-        map(([ k, v ]) => [
+      Object.entries(rawConfig)
+        .map(([ k, v ]) => [
           k.replace(/header/, "heading"),
           v
         ])

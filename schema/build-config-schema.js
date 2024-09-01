@@ -529,7 +529,7 @@ for (const rule of rules) {
           "description": "Allow URLs as inline links",
           "type": "boolean",
           "default": true
-        },
+        }
       };
       break;
     case "MD055":

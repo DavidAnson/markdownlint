@@ -64,8 +64,8 @@ test("resultFormattingV0", (t) => new Promise((resolve) => {
       "./test/atx_heading_spacing.md: 1: MD041" +
       " First line in a file should be a top-level heading\n" +
       "./test/first_heading_bad_atx.md: 1: MD041" +
-      " First line in a file should be a top-level heading"
-      t.is(actualMessage, expectedMessage, "Incorrect message (name).");
+      " First line in a file should be a top-level heading";
+    t.is(actualMessage, expectedMessage, "Incorrect message (name).");
     // @ts-ignore
     actualMessage = actualResult.toString(true);
     expectedMessage =
@@ -78,8 +78,8 @@ test("resultFormattingV0", (t) => new Promise((resolve) => {
       "./test/atx_heading_spacing.md: 1: first-line-heading" +
       " First line in a file should be a top-level heading\n" +
       "./test/first_heading_bad_atx.md: 1: first-line-heading" +
-      " First line in a file should be a top-level heading"
-      t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
+      " First line in a file should be a top-level heading";
+    t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
     resolve();
   });
 }));
@@ -121,7 +121,7 @@ test("resultFormattingSyncV0", (t) => {
     "./test/atx_heading_spacing.md: 1: MD041" +
     " First line in a file should be a top-level heading\n" +
     "./test/first_heading_bad_atx.md: 1: MD041" +
-    " First line in a file should be a top-level heading"
+    " First line in a file should be a top-level heading";
   t.is(actualMessage, expectedMessage, "Incorrect message (name).");
   // @ts-ignore
   actualMessage = actualResult.toString(true);
@@ -135,7 +135,7 @@ test("resultFormattingSyncV0", (t) => {
     "./test/atx_heading_spacing.md: 1: first-line-heading" +
     " First line in a file should be a top-level heading\n" +
     "./test/first_heading_bad_atx.md: 1: first-line-heading" +
-    " First line in a file should be a top-level heading"
+    " First line in a file should be a top-level heading";
   t.is(actualMessage, expectedMessage, "Incorrect message (alias).");
 });
 

@@ -2540,11 +2540,13 @@ function lintInput(options, synchronous, callback) {
   const config = options.config || { "default": true };
   const configParsers = options.configParsers || null;
   const frontMatter = (options.frontMatter === undefined) ?
-    helpers.frontMatterRe : options.frontMatter;
+    helpers.frontMatterRe :
+    options.frontMatter;
   const handleRuleFailures = !!options.handleRuleFailures;
   const noInlineConfig = !!options.noInlineConfig;
   const resultVersion = (options.resultVersion === undefined) ?
-    3 : options.resultVersion;
+    3 :
+    options.resultVersion;
   const getMarkdownIt = () => {
     const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
     const md = markdownit({ "html": true });
@@ -4027,14 +4029,14 @@ module.exports = {
         codeBlock.children,
         [ "codeFlowValue" ]
       );
-      const dollarMatches = codeFlowValues.
-        map((codeFlowValue) => ({
+      const dollarMatches = codeFlowValues
+        .map((codeFlowValue) => ({
           "result": codeFlowValue.text.match(dollarCommandRe),
           "startColumn": codeFlowValue.startColumn,
           "startLine": codeFlowValue.startLine,
           "text": codeFlowValue.text
-        })).
-        filter((dollarMatch) => dollarMatch.result);
+        }))
+        .filter((dollarMatch) => dollarMatch.result);
       if (dollarMatches.length === codeFlowValues.length) {
         for (const dollarMatch of dollarMatches) {
           // @ts-ignore
@@ -4647,9 +4649,9 @@ const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
 module.exports = {
-  "names": ["MD027", "no-multiple-space-blockquote"],
+  "names": [ "MD027", "no-multiple-space-blockquote" ],
   "description": "Multiple spaces after blockquote symbol",
-  "tags": ["blockquote", "whitespace", "indentation"],
+  "tags": [ "blockquote", "whitespace", "indentation" ],
   "parser": "micromark",
   "function": function MD027(params, onError) {
     for (const token of filterByTypesCached([ "linePrefix" ])) {
@@ -4921,10 +4923,12 @@ const codeFencePrefixRe = /^(.*?)[`~]/;
 function addError(onError, lines, lineNumber, top) {
   const line = lines[lineNumber - 1];
   const [ , prefix ] = line.match(codeFencePrefixRe) || [];
-  const fixInfo = (prefix === undefined) ? null : {
-    "lineNumber": lineNumber + (top ? 0 : 1),
-    "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
-  };
+  const fixInfo = (prefix === undefined) ?
+    null :
+    {
+      "lineNumber": lineNumber + (top ? 0 : 1),
+      "insertText": `${prefix.replace(/[^>]/g, " ").trim()}\n`
+    };
   addErrorContext(
     onError,
     lineNumber,
@@ -5122,8 +5126,6 @@ module.exports = {
           if ((token.type === "literalAutolink") && !inHtmlFlow(token)) {
             // Detect and ignore https://github.com/micromark/micromark/issues/164
             const siblings = token.parent?.children;
-              // Commented-out due to not being able to exercise in test/code coverage
-              // || micromarkTokens;
             const index = siblings?.indexOf(token);
             // @ts-ignore
             const prev = siblings?.at(index - 1);
@@ -5274,8 +5276,8 @@ module.exports = {
     punctuation = String((punctuation === undefined) ? allPunctuation : punctuation);
     const punctuationRe = new RegExp("[" + punctuation + "]$");
     const paragraphTokens =
-      filterByTypesCached([ "paragraph" ]).
-        filter((token) =>
+      filterByTypesCached([ "paragraph" ])
+        .filter((token) =>
           (token.parent?.type === "content") && !token.parent?.parent && (token.children.length === 1)
         );
     for (const paragraphToken of paragraphTokens) {
@@ -5556,10 +5558,12 @@ function addLabelSpaceError(onError, label, labelText, isStart) {
     isStart,
     !isStart,
     range,
-    range ? {
-      "editColumn": range[0],
-      "deleteCount": range[1]
-    } : undefined
+    range ?
+      {
+        "editColumn": range[0],
+        "deleteCount": range[1]
+      } :
+      undefined
   );
 }
 
@@ -5584,8 +5588,8 @@ module.exports = {
   "parser": "micromark",
   "function": function MD039(params, onError) {
     const { definitions } = getReferenceLinkImageData();
-    const labels = filterByTypesCached([ "label" ]).
-      filter((label) => label.parent?.type === "link");
+    const labels = filterByTypesCached([ "label" ])
+      .filter((label) => label.parent?.type === "link");
     for (const label of labels) {
       const labelTexts = filterByTypes(
         label.children,
@@ -5685,9 +5689,9 @@ module.exports = {
   "function": function MD041(params, onError) {
     const level = Number(params.config.level || 1);
     if (!frontMatterHasTitle(params.frontMatterLines, params.config.front_matter_title)) {
-      params.parsers.micromark.tokens.
-        filter((token) => !nonContentTokens.has(token.type) && !isHtmlFlowComment(token)).
-        every((token) => {
+      params.parsers.micromark.tokens
+        .filter((token) => !nonContentTokens.has(token.type) && !isHtmlFlowComment(token))
+        .every((token) => {
           let isError = true;
           if ((token.type === "atxHeading") || (token.type === "setextHeading")) {
             isError = (getHeadingLevel(token) !== level);
@@ -6906,7 +6910,7 @@ module.exports = {
       }
     }
   }
-}
+};
 
 
 /***/ }),

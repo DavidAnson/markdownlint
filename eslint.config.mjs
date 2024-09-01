@@ -1,14 +1,24 @@
 import js from "@eslint/js";
 import eslintPluginJsdoc from "eslint-plugin-jsdoc";
 import eslintPluginNode from "eslint-plugin-n";
-import eslintPluginRegexp from "eslint-plugin-regexp"
+import eslintPluginRegexp from "eslint-plugin-regexp";
+import eslintPluginStylistic from "@stylistic/eslint-plugin";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 
 export default [
   js.configs.all,
-  eslintPluginJsdoc.configs['flat/recommended'],
+  eslintPluginJsdoc.configs["flat/recommended"],
   eslintPluginNode.configs["flat/recommended"],
   eslintPluginRegexp.configs["flat/recommended"],
+  eslintPluginStylistic.configs.customize({
+    "arrowParens": true,
+    "braceStyle": "1tbs",
+    "commaDangle": "never",
+    "jsx": false,
+    "quoteProps": "always",
+    "quotes": "double",
+    "semi": true
+  }),
   eslintPluginUnicorn.configs["flat/all"],
   {
     "ignores": [
@@ -27,17 +37,23 @@ export default [
   },
   {
     "languageOptions": {
-      "sourceType": "commonjs",
+      "sourceType": "commonjs"
     },
     "linterOptions": {
       "reportUnusedDisableDirectives": true
     },
     "rules": {
+      "@stylistic/array-bracket-spacing": [ "error", "always" ],
+      "@stylistic/indent": [ "error", 2 ],
+      "@stylistic/indent-binary-ops": [ "off" ],
+      "@stylistic/operator-linebreak": [ "error", "after" ],
+      "@stylistic/padded-blocks": "off",
+      "@stylistic/space-before-function-paren": [ "error", "never" ],
       "capitalized-comments": "off",
       "complexity": "off",
       "func-style": "off",
       "id-length": "off",
-      "jsdoc/tag-lines": [ "error", "never", { "startLines":1 } ],
+      "jsdoc/tag-lines": [ "error", "never", { "startLines": 1 } ],
       "logical-assignment-operators": "off",
       "max-depth": "off",
       "max-lines-per-function": "off",

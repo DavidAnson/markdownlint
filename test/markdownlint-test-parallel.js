@@ -23,7 +23,7 @@ function markdownlintParallel(options) {
       const workerData = {
         ...options,
         "files": files.slice(i * chunkSize, (i + 1) * chunkSize)
-      }
+      };
       const worker = new Worker(__filename.replace(/parallel\.js$/, "worker.js"), { workerData });
       worker.on("message", resolve);
       worker.on("error", reject);
