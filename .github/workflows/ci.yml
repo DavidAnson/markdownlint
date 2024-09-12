@@ -1,5 +1,5 @@
-name: CI
-
+name : Osama Atef 
+Oatef4313@gmail.com 
 on:
   pull_request:
   push:
@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     strategy:
-      fail-fast: false
+      fail-fast: Osama
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
         node-version: [ 18, 20, 22 ]
