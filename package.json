@@ -57,7 +57,7 @@
     "test-cover": "c8 --100 npm test",
     "test-declaration": "cd example/typescript && tsc --module nodenext && tsc --module commonjs && node type-check.js",
     "test-extra": "ava --timeout=10m test/markdownlint-test-extra-parse.js test/markdownlint-test-extra-type.js",
-    "update-snapshots": "ava --update-snapshots test/markdownlint-test-micromark.mjs test/markdownlint-test-scenarios.js",
+    "update-snapshots": "ava --update-snapshots test/markdownlint-test-custom-rules.js test/markdownlint-test-micromark.mjs test/markdownlint-test-scenarios.js",
     "update-snapshots-test-repos": "ava --timeout=10m --update-snapshots test/markdownlint-test-repos-*.js",
     "upgrade": "npx --yes npm-check-updates --upgrade"
   },

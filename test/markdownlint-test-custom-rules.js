@@ -622,7 +622,7 @@ test("customRulesParserMicromark", (t) => {
   });
 });
 
-test("customRulesParamsTokensSameObject", (t) => {
+test("customRulesMarkdownItParamsTokensSameObject", (t) => {
   t.plan(1);
   // eslint-disable-next-line jsdoc/valid-types
   /** @type import("../lib/markdownlint").Options */
@@ -643,6 +643,29 @@ test("customRulesParamsTokensSameObject", (t) => {
     "strings": {
       "string": "# Heading\n"
     }
+  };
+  return markdownlint.promises.markdownlint(options).then(() => null);
+});
+
+test("customRulesMarkdownItTokensSnapshot", (t) => {
+  t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function":
+          (params) => {
+            t.snapshot(params.parsers.markdownit.tokens, "Unexpected tokens");
+          }
+      }
+    ],
+    "files": "./test/every-markdown-syntax.md",
+    "noInlineConfig": true
   };
   return markdownlint.promises.markdownlint(options).then(() => null);
 });
