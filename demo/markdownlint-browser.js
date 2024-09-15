@@ -268,67 +268,6 @@ module.exports.emphasisOrStrongStyleFor =
   };
 
 /**
- * @callback InlineCodeSpanCallback
- * @param {string} code Code content.
- * @param {number} lineIndex Line index (0-based).
- * @param {number} columnIndex Column index (0-based).
- * @param {number} ticks Count of backticks.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each inline code span's content.
- *
- * @param {string} input Markdown content.
- * @param {InlineCodeSpanCallback} handler Callback function taking (code,
- * lineIndex, columnIndex, ticks).
- * @returns {void}
- */
-function forEachInlineCodeSpan(input, handler) {
-  const backtickRe = /`+/g;
-  let match = null;
-  const backticksLengthAndIndex = [];
-  while ((match = backtickRe.exec(input)) !== null) {
-    backticksLengthAndIndex.push([ match[0].length, match.index ]);
-  }
-  const newLinesIndex = [];
-  while ((match = newLineRe.exec(input)) !== null) {
-    newLinesIndex.push(match.index);
-  }
-  let lineIndex = 0;
-  let lineStartIndex = 0;
-  let k = 0;
-  for (let i = 0; i < backticksLengthAndIndex.length - 1; i++) {
-    const [ startLength, startIndex ] = backticksLengthAndIndex[i];
-    if ((startIndex === 0) || (input[startIndex - 1] !== "\\")) {
-      for (let j = i + 1; j < backticksLengthAndIndex.length; j++) {
-        const [ endLength, endIndex ] = backticksLengthAndIndex[j];
-        if (startLength === endLength) {
-          for (; k < newLinesIndex.length; k++) {
-            const newLineIndex = newLinesIndex[k];
-            if (startIndex < newLineIndex) {
-              break;
-            }
-            lineIndex++;
-            lineStartIndex = newLineIndex + 1;
-          }
-          const columnIndex = startIndex - lineStartIndex + startLength;
-          handler(
-            input.slice(startIndex + startLength, endIndex),
-            lineIndex,
-            columnIndex,
-            startLength
-          );
-          i = j;
-          break;
-        }
-      }
-    }
-  }
-}
-module.exports.forEachInlineCodeSpan = forEachInlineCodeSpan;
-
-/**
  * Adds ellipsis to the left/right/middle of the specified text.
  *
  * @param {string} text Text to ellipsify.
@@ -1599,6 +1538,189 @@ module.exports.version = "0.35.0";
 
 /***/ }),
 
+/***/ "../lib/markdownit.cjs":
+/*!*****************************!*\
+  !*** ../lib/markdownit.cjs ***!
+  \*****************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+const { newLineRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+
+/**
+ * @callback InlineCodeSpanCallback
+ * @param {string} code Code content.
+ * @param {number} lineIndex Line index (0-based).
+ * @param {number} columnIndex Column index (0-based).
+ * @param {number} ticks Count of backticks.
+ * @returns {void}
+ */
+
+/**
+ * Calls the provided function for each inline code span's content.
+ *
+ * @param {string} input Markdown content.
+ * @param {InlineCodeSpanCallback} handler Callback function taking (code,
+ * lineIndex, columnIndex, ticks).
+ * @returns {void}
+ */
+function forEachInlineCodeSpan(input, handler) {
+  const backtickRe = /`+/g;
+  let match = null;
+  const backticksLengthAndIndex = [];
+  while ((match = backtickRe.exec(input)) !== null) {
+    backticksLengthAndIndex.push([ match[0].length, match.index ]);
+  }
+  const newLinesIndex = [];
+  while ((match = newLineRe.exec(input)) !== null) {
+    newLinesIndex.push(match.index);
+  }
+  let lineIndex = 0;
+  let lineStartIndex = 0;
+  let k = 0;
+  for (let i = 0; i < backticksLengthAndIndex.length - 1; i++) {
+    const [ startLength, startIndex ] = backticksLengthAndIndex[i];
+    if ((startIndex === 0) || (input[startIndex - 1] !== "\\")) {
+      for (let j = i + 1; j < backticksLengthAndIndex.length; j++) {
+        const [ endLength, endIndex ] = backticksLengthAndIndex[j];
+        if (startLength === endLength) {
+          for (; k < newLinesIndex.length; k++) {
+            const newLineIndex = newLinesIndex[k];
+            if (startIndex < newLineIndex) {
+              break;
+            }
+            lineIndex++;
+            lineStartIndex = newLineIndex + 1;
+          }
+          const columnIndex = startIndex - lineStartIndex + startLength;
+          handler(
+            input.slice(startIndex + startLength, endIndex),
+            lineIndex,
+            columnIndex,
+            startLength
+          );
+          i = j;
+          break;
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Freeze all freeze-able members of a token and its children.
+ *
+ * @param {import("./markdownlint").MarkdownItToken} token A markdown-it token.
+ * @returns {void}
+ */
+function freezeToken(token) {
+  if (token.attrs) {
+    for (const attr of token.attrs) {
+      Object.freeze(attr);
+    }
+    Object.freeze(token.attrs);
+  }
+  if (token.children) {
+    for (const child of token.children) {
+      freezeToken(child);
+    }
+    Object.freeze(token.children);
+  }
+  if (token.map) {
+    Object.freeze(token.map);
+  }
+  Object.freeze(token);
+}
+
+/**
+ * Annotate tokens with line/lineNumber and freeze them.
+ *
+ * @param {import("markdown-it").Token[]} tokens Array of markdown-it tokens.
+ * @param {string[]} lines Lines of Markdown content.
+ * @returns {void}
+ */
+function annotateAndFreezeTokens(tokens, lines) {
+  let trMap = null;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("./markdownlint").MarkdownItToken[] */
+  // @ts-ignore
+  const markdownItTokens = tokens;
+  for (const token of markdownItTokens) {
+    // Provide missing maps for table content
+    if (token.type === "tr_open") {
+      trMap = token.map;
+    } else if (token.type === "tr_close") {
+      trMap = null;
+    }
+    if (!token.map && trMap) {
+      token.map = [ ...trMap ];
+    }
+    // Update token metadata
+    if (token.map) {
+      token.line = lines[token.map[0]];
+      token.lineNumber = token.map[0] + 1;
+      // Trim bottom of token to exclude whitespace lines
+      while (token.map[1] && !((lines[token.map[1] - 1] || "").trim())) {
+        token.map[1]--;
+      }
+    }
+    // Annotate children with lineNumber
+    if (token.children) {
+      const codeSpanExtraLines = [];
+      if (token.children.some((child) => child.type === "code_inline")) {
+        forEachInlineCodeSpan(token.content, (code) => {
+          codeSpanExtraLines.push(code.split(newLineRe).length - 1);
+        });
+      }
+      let lineNumber = token.lineNumber;
+      for (const child of token.children) {
+        child.lineNumber = lineNumber;
+        child.line = lines[lineNumber - 1];
+        if ((child.type === "softbreak") || (child.type === "hardbreak")) {
+          lineNumber++;
+        } else if (child.type === "code_inline") {
+          lineNumber += codeSpanExtraLines.shift();
+        }
+      }
+    }
+    freezeToken(token);
+  }
+  Object.freeze(tokens);
+}
+
+/**
+ * Gets an array of markdown-it tokens for the input.
+ *
+ * @param {import("./markdownlint").Plugin[]} markdownItPlugins Additional plugins.
+ * @param {string} content Markdown content.
+ * @param {string[]} lines Lines of Markdown content.
+ * @returns {import("markdown-it").Token[]} Array of markdown-it tokens.
+ */
+function getMarkdownItTokens(markdownItPlugins, content, lines) {
+  const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
+  const md = markdownit({ "html": true });
+  // const markdownItPlugins = options.markdownItPlugins || [];
+  for (const plugin of markdownItPlugins) {
+    // @ts-ignore
+    md.use(...plugin);
+  }
+  const tokens = md.parse(content, {});
+  annotateAndFreezeTokens(tokens, lines);
+  return tokens;
+};
+
+module.exports = {
+  forEachInlineCodeSpan,
+  getMarkdownItTokens
+};
+
+
+/***/ }),
+
 /***/ "../lib/markdownlint.js":
 /*!******************************!*\
   !*** ../lib/markdownlint.js ***!
@@ -1803,87 +1925,6 @@ function removeFrontMatter(content, frontMatter) {
     "content": content,
     "frontMatterLines": frontMatterLines
   };
-}
-
-/**
- * Freeze all freeze-able members of a token and its children.
- *
- * @param {MarkdownItToken} token A markdown-it token.
- * @returns {void}
- */
-function freezeToken(token) {
-  if (token.attrs) {
-    for (const attr of token.attrs) {
-      Object.freeze(attr);
-    }
-    Object.freeze(token.attrs);
-  }
-  if (token.children) {
-    for (const child of token.children) {
-      freezeToken(child);
-    }
-    Object.freeze(token.children);
-  }
-  if (token.map) {
-    Object.freeze(token.map);
-  }
-  Object.freeze(token);
-}
-
-/**
- * Annotate tokens with line/lineNumber and freeze them.
- *
- * @param {import("markdown-it").Token[]} tokens Array of markdown-it tokens.
- * @param {string[]} lines Lines of Markdown content.
- * @returns {void}
- */
-function annotateAndFreezeTokens(tokens, lines) {
-  let trMap = null;
-  // eslint-disable-next-line jsdoc/valid-types
-  /** @type MarkdownItToken[] */
-  // @ts-ignore
-  const markdownItTokens = tokens;
-  for (const token of markdownItTokens) {
-    // Provide missing maps for table content
-    if (token.type === "tr_open") {
-      trMap = token.map;
-    } else if (token.type === "tr_close") {
-      trMap = null;
-    }
-    if (!token.map && trMap) {
-      token.map = [ ...trMap ];
-    }
-    // Update token metadata
-    if (token.map) {
-      token.line = lines[token.map[0]];
-      token.lineNumber = token.map[0] + 1;
-      // Trim bottom of token to exclude whitespace lines
-      while (token.map[1] && !((lines[token.map[1] - 1] || "").trim())) {
-        token.map[1]--;
-      }
-    }
-    // Annotate children with lineNumber
-    if (token.children) {
-      const codeSpanExtraLines = [];
-      if (token.children.some((child) => child.type === "code_inline")) {
-        helpers.forEachInlineCodeSpan(token.content, (code) => {
-          codeSpanExtraLines.push(code.split(helpers.newLineRe).length - 1);
-        });
-      }
-      let lineNumber = token.lineNumber;
-      for (const child of token.children) {
-        child.lineNumber = lineNumber;
-        child.line = lines[lineNumber - 1];
-        if ((child.type === "softbreak") || (child.type === "hardbreak")) {
-          lineNumber++;
-        } else if (child.type === "code_inline") {
-          lineNumber += codeSpanExtraLines.shift();
-        }
-      }
-    }
-    freezeToken(token);
-  }
-  Object.freeze(tokens);
 }
 
 /**
@@ -2141,7 +2182,7 @@ function getEnabledRulesPerLineNumber(
  * names.
  * @param {string} name Identifier for the content.
  * @param {string} content Markdown content.
- * @param {GetMarkdownIt} getMarkdownIt Getter for instance of markdown-it.
+ * @param {Plugin[]} markdownItPlugins Additional plugins.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp | null} frontMatter Regular expression for front matter.
@@ -2156,7 +2197,7 @@ function lintContent(
   aliasToRuleNames,
   name,
   content,
-  getMarkdownIt,
+  markdownItPlugins,
   config,
   configParsers,
   frontMatter,
@@ -2185,13 +2226,15 @@ function lintContent(
     (rule) => (rule.parser === "markdownit") || (rule.parser === undefined)
   );
   // Parse content into parser tokens
-  const markdownitTokens = needMarkdownItTokens ? getMarkdownIt().parse(content, {}) : [];
   const micromarkTokens = micromark.parse(content);
   // Hide the content of HTML comments from rules
+  const preClearedContent = content;
   content = helpers.clearHtmlCommentText(content);
-  // Parse content into lines and update markdown-it tokens
+  // Parse content into lines and get markdown-it tokens
   const lines = content.split(helpers.newLineRe);
-  annotateAndFreezeTokens(markdownitTokens, lines);
+  const markdownitTokens = needMarkdownItTokens ?
+    (__webpack_require__(/*! ./markdownit.cjs */ "../lib/markdownit.cjs").getMarkdownItTokens)(markdownItPlugins, preClearedContent, lines) :
+    [];
   // Create (frozen) parameters for rules
   /** @type {MarkdownParsers} */
   // @ts-ignore
@@ -2444,7 +2487,7 @@ function lintContent(
  * @param {Object.<string, string[]>} aliasToRuleNames Map of alias to rule
  * names.
  * @param {string} file Path of file to lint.
- * @param {GetMarkdownIt} getMarkdownIt Getter for instance of markdown-it.
+ * @param {Plugin[]} markdownItPlugins Additional plugins.
  * @param {Configuration} config Configuration object.
  * @param {ConfigurationParser[] | null} configParsers Configuration parsers.
  * @param {RegExp | null} frontMatter Regular expression for front matter.
@@ -2460,7 +2503,7 @@ function lintFile(
   ruleList,
   aliasToRuleNames,
   file,
-  getMarkdownIt,
+  markdownItPlugins,
   config,
   configParsers,
   frontMatter,
@@ -2480,7 +2523,7 @@ function lintFile(
       aliasToRuleNames,
       file,
       content,
-      getMarkdownIt,
+      markdownItPlugins,
       config,
       configParsers,
       frontMatter,
@@ -2547,16 +2590,7 @@ function lintInput(options, synchronous, callback) {
   const resultVersion = (options.resultVersion === undefined) ?
     3 :
     options.resultVersion;
-  const getMarkdownIt = () => {
-    const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
-    const md = markdownit({ "html": true });
-    const markdownItPlugins = options.markdownItPlugins || [];
-    for (const plugin of markdownItPlugins) {
-      // @ts-ignore
-      md.use(...plugin);
-    }
-    return md;
-  };
+  const markdownItPlugins = options.markdownItPlugins || [];
   const fs = options.fs || __webpack_require__(/*! node:fs */ "?d0ee");
   const aliasToRuleNames = mapAliasToRuleNames(ruleList);
   const results = newResults(ruleList);
@@ -2588,7 +2622,7 @@ function lintInput(options, synchronous, callback) {
         ruleList,
         aliasToRuleNames,
         currentItem,
-        getMarkdownIt,
+        markdownItPlugins,
         config,
         configParsers,
         frontMatter,
@@ -2607,7 +2641,7 @@ function lintInput(options, synchronous, callback) {
         aliasToRuleNames,
         currentItem,
         strings[currentItem] || "",
-        getMarkdownIt,
+        markdownItPlugins,
         config,
         configParsers,
         frontMatter,
@@ -2921,13 +2955,6 @@ markdownlint.promises = {
 module.exports = markdownlint;
 
 // Type declarations
-
-/**
- * Function to get an instance of the markdown-it parser.
- *
- * @callback GetMarkdownIt
- * @returns {import("markdown-it")}
- */
 
 /**
  * Function to implement rule logic.

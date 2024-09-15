@@ -7,6 +7,7 @@ const path = require("node:path");
 const test = require("ava").default;
 const helpers = require("../helpers");
 const { markdownlint } = require("../lib/markdownlint").promises;
+const { forEachInlineCodeSpan } = require("../lib/markdownit.cjs");
 
 test("clearHtmlCommentTextValid", (t) => {
   t.plan(1);
@@ -306,7 +307,7 @@ test("forEachInlineCodeSpan", (t) => {
     ];
   for (const testCase of testCases) {
     const { input, expecteds } = testCase;
-    helpers.forEachInlineCodeSpan(input, (code, line, column, ticks) => {
+    forEachInlineCodeSpan(input, (code, line, column, ticks) => {
       // @ts-ignore
       const [ expectedCode, expectedLine, expectedColumn, expectedTicks ] =
         expecteds.shift();

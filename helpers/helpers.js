@@ -256,67 +256,6 @@ module.exports.emphasisOrStrongStyleFor =
   };
 
 /**
- * @callback InlineCodeSpanCallback
- * @param {string} code Code content.
- * @param {number} lineIndex Line index (0-based).
- * @param {number} columnIndex Column index (0-based).
- * @param {number} ticks Count of backticks.
- * @returns {void}
- */
-
-/**
- * Calls the provided function for each inline code span's content.
- *
- * @param {string} input Markdown content.
- * @param {InlineCodeSpanCallback} handler Callback function taking (code,
- * lineIndex, columnIndex, ticks).
- * @returns {void}
- */
-function forEachInlineCodeSpan(input, handler) {
-  const backtickRe = /`+/g;
-  let match = null;
-  const backticksLengthAndIndex = [];
-  while ((match = backtickRe.exec(input)) !== null) {
-    backticksLengthAndIndex.push([ match[0].length, match.index ]);
-  }
-  const newLinesIndex = [];
-  while ((match = newLineRe.exec(input)) !== null) {
-    newLinesIndex.push(match.index);
-  }
-  let lineIndex = 0;
-  let lineStartIndex = 0;
-  let k = 0;
-  for (let i = 0; i < backticksLengthAndIndex.length - 1; i++) {
-    const [ startLength, startIndex ] = backticksLengthAndIndex[i];
-    if ((startIndex === 0) || (input[startIndex - 1] !== "\\")) {
-      for (let j = i + 1; j < backticksLengthAndIndex.length; j++) {
-        const [ endLength, endIndex ] = backticksLengthAndIndex[j];
-        if (startLength === endLength) {
-          for (; k < newLinesIndex.length; k++) {
-            const newLineIndex = newLinesIndex[k];
-            if (startIndex < newLineIndex) {
-              break;
-            }
-            lineIndex++;
-            lineStartIndex = newLineIndex + 1;
-          }
-          const columnIndex = startIndex - lineStartIndex + startLength;
-          handler(
-            input.slice(startIndex + startLength, endIndex),
-            lineIndex,
-            columnIndex,
-            startLength
-          );
-          i = j;
-          break;
-        }
-      }
-    }
-  }
-}
-module.exports.forEachInlineCodeSpan = forEachInlineCodeSpan;
-
-/**
  * Adds ellipsis to the left/right/middle of the specified text.
  *
  * @param {string} text Text to ellipsify.

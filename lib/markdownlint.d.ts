@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, GetMarkdownIt, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, ConfigurationStrict, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, ConfigurationStrict, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Lint specified Markdown files synchronously.
@@ -49,10 +49,6 @@ declare namespace promises {
     export { extendConfigPromise as extendConfig };
     export { readConfigPromise as readConfig };
 }
-/**
- * Function to get an instance of the markdown-it parser.
- */
-type GetMarkdownIt = () => any;
 /**
  * Function to implement rule logic.
  */
