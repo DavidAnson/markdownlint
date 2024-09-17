@@ -1352,8 +1352,12 @@ function getTokenParentOfType(token, types) {
  * @returns {string | null} Text of token.
  */
 function getTokenTextByType(tokens, type) {
-  const filtered = tokens.filter((token) => token.type === type);
-  return (filtered.length > 0) ? filtered[0].text : null;
+  for (const token of tokens) {
+    if (token.type === type) {
+      return token.text;
+    }
+  }
+  return null;
 }
 
 /**
@@ -1379,17 +1383,6 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
     }
   }
   return result;
-}
-
-/**
- * Returns the specified token iff it is of the desired type.
- *
- * @param {Token} token Micromark token candidate.
- * @param {TokenType} type Desired type.
- * @returns {Token | null} Token instance.
- */
-function tokenIfType(token, type) {
-  return (token && (token.type === type)) ? token : null;
 }
 
 /**
@@ -1424,8 +1417,7 @@ module.exports = {
   inHtmlFlow,
   isHtmlFlowComment,
   matchAndGetTokensByType,
-  nonContentTokens,
-  tokenIfType
+  nonContentTokens
 };
 
 
@@ -5448,7 +5440,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const leftSpaceRe = /^\s(?:[^`]|$)/;
@@ -5474,17 +5466,12 @@ module.exports = {
   "function": function MD038(params, onError) {
     const codeTexts = filterByTypesCached([ "codeText" ]);
     for (const codeText of codeTexts) {
-      const { children } = codeText;
-      const first = 0;
-      const last = children.length - 1;
-      const startSequence = tokenIfType(children[first], "codeTextSequence");
-      const endSequence = tokenIfType(children[last], "codeTextSequence");
-      const startData =
-        tokenIfType(children[first + 1], "codeTextData") ||
-        tokenIfType(children[first + 2], "codeTextData");
-      const endData =
-        tokenIfType(children[last - 1], "codeTextData") ||
-        tokenIfType(children[last - 2], "codeTextData");
+      const sequences = getDescendantsByType(codeText, [ "codeTextSequence" ]);
+      const startSequence = sequences[0];
+      const endSequence = sequences[sequences.length - 1];
+      const datas = getDescendantsByType(codeText, [ "codeTextData" ]);
+      const startData = datas[0];
+      const endData = datas[datas.length - 1];
       if (startSequence && endSequence && startData && endData) {
         const spaceLeft = leftSpaceRe.test(startData.text);
         const spaceRight = rightSpaceRe.test(endData.text);
@@ -5655,7 +5642,7 @@ module.exports = {
 
 
 const { addError, addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getTokenTextByType, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5671,18 +5658,16 @@ module.exports = {
     const languageOnly = !!params.config.language_only;
     const fencedCodes = filterByTypesCached([ "codeFenced" ]);
     for (const fencedCode of fencedCodes) {
-      const openingFence = tokenIfType(fencedCode.children[0], "codeFencedFence");
-      if (openingFence) {
-        const { children, startLine, text } = openingFence;
-        const info = getTokenTextByType(children, "codeFencedFenceInfo");
-        if (!info) {
-          addErrorContext(onError, startLine, text);
-        } else if ((allowed.length > 0) && !allowed.includes(info)) {
-          addError(onError, startLine, `"${info}" is not allowed`);
-        }
-        if (languageOnly && getTokenTextByType(children, "codeFencedFenceMeta")) {
-          addError(onError, startLine, `Info string contains more than language: "${text}"`);
-        }
+      const openingFence = getDescendantsByType(fencedCode, [ "codeFencedFence" ])[0];
+      const { children, startLine, text } = openingFence;
+      const info = getTokenTextByType(children, "codeFencedFenceInfo");
+      if (!info) {
+        addErrorContext(onError, startLine, text);
+      } else if ((allowed.length > 0) && !allowed.includes(info)) {
+        addError(onError, startLine, `"${info}" is not allowed`);
+      }
+      if (languageOnly && getTokenTextByType(children, "codeFencedFenceMeta")) {
+        addError(onError, startLine, `Info string contains more than language: "${text}"`);
       }
     }
   }
@@ -6190,7 +6175,7 @@ module.exports = {
 
 
 const { addErrorDetailIf, fencedCodeBlockStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -6205,22 +6190,18 @@ module.exports = {
     let expectedStyle = style;
     const codeFenceds = filterByTypesCached([ "codeFenced" ]);
     for (const codeFenced of codeFenceds) {
-      const codeFencedFence = tokenIfType(codeFenced.children[0], "codeFencedFence");
-      if (codeFencedFence) {
-        const codeFencedFenceSequence = tokenIfType(codeFencedFence.children[0], "codeFencedFenceSequence");
-        if (codeFencedFenceSequence) {
-          const { startLine, text } = codeFencedFenceSequence;
-          if (expectedStyle === "consistent") {
-            expectedStyle = fencedCodeBlockStyleFor(text);
-          }
-          addErrorDetailIf(
-            onError,
-            startLine,
-            expectedStyle,
-            fencedCodeBlockStyleFor(text)
-          );
-        }
+      const codeFencedFenceSequence =
+        getDescendantsByType(codeFenced, [ "codeFencedFence", "codeFencedFenceSequence" ])[0];
+      const { startLine, text } = codeFencedFenceSequence;
+      if (expectedStyle === "consistent") {
+        expectedStyle = fencedCodeBlockStyleFor(text);
       }
+      addErrorDetailIf(
+        onError,
+        startLine,
+        expectedStyle,
+        fencedCodeBlockStyleFor(text)
+      );
     }
   }
 };
@@ -6240,7 +6221,7 @@ module.exports = {
 
 
 const { addError, emphasisOrStrongStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, tokenIfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const intrawordRe = /^\w$/;
 
@@ -6262,9 +6243,9 @@ const impl =
       (token) => ((token.type === "htmlFlow") ? [] : token.children)
     );
     for (const token of emphasisTokens) {
-      const { children } = token;
-      const startSequence = tokenIfType(children[0], typeSequence);
-      const endSequence = tokenIfType(children[children.length - 1], typeSequence);
+      const sequences = getDescendantsByType(token, [ typeSequence ]);
+      const startSequence = sequences[0];
+      const endSequence = sequences[sequences.length - 1];
       if (startSequence && endSequence) {
         const markupStyle = emphasisOrStrongStyleFor(startSequence.text);
         if (style === "consistent") {

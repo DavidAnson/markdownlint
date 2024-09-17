@@ -467,8 +467,12 @@ function getTokenParentOfType(token, types) {
  * @returns {string | null} Text of token.
  */
 function getTokenTextByType(tokens, type) {
-  const filtered = tokens.filter((token) => token.type === type);
-  return (filtered.length > 0) ? filtered[0].text : null;
+  for (const token of tokens) {
+    if (token.type === type) {
+      return token.text;
+    }
+  }
+  return null;
 }
 
 /**
@@ -494,17 +498,6 @@ function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
     }
   }
   return result;
-}
-
-/**
- * Returns the specified token iff it is of the desired type.
- *
- * @param {Token} token Micromark token candidate.
- * @param {TokenType} type Desired type.
- * @returns {Token | null} Token instance.
- */
-function tokenIfType(token, type) {
-  return (token && (token.type === type)) ? token : null;
 }
 
 /**
@@ -539,6 +532,5 @@ module.exports = {
   inHtmlFlow,
   isHtmlFlowComment,
   matchAndGetTokensByType,
-  nonContentTokens,
-  tokenIfType
+  nonContentTokens
 };
