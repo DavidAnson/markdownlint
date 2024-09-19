@@ -483,60 +483,33 @@ function getReferenceLinkImageData(tokens) {
       case "image":
       case "link":
         {
-          let isShortcut = false;
-          let isFullOrCollapsed = false;
-          let labelText = null;
-          let referenceStringText = null;
-          const shortcutCandidate =
-            micromark.matchAndGetTokensByType(token.children, [ "label" ]);
-          if (shortcutCandidate) {
-            labelText =
-              micromark.getTokenTextByType(
-                shortcutCandidate[0].children, "labelText"
-              );
-            isShortcut = (labelText !== null);
-          }
-          const fullAndCollapsedCandidate =
-            micromark.matchAndGetTokensByType(
-              token.children, [ "label", "reference" ]
+          // Identify if shortcut or full/collapsed
+          let isShortcut = (token.children.length === 1);
+          const isFullOrCollapsed = (token.children.length === 2) && !token.children.some((t) => t.type === "resource");
+          const [ labelText ] = micromark.getDescendantsByType(token, [ "label", "labelText" ]);
+          const [ referenceString ] = micromark.getDescendantsByType(token, [ "reference", "referenceString" ]);
+          let label = labelText?.text;
+          // Identify if footnote
+          if (!isShortcut && !isFullOrCollapsed) {
+            const [ footnoteCallMarker, footnoteCallString ] = token.children.filter(
+              (t) => [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ].includes(t.type)
             );
-          if (fullAndCollapsedCandidate) {
-            labelText =
-              micromark.getTokenTextByType(
-                fullAndCollapsedCandidate[0].children, "labelText"
-              );
-            referenceStringText =
-              micromark.getTokenTextByType(
-                fullAndCollapsedCandidate[1].children, "referenceString"
-              );
-            isFullOrCollapsed = (labelText !== null);
+            if (footnoteCallMarker && footnoteCallString) {
+              label = `${footnoteCallMarker.text}${footnoteCallString.text}`;
+              isShortcut = true;
+            }
           }
-          const footnote = micromark.matchAndGetTokensByType(
-            token.children,
-            [
-              "gfmFootnoteCallLabelMarker", "gfmFootnoteCallMarker",
-              "gfmFootnoteCallString", "gfmFootnoteCallLabelMarker"
-            ],
-            [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ]
-          );
-          if (footnote) {
-            const callMarkerText = footnote[0].text;
-            const callString = footnote[1].text;
-            labelText = `${callMarkerText}${callString}`;
-            isShortcut = true;
-          }
-          // Track shortcuts separately due to ambiguity in "text [text] text"
+          // Track link (handle shortcuts separately due to ambiguity in "text [text] text")
           if (isShortcut || isFullOrCollapsed) {
             const referenceDatum = [
               token.startLine - 1,
               token.startColumn - 1,
               token.text.length,
-              // @ts-ignore
-              labelText.length,
-              (referenceStringText || "").length
+              label.length,
+              (referenceString?.text || "").length
             ];
             const reference =
-              normalizeReference(referenceStringText || labelText);
+              normalizeReference(referenceString?.text || label);
             const dictionary = isShortcut ? shortcuts : references;
             const referenceData = dictionary.get(reference) || [];
             referenceData.push(referenceDatum);
@@ -1361,31 +1334,6 @@ function getTokenTextByType(tokens, type) {
 }
 
 /**
- * Determines a list of Micromark tokens matches and returns a subset.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @param {TokenType[]} matchTypes Types to match.
- * @param {TokenType[]} [resultTypes] Types to return.
- * @returns {Token[] | null} Matching tokens.
- */
-function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
-  if (tokens.length !== matchTypes.length) {
-    return null;
-  }
-  resultTypes = resultTypes || matchTypes;
-  const result = [];
-  // eslint-disable-next-line unicorn/no-for-loop
-  for (let i = 0; i < matchTypes.length; i++) {
-    if (tokens[i].type !== matchTypes[i]) {
-      return null;
-    } else if (resultTypes.includes(matchTypes[i])) {
-      result.push(tokens[i]);
-    }
-  }
-  return result;
-}
-
-/**
  * Set containing token types that do not contain content.
  *
  * @type {Set<TokenType>}
@@ -1416,7 +1364,6 @@ module.exports = {
   getTokenTextByType,
   inHtmlFlow,
   isHtmlFlowComment,
-  matchAndGetTokensByType,
   nonContentTokens
 };
 
@@ -5273,15 +5220,15 @@ module.exports = {
 
 
 const { addErrorContext, allPunctuation } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { matchAndGetTokensByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /** @typedef {import("../helpers/micromark.cjs").TokenType} TokenType */
-/** @type {Map<TokenType, TokenType[]>} */
-const emphasisAndChildrenTypes = new Map([
-  [ "emphasis", [ "emphasisSequence", "emphasisText", "emphasisSequence" ] ],
-  [ "strong", [ "strongSequence", "strongText", "strongSequence" ] ]
-]);
+/** @type {TokenType[][]} */
+const emphasisTypes = [
+  [ "emphasis", "emphasisText" ],
+  [ "strong", "strongText" ]
+];
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5299,21 +5246,15 @@ module.exports = {
         .filter((token) =>
           (token.parent?.type === "content") && !token.parent?.parent && (token.children.length === 1)
         );
-    for (const paragraphToken of paragraphTokens) {
-      const childToken = paragraphToken.children[0];
-      for (const [ emphasisType, emphasisChildrenTypes ] of emphasisAndChildrenTypes) {
-        if (childToken.type === emphasisType) {
-          const matchingTokens = matchAndGetTokensByType(childToken.children, emphasisChildrenTypes);
-          if (matchingTokens) {
-            const textToken = matchingTokens[1];
-            if (
-              (textToken.children.length === 1) &&
-              (textToken.children[0].type === "data") &&
-              !punctuationRe.test(textToken.text)
-            ) {
-              addErrorContext(onError, textToken.startLine, textToken.text);
-            }
-          }
+    for (const emphasisType of emphasisTypes) {
+      const textTokens = getDescendantsByType(paragraphTokens, emphasisType);
+      for (const textToken of textTokens) {
+        if (
+          (textToken.children.length === 1) &&
+          (textToken.children[0].type === "data") &&
+          !punctuationRe.test(textToken.text)
+        ) {
+          addErrorContext(onError, textToken.startLine, textToken.text);
         }
       }
     }

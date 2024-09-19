@@ -476,31 +476,6 @@ function getTokenTextByType(tokens, type) {
 }
 
 /**
- * Determines a list of Micromark tokens matches and returns a subset.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @param {TokenType[]} matchTypes Types to match.
- * @param {TokenType[]} [resultTypes] Types to return.
- * @returns {Token[] | null} Matching tokens.
- */
-function matchAndGetTokensByType(tokens, matchTypes, resultTypes) {
-  if (tokens.length !== matchTypes.length) {
-    return null;
-  }
-  resultTypes = resultTypes || matchTypes;
-  const result = [];
-  // eslint-disable-next-line unicorn/no-for-loop
-  for (let i = 0; i < matchTypes.length; i++) {
-    if (tokens[i].type !== matchTypes[i]) {
-      return null;
-    } else if (resultTypes.includes(matchTypes[i])) {
-      result.push(tokens[i]);
-    }
-  }
-  return result;
-}
-
-/**
  * Set containing token types that do not contain content.
  *
  * @type {Set<TokenType>}
@@ -531,6 +506,5 @@ module.exports = {
   getTokenTextByType,
   inHtmlFlow,
   isHtmlFlowComment,
-  matchAndGetTokensByType,
   nonContentTokens
 };
