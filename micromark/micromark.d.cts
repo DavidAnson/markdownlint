@@ -23,6 +23,16 @@ nok?: State | undefined
 ) => State
 
 /**
+ * Directive attribute.
+ */
+declare interface Attributes {
+    /**
+     * Key to value.
+     */
+    [key: string]: string
+}
+
+/**
  * Generate a back label dynamically.
  *
  * For the following markdown:
@@ -42,6 +52,14 @@ nok?: State | undefined
  *  `bravo`, as it is the first used definition, and the second call to it
  * * `1` and `0` for the backreference from `things about remark` to
  *  `charlie`, as it is the second used definition
+ *
+ * @param referenceIndex
+ *   Index of the definition in the order that they are first referenced,
+ *   0-indexed.
+ * @param rereferenceIndex
+ *   Index of calls to the same definition, 0-indexed.
+ * @returns
+ *   Back label to use when linking back from definitions to their reference.
  */
 declare type BackLabelTemplate = (
 referenceIndex: number,
@@ -84,12 +102,10 @@ export declare function compile(options?: CompileOptions_2 | null | undefined): 
  */
 declare type Compile_2 = (events: Array<Event_2>) => string
 
-declare type CompileContext = CompileContext_2
-
 /**
  * HTML compiler context.
  */
-declare type CompileContext_2 = {
+declare type CompileContext = {
     /**
      * Configuration passed by the user.
      */
@@ -549,31 +565,31 @@ declare type Definition = {
 /**
  * Structure representing a directive.
  */
-declare type Directive = {
+declare interface Directive {
     /**
-     *   Kind.
+     * Private :)
      */
-    type: DirectiveType
-    /**
-     *   Name of directive.
-     */
-    name: string
-    /**
-     * Compiled HTML content that was in `[brackets]`.
-     */
-    label?: string | undefined
+    _fenceCount?: number | undefined
     /**
      * Object w/ HTML attributes.
      */
-    attributes?: Record<string, string> | undefined
+    attributes?: Attributes | undefined
     /**
      * Compiled HTML content inside container directive.
      */
     content?: string | undefined
     /**
-     * Private :)
+     * Compiled HTML content that was in `[brackets]`.
      */
-    _fenceCount?: number | undefined
+    label?: string | undefined
+    /**
+     * Name of directive.
+     */
+    name: string
+    /**
+     * Kind.
+     */
+    type: 'containerDirective' | 'leafDirective' | 'textDirective'
 }
 
 /**
@@ -583,7 +599,7 @@ declare type Directive = {
  *   Extension for `micromark` that can be passed in `extensions`, to
  *   enable directive syntax.
  */
-export declare function directive(): Extension
+export declare function directive(): Extension;
 
 /**
  * Create an extension for `micromark` to support directives when serializing
@@ -595,17 +611,7 @@ export declare function directive(): Extension
  *   Extension for `micromark` that can be passed in `htmlExtensions`, to
  *   support directives when serializing to HTML.
  */
-export declare function directiveHtml(
-options?: HtmlOptions | null | undefined
-): HtmlExtension_2
-
-/**
- * Kind.
- */
-declare type DirectiveType =
-| 'containerDirective'
-| 'leafDirective'
-| 'textDirective'
+export declare function directiveHtml(options?: HtmlOptions | null | undefined): HtmlExtension;
 
 /**
  * Handle the whole document.
@@ -614,7 +620,7 @@ declare type DirectiveType =
  *   Nothing.
  */
 declare type DocumentHandle = (
-this: Omit<CompileContext_2, 'sliceSerialize'>
+this: Omit<CompileContext, 'sliceSerialize'>
 ) => undefined
 
 /**
@@ -718,14 +724,12 @@ declare type Exit = (type: TokenType) => Token
  */
 declare type Exiter = (this: TokenizeContext, effects: Effects) => undefined
 
-declare type Extension = Extension_2
-
 /**
  * A syntax extension changes how markdown is tokenized.
  *
  * See: <https://github.com/micromark/micromark#syntaxextension>
  */
-declare interface Extension_2 {
+declare interface Extension {
     document?: ConstructRecord | undefined
     contentInitial?: ConstructRecord | undefined
     flowInitial?: ConstructRecord | undefined
@@ -739,19 +743,11 @@ declare interface Extension_2 {
     attentionMarkers?: {null?: Array<Code> | undefined} | undefined
 }
 
-declare type Extension_3 = Extension_2
-
-declare type Extension_4 = Extension_2
-
-declare type Extension_5 = Extension_2
-
-declare type Extension_6 = Extension_2
-
 /**
  * A full, filtereed, normalized, extension.
  */
 declare type FullNormalizedExtension = {
-    [Key in keyof Extension_2]-?: Exclude<Extension_2[Key], undefined>
+    [Key in keyof Extension]-?: Exclude<Extension[Key], undefined>
 }
 
 /**
@@ -762,7 +758,7 @@ declare type FullNormalizedExtension = {
  *   Extension for `micromark` that can be passed in `extensions` to enable GFM
  *   autolink literal syntax.
  */
-export declare function gfmAutolinkLiteral(): Extension_3
+export declare function gfmAutolinkLiteral(): Extension;
 
 /**
  * Create an HTML extension for `micromark` to support GitHub autolink literal
@@ -772,7 +768,7 @@ export declare function gfmAutolinkLiteral(): Extension_3
  *   Extension for `micromark` that can be passed in `htmlExtensions` to
  *   support GitHub autolink literal when serializing to HTML.
  */
-export declare function gfmAutolinkLiteralHtml(): HtmlExtension_3
+export declare function gfmAutolinkLiteralHtml(): HtmlExtension;
 
 /**
  * Create an extension for `micromark` to enable GFM footnote syntax.
@@ -781,7 +777,7 @@ export declare function gfmAutolinkLiteralHtml(): HtmlExtension_3
  *   Extension for `micromark` that can be passed in `extensions` to
  *   enable GFM footnote syntax.
  */
-export declare function gfmFootnote(): Extension_4
+export declare function gfmFootnote(): Extension;
 
 /**
  * Create an extension for `micromark` to support GFM footnotes when
@@ -793,9 +789,7 @@ export declare function gfmFootnote(): Extension_4
  *   Extension for `micromark` that can be passed in `htmlExtensions` to
  *   support GFM footnotes when serializing to HTML.
  */
-export declare function gfmFootnoteHtml(
-options?: Options | null | undefined
-): HtmlExtension_4
+export declare function gfmFootnoteHtml(options?: HtmlOptions_2 | null | undefined): HtmlExtension;
 
 /**
  * Create an HTML extension for `micromark` to support GitHub tables syntax.
@@ -804,7 +798,7 @@ options?: Options | null | undefined
  *   Extension for `micromark` that can be passed in `extensions` to enable GFM
  *   table syntax.
  */
-export declare function gfmTable(): Extension_5
+export declare function gfmTable(): Extension;
 
 /**
  * Create an HTML extension for `micromark` to support GitHub tables when
@@ -814,10 +808,19 @@ export declare function gfmTable(): Extension_5
  *   Extension for `micromark` that can be passed in `htmlExtensions` to
  *   support GitHub tables when serializing to HTML.
  */
-export declare function gfmTableHtml(): HtmlExtension_5
+export declare function gfmTableHtml(): HtmlExtension;
 
 /**
  * Handle a directive.
+ *
+ * @param this
+ *   Current context.
+ * @param directive
+ *   Directive.
+ * @returns
+ *   Signal whether the directive was handled.
+ *
+ *   Yield `false` to let the fallback (a special handle for `'*'`) handle it.
  */
 declare type Handle = (
 this: CompileContext,
@@ -832,7 +835,7 @@ directive: Directive
  * @returns
  *   Nothing.
  */
-declare type Handle_2 = (this: CompileContext_2, token: Token) => undefined
+declare type Handle_2 = (this: CompileContext, token: Token) => undefined
 
 /**
  * Token types mapping to handles.
@@ -857,60 +860,20 @@ declare interface HtmlExtension {
     exit?: Handles | undefined
 }
 
-declare type HtmlExtension_2 = HtmlExtension
-
-declare type HtmlExtension_3 = HtmlExtension
-
-declare type HtmlExtension_4 = HtmlExtension
-
-declare type HtmlExtension_5 = HtmlExtension
-
-declare type HtmlExtension_6 = HtmlExtension
-
 /**
  * Configuration.
  *
  * > 👉 **Note**: the special field `'*'` can be used to specify a fallback
  * > handle to handle all otherwise unhandled directives.
  */
-declare type HtmlOptions = Record<string, Handle>
-
-declare type KatexOptions = Object
-
-/**
- * Type of line ending in markdown.
- */
-declare type LineEnding = '\r' | '\n' | '\r\n'
-
-/**
- * Create an extension for `micromark` to enable math syntax.
- *
- * @param {Options | null | undefined} [options={}]
- *   Configuration (default: `{}`).
- * @returns {Extension}
- *   Extension for `micromark` that can be passed in `extensions`, to
- *   enable math syntax.
- */
-export declare function math(options?: Options_2 | null | undefined): Extension_6
-
-/**
- * Create an extension for `micromark` to support math when serializing to
- * HTML.
- *
- * > 👉 **Note**: this uses KaTeX to render math.
- *
- * @param {Options | null | undefined} [options={}]
- *   Configuration (default: `{}`).
- * @returns {HtmlExtension}
- *   Extension for `micromark` that can be passed in `htmlExtensions`, to
- *   support math when serializing to HTML.
- */
-export declare function mathHtml(options?: Options_4 | null | undefined): HtmlExtension_6
+declare interface HtmlOptions {
+    [name: string]: Handle
+}
 
 /**
  * Configuration.
  */
-declare type Options = {
+declare interface HtmlOptions_2 {
     /**
      * Prefix to use before the `id` attribute on footnotes to prevent them from
      * *clobbering* (default: `'user-content-'`).
@@ -979,11 +942,11 @@ declare type Options = {
      *
      * ```js
      * function defaultBackLabel(referenceIndex, rereferenceIndex) {
-     * return (
-     * 'Back to reference ' +
-     * (referenceIndex + 1) +
-     * (rereferenceIndex > 1 ? '-' + rereferenceIndex : '')
-     * )
+     *   return (
+     *     'Back to reference ' +
+     *     (referenceIndex + 1) +
+     *     (rereferenceIndex > 1 ? '-' + rereferenceIndex : '')
+     *   )
      * }
      * ```
      *
@@ -996,12 +959,56 @@ declare type Options = {
     backLabel?: BackLabelTemplate | string | null | undefined
 }
 
-declare type Options_2 = Options_3
+/**
+ * Configuration for HTML output.
+ *
+ * > 👉 **Note**: passed to `katex.renderToString`.
+ * > `displayMode` is overwritten by this plugin, to `false` for math in
+ * > text (inline), and `true` for math in flow (block).
+ */
+declare interface HtmlOptions_3 extends Object {
+    /**
+     * The field `displayMode` cannot be passed to `micromark-extension-math`.
+     * It is overwritten by it,
+     * to `false` for math in text (inline) and `true` for math in flow (block).
+     */
+    displayMode?: never
+}
+
+/**
+ * Type of line ending in markdown.
+ */
+declare type LineEnding = '\r' | '\n' | '\r\n'
+
+/**
+ * Create an extension for `micromark` to enable math syntax.
+ *
+ * @param {Options | null | undefined} [options={}]
+ *   Configuration (default: `{}`).
+ * @returns {Extension}
+ *   Extension for `micromark` that can be passed in `extensions`, to
+ *   enable math syntax.
+ */
+export declare function math(options?: Options | null | undefined): Extension;
+
+/**
+ * Create an extension for `micromark` to support math when serializing to
+ * HTML.
+ *
+ * > 👉 **Note**: this uses KaTeX to render math.
+ *
+ * @param {Options | null | undefined} [options={}]
+ *   Configuration (default: `{}`).
+ * @returns {HtmlExtension}
+ *   Extension for `micromark` that can be passed in `htmlExtensions`, to
+ *   support math when serializing to HTML.
+ */
+export declare function mathHtml(options?: HtmlOptions_3 | null | undefined): HtmlExtension;
 
 /**
  * Configuration.
  */
-declare type Options_3 = {
+declare interface Options {
     /**
      * Whether to support math (text) with a single dollar (default: `true`).
      *
@@ -1011,15 +1018,6 @@ declare type Options_3 = {
      */
     singleDollarTextMath?: boolean | null | undefined
 }
-
-/**
- * Configuration for HTML output.
- *
- * > 👉 **Note**: passed to `katex.renderToString`.
- * > `displayMode` is overwritten by this plugin, to `false` for math in
- * > text (inline), and `true` for math in flow (block).
- */
-declare type Options_4 = Omit<KatexOptions, 'displayMode'>
 
 /**
  * @param {ParseOptions | null | undefined} [options]
@@ -1090,7 +1088,7 @@ export declare interface ParseOptions {
     /**
      * Array of syntax extensions (default: `[]`).
      */
-    extensions?: Array<Extension_2> | null | undefined
+    extensions?: Array<Extension> | null | undefined
 }
 
 declare type ParseOptions_2 = ParseOptions
