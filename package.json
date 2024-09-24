@@ -69,7 +69,7 @@
     "markdownlint-micromark": "0.1.11"
   },
   "devDependencies": {
-    "@eslint/js": "9.11.0",
+    "@eslint/js": "9.11.1",
     "@stylistic/eslint-plugin": "2.8.0",
     "ajv": "8.17.1",
     "ava": "6.1.3",
