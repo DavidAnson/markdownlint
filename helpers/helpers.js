@@ -451,15 +451,10 @@ function getReferenceLinkImageData(tokens) {
           if (definitions.has(reference)) {
             duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
-            let destinationString = null;
             const parent =
               micromark.getTokenParentOfType(token, [ "definition" ]);
-            if (parent) {
-              destinationString = micromark.getTokenTextByType(
-                micromark.filterByPredicate(parent.children),
-                "definitionDestinationString"
-              );
-            }
+            const destinationString = parent &&
+              micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
             definitions.set(
               reference,
               [ token.startLine - 1, destinationString ]

@@ -463,15 +463,10 @@ function getReferenceLinkImageData(tokens) {
           if (definitions.has(reference)) {
             duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
-            let destinationString = null;
             const parent =
               micromark.getTokenParentOfType(token, [ "definition" ]);
-            if (parent) {
-              destinationString = micromark.getTokenTextByType(
-                micromark.filterByPredicate(parent.children),
-                "definitionDestinationString"
-              );
-            }
+            const destinationString = parent &&
+              micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
             definitions.set(
               reference,
               [ token.startLine - 1, destinationString ]
@@ -1180,13 +1175,15 @@ function filterByTypes(tokens, types, htmlFlow) {
  * Gets a list of nested Micromark token descendants by type path.
  *
  * @param {Token|Token[]} parent Micromark token parent or parents.
- * @param {TokenType[]} typePath Micromark token type path.
+ * @param {(TokenType|TokenType[])[]} typePath Micromark token type path.
  * @returns {Token[]} Micromark token descendants.
  */
 function getDescendantsByType(parent, typePath) {
   let tokens = Array.isArray(parent) ? parent : [ parent ];
   for (const type of typePath) {
-    tokens = tokens.flatMap((t) => t.children).filter((t) => t.type === type);
+    tokens = tokens
+      .flatMap((t) => t.children)
+      .filter((t) => Array.isArray(type) ? type.includes(t.type) : (type === t.type));
   }
   return tokens;
 }
@@ -1318,22 +1315,6 @@ function getTokenParentOfType(token, types) {
 }
 
 /**
- * Get the text of the first match from a list of Micromark tokens by type.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @param {TokenType} type Type to match.
- * @returns {string | null} Text of token.
- */
-function getTokenTextByType(tokens, type) {
-  for (const token of tokens) {
-    if (token.type === type) {
-      return token.text;
-    }
-  }
-  return null;
-}
-
-/**
  * Set containing token types that do not contain content.
  *
  * @type {Set<TokenType>}
@@ -1361,7 +1342,6 @@ module.exports = {
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,
-  getTokenTextByType,
   inHtmlFlow,
   isHtmlFlowComment,
   nonContentTokens
@@ -4711,7 +4691,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const listStyleExamples = {
@@ -4727,7 +4707,7 @@ const listStyleExamples = {
  * @returns {number} List item value.
  */
 function getOrderedListItemValue(listItemPrefix) {
-  return Number(getTokenTextByType(listItemPrefix.children, "listItemValue"));
+  return Number(getDescendantsByType(listItemPrefix, [ "listItemValue" ])[0].text);
 }
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5583,7 +5563,7 @@ module.exports = {
 
 
 const { addError, addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5600,14 +5580,14 @@ module.exports = {
     const fencedCodes = filterByTypesCached([ "codeFenced" ]);
     for (const fencedCode of fencedCodes) {
       const openingFence = getDescendantsByType(fencedCode, [ "codeFencedFence" ])[0];
-      const { children, startLine, text } = openingFence;
-      const info = getTokenTextByType(children, "codeFencedFenceInfo");
+      const { startLine, text } = openingFence;
+      const info = getDescendantsByType(openingFence, [ "codeFencedFenceInfo" ])[0]?.text;
       if (!info) {
         addErrorContext(onError, startLine, text);
       } else if ((allowed.length > 0) && !allowed.includes(info)) {
         addError(onError, startLine, `"${info}" is not allowed`);
       }
-      if (languageOnly && getTokenTextByType(children, "codeFencedFenceMeta")) {
+      if (languageOnly && getDescendantsByType(openingFence, [ "codeFencedFenceMeta" ]).length > 0) {
         addError(onError, startLine, `Info string contains more than language: "${text}"`);
       }
     }
@@ -5699,11 +5679,7 @@ module.exports = {
       const reference = getDescendantsByType(link, [ "reference" ]);
       const resource = getDescendantsByType(link, [ "resource" ]);
       const referenceString = getDescendantsByType(reference, [ "referenceString" ]);
-      const resourceDestination = getDescendantsByType(resource, [ "resourceDestination" ]);
-      const resourceDestinationString = [
-        ...getDescendantsByType(resourceDestination, [ "resourceDestinationRaw", "resourceDestinationString" ]),
-        ...getDescendantsByType(resourceDestination, [ "resourceDestinationLiteral", "resourceDestinationString" ])
-      ];
+      const resourceDestinationString = getDescendantsByType(resource, [ "resourceDestination", [ "resourceDestinationLiteral", "resourceDestinationRaw" ], "resourceDestinationString" ]);
       const hasLabelText = labelText.length > 0;
       const hasReference = reference.length > 0;
       const hasResource = resource.length > 0;
@@ -6583,7 +6559,7 @@ module.exports = {
 
 
 const { addErrorContext, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, getTokenTextByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const backslashEscapeRe = /\\([!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g;
@@ -6625,24 +6601,23 @@ module.exports = {
       let label = null;
       let destination = null;
       const {
-        children, endColumn, endLine, startColumn, startLine, text, type
+        endColumn, endLine, startColumn, startLine, text, type
       } = link;
       const image = (type === "image");
       let isError = false;
       if (type === "autolink") {
         // link kind is an autolink
-        destination = getTokenTextByType(children, "autolinkProtocol");
+        destination = getDescendantsByType(link, [ "autolinkProtocol" ])[0].text;
         label = destination;
         isError = !autolink;
       } else {
         // link type is "image" or "link"
-        const descendents = filterByPredicate(children);
-        label = getTokenTextByType(descendents, "labelText");
+        label = getDescendantsByType(link, [ "label", "labelText" ])[0].text;
         destination =
-          getTokenTextByType(descendents, "resourceDestinationString");
+          getDescendantsByType(link, [ "resource", "resourceDestination", [ "resourceDestinationLiteral", "resourceDestinationRaw" ], "resourceDestinationString" ])[0]?.text;
         if (destination) {
           // link kind is an inline link
-          const title = getTokenTextByType(descendents, "resourceTitleString");
+          const title = getDescendantsByType(link, [ "resource", "resourceTitle", "resourceTitleString" ])[0]?.text;
           isError = !inline || (
             !urlInline &&
             autolink &&
@@ -6653,9 +6628,9 @@ module.exports = {
           );
         } else {
           // link kind is a full/collapsed/shortcut reference link
-          const isShortcut = !children.some((t) => t.type === "reference");
-          const referenceString = getTokenTextByType(descendents, "referenceString");
-          const isCollapsed = (referenceString === null);
+          const isShortcut = getDescendantsByType(link, [ "reference" ]).length === 0;
+          const referenceString = getDescendantsByType(link, [ "reference", "referenceString" ])[0]?.text;
+          const isCollapsed = (referenceString === undefined);
           const definition = definitions.get(referenceString || label);
           destination = definition && definition[1];
           isError = destination &&

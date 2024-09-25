@@ -322,13 +322,15 @@ function filterByTypes(tokens, types, htmlFlow) {
  * Gets a list of nested Micromark token descendants by type path.
  *
  * @param {Token|Token[]} parent Micromark token parent or parents.
- * @param {TokenType[]} typePath Micromark token type path.
+ * @param {(TokenType|TokenType[])[]} typePath Micromark token type path.
  * @returns {Token[]} Micromark token descendants.
  */
 function getDescendantsByType(parent, typePath) {
   let tokens = Array.isArray(parent) ? parent : [ parent ];
   for (const type of typePath) {
-    tokens = tokens.flatMap((t) => t.children).filter((t) => t.type === type);
+    tokens = tokens
+      .flatMap((t) => t.children)
+      .filter((t) => Array.isArray(type) ? type.includes(t.type) : (type === t.type));
   }
   return tokens;
 }
@@ -460,22 +462,6 @@ function getTokenParentOfType(token, types) {
 }
 
 /**
- * Get the text of the first match from a list of Micromark tokens by type.
- *
- * @param {Token[]} tokens Micromark tokens.
- * @param {TokenType} type Type to match.
- * @returns {string | null} Text of token.
- */
-function getTokenTextByType(tokens, type) {
-  for (const token of tokens) {
-    if (token.type === type) {
-      return token.text;
-    }
-  }
-  return null;
-}
-
-/**
  * Set containing token types that do not contain content.
  *
  * @type {Set<TokenType>}
@@ -503,7 +489,6 @@ module.exports = {
   getHtmlTagInfo,
   getMicromarkEvents,
   getTokenParentOfType,
-  getTokenTextByType,
   inHtmlFlow,
   isHtmlFlowComment,
   nonContentTokens
