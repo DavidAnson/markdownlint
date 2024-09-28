@@ -2,7 +2,7 @@
 
 "use strict";
 
-const micromark = require("./micromark.cjs");
+const micromark = require("./micromark-helpers.cjs");
 
 const { newLineRe, nextLinesRe } = require("./shared.js");
 
@@ -421,7 +421,7 @@ module.exports.frontMatterHasTitle =
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {import("../helpers/micromark.cjs").Token[]} tokens Micromark tokens.
+ * @param {import("../helpers/micromark-helpers.cjs").Token[]} tokens Micromark tokens.
  * @returns {Object} Reference link/image data.
  */
 function getReferenceLinkImageData(tokens) {

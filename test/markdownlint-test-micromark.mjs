@@ -3,8 +3,8 @@
 import fs from "node:fs/promises";
 import test from "ava";
 import { newLineRe } from "../helpers/helpers.js";
-import { filterByPredicate, filterByTypes, getMicromarkEvents, parse }
-  from "../helpers/micromark.cjs";
+import { filterByPredicate, filterByTypes } from "../helpers/micromark-helpers.cjs";
+import { getEvents, parse } from "../helpers/micromark-parse.cjs";
 
 const testContent = new Promise((resolve, reject) => {
   fs
@@ -39,10 +39,10 @@ test("parse", async(t) => {
   t.snapshot(cloneTokens(await testTokens), "Unexpected tokens");
 });
 
-test("getMicromarkEvents/filterByPredicate", async(t) => {
+test("getEvents/filterByPredicate", async(t) => {
   t.plan(1);
   const content = await testContent;
-  const events = getMicromarkEvents(content);
+  const events = getEvents(content);
   let inHtmlFlow = false;
   const eventTypes = events
     .filter((event) => {

@@ -14,7 +14,7 @@ var markdownlint;
 
 
 
-const micromark = __webpack_require__(/*! ./micromark.cjs */ "../helpers/micromark.cjs");
+const micromark = __webpack_require__(/*! ./micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 
 const { newLineRe, nextLinesRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
@@ -433,7 +433,7 @@ module.exports.frontMatterHasTitle =
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {import("../helpers/micromark.cjs").Token[]} tokens Micromark tokens.
+ * @param {import("../helpers/micromark-helpers.cjs").Token[]} tokens Micromark tokens.
  * @returns {Object} Reference link/image data.
  */
 function getReferenceLinkImageData(tokens) {
@@ -737,6 +737,12 @@ module.exports.expandTildePath = expandTildePath;
 
 
 
+// Symbol for identifing the flat tokens array from micromark parse
+module.exports.flatTokensSymbol = Symbol("flat-tokens");
+
+// Symbol for identifying the htmlFlow token from micromark parse
+module.exports.htmlFlowSymbol = Symbol("html-flow");
+
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
 module.exports.newLineRe = /\r\n?|\n/g;
@@ -856,10 +862,10 @@ module.exports = {
 
 /***/ }),
 
-/***/ "../helpers/micromark.cjs":
-/*!********************************!*\
-  !*** ../helpers/micromark.cjs ***!
-  \********************************/
+/***/ "../helpers/micromark-helpers.cjs":
+/*!****************************************!*\
+  !*** ../helpers/micromark-helpers.cjs ***!
+  \****************************************/
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 "use strict";
@@ -867,15 +873,8 @@ module.exports = {
 
 
 
-const { directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse, postprocess, preprocess } =
-  __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
-const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+const { flatTokensSymbol, htmlFlowSymbol } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
-const flatTokensSymbol = Symbol("flat-tokens");
-const htmlFlowSymbol = Symbol("html-flow");
-
-/** @typedef {import("markdownlint-micromark").Event} Event */
-/** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
 
@@ -916,180 +915,6 @@ function isHtmlFlowComment(token) {
     );
   }
   return false;
-}
-
-/**
- * Parses a Markdown document and returns Micromark events.
- *
- * @param {string} markdown Markdown document.
- * @param {ParseOptions} [micromarkOptions] Options for micromark.
- * @param {boolean} [referencesDefined] Treat references as defined.
- * @returns {Event[]} Micromark events.
- */
-function getMicromarkEvents(
-  markdown,
-  micromarkOptions = {},
-  referencesDefined = true
-) {
-
-  // Customize options object to add useful extensions
-  micromarkOptions.extensions = micromarkOptions.extensions || [];
-  micromarkOptions.extensions.push(
-    directive(),
-    gfmAutolinkLiteral(),
-    gfmFootnote(),
-    gfmTable(),
-    math()
-  );
-
-  // Use micromark to parse document into Events
-  const encoding = undefined;
-  const eol = true;
-  const parseContext = parse(micromarkOptions);
-  if (referencesDefined) {
-    // Customize ParseContext to treat all references as defined
-    parseContext.defined.includes = (searchElement) => searchElement.length > 0;
-  }
-  const chunks = preprocess()(markdown, encoding, eol);
-  const events = postprocess(parseContext.document().write(chunks));
-  return events;
-}
-
-/**
- * Parses a Markdown document and returns (frozen) tokens.
- *
- * @param {string} markdown Markdown document.
- * @param {ParseOptions} micromarkOptions Options for micromark.
- * @param {boolean} referencesDefined Treat references as defined.
- * @param {number} lineDelta Offset to apply to start/end line.
- * @param {Token} [ancestor] Parent of top-most tokens.
- * @returns {Token[]} Micromark tokens (frozen).
- */
-function micromarkParseWithOffset(
-  markdown,
-  micromarkOptions,
-  referencesDefined,
-  lineDelta,
-  ancestor
-) {
-  // Use micromark to parse document into Events
-  const events = getMicromarkEvents(
-    markdown, micromarkOptions, referencesDefined
-  );
-
-  // Create Token objects
-  const document = [];
-  let flatTokens = [];
-  /** @type {Token} */
-  const root = {
-    "type": "data",
-    "startLine": -1,
-    "startColumn": -1,
-    "endLine": -1,
-    "endColumn": -1,
-    "text": "ROOT",
-    "children": document,
-    "parent": null
-  };
-  const history = [ root ];
-  let current = root;
-  // eslint-disable-next-line jsdoc/valid-types
-  /** @type ParseOptions | null */
-  let reparseOptions = null;
-  let lines = null;
-  let skipHtmlFlowChildren = false;
-  for (const event of events) {
-    const [ kind, token, context ] = event;
-    const { type, start, end } = token;
-    const { "column": startColumn, "line": startLine } = start;
-    const { "column": endColumn, "line": endLine } = end;
-    const text = context.sliceSerialize(token);
-    if ((kind === "enter") && !skipHtmlFlowChildren) {
-      const previous = current;
-      history.push(previous);
-      current = {
-        type,
-        "startLine": startLine + lineDelta,
-        startColumn,
-        "endLine": endLine + lineDelta,
-        endColumn,
-        text,
-        "children": [],
-        "parent": ((previous === root) ? (ancestor || null) : previous)
-      };
-      if (ancestor) {
-        Object.defineProperty(current, htmlFlowSymbol, { "value": true });
-      }
-      previous.children.push(current);
-      flatTokens.push(current);
-      if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
-        skipHtmlFlowChildren = true;
-        if (!reparseOptions || !lines) {
-          reparseOptions = {
-            ...micromarkOptions,
-            "extensions": [
-              {
-                "disable": {
-                  "null": [ "codeIndented", "htmlFlow" ]
-                }
-              }
-            ]
-          };
-          lines = markdown.split(newLineRe);
-        }
-        const reparseMarkdown = lines
-          .slice(current.startLine - 1, current.endLine)
-          .join("\n");
-        const tokens = micromarkParseWithOffset(
-          reparseMarkdown,
-          reparseOptions,
-          referencesDefined,
-          current.startLine - 1,
-          current
-        );
-        current.children = tokens;
-        // Avoid stack overflow of Array.push(...spread)
-        // eslint-disable-next-line unicorn/prefer-spread
-        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
-      }
-    } else if (kind === "exit") {
-      if (type === "htmlFlow") {
-        skipHtmlFlowChildren = false;
-      }
-      if (!skipHtmlFlowChildren) {
-        Object.freeze(current.children);
-        Object.freeze(current);
-        // @ts-ignore
-        current = history.pop();
-      }
-    }
-  }
-
-  // Return document
-  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
-  Object.freeze(document);
-  return document;
-}
-
-/**
- * Parses a Markdown document and returns (frozen) tokens.
- *
- * @param {string} markdown Markdown document.
- * @param {ParseOptions} [micromarkOptions] Options for micromark.
- * @param {boolean} [referencesDefined] Treat references as defined.
- * @returns {Token[]} Micromark tokens (frozen).
- */
-function micromarkParse(
-  markdown,
-  micromarkOptions = {},
-  referencesDefined = true
-) {
-  return micromarkParseWithOffset(
-    markdown,
-    micromarkOptions,
-    referencesDefined,
-    0
-  );
 }
 
 /**
@@ -1310,7 +1135,6 @@ const nonContentTokens = new Set([
 ]);
 
 module.exports = {
-  "parse": micromarkParse,
   addRangeToSet,
   filterByPredicate,
   filterByTypes,
@@ -1320,10 +1144,210 @@ module.exports = {
   getHeadingText,
   getHtmlTagInfo,
   getParentOfType,
-  getMicromarkEvents,
   inHtmlFlow,
   isHtmlFlowComment,
   nonContentTokens
+};
+
+
+/***/ }),
+
+/***/ "../helpers/micromark-parse.cjs":
+/*!**************************************!*\
+  !*** ../helpers/micromark-parse.cjs ***!
+  \**************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+// @ts-check
+
+
+
+const micromark = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
+const { isHtmlFlowComment } = __webpack_require__(/*! ./micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+
+/** @typedef {import("markdownlint-micromark").Event} Event */
+/** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
+/** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+
+/**
+ * Parses a Markdown document and returns Micromark events.
+ *
+ * @param {string} markdown Markdown document.
+ * @param {ParseOptions} [micromarkOptions] Options for micromark.
+ * @param {boolean} [referencesDefined] Treat references as defined.
+ * @returns {Event[]} Micromark events.
+ */
+function getEvents(
+  markdown,
+  micromarkOptions = {},
+  referencesDefined = true
+) {
+
+  // Customize options object to add useful extensions
+  micromarkOptions.extensions = micromarkOptions.extensions || [];
+  micromarkOptions.extensions.push(
+    micromark.directive(),
+    micromark.gfmAutolinkLiteral(),
+    micromark.gfmFootnote(),
+    micromark.gfmTable(),
+    micromark.math()
+  );
+
+  // Use micromark to parse document into Events
+  const encoding = undefined;
+  const eol = true;
+  const parseContext = micromark.parse(micromarkOptions);
+  if (referencesDefined) {
+    // Customize ParseContext to treat all references as defined
+    parseContext.defined.includes = (searchElement) => searchElement.length > 0;
+  }
+  const chunks = micromark.preprocess()(markdown, encoding, eol);
+  const events = micromark.postprocess(parseContext.document().write(chunks));
+  return events;
+}
+
+/**
+ * Parses a Markdown document and returns (frozen) tokens.
+ *
+ * @param {string} markdown Markdown document.
+ * @param {ParseOptions} micromarkOptions Options for micromark.
+ * @param {boolean} referencesDefined Treat references as defined.
+ * @param {number} lineDelta Offset to apply to start/end line.
+ * @param {Token} [ancestor] Parent of top-most tokens.
+ * @returns {Token[]} Micromark tokens (frozen).
+ */
+function parseWithOffset(
+  markdown,
+  micromarkOptions,
+  referencesDefined,
+  lineDelta,
+  ancestor
+) {
+  // Use micromark to parse document into Events
+  const events = getEvents(
+    markdown, micromarkOptions, referencesDefined
+  );
+
+  // Create Token objects
+  const document = [];
+  let flatTokens = [];
+  /** @type {Token} */
+  const root = {
+    "type": "data",
+    "startLine": -1,
+    "startColumn": -1,
+    "endLine": -1,
+    "endColumn": -1,
+    "text": "ROOT",
+    "children": document,
+    "parent": null
+  };
+  const history = [ root ];
+  let current = root;
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type ParseOptions | null */
+  let reparseOptions = null;
+  let lines = null;
+  let skipHtmlFlowChildren = false;
+  for (const event of events) {
+    const [ kind, token, context ] = event;
+    const { type, start, end } = token;
+    const { "column": startColumn, "line": startLine } = start;
+    const { "column": endColumn, "line": endLine } = end;
+    const text = context.sliceSerialize(token);
+    if ((kind === "enter") && !skipHtmlFlowChildren) {
+      const previous = current;
+      history.push(previous);
+      current = {
+        type,
+        "startLine": startLine + lineDelta,
+        startColumn,
+        "endLine": endLine + lineDelta,
+        endColumn,
+        text,
+        "children": [],
+        "parent": ((previous === root) ? (ancestor || null) : previous)
+      };
+      if (ancestor) {
+        Object.defineProperty(current, htmlFlowSymbol, { "value": true });
+      }
+      previous.children.push(current);
+      flatTokens.push(current);
+      if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
+        skipHtmlFlowChildren = true;
+        if (!reparseOptions || !lines) {
+          reparseOptions = {
+            ...micromarkOptions,
+            "extensions": [
+              {
+                "disable": {
+                  "null": [ "codeIndented", "htmlFlow" ]
+                }
+              }
+            ]
+          };
+          lines = markdown.split(newLineRe);
+        }
+        const reparseMarkdown = lines
+          .slice(current.startLine - 1, current.endLine)
+          .join("\n");
+        const tokens = parseWithOffset(
+          reparseMarkdown,
+          reparseOptions,
+          referencesDefined,
+          current.startLine - 1,
+          current
+        );
+        current.children = tokens;
+        // Avoid stack overflow of Array.push(...spread)
+        // eslint-disable-next-line unicorn/prefer-spread
+        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
+      }
+    } else if (kind === "exit") {
+      if (type === "htmlFlow") {
+        skipHtmlFlowChildren = false;
+      }
+      if (!skipHtmlFlowChildren) {
+        Object.freeze(current.children);
+        Object.freeze(current);
+        // @ts-ignore
+        current = history.pop();
+      }
+    }
+  }
+
+  // Return document
+  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
+  Object.freeze(document);
+  return document;
+}
+
+/**
+ * Parses a Markdown document and returns (frozen) tokens.
+ *
+ * @param {string} markdown Markdown document.
+ * @param {ParseOptions} [micromarkOptions] Options for micromark.
+ * @param {boolean} [referencesDefined] Treat references as defined.
+ * @returns {Token[]} Micromark tokens (frozen).
+ */
+function parse(
+  markdown,
+  micromarkOptions = {},
+  referencesDefined = true
+) {
+  return parseWithOffset(
+    markdown,
+    micromarkOptions,
+    referencesDefined,
+    0
+  );
+}
+
+module.exports = {
+  getEvents,
+  parse
 };
 
 
@@ -1341,7 +1365,7 @@ module.exports = {
 
 
 const helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 
 /** @type {Map<string, object>} */
 const map = new Map();
@@ -1632,7 +1656,7 @@ module.exports = {
 
 const path = __webpack_require__(/*! node:path */ "?9a52");
 const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
-const micromark = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const micromark = __webpack_require__(/*! ../helpers/micromark-parse.cjs */ "../helpers/micromark-parse.cjs");
 // const { deprecatedRuleNames } = require("./constants");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 const helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
@@ -3121,7 +3145,7 @@ module.exports = markdownlint;
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3163,7 +3187,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3224,7 +3248,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType, getParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType, getParentOfType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const markerToStyle = {
@@ -3264,7 +3288,7 @@ module.exports = {
     for (const listUnordered of filterByTypesCached([ "listUnordered" ])) {
       let nesting = 0;
       if (style === "sublist") {
-        /** @type {import("../helpers/micromark.cjs").Token | null} */
+        /** @type {import("../helpers/micromark-helpers.cjs").Token | null} */
         let parent = listUnordered;
         // @ts-ignore
         while ((parent = getParentOfType(parent, [ "listOrdered", "listUnordered" ]))) {
@@ -3404,7 +3428,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3436,7 +3460,7 @@ module.exports = {
         lastBlockQuotePrefix = token;
       } else if (type === "listUnordered") {
         let nesting = 0;
-        /** @type {import("../helpers/micromark.cjs").Token | null} */
+        /** @type {import("../helpers/micromark-helpers.cjs").Token | null} */
         let current = token;
         while (
           // @ts-ignore
@@ -3503,7 +3527,7 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3609,7 +3633,7 @@ module.exports = {
 
 
 const { addError, hasOverlap } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const tabRe = /\t+/g;
@@ -3633,7 +3657,7 @@ module.exports = {
       1 :
       Math.max(0, Number(spacesPerTab));
     // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").TokenType[] */
+    /** @type import("../helpers/micromark-helpers.cjs").TokenType[] */
     const exclusionTypes = [];
     if (includeCode) {
       if (ignoreCodeLanguages.size > 0) {
@@ -3702,7 +3726,7 @@ module.exports = {
 
 
 const { addError, hasOverlap } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const reversedLinkRe =
@@ -3771,7 +3795,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3826,7 +3850,7 @@ module.exports = {
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { getReferenceLinkImageData } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
-const { addRangeToSet, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const longLineRePrefix = "^.{";
@@ -3941,7 +3965,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const dollarCommandRe = /^(\s*)(\$\s+)/;
@@ -4006,7 +4030,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -4063,7 +4087,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers/helpers */ "../helpers/helpers.js");
-const { getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingStyle } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /**
@@ -4154,7 +4178,7 @@ module.exports = [
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -4236,7 +4260,7 @@ module.exports = {
 
 
 const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const defaultLines = 1;
@@ -4404,7 +4428,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -4463,7 +4487,7 @@ module.exports = {
 
 
 const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -4675,7 +4699,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const listStyleExamples = {
@@ -4687,7 +4711,7 @@ const listStyleExamples = {
 /**
  * Gets the value of an ordered list item prefix token.
  *
- * @param {import("../helpers/micromark.cjs").Token} listItemPrefix List item prefix token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} listItemPrefix List item prefix token.
  * @returns {number} List item value.
  */
 function getOrderedListItemValue(listItemPrefix) {
@@ -4833,7 +4857,7 @@ module.exports = {
 
 
 const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const codeFencePrefixRe = /^(.*?)[`~]/;
@@ -4909,7 +4933,7 @@ module.exports = {
 
 
 const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 
 const isList = (token) => (
   (token.type === "listOrdered") || (token.type === "listUnordered")
@@ -4986,7 +5010,7 @@ module.exports = {
 
 
 const { addError, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5038,7 +5062,8 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, getHtmlTagInfo, inHtmlFlow, parse } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, getHtmlTagInfo, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { parse } = __webpack_require__(/*! ../helpers/micromark-parse.cjs */ "../helpers/micromark-parse.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5184,10 +5209,10 @@ module.exports = {
 
 
 const { addErrorContext, allPunctuation } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
-/** @typedef {import("../helpers/micromark.cjs").TokenType} TokenType */
+/** @typedef {import("../helpers/micromark-helpers.cjs").TokenType} TokenType */
 /** @type {TokenType[][]} */
 const emphasisTypes = [
   [ "emphasis", "emphasisText" ],
@@ -5240,7 +5265,7 @@ module.exports = {
 
 
 const { addError } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, inHtmlFlow } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5345,7 +5370,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const leftSpaceRe = /^\s(?:[^`]|$)/;
@@ -5451,15 +5476,15 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /**
  * Adds an error for a label space issue.
  *
  * @param {import("./markdownlint").RuleOnError} onError Error-reporting callback.
- * @param {import("../helpers/micromark.cjs").Token} label Label token.
- * @param {import("../helpers/micromark.cjs").Token} labelText LabelText token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} label Label token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} labelText LabelText token.
  * @param {boolean} isStart True iff error is at the start of the link.
  */
 function addLabelSpaceError(onError, label, labelText, isStart) {
@@ -5489,8 +5514,8 @@ function addLabelSpaceError(onError, label, labelText, isStart) {
 /**
  * Determines if a link is a valid link (and not a fake shortcut link due to parser tricks).
  *
- * @param {import("../helpers/micromark.cjs").Token} label Label token.
- * @param {import("../helpers/micromark.cjs").Token} labelText LabelText token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} label Label token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} labelText LabelText token.
  * @param {Map<string, any>} definitions Map of link definitions.
  * @returns {boolean} True iff the link is valid.
  */
@@ -5547,7 +5572,7 @@ module.exports = {
 
 
 const { addError, addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5594,7 +5619,7 @@ module.exports = {
 
 const { addErrorContext, frontMatterHasTitle } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByTypes, getHeadingLevel, getHtmlTagInfo, isHtmlFlowComment, nonContentTokens } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+  __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
@@ -5641,7 +5666,7 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5711,7 +5736,7 @@ module.exports = {
 
 
 const { addErrorContext, addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getHeadingLevel, getHeadingText } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -5795,7 +5820,8 @@ module.exports = {
 
 
 const { addErrorDetailIf, escapeForRegExp, hasOverlap } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, filterByTypes, parse } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { parse } = __webpack_require__(/*! ../helpers/micromark-parse.cjs */ "../helpers/micromark-parse.cjs");
 
 const ignoredChildTypes = new Set(
   [ "codeFencedFence", "definition", "reference", "resource" ]
@@ -5918,7 +5944,7 @@ module.exports = {
 
 
 const { addError, getHtmlAttributeRe, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const altRe = getHtmlAttributeRe("alt");
@@ -6078,7 +6104,7 @@ module.exports = {
 
 
 const { addErrorDetailIf, fencedCodeBlockStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -6124,7 +6150,7 @@ module.exports = {
 
 
 const { addError, emphasisOrStrongStyleFor } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 
 const intrawordRe = /^\w$/;
 
@@ -6238,7 +6264,7 @@ module.exports = [
 
 
 const { addError, addErrorDetailIf, getHtmlAttributeRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByPredicate, filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // Regular expression for identifying HTML anchor names
@@ -6257,7 +6283,7 @@ const tokensInclude = new Set(
  * Converts a Markdown heading into an HTML fragment according to the rules
  * used by GitHub.
  *
- * @param {import("../helpers/micromark.cjs").Token} headingText Heading text token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} headingText Heading text token.
  * @returns {string} Fragment string for heading.
  */
 function convertHeadingToHTMLFragment(headingText) {
@@ -6286,7 +6312,7 @@ function convertHeadingToHTMLFragment(headingText) {
 /**
  * Unescapes the text of a String-type micromark Token.
  *
- * @param {import("../helpers/micromark.cjs").Token} token String-type micromark Token.
+ * @param {import("../helpers/micromark-helpers.cjs").Token} token String-type micromark Token.
  * @returns {string} Unescaped token text.
  */
 function unescapeStringTokenText(token) {
@@ -6339,7 +6365,7 @@ module.exports = {
 
     // Process link and definition fragments
     // eslint-disable-next-line jsdoc/valid-types
-    /** @type import("../helpers/micromark.cjs").TokenType[][] */
+    /** @type import("../helpers/micromark-helpers.cjs").TokenType[][] */
     const parentChilds = [
       [ "link", "resourceDestinationString" ],
       [ "definition", "definitionDestinationString" ]
@@ -6545,7 +6571,7 @@ module.exports = {
 
 
 const { addErrorContext, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const backslashEscapeRe = /\\([!"#$%&'()*+,\-./:;<=>?@[\\\]^_`{|}~])/g;
@@ -6680,7 +6706,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const whitespaceTypes = new Set([ "linePrefix", "whitespace" ]);
@@ -6770,7 +6796,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const makeRange = (start, end) => [ start, end - start + 1 ];

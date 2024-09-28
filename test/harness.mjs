@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import { parse } from "../helpers/micromark.cjs";
+import { parse } from "../helpers/micromark-parse.cjs";
 import library from "../lib/markdownlint.js";
 const markdownlint = library.promises.markdownlint;
 
