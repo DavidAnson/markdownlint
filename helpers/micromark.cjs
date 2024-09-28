@@ -2,16 +2,12 @@
 
 "use strict";
 
-// @ts-ignore
-const {
-  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math,
-  parse, postprocess, preprocess
-  // @ts-ignore
-} = require("markdownlint-micromark");
+const { directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse, postprocess, preprocess } =
+  require("markdownlint-micromark");
 const { newLineRe } = require("./shared.js");
 
 const flatTokensSymbol = Symbol("flat-tokens");
-const reparseSymbol = Symbol("reparse");
+const htmlFlowSymbol = Symbol("html-flow");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
@@ -19,13 +15,13 @@ const reparseSymbol = Symbol("reparse");
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
 
 /**
- * Determines if a Micromark token is within an htmlFlow.
+ * Determines if a Micromark token is within an htmlFlow type.
  *
  * @param {Token} token Micromark token.
- * @returns {boolean} True iff the token is within an htmlFlow.
+ * @returns {boolean} True iff the token is within an htmlFlow type.
  */
 function inHtmlFlow(token) {
-  return token[reparseSymbol];
+  return Boolean(token[htmlFlowSymbol]);
 }
 
 /**
@@ -157,7 +153,7 @@ function micromarkParseWithOffset(
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
       if (ancestor) {
-        Object.defineProperty(current, reparseSymbol, { "value": true });
+        Object.defineProperty(current, htmlFlowSymbol, { "value": true });
       }
       previous.children.push(current);
       flatTokens.push(current);
@@ -383,10 +379,7 @@ function getHeadingStyle(heading) {
  * @returns {string} Heading text.
  */
 function getHeadingText(heading) {
-  const headingTexts = filterByTypes(
-    heading.children,
-    [ "atxHeadingText", "setextHeadingText" ]
-  );
+  const headingTexts = getDescendantsByType(heading, [ [ "atxHeadingText", "setextHeadingText" ] ]);
   return headingTexts[0]?.text.replace(/[\r\n]+/g, " ") || "";
 }
 
@@ -427,7 +420,7 @@ function getHtmlTagInfo(token) {
  * @param {TokenType[]} types Types to allow.
  * @returns {Token | null} Parent token.
  */
-function getTokenParentOfType(token, types) {
+function getParentOfType(token, types) {
   /** @type {Token | null} */
   let current = token;
   while ((current = current.parent) && !types.includes(current.type)) {
@@ -461,8 +454,8 @@ module.exports = {
   getHeadingStyle,
   getHeadingText,
   getHtmlTagInfo,
+  getParentOfType,
   getMicromarkEvents,
-  getTokenParentOfType,
   inHtmlFlow,
   isHtmlFlowComment,
   nonContentTokens

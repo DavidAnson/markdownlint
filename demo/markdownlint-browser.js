@@ -406,7 +406,7 @@ const positionLessThanOrEqual = (lineA, columnA, lineB, columnB) => (
  *
  * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeA Range A.
  * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeB Range B.
- * @returns {boolean} Whether the two ranges overlap.
+ * @returns {boolean} True iff the two ranges overlap.
  */
 const hasOverlap = (rangeA, rangeB) => {
   const lte = positionLessThanOrEqual(rangeA.startLine, rangeA.startColumn, rangeB.startLine, rangeB.startColumn);
@@ -476,7 +476,7 @@ function getReferenceLinkImageData(tokens) {
             duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
             const parent =
-              micromark.getTokenParentOfType(token, [ "definition" ]);
+              micromark.getParentOfType(token, [ "definition" ]);
             const destinationString = parent &&
               micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
             definitions.set(
@@ -867,16 +867,12 @@ module.exports = {
 
 
 
-// @ts-ignore
-const {
-  directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math,
-  parse, postprocess, preprocess
-  // @ts-ignore
-} = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
+const { directive, gfmAutolinkLiteral, gfmFootnote, gfmTable, math, parse, postprocess, preprocess } =
+  __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
 const { newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
 const flatTokensSymbol = Symbol("flat-tokens");
-const reparseSymbol = Symbol("reparse");
+const htmlFlowSymbol = Symbol("html-flow");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
@@ -884,13 +880,13 @@ const reparseSymbol = Symbol("reparse");
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
 
 /**
- * Determines if a Micromark token is within an htmlFlow.
+ * Determines if a Micromark token is within an htmlFlow type.
  *
  * @param {Token} token Micromark token.
- * @returns {boolean} True iff the token is within an htmlFlow.
+ * @returns {boolean} True iff the token is within an htmlFlow type.
  */
 function inHtmlFlow(token) {
-  return token[reparseSymbol];
+  return Boolean(token[htmlFlowSymbol]);
 }
 
 /**
@@ -1022,7 +1018,7 @@ function micromarkParseWithOffset(
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
       if (ancestor) {
-        Object.defineProperty(current, reparseSymbol, { "value": true });
+        Object.defineProperty(current, htmlFlowSymbol, { "value": true });
       }
       previous.children.push(current);
       flatTokens.push(current);
@@ -1248,10 +1244,7 @@ function getHeadingStyle(heading) {
  * @returns {string} Heading text.
  */
 function getHeadingText(heading) {
-  const headingTexts = filterByTypes(
-    heading.children,
-    [ "atxHeadingText", "setextHeadingText" ]
-  );
+  const headingTexts = getDescendantsByType(heading, [ [ "atxHeadingText", "setextHeadingText" ] ]);
   return headingTexts[0]?.text.replace(/[\r\n]+/g, " ") || "";
 }
 
@@ -1292,7 +1285,7 @@ function getHtmlTagInfo(token) {
  * @param {TokenType[]} types Types to allow.
  * @returns {Token | null} Parent token.
  */
-function getTokenParentOfType(token, types) {
+function getParentOfType(token, types) {
   /** @type {Token | null} */
   let current = token;
   while ((current = current.parent) && !types.includes(current.type)) {
@@ -1326,8 +1319,8 @@ module.exports = {
   getHeadingStyle,
   getHeadingText,
   getHtmlTagInfo,
+  getParentOfType,
   getMicromarkEvents,
-  getTokenParentOfType,
   inHtmlFlow,
   isHtmlFlowComment,
   nonContentTokens
@@ -3231,7 +3224,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType, getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getDescendantsByType, getParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const markerToStyle = {
@@ -3274,7 +3267,7 @@ module.exports = {
         /** @type {import("../helpers/micromark.cjs").Token | null} */
         let parent = listUnordered;
         // @ts-ignore
-        while ((parent = getTokenParentOfType(parent, [ "listOrdered", "listUnordered" ]))) {
+        while ((parent = getParentOfType(parent, [ "listOrdered", "listUnordered" ]))) {
           nesting++;
         }
       }
@@ -3411,7 +3404,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -3447,7 +3440,7 @@ module.exports = {
         let current = token;
         while (
           // @ts-ignore
-          (current = getTokenParentOfType(current, unorderedParentTypes))
+          (current = getParentOfType(current, unorderedParentTypes))
         ) {
           if (current.type === "listUnordered") {
             nesting++;
@@ -4840,7 +4833,7 @@ module.exports = {
 
 
 const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getTokenParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const codeFencePrefixRe = /^(.*?)[`~]/;
@@ -4889,7 +4882,7 @@ module.exports = {
     const includeListItems = (listItems === undefined) ? true : !!listItems;
     const { lines } = params;
     for (const codeBlock of filterByTypesCached([ "codeFenced" ])) {
-      if (includeListItems || !(getTokenParentOfType(codeBlock, [ "listOrdered", "listUnordered" ]))) {
+      if (includeListItems || !(getParentOfType(codeBlock, [ "listOrdered", "listUnordered" ]))) {
         if (!isBlankLine(lines[codeBlock.startLine - 2])) {
           addError(onError, lines, codeBlock.startLine, true);
         }

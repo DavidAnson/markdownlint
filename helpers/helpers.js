@@ -394,7 +394,7 @@ const positionLessThanOrEqual = (lineA, columnA, lineB, columnB) => (
  *
  * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeA Range A.
  * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeB Range B.
- * @returns {boolean} Whether the two ranges overlap.
+ * @returns {boolean} True iff the two ranges overlap.
  */
 const hasOverlap = (rangeA, rangeB) => {
   const lte = positionLessThanOrEqual(rangeA.startLine, rangeA.startColumn, rangeB.startLine, rangeB.startColumn);
@@ -464,7 +464,7 @@ function getReferenceLinkImageData(tokens) {
             duplicateDefinitions.push([ reference, token.startLine - 1 ]);
           } else {
             const parent =
-              micromark.getTokenParentOfType(token, [ "definition" ]);
+              micromark.getParentOfType(token, [ "definition" ]);
             const destinationString = parent &&
               micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
             definitions.set(
