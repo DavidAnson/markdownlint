@@ -387,24 +387,6 @@ function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
 module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
- * Determines whether the specified range is within another range.
- *
- * @param {number[][]} ranges Array of ranges (line, index, length).
- * @param {number} lineIndex Line index to check.
- * @param {number} index Index to check.
- * @param {number} length Length to check.
- * @returns {boolean} True iff the specified range is within.
- */
-const withinAnyRange = (ranges, lineIndex, index, length) => (
-  !ranges.every((span) => (
-    (lineIndex !== span[0]) ||
-    (index < span[1]) ||
-    (index + length > span[1] + span[2])
-  ))
-);
-module.exports.withinAnyRange = withinAnyRange;
-
-/**
  * Defines a range within a file (start line/column to end line/column, subset of MicromarkToken).
  *
  * @typedef {Object} FileRange
@@ -5819,10 +5801,8 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, escapeForRegExp, withinAnyRange } =
-  __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, filterByTypes, parse } =
-  __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addErrorDetailIf, escapeForRegExp, hasOverlap } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, filterByTypes, parse } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 
 const ignoredChildTypes = new Set(
   [ "codeFencedFence", "definition", "reference", "resource" ]
@@ -5866,43 +5846,47 @@ module.exports = {
           token.children.filter((t) => !ignoredChildTypes.has(t.type))
         )
       );
+    /** @type {import("../helpers").FileRange[]} */
     const exclusions = [];
-    const autoLinked = new Set();
+    const scannedTokens = new Set();
     for (const name of names) {
       const escapedName = escapeForRegExp(name);
       const startNamePattern = /^\W/.test(name) ? "" : "\\b_*";
       const endNamePattern = /\W$/.test(name) ? "" : "_*\\b";
-      const namePattern =
-        `(${startNamePattern})(${escapedName})${endNamePattern}`;
+      const namePattern = `(${startNamePattern})(${escapedName})${endNamePattern}`;
       const nameRe = new RegExp(namePattern, "gi");
       for (const token of contentTokens) {
         let match = null;
         while ((match = nameRe.exec(token.text)) !== null) {
           const [ , leftMatch, nameMatch ] = match;
-          const index = token.startColumn - 1 + match.index + leftMatch.length;
+          const column = token.startColumn + match.index + leftMatch.length;
           const length = nameMatch.length;
-          const lineIndex = token.startLine - 1;
+          const lineNumber = token.startLine;
+          /** @type {import("../helpers").FileRange} */
+          const nameRange = {
+            "startLine": lineNumber,
+            "startColumn": column,
+            "endLine": lineNumber,
+            "endColumn": column + length - 1
+          };
           if (
-            !withinAnyRange(exclusions, lineIndex, index, length) &&
-            !names.includes(nameMatch)
+            !names.includes(nameMatch) &&
+            !exclusions.some((exclusion) => hasOverlap(exclusion, nameRange))
           ) {
-            let urlRanges = [];
-            if (!autoLinked.has(token)) {
-              urlRanges = filterByTypes(
-                parse(token.text),
-                [ "literalAutolink" ]
-              ).map(
-                (t) => [
-                  lineIndex,
-                  token.startColumn - 1 + t.startColumn - 1,
-                  t.endColumn - t.startColumn
-                ]
-              );
-              exclusions.push(...urlRanges);
-              autoLinked.add(token);
+            /** @type {import("../helpers").FileRange[]} */
+            let autolinkRanges = [];
+            if (!scannedTokens.has(token)) {
+              autolinkRanges = filterByTypes(parse(token.text), [ "literalAutolink" ])
+                .map((tok) => ({
+                  "startLine": lineNumber,
+                  "startColumn": token.startColumn + tok.startColumn - 1,
+                  "endLine": lineNumber,
+                  "endColumn": token.endColumn + tok.endColumn - 1
+                }));
+              exclusions.push(...autolinkRanges);
+              scannedTokens.add(token);
             }
-            if (!withinAnyRange(urlRanges, lineIndex, index, length)) {
-              const column = index + 1;
+            if (!autolinkRanges.some((autolinkRange) => hasOverlap(autolinkRange, nameRange))) {
               addErrorDetailIf(
                 onError,
                 token.startLine,
@@ -5919,7 +5903,7 @@ module.exports = {
               );
             }
           }
-          exclusions.push([ lineIndex, index, length ]);
+          exclusions.push(nameRange);
         }
       }
     }

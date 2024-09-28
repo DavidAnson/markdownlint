@@ -375,24 +375,6 @@ function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
 module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
- * Determines whether the specified range is within another range.
- *
- * @param {number[][]} ranges Array of ranges (line, index, length).
- * @param {number} lineIndex Line index to check.
- * @param {number} index Index to check.
- * @param {number} length Length to check.
- * @returns {boolean} True iff the specified range is within.
- */
-const withinAnyRange = (ranges, lineIndex, index, length) => (
-  !ranges.every((span) => (
-    (lineIndex !== span[0]) ||
-    (index < span[1]) ||
-    (index + length > span[1] + span[2])
-  ))
-);
-module.exports.withinAnyRange = withinAnyRange;
-
-/**
  * Defines a range within a file (start line/column to end line/column, subset of MicromarkToken).
  *
  * @typedef {Object} FileRange
