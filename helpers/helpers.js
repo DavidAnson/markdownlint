@@ -392,6 +392,36 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
 );
 module.exports.withinAnyRange = withinAnyRange;
 
+/**
+ * Defines a range within a file (start line/column to end line/column, subset of MicromarkToken).
+ *
+ * @typedef {Object} FileRange
+ * @property {number} startLine Start line (1-based).
+ * @property {number} startColumn Start column (1-based).
+ * @property {number} endLine End line (1-based).
+ * @property {number} endColumn End column (1-based).
+ */
+
+const positionLessThanOrEqual = (lineA, columnA, lineB, columnB) => (
+  (lineA < lineB) ||
+  ((lineA === lineB) && (columnA <= columnB))
+);
+
+/**
+ * Returns whether two ranges (or MicromarkTokens) overlap anywhere.
+ *
+ * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeA Range A.
+ * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeB Range B.
+ * @returns {boolean} Whether the two ranges overlap.
+ */
+const hasOverlap = (rangeA, rangeB) => {
+  const lte = positionLessThanOrEqual(rangeA.startLine, rangeA.startColumn, rangeB.startLine, rangeB.startColumn);
+  const first = lte ? rangeA : rangeB;
+  const second = lte ? rangeB : rangeA;
+  return positionLessThanOrEqual(second.startLine, second.startColumn, first.endLine, first.endColumn);
+};
+module.exports.hasOverlap = hasOverlap;
+
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
   function frontMatterHasTitle(frontMatterLines, frontMatterTitlePattern) {

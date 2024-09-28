@@ -404,6 +404,36 @@ const withinAnyRange = (ranges, lineIndex, index, length) => (
 );
 module.exports.withinAnyRange = withinAnyRange;
 
+/**
+ * Defines a range within a file (start line/column to end line/column, subset of MicromarkToken).
+ *
+ * @typedef {Object} FileRange
+ * @property {number} startLine Start line (1-based).
+ * @property {number} startColumn Start column (1-based).
+ * @property {number} endLine End line (1-based).
+ * @property {number} endColumn End column (1-based).
+ */
+
+const positionLessThanOrEqual = (lineA, columnA, lineB, columnB) => (
+  (lineA < lineB) ||
+  ((lineA === lineB) && (columnA <= columnB))
+);
+
+/**
+ * Returns whether two ranges (or MicromarkTokens) overlap anywhere.
+ *
+ * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeA Range A.
+ * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeB Range B.
+ * @returns {boolean} Whether the two ranges overlap.
+ */
+const hasOverlap = (rangeA, rangeB) => {
+  const lte = positionLessThanOrEqual(rangeA.startLine, rangeA.startColumn, rangeB.startLine, rangeB.startColumn);
+  const first = lte ? rangeA : rangeB;
+  const second = lte ? rangeB : rangeA;
+  return positionLessThanOrEqual(second.startLine, second.startColumn, first.endLine, first.endColumn);
+};
+module.exports.hasOverlap = hasOverlap;
+
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
   function frontMatterHasTitle(frontMatterLines, frontMatterTitlePattern) {
@@ -1188,31 +1218,6 @@ function getDescendantsByType(parent, typePath) {
   return tokens;
 }
 
-// eslint-disable-next-line jsdoc/valid-types
-/** @typedef {readonly string[]} ReadonlyStringArray */
-
-/**
- * Gets the line/column/length exclusions for a Micromark token.
- *
- * @param {ReadonlyStringArray} lines File/string lines.
- * @param {Token} token Micromark token.
- * @returns {number[][]} Exclusions (line number, start column, length).
- */
-function getExclusionsForToken(lines, token) {
-  const exclusions = [];
-  const { endColumn, endLine, startColumn, startLine } = token;
-  for (let lineNumber = startLine; lineNumber <= endLine; lineNumber++) {
-    const start = (lineNumber === startLine) ? startColumn : 1;
-    const end = (lineNumber === endLine) ? endColumn : lines[lineNumber - 1].length;
-    exclusions.push([
-      lineNumber,
-      start,
-      end - start + 1
-    ]);
-  }
-  return exclusions;
-}
-
 /**
  * Gets the heading level of a Micromark heading tokan.
  *
@@ -1335,7 +1340,6 @@ module.exports = {
   filterByPredicate,
   filterByTypes,
   getDescendantsByType,
-  getExclusionsForToken,
   getHeadingLevel,
   getHeadingStyle,
   getHeadingText,
@@ -3629,8 +3633,8 @@ module.exports = {
 
 
 
-const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getDescendantsByType, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, hasOverlap } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const tabRe = /\t+/g;
@@ -3653,7 +3657,6 @@ module.exports = {
     const spaceMultiplier = (spacesPerTab === undefined) ?
       1 :
       Math.max(0, Number(spacesPerTab));
-    const exclusions = [];
     // eslint-disable-next-line jsdoc/valid-types
     /** @type import("../helpers/micromark.cjs").TokenType[] */
     const exclusionTypes = [];
@@ -3671,24 +3674,29 @@ module.exports = {
       }
       return true;
     });
-    for (const codeToken of codeTokens) {
-      const exclusionsForToken = getExclusionsForToken(params.lines, codeToken);
-      if (codeToken.type === "codeFenced") {
-        exclusionsForToken.pop();
-        exclusionsForToken.shift();
-      }
-      exclusions.push(...exclusionsForToken);
-    }
+    const codeRanges = codeTokens.map((token) => {
+      const { type, startLine, startColumn, endLine, endColumn } = token;
+      const codeFenced = (type === "codeFenced");
+      return {
+        "startLine": startLine + (codeFenced ? 1 : 0),
+        "startColumn": codeFenced ? 0 : startColumn,
+        "endLine": endLine - (codeFenced ? 1 : 0),
+        "endColumn": codeFenced ? Number.MAX_SAFE_INTEGER : endColumn
+      };
+    });
     for (let lineIndex = 0; lineIndex < params.lines.length; lineIndex++) {
       const line = params.lines[lineIndex];
       let match = null;
       while ((match = tabRe.exec(line)) !== null) {
+        const lineNumber = lineIndex + 1;
         const column = match.index + 1;
         const length = match[0].length;
-        if (!withinAnyRange(exclusions, lineIndex + 1, column, length)) {
+        /** @type {import("../helpers").FileRange} */
+        const range = { "startLine": lineNumber, "startColumn": column, "endLine": lineNumber, "endColumn": column + length - 1 };
+        if (!codeRanges.some((codeRange) => hasOverlap(codeRange, range))) {
           addError(
             onError,
-            lineIndex + 1,
+            lineNumber,
             "Column: " + column,
             undefined,
             [ column, length ],
@@ -3718,8 +3726,8 @@ module.exports = {
 
 
 
-const { addError, withinAnyRange } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { addRangeToSet, getExclusionsForToken } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
+const { addError, hasOverlap } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addRangeToSet } = __webpack_require__(/*! ../helpers/micromark.cjs */ "../helpers/micromark.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const reversedLinkRe =
@@ -3737,34 +3745,35 @@ module.exports = {
     for (const codeBlock of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
       addRangeToSet(codeBlockLineNumbers, codeBlock.startLine, codeBlock.endLine);
     }
-    const exclusions = [];
-    for (const codeText of filterByTypesCached([ "codeText" ])) {
-      exclusions.push(...getExclusionsForToken(params.lines, codeText));
-    }
+    const codeTexts = filterByTypesCached([ "codeText" ]);
     for (const [ lineIndex, line ] of params.lines.entries()) {
-      if (!codeBlockLineNumbers.has(lineIndex + 1)) {
+      const lineNumber = lineIndex + 1;
+      if (!codeBlockLineNumbers.has(lineNumber)) {
         let match = null;
         while ((match = reversedLinkRe.exec(line)) !== null) {
           const [ reversedLink, preChar, linkText, linkDestination ] = match;
-          const index = match.index + preChar.length;
-          const length = match[0].length - preChar.length;
           if (
             !linkText.endsWith("\\") &&
-            !linkDestination.endsWith("\\") &&
-            !withinAnyRange(exclusions, lineIndex + 1, index, length)
+            !linkDestination.endsWith("\\")
           ) {
-            addError(
-              onError,
-              lineIndex + 1,
-              reversedLink.slice(preChar.length),
-              undefined,
-              [ index + 1, length ],
-              {
-                "editColumn": index + 1,
-                "deleteCount": length,
-                "insertText": `[${linkText}](${linkDestination})`
-              }
-            );
+            const column = match.index + preChar.length + 1;
+            const length = match[0].length - preChar.length;
+            /** @type {import("../helpers").FileRange} */
+            const range = { "startLine": lineNumber, "startColumn": column, "endLine": lineNumber, "endColumn": column + length - 1 };
+            if (!codeTexts.some((codeText) => hasOverlap(codeText, range))) {
+              addError(
+                onError,
+                lineNumber,
+                reversedLink.slice(preChar.length),
+                undefined,
+                [ column, length ],
+                {
+                  "editColumn": column,
+                  "deleteCount": length,
+                  "insertText": `[${linkText}](${linkDestination})`
+                }
+              );
+            }
           }
         }
       }

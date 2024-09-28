@@ -968,3 +968,92 @@ test("ellipsify", (t) => {
   t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", false, true), "...wxyzABCDEFGHIJKLMNOPQRSTUVWXYZ");
   t.is(helpers.ellipsify("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", true, true), "abcdefghijklmno...LMNOPQRSTUVWXYZ");
 });
+
+test("hasOverlap", (t) => {
+  t.plan(32);
+  /** @type {import("../helpers").FileRange[][]} */
+  const trueTestCases = [
+    // Same line
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 1 },
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 1 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 1, "endLine": 1, "startColumn": 2, "endColumn": 2 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 3 },
+      { "startLine": 1, "endLine": 1, "startColumn": 2, "endColumn": 2 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 1, "endLine": 1, "startColumn": 2, "endColumn": 3 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 3 },
+      { "startLine": 1, "endLine": 1, "startColumn": 2, "endColumn": 3 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 4 },
+      { "startLine": 1, "endLine": 1, "startColumn": 2, "endColumn": 3 }
+    ],
+    // Common line
+    [
+      { "startLine": 1, "endLine": 2, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 2, "endLine": 2, "startColumn": 2, "endColumn": 4 }
+    ],
+    [
+      { "startLine": 1, "endLine": 2, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 2, "endLine": 2, "startColumn": 1, "endColumn": 1 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 1, "endLine": 2, "startColumn": 2, "endColumn": 4 }
+    ],
+    // Common lines
+    [
+      { "startLine": 1, "endLine": 3, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 2, "endLine": 4, "startColumn": 3, "endColumn": 4 }
+    ],
+    [
+      { "startLine": 1, "endLine": 4, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 2, "endLine": 3, "startColumn": 3, "endColumn": 4 }
+    ]
+  ];
+  for (const trueTestCase of trueTestCases) {
+    const [ rangeA, rangeB ] = trueTestCase;
+    t.true(helpers.hasOverlap(rangeA, rangeB), JSON.stringify({ rangeA, rangeB }));
+    t.true(helpers.hasOverlap(rangeB, rangeA), JSON.stringify({ rangeB, rangeA }));
+  }
+  const falseTestCases = [
+    // Same line
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 1 },
+      { "startLine": 1, "endLine": 1, "startColumn": 2, "endColumn": 2 }
+    ],
+    [
+      { "startLine": 1, "endLine": 1, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 1, "endLine": 1, "startColumn": 3, "endColumn": 4 }
+    ],
+    // Common line
+    [
+      { "startLine": 1, "endLine": 2, "startColumn": 1, "endColumn": 2 },
+      { "startLine": 2, "endLine": 3, "startColumn": 3, "endColumn": 4 }
+    ],
+    [
+      { "startLine": 1, "endLine": 2, "startColumn": 4, "endColumn": 2 },
+      { "startLine": 2, "endLine": 3, "startColumn": 4, "endColumn": 2 }
+    ],
+    // No common lines
+    [
+      { "startLine": 1, "endLine": 2, "startColumn": 1, "endColumn": 4 },
+      { "startLine": 3, "endLine": 4, "startColumn": 2, "endColumn": 3 }
+    ]
+  ];
+  for (const falseTestCase of falseTestCases) {
+    const [ rangeA, rangeB ] = falseTestCase;
+    t.false(helpers.hasOverlap(rangeA, rangeB), JSON.stringify({ rangeA, rangeB }));
+    t.false(helpers.hasOverlap(rangeB, rangeA), JSON.stringify({ rangeB, rangeA }));
+  }
+});
