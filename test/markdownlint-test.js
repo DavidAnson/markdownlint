@@ -12,7 +12,7 @@ const pluginInline = require("markdown-it-for-inline");
 const pluginSub = require("markdown-it-sub");
 const pluginSup = require("markdown-it-sup");
 const test = require("ava").default;
-const { "exports": packageExports, homepage, version } = require("../package.json");
+const { "exports": packageExports, homepage, name, version } = require("../package.json");
 const markdownlint = require("../lib/markdownlint");
 const constants = require("../lib/constants");
 const rules = require("../lib/rules");
@@ -1071,11 +1071,11 @@ test("allBuiltInRulesHaveValidUrl", (t) => {
     t.truthy(rule.information);
     // @ts-ignore
     t.true(Object.getPrototypeOf(rule.information) === URL.prototype);
-    const name = rule.names[0].toLowerCase();
+    const ruleName = rule.names[0].toLowerCase();
     t.is(
       // @ts-ignore
       rule.information.href,
-      `${homepage}/blob/v${version}/doc/${name}.md`
+      `${homepage}/blob/v${version}/doc/${ruleName}.md`
     );
   }
 });
@@ -1363,3 +1363,28 @@ test("constants", (t) => {
   // @ts-ignore
   t.is(constants.version, version);
 });
+
+const exportMappings = new Map([
+  [ ".", "../lib/markdownlint.js" ],
+  [ "./helpers", "../helpers/helpers.js" ],
+  [ "./style/all", "../style/all.json" ],
+  [ "./style/cirosantilli", "../style/cirosantilli.json" ],
+  [ "./style/prettier", "../style/prettier.json" ],
+  [ "./style/relaxed", "../style/relaxed.json" ]
+]);
+
+test("exportMappings", (t) => {
+  t.deepEqual(
+    Object.keys(packageExports),
+    [ ...exportMappings.keys() ]
+  );
+});
+
+for (const [ exportName, exportPath ] of exportMappings) {
+  test(exportName, (t) => {
+    t.is(
+      require(exportName.replace(/^\./u, name)),
+      require(exportPath)
+    );
+  });
+}
