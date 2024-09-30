@@ -1338,6 +1338,30 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
 });
 
+test("customRulesVersion", (t) => new Promise((resolve) => {
+  t.plan(2);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": function stringName(params) {
+          t.is(params.version, version, "Incorrect version");
+        }
+      }
+    ],
+    "files": "doc/CustomRules.md"
+  };
+  markdownlint(options, function callback(err) {
+    t.falsy(err);
+    resolve();
+  });
+}));
+
 test("customRulesFileName", (t) => new Promise((resolve) => {
   t.plan(2);
   // eslint-disable-next-line jsdoc/valid-types

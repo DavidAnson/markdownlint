@@ -85,6 +85,7 @@ A rule is implemented as an `Object`:
       front matter (not present in `lines`).
     - `config` is an `Object` corresponding to the rule's entry in
       `options.config` (if present).
+    - `version` is a `String` that corresponds to the version of `markdownlint`
   - `onError` is a function that takes a single `Object` parameter with one
     required and four optional properties:
     - `lineNumber` is a required `Number` specifying the 1-based line number of

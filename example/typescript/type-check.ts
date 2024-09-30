@@ -136,7 +136,8 @@ const testRule: markdownlint.Rule = {
       "frontMatterLines": [
         "three"
       ],
-      "config": options.config
+      "config": options.config,
+      "version": "1.2.3"
     };
     assert(ruleParams);
     let ruleOnErrorInfo: markdownlint.RuleOnErrorInfo;

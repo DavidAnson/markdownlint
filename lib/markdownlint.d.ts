@@ -77,6 +77,10 @@ type RuleParams = {
      * Rule configuration.
      */
     config: RuleConfiguration;
+    /**
+     * Version of the markdownlint library.
+     */
+    version: string;
 };
 /**
  * Markdown parser data.

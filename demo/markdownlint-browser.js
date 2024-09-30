@@ -1657,7 +1657,7 @@ module.exports = {
 const path = __webpack_require__(/*! node:path */ "?9a52");
 const { promisify } = __webpack_require__(/*! node:util */ "?39e5");
 const micromark = __webpack_require__(/*! ../helpers/micromark-parse.cjs */ "../helpers/micromark-parse.cjs");
-// const { deprecatedRuleNames } = require("./constants");
+const { version } = __webpack_require__(/*! ./constants */ "../lib/constants.js");
 const rules = __webpack_require__(/*! ./rules */ "../lib/rules.js");
 const helpers = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const cache = __webpack_require__(/*! ./cache */ "../lib/cache.js");
@@ -2177,6 +2177,7 @@ function lintContent(
   const parsersNone = Object.freeze({});
   const paramsBase = {
     name,
+    version,
     "lines": Object.freeze(lines),
     "frontMatterLines": Object.freeze(frontMatterLines)
   };
@@ -2861,7 +2862,7 @@ function readConfigSync(file, parsers, fs) {
  * @returns {string} SemVer string.
  */
 function getVersion() {
-  return (__webpack_require__(/*! ./constants */ "../lib/constants.js").version);
+  return version;
 }
 
 // Export a/synchronous/Promise APIs
@@ -2898,6 +2899,7 @@ module.exports = markdownlint;
  * @property {readonly string[]} lines File/string lines.
  * @property {readonly string[]} frontMatterLines Front matter lines.
  * @property {RuleConfiguration} config Rule configuration.
+ * @property {string} version Version of the markdownlint library.
  */
 
 /* eslint-enable jsdoc/valid-types */
