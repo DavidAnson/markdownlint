@@ -21,7 +21,7 @@ const validateJson = require("./validate-json");
 module.exports.validateJson = validateJson;
 
 module.exports.all = [
-  anyBlockquote,
+  ...anyBlockquote,
   everyNLines,
   firstLine,
   lettersEX,

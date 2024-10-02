@@ -1710,7 +1710,7 @@ function validateRuleList(ruleList, synchronous) {
       !result &&
       (rule.parser !== undefined) &&
       (rule.parser !== "markdownit") &&
-      !((customIndex < 0) && (rule.parser === "micromark")) &&
+      (rule.parser !== "micromark") &&
       (rule.parser !== "none")
     ) {
       result = newError("parser", rule.parser);

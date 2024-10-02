@@ -17,26 +17,9 @@ const testTokens = new Promise((resolve, reject) => {
   testContent.then(parse).then(resolve, reject);
 });
 
-const cloneToken = (token) => {
-  for (const child of token.children) {
-    const expectedParent = (token.type ? token : null);
-    if (child.parent !== expectedParent) {
-      throw new Error("Unexpected parent.");
-    }
-  }
-  const clone = { ...token };
-  delete clone.parent;
-  clone.children = clone.children.map(cloneToken);
-  return clone;
-};
-
-const cloneTokens = (tokens) => (
-  cloneToken({ "children": tokens }).children
-);
-
 test("parse", async(t) => {
   t.plan(1);
-  t.snapshot(cloneTokens(await testTokens), "Unexpected tokens");
+  t.snapshot(await testTokens, "Unexpected tokens");
 });
 
 test("getEvents/filterByPredicate", async(t) => {

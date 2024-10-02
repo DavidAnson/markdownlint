@@ -3,7 +3,10 @@
   "version": "0.26.0",
   "description": "A collection of markdownlint helper functions for custom rules",
   "main": "./helpers.js",
-  "exports": "./helpers.js",
+  "exports": {
+    ".": "./helpers.js",
+    "./micromark": "./micromark-helpers.cjs"
+  },
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",

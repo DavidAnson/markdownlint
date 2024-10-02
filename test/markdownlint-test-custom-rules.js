@@ -7,6 +7,7 @@ const test = require("ava").default;
 const markdownlint = require("../lib/markdownlint");
 const customRules = require("./rules/rules.js");
 const { homepage, version } = require("../package.json");
+const { newLineRe } = require("../helpers/helpers.js");
 
 test("customRulesV0", (t) => new Promise((resolve) => {
   t.plan(4);
@@ -22,7 +23,8 @@ test("customRulesV0", (t) => new Promise((resolve) => {
     t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = {
-      "any-blockquote": [ 12 ],
+      "any-blockquote-markdown-it": [ 12 ],
+      "any-blockquote-micromark": [ 12 ],
       "every-n-lines": [ 2, 4, 6, 10, 12 ],
       "first-line": [ 1 ],
       "letters-E-X": [ 3, 7 ]
@@ -31,7 +33,9 @@ test("customRulesV0", (t) => new Promise((resolve) => {
     // @ts-ignore
     let actualMessage = actualResult.toString();
     let expectedMessage =
-      "./test/custom-rules.md: 12: any-blockquote" +
+      "./test/custom-rules.md: 12: any-blockquote-markdown-it" +
+      " Rule that reports an error for any blockquote\n" +
+      "./test/custom-rules.md: 12: any-blockquote-micromark" +
       " Rule that reports an error for any blockquote\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
       " Rule that reports an error every N lines\n" +
@@ -53,7 +57,9 @@ test("customRulesV0", (t) => new Promise((resolve) => {
     // @ts-ignore
     actualMessage = actualResult.toString(true);
     expectedMessage =
-      "./test/custom-rules.md: 12: any-blockquote" +
+      "./test/custom-rules.md: 12: any-blockquote-markdown-it" +
+      " Rule that reports an error for any blockquote\n" +
+      "./test/custom-rules.md: 12: any-blockquote-micromark" +
       " Rule that reports an error for any blockquote\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
       " Rule that reports an error every N lines\n" +
@@ -91,13 +97,22 @@ test("customRulesV1", (t) => new Promise((resolve) => {
     const expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
-        "ruleName": "any-blockquote",
-        "ruleAlias": "any-blockquote",
+        "ruleName": "any-blockquote-markdown-it",
+        "ruleAlias": "any-blockquote-markdown-it",
         "ruleDescription": "Rule that reports an error for any blockquote",
         "ruleInformation":
           `${homepage}/blob/main/test/rules/any-blockquote.js`,
         "errorDetail": "Blockquote spans 1 line(s).",
-        "errorContext": "> Block",
+        "errorContext": "> Blockquote",
+        "errorRange": null },
+      { "lineNumber": 12,
+        "ruleName": "any-blockquote-micromark",
+        "ruleAlias": "any-blockquote-micromark",
+        "ruleDescription": "Rule that reports an error for any blockquote",
+        "ruleInformation":
+          `${homepage}/blob/main/test/rules/any-blockquote.js`,
+        "errorDetail": "Blockquote spans 1 line(s).",
+        "errorContext": "> Blockquote",
         "errorRange": null },
       { "lineNumber": 2,
         "ruleName": "every-n-lines",
@@ -170,9 +185,12 @@ test("customRulesV1", (t) => new Promise((resolve) => {
     // @ts-ignore
     const actualMessage = actualResult.toString();
     const expectedMessage =
-      "./test/custom-rules.md: 12: any-blockquote/any-blockquote" +
+      "./test/custom-rules.md: 12: any-blockquote-markdown-it/any-blockquote-markdown-it" +
       " Rule that reports an error for any blockquote" +
-      " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
+      " [Blockquote spans 1 line(s).] [Context: \"> Blockquote\"]\n" +
+      "./test/custom-rules.md: 12: any-blockquote-micromark/any-blockquote-micromark" +
+      " Rule that reports an error for any blockquote" +
+      " [Blockquote spans 1 line(s).] [Context: \"> Blockquote\"]\n" +
       "./test/custom-rules.md: 2: every-n-lines/every-n-lines" +
       " Rule that reports an error every N lines [Line number 2]\n" +
       "./test/custom-rules.md: 4: every-n-lines/every-n-lines" +
@@ -211,12 +229,20 @@ test("customRulesV2", (t) => new Promise((resolve) => {
     const expectedResult = {};
     expectedResult[customRulesMd] = [
       { "lineNumber": 12,
-        "ruleNames": [ "any-blockquote" ],
+        "ruleNames": [ "any-blockquote-markdown-it" ],
         "ruleDescription": "Rule that reports an error for any blockquote",
         "ruleInformation":
           `${homepage}/blob/main/test/rules/any-blockquote.js`,
         "errorDetail": "Blockquote spans 1 line(s).",
-        "errorContext": "> Block",
+        "errorContext": "> Blockquote",
+        "errorRange": null },
+      { "lineNumber": 12,
+        "ruleNames": [ "any-blockquote-micromark" ],
+        "ruleDescription": "Rule that reports an error for any blockquote",
+        "ruleInformation":
+          `${homepage}/blob/main/test/rules/any-blockquote.js`,
+        "errorDetail": "Blockquote spans 1 line(s).",
+        "errorContext": "> Blockquote",
         "errorRange": null },
       { "lineNumber": 2,
         "ruleNames": [ "every-n-lines" ],
@@ -281,9 +307,12 @@ test("customRulesV2", (t) => new Promise((resolve) => {
     // @ts-ignore
     const actualMessage = actualResult.toString();
     const expectedMessage =
-      "./test/custom-rules.md: 12: any-blockquote" +
+      "./test/custom-rules.md: 12: any-blockquote-markdown-it" +
       " Rule that reports an error for any blockquote" +
-      " [Blockquote spans 1 line(s).] [Context: \"> Block\"]\n" +
+      " [Blockquote spans 1 line(s).] [Context: \"> Blockquote\"]\n" +
+      "./test/custom-rules.md: 12: any-blockquote-micromark" +
+      " Rule that reports an error for any blockquote" +
+      " [Blockquote spans 1 line(s).] [Context: \"> Blockquote\"]\n" +
       "./test/custom-rules.md: 2: every-n-lines" +
       " Rule that reports an error every N lines [Line number 2]\n" +
       "./test/custom-rules.md: 4: every-n-lines" +
@@ -328,7 +357,8 @@ test("customRulesConfig", (t) => new Promise((resolve) => {
     t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = {
-      "any-blockquote": [ 12 ],
+      "any-blockquote-markdown-it": [ 12 ],
+      "any-blockquote-micromark": [ 12 ],
       "every-n-lines": [ 3, 6, 12 ],
       "first-line": [ 1 ],
       "letters-E-X": [ 7 ]
@@ -402,7 +432,7 @@ test("customRulesBadProperty", (t) => {
   ]) {
     const { propertyName, propertyValues } = testCase;
     for (const propertyValue of propertyValues) {
-      const badRule = { ...customRules.anyBlockquote };
+      const badRule = { ...customRules.firstLine };
       badRule[propertyName] = propertyValue;
       // eslint-disable-next-line jsdoc/valid-types
       /** @type import("../lib/markdownlint").Options */
@@ -592,7 +622,7 @@ test("customRulesParserMarkdownIt", (t) => {
 });
 
 test("customRulesParserMicromark", (t) => {
-  t.plan(1);
+  t.plan(5);
   // eslint-disable-next-line jsdoc/valid-types
   /** @type import("../lib/markdownlint").Options */
   const options = {
@@ -603,12 +633,12 @@ test("customRulesParserMicromark", (t) => {
         "tags": [ "tag" ],
         "parser": "micromark",
         "function":
-          () => {
-            // t.false(Object.keys(params).includes("tokens"));
-            // t.is(Object.keys(params.parsers).length, 1);
-            // t.truthy(params.parsers.micromark);
-            // t.is(Object.keys(params.parsers.micromark).length, 1);
-            // t.truthy(params.parsers.micromark.tokens);
+          (params) => {
+            t.false(Object.keys(params).includes("tokens"));
+            t.is(Object.keys(params.parsers).length, 1);
+            t.truthy(params.parsers.micromark);
+            t.is(Object.keys(params.parsers.micromark).length, 1);
+            t.truthy(params.parsers.micromark.tokens);
           }
       }
     ],
@@ -616,10 +646,7 @@ test("customRulesParserMicromark", (t) => {
       "string": "# Heading\n"
     }
   };
-  return markdownlint.promises.markdownlint(options).catch((error) => {
-    // parser "micromark" currently unsupported for custom rules
-    t.is(error.message, "Property 'parser' of custom rule at index 0 is incorrect: 'micromark'.");
-  });
+  return markdownlint.promises.markdownlint(options).then(() => null);
 });
 
 test("customRulesMarkdownItParamsTokensSameObject", (t) => {
@@ -664,10 +691,41 @@ test("customRulesMarkdownItTokensSnapshot", (t) => {
           }
       }
     ],
-    "files": "./test/every-markdown-syntax.md",
     "noInlineConfig": true
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return fs
+    .readFile("./test/every-markdown-syntax.md", "utf8")
+    .then((content) => {
+      options.strings = { "content": content.split(newLineRe).join("\n") };
+      return markdownlint.promises.markdownlint(options).then(() => null);
+    });
+});
+
+test("customRulesMicromarkTokensSnapshot", (t) => {
+  t.plan(1);
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type import("../lib/markdownlint").Options */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "micromark",
+        "function":
+          (params) => {
+            t.snapshot(params.parsers.micromark.tokens, "Unexpected tokens");
+          }
+      }
+    ],
+    "noInlineConfig": true
+  };
+  return fs
+    .readFile("./test/every-markdown-syntax.md", "utf8")
+    .then((content) => {
+      options.strings = { "content": content.split(newLineRe).join("\n") };
+      return markdownlint.promises.markdownlint(options).then(() => null);
+    });
 });
 
 test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {

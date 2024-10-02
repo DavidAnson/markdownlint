@@ -13,22 +13,31 @@ npm install markdownlint --save-dev
 
 ## Overview
 
-The [Markdown](https://en.wikipedia.org/wiki/Markdown) markup language
-is designed to be easy to read, write, and understand. It succeeds -
-and its flexibility is both a benefit and a drawback. Many styles are
-possible, so formatting can be inconsistent. Some constructs don't
-work well in all parsers and should be avoided. The
-[CommonMark](https://commonmark.org/) specification standardizes
-parsers - but not authors.
+The [Markdown][markdown] markup language is designed to be easy to read, write,
+and understand. It succeeds - and its flexibility is both a benefit and a
+drawback. Many styles are possible, so formatting can be inconsistent; some
+constructs don't work well in all parsers and should be avoided.
 
-`markdownlint` is a
-[static analysis](https://en.wikipedia.org/wiki/Static_program_analysis)
-tool for [Node.js](https://nodejs.org/) with a library of rules
-to enforce standards and consistency for Markdown files. It was
-inspired by - and heavily influenced by - Mark Harrison's
-[markdownlint](https://github.com/markdownlint/markdownlint) for
-[Ruby](https://www.ruby-lang.org/). The initial rules, rule documentation,
-and test cases came directly from that project.
+`markdownlint` is a [static analysis][static-analysis] tool for
+[Node.js][nodejs] with a library of rules to enforce standards and consistency
+for Markdown files. It was inspired by - and heavily influenced by - Mark
+Harrison's [markdownlint][markdownlint-ruby] for Ruby. The initial rules, rule
+documentation, and test cases came from that project.
+
+`markdownlint` uses the [`micromark`][micromark] parser and honors the
+[CommonMark][commonmark] specification for Markdown. It additionally supports
+popular [GitHub Flavored Markdown (GFM)][gfm] syntax like autolinks and tables
+as well as directives, footnotes, and math syntax - all implemented by
+[`micromark` extensions][micromark-extensions].
+
+[commonmark]: https://commonmark.org/
+[gfm]: https://github.github.com/gfm/
+[markdown]: https://en.wikipedia.org/wiki/Markdown
+[markdownlint-ruby]: https://github.com/markdownlint/markdownlint
+[micromark]: https://github.com/micromark/micromark
+[micromark-extensions]: https://github.com/micromark/micromark?tab=readme-ov-file#list-of-extensions
+[nodejs]: https://nodejs.org/
+[static-analysis]: https://en.wikipedia.org/wiki/Static_program_analysis
 
 ### Related
 
@@ -565,7 +574,7 @@ Type: `Array` of `Array` of `Function` and plugin parameters
 
 Specifies additional [`markdown-it` plugins][markdown-it-plugin] to use when
 parsing input. Plugins can be used to support additional syntax and features for
-advanced scenarios.
+advanced scenarios. *Deprecated.*
 
 [markdown-it-plugin]: https://www.npmjs.com/search?q=keywords:markdown-it-plugin
 
@@ -601,23 +610,20 @@ Specifies which version of the `result` object to return (see the "Usage"
 section below for examples).
 
 Passing a `resultVersion` of `0` corresponds to the original, simple format
-where each error is identified by rule name and line number. *This is
-deprecated.*
+where each error is identified by rule name and line number. *Deprecated*
 
 Passing a `resultVersion` of `1` corresponds to a detailed format where each
 error includes information about the line number, rule name, alias, description,
-as well as any additional detail or context that is available. *This is
-deprecated.*
+as well as any additional detail or context that is available. *Deprecated*
 
 Passing a `resultVersion` of `2` corresponds to a detailed format where each
 error includes information about the line number, rule names, description, as
-well as any additional detail or context that is available. *This is
-deprecated.*
+well as any additional detail or context that is available. *Deprecated*
 
 Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
 with additional information about how to fix automatically-fixable errors. In
 this mode, all errors that occur on each line are reported (other versions
-report only the first error for each rule). *This is the default.*
+report only the first error for each rule). This is the default behavior.
 
 ##### options.strings
 
@@ -946,10 +952,11 @@ Generate normal and minified scripts with:
 npm run build-demo
 ```
 
-Then reference `markdown-it` and `markdownlint`:
+Then reference `markdownlint` and `micromark` scripts:
 
 ```html
-<script src="demo/markdown-it.min.js"></script>
+<script src="demo/micromark-browser.js"></script>
+<script src="demo/micromark-html-browser.js"></script>
 <script src="demo/markdownlint-browser.min.js"></script>
 ```
 
