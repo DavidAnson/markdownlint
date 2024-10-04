@@ -2,11 +2,11 @@
 
 (function main() {
   // Dependencies
-  var markdownit = window.markdownit;
-  var markdownlint = window.markdownlint.library;
-  var helpers = window.markdownlint.helpers;
-  var micromark = window.micromarkBrowser;
-  var micromarkHtml = window.micromarkHtmlBrowser;
+  var markdownit = globalThis.markdownit;
+  var markdownlint = globalThis.markdownlint.library;
+  var helpers = globalThis.markdownlint.helpers;
+  var micromark = globalThis.micromarkBrowser;
+  var micromarkHtml = globalThis.micromarkHtmlBrowser;
 
   // DOM elements
   var markdown = document.getElementById("markdown");
@@ -51,7 +51,7 @@
 
   // Renders Markdown to HTML
   function render(markdown) {
-    const match = /^\?renderer=([a-z-]+)$/.exec(window.location.search);
+    const match = /^\?renderer=([a-z-]+)$/.exec(globalThis.location.search);
     const renderer = match ? match[1] : "micromark";
     if (renderer === "markdown-it") {
       return markdownit({ "html": true }).render(markdown);
@@ -211,9 +211,9 @@
 
   // Updates the URL hash and copies the URL to the clipboard
   function onCopyLinkClick(e) {
-    window.location.hash = encodeURIComponent(hashPrefix + markdown.value);
+    globalThis.location.hash = encodeURIComponent(hashPrefix + markdown.value);
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(window.location).then(noop, noop);
+      navigator.clipboard.writeText(globalThis.location).then(noop, noop);
     } else {
       /* eslint-disable-next-line no-alert */
       alert("Document URL updated, select and copy it now.");
@@ -261,9 +261,9 @@
   ].join("\n");
 
   // Update Markdown from hash (if present)
-  if (window.location.hash) {
+  if (globalThis.location.hash) {
     try {
-      var decodedHash = decodeURIComponent(window.location.hash.substring(1));
+      var decodedHash = decodeURIComponent(globalThis.location.hash.substring(1));
       if (hashPrefix === decodedHash.substring(0, hashPrefix.length)) {
         markdown.value = decodedHash.substring(hashPrefix.length);
       }
