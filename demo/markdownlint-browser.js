@@ -30,10 +30,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expression for blockquote prefixes
-const blockquotePrefixRe = /^[>\s]*/;
-module.exports.blockquotePrefixRe = blockquotePrefixRe;
-
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
@@ -357,34 +353,6 @@ function addErrorContext(
   addError(onError, lineNumber, undefined, context, range, fixInfo);
 }
 module.exports.addErrorContext = addErrorContext;
-
-/**
- * Adds an error object with context for a construct missing a blank line.
- *
- * @param {Object} onError RuleOnError instance.
- * @param {string[]} lines Lines of Markdown content.
- * @param {number} lineIndex Line index of line.
- * @param {number} [lineNumber] Line number for override.
- * @returns {void}
- */
-function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
-  const line = lines[lineIndex];
-  // @ts-ignore
-  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
-  addErrorContext(
-    onError,
-    lineIndex + 1,
-    line.trim(),
-    undefined,
-    undefined,
-    undefined,
-    {
-      lineNumber,
-      "insertText": `${quotePrefix}\n`
-    }
-  );
-}
-module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
  * Defines a range within a file (start line/column to end line/column, subset of MicromarkToken).
@@ -1005,6 +973,25 @@ function filterByTypes(tokens, types, htmlFlow) {
 }
 
 /**
+ * Gets the blockquote prefix text (if any) for the specified line number.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {number} lineNumber Line number to examine.
+ * @param {number} [count] Number of times to repeat.
+ * @returns {string} Blockquote prefix text.
+ */
+function getBlockQuotePrefixText(tokens, lineNumber, count = 1) {
+  return filterByTypes(tokens, [ "blockQuotePrefix", "linePrefix" ])
+    .filter((prefix) => prefix.startLine === lineNumber)
+    .map((prefix) => prefix.text)
+    .join("")
+    .trimEnd()
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat("\n")
+    .repeat(count);
+};
+
+/**
  * Gets a list of nested Micromark token descendants by type path.
  *
  * @param {Token|Token[]} parent Micromark token parent or parents.
@@ -1138,6 +1125,7 @@ module.exports = {
   addRangeToSet,
   filterByPredicate,
   filterByTypes,
+  getBlockQuotePrefixText,
   getDescendantsByType,
   getHeadingLevel,
   getHeadingStyle,
@@ -4261,8 +4249,8 @@ module.exports = {
 
 
 
-const { addErrorDetailIf, blockquotePrefixRe, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { addErrorDetailIf, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getBlockQuotePrefixText, getHeadingLevel } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const defaultLines = 1;
@@ -4280,15 +4268,6 @@ const getLinesFunction = (linesParam) => {
   return () => lines;
 };
 
-const getBlockQuote = (str, count) => (
-  (str || "")
-    .match(blockquotePrefixRe)[0]
-    .trimEnd()
-    // eslint-disable-next-line unicorn/prefer-spread
-    .concat("\n")
-    .repeat(count)
-);
-
 // eslint-disable-next-line jsdoc/valid-types
 /** @type import("./markdownlint").Rule */
 module.exports = {
@@ -4300,6 +4279,7 @@ module.exports = {
     const getLinesAbove = getLinesFunction(params.config.lines_above);
     const getLinesBelow = getLinesFunction(params.config.lines_below);
     const { lines } = params;
+    const blockQuotePrefixes = filterByTypesCached([ "blockQuotePrefix", "linePrefix" ]);
     for (const heading of filterByTypesCached([ "atxHeading", "setextHeading" ])) {
       const { startLine, endLine } = heading;
       const line = lines[startLine - 1].trim();
@@ -4324,8 +4304,9 @@ module.exports = {
           line,
           undefined,
           {
-            "insertText": getBlockQuote(
-              lines[startLine - 2],
+            "insertText": getBlockQuotePrefixText(
+              blockQuotePrefixes,
+              startLine - 1,
               linesAbove - actualAbove
             )
           }
@@ -4353,8 +4334,9 @@ module.exports = {
           undefined,
           {
             "lineNumber": endLine + 1,
-            "insertText": getBlockQuote(
-              lines[endLine],
+            "insertText": getBlockQuotePrefixText(
+              blockQuotePrefixes,
+              endLine + 1,
               linesBelow - actualBelow
             )
           }
@@ -4934,8 +4916,9 @@ module.exports = {
 
 
 
-const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByPredicate, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { filterByPredicate, getBlockQuotePrefixText, nonContentTokens } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const isList = (token) => (
   (token.type === "listOrdered") || (token.type === "listUnordered")
@@ -4950,6 +4933,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD032(params, onError) {
     const { lines, parsers } = params;
+    const blockQuotePrefixes = filterByTypesCached([ "blockQuotePrefix", "linePrefix" ]);
 
     // For every top-level list...
     const topLevelLists = filterByPredicate(
@@ -4962,13 +4946,18 @@ module.exports = {
     for (const list of topLevelLists) {
 
       // Look for a blank line above the list
-      const firstIndex = list.startLine - 1;
-      if (!isBlankLine(lines[firstIndex - 1])) {
-        addErrorContextForLine(
+      const firstLineNumber = list.startLine;
+      if (!isBlankLine(lines[firstLineNumber - 2])) {
+        addErrorContext(
           onError,
-          // @ts-ignore
-          lines,
-          firstIndex
+          firstLineNumber,
+          lines[firstLineNumber - 1].trim(),
+          undefined,
+          undefined,
+          undefined,
+          {
+            "insertText": getBlockQuotePrefixText(blockQuotePrefixes, firstLineNumber)
+          }
         );
       }
 
@@ -4983,14 +4972,19 @@ module.exports = {
       }
 
       // Look for a blank line below the list
-      const lastIndex = endLine - 1;
-      if (!isBlankLine(lines[lastIndex + 1])) {
-        addErrorContextForLine(
+      const lastLineNumber = endLine;
+      if (!isBlankLine(lines[lastLineNumber])) {
+        addErrorContext(
           onError,
-          // @ts-ignore
-          lines,
-          lastIndex,
-          lastIndex + 2
+          lastLineNumber,
+          lines[lastLineNumber - 1].trim(),
+          undefined,
+          undefined,
+          undefined,
+          {
+            "lineNumber": lastLineNumber + 1,
+            "insertText": getBlockQuotePrefixText(blockQuotePrefixes, lastLineNumber)
+          }
         );
       }
     }
@@ -6864,7 +6858,8 @@ module.exports = {
 
 
 
-const { addErrorContextForLine, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addErrorContext, isBlankLine } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { getBlockQuotePrefixText } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 // eslint-disable-next-line jsdoc/valid-types
@@ -6876,28 +6871,42 @@ module.exports = {
   "parser": "micromark",
   "function": function MD058(params, onError) {
     const { lines } = params;
+    const blockQuotePrefixes = filterByTypesCached([ "blockQuotePrefix", "linePrefix" ]);
+
     // For every table...
     const tables = filterByTypesCached([ "table" ]);
     for (const table of tables) {
+
       // Look for a blank line above the table
-      const firstIndex = table.startLine - 1;
-      if (!isBlankLine(lines[firstIndex - 1])) {
-        addErrorContextForLine(
+      const firstLineNumber = table.startLine;
+      if (!isBlankLine(lines[firstLineNumber - 2])) {
+        addErrorContext(
           onError,
-          // @ts-ignore
-          lines,
-          firstIndex
+          firstLineNumber,
+          lines[firstLineNumber - 1].trim(),
+          undefined,
+          undefined,
+          undefined,
+          {
+            "insertText": getBlockQuotePrefixText(blockQuotePrefixes, firstLineNumber)
+          }
         );
       }
+
       // Look for a blank line below the table
-      const lastIndex = table.endLine - 1;
-      if (!isBlankLine(lines[lastIndex + 1])) {
-        addErrorContextForLine(
+      const lastLineNumber = table.endLine;
+      if (!isBlankLine(lines[lastLineNumber])) {
+        addErrorContext(
           onError,
-          // @ts-ignore
-          lines,
-          lastIndex,
-          lastIndex + 2
+          lastLineNumber,
+          lines[lastLineNumber - 1].trim(),
+          undefined,
+          undefined,
+          undefined,
+          {
+            "lineNumber": lastLineNumber + 1,
+            "insertText": getBlockQuotePrefixText(blockQuotePrefixes, lastLineNumber)
+          }
         );
       }
     }

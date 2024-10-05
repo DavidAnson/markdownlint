@@ -18,10 +18,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expression for blockquote prefixes
-const blockquotePrefixRe = /^[>\s]*/;
-module.exports.blockquotePrefixRe = blockquotePrefixRe;
-
 // Regular expression for link reference definitions
 const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
 module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
@@ -345,34 +341,6 @@ function addErrorContext(
   addError(onError, lineNumber, undefined, context, range, fixInfo);
 }
 module.exports.addErrorContext = addErrorContext;
-
-/**
- * Adds an error object with context for a construct missing a blank line.
- *
- * @param {Object} onError RuleOnError instance.
- * @param {string[]} lines Lines of Markdown content.
- * @param {number} lineIndex Line index of line.
- * @param {number} [lineNumber] Line number for override.
- * @returns {void}
- */
-function addErrorContextForLine(onError, lines, lineIndex, lineNumber) {
-  const line = lines[lineIndex];
-  // @ts-ignore
-  const quotePrefix = line.match(blockquotePrefixRe)[0].trimEnd();
-  addErrorContext(
-    onError,
-    lineIndex + 1,
-    line.trim(),
-    undefined,
-    undefined,
-    undefined,
-    {
-      lineNumber,
-      "insertText": `${quotePrefix}\n`
-    }
-  );
-}
-module.exports.addErrorContextForLine = addErrorContextForLine;
 
 /**
  * Defines a range within a file (start line/column to end line/column, subset of MicromarkToken).

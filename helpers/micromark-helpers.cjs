@@ -134,6 +134,25 @@ function filterByTypes(tokens, types, htmlFlow) {
 }
 
 /**
+ * Gets the blockquote prefix text (if any) for the specified line number.
+ *
+ * @param {Token[]} tokens Micromark tokens.
+ * @param {number} lineNumber Line number to examine.
+ * @param {number} [count] Number of times to repeat.
+ * @returns {string} Blockquote prefix text.
+ */
+function getBlockQuotePrefixText(tokens, lineNumber, count = 1) {
+  return filterByTypes(tokens, [ "blockQuotePrefix", "linePrefix" ])
+    .filter((prefix) => prefix.startLine === lineNumber)
+    .map((prefix) => prefix.text)
+    .join("")
+    .trimEnd()
+    // eslint-disable-next-line unicorn/prefer-spread
+    .concat("\n")
+    .repeat(count);
+};
+
+/**
  * Gets a list of nested Micromark token descendants by type path.
  *
  * @param {Token|Token[]} parent Micromark token parent or parents.
@@ -267,6 +286,7 @@ module.exports = {
   addRangeToSet,
   filterByPredicate,
   filterByTypes,
+  getBlockQuotePrefixText,
   getDescendantsByType,
   getHeadingLevel,
   getHeadingStyle,
