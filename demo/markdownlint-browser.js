@@ -21,6 +21,19 @@ const { newLineRe, nextLinesRe } = __webpack_require__(/*! ./shared.js */ "../he
 module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
+/** @typedef {import("../lib/markdownlint.js").RuleOnError} RuleOnError */
+/** @typedef {import("../lib/markdownlint.js").RuleOnErrorInfo} RuleOnErrorInfo */
+/** @typedef {import("../lib/markdownlint.js").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
+/**
+ * RuleOnErrorInfo with common optional properties filled in.
+ *
+ * @typedef {Object} RuleOnErrorFixInfoNormalized
+ * @property {number} lineNumber Line number (1-based).
+ * @property {number} editColumn Column of the fix (1-based).
+ * @property {number} deleteCount Count of characters to delete.
+ * @property {string} insertText Text to insert (after deleting).
+ */
+
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
   /((^---\s*$[\s\S]+?^---\s*)|(^\+\+\+\s*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
@@ -288,12 +301,12 @@ module.exports.ellipsify = ellipsify;
 /**
  * Adds a generic error object via the onError callback.
  *
- * @param {Object} onError RuleOnError instance.
+ * @param {RuleOnError} onError RuleOnError instance.
  * @param {number} lineNumber Line number.
  * @param {string} [detail] Error details.
  * @param {string} [context] Error context.
  * @param {number[]} [range] Column and length of error.
- * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @param {RuleOnErrorFixInfo} [fixInfo] RuleOnErrorFixInfo instance.
  * @returns {void}
  */
 function addError(onError, lineNumber, detail, context, range, fixInfo) {
@@ -310,14 +323,14 @@ module.exports.addError = addError;
 /**
  * Adds an error object with details conditionally via the onError callback.
  *
- * @param {Object} onError RuleOnError instance.
+ * @param {RuleOnError} onError RuleOnError instance.
  * @param {number} lineNumber Line number.
  * @param {Object} expected Expected value.
  * @param {Object} actual Actual value.
  * @param {string} [detail] Error details.
  * @param {string} [context] Error context.
  * @param {number[]} [range] Column and length of error.
- * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @param {RuleOnErrorFixInfo} [fixInfo] RuleOnErrorFixInfo instance.
  * @returns {void}
  */
 function addErrorDetailIf(
@@ -338,13 +351,13 @@ module.exports.addErrorDetailIf = addErrorDetailIf;
 /**
  * Adds an error object with context via the onError callback.
  *
- * @param {Object} onError RuleOnError instance.
+ * @param {RuleOnError} onError RuleOnError instance.
  * @param {number} lineNumber Line number.
  * @param {string} context Error context.
  * @param {boolean} [start] True iff the start of the text is important.
  * @param {boolean} [end] True iff the end of the text is important.
  * @param {number[]} [range] Column and length of error.
- * @param {Object} [fixInfo] RuleOnErrorFixInfo instance.
+ * @param {RuleOnErrorFixInfo} [fixInfo] RuleOnErrorFixInfo instance.
  * @returns {void}
  */
 function addErrorContext(
@@ -364,6 +377,15 @@ module.exports.addErrorContext = addErrorContext;
  * @property {number} endColumn End column (1-based).
  */
 
+/**
+ * Returns whether line/column A is less than or equal to line/column B.
+ *
+ * @param {number} lineA Line A.
+ * @param {number} columnA Column A.
+ * @param {number} lineB Line B.
+ * @param {number} columnB Column B.
+ * @returns {boolean} True iff A is less than or equal to B.
+ */
 const positionLessThanOrEqual = (lineA, columnA, lineB, columnB) => (
   (lineA < lineB) ||
   ((lineA === lineB) && (columnA <= columnB))
@@ -547,11 +569,11 @@ module.exports.getPreferredLineEnding = getPreferredLineEnding;
 /**
  * Normalizes the fields of a RuleOnErrorFixInfo instance.
  *
- * @param {Object} fixInfo RuleOnErrorFixInfo instance.
+ * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
  * @param {number} [lineNumber] Line number.
- * @returns {Object} Normalized RuleOnErrorFixInfo instance.
+ * @returns {RuleOnErrorFixInfoNormalized} Normalized RuleOnErrorFixInfo instance.
  */
-function normalizeFixInfo(fixInfo, lineNumber) {
+function normalizeFixInfo(fixInfo, lineNumber = 0) {
   return {
     "lineNumber": fixInfo.lineNumber || lineNumber,
     "editColumn": fixInfo.editColumn || 1,
@@ -564,7 +586,7 @@ function normalizeFixInfo(fixInfo, lineNumber) {
  * Fixes the specified error on a line of Markdown content.
  *
  * @param {string} line Line of Markdown content.
- * @param {Object} fixInfo RuleOnErrorFixInfo instance.
+ * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
  * @param {string} [lineEnding] Line ending to use.
  * @returns {string | null} Fixed content.
  */
@@ -583,7 +605,7 @@ module.exports.applyFix = applyFix;
  * Applies as many fixes as possible to Markdown content.
  *
  * @param {string} input Lines of Markdown content.
- * @param {Object[]} errors RuleOnErrorInfo instances.
+ * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
  * @returns {string} Corrected content.
  */
 function applyFixes(input, errors) {
@@ -592,6 +614,7 @@ function applyFixes(input, errors) {
   // Normalize fixInfo objects
   let fixInfos = errors
     .filter((error) => error.fixInfo)
+    // @ts-ignore
     .map((error) => normalizeFixInfo(error.fixInfo, error.lineNumber));
   // Sort bottom-to-top, line-deletes last, right-to-left, long-to-short
   fixInfos.sort((a, b) => {
@@ -605,6 +628,8 @@ function applyFixes(input, errors) {
     );
   });
   // Remove duplicate entries (needed for following collapse step)
+  // eslint-disable-next-line jsdoc/valid-types
+  /** @type RuleOnErrorFixInfo */
   let lastFixInfo = {};
   fixInfos = fixInfos.filter((fixInfo) => {
     const unique = (
@@ -670,26 +695,6 @@ function expandTildePath(file, os) {
   return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
 }
 module.exports.expandTildePath = expandTildePath;
-
-// Copied from markdownlint.js to avoid TypeScript compiler import() issue.
-/**
- * @typedef {Object} MarkdownItToken
- * @property {string[][]} attrs HTML attributes.
- * @property {boolean} block Block-level token.
- * @property {MarkdownItToken[]} children Child nodes.
- * @property {string} content Tag contents.
- * @property {boolean} hidden Ignore element.
- * @property {string} info Fence info.
- * @property {number} level Nesting level.
- * @property {number[]} map Beginning/ending line numbers.
- * @property {string} markup Markup text.
- * @property {Object} meta Arbitrary data.
- * @property {number} nesting Level change.
- * @property {string} tag HTML tag name.
- * @property {string} type Token type.
- * @property {number} lineNumber Line number (1-based).
- * @property {string} line Line content.
- */
 
 
 /***/ }),
@@ -6530,7 +6535,7 @@ module.exports = {
           `Unused link or image reference definition: "${label}"`,
           ellipsify(line),
           [ 1, line.length ],
-          singleLineDefinition(line) ? deleteFixInfo : 0
+          singleLineDefinition(line) ? deleteFixInfo : undefined
         );
       }
     }
@@ -6545,7 +6550,7 @@ module.exports = {
           `Duplicate link or image reference definition: "${label}"`,
           ellipsify(line),
           [ 1, line.length ],
-          singleLineDefinition(line) ? deleteFixInfo : 0
+          singleLineDefinition(line) ? deleteFixInfo : undefined
         );
       }
     }
