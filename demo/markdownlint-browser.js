@@ -36,7 +36,7 @@ module.exports.nextLinesRe = nextLinesRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
-  /((^---\s*$[\s\S]+?^---\s*)|(^\+\+\+\s*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{\s*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
+  /((^---[^\S\r\n\u2028\u2029]*$[\s\S]+?^---\s*)|(^\+\+\+[^\S\r\n\u2028\u2029]*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{[^\S\r\n\u2028\u2029]*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching the start of inline disable/enable comments
 const inlineCommentStartRe =
@@ -1554,7 +1554,7 @@ function freezeToken(token) {
 /**
  * Annotate tokens with line/lineNumber and freeze them.
  *
- * @param {import("markdown-it").Token[]} tokens Array of markdown-it tokens.
+ * @param {Object[]} tokens Array of markdown-it tokens.
  * @param {string[]} lines Lines of Markdown content.
  * @returns {void}
  */
@@ -1613,18 +1613,18 @@ function annotateAndFreezeTokens(tokens, lines) {
  * @param {import("./markdownlint").Plugin[]} markdownItPlugins Additional plugins.
  * @param {string} content Markdown content.
  * @param {string[]} lines Lines of Markdown content.
- * @returns {import("markdown-it").Token[]} Array of markdown-it tokens.
+ * @returns {import("../lib/markdownlint").MarkdownItToken} Array of markdown-it tokens.
  */
 function getMarkdownItTokens(markdownItPlugins, content, lines) {
   const markdownit = __webpack_require__(/*! markdown-it */ "markdown-it");
   const md = markdownit({ "html": true });
-  // const markdownItPlugins = options.markdownItPlugins || [];
   for (const plugin of markdownItPlugins) {
     // @ts-ignore
     md.use(...plugin);
   }
   const tokens = md.parse(content, {});
   annotateAndFreezeTokens(tokens, lines);
+  // @ts-ignore
   return tokens;
 };
 
@@ -4192,7 +4192,7 @@ module.exports = {
     for (const [ lineIndex, line ] of lines.entries()) {
       if (!ignoreBlockLineNumbers.has(lineIndex + 1)) {
         const match =
-          /^(#+)([ \t]*)([^#]*?[^#\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
+          /^(#+)([ \t]*)([^# \t\\]|[^# \t][^#]*?[^# \t\\])([ \t]*)((?:\\#)?)(#+)(\s*)$/.exec(line);
         if (match) {
           const [
             ,

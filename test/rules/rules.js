@@ -3,7 +3,7 @@
 "use strict";
 
 const anyBlockquote = require("./any-blockquote");
-module.exports.anyBlockquote = anyBlockquote;
+module.exports.anyBlockquote = anyBlockquote[1];
 
 const everyNLines = require("./every-n-lines");
 module.exports.everyNLines = everyNLines;

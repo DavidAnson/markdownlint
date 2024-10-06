@@ -1034,8 +1034,7 @@ test("validateConfigExampleJson", (t) => {
   const ajv = new Ajv(ajvOptions);
   const validateSchema = ajv.compile(configSchema);
   t.is(
-    // eslint-disable-next-line regexp/optimal-quantifier-concatenation
-    configSchema.$id.replace(/^.*v(?<ver>\d+\.\d+\.\d+).*$/u, "$<ver>"),
+    configSchema.$id.replace(/^.*\/v(?<ver>\d+\.\d+\.\d+)\/.*$/u, "$<ver>"),
     version
   );
   t.is(configSchema.$id, configSchema.properties.$schema.default);
@@ -1081,7 +1080,7 @@ test("allBuiltInRulesHaveValidUrl", (t) => {
 });
 
 test("someCustomRulesHaveValidUrl", (t) => {
-  t.plan(8);
+  t.plan(9);
   for (const rule of customRules.all) {
     t.true(!rule.information ||
       (Object.getPrototypeOf(rule.information) === URL.prototype));

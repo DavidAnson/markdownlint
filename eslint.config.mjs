@@ -75,7 +75,6 @@ export default [
       "prefer-destructuring": "off",
       "prefer-named-capture-group": "off",
       "prefer-template": "off",
-      "regexp/no-super-linear-backtracking": "off",
       "require-unicode-regexp": "off",
       "sort-imports": "off",
       "sort-keys": "off",
