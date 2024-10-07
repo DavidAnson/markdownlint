@@ -13,7 +13,7 @@ module.exports = {
   "asynchronous": true,
   "function": (params, onError) => {
     const fences = params.parsers.markdownit.tokens
-      .filter(((token) => token.type === "fence"));
+      .filter((token) => token.type === "fence");
     for (const fence of fences) {
       if (/jsonc?/i.test(fence.info)) {
         const errors = [];
