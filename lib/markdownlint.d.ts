@@ -8,7 +8,7 @@ export = markdownlint;
  */
 declare function markdownlint(options: Options | null, callback: LintCallback): void;
 declare namespace markdownlint {
-    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, ConfigurationStrict, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
+    export { markdownlintSync as sync, readConfig, readConfigSync, getVersion, promises, applyFix, applyFixes, RuleFunction, RuleParams, MarkdownParsers, ParserMarkdownIt, ParserMicromark, MarkdownItToken, MicromarkTokenType, MicromarkToken, RuleOnError, RuleOnErrorInfo, RuleOnErrorFixInfo, RuleOnErrorFixInfoNormalized, Rule, Options, Plugin, ToStringCallback, LintResults, LintError, FixInfo, LintContentCallback, LintCallback, Configuration, ConfigurationStrict, RuleConfiguration, ConfigurationParser, ReadConfigCallback, ResolveConfigExtendsCallback };
 }
 /**
  * Lint specified Markdown files synchronously.
@@ -49,6 +49,23 @@ declare namespace promises {
     export { extendConfigPromise as extendConfig };
     export { readConfigPromise as readConfig };
 }
+/**
+ * Applies the specified fix to a Markdown content line.
+ *
+ * @param {string} line Line of Markdown content.
+ * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
+ * @param {string} [lineEnding] Line ending to use.
+ * @returns {string | null} Fixed content or null if deleted.
+ */
+declare function applyFix(line: string, fixInfo: RuleOnErrorFixInfo, lineEnding?: string): string | null;
+/**
+ * Applies as many of the specified fixes as possible to Markdown content.
+ *
+ * @param {string} input Lines of Markdown content.
+ * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
+ * @returns {string} Fixed content.
+ */
+declare function applyFixes(input: string, errors: RuleOnErrorInfo[]): string;
 /**
  * Function to implement rule logic.
  */
@@ -269,6 +286,27 @@ type RuleOnErrorFixInfo = {
      * Text to insert (after deleting).
      */
     insertText?: string;
+};
+/**
+ * RuleOnErrorInfo with all optional properties present.
+ */
+type RuleOnErrorFixInfoNormalized = {
+    /**
+     * Line number (1-based).
+     */
+    lineNumber: number;
+    /**
+     * Column of the fix (1-based).
+     */
+    editColumn: number;
+    /**
+     * Count of characters to delete.
+     */
+    deleteCount: number;
+    /**
+     * Text to insert (after deleting).
+     */
+    insertText: string;
 };
 /**
  * Rule definition.

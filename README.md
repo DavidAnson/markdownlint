@@ -768,6 +768,44 @@ Type: `Object`
 
 Configuration object.
 
+### Fixing
+
+Rules that can be fixed automatically include a `fixInfo` property which is
+outlined in the [documentation for custom rules](doc/CustomRules.md#authoring).
+To apply fixes consistently, the `applyFix`/`applyFixes` methods may be used:
+
+```javascript
+/**
+ * Applies the specified fix to a Markdown content line.
+ *
+ * @param {string} line Line of Markdown content.
+ * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
+ * @param {string} [lineEnding] Line ending to use.
+ * @returns {string | null} Fixed content or null if deleted.
+ */
+function applyFix(line, fixInfo, lineEnding = "\n") { ... }
+
+/**
+ * Applies as many of the specified fixes as possible to Markdown content.
+ *
+ * @param {string} input Lines of Markdown content.
+ * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
+ * @returns {string} Fixed content.
+ */
+function applyFixes(input, errors) { ... }
+```
+
+Invoking `applyFixes` with the results of a call to lint can be done like so:
+
+```javascript
+const { "sync": markdownlintSync, applyFixes } = require("markdownlint");
+
+function fixMarkdownlintViolations(content) {
+  const fixResults = markdownlintSync({ strings: { content } });
+  return applyFixes(content, fixResults.content);
+}
+```
+
 ## Usage
 
 Invoke `markdownlint` and use the `result` object's `toString` method:
@@ -933,14 +971,6 @@ bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
  Use --force to continue.
 ```
-
-### Fixing
-
-Rules that can be fixed automatically include a `fixInfo` property which is
-outlined in the [documentation for custom rules](doc/CustomRules.md#authoring).
-To apply those fixes more easily, the `applyFixes` method in
-[markdownlint-rule-helpers](helpers/README.md#applying-recommended-fixes) may
-be used.
 
 ## Browser
 

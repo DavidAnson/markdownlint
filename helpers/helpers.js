@@ -10,17 +10,7 @@ module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
 /** @typedef {import("../lib/markdownlint.js").RuleOnError} RuleOnError */
-/** @typedef {import("../lib/markdownlint.js").RuleOnErrorInfo} RuleOnErrorInfo */
 /** @typedef {import("../lib/markdownlint.js").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
-/**
- * RuleOnErrorInfo with common optional properties filled in.
- *
- * @typedef {Object} RuleOnErrorFixInfoNormalized
- * @property {number} lineNumber Line number (1-based).
- * @property {number} editColumn Column of the fix (1-based).
- * @property {number} deleteCount Count of characters to delete.
- * @property {string} insertText Text to insert (after deleting).
- */
 
 // Regular expression for matching common front matter (YAML and TOML)
 module.exports.frontMatterRe =
@@ -553,123 +543,6 @@ function getPreferredLineEnding(input, os) {
   return preferredLineEnding;
 }
 module.exports.getPreferredLineEnding = getPreferredLineEnding;
-
-/**
- * Normalizes the fields of a RuleOnErrorFixInfo instance.
- *
- * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
- * @param {number} [lineNumber] Line number.
- * @returns {RuleOnErrorFixInfoNormalized} Normalized RuleOnErrorFixInfo instance.
- */
-function normalizeFixInfo(fixInfo, lineNumber = 0) {
-  return {
-    "lineNumber": fixInfo.lineNumber || lineNumber,
-    "editColumn": fixInfo.editColumn || 1,
-    "deleteCount": fixInfo.deleteCount || 0,
-    "insertText": fixInfo.insertText || ""
-  };
-}
-
-/**
- * Fixes the specified error on a line of Markdown content.
- *
- * @param {string} line Line of Markdown content.
- * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
- * @param {string} [lineEnding] Line ending to use.
- * @returns {string | null} Fixed content.
- */
-function applyFix(line, fixInfo, lineEnding) {
-  const { editColumn, deleteCount, insertText } = normalizeFixInfo(fixInfo);
-  const editIndex = editColumn - 1;
-  return (deleteCount === -1) ?
-    null :
-    line.slice(0, editIndex) +
-    insertText.replace(/\n/g, lineEnding || "\n") +
-    line.slice(editIndex + deleteCount);
-}
-module.exports.applyFix = applyFix;
-
-/**
- * Applies as many fixes as possible to Markdown content.
- *
- * @param {string} input Lines of Markdown content.
- * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
- * @returns {string} Corrected content.
- */
-function applyFixes(input, errors) {
-  const lineEnding = getPreferredLineEnding(input, require("node:os"));
-  const lines = input.split(newLineRe);
-  // Normalize fixInfo objects
-  let fixInfos = errors
-    .filter((error) => error.fixInfo)
-    // @ts-ignore
-    .map((error) => normalizeFixInfo(error.fixInfo, error.lineNumber));
-  // Sort bottom-to-top, line-deletes last, right-to-left, long-to-short
-  fixInfos.sort((a, b) => {
-    const aDeletingLine = (a.deleteCount === -1);
-    const bDeletingLine = (b.deleteCount === -1);
-    return (
-      (b.lineNumber - a.lineNumber) ||
-      (aDeletingLine ? 1 : (bDeletingLine ? -1 : 0)) ||
-      (b.editColumn - a.editColumn) ||
-      (b.insertText.length - a.insertText.length)
-    );
-  });
-  // Remove duplicate entries (needed for following collapse step)
-  // eslint-disable-next-line jsdoc/valid-types
-  /** @type RuleOnErrorFixInfo */
-  let lastFixInfo = {};
-  fixInfos = fixInfos.filter((fixInfo) => {
-    const unique = (
-      (fixInfo.lineNumber !== lastFixInfo.lineNumber) ||
-      (fixInfo.editColumn !== lastFixInfo.editColumn) ||
-      (fixInfo.deleteCount !== lastFixInfo.deleteCount) ||
-      (fixInfo.insertText !== lastFixInfo.insertText)
-    );
-    lastFixInfo = fixInfo;
-    return unique;
-  });
-  // Collapse insert/no-delete and no-insert/delete for same line/column
-  lastFixInfo = {
-    "lineNumber": -1
-  };
-  for (const fixInfo of fixInfos) {
-    if (
-      (fixInfo.lineNumber === lastFixInfo.lineNumber) &&
-      (fixInfo.editColumn === lastFixInfo.editColumn) &&
-      !fixInfo.insertText &&
-      (fixInfo.deleteCount > 0) &&
-      lastFixInfo.insertText &&
-      !lastFixInfo.deleteCount) {
-      fixInfo.insertText = lastFixInfo.insertText;
-      lastFixInfo.lineNumber = 0;
-    }
-    lastFixInfo = fixInfo;
-  }
-  fixInfos = fixInfos.filter((fixInfo) => fixInfo.lineNumber);
-  // Apply all (remaining/updated) fixes
-  let lastLineIndex = -1;
-  let lastEditIndex = -1;
-  for (const fixInfo of fixInfos) {
-    const { lineNumber, editColumn, deleteCount } = fixInfo;
-    const lineIndex = lineNumber - 1;
-    const editIndex = editColumn - 1;
-    if (
-      (lineIndex !== lastLineIndex) ||
-      (deleteCount === -1) ||
-      ((editIndex + deleteCount) <=
-        (lastEditIndex - ((deleteCount > 0) ? 0 : 1)))
-    ) {
-      // @ts-ignore
-      lines[lineIndex] = applyFix(lines[lineIndex], fixInfo, lineEnding);
-    }
-    lastLineIndex = lineIndex;
-    lastEditIndex = editIndex;
-  }
-  // Return corrected input
-  return lines.filter((line) => line !== null).join(lineEnding);
-}
-module.exports.applyFixes = applyFixes;
 
 /**
  * Expands a path with a tilde to an absolute path.

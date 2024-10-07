@@ -5,7 +5,9 @@
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const test = require("ava").default;
-const { markdownlint } = require("../lib/markdownlint").promises;
+const libMarkdownlint = require("../lib/markdownlint");
+const { applyFixes, promises } = libMarkdownlint;
+const { markdownlint } = promises;
 const helpers = require("../helpers");
 const constants = require("../lib/constants");
 
@@ -82,7 +84,7 @@ function createTestForFile(file) {
         }
         t.deepEqual(actual, expected, "Too few or too many issues found.");
         // Create snapshot
-        const fixed = helpers.applyFixes(content, errors)
+        const fixed = applyFixes(content, errors)
           .replace(/\r\n/g, "\n");
         t.snapshot({
           errors,

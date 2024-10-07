@@ -17,22 +17,6 @@ change from release to release. There are brief descriptive comments above each
 function, but no [JSDoc][jsdoc] annotations. That said, some of what's here will
 be useful to custom rule authors and may avoid duplicating code.
 
-## Examples
-
-### Applying Recommended Fixes
-
-```javascript
-const { "sync": markdownlintSync } = require("markdownlint");
-const markdownlintRuleHelpers = require("markdownlint-rule-helpers");
-
-function fixMarkdownlintViolations(content) {
-  const fixResults = markdownlintSync({ strings: { content } });
-  return markdownlintRuleHelpers.applyFixes(content, fixResults.content);
-}
-```
-
-See also: [`markdownlint` built-in rule implementations][lib].
-
 ## Tests
 
 *None* - The entire body of code is tested to 100% coverage by the core
@@ -40,7 +24,6 @@ See also: [`markdownlint` built-in rule implementations][lib].
 
 [custom-rules]: https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/CustomRules.md
 [jsdoc]: https://en.m.wikipedia.org/wiki/JSDoc
-[lib]: https://github.com/DavidAnson/markdownlint/tree/v0.35.0/lib
 [markdown]: https://en.wikipedia.org/wiki/Markdown
 [markdownlint]: https://github.com/DavidAnson/markdownlint
 [rules]: https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/Rules.md

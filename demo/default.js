@@ -4,7 +4,6 @@
   // Dependencies
   var markdownit = globalThis.markdownit;
   var markdownlint = globalThis.markdownlint.library;
-  var helpers = globalThis.markdownlint.helpers;
   var micromark = globalThis.micromarkBrowser;
   var micromarkHtml = globalThis.micromarkHtmlBrowser;
 
@@ -184,7 +183,7 @@
         var errors = e.shiftKey ?
           allLintErrors :
           [ JSON.parse(decodeURIComponent(e.target.target)) ];
-        var fixed = helpers.applyFixes(markdown.value, errors);
+        var fixed = markdownlint.applyFixes(markdown.value, errors);
         markdown.value = fixed;
         onMarkdownInput();
         e.preventDefault();

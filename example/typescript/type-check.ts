@@ -166,6 +166,36 @@ markdownlint(options, assertLintResultsCallback);
   assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
 })();
 
+assert.equal(
+  markdownlint.applyFix(
+    "# Fixing\n",
+    {
+      "insertText": "Head",
+      "editColumn": 3,
+      "deleteCount": 3
+    },
+    "\n"
+  ),
+  "# Heading\n"
+);
+
+assert.equal(
+  markdownlint.applyFixes(
+    "# Fixing\n",
+    [
+      {
+        "lineNumber": 1,
+        "fixInfo": {
+          "insertText": "Head",
+          "editColumn": 3,
+          "deleteCount": 3
+        }
+      }
+    ]
+  ),
+  "# Heading\n"
+);
+
 const configuration: markdownlint.Configuration = {
   "custom-rule": true,
   "no-hard-tabs": false,
