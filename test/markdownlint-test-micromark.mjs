@@ -86,7 +86,7 @@ test("filterByPredicate/filterByTypes", async(t) => {
   t.plan(1);
   const tokens = await testTokens;
   const byPredicate = filterByPredicate(tokens, () => true);
-  const allTypes = new Set(byPredicate.map(((token) => token.type)));
+  const allTypes = new Set(byPredicate.map((token) => token.type));
   const byTypes = filterByTypes(tokens, [ ...allTypes.values() ], true);
   t.deepEqual(byPredicate, byTypes);
 });

@@ -45,7 +45,7 @@ module.exports = {
   "parser": "micromark",
   "function": (params, onError) => {
     const blockquotes = params.parsers.micromark.tokens
-      .filter(((token) => token.type === "blockQuote"));
+      .filter((token) => token.type === "blockQuote");
     for (const blockquote of blockquotes) {
       const lines = blockquote.endLine - blockquote.startLine + 1;
       onError({
@@ -70,7 +70,7 @@ module.exports = {
   "parser": "markdownit",
   "function": (params, onError) => {
     const blockquotes = params.parsers.markdownit.tokens
-      .filter(((token) => token.type === "blockquote_open"));
+      .filter((token) => token.type === "blockquote_open");
     for (const blockquote of blockquotes) {
       const [ startIndex, endIndex ] = blockquote.map;
       const lines = endIndex - startIndex;
