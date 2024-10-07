@@ -21,10 +21,6 @@ const inlineCommentStartRe =
   /(<!--\s*markdownlint-(disable|enable|capture|restore|disable-file|enable-file|disable-line|disable-next-line|configure-file))(?:\s|-->)/gi;
 module.exports.inlineCommentStartRe = inlineCommentStartRe;
 
-// Regular expression for link reference definitions
-const linkReferenceDefinitionRe = /^ {0,3}\[([^\]]*[^\\])\]:/;
-module.exports.linkReferenceDefinitionRe = linkReferenceDefinitionRe;
-
 // Regular expression for identifying an HTML entity at the end of a line
 module.exports.endOfLineHtmlEntityRe =
   /&(?:#\d+|#[xX][\da-fA-F]+|[a-zA-Z]{2,31}|blk\d{2}|emsp1[34]|frac\d{2}|sup\d|there4);$/;
@@ -223,38 +219,6 @@ module.exports.escapeForRegExp = function escapeForRegExp(str) {
 };
 
 /**
- * Return the string representation of a fence markup character.
- *
- * @param {string} markup Fence string.
- * @returns {string} String representation.
- */
-module.exports.fencedCodeBlockStyleFor =
-  function fencedCodeBlockStyleFor(markup) {
-    switch (markup[0]) {
-      case "~":
-        return "tilde";
-      default:
-        return "backtick";
-    }
-  };
-
-/**
- * Return the string representation of a emphasis or strong markup character.
- *
- * @param {string} markup Emphasis or strong string.
- * @returns {"asterisk" | "underscore"} String representation.
- */
-module.exports.emphasisOrStrongStyleFor =
-  function emphasisOrStrongStyleFor(markup) {
-    switch (markup[0]) {
-      case "*":
-        return "asterisk";
-      default:
-        return "underscore";
-    }
-  };
-
-/**
  * Adds ellipsis to the left/right/middle of the specified text.
  *
  * @param {string} text Text to ellipsify.
@@ -376,13 +340,12 @@ const positionLessThanOrEqual = (lineA, columnA, lineB, columnB) => (
  * @param {FileRange|import("../lib/markdownlint.js").MicromarkToken} rangeB Range B.
  * @returns {boolean} True iff the two ranges overlap.
  */
-const hasOverlap = (rangeA, rangeB) => {
+module.exports.hasOverlap = function hasOverlap(rangeA, rangeB) {
   const lte = positionLessThanOrEqual(rangeA.startLine, rangeA.startColumn, rangeB.startLine, rangeB.startColumn);
   const first = lte ? rangeA : rangeB;
   const second = lte ? rangeB : rangeA;
   return positionLessThanOrEqual(second.startLine, second.startColumn, first.endLine, first.endColumn);
 };
-module.exports.hasOverlap = hasOverlap;
 
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
