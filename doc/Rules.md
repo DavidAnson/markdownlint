@@ -93,8 +93,8 @@ Setext style H2
 ```
 
 Note: The configured heading style can be a specific style to require (`atx`,
-`atx_closed`, `setext`, `setext_with_atx`, `setext_with_atx_closed`), or may
-just require that usage is consistent within the document via `consistent`.
+`atx_closed`, `setext`, `setext_with_atx`, `setext_with_atx_closed`), or can
+require that all heading styles match the first heading style via `consistent`.
 
 Note: The placement of a horizontal rule directly below a line of text can
 trigger this rule by turning that text into a level 2 setext-style heading:
@@ -139,9 +139,10 @@ document:
 * Item 3
 ```
 
-The configured list style can be a specific symbol to use (asterisk, plus,
-dash), to ensure that all list styling is consistent, or to ensure that each
-sublist has a consistent symbol that differs from its parent list.
+The configured list style can ensure all list styling is a specific symbol
+(`asterisk`, `plus`, `dash`), ensure each sublist has a consistent symbol that
+differs from its parent list (`sublist`), or ensure all list styles match the
+first list style (`consistent`).
 
 For example, the following is valid for the `sublist` style because the
 outer-most indent uses asterisk, the middle indent uses plus, and the inner-most
@@ -1416,8 +1417,7 @@ in the document:
 ****
 ```
 
-To fix this, ensure any horizontal rules used in the document are consistent,
-or match the given style if the rule is so configured:
+To fix this, use the same horizontal rule everywhere:
 
 ```markdown
 ---
@@ -1425,12 +1425,8 @@ or match the given style if the rule is so configured:
 ---
 ```
 
-Note: by default, this rule is configured to just require that all horizontal
-rules in the document are the same and will trigger if any of the horizontal
-rules are different than the first one encountered in the document. If you
-want to configure the rule to match a specific style, the parameter given to
-the 'style' option is a string containing the exact horizontal rule text that
-is allowed.
+The configured style can ensure all horizontal rules use a specific string or it
+can ensure all horizontal rules match the first horizontal rule (`consistent`).
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -1932,8 +1928,8 @@ document:
 To fix violations of this rule, use a consistent style (either indenting or code
 fences).
 
-The specified style can be specific (`fenced`, `indented`) or simply require
-that usage be consistent within the document (`consistent`).
+The configured code block style can be specific (`fenced`, `indented`) or can
+require all code blocks match the first code block (`consistent`).
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -2013,8 +2009,9 @@ document:
 ```
 ````
 
-The configured list style can be a specific symbol to use (backtick, tilde), or
-can require that usage be consistent within the document.
+The configured code fence style can be a specific symbol to use (`backtick`,
+`tilde`) or it can require all code fences match the first code fence
+(`consistent`).
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -2048,10 +2045,11 @@ To fix this issue, use the configured emphasis style throughout the document:
 *Text*
 ```
 
-The configured emphasis style can be a specific symbol to use ("asterisk",
-"underscore"), or can require that usage be consistent within the document.
+The configured emphasis style can be a specific symbol to use (`asterisk`,
+`underscore`) or can require all emphasis matches the first emphasis
+(`consistent`).
 
-Note: Emphasis within a word is restricted to "asterisk" in order to avoid
+Note: Emphasis within a word is restricted to `asterisk` in order to avoid
 unwanted emphasis for words containing internal underscores like_this_one.
 
 Rationale: Consistent formatting makes it easier to understand a document.
@@ -2086,11 +2084,11 @@ To fix this issue, use the configured strong style throughout the document:
 **Text**
 ```
 
-The configured strong style can be a specific symbol to use ("asterisk",
-"underscore"), or can require that usage be consistent within the document.
+The configured strong style can be a specific symbol to use (`asterisk`,
+`underscore`) or can require all strong matches the first strong (`consistent`).
 
-Note: Emphasis within a word is restricted to "asterisk" in order to avoid
-unwanted emphasis for words containing internal underscores like_this_one.
+Note: Emphasis within a word is restricted to `asterisk` in order to avoid
+unwanted emphasis for words containing internal underscores like__this__one.
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
@@ -2389,8 +2387,9 @@ This rule is triggered when a [GitHub Flavored Markdown table][gfm-table-055]
 is inconsistent about its use of leading and trailing pipe characters (`|`).
 
 By default (`consistent` style), the header row of the first table in a document
-is used to determine the style that is enforced for all tables in that document.
-A specific style can be required by setting the `style` parameter accordingly.
+is used to determine the style that is enforced for every table in the document.
+A specific style can be used instead (`leading_and_trailing`, `leading_only`,
+`no_leading_or_trailing`, `trailing_only`).
 
 This table's header row has leading and trailing pipes, but its delimiter row is
 missing the trailing pipe and its first row of cells is missing the leading
