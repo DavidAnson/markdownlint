@@ -1464,13 +1464,35 @@
     },
     "MD051": {
       "description": "MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/md051.md",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "ignore_case": {
+          "description": "Ignore case of fragments",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     },
     "link-fragments": {
       "description": "MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/md051.md",
-      "type": "boolean",
-      "default": true
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "ignore_case": {
+          "description": "Ignore case of fragments",
+          "type": "boolean",
+          "default": false
+        }
+      },
+      "additionalProperties": false
     },
     "MD052": {
       "description": "MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/md052.md",

@@ -937,11 +937,25 @@ export interface ConfigurationStrict {
   /**
    * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/md051.md
    */
-  MD051?: boolean;
+  MD051?:
+    | boolean
+    | {
+        /**
+         * Ignore case of fragments
+         */
+        ignore_case?: boolean;
+      };
   /**
    * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/md051.md
    */
-  "link-fragments"?: boolean;
+  "link-fragments"?:
+    | boolean
+    | {
+        /**
+         * Ignore case of fragments
+         */
+        ignore_case?: boolean;
+      };
   /**
    * MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.35.0/doc/md052.md
    */

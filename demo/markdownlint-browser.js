@@ -6245,7 +6245,7 @@ module.exports = [
 
 
 
-const { addError, addErrorDetailIf, getHtmlAttributeRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
+const { addError, getHtmlAttributeRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
 const { filterByPredicate, filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
@@ -6311,6 +6311,7 @@ module.exports = {
   "tags": [ "links" ],
   "parser": "micromark",
   "function": function MD051(params, onError) {
+    const ignoreCase = params.config.ignore_case || false;
     const fragments = new Map();
 
     // Process headings
@@ -6386,16 +6387,16 @@ module.exports = {
             if (mixedCaseKey) {
               // @ts-ignore
               (fixInfo || {}).insertText = mixedCaseKey;
-              addErrorDetailIf(
-                onError,
-                link.startLine,
-                mixedCaseKey,
-                text,
-                undefined,
-                context,
-                range,
-                fixInfo
-              );
+              if (!ignoreCase && (mixedCaseKey !== text)) {
+                addError(
+                  onError,
+                  link.startLine,
+                  `Expected: ${mixedCaseKey}; Actual: ${text}`,
+                  context,
+                  range,
+                  fixInfo
+                );
+              }
             } else {
               addError(
                 onError,

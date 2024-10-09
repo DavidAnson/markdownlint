@@ -477,6 +477,15 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD051":
+      scheme.properties = {
+        "ignore_case": {
+          "description": "Ignore case of fragments",
+          "type": "boolean",
+          "default": false
+        }
+      };
+      break;
     case "MD052":
       scheme.properties = {
         "shortcut_syntax": {
