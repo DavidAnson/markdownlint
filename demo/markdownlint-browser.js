@@ -846,12 +846,12 @@ function getDescendantsByType(parent, typePath) {
  * @returns {number} Heading level.
  */
 function getHeadingLevel(heading) {
-  const headingSequence = filterByTypes(
-    heading.children,
-    [ "atxHeadingSequence", "setextHeadingLineSequence" ]
-  );
   let level = 1;
-  const { text } = headingSequence[0];
+  const headingSequence = heading.children.find(
+    (child) => [ "atxHeadingSequence", "setextHeadingLine" ].includes(child.type)
+  );
+  // @ts-ignore
+  const { text } = headingSequence;
   if (text[0] === "#") {
     level = Math.min(text.length, 6);
   } else if (text[0] === "-") {
@@ -870,9 +870,8 @@ function getHeadingStyle(heading) {
   if (heading.type === "setextHeading") {
     return "setext";
   }
-  const atxHeadingSequenceLength = filterByTypes(
-    heading.children,
-    [ "atxHeadingSequence" ]
+  const atxHeadingSequenceLength = heading.children.filter(
+    (child) => child.type === "atxHeadingSequence"
   ).length;
   if (atxHeadingSequenceLength === 1) {
     return "atx";
@@ -1188,7 +1187,6 @@ const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.c
 
 /** @type {Map<string, object>} */
 const map = new Map();
-// eslint-disable-next-line no-undef-init
 let params = undefined;
 
 /**
@@ -1227,7 +1225,8 @@ function getCached(name, getValue) {
  */
 function filterByTypesCached(types, htmlFlow) {
   return getCached(
-    types.join("|"),
+    // eslint-disable-next-line prefer-rest-params
+    JSON.stringify(arguments),
     () => filterByTypes(params.parsers.micromark.tokens, types, htmlFlow)
   );
 }
@@ -3911,7 +3910,6 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const dollarCommandRe = /^(\s*)(\$\s+)/;
@@ -3925,10 +3923,7 @@ module.exports = {
   "parser": "micromark",
   "function": function MD014(params, onError) {
     for (const codeBlock of filterByTypesCached([ "codeFenced", "codeIndented" ])) {
-      const codeFlowValues = filterByTypes(
-        codeBlock.children,
-        [ "codeFlowValue" ]
-      );
+      const codeFlowValues = codeBlock.children.filter((child) => child.type === "codeFlowValue");
       const dollarMatches = codeFlowValues
         .map((codeFlowValue) => ({
           "result": codeFlowValue.text.match(dollarCommandRe),
@@ -5359,8 +5354,8 @@ module.exports = {
         const spaceRight = rightSpaceRe.test(endData.text);
         if (spaceLeft || spaceRight) {
           let lineNumber = startSequence.startLine;
-          let range = null;
-          let fixInfo = null;
+          let range = undefined;
+          let fixInfo = undefined;
           if (startSequence.startLine === endSequence.endLine) {
             range = [
               startSequence.startColumn,
@@ -5428,7 +5423,6 @@ module.exports = {
 
 
 const { addErrorContext } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { getReferenceLinkImageData, filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 /**
@@ -5487,10 +5481,7 @@ module.exports = {
     const labels = filterByTypesCached([ "label" ])
       .filter((label) => label.parent?.type === "link");
     for (const label of labels) {
-      const labelTexts = filterByTypes(
-        label.children,
-        [ "labelText" ]
-      );
+      const labelTexts = label.children.filter((child) => child.type === "labelText");
       for (const labelText of labelTexts) {
         if (
           (labelText.text.trimStart().length !== labelText.text.length) &&
@@ -5896,7 +5887,7 @@ module.exports = {
 
 
 const { addError, getHtmlAttributeRe, nextLinesRe } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes, getHtmlTagInfo } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { getHtmlTagInfo, getDescendantsByType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const altRe = getHtmlAttributeRe("alt");
@@ -5912,7 +5903,7 @@ module.exports = {
     // Process Markdown images
     const images = filterByTypesCached([ "image" ]);
     for (const image of images) {
-      const labelTexts = filterByTypes(image.children, [ "labelText" ]);
+      const labelTexts = getDescendantsByType(image, [ "label", "labelText" ]);
       if (labelTexts.some((labelText) => labelText.text.length === 0)) {
         const range = (image.startLine === image.endLine) ?
           [ image.startColumn, image.endColumn - image.startColumn ] :
@@ -6367,11 +6358,8 @@ module.exports = {
             !fragments.has(encodedText) &&
             !lineFragmentRe.test(encodedText)
           ) {
-            // eslint-disable-next-line no-undef-init
             let context = undefined;
-            // eslint-disable-next-line no-undef-init
             let range = undefined;
-            // eslint-disable-next-line no-undef-init
             let fixInfo = undefined;
             if (link.startLine === link.endLine) {
               context = link.text;
@@ -6634,9 +6622,8 @@ module.exports = {
         }
       }
       if (isError) {
-        // eslint-disable-next-line no-undef-init
         let range = undefined;
-        let fixInfo = null;
+        let fixInfo = undefined;
         if (startLine === endLine) {
           range = [ startColumn, endColumn - startColumn ];
           let insertText = null;
@@ -6690,7 +6677,6 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const whitespaceTypes = new Set([ "linePrefix", "whitespace" ]);
@@ -6715,51 +6701,45 @@ module.exports = {
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "trailing_only"));
     let expectedTrailingPipe =
       ((expectedStyle !== "no_leading_or_trailing") && (expectedStyle !== "leading_only"));
-    const tables = filterByTypesCached([ "table" ]);
-    for (const table of tables) {
-      const rows = filterByTypes(
-        table.children,
-        [ "tableDelimiterRow", "tableRow" ]
-      );
-      for (const row of rows) {
-        // The following uses of first/lastOrNothing lack fallback handling
-        // because it seems not to be possible (i.e., 0% coverage)
-        const firstCell = firstOrNothing(row.children);
-        const leadingToken = firstOrNothing(ignoreWhitespace(firstCell.children));
-        const actualLeadingPipe = (leadingToken.type === "tableCellDivider");
-        const lastCell = lastOrNothing(row.children);
-        const trailingToken = lastOrNothing(ignoreWhitespace(lastCell.children));
-        const actualTrailingPipe = (trailingToken.type === "tableCellDivider");
-        const actualStyle = actualLeadingPipe ?
-          (actualTrailingPipe ? "leading_and_trailing" : "leading_only") :
-          (actualTrailingPipe ? "trailing_only" : "no_leading_or_trailing");
-        if (expectedStyle === "consistent") {
-          expectedStyle = actualStyle;
-          expectedLeadingPipe = actualLeadingPipe;
-          expectedTrailingPipe = actualTrailingPipe;
-        }
-        if (actualLeadingPipe !== expectedLeadingPipe) {
-          addErrorDetailIf(
-            onError,
-            firstCell.startLine,
-            expectedStyle,
-            actualStyle,
-            `${expectedLeadingPipe ? "Missing" : "Unexpected"} leading pipe`,
-            undefined,
-            makeRange(row.startColumn, firstCell.startColumn)
-          );
-        }
-        if (actualTrailingPipe !== expectedTrailingPipe) {
-          addErrorDetailIf(
-            onError,
-            lastCell.endLine,
-            expectedStyle,
-            actualStyle,
-            `${expectedTrailingPipe ? "Missing" : "Unexpected"} trailing pipe`,
-            undefined,
-            makeRange(lastCell.endColumn - 1, row.endColumn - 1)
-          );
-        }
+    const rows = filterByTypesCached([ "tableDelimiterRow", "tableRow" ]);
+    for (const row of rows) {
+      // The following uses of first/lastOrNothing lack fallback handling
+      // because it seems not to be possible (i.e., 0% coverage)
+      const firstCell = firstOrNothing(row.children);
+      const leadingToken = firstOrNothing(ignoreWhitespace(firstCell.children));
+      const actualLeadingPipe = (leadingToken.type === "tableCellDivider");
+      const lastCell = lastOrNothing(row.children);
+      const trailingToken = lastOrNothing(ignoreWhitespace(lastCell.children));
+      const actualTrailingPipe = (trailingToken.type === "tableCellDivider");
+      const actualStyle = actualLeadingPipe ?
+        (actualTrailingPipe ? "leading_and_trailing" : "leading_only") :
+        (actualTrailingPipe ? "trailing_only" : "no_leading_or_trailing");
+      if (expectedStyle === "consistent") {
+        expectedStyle = actualStyle;
+        expectedLeadingPipe = actualLeadingPipe;
+        expectedTrailingPipe = actualTrailingPipe;
+      }
+      if (actualLeadingPipe !== expectedLeadingPipe) {
+        addErrorDetailIf(
+          onError,
+          firstCell.startLine,
+          expectedStyle,
+          actualStyle,
+          `${expectedLeadingPipe ? "Missing" : "Unexpected"} leading pipe`,
+          undefined,
+          makeRange(row.startColumn, firstCell.startColumn)
+        );
+      }
+      if (actualTrailingPipe !== expectedTrailingPipe) {
+        addErrorDetailIf(
+          onError,
+          lastCell.endLine,
+          expectedStyle,
+          actualStyle,
+          `${expectedTrailingPipe ? "Missing" : "Unexpected"} trailing pipe`,
+          undefined,
+          makeRange(lastCell.endColumn - 1, row.endColumn - 1)
+        );
       }
     }
   }
@@ -6780,7 +6760,7 @@ module.exports = {
 
 
 const { addErrorDetailIf } = __webpack_require__(/*! ../helpers */ "../helpers/helpers.js");
-const { filterByTypes } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
+const { getParentOfType } = __webpack_require__(/*! ../helpers/micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
 const { filterByTypesCached } = __webpack_require__(/*! ./cache */ "../lib/cache.js");
 
 const makeRange = (start, end) => [ start, end - start + 1 ];
@@ -6793,41 +6773,36 @@ module.exports = {
   "tags": [ "table" ],
   "parser": "micromark",
   "function": function MD056(params, onError) {
-    const tables = filterByTypesCached([ "table" ]);
-    for (const table of tables) {
-      const rows = filterByTypes(
-        table.children,
-        [ "tableDelimiterRow", "tableRow" ]
-      );
-      let expectedCount = 0;
-      for (const row of rows) {
-        const cells = filterByTypes(
-          row.children,
-          [ "tableData", "tableDelimiter", "tableHeader" ]
-        );
-        const actualCount = cells.length;
-        expectedCount ||= actualCount;
-        // eslint-disable-next-line no-undef-init
-        let detail = undefined;
-        // eslint-disable-next-line no-undef-init
-        let range = undefined;
-        if (actualCount < expectedCount) {
-          detail = "Too few cells, row will be missing data";
-          range = [ row.endColumn - 1, 1 ];
-        } else if (expectedCount < actualCount) {
-          detail = "Too many cells, extra data will be missing";
-          range = makeRange(cells[expectedCount].startColumn, row.endColumn - 1);
-        }
-        addErrorDetailIf(
-          onError,
-          row.endLine,
-          expectedCount,
-          actualCount,
-          detail,
-          undefined,
-          range
-        );
+    const rows = filterByTypesCached([ "tableDelimiterRow", "tableRow" ]);
+    let expectedCount = 0;
+    let currentTable = null;
+    for (const row of rows) {
+      const table = getParentOfType(row, [ "table" ]);
+      if (currentTable !== table) {
+        expectedCount = 0;
+        currentTable = table;
       }
+      const cells = row.children.filter((child) => [ "tableData", "tableDelimiter", "tableHeader" ].includes(child.type));
+      const actualCount = cells.length;
+      expectedCount ||= actualCount;
+      let detail = undefined;
+      let range = undefined;
+      if (actualCount < expectedCount) {
+        detail = "Too few cells, row will be missing data";
+        range = [ row.endColumn - 1, 1 ];
+      } else if (expectedCount < actualCount) {
+        detail = "Too many cells, extra data will be missing";
+        range = makeRange(cells[expectedCount].startColumn, row.endColumn - 1);
+      }
+      addErrorDetailIf(
+        onError,
+        row.endLine,
+        expectedCount,
+        actualCount,
+        detail,
+        undefined,
+        range
+      );
     }
   }
 };

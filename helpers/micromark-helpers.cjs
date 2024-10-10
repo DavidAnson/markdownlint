@@ -176,12 +176,12 @@ function getDescendantsByType(parent, typePath) {
  * @returns {number} Heading level.
  */
 function getHeadingLevel(heading) {
-  const headingSequence = filterByTypes(
-    heading.children,
-    [ "atxHeadingSequence", "setextHeadingLineSequence" ]
-  );
   let level = 1;
-  const { text } = headingSequence[0];
+  const headingSequence = heading.children.find(
+    (child) => [ "atxHeadingSequence", "setextHeadingLine" ].includes(child.type)
+  );
+  // @ts-ignore
+  const { text } = headingSequence;
   if (text[0] === "#") {
     level = Math.min(text.length, 6);
   } else if (text[0] === "-") {
@@ -200,9 +200,8 @@ function getHeadingStyle(heading) {
   if (heading.type === "setextHeading") {
     return "setext";
   }
-  const atxHeadingSequenceLength = filterByTypes(
-    heading.children,
-    [ "atxHeadingSequence" ]
+  const atxHeadingSequenceLength = heading.children.filter(
+    (child) => child.type === "atxHeadingSequence"
   ).length;
   if (atxHeadingSequenceLength === 1) {
     return "atx";

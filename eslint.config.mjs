@@ -67,6 +67,7 @@ export default [
       "no-param-reassign": "off",
       "no-plusplus": "off",
       "no-ternary": "off",
+      "no-undef-init": "off",
       "no-undefined": "off",
       "no-useless-assignment": "off",
       "object-shorthand": "off",
