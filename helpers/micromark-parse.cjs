@@ -7,26 +7,36 @@ const { isHtmlFlowComment } = require("./micromark-helpers.cjs");
 const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.js");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
-/** @typedef {import("markdownlint-micromark").ParseOptions} ParseOptions */
+/** @typedef {import("markdownlint-micromark").ParseOptions} MicromarkParseOptions */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+
+/**
+ * Parse options.
+ *
+ * @typedef {Object} ParseOptions
+ * @property {boolean} [freezeTokens] Whether to freeze output Tokens.
+ * @property {boolean} [shimReferences] Whether to shim missing references.
+ */
 
 /**
  * Parses a Markdown document and returns Micromark events.
  *
  * @param {string} markdown Markdown document.
- * @param {ParseOptions} [micromarkOptions] Options for micromark.
- * @param {boolean} [referencesDefined] Treat references as defined.
+ * @param {ParseOptions} [parseOptions] Options.
+ * @param {MicromarkParseOptions} [micromarkParseOptions] Options for micromark.
  * @returns {Event[]} Micromark events.
  */
 function getEvents(
   markdown,
-  micromarkOptions = {},
-  referencesDefined = true
+  parseOptions = {},
+  micromarkParseOptions = {}
 ) {
+  // Get options
+  const shimReferences = Boolean(parseOptions.shimReferences);
 
   // Customize options object to add useful extensions
-  micromarkOptions.extensions = micromarkOptions.extensions || [];
-  micromarkOptions.extensions.push(
+  micromarkParseOptions.extensions = micromarkParseOptions.extensions || [];
+  micromarkParseOptions.extensions.push(
     micromark.directive(),
     micromark.gfmAutolinkLiteral(),
     micromark.gfmFootnote(),
@@ -37,8 +47,8 @@ function getEvents(
   // Use micromark to parse document into Events
   const encoding = undefined;
   const eol = true;
-  const parseContext = micromark.parse(micromarkOptions);
-  if (referencesDefined) {
+  const parseContext = micromark.parse(micromarkParseOptions);
+  if (shimReferences) {
     // Customize ParseContext to treat all references as defined
     parseContext.defined.includes = (searchElement) => searchElement.length > 0;
   }
@@ -48,26 +58,27 @@ function getEvents(
 }
 
 /**
- * Parses a Markdown document and returns (frozen) tokens.
+ * Parses a Markdown document and returns micromark tokens (internal).
  *
  * @param {string} markdown Markdown document.
- * @param {ParseOptions} micromarkOptions Options for micromark.
- * @param {boolean} referencesDefined Treat references as defined.
- * @param {number} lineDelta Offset to apply to start/end line.
+ * @param {ParseOptions} [parseOptions] Options.
+ * @param {MicromarkParseOptions} [micromarkParseOptions] Options for micromark.
+ * @param {number} [lineDelta] Offset for start/end line.
  * @param {Token} [ancestor] Parent of top-most tokens.
- * @returns {Token[]} Micromark tokens (frozen).
+ * @returns {Token[]} Micromark tokens.
  */
-function parseWithOffset(
+function parseInternal(
   markdown,
-  micromarkOptions,
-  referencesDefined,
-  lineDelta,
-  ancestor
+  parseOptions = {},
+  micromarkParseOptions = {},
+  lineDelta = 0,
+  ancestor = undefined
 ) {
+  // Get options
+  const freezeTokens = Boolean(parseOptions.freezeTokens);
+
   // Use micromark to parse document into Events
-  const events = getEvents(
-    markdown, micromarkOptions, referencesDefined
-  );
+  const events = getEvents(markdown, parseOptions, micromarkParseOptions);
 
   // Create Token objects
   const document = [];
@@ -86,7 +97,7 @@ function parseWithOffset(
   const history = [ root ];
   let current = root;
   // eslint-disable-next-line jsdoc/valid-types
-  /** @type ParseOptions | null */
+  /** @type MicromarkParseOptions | null */
   let reparseOptions = null;
   let lines = null;
   let skipHtmlFlowChildren = false;
@@ -118,7 +129,7 @@ function parseWithOffset(
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
           reparseOptions = {
-            ...micromarkOptions,
+            ...micromarkParseOptions,
             "extensions": [
               {
                 "disable": {
@@ -132,10 +143,10 @@ function parseWithOffset(
         const reparseMarkdown = lines
           .slice(current.startLine - 1, current.endLine)
           .join("\n");
-        const tokens = parseWithOffset(
+        const tokens = parseInternal(
           reparseMarkdown,
+          parseOptions,
           reparseOptions,
-          referencesDefined,
           current.startLine - 1,
           current
         );
@@ -149,8 +160,10 @@ function parseWithOffset(
         skipHtmlFlowChildren = false;
       }
       if (!skipHtmlFlowChildren) {
-        Object.freeze(current.children);
-        Object.freeze(current);
+        if (freezeTokens) {
+          Object.freeze(current.children);
+          Object.freeze(current);
+        }
         // @ts-ignore
         current = history.pop();
       }
@@ -159,29 +172,21 @@ function parseWithOffset(
 
   // Return document
   Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
-  Object.freeze(document);
+  if (freezeTokens) {
+    Object.freeze(document);
+  }
   return document;
 }
 
 /**
- * Parses a Markdown document and returns (frozen) tokens.
+ * Parses a Markdown document and returns micromark tokens.
  *
  * @param {string} markdown Markdown document.
- * @param {ParseOptions} [micromarkOptions] Options for micromark.
- * @param {boolean} [referencesDefined] Treat references as defined.
- * @returns {Token[]} Micromark tokens (frozen).
+ * @param {ParseOptions} [parseOptions] Options.
+ * @returns {Token[]} Micromark tokens.
  */
-function parse(
-  markdown,
-  micromarkOptions = {},
-  referencesDefined = true
-) {
-  return parseWithOffset(
-    markdown,
-    micromarkOptions,
-    referencesDefined,
-    0
-  );
+function parse(markdown, parseOptions) {
+  return parseInternal(markdown, parseOptions);
 }
 
 module.exports = {
