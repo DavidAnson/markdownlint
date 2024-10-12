@@ -1788,33 +1788,47 @@ test("customRulesAsyncThrowsInSyncContext", (t) => {
 });
 
 test("customRulesParamsAreFrozen", (t) => {
+  const assertParamsFrozen = (params) => {
+    const pending = [ params ];
+    let current = null;
+    while ((current = pending.shift())) {
+      t.true(Object.isFrozen(current) || (current === params));
+      for (const name of Object.getOwnPropertyNames(current)) {
+        const value = current[name];
+        if (
+          value &&
+          (typeof value === "object") &&
+          (name !== "parent")
+        ) {
+          pending.push(value);
+        }
+      }
+    }
+  };
   // eslint-disable-next-line jsdoc/valid-types
   /** @type import("../lib/markdownlint").Options */
   const options = {
     "customRules": [
       {
-        "names": [ "name" ],
+        "names": [ "none" ],
         "description": "description",
         "tags": [ "tag" ],
         "parser": "none",
-        "function":
-          (params) => {
-            const pending = [ params ];
-            let current = null;
-            while ((current = pending.shift())) {
-              t.true(Object.isFrozen(current) || (current === params));
-              for (const name of Object.getOwnPropertyNames(current)) {
-                const value = current[name];
-                if (
-                  value &&
-                  (typeof value === "object") &&
-                  (name !== "parent")
-                ) {
-                  pending.push(value);
-                }
-              }
-            }
-          }
+        "function": assertParamsFrozen
+      },
+      {
+        "names": [ "markdownit" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": assertParamsFrozen
+      },
+      {
+        "names": [ "micromark" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "micromark",
+        "function": assertParamsFrozen
       }
     ],
     "files": [ "README.md" ]
