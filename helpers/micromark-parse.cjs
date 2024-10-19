@@ -8,7 +8,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.js");
 
 /** @typedef {import("markdownlint-micromark").Event} Event */
 /** @typedef {import("markdownlint-micromark").ParseOptions} MicromarkParseOptions */
-/** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+/** @typedef {import("../lib/markdownlint.js").MicromarkToken} MicromarkToken */
 
 /**
  * Parse options.
@@ -64,8 +64,8 @@ function getEvents(
  * @param {ParseOptions} [parseOptions] Options.
  * @param {MicromarkParseOptions} [micromarkParseOptions] Options for micromark.
  * @param {number} [lineDelta] Offset for start/end line.
- * @param {Token} [ancestor] Parent of top-most tokens.
- * @returns {Token[]} Micromark tokens.
+ * @param {MicromarkToken} [ancestor] Parent of top-most tokens.
+ * @returns {MicromarkToken[]} Micromark tokens.
  */
 function parseInternal(
   markdown,
@@ -83,7 +83,7 @@ function parseInternal(
   // Create Token objects
   const document = [];
   let flatTokens = [];
-  /** @type {Token} */
+  /** @type {MicromarkToken} */
   const root = {
     "type": "data",
     "startLine": -1,
@@ -183,7 +183,7 @@ function parseInternal(
  *
  * @param {string} markdown Markdown document.
  * @param {ParseOptions} [parseOptions] Options.
- * @returns {Token[]} Micromark tokens.
+ * @returns {MicromarkToken[]} Micromark tokens.
  */
 function parse(markdown, parseOptions) {
   return parseInternal(markdown, parseOptions);
