@@ -410,6 +410,7 @@ Collapsed reference link: [label][]
 Nested empty brackets: [text1[]](https://example.com/)
 Missing close bracket, empty text: [text2[](https://example.com/)
 Empty bracket pairs: [text3[]][]
+Empty bracket pair: [text4[]]
 
 [label]: https://example.com/label
       `

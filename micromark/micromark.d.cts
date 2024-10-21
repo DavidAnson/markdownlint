@@ -333,7 +333,7 @@ declare type CompileOptions_2 = CompileOptions
 /**
  * An object describing how to parse a markdown construct.
  */
-declare type Construct = {
+export declare type Construct = {
     /**
      * Set up a state machine to handle character codes streaming in.
      */
@@ -1200,7 +1200,7 @@ context: TokenizeContext
  * @returns
  *   Next state.
  */
-declare type State = (code: Code) => State | undefined
+export declare type State = (code: Code) => State | undefined
 
 /**
  * A token: a span of chunks.
@@ -1490,7 +1490,7 @@ declare interface TokenizeContext {
  * @returns
  *   First state.
  */
-declare type Tokenizer = (
+export declare type Tokenizer = (
 this: TokenizeContext,
 effects: Effects,
 ok: State,
@@ -1746,4 +1746,13 @@ export declare interface TokenTypeMap {
     mathTextData: 'mathTextData'
     mathTextPadding: 'mathTextPadding'
     mathTextSequence: 'mathTextSequence'
+}
+
+// Source: [CUSTOM]
+
+export declare interface TokenTypeMap {
+    undefinedReference: 'undefinedReference'
+    undefinedReferenceCollapsed: 'undefinedReferenceCollapsed'
+    undefinedReferenceFull: 'undefinedReferenceFull'
+    undefinedReferenceShortcut: 'undefinedReferenceShortcut'
 }

@@ -369,11 +369,23 @@ module.exports.frontMatterHasTitle =
  */
 function getReferenceLinkImageData(tokens) {
   const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
+  const references = new Map();
+  const shortcuts = new Map();
+  const addReferenceToDictionary = (token, label, isShortcut) => {
+    const referenceDatum = [
+      token.startLine - 1,
+      token.startColumn - 1,
+      token.text.length
+    ];
+    const reference = normalizeReference(label);
+    const dictionary = isShortcut ? shortcuts : references;
+    const referenceData = dictionary.get(reference) || [];
+    referenceData.push(referenceDatum);
+    dictionary.set(reference, referenceData);
+  };
   const definitions = new Map();
   const definitionLineIndices = [];
   const duplicateDefinitions = [];
-  const references = new Map();
-  const shortcuts = new Map();
   const filteredTokens =
     micromark.filterByTypes(
       tokens,
@@ -383,7 +395,9 @@ function getReferenceLinkImageData(tokens) {
         // definitions and definitionLineIndices
         "definitionLabelString", "gfmFootnoteDefinitionLabelString",
         // references and shortcuts
-        "gfmFootnoteCall", "image", "link"
+        "gfmFootnoteCall", "image", "link",
+        // undefined link labels
+        "undefinedReferenceCollapsed", "undefinedReferenceFull", "undefinedReferenceShortcut"
       ]
     );
   for (const token of filteredTokens) {
@@ -439,20 +453,18 @@ function getReferenceLinkImageData(tokens) {
           }
           // Track link (handle shortcuts separately due to ambiguity in "text [text] text")
           if (isShortcut || isFullOrCollapsed) {
-            const referenceDatum = [
-              token.startLine - 1,
-              token.startColumn - 1,
-              token.text.length,
-              label.length,
-              (referenceString?.text || "").length
-            ];
-            const reference =
-              normalizeReference(referenceString?.text || label);
-            const dictionary = isShortcut ? shortcuts : references;
-            const referenceData = dictionary.get(reference) || [];
-            referenceData.push(referenceDatum);
-            dictionary.set(reference, referenceData);
+            addReferenceToDictionary(token, referenceString?.text || label, isShortcut);
           }
+        }
+        break;
+      case "undefinedReferenceCollapsed":
+      case "undefinedReferenceFull":
+      case "undefinedReferenceShortcut":
+        {
+          const undefinedReference = micromark.getDescendantsByType(token, [ "undefinedReference" ])[0];
+          const label = undefinedReference.children.map((t) => t.text).join("");
+          const isShortcut = (token.type === "undefinedReferenceShortcut");
+          addReferenceToDictionary(token, label, isShortcut);
         }
         break;
     }

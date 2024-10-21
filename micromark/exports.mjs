@@ -10,3 +10,4 @@ export { math } from "micromark-extension-math";
 export { parse } from "micromark";
 export { postprocess } from "micromark";
 export { preprocess } from "micromark";
+export { labelEnd } from "micromark-core-commonmark";
