@@ -10,3 +10,5 @@ export { math } from "micromark-extension-math";
 export { parse } from "micromark";
 export { postprocess } from "micromark";
 export { preprocess } from "micromark";
+// micromark-core-commonmark is not a dev/dependency because this instance must match what's used by micromark
+export { labelEnd } from "micromark-core-commonmark";

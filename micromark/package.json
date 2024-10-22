@@ -1,6 +1,6 @@
 {
   "name": "markdownlint-micromark",
-  "version": "0.1.11",
+  "version": "0.1.12",
   "description": "A trivial package that re-exports some micromark functionality as a CommonJS module",
   "type": "commonjs",
   "exports": "./micromark.cjs",
