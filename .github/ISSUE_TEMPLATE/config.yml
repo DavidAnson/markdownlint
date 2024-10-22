@@ -1,0 +1,14 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Markdownlint CLI issue tracker
+    url: https://github.com/igorshubovych/markdownlint-cli/issues
+    about: If the issue is related to original Markdownlint CLI
+  - name: Markdownlint CLI 2 issue tracker
+    url: https://github.com/DavidAnson/markdownlint-cli2/issues
+    about: If the issue is related to new Markdownlint CLI
+  - name: Markdownlint CLI 2 GitHub Action issue tracker
+    url: https://github.com/DavidAnson/markdownlint-cli2-action/issues
+    about: If the issue is related to new Markdownlint CLI
+  - name: Markdownlint VS Code extension issue tracker
+    url: https://github.com/DavidAnson/vscode-markdownlint/issues
+    about: If the issue is related to using Markdownlint inside VS Code
