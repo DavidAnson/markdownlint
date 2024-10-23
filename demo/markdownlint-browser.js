@@ -1023,15 +1023,15 @@ function getEvents(
   markdown,
   micromarkParseOptions = {}
 ) {
-  // Customize options object to add useful extensions
-  micromarkParseOptions.extensions = micromarkParseOptions.extensions || [];
-  micromarkParseOptions.extensions.push(
+  // Customize extensions list to add useful extensions
+  const extensions = [
     micromark.directive(),
     micromark.gfmAutolinkLiteral(),
     micromark.gfmFootnote(),
     micromark.gfmTable(),
-    micromark.math()
-  );
+    micromark.math(),
+    ...(micromarkParseOptions.extensions || [])
+  ];
 
   // // Shim labelEnd to identify undefined link labels
   /** @type {Event[][]} */
@@ -1153,7 +1153,7 @@ function getEvents(
     // Use micromark to parse document into Events
     const encoding = undefined;
     const eol = true;
-    const parseContext = micromark.parse(micromarkParseOptions);
+    const parseContext = micromark.parse({ ...micromarkParseOptions, extensions });
     const chunks = micromark.preprocess()(markdown, encoding, eol);
     const events = micromark.postprocess(parseContext.document().write(chunks));
 
