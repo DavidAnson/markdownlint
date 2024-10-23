@@ -4,7 +4,7 @@
 
 const micromark = require("markdownlint-micromark");
 const { isHtmlFlowComment } = require("./micromark-helpers.cjs");
-const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.js");
+const { htmlFlowSymbol, newLineRe, tokenListsSymbol, tokenSequenceSymbol } = require("./shared.js");
 
 /** @typedef {import("markdownlint-micromark").Construct} Construct */
 /** @typedef {import("markdownlint-micromark").Event} Event */
@@ -12,6 +12,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.js");
 /** @typedef {import("markdownlint-micromark").State} State */
 /** @typedef {import("markdownlint-micromark").Token} Token */
 /** @typedef {import("markdownlint-micromark").Tokenizer} Tokenizer */
+/** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} MicromarkToken */
 
 /**
@@ -176,12 +177,27 @@ function getEvents(
 }
 
 /**
+ * Gets the sequence number for a token list map.
+ *
+ * @param {Map<TokenType, MicromarkToken[]>} tokenLists Token list map.
+ * @returns {number} Sequence number.
+ */
+function getSequence(tokenLists) {
+  let sequence = 0;
+  for (const tokenList of tokenLists.values()) {
+    sequence += tokenList.length;
+  }
+  return sequence;
+}
+
+/**
  * Parses a Markdown document and returns micromark tokens (internal).
  *
  * @param {string} markdown Markdown document.
  * @param {ParseOptions} [parseOptions] Options.
  * @param {MicromarkParseOptions} [micromarkParseOptions] Options for micromark.
  * @param {number} [lineDelta] Offset for start/end line.
+ * @param {Map<TokenType, MicromarkToken[]>} [tokenLists] Token list map.
  * @param {MicromarkToken} [ancestor] Parent of top-most tokens.
  * @returns {MicromarkToken[]} Micromark tokens.
  */
@@ -190,6 +206,7 @@ function parseInternal(
   parseOptions = {},
   micromarkParseOptions = {},
   lineDelta = 0,
+  tokenLists = new Map(),
   ancestor = undefined
 ) {
   // Get options
@@ -200,7 +217,7 @@ function parseInternal(
 
   // Create Token objects
   const document = [];
-  let flatTokens = [];
+  let sequence = getSequence(tokenLists);
   /** @type {MicromarkToken} */
   const root = {
     "type": "data",
@@ -238,11 +255,14 @@ function parseInternal(
         "children": [],
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
+      Object.defineProperty(current, tokenSequenceSymbol, { "value": sequence++ });
       if (ancestor) {
         Object.defineProperty(current, htmlFlowSymbol, { "value": true });
       }
       previous.children.push(current);
-      flatTokens.push(current);
+      const tokenList = tokenLists.get(type) || [];
+      tokenList.push(current);
+      tokenLists.set(type, tokenList);
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
@@ -266,12 +286,12 @@ function parseInternal(
           parseOptions,
           reparseOptions,
           current.startLine - 1,
+          tokenLists,
           current
         );
         current.children = tokens;
-        // Avoid stack overflow of Array.push(...spread)
-        // eslint-disable-next-line unicorn/prefer-spread
-        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
+        // Reset sequence
+        sequence = getSequence(tokenLists);
       }
     } else if (kind === "exit") {
       if (type === "htmlFlow") {
@@ -289,7 +309,7 @@ function parseInternal(
   }
 
   // Return document
-  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
+  Object.defineProperty(document, tokenListsSymbol, { "value": tokenLists });
   if (freezeTokens) {
     Object.freeze(document);
   }

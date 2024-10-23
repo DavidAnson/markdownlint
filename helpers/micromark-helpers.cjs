@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { flatTokensSymbol, htmlFlowSymbol } = require("./shared.js");
+const { htmlFlowSymbol, tokenListsSymbol, tokenSequenceSymbol } = require("./shared.js");
 
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
@@ -124,11 +124,18 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types, htmlFlow) {
-  const predicate = (token) =>
-    (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
-  const flatTokens = tokens[flatTokensSymbol];
-  if (flatTokens) {
-    return flatTokens.filter(predicate);
+  const predicate = (token) => (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
+  const tokenLists = tokens[tokenListsSymbol];
+  if (tokenLists) {
+    let filtered = [];
+    for (const type of types) {
+      const tokenList = tokenLists.get(type) || [];
+      // Avoid stack overflow of Array.push(...spread)
+      // eslint-disable-next-line unicorn/prefer-spread
+      filtered = filtered.concat(htmlFlow ? tokenList : tokenList.filter((token) => !inHtmlFlow(token)));
+    }
+    filtered.sort((a, b) => a[tokenSequenceSymbol] - b[tokenSequenceSymbol]);
+    return filtered;
   }
   return filterByPredicate(tokens, predicate);
 }

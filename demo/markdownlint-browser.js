@@ -558,11 +558,14 @@ module.exports.expandTildePath = expandTildePath;
 
 
 
-// Symbol for identifing the flat tokens array from micromark parse
-module.exports.flatTokensSymbol = Symbol("flat-tokens");
-
 // Symbol for identifying the htmlFlow token from micromark parse
 module.exports.htmlFlowSymbol = Symbol("html-flow");
+
+// Symbol for identifing the token lists map from micromark parse
+module.exports.tokenListsSymbol = Symbol("token-lists");
+
+// Symbol for identifying the token sequence number for micromark parse
+module.exports.tokenSequenceSymbol = Symbol("token-sequence");
 
 // Regular expression for matching common newline characters
 // See NEWLINES_RE in markdown-it/lib/rules_core/normalize.js
@@ -684,7 +687,7 @@ module.exports = {
 
 
 
-const { flatTokensSymbol, htmlFlowSymbol } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+const { htmlFlowSymbol, tokenListsSymbol, tokenSequenceSymbol } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
 /** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
@@ -806,11 +809,18 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types, htmlFlow) {
-  const predicate = (token) =>
-    (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
-  const flatTokens = tokens[flatTokensSymbol];
-  if (flatTokens) {
-    return flatTokens.filter(predicate);
+  const predicate = (token) => (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
+  const tokenLists = tokens[tokenListsSymbol];
+  if (tokenLists) {
+    let filtered = [];
+    for (const type of types) {
+      const tokenList = tokenLists.get(type) || [];
+      // Avoid stack overflow of Array.push(...spread)
+      // eslint-disable-next-line unicorn/prefer-spread
+      filtered = filtered.concat(htmlFlow ? tokenList : tokenList.filter((token) => !inHtmlFlow(token)));
+    }
+    filtered.sort((a, b) => a[tokenSequenceSymbol] - b[tokenSequenceSymbol]);
+    return filtered;
   }
   return filterByPredicate(tokens, predicate);
 }
@@ -995,7 +1005,7 @@ module.exports = {
 
 const micromark = __webpack_require__(/*! markdownlint-micromark */ "markdownlint-micromark");
 const { isHtmlFlowComment } = __webpack_require__(/*! ./micromark-helpers.cjs */ "../helpers/micromark-helpers.cjs");
-const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
+const { htmlFlowSymbol, newLineRe, tokenListsSymbol, tokenSequenceSymbol } = __webpack_require__(/*! ./shared.js */ "../helpers/shared.js");
 
 /** @typedef {import("markdownlint-micromark").Construct} Construct */
 /** @typedef {import("markdownlint-micromark").Event} Event */
@@ -1003,6 +1013,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = __webpack_require__(/*! 
 /** @typedef {import("markdownlint-micromark").State} State */
 /** @typedef {import("markdownlint-micromark").Token} Token */
 /** @typedef {import("markdownlint-micromark").Tokenizer} Tokenizer */
+/** @typedef {import("markdownlint-micromark").TokenType} TokenType */
 /** @typedef {import("../lib/markdownlint.js").MicromarkToken} MicromarkToken */
 
 /**
@@ -1167,12 +1178,27 @@ function getEvents(
 }
 
 /**
+ * Gets the sequence number for a token list map.
+ *
+ * @param {Map<TokenType, MicromarkToken[]>} tokenLists Token list map.
+ * @returns {number} Sequence number.
+ */
+function getSequence(tokenLists) {
+  let sequence = 0;
+  for (const tokenList of tokenLists.values()) {
+    sequence += tokenList.length;
+  }
+  return sequence;
+}
+
+/**
  * Parses a Markdown document and returns micromark tokens (internal).
  *
  * @param {string} markdown Markdown document.
  * @param {ParseOptions} [parseOptions] Options.
  * @param {MicromarkParseOptions} [micromarkParseOptions] Options for micromark.
  * @param {number} [lineDelta] Offset for start/end line.
+ * @param {Map<TokenType, MicromarkToken[]>} [tokenLists] Token list map.
  * @param {MicromarkToken} [ancestor] Parent of top-most tokens.
  * @returns {MicromarkToken[]} Micromark tokens.
  */
@@ -1181,6 +1207,7 @@ function parseInternal(
   parseOptions = {},
   micromarkParseOptions = {},
   lineDelta = 0,
+  tokenLists = new Map(),
   ancestor = undefined
 ) {
   // Get options
@@ -1191,7 +1218,7 @@ function parseInternal(
 
   // Create Token objects
   const document = [];
-  let flatTokens = [];
+  let sequence = getSequence(tokenLists);
   /** @type {MicromarkToken} */
   const root = {
     "type": "data",
@@ -1229,11 +1256,14 @@ function parseInternal(
         "children": [],
         "parent": ((previous === root) ? (ancestor || null) : previous)
       };
+      Object.defineProperty(current, tokenSequenceSymbol, { "value": sequence++ });
       if (ancestor) {
         Object.defineProperty(current, htmlFlowSymbol, { "value": true });
       }
       previous.children.push(current);
-      flatTokens.push(current);
+      const tokenList = tokenLists.get(type) || [];
+      tokenList.push(current);
+      tokenLists.set(type, tokenList);
       if ((current.type === "htmlFlow") && !isHtmlFlowComment(current)) {
         skipHtmlFlowChildren = true;
         if (!reparseOptions || !lines) {
@@ -1257,12 +1287,12 @@ function parseInternal(
           parseOptions,
           reparseOptions,
           current.startLine - 1,
+          tokenLists,
           current
         );
         current.children = tokens;
-        // Avoid stack overflow of Array.push(...spread)
-        // eslint-disable-next-line unicorn/prefer-spread
-        flatTokens = flatTokens.concat(tokens[flatTokensSymbol]);
+        // Reset sequence
+        sequence = getSequence(tokenLists);
       }
     } else if (kind === "exit") {
       if (type === "htmlFlow") {
@@ -1280,7 +1310,7 @@ function parseInternal(
   }
 
   // Return document
-  Object.defineProperty(document, flatTokensSymbol, { "value": flatTokens });
+  Object.defineProperty(document, tokenListsSymbol, { "value": tokenLists });
   if (freezeTokens) {
     Object.freeze(document);
   }
