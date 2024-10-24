@@ -806,8 +806,7 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types, htmlFlow) {
-  const predicate = (token) =>
-    (htmlFlow || !inHtmlFlow(token)) && types.includes(token.type);
+  const predicate = (token) => types.includes(token.type) && (htmlFlow || !inHtmlFlow(token));
   const flatTokens = tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
