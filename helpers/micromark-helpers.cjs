@@ -161,9 +161,8 @@ function getBlockQuotePrefixText(tokens, lineNumber, count = 1) {
 function getDescendantsByType(parent, typePath) {
   let tokens = Array.isArray(parent) ? parent : [ parent ];
   for (const type of typePath) {
-    tokens = tokens
-      .flatMap((t) => t.children)
-      .filter((t) => Array.isArray(type) ? type.includes(t.type) : (type === t.type));
+    const predicate = (token) => Array.isArray(type) ? type.includes(token.type) : (type === token.type);
+    tokens = tokens.flatMap((t) => t.children.filter(predicate));
   }
   return tokens;
 }
