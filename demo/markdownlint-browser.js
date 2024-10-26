@@ -1,4 +1,4 @@
-/*! markdownlint 0.35.0 https://github.com/DavidAnson/markdownlint @license MIT */
+/*! markdownlint 0.36.0 https://github.com/DavidAnson/markdownlint @license MIT */
 var markdownlint;
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
@@ -1406,7 +1406,7 @@ module.exports.fixableRuleNames = [
   "MD058"
 ];
 module.exports.homepage = "https://github.com/DavidAnson/markdownlint";
-module.exports.version = "0.35.0";
+module.exports.version = "0.36.0";
 
 
 /***/ }),

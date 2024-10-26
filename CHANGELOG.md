@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.36.0
+
+- Improve MD051
+- Move `applyFix` and `applyFixes` from helpers to core
+- Make `micromark` parser available to custom rules
+- Introduce `./micromark` helpers exports
+- Update custom/rule documentation
+- Improve performance
+- Update dependencies
+
 ## 0.35.0
 
 - Add MD058/blanks-around-tables
