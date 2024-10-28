@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.36.1
+
+- Fix behavior of MD054
+
 ## 0.36.0
 
 - Improve MD051
