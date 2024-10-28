@@ -47,6 +47,19 @@ Text ![url] text
 
 Text [file.md](file.md) text
 
+Text <user@example.com> text
+
+Text [user@example.com](user@example.com) text
+(allowed by !url_inline because email address is not an absolute URL)
+
+Text [user@example.com][email] text
+
+Text [email][] text
+
+Text [email] text
+
+[email]: user@example.com
+
 <!-- markdownlint-configure-file {
   "link-image-style": {
     "url_inline": false

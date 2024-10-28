@@ -47,6 +47,18 @@ Text ![url] text
 
 Text [file.md](file.md) text
 
+Text <user@example.com> text {MD054}
+
+Text [user@example.com](user@example.com) text
+
+Text [user@example.com][email] text
+
+Text [email][] text
+
+Text [email] text
+
+[email]: user@example.com
+
 <!-- markdownlint-configure-file {
   "link-image-style": {
     "autolink": false,

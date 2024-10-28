@@ -68,6 +68,18 @@ Text <https://example.com/pa)re(ns> text {MD054}
 
 Text [url](https://example.com/an>g<le>) text {MD054}
 
+Text <user@example.com> text {MD054}
+
+Text [user@example.com](user@example.com) text {MD054}
+
+Text [user@example.com][email] text
+
+Text [email][] text
+
+Text [email] text
+
+[email]: user@example.com
+
 <!-- markdownlint-configure-file {
   "link-fragments": false,
   "link-image-style": {
