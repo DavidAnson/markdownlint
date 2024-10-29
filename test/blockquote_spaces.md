@@ -46,3 +46,17 @@ Test nothing in the blockquote:
 
 >  
 {MD027:-1}
+
+<!-- markdownlint-disable code-block-style -->
+
+> Blockquoted code blocks:
+>
+>     Code
+>     Code
+>      Code
+>
+> ```text
+> Code
+> Code
+>  Code
+> ```
