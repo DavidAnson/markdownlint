@@ -75,7 +75,7 @@ as well as directives, footnotes, and math syntax - all implemented by
 [markdownlint-problem-matcher]: https://github.com/xt0rted/markdownlint-problem-matcher
 [nodejs-extensions]: https://github.com/Lombiq/NodeJs-Extensions
 [rubygems-mdl]: https://rubygems.org/gems/mdl
-[sublimelinter]: https://packagecontrol.io/packages/SublimeLinter-contrib-markdownlint
+[sublimelinter]: https://github.com/jonlabelle/SublimeLinter-contrib-markdownlint
 [super-linter]: https://github.com/super-linter/super-linter
 [vscode-markdownlint]: https://marketplace.visualstudio.com/items?itemName=DavidAnson.vscode-markdownlint
 
