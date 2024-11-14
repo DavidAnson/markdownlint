@@ -32,7 +32,7 @@
   ],
   "devDependencies": {
     "@microsoft/api-extractor": "7.47.11",
-    "micromark": "4.0.0",
+    "micromark": "4.0.1",
     "micromark-extension-directive": "3.0.2",
     "micromark-extension-gfm-autolink-literal": "2.1.0",
     "micromark-extension-gfm-footnote": "2.1.0",
