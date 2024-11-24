@@ -547,7 +547,7 @@ Type: `Object` implementing the [file system API][node-fs-api]
 
 In advanced scenarios, it may be desirable to bypass the default file system
 API. If a custom file system implementation is provided, `markdownlint` will use
-that instead of invoking `require("fs")`.
+that instead of using `node:fs`.
 
 Note: The only methods called are `readFile` and `readFileSync`.
 
@@ -751,7 +751,7 @@ Type: *Optional* `Object` implementing the [file system API][file-system-api]
 
 In advanced scenarios, it may be desirable to bypass the default file system
 API. If a custom file system implementation is provided, `markdownlint` will use
-that instead of invoking `require("fs")`.
+that instead of invoking `node:fs`.
 
 Note: The only methods called are `readFile`, `readFileSync`, `access`, and
 `accessSync`.
@@ -897,80 +897,10 @@ Output:
 ```
 
 Integration with the [gulp](https://gulpjs.com/) build system is
-straightforward:
-
-```javascript
-const gulp = require("gulp");
-const through2 = require("through2");
-const markdownlint = require("markdownlint");
-
-gulp.task("markdownlint", function task() {
-  return gulp.src("*.md", { "read": false })
-    .pipe(through2.obj(function obj(file, enc, next) {
-      markdownlint(
-        { "files": [ file.relative ] },
-        function callback(err, result) {
-          const resultString = (result || "").toString();
-          if (resultString) {
-            console.log(resultString);
-          }
-          next(err, file);
-        });
-    }));
-});
-```
-
-Output:
-
-```text
-[00:00:00] Starting 'markdownlint'...
-bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
-bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
-bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
-[00:00:00] Finished 'markdownlint' after 10 ms
-```
+straightforward: [`gulpfile.js`](example/gulpfile.js).
 
 Integration with the [Grunt](https://gruntjs.com/) build system is similar:
-
-```javascript
-const markdownlint = require("markdownlint");
-
-module.exports = function wrapper(grunt) {
-  grunt.initConfig({
-    "markdownlint": {
-      "example": {
-        "src": [ "*.md" ]
-      }
-    }
-  });
-
-  grunt.registerMultiTask("markdownlint", function task() {
-    const done = this.async();
-    markdownlint(
-      { "files": this.filesSrc },
-      function callback(err, result) {
-        const resultString = err || ((result || "").toString());
-        if (resultString) {
-          grunt.fail.warn("\n" + resultString + "\n");
-        }
-        done(!err || !resultString);
-      });
-  });
-};
-```
-
-Output:
-
-```text
-Running "markdownlint:example" (markdownlint) task
-Warning:
-bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
-bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
-bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
- Use --force to continue.
-```
+[`Gruntfile.js`](example/Gruntfile.js).
 
 ## Browser
 
