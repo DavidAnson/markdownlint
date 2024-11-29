@@ -1,6 +1,0 @@
-exports.mjs
-exports-html.mjs
-micromark.dev.cjs
-micromark-browser.dev.js
-micromark-html-browser.dev.js
-webpack.config.js

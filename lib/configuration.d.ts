@@ -1,4 +1,4 @@
-import { ConfigurationStrict } from "./configuration-strict";
+import type { ConfigurationStrict } from "./configuration-strict.d.ts";
 
 export interface Configuration extends ConfigurationStrict {
   /**

@@ -3,9 +3,8 @@
 (function main() {
   // Dependencies
   var markdownit = globalThis.markdownit;
-  var markdownlint = globalThis.markdownlint.library;
-  var micromark = globalThis.micromarkBrowser;
-  var micromarkHtml = globalThis.micromarkHtmlBrowser;
+  var markdownlint = globalThis.markdownlint.markdownlint;
+  var micromark = globalThis.markdownlint;
 
   // DOM elements
   var markdown = document.getElementById("markdown");
@@ -70,15 +69,15 @@
       const compileOptions = {
         "allowDangerousHtml": true,
         "htmlExtensions": [
-          micromarkHtml.directiveHtml({ "*": handleDirective }),
-          micromarkHtml.gfmAutolinkLiteralHtml(),
-          micromarkHtml.gfmFootnoteHtml(),
-          micromarkHtml.gfmTableHtml(),
-          micromarkHtml.mathHtml()
+          micromark.directiveHtml({ "*": handleDirective }),
+          micromark.gfmAutolinkLiteralHtml(),
+          micromark.gfmFootnoteHtml(),
+          micromark.gfmTableHtml(),
+          micromark.mathHtml()
         ]
       };
       try {
-        return micromarkHtml.compile(compileOptions)(events);
+        return micromark.compile(compileOptions)(events);
       } catch (error) {
         return `[Exception: "${error}"]`;
       }

@@ -1,25 +1,27 @@
-// Attempt to validate all the type declarations in markdownlint.d.ts
+// Attempt to validate all the type declarations in markdownlint.d.mts
 
-import markdownlint from "../..";
+import { default as markdownlint, Configuration, ConfigurationStrict, LintResults, Options, Rule, RuleParams, RuleOnError, RuleOnErrorInfo } from "../../lib/markdownlint.mjs";
 
-const assert = require("assert");
+import assert from "assert";
+// @ts-expect-error TS7016: Could not find a declaration file for module 'markdown-it-sub'.
+import markdownItSub from "markdown-it-sub";
 const markdownlintJsonPath = "../../.markdownlint.json";
 
 const version: string = markdownlint.getVersion();
 assert(/^\d+\.\d+\.\d+$/.test(version));
 
-function assertConfiguration(config: markdownlint.Configuration) {
+function assertConfiguration(config: Configuration) {
   assert(!!config);
   assert.deepEqual(config["line-length"], { "strict": true, "code_blocks": false });
   // config assignment is covered by markdownlint.Options
 }
 
-function assertConfigurationCallback(err: Error | null, config?: markdownlint.Configuration) {
+function assertConfigurationCallback(err: Error | null, config?: Configuration) {
   assert(!err);
   config && assertConfiguration(config);
 }
 
-function assertLintResults(results: markdownlint.LintResults) {
+function assertLintResults(results: LintResults) {
   assert(!!results);
   assert.equal(results["string"].length, 1);
   assert.equal(results["string"][0].lineNumber, 1);
@@ -60,7 +62,7 @@ function assertLintResults(results: markdownlint.LintResults) {
   };
 }
 
-function assertLintResultsCallback(err: Error | null, results?: markdownlint.LintResults) {
+function assertLintResultsCallback(err: Error | null, results?: LintResults) {
   assert(!err);
   results && assertLintResults(results);
 }
@@ -76,7 +78,7 @@ markdownlint.readConfig(markdownlintJsonPath, [ JSON.parse ], assertConfiguratio
   assertConfigurationCallback(null, await markdownlint.promises.readConfig(markdownlintJsonPath, [ JSON.parse ]))
 })();
 
-let options: markdownlint.Options;
+let options: Options;
 options = {
   "files": [ "../bad.md" ],
   "strings": {
@@ -93,7 +95,7 @@ options = {
   "frontMatter": /---/,
   "handleRuleFailures": false,
   "noInlineConfig": false,
-  "markdownItPlugins": [ [ require("markdown-it-sub") ] ]
+  "markdownItPlugins": [ [ markdownItSub ] ]
 };
 
 assertLintResults(markdownlint.sync(options));
@@ -109,16 +111,16 @@ markdownlint(options, assertLintResultsCallback);
   assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
 })();
 
-const testRule: markdownlint.Rule = {
+const testRule: Rule = {
   "names": [ "test-rule" ],
   "description": "Test rule",
   "information": new URL("https://example.com/rule-information"),
   "tags": [ "test-tag" ],
   "parser": "none",
-  "function": function rule(params: markdownlint.RuleParams, onError: markdownlint.RuleOnError) {
+  "function": function rule(params: RuleParams, onError: RuleOnError) {
     assert(!!params);
     assert(!!onError);
-    let ruleParams: markdownlint.RuleParams;
+    let ruleParams: RuleParams;
     ruleParams = {
       "name": "name",
       "parsers": {
@@ -140,7 +142,7 @@ const testRule: markdownlint.Rule = {
       "version": "1.2.3"
     };
     assert(ruleParams);
-    let ruleOnErrorInfo: markdownlint.RuleOnErrorInfo;
+    let ruleOnErrorInfo: RuleOnErrorInfo;
     ruleOnErrorInfo = {
       "lineNumber": 1,
       "detail": "detail",
@@ -196,7 +198,7 @@ assert.equal(
   "# Heading\n"
 );
 
-const configuration: markdownlint.Configuration = {
+const configuration: Configuration = {
   "custom-rule": true,
   "no-hard-tabs": false,
   "heading-style": {
@@ -204,7 +206,7 @@ const configuration: markdownlint.Configuration = {
   }
 };
 assert(configuration);
-const configurationStrict: markdownlint.ConfigurationStrict = {
+const configurationStrict: ConfigurationStrict = {
   // "custom-rule": true,
   "no-hard-tabs": false,
   "heading-style": {

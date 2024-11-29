@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { parse } from "../helpers/micromark-parse.cjs";
-import library from "../lib/markdownlint.js";
+import { parse } from "../helpers/micromark-parse.mjs";
+import library from "../lib/markdownlint.mjs";
 const markdownlint = library.promises.markdownlint;
 
 /* eslint-disable no-await-in-loop, no-console */

@@ -36,7 +36,7 @@ A simple rule implementation using the `micromark` parser to report a violation
 for any use of blockquotes might look like:
 
 ```javascript
-/** @type import("markdownlint").Rule */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "any-blockquote-micromark" ],
   "description": "Rule that reports an error for any blockquote",
@@ -61,7 +61,7 @@ module.exports = {
 That same rule implemented using the `markdown-it` parser might look like:
 
 ```javascript
-/** @type import("markdownlint").Rule */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "any-blockquote-markdown-it" ],
   "description": "Rule that reports an error for any blockquote",
@@ -187,8 +187,8 @@ exception.
 [markdown-it-token]: https://markdown-it.github.io/markdown-it/#Token
 [markdownlint-rule]: https://www.npmjs.com/search?q=keywords:markdownlint-rule
 [micromark]: https://github.com/micromark/micromark
-[micromark-token]: ../lib/markdownlint.d.ts
+[micromark-token]: ../lib/markdownlint.d.mts
 [rule-helpers]: https://www.npmjs.com/package/markdownlint-rule-helpers
 [options-custom-rules]: ../README.md#optionscustomrules
 [test-rules]: ../test/rules
-[tokens]: ../test/snapshots/markdownlint-test-custom-rules.js.md
+[tokens]: ../test/snapshots/markdownlint-test-custom-rules.mjs.md

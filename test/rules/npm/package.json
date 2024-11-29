@@ -2,6 +2,7 @@
   "name": "markdownlint-rule-sample",
   "version": "0.0.1",
   "description": "Package for markdownlint custom rule sample",
+  "type": "commonjs",
   "main": "sample-rule.js",
   "author": "David Anson (https://dlaa.me/)",
   "homepage": "https://github.com/DavidAnson/markdownlint",

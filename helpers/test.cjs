@@ -7,7 +7,7 @@ const test = require("ava").default;
 const { "exports": packageExports, name } = require("../helpers/package.json");
 
 const exportMappings = new Map([
-  [ ".", "../helpers/helpers.js" ],
+  [ ".", "../helpers/helpers.cjs" ],
   [ "./micromark", "../helpers/micromark-helpers.cjs" ]
 ]);
 

@@ -1,14 +1,7 @@
 coverage
 demo/markdown-it.min.js
+demo/markdownlint-browser.js
 demo/markdownlint-browser.min.js
-demo/micromark-browser.js
-demo/micromark-html-browser.js
-micromark/micromark.cjs
-micromark/micromark.dev.cjs
-micromark/micromark-browser.js
-micromark/micromark-browser.dev.js
-micromark/micromark-html-browser.js
-micromark/micromark-html-browser.dev.js
 node_modules
 !test/node_modules
 npm-debug.log

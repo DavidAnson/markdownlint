@@ -30,11 +30,3 @@ jobs:
       run: npm install --no-package-lock
     - name: Run CI Tests
       run: npm run ci
-    - name: Install markdownlint-micromark Dependencies
-      run: npm run install-micromark
-    - name: Build markdownlint-micromark
-      run: npm run build-micromark
-    - name: Install local markdownlint-micromark
-      run: npm install --no-package-lock ./micromark
-    - name: Test with local markdownlint-micromark
-      run: npm test

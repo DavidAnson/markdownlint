@@ -1,5 +1,5 @@
 import { readFile } from "node:fs/promises";
-import library from "../lib/markdownlint.js";
+import library from "../lib/markdownlint.mjs";
 const markdownlint = library.promises.markdownlint;
 
 const strings = {

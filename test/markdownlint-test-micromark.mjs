@@ -2,9 +2,9 @@
 
 import fs from "node:fs/promises";
 import test from "ava";
-import { newLineRe } from "../helpers/helpers.js";
+import { newLineRe } from "../helpers/helpers.cjs";
 import { filterByPredicate, filterByTypes } from "../helpers/micromark-helpers.cjs";
-import { getEvents, parse } from "../helpers/micromark-parse.cjs";
+import { getEvents, parse } from "../helpers/micromark-parse.mjs";
 
 const testContent = new Promise((resolve, reject) => {
   fs
@@ -49,8 +49,7 @@ test("getEvents/filterByPredicate", async(t) => {
 test("filterByTypes, htmlFlow false", async(t) => {
   t.plan(7);
   const tokens = await testTokens;
-  // eslint-disable-next-line jsdoc/valid-types
-  /** @type import("../micromark/micromark.cjs").TokenType[] */
+  /** @type {import("micromark-util-types").TokenType[]} */
   const types = [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ];
   const filtered = filterByTypes(tokens, types);
   // Using flat tokens
@@ -67,8 +66,7 @@ test("filterByTypes, htmlFlow false", async(t) => {
 test("filterByTypes, htmlFlow true", async(t) => {
   t.plan(9);
   const tokens = await testTokens;
-  // eslint-disable-next-line jsdoc/valid-types
-  /** @type import("../micromark/micromark.cjs").TokenType[] */
+  /** @type {import("micromark-util-types").TokenType[]} */
   const types = [ "atxHeadingText", "codeText", "htmlText", "setextHeadingText" ];
   // Using flat tokens
   const filtered = filterByTypes(tokens, types, true);

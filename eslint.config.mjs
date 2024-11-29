@@ -25,20 +25,11 @@ export default [
       "demo/markdown-it.min.js",
       "demo/markdownlint-browser.js",
       "demo/markdownlint-browser.min.js",
-      "demo/micromark-browser.js",
-      "demo/micromark-html-browser.js",
       "example/typescript/type-check.js",
-      "micromark/micromark.cjs",
-      "micromark/micromark.dev.cjs",
-      "micromark/micromark-browser.js",
-      "micromark/micromark-browser.dev.js",
       "test-repos/**"
     ]
   },
   {
-    "languageOptions": {
-      "sourceType": "commonjs"
-    },
     "linterOptions": {
       "reportUnusedDisableDirectives": true
     },
@@ -88,7 +79,6 @@ export default [
       "unicorn/no-null": "off",
       "unicorn/no-useless-undefined": "off",
       "unicorn/prefer-at": "off",
-      "unicorn/prefer-module": "off",
       "unicorn/prefer-string-raw": "off",
       "unicorn/prefer-string-replace-all": "off",
       "unicorn/prefer-string-slice": "off",
@@ -107,15 +97,20 @@ export default [
   },
   {
     "files": [
-      "**/*.mjs"
+      "**/*.js",
+      "**/*.cjs"
     ],
     "languageOptions": {
-      "sourceType": "module"
+      "sourceType": "commonjs",
+      "globals": {
+        "module": "readonly",
+        "require": "readonly"
+      }
     }
   },
   {
     "files": [
-      "demo/*.js"
+      "demo/default.js"
     ],
     "languageOptions": {
       "globals": {
@@ -131,26 +126,42 @@ export default [
       "no-invalid-this": "off",
       "no-shadow": "off",
       "no-var": "off",
+      "unicorn/prefer-module": "off",
       "unicorn/prefer-query-selector": "off"
     }
   },
   {
     "files": [
-      "example/*.js"
+      "example/*.cjs"
     ],
+    "languageOptions": {
+      "sourceType": "commonjs"
+    },
     "rules": {
       "n/no-missing-require": "off",
       "no-console": "off",
-      "no-invalid-this": "off",
+      "no-invalid-this": "off"
+    }
+  },
+  {
+    "files": [
+      "example/standalone.mjs"
+    ],
+    "rules": {
+      "no-console": "off",
       "no-shadow": "off"
     }
   },
   {
     "files": [
-      "test/rules/**/*.js"
+      "test/rules/**/*.js",
+      "test/rules/**/*.cjs"
     ],
+    "languageOptions": {
+      "sourceType": "commonjs"
+    },
     "rules": {
-      "jsdoc/valid-types": "off"
+      "unicorn/prefer-module": "off"
     }
   }
 ];

@@ -798,12 +798,10 @@ function applyFixes(input, errors) { ... }
 Invoking `applyFixes` with the results of a call to lint can be done like so:
 
 ```javascript
-const { "sync": markdownlintSync, applyFixes } = require("markdownlint");
+import markdownlint from "markdownlint";
 
-function fixMarkdownlintViolations(content) {
-  const fixResults = markdownlintSync({ strings: { content } });
-  return applyFixes(content, fixResults.content);
-}
+const fixResults = markdownlint.sync({ "strings": { "content": original } });
+const fixed = markdownlint.applyFixes(original, fixResults.content);
 ```
 
 ## Usage
@@ -811,7 +809,7 @@ function fixMarkdownlintViolations(content) {
 Invoke `markdownlint` and use the `result` object's `toString` method:
 
 ```javascript
-const markdownlint = require("markdownlint");
+import markdownlint from "markdownlint";
 
 const options = {
   "files": [ "good.md", "bad.md" ],
@@ -897,10 +895,10 @@ Output:
 ```
 
 Integration with the [gulp](https://gulpjs.com/) build system is
-straightforward: [`gulpfile.js`](example/gulpfile.js).
+straightforward: [`gulpfile.cjs`](example/gulpfile.cjs).
 
 Integration with the [Grunt](https://gruntjs.com/) build system is similar:
-[`Gruntfile.js`](example/Gruntfile.js).
+[`Gruntfile.cjs`](example/Gruntfile.cjs).
 
 ## Browser
 
@@ -912,11 +910,9 @@ Generate normal and minified scripts with:
 npm run build-demo
 ```
 
-Then reference `markdownlint` and `micromark` scripts:
+Then reference the `markdownlint` script:
 
 ```html
-<script src="demo/micromark-browser.js"></script>
-<script src="demo/micromark-html-browser.js"></script>
 <script src="demo/markdownlint-browser.min.js"></script>
 ```
 
@@ -928,7 +924,7 @@ const options = {
     "content": "Some Markdown to lint."
   }
 };
-const results = window.markdownlint.sync(options).toString();
+const results = window.markdownlint.markdownlint.sync(options).toString();
 ```
 
 ## Examples

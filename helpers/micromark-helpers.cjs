@@ -2,10 +2,12 @@
 
 "use strict";
 
-const { flatTokensSymbol, htmlFlowSymbol } = require("./shared.js");
+const { flatTokensSymbol, htmlFlowSymbol } = require("./shared.cjs");
 
-/** @typedef {import("markdownlint-micromark").TokenType} TokenType */
-/** @typedef {import("../lib/markdownlint.js").MicromarkToken} Token */
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+/** @typedef {import("micromark-util-types").TokenType} TokenType */
+// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
+/** @typedef {import("../lib/markdownlint.mjs").MicromarkToken} Token */
 
 /**
  * Determines if a Micromark token is within an htmlFlow type.

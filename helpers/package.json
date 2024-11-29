@@ -2,9 +2,9 @@
   "name": "markdownlint-rule-helpers",
   "version": "0.27.0",
   "description": "A collection of markdownlint helper functions for custom rules",
-  "main": "./helpers.js",
+  "main": "./helpers.cjs",
   "exports": {
-    ".": "./helpers.js",
+    ".": "./helpers.cjs",
     "./micromark": "./micromark-helpers.cjs"
   },
   "author": "David Anson (https://dlaa.me/)",
@@ -20,7 +20,12 @@
     "node": ">=18"
   },
   "dependencies": {
-    "markdownlint-micromark": "0.1.2"
+    "micromark": "4.0.0",
+    "micromark-extension-directive": "3.0.2",
+    "micromark-extension-gfm-autolink-literal": "2.1.0",
+    "micromark-extension-gfm-footnote": "2.1.0",
+    "micromark-extension-gfm-table": "2.1.0",
+    "micromark-extension-math": "3.1.0"
   },
   "keywords": [
     "markdownlint",

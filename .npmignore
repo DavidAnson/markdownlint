@@ -5,13 +5,11 @@
 .vscode
 coverage
 demo/*
-!demo/markdownlint-browser.js
 doc-build
 eslint.config.mjs
 example
-micromark
 npm-debug.log
-schema/*.js
+schema/*.mjs
 scripts
 test
 test-repos
