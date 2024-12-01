@@ -676,7 +676,7 @@ Asynchronous API:
  * Read specified configuration file.
  *
  * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing function.
+ * @param {ConfigurationParser[] | ReadConfigCallback} [parsers] Parsing function(s).
  * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}

@@ -1,5 +1,6 @@
 // @ts-check
 
+import fs from "node:fs";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 import os from "node:os";
@@ -516,12 +517,35 @@ test("extendSinglePromise", (t) => new Promise((resolve) => {
   t.plan(1);
   const expected = require("./config/config-child.json");
   markdownlint.promises.extendConfig(
-    expected, "./test/config/config-child.json"
+    expected,
+    "./test/config/config-child.json",
+    undefined,
+    fs
   )
     .then((actual) => {
       t.deepEqual(actual, expected, "Config object not correct.");
       resolve();
     });
+}));
+
+test("extendBadPromise", (t) => new Promise((resolve) => {
+  t.plan(2);
+  markdownlint.promises.extendConfig(
+    {
+      "extends": "missing.json"
+    },
+    "./test/config/missing.json",
+    undefined,
+    fs
+  )
+    .then(
+      null,
+      (error) => {
+        t.truthy(error, "Did not get an error for bad input.");
+        t.true(error instanceof Error, "Error not instance of Error.");
+        resolve();
+      }
+    );
 }));
 
 test("extendCustomFileSystemPromise", (t) => new Promise((resolve) => {

@@ -54,7 +54,6 @@ function config(options) {
         "fs": false,
         "os": false,
         "path": false,
-        "util": false,
         "module": require.resolve("./module-stub.cjs")
       }
     }

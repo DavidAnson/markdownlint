@@ -463,13 +463,13 @@ declare function markdownlintSync(options: Options | null): LintResults;
  * Read specified configuration file.
  *
  * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | ReadConfigCallback} parsers Parsing
+ * @param {ConfigurationParser[] | ReadConfigCallback} [parsers] Parsing
  * function(s).
  * @param {Object} [fs] File system implementation.
  * @param {ReadConfigCallback} [callback] Callback (err, result) function.
  * @returns {void}
  */
-declare function readConfig(file: string, parsers: ConfigurationParser[] | ReadConfigCallback, fs?: any, callback?: ReadConfigCallback): void;
+declare function readConfig(file: string, parsers?: ConfigurationParser[] | ReadConfigCallback, fs?: any, callback?: ReadConfigCallback): void;
 /**
  * Read specified configuration file synchronously.
  *
@@ -498,11 +498,11 @@ declare function markdownlintPromise(options: Options): Promise<LintResults>;
  *
  * @param {Configuration} config Configuration object.
  * @param {string} file Configuration file name.
- * @param {ConfigurationParser[]} [parsers] Parsing function(s).
- * @param {Object} [fs] File system implementation.
+ * @param {ConfigurationParser[] | undefined} parsers Parsing function(s).
+ * @param {Object} fs File system implementation.
  * @returns {Promise<Configuration>} Configuration object.
  */
-declare function extendConfigPromise(config: Configuration, file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;
+declare function extendConfigPromise(config: Configuration, file: string, parsers: ConfigurationParser[] | undefined, fs: any): Promise<Configuration>;
 /**
  * Read specified configuration file.
  *
