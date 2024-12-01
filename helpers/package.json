@@ -19,14 +19,6 @@
   "engines": {
     "node": ">=18"
   },
-  "dependencies": {
-    "micromark": "4.0.0",
-    "micromark-extension-directive": "3.0.2",
-    "micromark-extension-gfm-autolink-literal": "2.1.0",
-    "micromark-extension-gfm-footnote": "2.1.0",
-    "micromark-extension-gfm-table": "2.1.0",
-    "micromark-extension-math": "3.1.0"
-  },
   "keywords": [
     "markdownlint",
     "markdownlint-rule"

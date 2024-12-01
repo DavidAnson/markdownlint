@@ -4,7 +4,7 @@ import fs from "node:fs/promises";
 import test from "ava";
 import { newLineRe } from "../helpers/helpers.cjs";
 import { filterByPredicate, filterByTypes } from "../helpers/micromark-helpers.cjs";
-import { getEvents, parse } from "../helpers/micromark-parse.mjs";
+import { getEvents, parse } from "../lib/micromark-parse.mjs";
 
 const testContent = new Promise((resolve, reject) => {
   fs
