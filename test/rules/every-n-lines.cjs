@@ -2,7 +2,7 @@
 
 "use strict";
 
-/** @type {import("../../lib/markdownlint.mjs").Rule} */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "every-n-lines" ],
   "description": "Rule that reports an error every N lines",

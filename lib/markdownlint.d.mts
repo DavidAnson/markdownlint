@@ -1,4 +1,87 @@
-export default markdownlint;
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
+ * @param {LintCallback} callback Callback (err, result) function.
+ * @returns {void}
+ */
+export function lintAsync(options: Options | null, callback: LintCallback): void;
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
+ * @returns {Promise<LintResults>} Results object.
+ */
+export function lintPromise(options: Options | null): Promise<LintResults>;
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
+ * @returns {LintResults} Results object.
+ */
+export function lintSync(options: Options | null): LintResults;
+/**
+ * Extend specified configuration object.
+ *
+ * @param {Configuration} config Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[] | undefined} parsers Parsing function(s).
+ * @param {Object} fs File system implementation.
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+export function extendConfigPromise(config: Configuration, file: string, parsers: ConfigurationParser[] | undefined, fs: any): Promise<Configuration>;
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[] | ReadConfigCallback} [parsers] Parsing
+ * function(s).
+ * @param {Object} [fs] File system implementation.
+ * @param {ReadConfigCallback} [callback] Callback (err, result) function.
+ * @returns {void}
+ */
+export function readConfigAsync(file: string, parsers?: ConfigurationParser[] | ReadConfigCallback, fs?: any, callback?: ReadConfigCallback): void;
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+export function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {Object} [fs] File system implementation.
+ * @returns {Configuration} Configuration object.
+ */
+export function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: any): Configuration;
+/**
+ * Applies the specified fix to a Markdown content line.
+ *
+ * @param {string} line Line of Markdown content.
+ * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
+ * @param {string} [lineEnding] Line ending to use.
+ * @returns {string | null} Fixed content or null if deleted.
+ */
+export function applyFix(line: string, fixInfo: RuleOnErrorFixInfo, lineEnding?: string): string | null;
+/**
+ * Applies as many of the specified fixes as possible to Markdown content.
+ *
+ * @param {string} input Lines of Markdown content.
+ * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
+ * @returns {string} Fixed content.
+ */
+export function applyFixes(input: string, errors: RuleOnErrorInfo[]): string;
+/**
+ * Gets the (semantic) version of the library.
+ *
+ * @returns {string} SemVer string.
+ */
+export function getVersion(): string;
 /**
  * Function to implement rule logic.
  */
@@ -431,101 +514,3 @@ export type ReadConfigCallback = (err: Error | null, config?: Configuration) => 
  * Called with the result of the resolveConfigExtends function.
  */
 export type ResolveConfigExtendsCallback = (err: Error | null, path?: string) => void;
-/**
- * Lint specified Markdown files.
- *
- * @param {Options | null} options Configuration options.
- * @param {LintCallback} callback Callback (err, result) function.
- * @returns {void}
- */
-declare function markdownlint(options: Options | null, callback: LintCallback): void;
-declare namespace markdownlint {
-    export { markdownlintSync as sync };
-    export { readConfig };
-    export { readConfigSync };
-    export { getVersion };
-    export namespace promises {
-        export { markdownlintPromise as markdownlint };
-        export { extendConfigPromise as extendConfig };
-        export { readConfigPromise as readConfig };
-    }
-    export { applyFix };
-    export { applyFixes };
-}
-/**
- * Lint specified Markdown files synchronously.
- *
- * @param {Options | null} options Configuration options.
- * @returns {LintResults} Results object.
- */
-declare function markdownlintSync(options: Options | null): LintResults;
-/**
- * Read specified configuration file.
- *
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | ReadConfigCallback} [parsers] Parsing
- * function(s).
- * @param {Object} [fs] File system implementation.
- * @param {ReadConfigCallback} [callback] Callback (err, result) function.
- * @returns {void}
- */
-declare function readConfig(file: string, parsers?: ConfigurationParser[] | ReadConfigCallback, fs?: any, callback?: ReadConfigCallback): void;
-/**
- * Read specified configuration file synchronously.
- *
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[]} [parsers] Parsing function(s).
- * @param {Object} [fs] File system implementation.
- * @returns {Configuration} Configuration object.
- * @throws An Error if processing fails.
- */
-declare function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: any): Configuration;
-/**
- * Gets the (semantic) version of the library.
- *
- * @returns {string} SemVer string.
- */
-declare function getVersion(): string;
-/**
- * Lint specified Markdown files.
- *
- * @param {Options} options Configuration options.
- * @returns {Promise<LintResults>} Results object.
- */
-declare function markdownlintPromise(options: Options): Promise<LintResults>;
-/**
- * Extend specified configuration object.
- *
- * @param {Configuration} config Configuration object.
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | undefined} parsers Parsing function(s).
- * @param {Object} fs File system implementation.
- * @returns {Promise<Configuration>} Configuration object.
- */
-declare function extendConfigPromise(config: Configuration, file: string, parsers: ConfigurationParser[] | undefined, fs: any): Promise<Configuration>;
-/**
- * Read specified configuration file.
- *
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[]} [parsers] Parsing function(s).
- * @param {Object} [fs] File system implementation.
- * @returns {Promise<Configuration>} Configuration object.
- */
-declare function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: any): Promise<Configuration>;
-/**
- * Applies the specified fix to a Markdown content line.
- *
- * @param {string} line Line of Markdown content.
- * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
- * @param {string} [lineEnding] Line ending to use.
- * @returns {string | null} Fixed content or null if deleted.
- */
-declare function applyFix(line: string, fixInfo: RuleOnErrorFixInfo, lineEnding?: string): string | null;
-/**
- * Applies as many of the specified fixes as possible to Markdown content.
- *
- * @param {string} input Lines of Markdown content.
- * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
- * @returns {string} Fixed content.
- */
-declare function applyFixes(input: string, errors: RuleOnErrorInfo[]): string;

@@ -5,8 +5,7 @@ const { join } = path.posix;
 import { globby } from "globby";
 import jsoncParser from "jsonc-parser";
 import jsYaml from "js-yaml";
-import library from "../lib/markdownlint.mjs";
-const { markdownlint, readConfig } = library.promises;
+import { lint, readConfig } from "markdownlint/promise";
 import { markdownlintParallel } from "./markdownlint-test-parallel.mjs";
 
 /**
@@ -39,7 +38,7 @@ export function lintTestRepo(t, globPatterns, configPath, parallel) {
           v
         ])
     );
-    return (parallel ? markdownlintParallel : markdownlint)({
+    return (parallel ? markdownlintParallel : lint)({
       files,
       config
     }).then((results) => {

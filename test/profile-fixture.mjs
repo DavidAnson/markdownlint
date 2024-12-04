@@ -1,6 +1,5 @@
 import { readFile } from "node:fs/promises";
-import library from "../lib/markdownlint.mjs";
-const markdownlint = library.promises.markdownlint;
+import { lint } from "markdownlint/promise";
 
 const strings = {
   "CHANGELOG": await readFile("CHANGELOG.md", "utf8"),
@@ -14,7 +13,7 @@ const strings = {
 const start = new Date();
 for (let i = 0; i < 250; i++) {
   // eslint-disable-next-line no-await-in-loop
-  await markdownlint({ strings });
+  await lint({ strings });
 }
 const end = new Date();
 // eslint-disable-next-line no-console

@@ -6,8 +6,7 @@ import test from "ava";
 import { characterEntities } from "character-entities";
 import { gemoji } from "gemoji";
 import helpers from "../helpers/helpers.cjs";
-import libMarkdownlint from "../lib/markdownlint.mjs";
-const { markdownlint } = libMarkdownlint.promises;
+import { lint } from "markdownlint/promise";
 import { forEachInlineCodeSpan } from "../lib/markdownit.cjs";
 import { getReferenceLinkImageData } from "../lib/cache.mjs";
 
@@ -387,7 +386,7 @@ test("expandTildePath", (t) => {
 
 test("getReferenceLinkImageData().shortcuts", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -415,7 +414,7 @@ Empty bracket pair: [text4[]]
       `
     }
   };
-  return markdownlint(options).then(() => null);
+  return lint(options).then(() => null);
 });
 
 test("endOfLineHtmlEntityRe", (t) => {

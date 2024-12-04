@@ -3,8 +3,8 @@
 (function main() {
   // Dependencies
   var markdownit = globalThis.markdownit;
-  var markdownlint = globalThis.markdownlint.markdownlint;
-  var micromark = globalThis.markdownlint;
+  var markdownlint = globalThis.markdownlint;
+  var micromark = markdownlint;
 
   // DOM elements
   var markdown = document.getElementById("markdown");
@@ -112,7 +112,7 @@
       },
       "handleRuleFailures": true
     };
-    allLintErrors = markdownlint.sync(options).content;
+    allLintErrors = markdownlint.lintSync(options).content;
     violations.innerHTML = allLintErrors.map(function mapResult(result) {
       var ruleName = result.ruleNames.slice(0, 2).join(" / ");
       return "<em><a href='#line' target='" + result.lineNumber + "'>" +

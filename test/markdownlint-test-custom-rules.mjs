@@ -4,7 +4,9 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 import test from "ava";
-import markdownlint from "../lib/markdownlint.mjs";
+import { lint as lintAsync } from "markdownlint/async";
+import { lint as lintPromise } from "markdownlint/promise";
+import { lint as lintSync } from "markdownlint/sync";
 import customRules from "./rules/rules.cjs";
 import { newLineRe } from "../helpers/helpers.cjs";
 import { __filename, importWithTypeJson } from "./esm-helpers.mjs";
@@ -14,13 +16,13 @@ const { homepage, version } = packageJson;
 test("customRulesV0", (t) => new Promise((resolve) => {
   t.plan(4);
   const customRulesMd = "./test/custom-rules.md";
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = {
@@ -86,13 +88,13 @@ test("customRulesV0", (t) => new Promise((resolve) => {
 test("customRulesV1", (t) => new Promise((resolve) => {
   t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "resultVersion": 1
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = [
@@ -217,13 +219,13 @@ test("customRulesV1", (t) => new Promise((resolve) => {
 test("customRulesV2", (t) => new Promise((resolve) => {
   t.plan(3);
   const customRulesMd = "./test/custom-rules.md";
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     "resultVersion": 2
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = [
@@ -338,7 +340,7 @@ test("customRulesV2", (t) => new Promise((resolve) => {
 test("customRulesConfig", (t) => new Promise((resolve) => {
   t.plan(2);
   const customRulesMd = "./test/custom-rules.md";
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
@@ -351,7 +353,7 @@ test("customRulesConfig", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {};
     expectedResult[customRulesMd] = {
@@ -368,7 +370,7 @@ test("customRulesConfig", (t) => new Promise((resolve) => {
 
 test("customRulesNpmPackage", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       require("./rules/npm"),
@@ -379,7 +381,7 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {};
     expectedResult.string = {
@@ -431,13 +433,13 @@ test("customRulesBadProperty", (t) => {
     for (const propertyValue of propertyValues) {
       const badRule = { ...customRules.firstLine };
       badRule[propertyName] = propertyValue;
-      /** @type {import("../lib/markdownlint.mjs").Options} */
+      /** @type {import("markdownlint").Options} */
       const options = {
         "customRules": [ badRule ]
       };
       t.throws(
         function badRuleCall() {
-          markdownlint.sync(options);
+          lintSync(options);
         },
         {
           "message":
@@ -451,8 +453,8 @@ test("customRulesBadProperty", (t) => {
 
 test("customRulesUsedNameName", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name", "NO-missing-SPACE-atx" ],
@@ -477,8 +479,8 @@ test("customRulesUsedNameName", (t) => new Promise((resolve) => {
 
 test("customRulesUsedNameTag", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name", "HtMl" ],
@@ -502,8 +504,8 @@ test("customRulesUsedNameTag", (t) => new Promise((resolve) => {
 
 test("customRulesUsedTagName", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "filler" ],
@@ -535,7 +537,7 @@ test("customRulesUsedTagName", (t) => new Promise((resolve) => {
 
 test("customRulesParserUndefined", (t) => {
   t.plan(5);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       // @ts-ignore
@@ -557,12 +559,12 @@ test("customRulesParserUndefined", (t) => {
       "string": "# Heading\n"
     }
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesParserNone", (t) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -581,12 +583,12 @@ test("customRulesParserNone", (t) => {
       "string": "# Heading\n"
     }
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesParserMarkdownIt", (t) => {
   t.plan(5);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -608,12 +610,12 @@ test("customRulesParserMarkdownIt", (t) => {
       "string": "# Heading\n"
     }
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesParserMicromark", (t) => {
   t.plan(5);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -635,12 +637,12 @@ test("customRulesParserMicromark", (t) => {
       "string": "# Heading\n"
     }
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesMarkdownItParamsTokensSameObject", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       // @ts-ignore
@@ -659,12 +661,12 @@ test("customRulesMarkdownItParamsTokensSameObject", (t) => {
       "string": "# Heading\n"
     }
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesMarkdownItTokensSnapshot", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -684,13 +686,13 @@ test("customRulesMarkdownItTokensSnapshot", (t) => {
     .readFile("./test/every-markdown-syntax.md", "utf8")
     .then((content) => {
       options.strings = { "content": content.split(newLineRe).join("\n") };
-      return markdownlint.promises.markdownlint(options).then(() => null);
+      return lintPromise(options).then(() => null);
     });
 });
 
 test("customRulesMicromarkTokensSnapshot", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -710,13 +712,13 @@ test("customRulesMicromarkTokensSnapshot", (t) => {
     .readFile("./test/every-markdown-syntax.md", "utf8")
     .then((content) => {
       options.strings = { "content": content.split(newLineRe).join("\n") };
-      return markdownlint.promises.markdownlint(options).then(() => null);
+      return lintPromise(options).then(() => null);
     });
 });
 
 test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -741,7 +743,7 @@ test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
       "string": "# Heading\n"
     }
   };
-  markdownlint(options, (err, actualResult) => {
+  lintAsync(options, (err, actualResult) => {
     t.falsy(err);
     const expectedResult = {
       "string": [
@@ -765,8 +767,8 @@ test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
 test("customRulesThrowForFile", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -795,8 +797,8 @@ test("customRulesThrowForFileSync", (t) => {
   const exceptionMessage = "Test exception message";
   t.throws(
     function customRuleThrowsCall() {
-      markdownlint.sync({
-        /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+      lintSync({
+        /** @type {import("markdownlint").Rule[]} */
         "customRules": [
           {
             "names": [ "name" ],
@@ -821,8 +823,8 @@ test("customRulesThrowForFileSync", (t) => {
 test("customRulesThrowForString", (t) => new Promise((resolve) => {
   t.plan(4);
   const exceptionMessage = "Test exception message";
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -853,8 +855,8 @@ test("customRulesThrowForStringSync", (t) => {
   const exceptionMessage = "Test exception message";
   t.throws(
     function customRuleThrowsCall() {
-      markdownlint.sync({
-        /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+      lintSync({
+        /** @type {import("markdownlint").Rule[]} */
         "customRules": [
           {
             "names": [ "name" ],
@@ -880,8 +882,8 @@ test("customRulesThrowForStringSync", (t) => {
 
 test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -914,7 +916,7 @@ test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
 
 test("customRulesOnErrorNullSync", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -934,7 +936,7 @@ test("customRulesOnErrorNullSync", (t) => {
   };
   t.throws(
     function nullErrorCall() {
-      markdownlint.sync(options);
+      lintSync(options);
     },
     {
       "message": "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'."
@@ -1005,7 +1007,7 @@ test("customRulesOnErrorBad", (t) => {
         badObject[propertyName] = propertyValue;
         propertyNames = propertyName;
       }
-      /** @type {import("../lib/markdownlint.mjs").Options} */
+      /** @type {import("markdownlint").Options} */
       const options = {
         "customRules": [
           {
@@ -1024,7 +1026,7 @@ test("customRulesOnErrorBad", (t) => {
       };
       t.throws(
         function badErrorCall() {
-          markdownlint.sync(options);
+          lintSync(options);
         },
         {
           "message":
@@ -1077,7 +1079,7 @@ test("customRulesOnErrorInvalid", (t) => {
         badObject[propertyName] = propertyValue;
         propertyNames = propertyName;
       }
-      /** @type {import("../lib/markdownlint.mjs").Options} */
+      /** @type {import("markdownlint").Options} */
       const options = {
         "customRules": [
           {
@@ -1096,7 +1098,7 @@ test("customRulesOnErrorInvalid", (t) => {
       };
       t.throws(
         function invalidErrorCall() {
-          markdownlint.sync(options);
+          lintSync(options);
         },
         {
           "message":
@@ -1152,7 +1154,7 @@ test("customRulesOnErrorValid", (t) => {
       } else {
         goodObject[propertyName] = propertyValue;
       }
-      /** @type {import("../lib/markdownlint.mjs").Options} */
+      /** @type {import("markdownlint").Options} */
       const options = {
         "customRules": [
           {
@@ -1169,7 +1171,7 @@ test("customRulesOnErrorValid", (t) => {
           "string": "Text\ntext"
         }
       };
-      markdownlint.sync(options);
+      lintSync(options);
       t.truthy(true);
     }
   }
@@ -1177,7 +1179,7 @@ test("customRulesOnErrorValid", (t) => {
 
 test("customRulesOnErrorLazy", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1199,7 +1201,7 @@ test("customRulesOnErrorLazy", (t) => new Promise((resolve) => {
       "string": "# Heading\n"
     }
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "string": [
@@ -1234,7 +1236,7 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
       "insertText": "text"
     }
   };
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1259,7 +1261,7 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
       "string": "# Heading\n"
     }
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "string": [
@@ -1286,8 +1288,8 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
 
 test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  lintAsync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1329,8 +1331,8 @@ test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
 
 test("customRulesOnErrorInvalidHandledSync", (t) => {
   t.plan(1);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1370,7 +1372,7 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
 
 test("customRulesVersion", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1385,7 +1387,7 @@ test("customRulesVersion", (t) => new Promise((resolve) => {
     ],
     "files": "doc/CustomRules.md"
   };
-  markdownlint(options, function callback(err) {
+  lintAsync(options, function callback(err) {
     t.falsy(err);
     resolve();
   });
@@ -1393,7 +1395,7 @@ test("customRulesVersion", (t) => new Promise((resolve) => {
 
 test("customRulesFileName", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1408,7 +1410,7 @@ test("customRulesFileName", (t) => new Promise((resolve) => {
     ],
     "files": "doc/CustomRules.md"
   };
-  markdownlint(options, function callback(err) {
+  lintAsync(options, function callback(err) {
     t.falsy(err);
     resolve();
   });
@@ -1416,7 +1418,7 @@ test("customRulesFileName", (t) => new Promise((resolve) => {
 
 test("customRulesStringName", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1433,7 +1435,7 @@ test("customRulesStringName", (t) => new Promise((resolve) => {
       "string": "# Heading"
     }
   };
-  markdownlint(options, function callback(err) {
+  lintAsync(options, function callback(err) {
     t.falsy(err);
     resolve();
   });
@@ -1441,8 +1443,8 @@ test("customRulesStringName", (t) => new Promise((resolve) => {
 
 test("customRulesOnErrorInformationNotRuleNotError", (t) => {
   t.plan(1);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1465,8 +1467,8 @@ test("customRulesOnErrorInformationNotRuleNotError", (t) => {
 
 test("customRulesOnErrorInformationRuleNotError", (t) => {
   t.plan(1);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1494,8 +1496,8 @@ test("customRulesOnErrorInformationRuleNotError", (t) => {
 
 test("customRulesOnErrorInformationNotRuleError", (t) => {
   t.plan(1);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1523,8 +1525,8 @@ test("customRulesOnErrorInformationNotRuleError", (t) => {
 
 test("customRulesOnErrorInformationRuleError", (t) => {
   t.plan(1);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1553,8 +1555,8 @@ test("customRulesOnErrorInformationRuleError", (t) => {
 
 test("customRulesOnErrorInformationRuleErrorUndefined", (t) => {
   t.plan(1);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1583,8 +1585,8 @@ test("customRulesOnErrorInformationRuleErrorUndefined", (t) => {
 
 test("customRulesOnErrorInformationRuleErrorMultiple", (t) => {
   t.plan(6);
-  const actualResult = markdownlint.sync({
-    /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  const actualResult = lintSync({
+    /** @type {import("markdownlint").Rule[]} */
     "customRules": [
       {
         "names": [ "name" ],
@@ -1645,7 +1647,7 @@ test("customRulesOnErrorInformationRuleErrorMultiple", (t) => {
 
 test("customRulesDoc", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "files": "./doc/CustomRules.md",
     "config": {
       "MD013": { "line_length": 200 }
@@ -1660,12 +1662,12 @@ test("customRulesDoc", (t) => new Promise((resolve) => {
 
 test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
   t.plan(2);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.lintJavaScript,
     "files": "test/lint-javascript.md"
   };
-  markdownlint(options, (err, actual) => {
+  lintAsync(options, (err, actual) => {
     t.falsy(err);
     const expected = {
       "test/lint-javascript.md": [
@@ -1688,12 +1690,12 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
 
 test("customRulesValidateJson", (t) => new Promise((resolve) => {
   t.plan(3);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.validateJson,
     "files": "test/validate-json.md"
   };
-  markdownlint(options, (err, actual) => {
+  lintAsync(options, (err, actual) => {
     t.falsy(err);
     const expected = {
       "test/validate-json.md": [
@@ -1721,7 +1723,7 @@ test("customRulesValidateJson", (t) => new Promise((resolve) => {
 
 test("customRulesAsyncThrowsInSyncContext", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1738,7 +1740,7 @@ test("customRulesAsyncThrowsInSyncContext", (t) => {
     }
   };
   t.throws(
-    () => markdownlint.sync(options),
+    () => lintSync(options),
     {
       "message": "Custom rule name1/name2 at index 0 is asynchronous and " +
         "can not be used in a synchronous context."
@@ -1765,7 +1767,7 @@ test("customRulesParamsAreFrozen", (t) => {
       }
     }
   };
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1792,14 +1794,14 @@ test("customRulesParamsAreFrozen", (t) => {
     ],
     "files": [ "README.md" ]
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesParamsAreStable", (t) => {
   t.plan(4);
   const config1 = { "value1": 10 };
   const config2 = { "value2": 20 };
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "config": {
       "MD010": true,
@@ -1860,12 +1862,12 @@ test("customRulesParamsAreStable", (t) => {
       "string": "# Heading"
     }
   };
-  return markdownlint.promises.markdownlint(options).then(() => null);
+  return lintPromise(options).then(() => null);
 });
 
 test("customRulesAsyncReadFiles", (t) => {
   t.plan(3);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1947,13 +1949,13 @@ test("customRulesAsyncReadFiles", (t) => {
       }
     ]
   };
-  return markdownlint.promises.markdownlint(options)
+  return lintPromise(options)
     .then((actual) => t.deepEqual(actual, expected, "Unexpected issues."));
 });
 
 test("customRulesAsyncIgnoresSyncReturn", (t) => {
   t.plan(1);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -2011,7 +2013,7 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
       }
     ]
   };
-  return markdownlint.promises.markdownlint(options)
+  return lintPromise(options)
     .then((actual) => t.deepEqual(actual, expected, "Unexpected issues."));
 });
 
@@ -2044,7 +2046,7 @@ for (const flavor of [
   ]
 ]) {
   const [ name, func ] = flavor;
-  /** @type {import("../lib/markdownlint.mjs").Rule[]} */
+  /** @type {import("markdownlint").Rule[]} */
   const customRule = [
     {
       "names": [ "name" ],
@@ -2074,7 +2076,7 @@ for (const flavor of [
 
     test(`${name}${subname}UnhandledAsync`, (t) => new Promise((resolve) => {
       t.plan(4);
-      markdownlint({
+      lintAsync({
         // @ts-ignore
         "customRules": customRule,
         // @ts-ignore
@@ -2093,7 +2095,7 @@ for (const flavor of [
 
     test(`${name}${subname}HandledAsync`, (t) => new Promise((resolve) => {
       t.plan(2);
-      markdownlint({
+      lintAsync({
         // @ts-ignore
         "customRules": customRule,
         // @ts-ignore
@@ -2111,7 +2113,7 @@ for (const flavor of [
     test(`${name}${subname}UnhandledSync`, (t) => {
       t.plan(1);
       t.throws(
-        () => markdownlint.sync({
+        () => lintSync({
           // @ts-ignore
           "customRules": customRule,
           // @ts-ignore
@@ -2128,7 +2130,7 @@ for (const flavor of [
 
     test(`${name}${subname}HandledSync`, (t) => {
       t.plan(1);
-      const actualResult = markdownlint.sync({
+      const actualResult = lintSync({
         // @ts-ignore
         "customRules": customRule,
         // @ts-ignore
@@ -2181,7 +2183,7 @@ for (const flavor of [
   ]
 ]) {
   const [ name, func ] = flavor;
-  /** @type {import("../lib/markdownlint.mjs").Rule} */
+  /** @type {import("markdownlint").Rule} */
   const customRule = {
     "names": [ "name" ],
     "description": "description",
@@ -2196,7 +2198,7 @@ for (const flavor of [
 
     test(`${name}${subname}Unhandled`, (t) => new Promise((resolve) => {
       t.plan(4);
-      markdownlint({
+      lintAsync({
         // @ts-ignore
         "customRules": [ customRule ],
         // @ts-ignore
@@ -2215,7 +2217,7 @@ for (const flavor of [
 
     test(`${name}${subname}Handled`, (t) => new Promise((resolve) => {
       t.plan(2);
-      markdownlint({
+      lintAsync({
         // @ts-ignore
         "customRules": [ customRule ],
         // @ts-ignore

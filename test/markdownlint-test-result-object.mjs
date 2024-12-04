@@ -1,7 +1,8 @@
 // @ts-check
 
 import test from "ava";
-import markdownlint from "../lib/markdownlint.mjs";
+import { lint as lintAsync } from "markdownlint/async";
+import { lint as lintSync } from "markdownlint/sync";
 import { importWithTypeJson } from "./esm-helpers.mjs";
 const packageJson = await importWithTypeJson(import.meta, "../package.json");
 const { homepage, version } = packageJson;
@@ -13,7 +14,7 @@ test("resultObjectToStringNotEnumerable", (t) => new Promise((resolve) => {
       "string": "# Heading"
     }
   };
-  markdownlint(options, function callback(err, result) {
+  lintAsync(options, function callback(err, result) {
     t.falsy(err);
     // eslint-disable-next-line guard-for-in
     for (const property in result) {
@@ -36,7 +37,7 @@ test("resultFormattingV0", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -95,7 +96,7 @@ test("resultFormattingSyncV0", (t) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  const actualResult = markdownlint.sync(options);
+  const actualResult = lintSync(options);
   const expectedResult = {
     "./test/atx_heading_spacing.md": {
       "MD018": [ 1 ],
@@ -154,7 +155,7 @@ test("resultFormattingV1", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 1
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "truncate": [
@@ -258,7 +259,7 @@ test("resultFormattingV2", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 2
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "truncate": [
@@ -352,7 +353,7 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
     },
     "resultVersion": 3
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "input": [
@@ -467,7 +468,7 @@ test("onePerLineResultVersion0", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "input": {
@@ -488,7 +489,7 @@ test("onePerLineResultVersion1", (t) => new Promise((resolve) => {
     },
     "resultVersion": 1
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "input": [
@@ -519,7 +520,7 @@ test("onePerLineResultVersion2", (t) => new Promise((resolve) => {
     },
     "resultVersion": 2
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "input": [
@@ -548,7 +549,7 @@ test("manyPerLineResultVersion3", (t) => new Promise((resolve) => {
     },
     "resultVersion": 3
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "input": [
@@ -597,7 +598,7 @@ test("frontMatterResultVersion3", (t) => new Promise((resolve) => {
     },
     "resultVersion": 3
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "input": [

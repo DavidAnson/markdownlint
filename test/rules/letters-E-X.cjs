@@ -2,7 +2,7 @@
 
 "use strict";
 
-/** @type {import("../../lib/markdownlint.mjs").Rule} */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
   "description": "Rule that reports an error for lines with the letters 'EX'",

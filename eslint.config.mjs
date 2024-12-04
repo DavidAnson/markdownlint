@@ -149,7 +149,7 @@ export default [
     ],
     "rules": {
       "no-console": "off",
-      "no-shadow": "off"
+      "no-constant-condition": "off"
     }
   },
   {

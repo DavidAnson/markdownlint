@@ -3,7 +3,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import test from "ava";
-import markdownlint from "../lib/markdownlint.mjs";
+import { lint } from "markdownlint/sync";
 
 // Simulates typing each test file to validate handling of partial input
 const files = fs
@@ -18,7 +18,7 @@ for (const file of files) {
   }
   test.serial(`type ${file}`, (t) => {
     t.plan(1);
-    markdownlint.sync({
+    lint({
       // @ts-ignore
       strings,
       "resultVersion": 0

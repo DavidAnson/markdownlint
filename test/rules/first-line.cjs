@@ -2,7 +2,7 @@
 
 "use strict";
 
-/** @type {import("../../lib/markdownlint.mjs").Rule} */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "first-line" ],
   "description": "Rule that reports an error for the first line",

@@ -7,7 +7,7 @@ const eslint = require("eslint");
 const linter = new eslint.Linter();
 const languageJavaScript = /js|javascript/i;
 
-/** @type {import("../../lib/markdownlint.mjs").Rule} */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "lint-javascript" ],
   "description": "Rule that lints JavaScript code",

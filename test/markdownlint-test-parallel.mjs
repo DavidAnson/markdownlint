@@ -3,15 +3,14 @@
 // eslint-disable-next-line n/no-unsupported-features/node-builtins
 import { availableParallelism } from "node:os";
 import { Worker } from "node:worker_threads";
+import { lint } from "markdownlint/sync";
 import { __filename } from "./esm-helpers.mjs";
-import markdownlint from "../lib/markdownlint.mjs";
-const markdownlintSync = markdownlint.sync;
 
 /**
  * Lint specified Markdown files (using multiple threads).
  *
- * @param {import("../lib/markdownlint.mjs").Options} options Configuration options.
- * @returns {Promise<import("../lib/markdownlint.mjs").LintResults>} Results object.
+ * @param {import("markdownlint").Options} options Configuration options.
+ * @returns {Promise<import("markdownlint").LintResults>} Results object.
  */
 export function markdownlintParallel(options) {
   const workerCount = availableParallelism();
@@ -30,7 +29,7 @@ export function markdownlintParallel(options) {
     }));
   }
   return Promise.all(promises).then((workerResults) => {
-    const combinedResults = markdownlintSync(null);
+    const combinedResults = lint(null);
     for (const workerResult of workerResults) {
       // eslint-disable-next-line guard-for-in
       for (const result in workerResult) {

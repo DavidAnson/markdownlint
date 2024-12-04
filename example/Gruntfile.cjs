@@ -13,8 +13,8 @@ module.exports = function wrapper(grunt) {
 
   grunt.registerMultiTask("markdownlint", function task() {
     const done = this.async();
-    import("markdownlint").then(({ "default": markdownlint }) => {
-      markdownlint(
+    import("markdownlint/async").then(({ lint }) => {
+      lint(
         { "files": this.filesSrc },
         function callback(err, result) {
           const resultString = err || ((result || "").toString());

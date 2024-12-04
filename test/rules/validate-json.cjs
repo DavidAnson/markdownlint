@@ -4,7 +4,7 @@
 
 const { parse, printParseErrorCode } = require("jsonc-parser");
 
-/** @type {import("../../lib/markdownlint.mjs").Rule} */
+/** @type {import("markdownlint").Rule} */
 module.exports = {
   "names": [ "validate-json" ],
   "description": "Rule that validates JSON code",

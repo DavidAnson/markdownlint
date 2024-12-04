@@ -160,8 +160,8 @@ implementation that is resolved when the rule completes. (The value passed to
 reported via the `onError` function just like for synchronous rules.
 
 **Note**: Asynchronous rules cannot be referenced in a synchronous calling
-context (i.e., `markdownlint.sync(...)`). Attempting to do so throws an
-exception.
+context (i.e., `import { lint } from "markdownlint/sync"`). Attempting to do so
+throws an exception.
 
 ## Examples
 

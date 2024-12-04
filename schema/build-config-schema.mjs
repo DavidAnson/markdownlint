@@ -2,7 +2,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-/** @type {import("../lib/markdownlint.mjs").Rule[]} */
+/** @type {import("markdownlint").Rule[]} */
 import rules from "../lib/rules.mjs";
 import jsonSchemaToTypeScript from "json-schema-to-typescript";
 import { version } from "../lib/constants.mjs";

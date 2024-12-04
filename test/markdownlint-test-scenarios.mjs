@@ -3,9 +3,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import test from "ava";
-import libMarkdownlint from "../lib/markdownlint.mjs";
-const { applyFixes, promises } = libMarkdownlint;
-const { markdownlint } = promises;
+import { lint } from "markdownlint/promise";
+import { applyFixes } from "markdownlint";
 import helpers from "../helpers/helpers.cjs";
 import { fixableRuleNames } from "../lib/constants.mjs";
 
@@ -22,7 +21,7 @@ function createTestForFile(file) {
     // Read and lint Markdown test file
     Promise.all([
       fs.readFile(file, "utf8"),
-      markdownlint({
+      lint({
         "files": [ file ]
       })
     ])
@@ -89,7 +88,7 @@ function createTestForFile(file) {
           fixed
         });
         // Identify missing fixes
-        return markdownlint({
+        return lint({
           "strings": {
             "input": fixed
           }

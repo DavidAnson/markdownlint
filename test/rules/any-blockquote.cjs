@@ -2,7 +2,7 @@
 
 "use strict";
 
-/** @type {import("../../lib/markdownlint.mjs").Rule[]} */
+/** @type {import("markdownlint").Rule[]} */
 module.exports = [
 
   // micromark parser (preferred)

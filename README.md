@@ -312,42 +312,41 @@ alternate formats.
 
 ### Linting
 
-Standard asynchronous API:
+Asynchronous API via `import { lint } from "markdownlint/async"`:
 
 ```javascript
 /**
  * Lint specified Markdown files.
  *
- * @param {Options} options Configuration options.
+ * @param {Options | null} options Configuration options.
  * @param {LintCallback} callback Callback (err, result) function.
  * @returns {void}
  */
-function markdownlint(options, callback) { ... }
+function lint(options, callback) { ... }
 ```
 
-Synchronous API (for build scripts, etc.):
-
-```javascript
-/**
- * Lint specified Markdown files synchronously.
- *
- * @param {Options} options Configuration options.
- * @returns {LintResults} Results object.
- */
-function markdownlint.sync(options) { ... }
-```
-
-Promise API (in the `promises` namespace like Node.js's
-[`fs` Promises API](https://nodejs.org/api/fs.html#fs_fs_promises_api)):
+Synchronous API via `import { lint } from "markdownlint/sync"`:
 
 ```javascript
 /**
  * Lint specified Markdown files.
  *
- * @param {Options} options Configuration options.
+ * @param {Options | null} options Configuration options.
+ * @returns {LintResults} Results object.
+ */
+function lint(options) { ... }
+```
+
+Promise API via `import { lint } from "markdownlint/promise"`:
+
+```javascript
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
  * @returns {Promise<LintResults>} Results object.
  */
-function markdownlint(options) { ... }
+function lint(options) { ... }
 ```
 
 #### options
@@ -669,7 +668,7 @@ By default, configuration files are parsed as JSON (and named
 `.markdownlint.json`). Custom parsers can be provided to handle other formats
 like JSONC, YAML, and TOML.
 
-Asynchronous API:
+Asynchronous API via `import { readConfig } from "markdownlint/async"`:
 
 ```javascript
 /**
@@ -684,22 +683,21 @@ Asynchronous API:
 function readConfig(file, parsers, fs, callback) { ... }
 ```
 
-Synchronous API:
+Synchronous API via `import { readConfig } from "markdownlint/sync"`:
 
 ```javascript
 /**
- * Read specified configuration file synchronously.
+ * Read specified configuration file.
  *
  * @param {string} file Configuration file name.
  * @param {ConfigurationParser[]} [parsers] Parsing function(s).
  * @param {Object} [fs] File system implementation.
  * @returns {Configuration} Configuration object.
  */
-function readConfigSync(file, parsers, fs) { ... }
+function readConfig(file, parsers, fs) { ... }
 ```
 
-Promise API (in the `promises` namespace like Node.js's
-[`fs` Promises API](https://nodejs.org/api/fs.html#fs_promises_api)):
+Promise API via `import { readConfig } from "markdownlint/promise"`:
 
 ```javascript
 /**
@@ -772,7 +770,8 @@ Configuration object.
 
 Rules that can be fixed automatically include a `fixInfo` property which is
 outlined in the [documentation for custom rules](doc/CustomRules.md#authoring).
-To apply fixes consistently, the `applyFix`/`applyFixes` methods may be used:
+To apply fixes consistently, the `applyFix`/`applyFixes` methods may be used via
+`import { applyFix, applyFixes } from "markdownlint"`:
 
 ```javascript
 /**
@@ -798,18 +797,19 @@ function applyFixes(input, errors) { ... }
 Invoking `applyFixes` with the results of a call to lint can be done like so:
 
 ```javascript
-import markdownlint from "markdownlint";
+import { applyFixes } from "markdownlint";
+import { lint as lintSync } from "markdownlint/sync";
 
-const fixResults = markdownlint.sync({ "strings": { "content": original } });
-const fixed = markdownlint.applyFixes(original, fixResults.content);
+const results = lintSync({ "strings": { "content": original } });
+const fixed = applyFixes(original, results.content);
 ```
 
 ## Usage
 
-Invoke `markdownlint` and use the `result` object's `toString` method:
+Invoke `lint` and use the `result` object's `toString` method:
 
 ```javascript
-import markdownlint from "markdownlint";
+import { lint as lintAsync } from "markdownlint/async";
 
 const options = {
   "files": [ "good.md", "bad.md" ],
@@ -819,9 +819,9 @@ const options = {
   }
 };
 
-markdownlint(options, function callback(err, result) {
-  if (!err) {
-    console.log(result.toString());
+lintAsync(options, function callback(error, results) {
+  if (!error && results) {
+    console.log(results.toString());
   }
 });
 ```
@@ -839,21 +839,22 @@ bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [
 bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 ```
 
-Or invoke `markdownlint.sync` for a synchronous call:
+Or as a synchronous call:
 
 ```javascript
-const result = markdownlint.sync(options);
-console.log(result.toString());
+import { lint as lintSync } from "markdownlint/sync";
+
+const results = lintSync(options);
+console.log(results.toString());
 ```
 
-To examine the `result` object directly:
+To examine the `result` object directly via a `Promise`-based call:
 
 ```javascript
-markdownlint(options, function callback(err, result) {
-  if (!err) {
-    console.dir(result, { "colors": true, "depth": null });
-  }
-});
+import { lint as lintPromise } from "markdownlint/promise";
+
+const results = await lintPromise(options);
+console.dir(results, { "colors": true, "depth": null });
 ```
 
 Output:
@@ -910,7 +911,7 @@ Generate normal and minified scripts with:
 npm run build-demo
 ```
 
-Then reference the `markdownlint` script:
+Then reference the `markdownlint-browser` script:
 
 ```html
 <script src="demo/markdownlint-browser.min.js"></script>
@@ -924,7 +925,8 @@ const options = {
     "content": "Some Markdown to lint."
   }
 };
-const results = window.markdownlint.markdownlint.sync(options).toString();
+
+const results = globalThis.markdownlint.lintSync(options).toString();
 ```
 
 ## Examples

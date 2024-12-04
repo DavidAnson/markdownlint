@@ -9,8 +9,8 @@ const through2 = require("through2");
 gulp.task("markdownlint", function task() {
   return gulp.src("*.md", { "read": false })
     .pipe(through2.obj(function obj(file, enc, next) {
-      import("markdownlint").then(({ "default": markdownlint }) => {
-        markdownlint(
+      import("markdownlint/async").then(({ lint }) => {
+        lint(
           { "files": [ file.relative ] },
           function callback(err, result) {
             const resultString = (result || "").toString();

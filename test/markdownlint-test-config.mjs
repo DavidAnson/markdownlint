@@ -6,14 +6,16 @@ const require = createRequire(import.meta.url);
 import os from "node:os";
 import path from "node:path";
 import test from "ava";
-import markdownlint from "../lib/markdownlint.mjs";
+import { readConfig as readConfigAsync } from "markdownlint/async";
+import { extendConfig, readConfig as readConfigPromise } from "markdownlint/promise";
+import { readConfig as readConfigSync } from "markdownlint/sync";
 import { __dirname } from "./esm-helpers.mjs";
 
 const sameFileSystem = (path.relative(os.homedir(), __dirname(import.meta)) !== __dirname(import.meta));
 
 test("configSingle", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig("./test/config/config-child.json",
+  readConfigAsync("./test/config/config-child.json",
     function callback(err, actual) {
       t.falsy(err);
       const expected = require("./config/config-child.json");
@@ -24,7 +26,7 @@ test("configSingle", (t) => new Promise((resolve) => {
 
 test("configAbsolute", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig(path.join(__dirname(import.meta), "config", "config-child.json"),
+  readConfigAsync(path.join(__dirname(import.meta), "config", "config-child.json"),
     function callback(err, actual) {
       t.falsy(err);
       const expected = require("./config/config-child.json");
@@ -36,7 +38,7 @@ test("configAbsolute", (t) => new Promise((resolve) => {
 if (sameFileSystem) {
   test("configTilde", (t) => new Promise((resolve) => {
     t.plan(2);
-    markdownlint.readConfig(
+    readConfigAsync(
       `~/${path.relative(os.homedir(), "./test/config/config-child.json")}`,
       function callback(err, actual) {
         t.falsy(err);
@@ -49,7 +51,7 @@ if (sameFileSystem) {
 
 test("configMultiple", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig("./test/config/config-grandparent.json",
+  readConfigAsync("./test/config/config-grandparent.json",
     function callback(err, actual) {
       t.falsy(err);
       const expected = {
@@ -66,7 +68,7 @@ test("configMultiple", (t) => new Promise((resolve) => {
 
 test("configMultipleWithRequireResolve", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig("./test/config/config-packageparent.json",
+  readConfigAsync("./test/config/config-packageparent.json",
     function callback(err, actual) {
       t.falsy(err);
       const expected = {
@@ -108,7 +110,7 @@ test("configCustomFileSystem", (t) => new Promise((resolve) => {
       return t.fail(p);
     }
   };
-  markdownlint.readConfig(
+  readConfigAsync(
     file,
     // @ts-ignore
     null,
@@ -128,7 +130,7 @@ test("configCustomFileSystem", (t) => new Promise((resolve) => {
 
 test("configBadFile", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint.readConfig("./test/config/config-badfile.json",
+  readConfigAsync("./test/config/config-badfile.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad file.");
       t.true(err instanceof Error, "Error not instance of Error.");
@@ -141,7 +143,7 @@ test("configBadFile", (t) => new Promise((resolve) => {
 
 test("configBadChildFile", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint.readConfig("./test/config/config-badchildfile.json",
+  readConfigAsync("./test/config/config-badchildfile.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad child file.");
       t.true(err instanceof Error, "Error not instance of Error.");
@@ -155,7 +157,7 @@ test("configBadChildFile", (t) => new Promise((resolve) => {
 
 test("configBadChildPackage", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint.readConfig("./test/config/config-badchildpackage.json",
+  readConfigAsync("./test/config/config-badchildpackage.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad child package.");
       t.true(err instanceof Error, "Error not instance of Error.");
@@ -169,7 +171,7 @@ test("configBadChildPackage", (t) => new Promise((resolve) => {
 
 test("configBadJson", (t) => new Promise((resolve) => {
   t.plan(3);
-  markdownlint.readConfig("./test/config/config-badjson.json",
+  readConfigAsync("./test/config/config-badjson.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad JSON.");
       t.true(err instanceof Error, "Error not instance of Error.");
@@ -180,7 +182,7 @@ test("configBadJson", (t) => new Promise((resolve) => {
 
 test("configBadChildJson", (t) => new Promise((resolve) => {
   t.plan(3);
-  markdownlint.readConfig("./test/config/config-badchildjson.json",
+  readConfigAsync("./test/config/config-badchildjson.json",
     function callback(err, result) {
       t.truthy(err, "Did not get an error for bad child JSON.");
       t.true(err instanceof Error, "Error not instance of Error.");
@@ -191,7 +193,7 @@ test("configBadChildJson", (t) => new Promise((resolve) => {
 
 test("configSingleYaml", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig(
+  readConfigAsync(
     "./test/config/config-child.yaml",
     // @ts-ignore
     [ require("js-yaml").load ],
@@ -205,7 +207,7 @@ test("configSingleYaml", (t) => new Promise((resolve) => {
 
 test("configMultipleYaml", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig(
+  readConfigAsync(
     "./test/config/config-grandparent.yaml",
     // @ts-ignore
     [ require("js-yaml").load ],
@@ -225,7 +227,7 @@ test("configMultipleYaml", (t) => new Promise((resolve) => {
 
 test("configMultipleHybrid", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.readConfig(
+  readConfigAsync(
     "./test/config/config-grandparent-hybrid.yaml",
     // @ts-ignore
     [ JSON.parse, require("toml").parse, require("js-yaml").load ],
@@ -245,7 +247,7 @@ test("configMultipleHybrid", (t) => new Promise((resolve) => {
 
 test("configBadHybrid", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint.readConfig(
+  readConfigAsync(
     "./test/config/config-badcontent.txt",
     // @ts-ignore
     [ JSON.parse, require("toml").parse, require("js-yaml").load ],
@@ -262,14 +264,14 @@ test("configBadHybrid", (t) => new Promise((resolve) => {
 
 test("configSingleSync", (t) => {
   t.plan(1);
-  const actual = markdownlint.readConfigSync("./test/config/config-child.json");
+  const actual = readConfigSync("./test/config/config-child.json");
   const expected = require("./config/config-child.json");
   t.deepEqual(actual, expected, "Config object not correct.");
 });
 
 test("configAbsoluteSync", (t) => {
   t.plan(1);
-  const actual = markdownlint.readConfigSync(
+  const actual = readConfigSync(
     path.join(__dirname(import.meta), "config", "config-child.json"));
   const expected = require("./config/config-child.json");
   t.deepEqual(actual, expected, "Config object not correct.");
@@ -278,7 +280,7 @@ test("configAbsoluteSync", (t) => {
 if (sameFileSystem) {
   test("configTildeSync", (t) => {
     t.plan(1);
-    const actual = markdownlint.readConfigSync(
+    const actual = readConfigSync(
       `~/${path.relative(os.homedir(), "./test/config/config-child.json")}`);
     const expected = require("./config/config-child.json");
     t.deepEqual(actual, expected, "Config object not correct.");
@@ -288,7 +290,7 @@ if (sameFileSystem) {
 test("configMultipleSync", (t) => {
   t.plan(1);
   const actual =
-    markdownlint.readConfigSync("./test/config/config-grandparent.json");
+    readConfigSync("./test/config/config-grandparent.json");
   const expected = {
     ...require("./config/config-child.json"),
     ...require("./config/config-parent.json"),
@@ -303,7 +305,7 @@ test("configBadFileSync", (t) => {
   t.plan(1);
   t.throws(
     function badFileCall() {
-      markdownlint.readConfigSync("./test/config/config-badfile.json");
+      readConfigSync("./test/config/config-badfile.json");
     },
     {
       "message": /ENOENT/
@@ -316,7 +318,7 @@ test("configBadChildFileSync", (t) => {
   t.plan(1);
   t.throws(
     function badChildFileCall() {
-      markdownlint.readConfigSync("./test/config/config-badchildfile.json");
+      readConfigSync("./test/config/config-badchildfile.json");
     },
     {
       "message": /ENOENT/
@@ -329,7 +331,7 @@ test("configBadJsonSync", (t) => {
   t.plan(1);
   t.throws(
     function badJsonCall() {
-      markdownlint.readConfigSync("./test/config/config-badjson.json");
+      readConfigSync("./test/config/config-badjson.json");
     },
     {
       "message":
@@ -343,7 +345,7 @@ test("configBadChildJsonSync", (t) => {
   t.plan(1);
   t.throws(
     function badChildJsonCall() {
-      markdownlint.readConfigSync("./test/config/config-badchildjson.json");
+      readConfigSync("./test/config/config-badchildjson.json");
     },
     {
       "message":
@@ -355,7 +357,7 @@ test("configBadChildJsonSync", (t) => {
 
 test("configSingleYamlSync", (t) => {
   t.plan(1);
-  const actual = markdownlint.readConfigSync(
+  const actual = readConfigSync(
     // @ts-ignore
     "./test/config/config-child.yaml", [ require("js-yaml").load ]);
   const expected = require("./config/config-child.json");
@@ -364,7 +366,7 @@ test("configSingleYamlSync", (t) => {
 
 test("configMultipleYamlSync", (t) => {
   t.plan(1);
-  const actual = markdownlint.readConfigSync(
+  const actual = readConfigSync(
     // @ts-ignore
     "./test/config/config-grandparent.yaml", [ require("js-yaml").load ]);
   const expected = {
@@ -379,7 +381,7 @@ test("configMultipleYamlSync", (t) => {
 
 test("configMultipleHybridSync", (t) => {
   t.plan(1);
-  const actual = markdownlint.readConfigSync(
+  const actual = readConfigSync(
     "./test/config/config-grandparent-hybrid.yaml",
     // @ts-ignore
     [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
@@ -420,7 +422,7 @@ test("configCustomFileSystemSync", (t) => {
       return t.fail(p);
     }
   };
-  const actual = markdownlint.readConfigSync(file, undefined, fsApi);
+  const actual = readConfigSync(file, undefined, fsApi);
   const expected = {
     ...extendedContent,
     ...fileContent
@@ -434,7 +436,7 @@ test("configBadHybridSync", (t) => {
   t.plan(1);
   t.throws(
     function badHybridCall() {
-      markdownlint.readConfigSync(
+      readConfigSync(
         "./test/config/config-badcontent.txt",
         // @ts-ignore
         [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
@@ -448,7 +450,7 @@ test("configBadHybridSync", (t) => {
 
 test("configSinglePromise", (t) => new Promise((resolve) => {
   t.plan(1);
-  markdownlint.promises.readConfig("./test/config/config-child.json")
+  readConfigPromise("./test/config/config-child.json")
     .then((actual) => {
       const expected = require("./config/config-child.json");
       t.deepEqual(actual, expected, "Config object not correct.");
@@ -487,7 +489,7 @@ test("configCustomFileSystemPromise", (t) => new Promise((resolve) => {
       }
     }
   };
-  markdownlint.promises.readConfig(file, undefined, fsApi)
+  readConfigPromise(file, undefined, fsApi)
     .then((actual) => {
       const expected = {
         ...extendedContent,
@@ -502,7 +504,7 @@ test("configCustomFileSystemPromise", (t) => new Promise((resolve) => {
 
 test("configBadFilePromise", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.promises.readConfig("./test/config/config-badfile.json")
+  readConfigPromise("./test/config/config-badfile.json")
     .then(
       null,
       (error) => {
@@ -516,7 +518,7 @@ test("configBadFilePromise", (t) => new Promise((resolve) => {
 test("extendSinglePromise", (t) => new Promise((resolve) => {
   t.plan(1);
   const expected = require("./config/config-child.json");
-  markdownlint.promises.extendConfig(
+  extendConfig(
     expected,
     "./test/config/config-child.json",
     undefined,
@@ -530,7 +532,7 @@ test("extendSinglePromise", (t) => new Promise((resolve) => {
 
 test("extendBadPromise", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint.promises.extendConfig(
+  extendConfig(
     {
       "extends": "missing.json"
     },
@@ -576,7 +578,7 @@ test("extendCustomFileSystemPromise", (t) => new Promise((resolve) => {
       }
     }
   };
-  markdownlint.promises.extendConfig(fileContent, file, undefined, fsApi)
+  extendConfig(fileContent, file, undefined, fsApi)
     .then((actual) => {
       t.truthy(fileContent.extends);
       const expected = {

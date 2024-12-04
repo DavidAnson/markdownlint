@@ -1,10 +1,9 @@
 // @ts-check
 
 import { parentPort, workerData } from "node:worker_threads";
-import library from "../lib/markdownlint.mjs";
-const { markdownlint } = library.promises;
+import { lint } from "markdownlint/promise";
 
-const lintResults = await markdownlint(workerData);
+const lintResults = await lint(workerData);
 // @ts-ignore
 parentPort
   // eslint-disable-next-line unicorn/require-post-message-target-origin

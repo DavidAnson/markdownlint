@@ -1,13 +1,17 @@
-// Attempt to validate all the type declarations in markdownlint.d.mts
+// Attempt to validate important type declarations
 
-import { default as markdownlint, Configuration, ConfigurationStrict, LintResults, Options, Rule, RuleParams, RuleOnError, RuleOnErrorInfo } from "../../lib/markdownlint.mjs";
+import { Configuration, ConfigurationStrict, LintResults, Options, Rule, RuleParams, RuleOnError, RuleOnErrorInfo } from "../../lib/exports.mjs";
+import { applyFix, applyFixes, getVersion } from "../../lib/exports.mjs";
+import { lint as lintAsync, readConfig as readConfigAsync } from "../../lib/exports-async.mjs";
+import { lint as lintPromise, readConfig as readConfigPromise } from "../../lib/exports-promise.mjs";
+import { lint as lintSync, readConfig as readConfigSync } from "../../lib/exports-sync.mjs";
 
 import assert from "assert";
 // @ts-expect-error TS7016: Could not find a declaration file for module 'markdown-it-sub'.
 import markdownItSub from "markdown-it-sub";
 const markdownlintJsonPath = "../../.markdownlint.json";
 
-const version: string = markdownlint.getVersion();
+const version: string = getVersion();
 assert(/^\d+\.\d+\.\d+$/.test(version));
 
 function assertConfiguration(config: Configuration) {
@@ -67,15 +71,15 @@ function assertLintResultsCallback(err: Error | null, results?: LintResults) {
   results && assertLintResults(results);
 }
 
-assertConfiguration(markdownlint.readConfigSync(markdownlintJsonPath));
-assertConfiguration(markdownlint.readConfigSync(markdownlintJsonPath, [ JSON.parse ]));
+assertConfiguration(readConfigSync(markdownlintJsonPath));
+assertConfiguration(readConfigSync(markdownlintJsonPath, [ JSON.parse ]));
 
-markdownlint.readConfig(markdownlintJsonPath, assertConfigurationCallback);
-markdownlint.readConfig(markdownlintJsonPath, [ JSON.parse ], assertConfigurationCallback);
+readConfigAsync(markdownlintJsonPath, assertConfigurationCallback);
+readConfigAsync(markdownlintJsonPath, [ JSON.parse ], assertConfigurationCallback);
 
 (async () => {
-  assertConfigurationCallback(null, await markdownlint.promises.readConfig(markdownlintJsonPath));
-  assertConfigurationCallback(null, await markdownlint.promises.readConfig(markdownlintJsonPath, [ JSON.parse ]))
+  assertConfigurationCallback(null, await readConfigPromise(markdownlintJsonPath));
+  assertConfigurationCallback(null, await readConfigPromise(markdownlintJsonPath, [ JSON.parse ]))
 })();
 
 let options: Options;
@@ -98,17 +102,17 @@ options = {
   "markdownItPlugins": [ [ markdownItSub ] ]
 };
 
-assertLintResults(markdownlint.sync(options));
-markdownlint(options, assertLintResultsCallback);
+assertLintResults(lintSync(options));
+lintAsync(options, assertLintResultsCallback);
 (async () => {
-  assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
+  assertLintResultsCallback(null, await lintPromise(options));
 })();
 
 options.files = "../bad.md";
-assertLintResults(markdownlint.sync(options));
-markdownlint(options, assertLintResultsCallback);
+assertLintResults(lintSync(options));
+lintAsync(options, assertLintResultsCallback);
 (async () => {
-  assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
+  assertLintResultsCallback(null, await lintPromise(options));
 })();
 
 const testRule: Rule = {
@@ -162,14 +166,14 @@ const testRule: Rule = {
 };
 
 options.customRules = [ testRule ];
-assertLintResults(markdownlint.sync(options));
-markdownlint(options, assertLintResultsCallback);
+assertLintResults(lintSync(options));
+lintAsync(options, assertLintResultsCallback);
 (async () => {
-  assertLintResultsCallback(null, await markdownlint.promises.markdownlint(options));
+  assertLintResultsCallback(null, await lintPromise(options));
 })();
 
 assert.equal(
-  markdownlint.applyFix(
+  applyFix(
     "# Fixing\n",
     {
       "insertText": "Head",
@@ -182,7 +186,7 @@ assert.equal(
 );
 
 assert.equal(
-  markdownlint.applyFixes(
+  applyFixes(
     "# Fixing\n",
     [
       {

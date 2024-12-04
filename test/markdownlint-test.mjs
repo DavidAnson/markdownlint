@@ -13,7 +13,10 @@ import pluginInline from "markdown-it-for-inline";
 import pluginSub from "markdown-it-sub";
 import pluginSup from "markdown-it-sup";
 import test from "ava";
-import markdownlint from "../lib/markdownlint.mjs";
+import { getVersion } from "markdownlint";
+import { lint as lintAsync } from "markdownlint/async";
+import { lint as lintPromise } from "markdownlint/promise";
+import { lint as lintSync } from "markdownlint/sync";
 import * as constants from "../lib/constants.mjs";
 import rules from "../lib/rules.mjs";
 import customRules from "./rules/rules.cjs";
@@ -36,7 +39,7 @@ test("simpleAsync", (t) => new Promise((resolve) => {
   };
   const expected = "content: 1: MD047/single-trailing-newline " +
     "Files should end with a single newline character";
-  markdownlint(options, (err, actual) => {
+  lintAsync(options, (err, actual) => {
     t.falsy(err);
     // @ts-ignore
     t.is(actual.toString(), expected, "Unexpected results.");
@@ -53,7 +56,7 @@ test("simpleSync", (t) => {
   };
   const expected = "content: 1: MD047/single-trailing-newline " +
     "Files should end with a single newline character";
-  const actual = markdownlint.sync(options).toString();
+  const actual = lintSync(options).toString();
   t.is(actual, expected, "Unexpected results.");
 });
 
@@ -66,7 +69,7 @@ test("simplePromise", (t) => {
   };
   const expected = "content: 1: MD047/single-trailing-newline " +
     "Files should end with a single newline character";
-  return markdownlint.promises.markdownlint(options).then((actual) => {
+  return lintPromise(options).then((actual) => {
     t.is(actual.toString(), expected, "Unexpected results.");
   });
 });
@@ -90,7 +93,7 @@ test("projectFiles", (t) => {
         "config": require("../.markdownlint.json")
       };
       // @ts-ignore
-      return markdownlint.promises.markdownlint(options).then((actual) => {
+      return lintPromise(options).then((actual) => {
         const expected = {};
         for (const file of files) {
           expected[file] = [];
@@ -118,7 +121,7 @@ test("projectFilesExtendedAscii", (t) => {
         "customRules": [ require("markdownlint-rule-extended-ascii") ]
       };
       // @ts-ignore
-      return markdownlint.promises.markdownlint(options).then((actual) => {
+      return lintPromise(options).then((actual) => {
         const expected = {};
         for (const file of files) {
           expected[file] = [];
@@ -142,7 +145,7 @@ test("stringInputLineEndings", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "cr": { "MD018": [ 3 ] },
@@ -168,7 +171,7 @@ test("inputOnlyNewline", (t) => new Promise((resolve) => {
       "default": false
     }
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "cr": [],
@@ -193,7 +196,7 @@ test("defaultTrue", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -224,7 +227,7 @@ test("defaultFalse", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {},
@@ -247,7 +250,7 @@ test("defaultUndefined", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -279,7 +282,7 @@ test("disableRules", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -308,7 +311,7 @@ test("enableRules", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -340,7 +343,7 @@ test("enableRulesMixedCase", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -371,7 +374,7 @@ test("disableTag", (t) => new Promise((resolve) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -401,7 +404,7 @@ test("enableTag", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -430,7 +433,7 @@ test("enableTagMixedCase", (t) => new Promise((resolve) => {
     },
     "resultVersion": 0
   };
-  markdownlint(options, function callback(err, actualResult) {
+  lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
     const expectedResult = {
       "./test/atx_heading_spacing.md": {
@@ -464,7 +467,7 @@ test("styleAll", async(t) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  const actualResult = await markdownlint.promises.markdownlint(options);
+  const actualResult = await lintPromise(options);
   const expectedResult = {
     "./test/break-all-the-rules.md": {
       "MD001": [ 3 ],
@@ -527,7 +530,7 @@ test("styleRelaxed", async(t) => {
     "noInlineConfig": true,
     "resultVersion": 0
   };
-  const actualResult = await markdownlint.promises.markdownlint(options);
+  const actualResult = await lintPromise(options);
   const expectedResult = {
     "./test/break-all-the-rules.md": {
       "MD001": [ 3 ],
@@ -569,7 +572,7 @@ test("styleRelaxed", async(t) => {
 
 test("nullFrontMatter", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "strings": {
       "content": "---\n\t\n---\n# Heading\n"
     },
@@ -592,7 +595,7 @@ test("nullFrontMatter", (t) => new Promise((resolve) => {
 
 test("customFrontMatter", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "strings": {
       "content": "<head>\n\t\n</head>\n# Heading\n"
     },
@@ -613,7 +616,7 @@ test("customFrontMatter", (t) => new Promise((resolve) => {
 
 test("noInlineConfig", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "strings": {
       "content": [
         "# Heading",
@@ -646,7 +649,7 @@ test("noInlineConfig", (t) => new Promise((resolve) => {
 
 test("readmeHeadings", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "files": "README.md",
     "noInlineConfig": true,
     "config": {
@@ -713,7 +716,7 @@ test("filesArrayNotModified", (t) => new Promise((resolve) => {
     "./test/first_heading_bad_atx.md"
   ];
   const expectedFiles = [ ...files ];
-  markdownlint({ "files": files }, function callback(err) {
+  lintAsync({ "files": files }, function callback(err) {
     t.falsy(err);
     t.deepEqual(files, expectedFiles, "Files modified.");
     resolve();
@@ -722,7 +725,7 @@ test("filesArrayNotModified", (t) => new Promise((resolve) => {
 
 test("filesArrayAsString", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "files": "README.md",
     "noInlineConfig": true,
     "config": {
@@ -739,7 +742,7 @@ test("filesArrayAsString", (t) => new Promise((resolve) => {
 
 test("missingOptions", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint(null, function callback(err, result) {
+  lintAsync(null, function callback(err, result) {
     t.falsy(err);
     t.deepEqual(
       result,
@@ -752,7 +755,7 @@ test("missingOptions", (t) => new Promise((resolve) => {
 
 test("missingFilesAndStrings", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({}, function callback(err, result) {
+  lintAsync({}, function callback(err, result) {
     t.falsy(err);
     t.truthy(result, "Did not get result for missing files/strings.");
     resolve();
@@ -762,12 +765,12 @@ test("missingFilesAndStrings", (t) => new Promise((resolve) => {
 test("missingCallback", (t) => {
   t.plan(0);
   // @ts-ignore
-  markdownlint();
+  lintAsync();
 });
 
 test("badFile", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
+  lintAsync({
     "files": [ "./badFile" ]
   }, function callback(err, result) {
     t.truthy(err, "Did not get an error for bad file.");
@@ -783,7 +786,7 @@ test("badFileSync", (t) => {
   t.plan(1);
   t.throws(
     function badFileCall() {
-      markdownlint.sync({
+      lintSync({
         "files": [ "./badFile" ]
       });
     },
@@ -796,7 +799,7 @@ test("badFileSync", (t) => {
 
 test("badFilePromise", (t) => new Promise((resolve) => {
   t.plan(3);
-  markdownlint.promises.markdownlint({
+  lintPromise({
     "files": [ "./badFile" ]
   }).then(
     null,
@@ -811,7 +814,7 @@ test("badFilePromise", (t) => new Promise((resolve) => {
 
 test("missingStringValue", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "strings": {
       // @ts-ignore
       "undefined": undefined,
@@ -840,7 +843,7 @@ test("customFileSystemSync", (t) => {
       return "# Heading";
     }
   };
-  const result = markdownlint.sync({
+  const result = lintSync({
     "files": file,
     "fs": fsApi
   });
@@ -856,7 +859,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
       cb(null, "# Heading");
     }
   };
-  markdownlint({
+  lintAsync({
     "files": file,
     "fs": fsApi
   }, function callback(err, result) {
@@ -1101,7 +1104,7 @@ test("someCustomRulesHaveValidUrl", (t) => {
 
 test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
+  lintAsync({
     "strings": {
       "string": "# Heading\n\nText\n"
     },
@@ -1120,7 +1123,7 @@ test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
 
 test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
   t.plan(4);
-  markdownlint({
+  lintAsync({
     "strings": {
       "string": "# Heading\n\nText H~2~0 text 29^th^ text\n"
     },
@@ -1142,7 +1145,7 @@ test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
 
 test("markdownItPluginsNoMarkdownIt", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "strings": {
       "string": "# Heading\n\nText\n"
     },
@@ -1159,7 +1162,7 @@ test("markdownItPluginsNoMarkdownIt", (t) => new Promise((resolve) => {
 
 test("markdownItPluginsUnusedUncalled", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "config": {
       "default": false
     },
@@ -1181,7 +1184,7 @@ test("markdownItPluginsUnusedUncalled", (t) => new Promise((resolve) => {
 
 test("Pandoc footnote", (t) => new Promise((resolve) => {
   t.plan(2);
-  markdownlint({
+  lintAsync({
     "strings": {
       "string":
 `# Heading
@@ -1206,7 +1209,7 @@ Text with: [^footnote]
 
 test("token-map-spans", (t) => {
   t.plan(38);
-  /** @type {import("../lib/markdownlint.mjs").Options} */
+  /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": [
       {
@@ -1239,7 +1242,7 @@ test("token-map-spans", (t) => {
     ],
     "files": [ "./test/token-map-spans.md" ]
   };
-  markdownlint.sync(options);
+  lintSync(options);
 });
 
 test("configParsersInvalid", async(t) => {
@@ -1258,7 +1261,7 @@ test("configParsersInvalid", async(t) => {
   };
   const expected = "content: 1: MD041/first-line-heading/first-line-h1 " +
     "First line in a file should be a top-level heading [Context: \"Text\"]";
-  const actual = await markdownlint.promises.markdownlint(options);
+  const actual = await lintPromise(options);
   t.is(actual.toString(), expected, "Unexpected results.");
 });
 
@@ -1278,7 +1281,7 @@ test("configParsersJSON", async(t) => {
       ].join("\n")
     }
   };
-  const actual = await markdownlint.promises.markdownlint(options);
+  const actual = await lintPromise(options);
   t.is(actual.toString(), "", "Unexpected results.");
 });
 
@@ -1300,7 +1303,7 @@ test("configParsersJSONC", async(t) => {
     },
     "configParsers": [ jsoncParser.parse ]
   };
-  const actual = await markdownlint.promises.markdownlint(options);
+  const actual = await lintPromise(options);
   t.is(actual.toString(), "", "Unexpected results.");
 });
 
@@ -1321,7 +1324,7 @@ test("configParsersYAML", async(t) => {
     "configParsers": [ jsYaml.load ]
   };
   // @ts-ignore
-  const actual = await markdownlint.promises.markdownlint(options);
+  const actual = await lintPromise(options);
   t.is(actual.toString(), "", "Unexpected results.");
 });
 
@@ -1344,13 +1347,13 @@ test("configParsersTOML", async(t) => {
       require("toml").parse
     ]
   };
-  const actual = await markdownlint.promises.markdownlint(options);
+  const actual = await lintPromise(options);
   t.is(actual.toString(), "", "Unexpected results.");
 });
 
 test("getVersion", (t) => {
   t.plan(1);
-  const actual = markdownlint.getVersion();
+  const actual = getVersion();
   const expected = packageJson.version;
   t.is(actual, expected, "Version string not correct.");
 });
@@ -1364,7 +1367,10 @@ test("constants", (t) => {
 });
 
 const exportMappings = new Map([
-  [ ".", "../lib/markdownlint.mjs" ],
+  [ ".", "../lib/exports.mjs" ],
+  [ "./async", "../lib/exports-async.mjs" ],
+  [ "./promise", "../lib/exports-promise.mjs" ],
+  [ "./sync", "../lib/exports-sync.mjs" ],
   [ "./helpers", "../helpers/helpers.cjs" ],
   [ "./style/all", "../style/all.json" ],
   [ "./style/cirosantilli", "../style/cirosantilli.json" ],

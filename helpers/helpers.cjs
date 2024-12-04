@@ -10,13 +10,18 @@ module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-/** @typedef {import("../lib/markdownlint.mjs").RuleOnError} RuleOnError */
+/** @typedef {import("markdownlint").RuleOnError} RuleOnError */
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-/** @typedef {import("../lib/markdownlint.mjs").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
+/** @typedef {import("markdownlint").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-/** @typedef {import("../lib/markdownlint.mjs").MicromarkToken} MicromarkToken */
+/** @typedef {import("markdownlint").MicromarkToken} MicromarkToken */
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {import("micromark-extension-gfm-footnote", { with: { "resolution-mode": "import" } })} */
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} */
 
 // Regular expression for matching common front matter (YAML and TOML)
+// @ts-ignore
 module.exports.frontMatterRe =
   /((^---[^\S\r\n\u2028\u2029]*$[\s\S]+?^---\s*)|(^\+\+\+[^\S\r\n\u2028\u2029]*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{[^\S\r\n\u2028\u2029]*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
 
@@ -368,7 +373,7 @@ module.exports.frontMatterHasTitle =
 /**
  * Returns an object with information about reference links and images.
  *
- * @param {import("../helpers/micromark-helpers.cjs").Token[]} tokens Micromark tokens.
+ * @param {MicromarkToken[]} tokens Micromark tokens.
  * @returns {Object} Reference link/image data.
  */
 function getReferenceLinkImageData(tokens) {

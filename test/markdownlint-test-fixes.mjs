@@ -1,7 +1,7 @@
 // @ts-check
 
 import test from "ava";
-import markdownlint from "../lib/markdownlint.mjs";
+import { applyFix, applyFixes } from "markdownlint";
 
 test("applyFix", (t) => {
   t.plan(4);
@@ -46,7 +46,7 @@ test("applyFix", (t) => {
   for (const testCase of testCases) {
     const [ line, fixInfo, lineEnding, expected ] = testCase;
     // @ts-ignore
-    const actual = markdownlint.applyFix(line, fixInfo, lineEnding);
+    const actual = applyFix(line, fixInfo, lineEnding);
     t.is(actual, String(expected), "Incorrect fix applied.");
   }
 });
@@ -524,7 +524,7 @@ test("applyFixes", (t) => {
   for (const testCase of testCases) {
     const [ input, errors, expected ] = testCase;
     // @ts-ignore
-    const actual = markdownlint.applyFixes(input, errors);
+    const actual = applyFixes(input, errors);
     t.is(actual, String(expected), "Incorrect fix applied.");
   }
 });
