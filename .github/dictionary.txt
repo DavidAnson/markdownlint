@@ -30,6 +30,7 @@ Config
 config.
 CVE-\d+-\d+
 docs-util
+ECMAScript
 ES2015
 ES6
 ESLint

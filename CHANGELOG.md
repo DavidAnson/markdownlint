@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.37.0
+
+- Convert to ECMAScript module, for guidance see:
+  - <https://nodejs.org/docs/latest/api/esm.html>
+  - <https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c>
+
 ## 0.36.1
 
 - Fix behavior of MD054
