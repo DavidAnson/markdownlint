@@ -804,6 +804,31 @@ const results = lintSync({ "strings": { "content": original } });
 const fixed = applyFixes(original, results.content);
 ```
 
+### Miscellaneous
+
+To get the [semantic version][semver] of the library, the `getVersion` method
+can be used:
+
+```javascript
+/**
+ * Gets the (semantic) version of the library.
+ *
+ * @returns {string} SemVer string.
+ */
+function getVersion() { ... }
+```
+
+Invoking `getVersion` is simple:
+
+```javascript
+import { getVersion } from "markdownlint";
+
+// Displays the library version
+console.log(getVersion());
+```
+
+[semver]: https://semver.org
+
 ## Usage
 
 Invoke `lint` and use the `result` object's `toString` method:

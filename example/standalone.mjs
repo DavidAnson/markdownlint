@@ -1,9 +1,12 @@
 // @ts-check
 
-import { applyFixes } from "markdownlint";
+import { applyFixes, getVersion } from "markdownlint";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
+
+// Displays the library version
+console.log(getVersion());
 
 const options = {
   "files": [ "good.md", "bad.md" ],

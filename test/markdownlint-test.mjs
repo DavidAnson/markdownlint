@@ -692,6 +692,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "#### callback",
           "#### result",
           "### Fixing",
+          "### Miscellaneous",
           "## Usage",
           "## Browser",
           "## Examples",
