@@ -1386,13 +1386,11 @@ test("exportMappings", (t) => {
   );
 });
 
-// const commonJsRe = /\.js$/u;
 const jsonRe = /\.json$/u;
 const importOptionsJson = { "with": { "type": "json" } };
 
 for (const [ exportName, exportPath ] of exportMappings) {
   test(exportName, async(t) => {
-    // const commonJs = !commonJsRe.test(exportPath);
     const json = jsonRe.test(exportPath);
     const importOptions = json ? importOptionsJson : undefined;
     const importExportName = await import(exportName.replace(/^\./u, packageJson.name), importOptions);

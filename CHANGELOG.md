@@ -2,9 +2,10 @@
 
 ## 0.37.0
 
-- Convert to ECMAScript module, for guidance see:
+- Convert module to ECMAScript (breaking change)
   - <https://nodejs.org/docs/latest/api/esm.html>
   - <https://gist.github.com/sindresorhus/a39789f98801d908bbc7ff3ecc99d99c>
+- Convert module to named exports (breaking change)
 
 ## 0.36.1
 
