@@ -1,12 +1,9 @@
 // @ts-check
 
-import { createRequire } from "node:module";
-const require = createRequire(import.meta.url);
 import webpack from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
 import { __dirname, importWithTypeJson } from "../test/esm-helpers.mjs";
 const libraryPackageJson = await importWithTypeJson(import.meta, "../package.json");
-const nodeModulePrefixRe = /^node:/u;
 
 // eslint-disable-next-line jsdoc/require-jsdoc
 function config(options) {
@@ -19,14 +16,6 @@ function config(options) {
       "markdown-it": "markdownit"
     },
     "mode": mode,
-    "module": {
-      "rules": [
-        {
-          "test": /\.[cm]?js$/,
-          "exclude": /node_modules/
-        }
-      ]
-    },
     "name": name,
     "optimization": optimization,
     "output": {
@@ -38,25 +27,10 @@ function config(options) {
       "path": __dirname(import.meta)
     },
     "plugins": [
-      new webpack.NormalModuleReplacementPlugin(
-        nodeModulePrefixRe,
-        (resource) => {
-          const module = resource.request.replace(nodeModulePrefixRe, "");
-          resource.request = module;
-        }
-      ),
       new webpack.BannerPlugin({
         "banner": `${name} ${version} ${homepage} @license ${license}`
       })
     ],
-    "resolve": {
-      "fallback": {
-        "fs": false,
-        "os": false,
-        "path": false,
-        "module": require.resolve("./module-stub.cjs")
-      }
-    },
     "ignoreWarnings": [
       {
         "message": /(asset|entrypoint) size limit/

@@ -14,6 +14,12 @@
     "./style/prettier": "./style/prettier.json",
     "./style/relaxed": "./style/relaxed.json"
   },
+  "imports": {
+    "#node-imports": {
+      "browser": "./lib/node-imports-browser.mjs",
+      "default": "./lib/node-imports-node.mjs"
+    }
+  },
   "types": "./lib/types.d.mts",
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
