@@ -56,7 +56,18 @@ function config(options) {
         "path": false,
         "module": require.resolve("./module-stub.cjs")
       }
-    }
+    },
+    "ignoreWarnings": [
+      {
+        "message": /(asset|entrypoint) size limit/
+      },
+      {
+        "message": /dependencies cannot be statically extracted/
+      },
+      {
+        "message": /lazy load some parts of your application/
+      }
+    ]
   };
 }
 
