@@ -10,11 +10,11 @@ module.exports.newLineRe = newLineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-/** @typedef {import("markdownlint").RuleOnError} RuleOnError */
+/** @typedef {import("../lib/exports.mjs").RuleOnError} RuleOnError */
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-/** @typedef {import("markdownlint").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
+/** @typedef {import("../lib/exports.mjs").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
 // @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
-/** @typedef {import("markdownlint").MicromarkToken} MicromarkToken */
+/** @typedef {import("../lib/exports.mjs").MicromarkToken} MicromarkToken */
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import("micromark-extension-gfm-footnote", { with: { "resolution-mode": "import" } })} */
 // eslint-disable-next-line jsdoc/valid-types

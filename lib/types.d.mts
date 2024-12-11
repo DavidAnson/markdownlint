@@ -1,3 +1,4 @@
+export {};
 declare module "markdownlint" {
   export * from "./exports.mjs";
 }
