@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.37.1
+
+- Add support for "browser" condition (as used by Webpack)
+
 ## 0.37.0
 
 - Convert module to ECMAScript (breaking change)
