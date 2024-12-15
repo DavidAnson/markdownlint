@@ -2,7 +2,7 @@
 
 ## 0.37.1
 
-- Add support for "browser" condition (as used by Webpack)
+- Add support for "browser" condition (as used by webpack)
 
 ## 0.37.0
 
