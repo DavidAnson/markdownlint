@@ -130,9 +130,9 @@
             "\"</span>]" :
           "") +
         (result.fixInfo ?
-          " [<a href='#fix' target='" +
+          " [<a href='#fix' target=\"" +
             encodeURIComponent(JSON.stringify(result)) +
-            "' class='detail'>Fix</a>]" :
+            "\" class='detail'>Fix</a>]" :
           "");
     }).join("<br/>");
   }
