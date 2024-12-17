@@ -88,6 +88,11 @@ text
 
 <p>* Not a list</p>
 
+1. Undefined reference token
+   <pre>
+   [()]
+   </pre>
+
 <!-- markdownlint-configure-file {
   "no-inline-html": false,
   "ul-style": false,

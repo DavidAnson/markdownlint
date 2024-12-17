@@ -78,12 +78,11 @@ function addRangeToSet(set, start, end) {
  * Filter a list of Micromark tokens by predicate.
  *
  * @param {Token[]} tokens Micromark tokens.
- * @param {AllowedPredicate} [allowed] Allowed token predicate.
+ * @param {AllowedPredicate} allowed Allowed token predicate.
  * @param {TransformPredicate} [transformChildren] Transform predicate.
  * @returns {Token[]} Filtered tokens.
  */
 function filterByPredicate(tokens, allowed, transformChildren) {
-  allowed = allowed || (() => true);
   const result = [];
   const queue = [
     {
@@ -278,7 +277,11 @@ const nonContentTokens = new Set([
   "lineEnding",
   "lineEndingBlank",
   "linePrefix",
-  "listItemIndent"
+  "listItemIndent",
+  "undefinedReference",
+  "undefinedReferenceCollapsed",
+  "undefinedReferenceFull",
+  "undefinedReferenceShortcut"
 ]);
 
 module.exports = {
