@@ -16,6 +16,8 @@
   },
   "imports": {
     "#node-imports": {
+      "markdownlint-imports-browser": "./lib/node-imports-browser.mjs",
+      "markdownlint-imports-node": "./lib/node-imports-node.mjs",
       "browser": "./lib/node-imports-browser.mjs",
       "default": "./lib/node-imports-node.mjs"
     }
@@ -99,6 +101,7 @@
     "markdown-it-sub": "2.0.0",
     "markdown-it-sup": "2.0.0",
     "markdownlint-rule-extended-ascii": "0.1.0",
+    "nano-spawn": "0.2.0",
     "npm-run-all": "4.1.5",
     "terser-webpack-plugin": "5.3.11",
     "toml": "3.0.0",

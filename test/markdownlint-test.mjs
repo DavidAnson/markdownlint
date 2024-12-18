@@ -13,6 +13,7 @@ import pluginInline from "markdown-it-for-inline";
 import pluginSub from "markdown-it-sub";
 import pluginSup from "markdown-it-sup";
 import test from "ava";
+import spawn from "nano-spawn";
 import { getVersion } from "markdownlint";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
@@ -1398,3 +1399,29 @@ for (const [ exportName, exportPath ] of exportMappings) {
     t.is(importExportName, importExportPath);
   });
 }
+
+test("subpathImports", async(t) => {
+  t.plan(8);
+  const scenarios = [
+    { "conditions": "browser", "throws": true },
+    { "conditions": "default", "throws": false },
+    { "conditions": "markdownlint-imports-browser", "throws": true },
+    { "conditions": "markdownlint-imports-node", "throws": false }
+  ];
+  for (const scenario of scenarios) {
+    const { conditions, throws } = scenario;
+    try {
+      // eslint-disable-next-line no-await-in-loop
+      await spawn("node", [ `--conditions=${conditions}`, "./standalone.mjs" ], { "cwd": "./example" });
+      t.true(!throws, conditions);
+    } catch {
+      t.true(throws, conditions);
+    }
+  }
+  // Fake "100%" coverage for node-imports-browser.mjs
+  const { "fs": browserFs } = await import("../lib/node-imports-browser.mjs");
+  t.throws(() => browserFs.access());
+  t.throws(() => browserFs.accessSync());
+  t.throws(() => browserFs.readFile());
+  t.throws(() => browserFs.readFileSync());
+});
