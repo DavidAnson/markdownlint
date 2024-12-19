@@ -16,6 +16,7 @@ blockquotes
 Boostnote
 br
 br_spaces
+bundler
 changelog
 Changelog
 changelogs
@@ -95,6 +96,7 @@ setext_with_atx_closed
 setext-style
 single-h1
 sublist
+subpath
 Super-Linter
 TestCafe
 TOML
