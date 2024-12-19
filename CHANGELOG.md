@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.37.2
+
+- Add subpath imports for overriding default bundler behavior
+- Improve MD032
+
 ## 0.37.1
 
 - Add support for "browser" condition (as used by webpack)

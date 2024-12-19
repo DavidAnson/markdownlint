@@ -19,15 +19,15 @@ export interface ConfigurationStrict {
    */
   extends?: string | null;
   /**
-   * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md001.md
+   * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md001.md
    */
   MD001?: boolean;
   /**
-   * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md001.md
+   * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md001.md
    */
   "heading-increment"?: boolean;
   /**
-   * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md003.md
+   * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md003.md
    */
   MD003?:
     | boolean
@@ -38,7 +38,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "atx" | "atx_closed" | "setext" | "setext_with_atx" | "setext_with_atx_closed";
       };
   /**
-   * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md003.md
+   * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md003.md
    */
   "heading-style"?:
     | boolean
@@ -49,7 +49,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "atx" | "atx_closed" | "setext" | "setext_with_atx" | "setext_with_atx_closed";
       };
   /**
-   * MD004/ul-style : Unordered list style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md004.md
+   * MD004/ul-style : Unordered list style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md004.md
    */
   MD004?:
     | boolean
@@ -60,7 +60,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "asterisk" | "plus" | "dash" | "sublist";
       };
   /**
-   * MD004/ul-style : Unordered list style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md004.md
+   * MD004/ul-style : Unordered list style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md004.md
    */
   "ul-style"?:
     | boolean
@@ -71,15 +71,15 @@ export interface ConfigurationStrict {
         style?: "consistent" | "asterisk" | "plus" | "dash" | "sublist";
       };
   /**
-   * MD005/list-indent : Inconsistent indentation for list items at the same level : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md005.md
+   * MD005/list-indent : Inconsistent indentation for list items at the same level : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md005.md
    */
   MD005?: boolean;
   /**
-   * MD005/list-indent : Inconsistent indentation for list items at the same level : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md005.md
+   * MD005/list-indent : Inconsistent indentation for list items at the same level : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md005.md
    */
   "list-indent"?: boolean;
   /**
-   * MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md007.md
+   * MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md007.md
    */
   MD007?:
     | boolean
@@ -98,7 +98,7 @@ export interface ConfigurationStrict {
         start_indent?: number;
       };
   /**
-   * MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md007.md
+   * MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md007.md
    */
   "ul-indent"?:
     | boolean
@@ -117,7 +117,7 @@ export interface ConfigurationStrict {
         start_indent?: number;
       };
   /**
-   * MD009/no-trailing-spaces : Trailing spaces : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md009.md
+   * MD009/no-trailing-spaces : Trailing spaces : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md009.md
    */
   MD009?:
     | boolean
@@ -136,7 +136,7 @@ export interface ConfigurationStrict {
         strict?: boolean;
       };
   /**
-   * MD009/no-trailing-spaces : Trailing spaces : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md009.md
+   * MD009/no-trailing-spaces : Trailing spaces : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md009.md
    */
   "no-trailing-spaces"?:
     | boolean
@@ -155,7 +155,7 @@ export interface ConfigurationStrict {
         strict?: boolean;
       };
   /**
-   * MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md010.md
+   * MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md010.md
    */
   MD010?:
     | boolean
@@ -174,7 +174,7 @@ export interface ConfigurationStrict {
         spaces_per_tab?: number;
       };
   /**
-   * MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md010.md
+   * MD010/no-hard-tabs : Hard tabs : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md010.md
    */
   "no-hard-tabs"?:
     | boolean
@@ -193,15 +193,15 @@ export interface ConfigurationStrict {
         spaces_per_tab?: number;
       };
   /**
-   * MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md011.md
+   * MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md011.md
    */
   MD011?: boolean;
   /**
-   * MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md011.md
+   * MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md011.md
    */
   "no-reversed-links"?: boolean;
   /**
-   * MD012/no-multiple-blanks : Multiple consecutive blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md012.md
+   * MD012/no-multiple-blanks : Multiple consecutive blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md012.md
    */
   MD012?:
     | boolean
@@ -212,7 +212,7 @@ export interface ConfigurationStrict {
         maximum?: number;
       };
   /**
-   * MD012/no-multiple-blanks : Multiple consecutive blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md012.md
+   * MD012/no-multiple-blanks : Multiple consecutive blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md012.md
    */
   "no-multiple-blanks"?:
     | boolean
@@ -223,7 +223,7 @@ export interface ConfigurationStrict {
         maximum?: number;
       };
   /**
-   * MD013/line-length : Line length : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md013.md
+   * MD013/line-length : Line length : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md013.md
    */
   MD013?:
     | boolean
@@ -262,7 +262,7 @@ export interface ConfigurationStrict {
         stern?: boolean;
       };
   /**
-   * MD013/line-length : Line length : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md013.md
+   * MD013/line-length : Line length : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md013.md
    */
   "line-length"?:
     | boolean
@@ -301,47 +301,47 @@ export interface ConfigurationStrict {
         stern?: boolean;
       };
   /**
-   * MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md014.md
+   * MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md014.md
    */
   MD014?: boolean;
   /**
-   * MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md014.md
+   * MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md014.md
    */
   "commands-show-output"?: boolean;
   /**
-   * MD018/no-missing-space-atx : No space after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md018.md
+   * MD018/no-missing-space-atx : No space after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md018.md
    */
   MD018?: boolean;
   /**
-   * MD018/no-missing-space-atx : No space after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md018.md
+   * MD018/no-missing-space-atx : No space after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md018.md
    */
   "no-missing-space-atx"?: boolean;
   /**
-   * MD019/no-multiple-space-atx : Multiple spaces after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md019.md
+   * MD019/no-multiple-space-atx : Multiple spaces after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md019.md
    */
   MD019?: boolean;
   /**
-   * MD019/no-multiple-space-atx : Multiple spaces after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md019.md
+   * MD019/no-multiple-space-atx : Multiple spaces after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md019.md
    */
   "no-multiple-space-atx"?: boolean;
   /**
-   * MD020/no-missing-space-closed-atx : No space inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md020.md
+   * MD020/no-missing-space-closed-atx : No space inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md020.md
    */
   MD020?: boolean;
   /**
-   * MD020/no-missing-space-closed-atx : No space inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md020.md
+   * MD020/no-missing-space-closed-atx : No space inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md020.md
    */
   "no-missing-space-closed-atx"?: boolean;
   /**
-   * MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md021.md
+   * MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md021.md
    */
   MD021?: boolean;
   /**
-   * MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md021.md
+   * MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md021.md
    */
   "no-multiple-space-closed-atx"?: boolean;
   /**
-   * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md022.md
+   * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md022.md
    */
   MD022?:
     | boolean
@@ -356,7 +356,7 @@ export interface ConfigurationStrict {
         lines_below?: number | number[];
       };
   /**
-   * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md022.md
+   * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md022.md
    */
   "blanks-around-headings"?:
     | boolean
@@ -371,15 +371,15 @@ export interface ConfigurationStrict {
         lines_below?: number | number[];
       };
   /**
-   * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md023.md
+   * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md023.md
    */
   MD023?: boolean;
   /**
-   * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md023.md
+   * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md023.md
    */
   "heading-start-left"?: boolean;
   /**
-   * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md024.md
+   * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md024.md
    */
   MD024?:
     | boolean
@@ -390,7 +390,7 @@ export interface ConfigurationStrict {
         siblings_only?: boolean;
       };
   /**
-   * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md024.md
+   * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md024.md
    */
   "no-duplicate-heading"?:
     | boolean
@@ -401,7 +401,7 @@ export interface ConfigurationStrict {
         siblings_only?: boolean;
       };
   /**
-   * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md025.md
+   * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md025.md
    */
   MD025?:
     | boolean
@@ -416,7 +416,7 @@ export interface ConfigurationStrict {
         front_matter_title?: string;
       };
   /**
-   * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md025.md
+   * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md025.md
    */
   "single-title"?:
     | boolean
@@ -431,7 +431,7 @@ export interface ConfigurationStrict {
         front_matter_title?: string;
       };
   /**
-   * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md025.md
+   * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md025.md
    */
   "single-h1"?:
     | boolean
@@ -446,7 +446,7 @@ export interface ConfigurationStrict {
         front_matter_title?: string;
       };
   /**
-   * MD026/no-trailing-punctuation : Trailing punctuation in heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md026.md
+   * MD026/no-trailing-punctuation : Trailing punctuation in heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md026.md
    */
   MD026?:
     | boolean
@@ -457,7 +457,7 @@ export interface ConfigurationStrict {
         punctuation?: string;
       };
   /**
-   * MD026/no-trailing-punctuation : Trailing punctuation in heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md026.md
+   * MD026/no-trailing-punctuation : Trailing punctuation in heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md026.md
    */
   "no-trailing-punctuation"?:
     | boolean
@@ -468,23 +468,23 @@ export interface ConfigurationStrict {
         punctuation?: string;
       };
   /**
-   * MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md027.md
+   * MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md027.md
    */
   MD027?: boolean;
   /**
-   * MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md027.md
+   * MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md027.md
    */
   "no-multiple-space-blockquote"?: boolean;
   /**
-   * MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md028.md
+   * MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md028.md
    */
   MD028?: boolean;
   /**
-   * MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md028.md
+   * MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md028.md
    */
   "no-blanks-blockquote"?: boolean;
   /**
-   * MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md029.md
+   * MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md029.md
    */
   MD029?:
     | boolean
@@ -495,7 +495,7 @@ export interface ConfigurationStrict {
         style?: "one" | "ordered" | "one_or_ordered" | "zero";
       };
   /**
-   * MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md029.md
+   * MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md029.md
    */
   "ol-prefix"?:
     | boolean
@@ -506,7 +506,7 @@ export interface ConfigurationStrict {
         style?: "one" | "ordered" | "one_or_ordered" | "zero";
       };
   /**
-   * MD030/list-marker-space : Spaces after list markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md030.md
+   * MD030/list-marker-space : Spaces after list markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md030.md
    */
   MD030?:
     | boolean
@@ -529,7 +529,7 @@ export interface ConfigurationStrict {
         ol_multi?: number;
       };
   /**
-   * MD030/list-marker-space : Spaces after list markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md030.md
+   * MD030/list-marker-space : Spaces after list markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md030.md
    */
   "list-marker-space"?:
     | boolean
@@ -552,7 +552,7 @@ export interface ConfigurationStrict {
         ol_multi?: number;
       };
   /**
-   * MD031/blanks-around-fences : Fenced code blocks should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md031.md
+   * MD031/blanks-around-fences : Fenced code blocks should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md031.md
    */
   MD031?:
     | boolean
@@ -563,7 +563,7 @@ export interface ConfigurationStrict {
         list_items?: boolean;
       };
   /**
-   * MD031/blanks-around-fences : Fenced code blocks should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md031.md
+   * MD031/blanks-around-fences : Fenced code blocks should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md031.md
    */
   "blanks-around-fences"?:
     | boolean
@@ -574,15 +574,15 @@ export interface ConfigurationStrict {
         list_items?: boolean;
       };
   /**
-   * MD032/blanks-around-lists : Lists should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md032.md
+   * MD032/blanks-around-lists : Lists should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md032.md
    */
   MD032?: boolean;
   /**
-   * MD032/blanks-around-lists : Lists should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md032.md
+   * MD032/blanks-around-lists : Lists should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md032.md
    */
   "blanks-around-lists"?: boolean;
   /**
-   * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md033.md
+   * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md033.md
    */
   MD033?:
     | boolean
@@ -593,7 +593,7 @@ export interface ConfigurationStrict {
         allowed_elements?: string[];
       };
   /**
-   * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md033.md
+   * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md033.md
    */
   "no-inline-html"?:
     | boolean
@@ -604,15 +604,15 @@ export interface ConfigurationStrict {
         allowed_elements?: string[];
       };
   /**
-   * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md034.md
+   * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md034.md
    */
   MD034?: boolean;
   /**
-   * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md034.md
+   * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md034.md
    */
   "no-bare-urls"?: boolean;
   /**
-   * MD035/hr-style : Horizontal rule style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md035.md
+   * MD035/hr-style : Horizontal rule style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md035.md
    */
   MD035?:
     | boolean
@@ -623,7 +623,7 @@ export interface ConfigurationStrict {
         style?: string;
       };
   /**
-   * MD035/hr-style : Horizontal rule style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md035.md
+   * MD035/hr-style : Horizontal rule style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md035.md
    */
   "hr-style"?:
     | boolean
@@ -634,7 +634,7 @@ export interface ConfigurationStrict {
         style?: string;
       };
   /**
-   * MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md036.md
+   * MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md036.md
    */
   MD036?:
     | boolean
@@ -645,7 +645,7 @@ export interface ConfigurationStrict {
         punctuation?: string;
       };
   /**
-   * MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md036.md
+   * MD036/no-emphasis-as-heading : Emphasis used instead of a heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md036.md
    */
   "no-emphasis-as-heading"?:
     | boolean
@@ -656,31 +656,31 @@ export interface ConfigurationStrict {
         punctuation?: string;
       };
   /**
-   * MD037/no-space-in-emphasis : Spaces inside emphasis markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md037.md
+   * MD037/no-space-in-emphasis : Spaces inside emphasis markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md037.md
    */
   MD037?: boolean;
   /**
-   * MD037/no-space-in-emphasis : Spaces inside emphasis markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md037.md
+   * MD037/no-space-in-emphasis : Spaces inside emphasis markers : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md037.md
    */
   "no-space-in-emphasis"?: boolean;
   /**
-   * MD038/no-space-in-code : Spaces inside code span elements : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md038.md
+   * MD038/no-space-in-code : Spaces inside code span elements : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md038.md
    */
   MD038?: boolean;
   /**
-   * MD038/no-space-in-code : Spaces inside code span elements : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md038.md
+   * MD038/no-space-in-code : Spaces inside code span elements : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md038.md
    */
   "no-space-in-code"?: boolean;
   /**
-   * MD039/no-space-in-links : Spaces inside link text : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md039.md
+   * MD039/no-space-in-links : Spaces inside link text : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md039.md
    */
   MD039?: boolean;
   /**
-   * MD039/no-space-in-links : Spaces inside link text : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md039.md
+   * MD039/no-space-in-links : Spaces inside link text : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md039.md
    */
   "no-space-in-links"?: boolean;
   /**
-   * MD040/fenced-code-language : Fenced code blocks should have a language specified : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md040.md
+   * MD040/fenced-code-language : Fenced code blocks should have a language specified : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md040.md
    */
   MD040?:
     | boolean
@@ -695,7 +695,7 @@ export interface ConfigurationStrict {
         language_only?: boolean;
       };
   /**
-   * MD040/fenced-code-language : Fenced code blocks should have a language specified : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md040.md
+   * MD040/fenced-code-language : Fenced code blocks should have a language specified : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md040.md
    */
   "fenced-code-language"?:
     | boolean
@@ -710,7 +710,7 @@ export interface ConfigurationStrict {
         language_only?: boolean;
       };
   /**
-   * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md041.md
+   * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md041.md
    */
   MD041?:
     | boolean
@@ -725,7 +725,7 @@ export interface ConfigurationStrict {
         front_matter_title?: string;
       };
   /**
-   * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md041.md
+   * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md041.md
    */
   "first-line-heading"?:
     | boolean
@@ -740,7 +740,7 @@ export interface ConfigurationStrict {
         front_matter_title?: string;
       };
   /**
-   * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md041.md
+   * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md041.md
    */
   "first-line-h1"?:
     | boolean
@@ -755,15 +755,15 @@ export interface ConfigurationStrict {
         front_matter_title?: string;
       };
   /**
-   * MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md042.md
+   * MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md042.md
    */
   MD042?: boolean;
   /**
-   * MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md042.md
+   * MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md042.md
    */
   "no-empty-links"?: boolean;
   /**
-   * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md043.md
+   * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md043.md
    */
   MD043?:
     | boolean
@@ -778,7 +778,7 @@ export interface ConfigurationStrict {
         match_case?: boolean;
       };
   /**
-   * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md043.md
+   * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md043.md
    */
   "required-headings"?:
     | boolean
@@ -793,7 +793,7 @@ export interface ConfigurationStrict {
         match_case?: boolean;
       };
   /**
-   * MD044/proper-names : Proper names should have the correct capitalization : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md044.md
+   * MD044/proper-names : Proper names should have the correct capitalization : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md044.md
    */
   MD044?:
     | boolean
@@ -812,7 +812,7 @@ export interface ConfigurationStrict {
         html_elements?: boolean;
       };
   /**
-   * MD044/proper-names : Proper names should have the correct capitalization : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md044.md
+   * MD044/proper-names : Proper names should have the correct capitalization : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md044.md
    */
   "proper-names"?:
     | boolean
@@ -831,15 +831,15 @@ export interface ConfigurationStrict {
         html_elements?: boolean;
       };
   /**
-   * MD045/no-alt-text : Images should have alternate text (alt text) : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md045.md
+   * MD045/no-alt-text : Images should have alternate text (alt text) : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md045.md
    */
   MD045?: boolean;
   /**
-   * MD045/no-alt-text : Images should have alternate text (alt text) : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md045.md
+   * MD045/no-alt-text : Images should have alternate text (alt text) : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md045.md
    */
   "no-alt-text"?: boolean;
   /**
-   * MD046/code-block-style : Code block style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md046.md
+   * MD046/code-block-style : Code block style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md046.md
    */
   MD046?:
     | boolean
@@ -850,7 +850,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "fenced" | "indented";
       };
   /**
-   * MD046/code-block-style : Code block style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md046.md
+   * MD046/code-block-style : Code block style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md046.md
    */
   "code-block-style"?:
     | boolean
@@ -861,15 +861,15 @@ export interface ConfigurationStrict {
         style?: "consistent" | "fenced" | "indented";
       };
   /**
-   * MD047/single-trailing-newline : Files should end with a single newline character : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md047.md
+   * MD047/single-trailing-newline : Files should end with a single newline character : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md047.md
    */
   MD047?: boolean;
   /**
-   * MD047/single-trailing-newline : Files should end with a single newline character : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md047.md
+   * MD047/single-trailing-newline : Files should end with a single newline character : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md047.md
    */
   "single-trailing-newline"?: boolean;
   /**
-   * MD048/code-fence-style : Code fence style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md048.md
+   * MD048/code-fence-style : Code fence style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md048.md
    */
   MD048?:
     | boolean
@@ -880,7 +880,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "backtick" | "tilde";
       };
   /**
-   * MD048/code-fence-style : Code fence style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md048.md
+   * MD048/code-fence-style : Code fence style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md048.md
    */
   "code-fence-style"?:
     | boolean
@@ -891,7 +891,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "backtick" | "tilde";
       };
   /**
-   * MD049/emphasis-style : Emphasis style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md049.md
+   * MD049/emphasis-style : Emphasis style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md049.md
    */
   MD049?:
     | boolean
@@ -902,7 +902,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "asterisk" | "underscore";
       };
   /**
-   * MD049/emphasis-style : Emphasis style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md049.md
+   * MD049/emphasis-style : Emphasis style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md049.md
    */
   "emphasis-style"?:
     | boolean
@@ -913,7 +913,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "asterisk" | "underscore";
       };
   /**
-   * MD050/strong-style : Strong style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md050.md
+   * MD050/strong-style : Strong style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md050.md
    */
   MD050?:
     | boolean
@@ -924,7 +924,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "asterisk" | "underscore";
       };
   /**
-   * MD050/strong-style : Strong style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md050.md
+   * MD050/strong-style : Strong style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md050.md
    */
   "strong-style"?:
     | boolean
@@ -935,7 +935,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "asterisk" | "underscore";
       };
   /**
-   * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md051.md
+   * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md051.md
    */
   MD051?:
     | boolean
@@ -946,7 +946,7 @@ export interface ConfigurationStrict {
         ignore_case?: boolean;
       };
   /**
-   * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md051.md
+   * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md051.md
    */
   "link-fragments"?:
     | boolean
@@ -957,7 +957,7 @@ export interface ConfigurationStrict {
         ignore_case?: boolean;
       };
   /**
-   * MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md052.md
+   * MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md052.md
    */
   MD052?:
     | boolean
@@ -968,7 +968,7 @@ export interface ConfigurationStrict {
         shortcut_syntax?: boolean;
       };
   /**
-   * MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md052.md
+   * MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md052.md
    */
   "reference-links-images"?:
     | boolean
@@ -979,7 +979,7 @@ export interface ConfigurationStrict {
         shortcut_syntax?: boolean;
       };
   /**
-   * MD053/link-image-reference-definitions : Link and image reference definitions should be needed : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md053.md
+   * MD053/link-image-reference-definitions : Link and image reference definitions should be needed : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md053.md
    */
   MD053?:
     | boolean
@@ -990,7 +990,7 @@ export interface ConfigurationStrict {
         ignored_definitions?: string[];
       };
   /**
-   * MD053/link-image-reference-definitions : Link and image reference definitions should be needed : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md053.md
+   * MD053/link-image-reference-definitions : Link and image reference definitions should be needed : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md053.md
    */
   "link-image-reference-definitions"?:
     | boolean
@@ -1001,7 +1001,7 @@ export interface ConfigurationStrict {
         ignored_definitions?: string[];
       };
   /**
-   * MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md054.md
+   * MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md054.md
    */
   MD054?:
     | boolean
@@ -1032,7 +1032,7 @@ export interface ConfigurationStrict {
         url_inline?: boolean;
       };
   /**
-   * MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md054.md
+   * MD054/link-image-style : Link and image style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md054.md
    */
   "link-image-style"?:
     | boolean
@@ -1063,7 +1063,7 @@ export interface ConfigurationStrict {
         url_inline?: boolean;
       };
   /**
-   * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md055.md
+   * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md055.md
    */
   MD055?:
     | boolean
@@ -1074,7 +1074,7 @@ export interface ConfigurationStrict {
         style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
       };
   /**
-   * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md055.md
+   * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md055.md
    */
   "table-pipe-style"?:
     | boolean
@@ -1085,19 +1085,19 @@ export interface ConfigurationStrict {
         style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
       };
   /**
-   * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md056.md
+   * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md056.md
    */
   MD056?: boolean;
   /**
-   * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md056.md
+   * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md056.md
    */
   "table-column-count"?: boolean;
   /**
-   * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md058.md
+   * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md058.md
    */
   MD058?: boolean;
   /**
-   * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.1/doc/md058.md
+   * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.2/doc/md058.md
    */
   "blanks-around-tables"?: boolean;
   /**
