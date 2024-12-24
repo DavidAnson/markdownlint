@@ -1388,15 +1388,20 @@ test("exportMappings", (t) => {
 });
 
 const jsonRe = /\.json$/u;
-const importOptionsJson = { "with": { "type": "json" } };
+// ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
+// const importOptionsJson = { "with": { "type": "json" } };
 
 for (const [ exportName, exportPath ] of exportMappings) {
   test(exportName, async(t) => {
     const json = jsonRe.test(exportPath);
-    const importOptions = json ? importOptionsJson : undefined;
-    const importExportName = await import(exportName.replace(/^\./u, packageJson.name), importOptions);
-    const importExportPath = await import(exportPath, importOptions);
-    t.is(importExportName, importExportPath);
+    const exportByName = exportName.replace(/^\./u, packageJson.name);
+    const importExportByName = json ?
+      require(exportByName) :
+      await import(exportByName);
+    const importExportByPath = json ?
+      require(exportPath) :
+      await import(exportPath);
+    t.is(importExportByName, importExportByPath);
   });
 }
 
