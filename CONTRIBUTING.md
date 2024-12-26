@@ -14,8 +14,8 @@ Match the coding style of the files you edit. Although everyone has their own
 preferences and opinions, a pull request is not the right forum to debate them.
 
 Do not add new [`dependencies` to `package.json`][dependencies]. The Markdown
-parsers [`markdown-it`][markdown-it] and [`micromark`][micromark] are the
-project's only dependencies.
+parser [`micromark`][micromark] (and its extensions) is this project's only
+dependency.
 
 Package versions for `dependencies` and `devDependencies` should be specified
 exactly (also known as "pinning"). The short explanation is that doing otherwise

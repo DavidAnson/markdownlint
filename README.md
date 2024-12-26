@@ -24,7 +24,7 @@ for Markdown files. It was inspired by - and heavily influenced by - Mark
 Harrison's [markdownlint][markdownlint-ruby] for Ruby. The initial rules, rule
 documentation, and test cases came from that project.
 
-`markdownlint` uses the [`micromark`][micromark] parser and honors the
+`markdownlint` uses the [`micromark` parser][micromark] and honors the
 [CommonMark][commonmark] specification for Markdown. It additionally supports
 popular [GitHub Flavored Markdown (GFM)][gfm] syntax like autolinks and tables
 as well as directives, footnotes, and math syntax - all implemented by
@@ -567,28 +567,35 @@ This setting can be useful in the presence of (custom) rules that encounter
 unexpected syntax and fail. By enabling this option, the linting process
 is allowed to continue and report any violations that were found.
 
-##### options.markdownItPlugins
+##### options.markdownItFactory
 
-Type: `Array` of `Array` of `Function` and plugin parameters
+Type: `Function` returning an instance of a [`markdown-it` parser][markdown-it]
 
-Specifies additional [`markdown-it` plugins][markdown-it-plugin] to use when
-parsing input. Plugins can be used to support additional syntax and features for
-advanced scenarios. *Deprecated.*
+Provides a factory function for creating instances of the `markdown-it` parser.
 
-[markdown-it-plugin]: https://www.npmjs.com/search?q=keywords:markdown-it-plugin
+Previous versions of the `markdownlint` library declared `markdown-it` as a
+direct dependency. This function makes it possible to avoid that dependency
+entirely. In cases where `markdown-it` is needed, the caller is responsible for
+declaring the dependency and returning an instance from this factory. If any
+[`markdown-it` plugins][markdown-it-plugin] are needed, they should be `use`d by
+the caller before returning the `markdown-it` instance.
 
-Each item in the top-level `Array` should be of the form:
+For compatibility with previous versions of `markdownlint`, this function can be
+implemented like:
 
 ```javascript
-[ require("markdown-it-plugin"), plugin_param_0, plugin_param_1, ... ]
+import markdownIt from "markdown-it";
+const markdownItFactory = () => markdownIt({ "html": true });
 ```
 
-> Note that `markdown-it` plugins are only called when the `markdown-it` parser
-> is invoked. None of the built-in rules use the `markdown-it` parser, so
-> `markdown-it` plugins will only be invoked when one or more
-> [custom rules][custom-rules] that use the `markdown-it` parser are present.
+> Note that this function is only invoked when a `markdown-it` parser is
+> needed. None of the built-in rules use the `markdown-it` parser, so it is only
+> invoked when one or more [custom rules][custom-rules] are present that use the
+> `markdown-it` parser.
 
 [custom-rules]: #custom-rules
+[markdown-it]: https://github.com/markdown-it/markdown-it
+[markdown-it-plugin]: https://www.npmjs.com/search?q=keywords:markdown-it-plugin
 
 ##### options.noInlineConfig
 

@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 import test from "ava";
+import markdownIt from "markdown-it";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
@@ -13,6 +14,8 @@ import { __filename, importWithTypeJson } from "./esm-helpers.mjs";
 const packageJson = await importWithTypeJson(import.meta, "../package.json");
 const { homepage, version } = packageJson;
 
+const markdownItFactory = () => markdownIt({ "html": true });
+
 test("customRulesV0", (t) => new Promise((resolve) => {
   t.plan(4);
   const customRulesMd = "./test/custom-rules.md";
@@ -20,6 +23,7 @@ test("customRulesV0", (t) => new Promise((resolve) => {
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
+    markdownItFactory,
     "resultVersion": 0
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -92,6 +96,7 @@ test("customRulesV1", (t) => new Promise((resolve) => {
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
+    markdownItFactory,
     "resultVersion": 1
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -223,6 +228,7 @@ test("customRulesV2", (t) => new Promise((resolve) => {
   const options = {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
+    markdownItFactory,
     "resultVersion": 2
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -351,6 +357,7 @@ test("customRulesConfig", (t) => new Promise((resolve) => {
       },
       "letters-e-x": false
     },
+    markdownItFactory,
     "resultVersion": 0
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -376,6 +383,7 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
       require("./rules/npm"),
       require("markdownlint-rule-extended-ascii")
     ],
+    markdownItFactory,
     "strings": {
       "string": "# Text\n\n---\n\nText ✅\n"
     },
@@ -555,11 +563,12 @@ test("customRulesParserUndefined", (t) => {
           }
       }
     ],
+    markdownItFactory,
     "strings": {
       "string": "# Heading\n"
     }
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
 });
 
 test("customRulesParserNone", (t) => {
@@ -583,7 +592,7 @@ test("customRulesParserNone", (t) => {
       "string": "# Heading\n"
     }
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
 });
 
 test("customRulesParserMarkdownIt", (t) => {
@@ -606,11 +615,12 @@ test("customRulesParserMarkdownIt", (t) => {
           }
       }
     ],
+    markdownItFactory,
     "strings": {
       "string": "# Heading\n"
     }
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
 });
 
 test("customRulesParserMicromark", (t) => {
@@ -637,7 +647,33 @@ test("customRulesParserMicromark", (t) => {
       "string": "# Heading\n"
     }
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
+});
+
+test("customRulesMarkdownItFactoryUndefined", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  t.throws(
+    () => lintSync(options),
+    {
+      "message": "The option 'markdownItFactory' was required (due to the option 'customRules' including a rule requiring the 'markdown-it' parser), but 'markdownItFactory' was not set."
+    },
+    "No exception when markdownItFactory is undefined."
+  );
 });
 
 test("customRulesMarkdownItParamsTokensSameObject", (t) => {
@@ -657,11 +693,12 @@ test("customRulesMarkdownItParamsTokensSameObject", (t) => {
           }
       }
     ],
+    markdownItFactory,
     "strings": {
       "string": "# Heading\n"
     }
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
 });
 
 test("customRulesMarkdownItTokensSnapshot", (t) => {
@@ -680,13 +717,14 @@ test("customRulesMarkdownItTokensSnapshot", (t) => {
           }
       }
     ],
+    markdownItFactory,
     "noInlineConfig": true
   };
   return fs
     .readFile("./test/every-markdown-syntax.md", "utf8")
     .then((content) => {
       options.strings = { "content": content.split(newLineRe).join("\n") };
-      return lintPromise(options).then(() => null);
+      return lintPromise(options);
     });
 });
 
@@ -712,7 +750,7 @@ test("customRulesMicromarkTokensSnapshot", (t) => {
     .readFile("./test/every-markdown-syntax.md", "utf8")
     .then((content) => {
       options.strings = { "content": content.split(newLineRe).join("\n") };
-      return lintPromise(options).then(() => null);
+      return lintPromise(options);
     });
 });
 
@@ -1665,7 +1703,8 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
   /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.lintJavaScript,
-    "files": "test/lint-javascript.md"
+    "files": "test/lint-javascript.md",
+    markdownItFactory
   };
   lintAsync(options, (err, actual) => {
     t.falsy(err);
@@ -1693,7 +1732,8 @@ test("customRulesValidateJson", (t) => new Promise((resolve) => {
   /** @type {import("markdownlint").Options} */
   const options = {
     "customRules": customRules.validateJson,
-    "files": "test/validate-json.md"
+    "files": "test/validate-json.md",
+    markdownItFactory
   };
   lintAsync(options, (err, actual) => {
     t.falsy(err);
@@ -1792,9 +1832,10 @@ test("customRulesParamsAreFrozen", (t) => {
         "function": assertParamsFrozen
       }
     ],
-    "files": [ "README.md" ]
+    "files": [ "README.md" ],
+    markdownItFactory
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
 });
 
 test("customRulesParamsAreStable", (t) => {
@@ -1862,7 +1903,7 @@ test("customRulesParamsAreStable", (t) => {
       "string": "# Heading"
     }
   };
-  return lintPromise(options).then(() => null);
+  return lintPromise(options);
 });
 
 test("customRulesAsyncReadFiles", (t) => {

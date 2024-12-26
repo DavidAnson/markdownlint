@@ -30,6 +30,23 @@ const ajvOptions = {
   "allowUnionTypes": true
 };
 
+/**
+ * Gets an instance of a markdown-it factory, suitable for use with options.markdownItFactory.
+ *
+ * @param {import("../lib/markdownlint.mjs").Plugin[]} markdownItPlugins Additional markdown-it plugins.
+ * @returns {import("../lib/markdownlint.mjs").MarkdownItFactory} Function to create a markdown-it parser.
+ */
+function getMarkdownItFactory(markdownItPlugins) {
+  return () => {
+    const md = markdownIt({ "html": true });
+    for (const markdownItPlugin of markdownItPlugins) {
+      // @ts-ignore
+      md.use(...markdownItPlugin);
+    }
+    return md;
+  };
+}
+
 test("simpleAsync", (t) => new Promise((resolve) => {
   t.plan(2);
   const options = {
@@ -622,7 +639,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "##### options.frontMatter",
           "##### options.fs",
           "##### options.handleRuleFailures",
-          "##### options.markdownItPlugins",
+          "##### options.markdownItFactory",
           "##### options.noInlineConfig",
           "##### options.resultVersion",
           "##### options.strings",
@@ -1054,9 +1071,9 @@ test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
     },
     // Use a markdown-it custom rule so the markdown-it plugin will be run
     "customRules": customRules.anyBlockquote,
-    "markdownItPlugins": [
+    "markdownItFactory": getMarkdownItFactory([
       [ pluginInline, "check_text_plugin", "text", () => t.true(true) ]
-    ]
+    ])
   }, function callback(err, actual) {
     t.falsy(err);
     const expected = { "string": [] };
@@ -1073,12 +1090,12 @@ test("markdownItPluginsMultiple", (t) => new Promise((resolve) => {
     },
     // Use a markdown-it custom rule so the markdown-it plugin will be run
     "customRules": customRules.anyBlockquote,
-    "markdownItPlugins": [
+    "markdownItFactory": getMarkdownItFactory([
       [ pluginSub ],
       [ pluginSup ],
       [ pluginInline, "check_sub_plugin", "sub_open", () => t.true(true) ],
       [ pluginInline, "check_sup_plugin", "sup_open", () => t.true(true) ]
-    ]
+    ])
   }, function callback(err, actual) {
     t.falsy(err);
     const expected = { "string": [] };
@@ -1093,9 +1110,9 @@ test("markdownItPluginsNoMarkdownIt", (t) => new Promise((resolve) => {
     "strings": {
       "string": "# Heading\n\nText\n"
     },
-    "markdownItPlugins": [
+    "markdownItFactory": getMarkdownItFactory([
       [ pluginInline, "check_text_plugin", "text", () => t.fail() ]
-    ]
+    ])
   }, function callback(err, actual) {
     t.falsy(err);
     const expected = { "string": [] };
@@ -1115,9 +1132,9 @@ test("markdownItPluginsUnusedUncalled", (t) => new Promise((resolve) => {
     },
     // Use a markdown-it custom rule so the markdown-it plugin will be run
     "customRules": customRules.anyBlockquote,
-    "markdownItPlugins": [
+    "markdownItFactory": getMarkdownItFactory([
       [ pluginInline, "check_text_plugin", "text", () => t.fail() ]
-    ]
+    ])
   }, function callback(err, actual) {
     t.falsy(err);
     const expected = { "string": [] };
@@ -1184,7 +1201,8 @@ test("token-map-spans", (t) => {
         }
       }
     ],
-    "files": [ "./test/token-map-spans.md" ]
+    "files": [ "./test/token-map-spans.md" ],
+    "markdownItFactory": getMarkdownItFactory([])
   };
   lintSync(options);
 });

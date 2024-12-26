@@ -7,6 +7,7 @@ export type LintCallback = import("./markdownlint.mjs").LintCallback;
 export type LintContentCallback = import("./markdownlint.mjs").LintContentCallback;
 export type LintError = import("./markdownlint.mjs").LintError;
 export type LintResults = import("./markdownlint.mjs").LintResults;
+export type MarkdownItFactory = import("./markdownlint.mjs").MarkdownItFactory;
 export type MarkdownItToken = import("./markdownlint.mjs").MarkdownItToken;
 export type MarkdownParsers = import("./markdownlint.mjs").MarkdownParsers;
 export type MicromarkToken = import("./markdownlint.mjs").MicromarkToken;
