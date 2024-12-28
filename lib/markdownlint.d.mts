@@ -373,7 +373,7 @@ export type MarkdownIt = {
 /**
  * Gets an instance of the markdown-it parser. Any plugins should already have been loaded.
  */
-export type MarkdownItFactory = () => MarkdownIt;
+export type MarkdownItFactory = () => MarkdownIt | Promise<MarkdownIt>;
 /**
  * Configuration options.
  */

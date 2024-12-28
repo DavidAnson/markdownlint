@@ -580,12 +580,20 @@ declaring the dependency and returning an instance from this factory. If any
 [`markdown-it` plugins][markdown-it-plugin] are needed, they should be `use`d by
 the caller before returning the `markdown-it` instance.
 
-For compatibility with previous versions of `markdownlint`, this function can be
-implemented like:
+For compatibility with previous versions of `markdownlint`, this function should
+be similar to:
 
 ```javascript
 import markdownIt from "markdown-it";
 const markdownItFactory = () => markdownIt({ "html": true });
+```
+
+When an asynchronous implementation of `lint` is being invoked (e.g., via
+`markdownlint/async` or `markdownlint/promise`), this function can return a
+`Promise` in order to defer the import of `markdown-it`:
+
+```javascript
+const markdownItFactory = () => import("markdown-it").then((module) => module.default({ "html": true }));
 ```
 
 > Note that this function is only invoked when a `markdown-it` parser is

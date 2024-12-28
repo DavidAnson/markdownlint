@@ -676,6 +676,178 @@ test("customRulesMarkdownItFactoryUndefined", (t) => {
   );
 });
 
+test("customRulesMarkdownItFactoryNotNeededSync", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => t.fail(),
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  t.pass();
+  return lintSync(options);
+});
+
+test("customRulesMarkdownItFactoryNeededSync", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => t.pass() && markdownIt(),
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return lintSync(options);
+});
+
+test("customRulesMarkdownItFactoryNotNeededAsync", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => t.fail(),
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  t.pass();
+  return lintPromise(options);
+});
+
+test("customRulesMarkdownItFactoryNeededAsyncRunsSync", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => t.pass() && markdownIt(),
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return lintPromise(options);
+});
+
+test("customRulesMarkdownItFactoryNeededAsyncRunsAsync", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => t.pass() && Promise.resolve(markdownIt()),
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return lintPromise(options);
+});
+
+test("customRulesMarkdownItFactoryNeededAsyncRunsAsyncWithImport", (t) => {
+  t.plan(1);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => import("markdown-it").then((module) => t.pass() && module.default()),
+    "strings": {
+      "string": "# Heading\n"
+    }
+  };
+  return lintPromise(options);
+});
+
+test("customRulesMarkdownItInstanceCanBeReusedSync", (t) => {
+  t.plan(1);
+  const markdownItInstance = markdownItFactory();
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => markdownItInstance,
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  t.deepEqual(lintSync(options), lintSync(options));
+});
+
+test("customRulesMarkdownItInstanceCanBeReusedAsync", async(t) => {
+  t.plan(1);
+  const markdownItInstance = markdownItFactory();
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "customRules": [
+      {
+        "names": [ "name" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "markdownit",
+        "function": () => {}
+      }
+    ],
+    "markdownItFactory": () => Promise.resolve(markdownItInstance),
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  t.deepEqual(await lintPromise(options), await lintPromise(options));
+});
+
 test("customRulesMarkdownItParamsTokensSameObject", (t) => {
   t.plan(1);
   /** @type {import("markdownlint").Options} */
