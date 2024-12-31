@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.37.3
+
+- Tweak `package.json` dependencies to work with `pnpm`
+
 ## 0.37.2
 
 - Add subpath imports for overriding default bundler behavior
