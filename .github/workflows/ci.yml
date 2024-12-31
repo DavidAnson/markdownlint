@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -30,3 +29,21 @@ jobs:
       run: npm install --no-package-lock
     - name: Run CI Tests
       run: npm run ci
+
+  pnpm:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Use pnpm latest
+      uses: pnpm/action-setup@v4
+      with:
+        version: latest
+    - name: Use Node.js latest
+      uses: actions/setup-node@v4
+      with:
+        node-version: latest
+    - name: Install dependencies
+      run: pnpm install
+    - name: Run CI Tests
+      run: npm test
