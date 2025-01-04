@@ -25,7 +25,7 @@ export default [
       "demo/markdown-it.min.js",
       "demo/markdownlint-browser.js",
       "demo/markdownlint-browser.min.js",
-      "example/typescript/type-check.js",
+      "example/typescript/type-check-*",
       "test-repos/**"
     ]
   },

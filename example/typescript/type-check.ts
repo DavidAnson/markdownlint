@@ -7,7 +7,6 @@ import { lint as lintPromise, readConfig as readConfigPromise } from "../../lib/
 import { lint as lintSync, readConfig as readConfigSync } from "../../lib/exports-sync.mjs";
 
 import assert from "assert";
-// @ts-expect-error TS7016: Could not find a declaration file for module 'markdown-it-sub'.
 import markdownItSub from "markdown-it-sub";
 const markdownlintJsonPath = "../../.markdownlint.json";
 
