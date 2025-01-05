@@ -13,7 +13,6 @@ import pluginInline from "markdown-it-for-inline";
 import pluginSub from "markdown-it-sub";
 import pluginSup from "markdown-it-sup";
 import test from "ava";
-import spawn from "nano-spawn";
 import { getVersion } from "markdownlint";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
@@ -73,63 +72,6 @@ test("simplePromise", (t) => {
   return lintPromise(options).then((actual) => {
     t.is(actual.toString(), expected, "Unexpected results.");
   });
-});
-
-const projectFiles = [
-  "*.md",
-  "doc/*.md",
-  "helpers/*.md",
-  "micromark/*.md",
-  "schema/*.md"
-];
-
-test("projectFiles", (t) => {
-  t.plan(2);
-  return import("globby")
-    .then((module) => module.globby(projectFiles))
-    .then((files) => {
-      t.is(files.length, 60);
-      const options = {
-        files,
-        "config": require("../.markdownlint.json")
-      };
-      // @ts-ignore
-      return lintPromise(options).then((actual) => {
-        const expected = {};
-        for (const file of files) {
-          expected[file] = [];
-        }
-        t.deepEqual(actual, expected, "Issue(s) with project files.");
-      });
-    });
-});
-
-test("projectFilesExtendedAscii", (t) => {
-  t.plan(2);
-  return import("globby")
-    .then((module) => module.globby([
-      ...projectFiles,
-      "!doc/Rules.md",
-      "!doc/md010.md",
-      "!doc/md026.md",
-      "!doc/md036.md"
-    ]))
-    .then((files) => {
-      t.is(files.length, 56);
-      const options = {
-        files,
-        "config": require("../.markdownlint.json"),
-        "customRules": [ require("markdownlint-rule-extended-ascii") ]
-      };
-      // @ts-ignore
-      return lintPromise(options).then((actual) => {
-        const expected = {};
-        for (const file of files) {
-          expected[file] = [];
-        }
-        t.deepEqual(actual, expected, "Issue(s) with project files.");
-      });
-    });
 });
 
 test("stringInputLineEndings", (t) => new Promise((resolve) => {
@@ -1366,67 +1308,4 @@ test("constants", (t) => {
   t.is(constants.homepage, packageJson.homepage);
   // @ts-ignore
   t.is(constants.version, packageJson.version);
-});
-
-const exportMappings = new Map([
-  [ ".", "../lib/exports.mjs" ],
-  [ "./async", "../lib/exports-async.mjs" ],
-  [ "./promise", "../lib/exports-promise.mjs" ],
-  [ "./sync", "../lib/exports-sync.mjs" ],
-  [ "./helpers", "../helpers/helpers.cjs" ],
-  [ "./style/all", "../style/all.json" ],
-  [ "./style/cirosantilli", "../style/cirosantilli.json" ],
-  [ "./style/prettier", "../style/prettier.json" ],
-  [ "./style/relaxed", "../style/relaxed.json" ]
-]);
-
-test("exportMappings", (t) => {
-  t.deepEqual(
-    Object.keys(packageJson.exports),
-    [ ...exportMappings.keys() ]
-  );
-});
-
-const jsonRe = /\.json$/u;
-// ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time
-// const importOptionsJson = { "with": { "type": "json" } };
-
-for (const [ exportName, exportPath ] of exportMappings) {
-  test(exportName, async(t) => {
-    const json = jsonRe.test(exportPath);
-    const exportByName = exportName.replace(/^\./u, packageJson.name);
-    const importExportByName = json ?
-      require(exportByName) :
-      await import(exportByName);
-    const importExportByPath = json ?
-      require(exportPath) :
-      await import(exportPath);
-    t.is(importExportByName, importExportByPath);
-  });
-}
-
-test("subpathImports", async(t) => {
-  t.plan(8);
-  const scenarios = [
-    { "conditions": "browser", "throws": true },
-    { "conditions": "default", "throws": false },
-    { "conditions": "markdownlint-imports-browser", "throws": true },
-    { "conditions": "markdownlint-imports-node", "throws": false }
-  ];
-  for (const scenario of scenarios) {
-    const { conditions, throws } = scenario;
-    try {
-      // eslint-disable-next-line no-await-in-loop
-      await spawn("node", [ `--conditions=${conditions}`, "./standalone.mjs" ], { "cwd": "./example" });
-      t.true(!throws, conditions);
-    } catch {
-      t.true(throws, conditions);
-    }
-  }
-  // Fake "100%" coverage for node-imports-browser.mjs
-  const { "fs": browserFs } = await import("../lib/node-imports-browser.mjs");
-  t.throws(() => browserFs.access());
-  t.throws(() => browserFs.accessSync());
-  t.throws(() => browserFs.readFile());
-  t.throws(() => browserFs.readFileSync());
 });
