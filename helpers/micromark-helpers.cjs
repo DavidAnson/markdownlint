@@ -284,6 +284,20 @@ const nonContentTokens = new Set([
   "undefinedReferenceShortcut"
 ]);
 
+
+
+/**
+ * Determines if a link is a valid link (and not a fake shortcut link due to parser tricks).
+ *
+ * @param label Label token.
+ * @param labelText LabelText token.
+ * @param {Map<string, any>} definitions Map of link definitions.
+ * @returns {boolean} True iff the link is valid.
+ */
+function validLink(label, labelText, definitions) {
+  return (label.parent?.children.length !== 1) || definitions.has(labelText.text.trim());
+}
+
 module.exports = {
   addRangeToSet,
   filterByPredicate,
@@ -297,5 +311,6 @@ module.exports = {
   getParentOfType,
   inHtmlFlow,
   isHtmlFlowComment,
-  nonContentTokens
+  nonContentTokens,
+  validLink
 };
