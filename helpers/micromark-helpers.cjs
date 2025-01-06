@@ -284,13 +284,11 @@ const nonContentTokens = new Set([
   "undefinedReferenceShortcut"
 ]);
 
-
-
 /**
  * Determines if a link is a valid link (and not a fake shortcut link due to parser tricks).
  *
- * @param label Label token.
- * @param labelText LabelText token.
+ * @param {Token} label Label token.
+ * @param {Token} labelText LabelText token.
  * @param {Map<string, any>} definitions Map of link definitions.
  * @returns {boolean} True iff the link is valid.
  */

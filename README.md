@@ -146,6 +146,7 @@ playground for learning and exploring.
 - **[MD055](doc/md055.md)** *table-pipe-style* - Table pipe style
 - **[MD056](doc/md056.md)** *table-column-count* - Table column count
 - **[MD058](doc/md058.md)** *blanks-around-tables* - Tables should be surrounded by blank lines
+- **[MD059](doc/md059.md)** *no-generic-link-name* - No generic link name
 
 <!-- markdownlint-restore -->
 
@@ -165,7 +166,7 @@ To implement your own rules, refer to [CustomRules.md](doc/CustomRules.md).
 Tags group related rules and can be used to enable/disable multiple
 rules at once.
 
-- **`accessibility`** - `MD045`
+- **`accessibility`** - `MD045`, `MD059`
 - **`atx`** - `MD018`, `MD019`
 - **`atx_closed`** - `MD020`, `MD021`
 - **`blank_lines`** - `MD012`, `MD022`, `MD031`, `MD032`, `MD047`
@@ -183,7 +184,7 @@ rules at once.
 - **`language`** - `MD040`
 - **`line_length`** - `MD013`
 - **`links`** - `MD011`, `MD034`, `MD039`, `MD042`, `MD051`, `MD052`, `MD053`,
-  `MD054`
+  `MD054`, `MD059`
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`

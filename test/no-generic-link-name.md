@@ -13,3 +13,5 @@ Learn about [JavaScript](https://example.com/javascript/about).
 To learn more, go [here!](https://example.com/javascript/about). {MD059}
 
 To learn more, [click here!!!!](https://example.com/javascript/about). {MD059}
+
+[click here!!!!](https://example.com/javascript/about). {MD059}
