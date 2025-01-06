@@ -540,3 +540,18 @@ function expandTildePath(file, os) {
   return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
 }
 module.exports.expandTildePath = expandTildePath;
+
+/**
+ * Downcases a string and strips extra white spaces and punctuations
+ *
+ * @param {string} text String to transform
+ * @returns {string} Stripped and downcased string
+ */
+function stripAndDowncaseText(text) {
+  return text
+    .toLowerCase()
+    .replace(/[.,/#!$%^&*;:{}=\-_`~()]/g, "")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+module.exports.stripAndDowncaseText = stripAndDowncaseText;
