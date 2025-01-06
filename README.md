@@ -146,7 +146,7 @@ playground for learning and exploring.
 - **[MD055](doc/md055.md)** *table-pipe-style* - Table pipe style
 - **[MD056](doc/md056.md)** *table-column-count* - Table column count
 - **[MD058](doc/md058.md)** *blanks-around-tables* - Tables should be surrounded by blank lines
-- **[MD059](doc/md059.md)** *no-generic-link-name* - No generic link name
+- **[MD059](doc/md059.md)** *no-generic-link-name* - Links should have a descriptive name
 
 <!-- markdownlint-restore -->
 
