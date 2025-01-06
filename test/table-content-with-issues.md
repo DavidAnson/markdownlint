@@ -9,5 +9,5 @@
 | * emphasis*                  | {MD037} |
 | __strong __                  | {MD037} |
 |  ` code`                     | {MD038} |
-| [link ](https://example.com) | {MD039} |
-| [link]()                     | {MD042} |
+| [link ](https://example.com) | {MD039} {MD059} |
+| [link]()                     | {MD042} {MD059} |

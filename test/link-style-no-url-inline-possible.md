@@ -63,5 +63,6 @@ Text [email] text
 <!-- markdownlint-configure-file {
   "link-image-style": {
     "url_inline": false
-  }
+  },
+  "no-generic-link-name": false
 } -->

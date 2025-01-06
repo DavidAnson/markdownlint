@@ -34,4 +34,4 @@ Text
 
 </p>
 
-<!-- markdownlint-disable-file line-length no-inline-html -->
+<!-- markdownlint-disable-file line-length no-inline-html no-generic-link-name  -->

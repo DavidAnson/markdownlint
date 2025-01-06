@@ -1,6 +1,6 @@
 # Heading
 
-<!-- markdownlint-disable-file emphasis-style strong-style -->
+<!-- markdownlint-disable-file emphasis-style strong-style no-generic-link-name -->
 
 Line with *Normal emphasis*
 
