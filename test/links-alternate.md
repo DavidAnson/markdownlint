@@ -45,5 +45,6 @@ Text [ link ][reference] text. {MD039}
 
 <!-- markdownlint-configure-file {
   "line-length": false,
-  "code-block-style": false
+  "code-block-style": false,
+  "descriptive-link-text": false
 } -->

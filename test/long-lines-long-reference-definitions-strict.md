@@ -19,5 +19,6 @@
 <!-- markdownlint-configure-file {
   "line-length": {
     "strict": true
-  }
+  },
+  "descriptive-link-text": false
 } -->

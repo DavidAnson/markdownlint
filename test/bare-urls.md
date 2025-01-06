@@ -12,7 +12,7 @@ Visit https://example.com, then refresh. {MD034}
 
 The site (https://example.com) is down. {MD034}
 
-<!-- markdownlint-disable line-length no-inline-html -->
+<!-- markdownlint-disable descriptive-link-text line-length no-inline-html -->
 
 Some documents use <a href="https://example.com">to link</a>.
 

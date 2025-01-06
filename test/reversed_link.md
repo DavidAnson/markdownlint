@@ -87,5 +87,6 @@ Text (text()[text] text
 <!-- markdownlint-configure-file {
   "code-block-style": false,
   "line-length": false,
-  "no-inline-html": false
+  "no-inline-html": false,
+  "descriptive-link-text": false
 } -->

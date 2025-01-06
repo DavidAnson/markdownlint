@@ -61,6 +61,7 @@ Text [email] text
 [email]: user@example.com
 
 <!-- markdownlint-configure-file {
+  "descriptive-link-text": false,
   "link-image-style": {
     "url_inline": false
   }

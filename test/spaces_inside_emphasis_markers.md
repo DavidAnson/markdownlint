@@ -1,7 +1,5 @@
 # Heading
 
-<!-- markdownlint-disable-file emphasis-style strong-style -->
-
 Line with *Normal emphasis*
 
 Line with **Normal strong**
@@ -391,3 +389,9 @@ Emphasis <p data="* attribute *">* HTML *</p> {MD033} {MD037}
 
 Embedded underscore is okay:
 Text _emphas_i_s_ text _emphasis_
+
+<!-- markdownlint-configure-file {
+  "emphasis-style": false,
+  "descriptive-link-text": false,
+  "strong-style": false
+} -->

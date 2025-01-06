@@ -832,7 +832,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(128);
+  t.plan(130);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -907,7 +907,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(182);
+  t.plan(187);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1029,7 +1029,7 @@ test("validateConfigExampleJson", (t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(153);
+  t.plan(156);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

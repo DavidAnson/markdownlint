@@ -105,3 +105,7 @@ Wrapped [
 Not a link, just [ text in ] brackets
 
 Images are ![ not links ](image.jpg)
+
+<!-- markdownlint-configure-file {
+  "descriptive-link-text": false
+} -->

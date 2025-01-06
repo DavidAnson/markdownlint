@@ -2538,6 +2538,35 @@ Some text
 Rationale: In addition to aesthetic reasons, some parsers will incorrectly parse
 tables that don't have blank lines before and after them.
 
+<a name="md059"></a>
+
+## `MD059` - Link text should be descriptive
+
+Tags: `accessibility`, `links`
+
+Aliases: `descriptive-link-text`
+
+Parameters:
+
+- `link_texts`: List of restricted link texts (`string[]`, default `[]`)
+
+This rule is triggered when a link is set with generic text like
+"Click here", "here", or "learn more", giving it a generic accessible name.
+
+Rationale: Screen reader users may navigate through a list of links
+to quickly find content on a page. When the link name is something ambiguous
+like "Learn more", there isn't sufficient context to help the user determine
+whether to follow the link.
+
+Link names should be descriptive and describe the purpose of the link, like:
+`[Download the budget document]`, `[About markdownlint]`,`[View registration]`,
+etc.
+
+To override the default list and configure your own list of banned accessible
+names, set `link_texts` in the config.
+
+Note: This rule checks Markdown-style links and ignores HTML-style links.
+
 <!-- markdownlint-configure-file {
   "no-inline-html": {
     "allowed_elements": [
