@@ -12,6 +12,6 @@ To learn more, go to this [link!](https://example.com/javascript/about).
 
 <!-- markdownlint-configure-file {
   "descriptive-link-text": {
-    "banned_names_override": ["go here"]
+    "banned_link_texts_override": ["go here"]
   }
 } -->
