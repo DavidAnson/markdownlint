@@ -88,7 +88,7 @@ test("projectFiles", (t) => {
   return import("globby")
     .then((module) => module.globby(projectFiles))
     .then((files) => {
-      t.is(files.length, 61);
+      t.is(files.length, 60);
       const options = {
         files,
         "config": require("../.markdownlint.json")
@@ -115,7 +115,7 @@ test("projectFilesExtendedAscii", (t) => {
       "!doc/md036.md"
     ]))
     .then((files) => {
-      t.is(files.length, 57);
+      t.is(files.length, 56);
       const options = {
         files,
         "config": require("../.markdownlint.json"),
