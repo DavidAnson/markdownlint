@@ -11,7 +11,7 @@ To learn more, go [here!](https://example.com/javascript/about).
 To learn more, go to this [link!](https://example.com/javascript/about).
 
 <!-- markdownlint-configure-file {
-  "no-generic-link-name": {
+  "descriptive-link-text": {
     "banned_names_override": ["go here"]
   }
 } -->

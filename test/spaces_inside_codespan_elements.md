@@ -70,7 +70,7 @@ text and ``\`code with ignored escaped \` backticks``
 
 `` ` leading and trailing space allowed for backtick ` `` text `code`
 
-<!-- markdownlint-disable no-generic-link-name -->
+<!-- markdownlint-disable descriptive-link-text -->
 
 Text [link](https://example.com/link`link) text `code`.
 

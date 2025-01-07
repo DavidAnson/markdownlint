@@ -88,5 +88,5 @@ Text (text()[text] text
   "code-block-style": false,
   "line-length": false,
   "no-inline-html": false,
-  "no-generic-link-name": false
+  "descriptive-link-text": false
 } -->

@@ -20,5 +20,5 @@
   "line-length": {
     "strict": true
   },
-  "no-generic-link-name": false
+  "descriptive-link-text": false
 } -->

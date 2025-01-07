@@ -107,5 +107,5 @@ Not a link, just [ text in ] brackets
 Images are ![ not links ](image.jpg)
 
 <!-- markdownlint-configure-file {
-  "no-generic-link-name": false
+  "descriptive-link-text": false
 } -->

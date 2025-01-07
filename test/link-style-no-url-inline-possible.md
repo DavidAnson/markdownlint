@@ -64,5 +64,5 @@ Text [email] text
   "link-image-style": {
     "url_inline": false
   },
-  "no-generic-link-name": false
+  "descriptive-link-text": false
 } -->

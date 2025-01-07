@@ -60,7 +60,7 @@ Text [email] text
 [email]: user@example.com
 
 <!-- markdownlint-configure-file {
-  "no-generic-link-name": false,
+  "descriptive-link-text": false,
   "link-image-style": {
     "autolink": false,
     "url_inline": false

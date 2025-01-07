@@ -17,5 +17,5 @@
 [ *link* link ](https://example.com/) {MD039}
 
 <!-- markdownlint-configure-file {
-  "no-generic-link-name": false
+  "descriptive-link-text": false
 } -->

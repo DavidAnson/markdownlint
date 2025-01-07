@@ -1,6 +1,6 @@
 # Long Lines Long Reference Definitions Stern
 
-<!-- markdownlint-disable-file no-generic-link-name -->
+<!-- markdownlint-disable-file descriptive-link-text -->
 [Link][short-reference-definition]
 
 [Link][long-reference-definition]
