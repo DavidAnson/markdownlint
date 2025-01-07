@@ -1783,7 +1783,7 @@
       "default": true
     },
     "links": {
-      "description": "links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054",
+      "description": "links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054, MD059",
       "type": "boolean",
       "default": true
     },
@@ -1858,7 +1858,7 @@
       "default": true
     },
     "accessibility": {
-      "description": "accessibility : MD045",
+      "description": "accessibility : MD045, MD059",
       "type": "boolean",
       "default": true
     },
