@@ -1,4 +1,4 @@
-# Links with descriptive and non-descriptive names
+# Descriptive link text
 
 [Learn about Javascript](https://example.com/javascript/about)
 
@@ -14,6 +14,10 @@ To learn more, go [here!](https://example.com/javascript/about). {MD059}
 
 To learn more, [click here!!!!](https://example.com/javascript/about). {MD059}
 
-[click here!!!!](https://example.com/javascript/about). {MD059}
+[click-here!!!!](https://example.com/javascript/about). {MD059}
 
 Go to this [link]((https://example.com/javascript/about)). {MD059}
+
+[link][1] {MD059}
+
+[1]: https://example.com/javascript/about
