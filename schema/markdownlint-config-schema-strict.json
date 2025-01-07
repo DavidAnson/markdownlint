@@ -1723,7 +1723,7 @@
         "object"
       ],
       "properties": {
-        "banned_link_texts": {
+        "banned_link_texts_override": {
           "description": "List of banned link texts",
           "type": "array",
           "items": {
@@ -1741,7 +1741,7 @@
         "object"
       ],
       "properties": {
-        "banned_link_texts": {
+        "banned_link_texts_override": {
           "description": "List of banned link texts",
           "type": "array",
           "items": {
