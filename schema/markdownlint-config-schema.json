@@ -1716,42 +1716,6 @@
       "type": "boolean",
       "default": true
     },
-    "MD059": {
-      "description": "MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "properties": {
-        "banned_link_texts_override": {
-          "description": "List of banned link texts",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        }
-      },
-      "default": true
-    },
-    "descriptive-link-text": {
-      "description": "MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md",
-      "type": [
-        "boolean",
-        "object"
-      ],
-      "properties": {
-        "banned_link_texts_override": {
-          "description": "List of banned link texts",
-          "type": "array",
-          "items": {
-            "type": "string"
-          },
-          "default": []
-        }
-      },
-      "default": true
-    },
     "headings": {
       "description": "headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1783,7 +1747,7 @@
       "default": true
     },
     "links": {
-      "description": "links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054, MD059",
+      "description": "links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054",
       "type": "boolean",
       "default": true
     },
@@ -1858,7 +1822,7 @@
       "default": true
     },
     "accessibility": {
-      "description": "accessibility : MD045, MD059",
+      "description": "accessibility : MD045",
       "type": "boolean",
       "default": true
     },
