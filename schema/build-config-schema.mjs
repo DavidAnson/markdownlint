@@ -556,6 +556,18 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD059":
+      scheme.properties = {
+        "link_texts": {
+          "description": "List of restricted link texts",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
+        }
+      };
+      break;
     default:
       custom = false;
       break;
