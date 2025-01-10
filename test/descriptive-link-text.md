@@ -2,22 +2,28 @@
 
 [Learn about Javascript](https://example.com/javascript/about)
 
-[Read about Javascript](https://example.com/javascript/about)
+[About Javascript](https://example.com/file.txt)
 
-Learn about [JavaScript](https://example.com/javascript/about).
+Learn about [our mission](https://example.com/mission).
 
-[Learn more](https://example.com/javascript/about). {MD059}
+Go [here](https://example.com/descriptive-links) {MD059}
 
-[Click here](https://example.com/javascript/about). {MD059}
+[Learn more](https://example.com/images/about) about us. {MD059}
 
-To learn more, go [here!](https://example.com/javascript/about). {MD059}
+[Click here](https://example.com/dir/file.txt). {MD059}
 
-To learn more, [click here!!!!](https://example.com/javascript/about). {MD059}
+[read more](https://example.com/guide). {MD059}
 
-[click-here!!!!](https://example.com/javascript/about). {MD059}
+To get more support, go [here!](https://example.com/contact). {MD059}
 
-Go to this [link]((https://example.com/javascript/about)). {MD059}
+Learn [more](https://example.com/contact). {MD059}
 
-[link][1] {MD059}
+To learn more, [click here!!!!](https://example.com/about). {MD059}
 
-[1]: https://example.com/javascript/about
+[click-here!!!!](https://example.com/first). {MD059}
+
+Go to this [link]((https://example.com/second)). {MD059}
+
+[link][Example URL] {MD059}
+
+[Example URL]: https://example.com
