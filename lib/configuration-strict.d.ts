@@ -1101,6 +1101,28 @@ export interface ConfigurationStrict {
    */
   "blanks-around-tables"?: boolean;
   /**
+   * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md
+   */
+  MD059?:
+    | boolean
+    | {
+        /**
+         * List of restricted link texts
+         */
+        link_texts?: string[];
+      };
+  /**
+   * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md
+   */
+  "descriptive-link-text"?:
+    | boolean
+    | {
+        /**
+         * List of restricted link texts
+         */
+        link_texts?: string[];
+      };
+  /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
@@ -1125,7 +1147,7 @@ export interface ConfigurationStrict {
    */
   hard_tab?: boolean;
   /**
-   * links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054
+   * links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054, MD059
    */
   links?: boolean;
   /**
@@ -1185,7 +1207,7 @@ export interface ConfigurationStrict {
    */
   spelling?: boolean;
   /**
-   * accessibility : MD045
+   * accessibility : MD045, MD059
    */
   accessibility?: boolean;
   /**
