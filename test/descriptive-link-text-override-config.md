@@ -1,4 +1,4 @@
-# Descriptive link text override config
+# Descriptive link text override
 
 [Go here](https://example.com/javascript/about) {MD059}
 
