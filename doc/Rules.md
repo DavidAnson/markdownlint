@@ -2536,7 +2536,7 @@ Aliases: `descriptive-link-text`
 
 Parameters:
 
-- `banned_link_texts_override`: List of banned link texts (`string[]`, default
+- `link_texts`: List of banned link texts (`string[]`, default
   `[]`)
 
 This rule is triggered when a link is set with non-descriptive text like
@@ -2550,7 +2550,7 @@ whether to follow the link.
 Link names should be descriptive and describe the purpose of the link.
 
 To override the default list and configure your own list of banned accessible
-names, set `banned_link_texts_override` in the config.
+names, set `link_texts` in the config.
 
 Note: At this time, this rule only checks against inline Markdown links given
 the complexities of determining the accessible name of an HTML anchor tag.
