@@ -82,7 +82,7 @@
     "micromark-util-types": "2.0.1"
   },
   "devDependencies": {
-    "@eslint/js": "9.17.0",
+    "@eslint/js": "9.18.0",
     "@stylistic/eslint-plugin": "2.12.1",
     "ajv": "8.17.1",
     "ava": "6.2.0",
