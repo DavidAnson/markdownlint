@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.37.4
+
+- Stop using `module.createRequire`, export `resolveModule`
+
 ## 0.37.3
 
 - Tweak `package.json` dependencies to work with `pnpm`
