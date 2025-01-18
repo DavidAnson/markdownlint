@@ -1101,7 +1101,7 @@ export interface ConfigurationStrict {
    */
   "blanks-around-tables"?: boolean;
   /**
-   * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md
+   * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md
    */
   MD059?:
     | boolean
@@ -1112,7 +1112,7 @@ export interface ConfigurationStrict {
         link_texts?: string[];
       };
   /**
-   * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md
+   * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md
    */
   "descriptive-link-text"?:
     | boolean

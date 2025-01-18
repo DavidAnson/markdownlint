@@ -276,7 +276,7 @@ MD056: true
 # MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md058.md
 MD058: true
 
-# MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md
+# MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md
 MD059:
   # List of restricted link texts
   link_texts: []

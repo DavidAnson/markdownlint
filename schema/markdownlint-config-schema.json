@@ -1717,7 +1717,7 @@
       "default": true
     },
     "MD059": {
-      "description": "MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md",
+      "description": "MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md",
       "type": [
         "boolean",
         "object"
@@ -1736,7 +1736,7 @@
       "additionalProperties": false
     },
     "descriptive-link-text": {
-      "description": "MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.3/doc/md059.md",
+      "description": "MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md",
       "type": [
         "boolean",
         "object"
