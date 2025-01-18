@@ -29,4 +29,4 @@ Go to this [link]((https://example.com/second)). {MD059}
 [Example URL]: https://example.com
 
 {MD059} [click
- here](https://example.com)
+here](https://example.com)
