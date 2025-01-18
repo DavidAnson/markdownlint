@@ -18,6 +18,6 @@ If you need additional guidance, read [this](https://example.com/links). {MD059}
 
 <!-- markdownlint-configure-file {
   "descriptive-link-text": {
-    "link_texts": ["go here", "this']
+    "link_texts": ["go here", "this"]
   }
 } -->
