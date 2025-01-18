@@ -4,6 +4,7 @@ demo/markdownlint-browser.js
 demo/markdownlint-browser.min.js
 node_modules
 !test/node_modules
+!test/rules/node_modules
 npm-debug.log
 test-repos
 .DS_Store

@@ -1,3 +1,4 @@
+export { resolveModule } from "./resolve-module.cjs";
 export type Configuration = import("./markdownlint.mjs").Configuration;
 export type ConfigurationParser = import("./markdownlint.mjs").ConfigurationParser;
 export type ConfigurationStrict = import("./markdownlint.mjs").ConfigurationStrict;
