@@ -79,7 +79,7 @@
     "micromark-extension-directive": "3.0.2",
     "micromark-extension-gfm-autolink-literal": "2.1.0",
     "micromark-extension-gfm-footnote": "2.1.0",
-    "micromark-extension-gfm-table": "2.1.0",
+    "micromark-extension-gfm-table": "2.1.1",
     "micromark-extension-math": "3.1.0",
     "micromark-util-types": "2.0.1"
   },
