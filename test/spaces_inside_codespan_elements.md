@@ -10,7 +10,7 @@
 
 empty `` codespan element
 
-single space ` ` codespan element {MD038}
+single space ` ` codespan element
 
 `,`, `.`
 
@@ -106,7 +106,10 @@ No start space, end space: `code ` {MD038}
 
 Single start and end space: ` code ` (explicitly allowed/trimmed by the specification)
 
-All spaces: `    ` {MD038}
+All spaces: ` ` `  ` `   ` `    `
+
+All line endings: `
+`
 
 Double start and single end space: `  code ` {MD038}
 
