@@ -54,6 +54,6 @@
 
 `` `code `` (fixed)
 
-``  `code`  `` {Could be MD038}
+``  `code`  `` {MD038}
 
 `` `code` `` (fixed)
