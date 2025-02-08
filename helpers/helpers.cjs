@@ -378,6 +378,7 @@ module.exports.frontMatterHasTitle =
  */
 function getReferenceLinkImageData(tokens) {
   const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
+  const getText = (t) => t?.children.filter((c) => c.type !== "blockQuotePrefix").map((c) => c.text).join("");
   const references = new Map();
   const shortcuts = new Map();
   const addReferenceToDictionary = (token, label, isShortcut) => {
@@ -449,7 +450,7 @@ function getReferenceLinkImageData(tokens) {
           const isFullOrCollapsed = (token.children.length === 2) && !token.children.some((t) => t.type === "resource");
           const [ labelText ] = micromark.getDescendantsByType(token, [ "label", "labelText" ]);
           const [ referenceString ] = micromark.getDescendantsByType(token, [ "reference", "referenceString" ]);
-          let label = labelText?.text;
+          let label = getText(labelText);
           // Identify if footnote
           if (!isShortcut && !isFullOrCollapsed) {
             const [ footnoteCallMarker, footnoteCallString ] = token.children.filter(
@@ -462,7 +463,7 @@ function getReferenceLinkImageData(tokens) {
           }
           // Track link (handle shortcuts separately due to ambiguity in "text [text] text")
           if (isShortcut || isFullOrCollapsed) {
-            addReferenceToDictionary(token, referenceString?.text || label, isShortcut);
+            addReferenceToDictionary(token, getText(referenceString) || label, isShortcut);
           }
         }
         break;
