@@ -32,6 +32,7 @@ Go to this [link](https://example.com/second). {MD059}
 here](https://example.com)
 
 [link](destination) {MD059}
+[ link ](destination) {MD039} {MD059}
 [*link*](destination) {MD059}
 [_link_](destination) {MD049} {MD059}
 [~~link~~](destination) {MD059}
