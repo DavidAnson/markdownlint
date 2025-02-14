@@ -1724,13 +1724,18 @@
       ],
       "default": true,
       "properties": {
-        "link_texts": {
-          "description": "List of restricted link texts",
+        "prohibited_texts": {
+          "description": "Prohibited link texts",
           "type": "array",
           "items": {
             "type": "string"
           },
-          "default": []
+          "default": [
+            "click here",
+            "here",
+            "link",
+            "more"
+          ]
         }
       },
       "additionalProperties": false
@@ -1743,13 +1748,18 @@
       ],
       "default": true,
       "properties": {
-        "link_texts": {
-          "description": "List of restricted link texts",
+        "prohibited_texts": {
+          "description": "Prohibited link texts",
           "type": "array",
           "items": {
             "type": "string"
           },
-          "default": []
+          "default": [
+            "click here",
+            "here",
+            "link",
+            "more"
+          ]
         }
       },
       "additionalProperties": false

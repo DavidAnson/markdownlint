@@ -313,7 +313,7 @@ module.exports.addErrorDetailIf = addErrorDetailIf;
  */
 function addErrorContext(
   onError, lineNumber, context, start, end, range, fixInfo) {
-  context = ellipsify(context, start, end);
+  context = ellipsify(context.replace(newLineRe, "\n"), start, end);
   addError(onError, lineNumber, undefined, context, range, fixInfo);
 }
 module.exports.addErrorContext = addErrorContext;

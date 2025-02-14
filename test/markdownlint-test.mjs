@@ -907,7 +907,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(187);
+  t.plan(186);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);

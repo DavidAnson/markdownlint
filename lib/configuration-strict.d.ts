@@ -1107,9 +1107,9 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * List of restricted link texts
+         * Prohibited link texts
          */
-        link_texts?: string[];
+        prohibited_texts?: string[];
       };
   /**
    * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md
@@ -1118,9 +1118,9 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * List of restricted link texts
+         * Prohibited link texts
          */
-        link_texts?: string[];
+        prohibited_texts?: string[];
       };
   /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043

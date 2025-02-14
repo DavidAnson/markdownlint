@@ -558,13 +558,18 @@ for (const rule of rules) {
       break;
     case "MD059":
       scheme.properties = {
-        "link_texts": {
-          "description": "List of restricted link texts",
+        "prohibited_texts": {
+          "description": "Prohibited link texts",
           "type": "array",
           "items": {
             "type": "string"
           },
-          "default": []
+          "default": [
+            "click here",
+            "here",
+            "link",
+            "more"
+          ]
         }
       };
       break;

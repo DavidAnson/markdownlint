@@ -310,7 +310,12 @@
 
   // MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md059.md
   "MD059": {
-    // List of restricted link texts
-    "link_texts": []
+    // Prohibited link texts
+    "prohibited_texts": [
+      "click here",
+      "here",
+      "link",
+      "more"
+    ]
   }
 }
