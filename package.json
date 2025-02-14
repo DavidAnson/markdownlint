@@ -109,7 +109,7 @@
     "terser-webpack-plugin": "5.3.11",
     "toml": "3.0.0",
     "typescript": "5.7.3",
-    "webpack": "5.97.1",
+    "webpack": "5.98.0",
     "webpack-cli": "6.0.1"
   },
   "keywords": [
