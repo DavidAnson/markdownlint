@@ -1,6 +1,6 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { EOL } from "node:os";
-import { default as rules } from "../lib/rules.mjs";
+import rules from "../lib/rules.mjs";
 import { newLineRe } from "../helpers/helpers.cjs";
 import { deprecatedRuleNames, fixableRuleNames } from "../lib/constants.mjs";
 
