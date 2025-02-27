@@ -37,6 +37,7 @@ ES6
 ESLint
 eslint-plugin-markdownlint
 first-line-h1
+flymake-markdownlint-cli2
 formatter
 fs
 GFM
