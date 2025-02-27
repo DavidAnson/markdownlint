@@ -55,6 +55,7 @@ as well as directives, footnotes, and math syntax - all implemented by
   - [vscode-markdownlint extension for VS Code][vscode-markdownlint]
   - [Sublime Text markdownlint for Sublime Text][sublimelinter]
   - [coc-markdownlint extension for Vim/Neovim][coc]
+  - [flymake-markdownlint-cli2 extension for Emacs][emacsflymake]
 - Tooling
   - [eslint-plugin-markdownlint for the ESLint analyzer][eslint-plugin]
   - [grunt-markdownlint for the Grunt task runner][grunt-markdownlint]
@@ -65,6 +66,7 @@ as well as directives, footnotes, and math syntax - all implemented by
 
 [cake]: https://github.com/cake-contrib/Cake.Markdownlint
 [coc]: https://github.com/fannheyward/coc-markdownlint
+[emacsflymake]: https://github.com/ewilderj/flymake-markdownlint-cli2
 [eslint-plugin]: https://github.com/paweldrozd/eslint-plugin-markdownlint
 [grunt-markdownlint]: https://github.com/sagiegurari/grunt-markdownlint
 [markdownlint-cli]: https://github.com/igorshubovych/markdownlint-cli
