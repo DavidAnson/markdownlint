@@ -31,8 +31,12 @@ test("invalid json, default parser", (t) => {
   const actual = parseConfiguration("name", "{");
   const expected = {
     "config": null,
-    "message": "Unable to parse 'name'; Parser 0: Expected property name or '}' in JSON at position 1 (line 1 column 2)"
+    "message": "Unable to parse 'name'; Parser 0: Expected property name or '}' in JSON at position 1"
   };
+  // Backwards-compatibility for testing Node versions < 22
+  if (actual.message) {
+    actual.message = actual.message.replace(" (line 1 column 2)", "");
+  }
   t.deepEqual(actual, expected);
 });
 
