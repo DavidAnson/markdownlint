@@ -1305,7 +1305,6 @@ test("configParsersTOML", async(t) => {
       ].join("\n")
     },
     "configParsers": [
-      jsoncParser.parse,
       require("toml").parse
     ]
   };
