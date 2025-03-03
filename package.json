@@ -91,7 +91,7 @@
     "character-entities": "2.0.2",
     "eslint": "9.21.0",
     "eslint-plugin-jsdoc": "50.6.3",
-    "eslint-plugin-n": "17.15.1",
+    "eslint-plugin-n": "17.16.1",
     "eslint-plugin-regexp": "2.7.0",
     "eslint-plugin-unicorn": "57.0.0",
     "gemoji": "8.1.0",
