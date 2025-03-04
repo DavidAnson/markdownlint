@@ -6,7 +6,6 @@ const { flatTokensSymbol, htmlFlowSymbol } = require("./shared.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import("micromark-util-types", { with: { "resolution-mode": "import" } }).TokenType} TokenType */
-// @ts-expect-error https://github.com/microsoft/TypeScript/issues/52529
 /** @typedef {import("../lib/exports.mjs").MicromarkToken} Token */
 
 /**
