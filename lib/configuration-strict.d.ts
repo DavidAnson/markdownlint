@@ -470,11 +470,25 @@ export interface ConfigurationStrict {
   /**
    * MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md027.md
    */
-  MD027?: boolean;
+  MD027?:
+    | boolean
+    | {
+        /**
+         * Include list items
+         */
+        list_items?: boolean;
+      };
   /**
    * MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md027.md
    */
-  "no-multiple-space-blockquote"?: boolean;
+  "no-multiple-space-blockquote"?:
+    | boolean
+    | {
+        /**
+         * Include list items
+         */
+        list_items?: boolean;
+      };
   /**
    * MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md028.md
    */

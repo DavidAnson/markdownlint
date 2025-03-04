@@ -273,6 +273,15 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD027":
+      scheme.properties = {
+        "list_items": {
+          "description": "Include list items",
+          "type": "boolean",
+          "default": true
+        }
+      };
+      break;
     case "MD029":
       scheme.properties = {
         "style": {

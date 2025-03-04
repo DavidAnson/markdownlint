@@ -119,7 +119,9 @@ MD026:
   punctuation: ".,;:!。，；：！"
 
 # MD027/no-multiple-space-blockquote : Multiple spaces after blockquote symbol : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md027.md
-MD027: true
+MD027:
+  # Include list items
+  list_items: true
 
 # MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md028.md
 MD028: true
