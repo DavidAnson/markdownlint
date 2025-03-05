@@ -7,6 +7,8 @@ const { flatTokensSymbol, htmlFlowSymbol } = require("./shared.cjs");
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import("micromark-util-types", { with: { "resolution-mode": "import" } }).TokenType} TokenType */
 /** @typedef {import("../lib/exports.mjs").MicromarkToken} Token */
+// eslint-disable-next-line jsdoc/valid-types
+/** @typedef {import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} */
 
 /**
  * Determines if a Micromark token is within an htmlFlow type.
@@ -214,8 +216,12 @@ function getHeadingStyle(heading) {
  * @returns {string} Heading text.
  */
 function getHeadingText(heading) {
-  const headingTexts = getDescendantsByType(heading, [ [ "atxHeadingText", "setextHeadingText" ] ]);
-  return headingTexts[0]?.text.replace(/[\r\n]+/g, " ") || "";
+  const headingText = getDescendantsByType(heading, [ [ "atxHeadingText", "setextHeadingText" ] ])
+    .flatMap((descendant) => descendant.children.filter((child) => child.type !== "htmlText"))
+    .map((data) => data.text)
+    .join("")
+    .replace(/[\r\n]+/g, " ");
+  return headingText || "";
 }
 
 /**

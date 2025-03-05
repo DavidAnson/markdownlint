@@ -95,6 +95,12 @@ BB
 
 {MD024:94}
 
+## Headings <!-- that differ -->
+
+## Headings <!-- in comments -->
+
+{MD024:-2}
+
 <!-- markdownlint-configure-file {
   "heading-style": false,
   "no-duplicate-heading": {
