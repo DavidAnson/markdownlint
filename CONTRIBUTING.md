@@ -85,7 +85,6 @@ Thank you!
 [custom-rules]: doc/CustomRules.md
 [dependencies]: https://docs.npmjs.com/files/package.json#dependencies
 [example-com]: https://en.wikipedia.org/wiki/Example.com
-[markdown-it]: https://www.npmjs.com/package/markdown-it
 [micromark]: https://www.npmjs.com/package/micromark
 [new-rule]: https://github.com/DavidAnson/markdownlint/labels/new%20rule
 [npm-scripts]: https://docs.npmjs.com/misc/scripts

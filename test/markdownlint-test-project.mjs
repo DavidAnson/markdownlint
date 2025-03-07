@@ -17,7 +17,7 @@ const files = await globby(projectFiles);
 
 test("projectFiles", (t) => {
   t.plan(2);
-  t.is(files.length, 60);
+  t.is(files.length, 61);
   const options = {
     files,
     "config": require("../.markdownlint.json")
@@ -40,7 +40,7 @@ test("projectFilesExtendedAscii", (t) => {
     "doc/md036.md"
   ]);
   const filteredFiles = files.filter((file) => !ignoreFiles.has(file));
-  t.is(filteredFiles.length, 56);
+  t.is(filteredFiles.length, 57);
   const options = {
     "files": filteredFiles,
     "config": require("../.markdownlint.json"),

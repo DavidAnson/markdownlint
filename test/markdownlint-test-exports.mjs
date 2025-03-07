@@ -19,7 +19,7 @@ const exportMappings = new Map([
   [ "./style/relaxed", "../style/relaxed.json" ]
 ]);
 
-test("exportMappings", (t) => {
+test("exportMappings table", (t) => {
   t.deepEqual(
     Object.keys(packageJson.exports),
     [ ...exportMappings.keys() ]
@@ -31,9 +31,10 @@ const jsonRe = /\.json$/u;
 // const importOptionsJson = { "with": { "type": "json" } };
 
 for (const [ exportName, exportPath ] of exportMappings) {
-  test(exportName, async(t) => {
+  const exportByName = exportName.replace(/^\./u, packageJson.name);
+  test(`export mapping for ${exportByName}`, async(t) => {
+    t.plan(1);
     const json = jsonRe.test(exportPath);
-    const exportByName = exportName.replace(/^\./u, packageJson.name);
     const importExportByName = json ?
       require(exportByName) :
       await import(exportByName);
@@ -44,7 +45,22 @@ for (const [ exportName, exportPath ] of exportMappings) {
   });
 }
 
-test("subpathImports", async(t) => {
+test(`exported names`, async(t) => {
+  t.plan(1);
+  const exportedNames = {};
+  for (const [ exportName, exportPath ] of exportMappings) {
+    const exportByName = exportName.replace(/^\./u, packageJson.name);
+    const json = jsonRe.test(exportPath);
+    const importExportByName = json ?
+      require(exportByName) :
+      // eslint-disable-next-line no-await-in-loop
+      await import(exportByName);
+    exportedNames[exportByName] = Object.keys(importExportByName);
+  }
+  t.snapshot(exportedNames);
+});
+
+test("subpathImports and conditions", async(t) => {
   t.plan(8);
   const scenarios = [
     { "conditions": "browser", "throws": true },
