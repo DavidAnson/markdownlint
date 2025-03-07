@@ -55,7 +55,8 @@ test(`exported names`, async(t) => {
       require(exportByName) :
       // eslint-disable-next-line no-await-in-loop
       await import(exportByName);
-    exportedNames[exportByName] = Object.keys(importExportByName);
+    // Filter out module.exports to keep snapshot consistent between Node 22 (missing) and 23 (present)
+    exportedNames[exportByName] = Object.keys(importExportByName).filter((name) => name !== "module.exports");
   }
   t.snapshot(exportedNames);
 });
