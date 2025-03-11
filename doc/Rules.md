@@ -1767,7 +1767,7 @@ structure for a set of files.
 To require exactly the following structure:
 
 ```markdown
-# Head
+# Heading
 ## Item
 ### Detail
 ```
@@ -1776,7 +1776,7 @@ Set the `headings` parameter to:
 
 ```json
 [
-    "# Head",
+    "# Heading",
     "## Item",
     "### Detail"
 ]
@@ -1785,7 +1785,7 @@ Set the `headings` parameter to:
 To allow optional headings as with the following structure:
 
 ```markdown
-# Head
+# Heading
 ## Item
 ### Detail (optional)
 ## Foot
@@ -1798,11 +1798,29 @@ special value `"+"` meaning "one or more unspecified headings" and set the
 
 ```json
 [
-    "# Head",
+    "# Heading",
     "## Item",
     "*",
     "## Foot",
     "*"
+]
+```
+
+To allow a single required heading to vary as with a project name:
+
+```markdown
+# Project Name
+## Description
+## Examples
+```
+
+Use the special value `"?"` meaning "exactly one unspecified heading":
+
+```json
+[
+    "?",
+    "## Description",
+    "## Examples"
 ]
 ```
 

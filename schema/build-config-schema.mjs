@@ -396,7 +396,7 @@ for (const rule of rules) {
           "type": "array",
           "items": {
             "type": "string",
-            "pattern": "^(\\*|\\+|#{1,6} .*)$"
+            "pattern": "^(\\*|\\+|\\?|#{1,6}\\s+\\S.*)$"
           },
           "default": []
         },
