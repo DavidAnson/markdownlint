@@ -332,6 +332,12 @@ Valid Setext Heading with Named Fragment {#setext}
 
 [Invalid](#C11-L4C31) {MD051}
 
+## Implicit Fragments
+
+[Valid](#top)
+
+[Invalid](#ToP) {MD051}
+
 <!-- markdownlint-configure-file {
   "emphasis-style": false,
   "heading-style": false,
