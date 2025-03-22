@@ -118,10 +118,10 @@
 
   // MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md025.md
   "MD025": {
-    // Heading level
-    "level": 1,
     // RegExp for matching title in front matter
-    "front_matter_title": "^\\s*title\\s*[:=]"
+    "front_matter_title": "^\\s*title\\s*[:=]",
+    // Heading level
+    "level": 1
   },
 
   // MD026/no-trailing-punctuation : Trailing punctuation in heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md026.md
@@ -206,10 +206,12 @@
 
   // MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md041.md
   "MD041": {
-    // Heading level
-    "level": 1,
+    // Allow content before first heading
+    "allow_preamble": false,
     // RegExp for matching title in front matter
-    "front_matter_title": "^\\s*title\\s*[:=]"
+    "front_matter_title": "^\\s*title\\s*[:=]",
+    // Heading level
+    "level": 1
   },
 
   // MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md042.md

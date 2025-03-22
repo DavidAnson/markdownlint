@@ -407,13 +407,13 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * Heading level
-         */
-        level?: number;
-        /**
          * RegExp for matching title in front matter
          */
         front_matter_title?: string;
+        /**
+         * Heading level
+         */
+        level?: number;
       };
   /**
    * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md025.md
@@ -422,13 +422,13 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * Heading level
-         */
-        level?: number;
-        /**
          * RegExp for matching title in front matter
          */
         front_matter_title?: string;
+        /**
+         * Heading level
+         */
+        level?: number;
       };
   /**
    * MD025/single-title/single-h1 : Multiple top-level headings in the same document : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md025.md
@@ -437,13 +437,13 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * Heading level
-         */
-        level?: number;
-        /**
          * RegExp for matching title in front matter
          */
         front_matter_title?: string;
+        /**
+         * Heading level
+         */
+        level?: number;
       };
   /**
    * MD026/no-trailing-punctuation : Trailing punctuation in heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md026.md
@@ -730,13 +730,17 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * Heading level
+         * Allow content before first heading
          */
-        level?: number;
+        allow_preamble?: boolean;
         /**
          * RegExp for matching title in front matter
          */
         front_matter_title?: string;
+        /**
+         * Heading level
+         */
+        level?: number;
       };
   /**
    * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md041.md
@@ -745,13 +749,17 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * Heading level
+         * Allow content before first heading
          */
-        level?: number;
+        allow_preamble?: boolean;
         /**
          * RegExp for matching title in front matter
          */
         front_matter_title?: string;
+        /**
+         * Heading level
+         */
+        level?: number;
       };
   /**
    * MD041/first-line-heading/first-line-h1 : First line in a file should be a top-level heading : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md041.md
@@ -760,13 +768,17 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
-         * Heading level
+         * Allow content before first heading
          */
-        level?: number;
+        allow_preamble?: boolean;
         /**
          * RegExp for matching title in front matter
          */
         front_matter_title?: string;
+        /**
+         * Heading level
+         */
+        level?: number;
       };
   /**
    * MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md042.md

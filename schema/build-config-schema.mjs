@@ -367,20 +367,32 @@ for (const rule of rules) {
       break;
     case "MD025":
     case "MD041":
-      scheme.properties = {
-        "level": {
-          "description": "Heading level",
-          "type": "integer",
-          "minimum": 1,
-          "maximum": 6,
-          "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
-        }
-      };
+      {
+        const md041Properties = (ruleName === "MD041") ?
+          {
+            "allow_preamble": {
+              "description": "Allow content before first heading",
+              "type": "boolean",
+              "default": false
+            }
+          } :
+          {};
+        scheme.properties = {
+          ...md041Properties,
+          "front_matter_title": {
+            "description": "RegExp for matching title in front matter",
+            "type": "string",
+            "default": "^\\s*title\\s*[:=]"
+          },
+          "level": {
+            "description": "Heading level",
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 6,
+            "default": 1
+          }
+        };
+      }
       break;
     case "MD043":
       scheme.properties = {

@@ -628,17 +628,17 @@
       ],
       "default": true,
       "properties": {
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        },
         "level": {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
           "maximum": 6,
           "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
@@ -651,17 +651,17 @@
       ],
       "default": true,
       "properties": {
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        },
         "level": {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
           "maximum": 6,
           "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
@@ -674,17 +674,17 @@
       ],
       "default": true,
       "properties": {
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        },
         "level": {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
           "maximum": 6,
           "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
@@ -1117,17 +1117,22 @@
       ],
       "default": true,
       "properties": {
+        "allow_preamble": {
+          "description": "Allow content before first heading",
+          "type": "boolean",
+          "default": false
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        },
         "level": {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
           "maximum": 6,
           "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
@@ -1140,17 +1145,22 @@
       ],
       "default": true,
       "properties": {
+        "allow_preamble": {
+          "description": "Allow content before first heading",
+          "type": "boolean",
+          "default": false
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        },
         "level": {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
           "maximum": 6,
           "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
@@ -1163,17 +1173,22 @@
       ],
       "default": true,
       "properties": {
+        "allow_preamble": {
+          "description": "Allow content before first heading",
+          "type": "boolean",
+          "default": false
+        },
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        },
         "level": {
           "description": "Heading level",
           "type": "integer",
           "minimum": 1,
           "maximum": 6,
           "default": 1
-        },
-        "front_matter_title": {
-          "description": "RegExp for matching title in front matter",
-          "type": "string",
-          "default": "^\\s*title\\s*[:=]"
         }
       },
       "additionalProperties": false
