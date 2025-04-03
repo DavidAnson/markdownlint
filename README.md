@@ -421,9 +421,9 @@ object.
 See [ValidatingConfiguration.md](schema/ValidatingConfiguration.md) for ways to
 use the JSON Schema to validate configuration.
 
-For more advanced scenarios, styles can reference and extend other styles.
-The `readConfig` and `readConfigSync` functions can be used to read such
-styles.
+For more advanced scenarios, styles can reference and build upon other styles
+via the `extends` keyword and a file path or (installed) package name. The
+`readConfig` function can be used to read such aggregate styles from code.
 
 For example, assuming a `base.json` configuration file:
 
@@ -678,9 +678,9 @@ uses rule aliases (ex: `no-hard-tabs`) instead of names (ex: `MD010`).
 ### Config
 
 The `options.config` configuration object is simple and can be stored in a file
-for readability and easy reuse. The `readConfig` and `readConfigSync` functions
-load configuration settings and support the `extends` keyword for referencing
-other files (see above).
+for readability and easy reuse. The `readConfig` function loads configuration
+settings and supports the `extends` keyword for referencing files or packages
+(see above).
 
 By default, configuration files are parsed as JSON (and named
 `.markdownlint.json`). Custom parsers can be provided to handle other formats
