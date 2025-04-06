@@ -970,6 +970,10 @@ export interface ConfigurationStrict {
          * Ignore case of fragments
          */
         ignore_case?: boolean;
+        /**
+         * Pattern for ignoring additional fragments
+         */
+        ignored_pattern?: string;
       };
   /**
    * MD051/link-fragments : Link fragments should be valid : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md051.md
@@ -981,6 +985,10 @@ export interface ConfigurationStrict {
          * Ignore case of fragments
          */
         ignore_case?: boolean;
+        /**
+         * Pattern for ignoring additional fragments
+         */
+        ignored_pattern?: string;
       };
   /**
    * MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md052.md

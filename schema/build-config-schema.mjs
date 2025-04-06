@@ -483,6 +483,11 @@ for (const rule of rules) {
           "description": "Ignore case of fragments",
           "type": "boolean",
           "default": false
+        },
+        "ignored_pattern": {
+          "description": "Pattern for ignoring additional fragments",
+          "type": "string",
+          "default": ""
         }
       };
       break;
