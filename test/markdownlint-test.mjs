@@ -17,6 +17,7 @@ import { getVersion } from "markdownlint";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
+import * as cache from "../lib/cache.mjs";
 import * as constants from "../lib/constants.mjs";
 import rules from "../lib/rules.mjs";
 import customRules from "./rules/rules.cjs";
@@ -1062,6 +1063,71 @@ test("someCustomRulesHaveValidUrl", (t) => {
     }
   }
 });
+
+test("coverageForCacheMicromarkTokensWhenUndefined", (t) => {
+  t.plan(1);
+  cache.initialize(undefined);
+  t.is(cache.micromarkTokens().length, 0);
+});
+
+test("micromarkParseCalledWhenNeeded", (t) => new Promise((resolve) => {
+  t.plan(3);
+  /** @type {import("markdownlint").Rule} */
+  const markdownItRule = {
+    "names": [ "markdown-it-rule" ],
+    "description": "markdown-it rule",
+    "tags": [ "test" ],
+    "parser": "markdownit",
+    "function": () => {
+      t.true(cache.micromarkTokens().length > 0);
+    }
+  };
+  lintAsync({
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    "config": {
+      "markdown-it-rule": true
+    },
+    "customRules": [ markdownItRule ],
+    "markdownItFactory": getMarkdownItFactory([])
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
+
+test("micromarkParseSkippedWhenNotNeeded", (t) => new Promise((resolve) => {
+  t.plan(3);
+  /** @type {import("markdownlint").Rule} */
+  const markdownItRule = {
+    "names": [ "markdown-it-rule" ],
+    "description": "markdown-it rule",
+    "tags": [ "test" ],
+    "parser": "markdownit",
+    "function": () => {
+      t.true(cache.micromarkTokens().length === 0);
+    }
+  };
+  lintAsync({
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    "config": {
+      "default": false,
+      "markdown-it-rule": true
+    },
+    "customRules": [ markdownItRule ],
+    "markdownItFactory": getMarkdownItFactory([])
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
 
 test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
   t.plan(4);

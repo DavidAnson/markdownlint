@@ -83,6 +83,23 @@ export function applyFixes(input: string, errors: RuleOnErrorInfo[]): string;
  */
 export function getVersion(): string;
 /**
+ * Result object for getEnabledRulesPerLineNumber.
+ */
+export type EnabledRulesPerLineNumberResult = {
+    /**
+     * Effective configuration.
+     */
+    effectiveConfig: Configuration;
+    /**
+     * Enabled rules per line number.
+     */
+    enabledRulesPerLineNumber: any[];
+    /**
+     * Enabled rule list.
+     */
+    enabledRuleList: Rule[];
+};
+/**
  * Function to implement rule logic.
  */
 export type RuleFunction = (params: RuleParams, onError: RuleOnError) => void;
