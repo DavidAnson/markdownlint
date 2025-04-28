@@ -493,6 +493,14 @@ for (const rule of rules) {
       break;
     case "MD052":
       scheme.properties = {
+        "ignored_labels": {
+          "description": "Ignored link labels",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [ "x" ]
+        },
         "shortcut_syntax": {
           "description": "Include shortcut syntax",
           "type": "boolean",

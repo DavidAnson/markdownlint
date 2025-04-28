@@ -997,6 +997,10 @@ export interface ConfigurationStrict {
     | boolean
     | {
         /**
+         * Ignored link labels
+         */
+        ignored_labels?: string[];
+        /**
          * Include shortcut syntax
          */
         shortcut_syntax?: boolean;
@@ -1007,6 +1011,10 @@ export interface ConfigurationStrict {
   "reference-links-images"?:
     | boolean
     | {
+        /**
+         * Ignored link labels
+         */
+        ignored_labels?: string[];
         /**
          * Include shortcut syntax
          */

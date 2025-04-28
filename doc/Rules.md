@@ -2278,6 +2278,7 @@ Aliases: `reference-links-images`
 
 Parameters:
 
+- `ignored_labels`: Ignored link labels (`string[]`, default `["x"]`)
 - `shortcut_syntax`: Include shortcut syntax (`boolean`, default `false`)
 
 Links and images in Markdown can provide the link destination or image source
@@ -2310,6 +2311,17 @@ so "shortcut" syntax is ignored by default. To include "shortcut" syntax, set
 the `include_shortcut` parameter to `true`. Note that doing so produces warnings
 for *all* text in the document that *could* be a shortcut. If bracketed text is
 intentional, brackets can be escaped with the `\` character: `\[example\]`.
+
+If there are link labels that are deliberately unreferenced, they can be ignored
+by setting the `ignored_labels` parameter to the list of strings to ignore. The
+default value of this parameter ignores the checkbox syntax used by
+[GitHub Flavored Markdown task list items][gfm-tasklist]:
+
+```markdown
+- [x] Checked task list item
+```
+
+[gfm-tasklist]: https://github.github.com/gfm/#task-list-items-extension-
 
 <a name="md053"></a>
 
@@ -2344,9 +2356,9 @@ reference has the corresponding label. The "full", "collapsed", and "shortcut"
 formats are all supported.
 
 If there are reference definitions that are deliberately unreferenced, they can
-be ignored by setting the `ignored_definitions` parameter. The default value of
-this parameter ignores the following convention for adding non-HTML comments to
-Markdown:
+be ignored by setting the `ignored_definitions` parameter to the list of strings
+to ignore. The default value of this parameter ignores the following convention
+for adding non-HTML comments to Markdown:
 
 ```markdown
 [//]: # (This behaves like a comment)

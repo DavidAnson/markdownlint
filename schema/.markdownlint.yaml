@@ -247,6 +247,9 @@ MD051:
 
 # MD052/reference-links-images : Reference links and images should use a label that is defined : https://github.com/DavidAnson/markdownlint/blob/v0.37.4/doc/md052.md
 MD052:
+  # Ignored link labels
+  ignored_labels:
+    - "x"
   # Include shortcut syntax
   shortcut_syntax: false
 
