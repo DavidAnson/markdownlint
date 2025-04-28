@@ -68,6 +68,18 @@ Uppercase image tag with no alt set <IMG SRC="cat.png" /> {MD045}
   <img src="image.png" /> {MD045}
 </p>
 
+No alt attribute is okay when the image is hidden from assistive technology:
+<img src="image.png" aria-hidden="true"/>
+<img src="image.png" ARIA-HIDDEN="TRUE" />
+
+But not when disabled: <img src="image.png" aria-hidden="false"/> {MD045}
+
+Multi-line image tag aria-hidden:
+<img
+  src="image.png"
+  aria-hidden="true"
+  />
+
 <!-- markdownlint-restore no-inline-html -->
 
 [notitle]: image.jpg
