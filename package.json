@@ -71,7 +71,7 @@
     "upgrade": "npx --yes npm-check-updates --upgrade"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "micromark": "4.0.2",
