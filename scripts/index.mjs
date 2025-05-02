@@ -1,6 +1,5 @@
 // @ts-check
 
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
 import { constants, copyFile, rm, unlink } from "node:fs/promises";
 import { globby } from "globby";
 
