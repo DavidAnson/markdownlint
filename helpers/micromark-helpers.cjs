@@ -270,6 +270,26 @@ function getParentOfType(token, types) {
   return current;
 }
 
+const docfxTabSyntaxRe = /^#tab\//;
+
+/**
+ * Returns whether the specified Micromark token looks like a Docfx tab.
+ *
+ * @param {Token | null} heading Micromark token.
+ * @returns {boolean} True iff the token looks like a Docfx tab.
+ */
+function isDocfxTab(heading) {
+  // See https://dotnet.github.io/docfx/docs/markdown.html?tabs=linux%2Cdotnet#tabs
+  if (heading?.type === "atxHeading") {
+    const headingTexts = getDescendantsByType(heading, [ "atxHeadingText" ]);
+    if ((headingTexts.length === 1) && (headingTexts[0].children.length === 1) && (headingTexts[0].children[0].type === "link")) {
+      const resourceDestinationStrings = filterByTypes(headingTexts[0].children[0].children, [ "resourceDestinationString" ]);
+      return (resourceDestinationStrings.length === 1) && docfxTabSyntaxRe.test(resourceDestinationStrings[0].text);
+    }
+  }
+  return false;
+}
+
 /**
  * Set containing token types that do not contain content.
  *
@@ -301,6 +321,7 @@ module.exports = {
   getHtmlTagInfo,
   getParentOfType,
   inHtmlFlow,
+  isDocfxTab,
   isHtmlFlowComment,
   nonContentTokens
 };
