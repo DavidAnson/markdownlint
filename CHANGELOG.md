@@ -1,5 +1,15 @@
 # Changelog
 
+## 0.38.0
+
+- Add MD059/descriptive-link-text
+- Improve MD025/MD027/MD036/MD038/MD041/MD043/MD045/MD051/MD052
+- `markdown-it` parser no longer a production dependency (breaking change)
+  - Add `markdownItFactory` option, remove `markdownItPlugins` option
+- Remove support for end-of-life Node version 18
+- Improve performance
+- Update dependencies
+
 ## 0.37.4
 
 - Stop using `module.createRequire`, export `resolveModule`
