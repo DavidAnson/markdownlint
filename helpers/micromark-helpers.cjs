@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { flatTokensSymbol, htmlFlowSymbol } = require("./shared.cjs");
+const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import("micromark-util-types", { with: { "resolution-mode": "import" } }).TokenType} TokenType */
@@ -216,12 +216,11 @@ function getHeadingStyle(heading) {
  * @returns {string} Heading text.
  */
 function getHeadingText(heading) {
-  const headingText = getDescendantsByType(heading, [ [ "atxHeadingText", "setextHeadingText" ] ])
+  return getDescendantsByType(heading, [ [ "atxHeadingText", "setextHeadingText" ] ])
     .flatMap((descendant) => descendant.children.filter((child) => child.type !== "htmlText"))
     .map((data) => data.text)
     .join("")
-    .replace(/[\r\n]+/g, " ");
-  return headingText || "";
+    .replace(newLineRe, " ");
 }
 
 /**
