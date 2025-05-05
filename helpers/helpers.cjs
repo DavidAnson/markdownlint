@@ -308,9 +308,9 @@ module.exports.addErrorDetailIf = addErrorDetailIf;
  * @param {RuleOnErrorFixInfo} [fixInfo] RuleOnErrorFixInfo instance.
  * @returns {void}
  */
-function addErrorContext(
-  onError, lineNumber, context, start, end, range, fixInfo) {
-  context = ellipsify(context, start, end);
+function addErrorContext(onError, lineNumber, context, start, end, range, fixInfo) {
+  // Normalize new line characters so Linux and Windows trim consistently
+  context = ellipsify(context.replace(newLineRe, "\n"), start, end);
   addError(onError, lineNumber, undefined, context, range, fixInfo);
 }
 module.exports.addErrorContext = addErrorContext;
