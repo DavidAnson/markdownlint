@@ -2647,7 +2647,10 @@ translations for every language.
 
 Note: This rule checks Markdown links; HTML links are ignored.
 
-More information: <https://webaim.org/techniques/hypertext/>
+More information:
+
+- <https://webaim.org/techniques/hypertext/>
+- <https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-link-only.html>
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {
