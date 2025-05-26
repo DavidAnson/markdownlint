@@ -154,6 +154,8 @@ MD032: true
 MD033:
   # Allowed elements
   allowed_elements: []
+  # Allowed elements in tables
+  table_allowed_elements: []
 
 # MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md
 MD034: true

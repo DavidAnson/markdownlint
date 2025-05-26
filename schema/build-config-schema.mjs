@@ -336,6 +336,14 @@ for (const rule of rules) {
             "type": "string"
           },
           "default": []
+        },
+        "table_allowed_elements": {
+          "description": "Allowed elements in tables",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
         }
       };
       break;

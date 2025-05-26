@@ -605,6 +605,10 @@ export interface ConfigurationStrict {
          * Allowed elements
          */
         allowed_elements?: string[];
+        /**
+         * Allowed elements in tables
+         */
+        table_allowed_elements?: string[];
       };
   /**
    * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md033.md
@@ -616,6 +620,10 @@ export interface ConfigurationStrict {
          * Allowed elements
          */
         allowed_elements?: string[];
+        /**
+         * Allowed elements in tables
+         */
+        table_allowed_elements?: string[];
       };
   /**
    * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md
