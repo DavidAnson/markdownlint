@@ -1327,6 +1327,8 @@ Aliases: `no-inline-html`
 Parameters:
 
 - `allowed_elements`: Allowed elements (`string[]`, default `[]`)
+- `table_allowed_elements`: Allowed elements in tables (`string[]`, default
+  `[]`)
 
 This rule is triggered whenever raw HTML is used in a Markdown document:
 
@@ -1340,7 +1342,13 @@ To fix this, use 'pure' Markdown instead of including raw HTML:
 # Markdown heading
 ```
 
-Note: To allow specific HTML elements, use the `allowed_elements` parameter.
+Discussions of parameters are usually in paragraph form. What about:
+
+To allow specific HTML elements anywhere in Markdown content, set the
+`allowed_elements` parameter to a list of HTML element names. To allow
+a specific set of HTML elements within Markdown tables, set the
+`table_allowed_elements` to a list of HTML element names. This can be
+used to permit the use of `<br>` line breaks only within Markdown tables.
 
 Rationale: Raw HTML is allowed in Markdown, but this rule is included for
 those who want their documents to only include "pure" Markdown, or for those
