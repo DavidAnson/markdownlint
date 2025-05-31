@@ -383,6 +383,12 @@ parameter to the desired value.
 Rationale: Hard tabs are often rendered inconsistently by different editors and
 can be harder to work with than spaces.
 
+More information:
+
+- <https://agiletribe.wordpress.com/2011/10/27/18-dont-use-tab-characters/>
+- <https://www.jwz.org/doc/tabs-vs-spaces.html>
+- <https://adamspiers.org/computing/why_no_tabs.html>
+
 <a name="md011"></a>
 
 ## `MD011` - Reversed link syntax
