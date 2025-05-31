@@ -21,11 +21,25 @@ export interface ConfigurationStrict {
   /**
    * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md001.md
    */
-  MD001?: boolean;
+  MD001?:
+    | boolean
+    | {
+        /**
+         * RegExp for matching title in front matter
+         */
+        front_matter_title?: string;
+      };
   /**
    * MD001/heading-increment : Heading levels should only increment by one level at a time : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md001.md
    */
-  "heading-increment"?: boolean;
+  "heading-increment"?:
+    | boolean
+    | {
+        /**
+         * RegExp for matching title in front matter
+         */
+        front_matter_title?: string;
+      };
   /**
    * MD003/heading-style : Heading style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md003.md
    */
