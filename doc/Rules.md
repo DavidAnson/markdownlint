@@ -1342,13 +1342,11 @@ To fix this, use 'pure' Markdown instead of including raw HTML:
 # Markdown heading
 ```
 
-Discussions of parameters are usually in paragraph form. What about:
-
 To allow specific HTML elements anywhere in Markdown content, set the
-`allowed_elements` parameter to a list of HTML element names. To allow
-a specific set of HTML elements within Markdown tables, set the
-`table_allowed_elements` to a list of HTML element names. This can be
-used to permit the use of `<br>` line breaks only within Markdown tables.
+`allowed_elements` parameter to a list of HTML element names. To allow a
+specific set of HTML elements within Markdown tables, set the
+`table_allowed_elements` parameter to a list of HTML element names. This can be
+used to permit the use of `<br>`-style line breaks only within Markdown tables.
 
 Rationale: Raw HTML is allowed in Markdown, but this rule is included for
 those who want their documents to only include "pure" Markdown, or for those
