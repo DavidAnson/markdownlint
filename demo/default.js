@@ -49,6 +49,7 @@
 
   // Renders Markdown to HTML
   function render(markdown) {
+    markdown = markdown.replace(markdownlint.frontMatterRe, "");
     const match = /^\?renderer=([a-z-]+)$/.exec(globalThis.location.search);
     const renderer = match ? match[1] : "micromark";
     if (renderer === "markdown-it") {
