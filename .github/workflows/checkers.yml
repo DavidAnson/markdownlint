@@ -17,7 +17,6 @@ jobs:
       with:
         linksToSkip: '^https://github.com/ ^https://www.jwz.org/ ^https://opensource.org/ ^https://unix.stackexchange.com/'
         paths: '*.md doc/*.md helpers/*.md'
-        timeout: 60000
 
   spellcheck:
     runs-on: ubuntu-latest
