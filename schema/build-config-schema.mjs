@@ -64,6 +64,15 @@ for (const rule of rules) {
   };
   let custom = true;
   switch (ruleName) {
+    case "MD001":
+      scheme.properties = {
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        }
+      };
+      break;
     case "MD003":
       scheme.properties = {
         "style": {
