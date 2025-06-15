@@ -24,7 +24,7 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install --no-package-lock
+      run: npm install
     - name: Clone Test Repos
       run: npm run clone-test-repos
     - name: Lint Test Repos
