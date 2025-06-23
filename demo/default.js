@@ -79,7 +79,7 @@
       };
       try {
         return micromark.compile(compileOptions)(events);
-      } catch (error) {
+      } catch(error) {
         return `[Exception: "${error}"]`;
       }
     }
