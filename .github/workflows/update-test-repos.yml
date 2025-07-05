@@ -9,7 +9,9 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  update:
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
