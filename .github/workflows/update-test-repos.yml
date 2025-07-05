@@ -1,0 +1,28 @@
+name: UpdateTestRepos
+
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  schedule:
+    - cron: '30 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: next
+    - uses: actions/setup-node@v4
+    - run: BRANCHNAME=$(date +update-test-repos-%Y%m%d%H%M%S)
+    - run: git checkout -b $BRANCHNAME
+    - run: npm install
+    - run: npm run update-test-repos
+      continue-on-error: true
+    - run: exit 0
+      if: ${{ success() }}
+    - run: git add .
+    - run: git commit -m "Update test repo snapshots."
+    - run: git push --set-upstream origin $BRANCHNAME
