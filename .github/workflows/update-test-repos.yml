@@ -16,8 +16,8 @@ jobs:
       with:
         ref: next
     - uses: actions/setup-node@v4
-    - run: export BRANCHNAME=$(date +update-test-repos-%Y%m%d%H%M%S)
-    - run: git checkout -b $BRANCHNAME
+    # - run: export BRANCHNAME=$(date +update-test-repos-%Y%m%d%H%M%S)
+    - run: git checkout -b update-test-repos-$GITHUB_RUN_ID
     - run: npm install
     - run: npm run update-test-repos
       continue-on-error: true
@@ -25,4 +25,4 @@ jobs:
       if: ${{ success() }}
     - run: git add .
     - run: git commit -m "Update test repo snapshots."
-    - run: git push --set-upstream origin $BRANCHNAME
+    - run: git push --set-upstream origin update-test-repos-$GITHUB_RUN_ID
