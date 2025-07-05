@@ -16,7 +16,7 @@ jobs:
       with:
         ref: next
     - uses: actions/setup-node@v4
-    - run: BRANCHNAME=$(date +update-test-repos-%Y%m%d%H%M%S)
+    - run: export BRANCHNAME=$(date +update-test-repos-%Y%m%d%H%M%S)
     - run: git checkout -b $BRANCHNAME
     - run: npm install
     - run: npm run update-test-repos
