@@ -12,12 +12,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - run: git config user.email "update-test-repos@example.com"
-    - run: git config user.name "update-test-repos.yml"
     - uses: actions/checkout@v4
       with:
         ref: next
     - uses: actions/setup-node@v4
+    - run: git config user.email "update-test-repos@example.com"
+    - run: git config user.name "update-test-repos.yml"
     - run: git checkout -b update-test-repos-$GITHUB_RUN_ID
     - run: npm install
     - run: npm run update-test-repos
