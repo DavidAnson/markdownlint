@@ -43,6 +43,7 @@ export function lintTestRepo(t, globPatterns, configPath, parallel) {
       config
     }).then((results) => {
       const resultsString = results.toString();
+      console.log(`${t.title}:\n${resultsString}`);
       t.snapshot(
         resultsString,
         "Expected linting violations"
