@@ -1,0 +1,41 @@
+name: UpdateTestRepos
+
+on:
+  push:
+    branches-ignore:
+      - 'dependabot/**'
+  schedule:
+    - cron: '30 12 * * *'
+  workflow_dispatch:
+
+jobs:
+  update:
+    permissions:
+      contents: write
+      pull-requests: write
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: next
+    - uses: actions/setup-node@v4
+    - run: git config user.email "david@dlaa.me"
+    - run: git config user.name "David Anson"
+    - run: git checkout -b update-test-repos-$GITHUB_RUN_ID
+    - run: npm install
+    - run: npm run update-test-repos
+      env:
+        AVA_FORCE_CI: not-ci
+    - run: git diff --exit-code
+      continue-on-error: true
+      id: diff
+    - run: git add .
+      if: ${{ success() && steps.diff.outcome == 'failure' }}
+    - run: git commit -m "Update test repository snapshots."
+      if: ${{ success() && steps.diff.outcome == 'failure' }}
+    - run: git push --set-upstream origin update-test-repos-$GITHUB_RUN_ID
+      if: ${{ success() && steps.diff.outcome == 'failure' }}
+    - run: gh pr create --base next --body "" --title "Update test repository snapshots."
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      if: ${{ success() && steps.diff.outcome == 'failure' }}
