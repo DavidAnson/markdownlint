@@ -22,6 +22,8 @@ jobs:
     - run: git config user.name "David Anson"
     - run: git checkout -b update-test-repos-$GITHUB_RUN_ID
     - run: npm install
+    # REMOVE NEXT LINE
+    - run: node scripts/index.mjs delete test/markdownlint-test-repos-dotnet-docs.mjs test/markdownlint-test-repos-mdn-content.mjs
     - run: npm run update-test-repos
       continue-on-error: true
     - run: exit 0
