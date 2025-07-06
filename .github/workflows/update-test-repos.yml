@@ -12,6 +12,7 @@ jobs:
   update:
     permissions:
       contents: write
+      pull-requests: write
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
@@ -26,17 +27,13 @@ jobs:
     - run: npm install
     # REMOVE NEXT LINE
     - run: node scripts/index.mjs delete test/markdownlint-test-repos-dotnet-docs.mjs test/markdownlint-test-repos-mdn-content.mjs
-    - run: npm run clone-test-repos
     - run: npm run update-test-repos
-      continue-on-error: true
       env:
         AVA_FORCE_CI: not-ci
-    - run: exit 0
-      if: ${{ success() }}
     - run: git add .
     - run: git commit -m "Update test repo snapshots."
     - run: git push --set-upstream origin update-test-repos-$GITHUB_RUN_ID
     # BLOCKED: https://github.com/cli/cli/issues/10093
-    # - run: gh pr create --base next --body "" --title "Update test repo snapshots." --draft
-      # env:
-        # GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    - run: gh pr create --base next --body "" --title "Update test repo snapshots." --draft
+      env:
+        GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
