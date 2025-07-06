@@ -56,7 +56,7 @@
     "declaration": "npm run build-declaration && npm run test-declaration",
     "example": "cd example && node standalone.mjs && grunt markdownlint --force && gulp markdownlint",
     "lint": "eslint --max-warnings 0",
-    "lint-test-repos": "ava --timeout=10m test/markdownlint-test-repos-*.mjs",
+    "lint-test-repos": "ava --timeout=10m test/markdownlint-test-repos-small.mjs",
     "serial-config-docs": "npm run build-config && npm run build-docs",
     "serial-declaration": "npm run build-declaration && npm run test-declaration",
     "test": "ava --timeout=30s test/markdownlint-test.mjs test/markdownlint-test-config.mjs test/markdownlint-test-custom-rules.mjs test/markdownlint-test-exports.mjs test/markdownlint-test-fixes.mjs test/markdownlint-test-helpers.mjs test/markdownlint-test-micromark.mjs test/markdownlint-test-project.mjs test/markdownlint-test-result-object.mjs test/markdownlint-test-scenarios.mjs test/parse-configuration-test.mjs test/resolve-module-test.mjs helpers/test.cjs",
@@ -66,7 +66,7 @@
     "test-declaration-mts": "cd example/typescript && node ../../scripts/index.mjs copy type-check.ts type-check-nodenext.mts && tsc --module nodenext                   type-check-nodenext.mts && node type-check-nodenext.mjs",
     "test-extra": "ava --timeout=10m test/markdownlint-test-extra-parse.mjs test/markdownlint-test-extra-type.mjs",
     "update-snapshots": "ava --update-snapshots test/markdownlint-test-custom-rules.mjs test/markdownlint-test-exports.mjs test/markdownlint-test-micromark.mjs test/markdownlint-test-scenarios.mjs",
-    "update-snapshots-test-repos": "ava --timeout=10m --update-snapshots test/markdownlint-test-repos-small.mjs",
+    "update-snapshots-test-repos": "ava --timeout=10m --update-snapshots test/markdownlint-test-repos-*.mjs",
     "update-test-repos": "node scripts/index.mjs remove ./test-repos && npm run clone-test-repos && npm run update-snapshots-test-repos",
     "upgrade": "npx --yes npm-check-updates --upgrade"
   },
