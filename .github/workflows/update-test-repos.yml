@@ -26,7 +26,7 @@ jobs:
     - run: npm install
     # REMOVE NEXT LINE
     - run: node scripts/index.mjs delete test/markdownlint-test-repos-dotnet-docs.mjs test/markdownlint-test-repos-mdn-content.mjs
-    - run: npm run clone-test-repo
+    - run: npm run clone-test-repos
     # - run: npm run update-test-repos
     - run: ava --timeout=11m --update-snapshots test/markdownlint-test-repos-small.mjs
       continue-on-error: true
