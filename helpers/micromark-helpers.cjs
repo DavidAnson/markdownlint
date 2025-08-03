@@ -298,6 +298,7 @@ const nonContentTokens = new Set([
   "blockQuoteMarker",
   "blockQuotePrefix",
   "blockQuotePrefixWhitespace",
+  "gfmFootnoteDefinitionIndent",
   "lineEnding",
   "lineEndingBlank",
   "linePrefix",
