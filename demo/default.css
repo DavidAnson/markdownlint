@@ -47,6 +47,9 @@ textarea {
   font-style: italic;
   white-space: pre-wrap;
 }
+.error {
+  background: rgb(255, 0, 0, 0.3);
+}
 .flex-rows {
   display: flex;
   flex-direction: column;
@@ -64,7 +67,7 @@ textarea {
   min-height: 0;
 }
 .highlight {
-  background: yellow;
+  background: rgb(255, 0, 0, 0.8);
 }
 .inset {
   box-sizing: border-box;
