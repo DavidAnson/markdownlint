@@ -468,7 +468,7 @@ test("styleAll", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 140 ],
+      "MD047": [ 144 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -476,8 +476,10 @@ test("styleAll", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ],
-      "MD058": [ 117, 119 ]
+      "MD056": [ 116 ],
+      "MD058": [ 119, 121 ],
+      "MD059": [ 124 ],
+      "MD060": [ 110 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -516,7 +518,7 @@ test("styleRelaxed", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 140 ],
+      "MD047": [ 144 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -524,8 +526,10 @@ test("styleRelaxed", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ],
-      "MD058": [ 117, 119 ]
+      "MD056": [ 116 ],
+      "MD058": [ 119, 121 ],
+      "MD059": [ 124 ],
+      "MD060": [ 110 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -833,7 +837,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(130);
+  t.plan(132);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -908,7 +912,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(204);
+  t.plan(209);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1030,7 +1034,7 @@ test("validateConfigExampleJson", (t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(156);
+  t.plan(159);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);

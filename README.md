@@ -149,6 +149,7 @@ playground for learning and exploring.
 - **[MD056](doc/md056.md)** *table-column-count* - Table column count
 - **[MD058](doc/md058.md)** *blanks-around-tables* - Tables should be surrounded by blank lines
 - **[MD059](doc/md059.md)** *descriptive-link-text* - Link text should be descriptive
+- **[MD060](doc/md060.md)** *table-column-style* - Table column style
 
 <!-- markdownlint-restore -->
 
@@ -190,7 +191,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
-- **`table`** - `MD055`, `MD056`, `MD058`
+- **`table`** - `MD055`, `MD056`, `MD058`, `MD060`
 - **`ul`** - `MD004`, `MD005`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,

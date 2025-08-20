@@ -604,6 +604,21 @@ for (const rule of rules) {
         }
       };
       break;
+    case "MD060":
+      scheme.properties = {
+        "style": {
+          "description": "Table column style",
+          "type": "string",
+          "enum": [
+            "any",
+            "aligned",
+            "compact",
+            "tight"
+          ],
+          "default": "any"
+        }
+      };
+      break;
     default:
       custom = false;
       break;

@@ -107,7 +107,9 @@ Strong **with** different style {MD050}
 
 | table  | header |
 |--------|--------|
- {MD055} | cell   |
+ {MD055} | cell  |
+
+{MD060:-2}
 
 | table   | header |
 |---------|--------|
@@ -115,9 +117,11 @@ Strong **with** different style {MD050}
 
 Text
 | table {MD058} |
-|-------|
+| ------- |
 | cell  {MD058} |
 > Blockquote
+
+[click here](https://example.org) {MD059}
 
 <!-- markdownlint-configure-file {
   "required-headings": {

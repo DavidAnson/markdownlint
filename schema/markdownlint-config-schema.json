@@ -1869,6 +1869,50 @@
       },
       "additionalProperties": false
     },
+    "MD060": {
+      "description": "MD060/table-column-style : Table column style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md060.md",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Table column style",
+          "type": "string",
+          "enum": [
+            "any",
+            "aligned",
+            "compact",
+            "tight"
+          ],
+          "default": "any"
+        }
+      },
+      "additionalProperties": false
+    },
+    "table-column-style": {
+      "description": "MD060/table-column-style : Table column style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md060.md",
+      "type": [
+        "boolean",
+        "object"
+      ],
+      "default": true,
+      "properties": {
+        "style": {
+          "description": "Table column style",
+          "type": "string",
+          "enum": [
+            "any",
+            "aligned",
+            "compact",
+            "tight"
+          ],
+          "default": "any"
+        }
+      },
+      "additionalProperties": false
+    },
     "headings": {
       "description": "headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043",
       "type": "boolean",
@@ -1985,7 +2029,7 @@
       "default": true
     },
     "table": {
-      "description": "table : MD055, MD056, MD058",
+      "description": "table : MD055, MD056, MD058, MD060",
       "type": "boolean",
       "default": true
     }

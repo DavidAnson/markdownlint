@@ -1187,6 +1187,28 @@ export interface ConfigurationStrict {
         prohibited_texts?: string[];
       };
   /**
+   * MD060/table-column-style : Table column style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md060.md
+   */
+  MD060?:
+    | boolean
+    | {
+        /**
+         * Table column style
+         */
+        style?: "any" | "aligned" | "compact" | "tight";
+      };
+  /**
+   * MD060/table-column-style : Table column style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md060.md
+   */
+  "table-column-style"?:
+    | boolean
+    | {
+        /**
+         * Table column style
+         */
+        style?: "any" | "aligned" | "compact" | "tight";
+      };
+  /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
   headings?: boolean;
@@ -1279,7 +1301,7 @@ export interface ConfigurationStrict {
    */
   images?: boolean;
   /**
-   * table : MD055, MD056, MD058
+   * table : MD055, MD056, MD058, MD060
    */
   table?: boolean;
 }

@@ -2549,7 +2549,7 @@ Rationale: Some parsers have difficulty with tables that are missing their
 leading or trailing pipe characters. The use of leading/trailing pipes can also
 help provide visual clarity.
 
-[gfm-table-055]: https://github.github.com/gfm/#tables-extension-
+[gfm-table-055]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
 
 <a name="md056"></a>
 
@@ -2589,7 +2589,7 @@ of cells or it will not be recognized as a table (per specification).
 Rationale: Extra cells in a row are usually not shown, so their data is lost.
 Missing cells in a row create holes in the table and suggest an omission.
 
-[gfm-table-056]: https://github.github.com/gfm/#tables-extension-
+[gfm-table-056]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
 
 <a name="md058"></a>
 
@@ -2677,6 +2677,79 @@ More information:
 
 - <https://webaim.org/techniques/hypertext/>
 - <https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-link-only.html>
+
+<a name="md060"></a>
+
+## `MD060` - Table column style
+
+Tags: `table`
+
+Aliases: `table-column-style`
+
+Parameters:
+
+- `style`: Table column style (`string`, default `any`, values `aligned` /
+  `any` / `compact` / `tight`)
+
+This rule is triggered when the column separators of a
+[GitHub Flavored Markdown table][gfm-table-060] are used inconsistently.
+
+This rule recognizes three table column styles based on popular use:
+
+Style `aligned` looks the most like a table:
+
+```markdown
+| Character | Meaning |
+| --------- | ------- |
+| Y         | Yes     |
+| N         | No      |
+```
+
+Style `compact` uses a single space to pad cell content:
+
+```markdown
+| Character | Meaning |
+| --- | --- |
+| Y | Yes |
+| N | No |
+```
+
+Style `tight` uses no padding for cell content:
+
+```markdown
+|Character|Meaning|
+|---|---|
+|Y|Yes|
+|N|No|
+```
+
+When this rule's `style` parameter is set to `aligned`, `compact`, or `tight`,
+every table must match the corresponding pattern and errors will be reported for
+any violations. By default, or when the `any` style is used, each table is
+analyzed to see if it satisfies any supported style. If so, no errors are
+reported. If not, errors are be reported for whichever style would produce the
+*fewest* errors (i.e., whichever style is the closest match).
+
+Note: Pipe alignment for the `aligned` style is based on character count, so
+wide characters and multi-character encodings can produce unexpected results.
+The following table is correctly aligned based on character count, though some
+editors render the emoji wider:
+
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable extended-ascii -->
+
+```markdown
+| Response | Emoji |
+| -------- | ----- |
+| Yes      | ✅     |
+| No       | ❎     |
+```
+
+<!-- markdownlint-restore -->
+
+Rationale: Consistent formatting makes it easier to understand a document.
+
+[gfm-table-060]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {
