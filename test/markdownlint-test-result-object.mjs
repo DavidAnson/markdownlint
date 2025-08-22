@@ -405,7 +405,7 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md037.md`,
           "errorDetail": null,
           "errorContext": "* e",
-          "errorRange": [ 6, 3 ],
+          "errorRange": [ 7, 1 ],
           "fixInfo": {
             "editColumn": 7,
             "deleteCount": 1
@@ -418,7 +418,7 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md037.md`,
           "errorDetail": null,
           "errorContext": "s *",
-          "errorRange": [ 15, 3 ],
+          "errorRange": [ 16, 1 ],
           "fixInfo": {
             "editColumn": 16,
             "deleteCount": 1
