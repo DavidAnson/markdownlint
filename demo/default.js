@@ -117,7 +117,8 @@
         var paddedIndex = (padding + index).slice(-padding.length);
         return (
           `<span><em id='l${index}'>${paddedIndex}</em>: ` +
-            [ ...line ].map((c, i) => `<span id='l${index}c${i + 1}'>${sanitize(c)}</span>`).join("") +
+            // eslint-disable-next-line unicorn/prefer-spread
+            line.split("").map((c, i) => `<span id='l${index}c${i + 1}'>${sanitize(c)}</span>`).join("") +
           "</span>"
         );
       }).join("\n");
