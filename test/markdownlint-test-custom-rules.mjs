@@ -24,6 +24,7 @@ test("customRulesV0", (t) => new Promise((resolve) => {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     markdownItFactory,
+    // @ts-ignore
     "resultVersion": 0
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -97,6 +98,7 @@ test("customRulesV1", (t) => new Promise((resolve) => {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     markdownItFactory,
+    // @ts-ignore
     "resultVersion": 1
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -229,6 +231,7 @@ test("customRulesV2", (t) => new Promise((resolve) => {
     "customRules": customRules.all,
     "files": [ customRulesMd ],
     markdownItFactory,
+    // @ts-ignore
     "resultVersion": 2
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -358,6 +361,7 @@ test("customRulesConfig", (t) => new Promise((resolve) => {
       "letters-e-x": false
     },
     markdownItFactory,
+    // @ts-ignore
     "resultVersion": 0
   };
   lintAsync(options, function callback(err, actualResult) {
@@ -387,6 +391,7 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
     "strings": {
       "string": "# Text\n\n---\n\nText ✅\n"
     },
+    // @ts-ignore
     "resultVersion": 0
   };
   lintAsync(options, function callback(err, actualResult) {

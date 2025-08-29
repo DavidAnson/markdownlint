@@ -432,10 +432,6 @@ export type Options = {
      */
     noInlineConfig?: boolean;
     /**
-     * Results object version.
-     */
-    resultVersion?: number;
-    /**
      * Strings to lint.
      */
     strings?: {
@@ -451,7 +447,7 @@ export type Plugin = any[];
  */
 export type ToStringCallback = (ruleAliases?: boolean) => string;
 /**
- * Lint results (for resultVersion 3).
+ * Lint results.
  */
 export type LintResults = {
     [x: string]: LintError[];

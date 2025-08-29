@@ -546,6 +546,7 @@ test("nullFrontMatter", (t) => new Promise((resolve) => {
       "default": false,
       "MD010": true
     },
+    // @ts-ignore
     "resultVersion": 0
   }, function callback(err, result) {
     t.falsy(err);
@@ -598,6 +599,7 @@ test("noInlineConfig", (t) => new Promise((resolve) => {
       ].join("\n")
     },
     "noInlineConfig": true,
+    // @ts-ignore
     "resultVersion": 0
   }, function callback(err, result) {
     t.falsy(err);
@@ -646,7 +648,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "##### options.handleRuleFailures",
           "##### options.markdownItFactory",
           "##### options.noInlineConfig",
-          "##### options.resultVersion",
+          "##### ~~options.resultVersion~~",
           "##### options.strings",
           "#### callback",
           "#### result",
@@ -1229,6 +1231,7 @@ Text with: [^footnote]
 [reference]: https://example.com
 `
     },
+    // @ts-ignore
     "resultVersion": 0
   }, (err, actual) => {
     t.falsy(err);

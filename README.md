@@ -620,28 +620,15 @@ By default, properly-formatted inline comments can be used to create exceptions
 for parts of a document. Setting `noInlineConfig` to `true` ignores all such
 comments.
 
-##### options.resultVersion
+##### ~~options.resultVersion~~
 
-Type: `Number`
+This property is *deprecated* and should be removed. The default format of the
+`result` object remains the same as setting `resultVersion` to `3`. For
+continued access to other (previously *deprecated*) formats:
 
-Specifies which version of the `result` object to return (see the "Usage"
-section below for examples).
-
-Passing a `resultVersion` of `0` corresponds to the original, simple format
-where each error is identified by rule name and line number. *Deprecated*
-
-Passing a `resultVersion` of `1` corresponds to a detailed format where each
-error includes information about the line number, rule name, alias, description,
-as well as any additional detail or context that is available. *Deprecated*
-
-Passing a `resultVersion` of `2` corresponds to a detailed format where each
-error includes information about the line number, rule names, description, as
-well as any additional detail or context that is available. *Deprecated*
-
-Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
-with additional information about how to fix automatically-fixable errors. In
-this mode, all errors that occur on each line are reported (other versions
-report only the first error for each rule). This is the default behavior.
+```javascript
+import { convertToResultVersion0, convertToResultVersion1, convertToResultVersion2 } from "markdownlint/helpers";
+```
 
 ##### options.strings
 

@@ -538,3 +538,111 @@ function expandTildePath(file, os) {
   return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
 }
 module.exports.expandTildePath = expandTildePath;
+
+/** @typedef {import("../lib/markdownlint.mjs").LintError[]} LintErrors */
+/** @typedef {import("../lib/markdownlint.mjs").LintResults} LintResults */
+
+/**
+ * Converts lint errors from resultVersion 3 to 2.
+ *
+ * @param {LintErrors} errors Lint errors (v3).
+ * @returns {LintErrors} Lint errors (v2).
+ */
+function convertLintErrorsVersion3To2(errors) {
+  const noPrevious = {
+    "ruleNames": [],
+    "lineNumber": -1
+  };
+  return errors.filter((error, index, array) => {
+    delete error.fixInfo;
+    const previous = array[index - 1] || noPrevious;
+    return (
+      (error.ruleNames[0] !== previous.ruleNames[0]) ||
+      (error.lineNumber !== previous.lineNumber)
+    );
+  });
+}
+
+/**
+ * Converts lint errors from resultVersion 2 to 1.
+ *
+ * @param {LintErrors} errors Lint errors (v2).
+ * @returns {LintErrors} Lint errors (v1).
+ */
+function convertLintErrorsVersion2To1(errors) {
+  for (const error of errors) {
+    // @ts-ignore
+    error.ruleName = error.ruleNames[0];
+    // @ts-ignore
+    error.ruleAlias = error.ruleNames[1] || error.ruleName;
+    // @ts-ignore
+    delete error.ruleNames;
+  }
+  return errors;
+}
+
+/**
+ * Converts lint errors from resultVersion 2 to 0.
+ *
+ * @param {LintErrors} errors Lint errors (v2).
+ * @returns {LintErrors} Lint errors (v0).
+ */
+function convertLintErrorsVersion2To0(errors) {
+  const dictionary = {};
+  for (const error of errors) {
+    const ruleName = error.ruleNames[0];
+    const ruleLines = dictionary[ruleName] || [];
+    ruleLines.push(error.lineNumber);
+    dictionary[ruleName] = ruleLines;
+  }
+  // @ts-ignore
+  return dictionary;
+}
+
+/**
+ * Copies and transforms lint results from resultVersion 3 to ?.
+ *
+ * @param {LintResults} results Lint results (v3).
+ * @param {(LintErrors) => LintErrors} transform Lint errors (v?).
+ * @returns {LintResults} Lint results (v?).
+ */
+function copyAndTransformResults(results, transform) {
+  const newResults = {};
+  Object.defineProperty(newResults, "toString", { "value": results.toString });
+  for (const key of Object.keys(results)) {
+    const arr = results[key].map((r) => ({ ...r }));
+    newResults[key] = transform(arr);
+  }
+  // @ts-ignore
+  return newResults;
+}
+
+/**
+ * Converts lint results from resultVersion 3 to 0.
+ *
+ * @param {LintResults} results Lint results (v3).
+ * @returns {LintResults} Lint results (v0).
+ */
+module.exports.convertToResultVersion0 = function convertToResultVersion0(results) {
+  return copyAndTransformResults(results, (r) => convertLintErrorsVersion2To0(convertLintErrorsVersion3To2(r)));
+};
+
+/**
+ * Converts lint results from resultVersion 3 to 1.
+ *
+ * @param {LintResults} results Lint results (v3).
+ * @returns {LintResults} Lint results (v1).
+ */
+module.exports.convertToResultVersion1 = function convertToResultVersion1(results) {
+  return copyAndTransformResults(results, (r) => convertLintErrorsVersion2To1(convertLintErrorsVersion3To2(r)));
+};
+
+/**
+ * Converts lint results from resultVersion 3 to 2.
+ *
+ * @param {LintResults} results Lint results (v3).
+ * @returns {LintResults} Lint results (v2).
+ */
+module.exports.convertToResultVersion2 = function convertToResultVersion2(results) {
+  return copyAndTransformResults(results, convertLintErrorsVersion3To2);
+};
