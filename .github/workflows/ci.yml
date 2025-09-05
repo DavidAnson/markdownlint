@@ -22,7 +22,7 @@ jobs:
     steps:
     - uses: actions/checkout@v5
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
@@ -40,7 +40,7 @@ jobs:
       with:
         version: latest
     - name: Use Node.js latest
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: latest
     - name: Install dependencies
