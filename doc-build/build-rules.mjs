@@ -8,7 +8,7 @@ const maxLineLength = 80;
 
 const pathFor = (relativePath) => new URL(relativePath, import.meta.url);
 const inCode = (items) => items.map((item) => `\`${item}\``);
-const sortedComma = (items) => items.sort().join(", ");
+const sortedComma = (items) => items.toSorted().join(", ");
 const linesFrom = (text) => text.split(newLineRe);
 const wrapListItem = (line) => {
   const wrappedLines = [];
@@ -66,7 +66,7 @@ for (const rule of rules) {
       "Parameters:",
       ""
     );
-    for (const property of Object.keys(ruleData.properties).sort()) {
+    for (const property of Object.keys(ruleData.properties).toSorted()) {
       const propData = ruleData.properties[property];
       const propType = [ propData.type ]
         .flat()
@@ -75,7 +75,7 @@ for (const rule of rules) {
       const defaultValue = Array.isArray(propData.default) ?
         JSON.stringify(propData.default) :
         propData.default;
-      const allValues = propData.enum?.sort();
+      const allValues = propData.enum?.toSorted();
       const listItem = `- \`${property}\`: ${propData.description} (` +
         `\`${propType}\`, default \`${defaultValue}\`` +
         (propData.enum ?
