@@ -63,19 +63,19 @@ export function readConfigSync(file: string, parsers?: ConfigurationParser[], fs
  * Applies the specified fix to a Markdown content line.
  *
  * @param {string} line Line of Markdown content.
- * @param {RuleOnErrorFixInfo} fixInfo RuleOnErrorFixInfo instance.
+ * @param {FixInfo} fixInfo FixInfo instance.
  * @param {string} [lineEnding] Line ending to use.
  * @returns {string | null} Fixed content or null if deleted.
  */
-export function applyFix(line: string, fixInfo: RuleOnErrorFixInfo, lineEnding?: string): string | null;
+export function applyFix(line: string, fixInfo: FixInfo, lineEnding?: string): string | null;
 /**
  * Applies as many of the specified fixes as possible to Markdown content.
  *
  * @param {string} input Lines of Markdown content.
- * @param {RuleOnErrorInfo[]} errors RuleOnErrorInfo instances.
+ * @param {LintError[]} errors LintError instances.
  * @returns {string} Fixed content.
  */
-export function applyFixes(input: string, errors: RuleOnErrorInfo[]): string;
+export function applyFixes(input: string, errors: LintError[]): string;
 /**
  * Gets the (semantic) version of the library.
  *
@@ -321,27 +321,6 @@ export type RuleOnErrorFixInfo = {
     insertText?: string;
 };
 /**
- * RuleOnErrorInfo with all optional properties present.
- */
-export type RuleOnErrorFixInfoNormalized = {
-    /**
-     * Line number (1-based).
-     */
-    lineNumber: number;
-    /**
-     * Column of the fix (1-based).
-     */
-    editColumn: number;
-    /**
-     * Count of characters to delete.
-     */
-    deleteCount: number;
-    /**
-     * Text to insert (after deleting).
-     */
-    insertText: string;
-};
-/**
  * Rule definition.
  */
 export type Rule = {
@@ -443,10 +422,6 @@ export type Options = {
  */
 export type Plugin = any[];
 /**
- * Function to pretty-print lint results.
- */
-export type ToStringCallback = (ruleAliases?: boolean) => string;
-/**
  * Lint results.
  */
 export type LintResults = {
@@ -483,11 +458,11 @@ export type LintError = {
     /**
      * Column number (1-based) and length.
      */
-    errorRange: number[];
+    errorRange: number[] | null;
     /**
      * Fix information.
      */
-    fixInfo?: FixInfo;
+    fixInfo: FixInfo | null;
 };
 /**
  * Fix information.
@@ -509,6 +484,27 @@ export type FixInfo = {
      * Text to insert (after deleting).
      */
     insertText?: string;
+};
+/**
+ * FixInfo with all optional properties present.
+ */
+export type FixInfoNormalized = {
+    /**
+     * Line number (1-based).
+     */
+    lineNumber: number;
+    /**
+     * Column of the fix (1-based).
+     */
+    editColumn: number;
+    /**
+     * Count of characters to delete.
+     */
+    deleteCount: number;
+    /**
+     * Text to insert (after deleting).
+     */
+    insertText: string;
 };
 /**
  * Called with the result of linting a string or document.

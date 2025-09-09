@@ -659,9 +659,9 @@ Standard completion callback.
 
 Type: `Object`
 
-Call `result.toString()` for convenience or see below for an example of the
-structure of the `result` object. Passing the value `true` to `toString()`
-uses rule aliases (ex: `no-hard-tabs`) instead of names (ex: `MD010`).
+Map of input file names and string identifiers to issues within.
+
+See the [Usage section](#usage) for an example of the structure of this object.
 
 ### Config
 
@@ -837,7 +837,7 @@ console.log(getVersion());
 
 ## Usage
 
-Invoke `lint` and use the `result` object's `toString` method:
+Invoke `lint` as an asynchronous call:
 
 ```javascript
 import { lint as lintAsync } from "markdownlint/async";
@@ -852,22 +852,9 @@ const options = {
 
 lintAsync(options, function callback(error, results) {
   if (!error && results) {
-    console.log(results.toString());
+    console.dir(results, { "colors": true, "depth": null });
   }
 });
-```
-
-Output:
-
-```text
-bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
-bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.string"]
-bad.string: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This string fails        some rules."]
-bad.string: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.string"]
-bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
-bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
-bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 ```
 
 Or as a synchronous call:
@@ -876,10 +863,10 @@ Or as a synchronous call:
 import { lint as lintSync } from "markdownlint/sync";
 
 const results = lintSync(options);
-console.log(results.toString());
+console.dir(results, { "colors": true, "depth": null });
 ```
 
-To examine the `result` object directly via a `Promise`-based call:
+Or as a `Promise`-based call:
 
 ```javascript
 import { lint as lintPromise } from "markdownlint/promise";
@@ -888,7 +875,7 @@ const results = await lintPromise(options);
 console.dir(results, { "colors": true, "depth": null });
 ```
 
-Output:
+All of which return an object like:
 
 ```json
 {
@@ -900,37 +887,35 @@ Output:
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md010.md",
       "errorDetail": "Column: 17",
       "errorContext": null,
-      "errorRange": [ 17, 1 ] },
+      "errorRange": [ 17, 1 ],
+      "fixInfo": { "editColumn": 17, "deleteCount": 1, "insertText": ' ' } }
     { "lineNumber": 1,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md018.md",
       "errorDetail": null,
       "errorContext": "#bad.md",
-      "errorRange": [ 1, 2 ] },
+      "errorRange": [ 1, 2 ],
+      "fixInfo": { "editColumn": 2, "insertText": ' ' } }
     { "lineNumber": 3,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md018.md",
       "errorDetail": null,
       "errorContext": "#This file fails\tsome rules.",
-      "errorRange": [ 1, 2 ] },
+      "errorRange": [ 1, 2 ],
+      "fixInfo": { "editColumn": 2, "insertText": ' ' } }
     { "lineNumber": 1,
       "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
       "ruleDescription": "First line in a file should be a top-level heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md041.md",
       "errorDetail": null,
       "errorContext": "#bad.md",
-      "errorRange": null }
+      "errorRange": null,
+      "fixInfo": null }
   ]
 }
 ```
-
-Integration with the [gulp](https://gulpjs.com/) build system is
-straightforward: [`gulpfile.cjs`](example/gulpfile.cjs).
-
-Integration with the [Grunt](https://gruntjs.com/) build system is similar:
-[`Gruntfile.cjs`](example/Gruntfile.cjs).
 
 ## Browser
 
@@ -957,7 +942,7 @@ const options = {
   }
 };
 
-const results = globalThis.markdownlint.lintSync(options).toString();
+const results = globalThis.markdownlint.lintSync(options);
 ```
 
 ## Examples

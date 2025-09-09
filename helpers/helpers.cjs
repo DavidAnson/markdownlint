@@ -554,6 +554,7 @@ function convertLintErrorsVersion3To2(errors) {
     "lineNumber": -1
   };
   return errors.filter((error, index, array) => {
+    // @ts-ignore
     delete error.fixInfo;
     const previous = array[index - 1] || noPrevious;
     return (
@@ -645,4 +646,32 @@ module.exports.convertToResultVersion1 = function convertToResultVersion1(result
  */
 module.exports.convertToResultVersion2 = function convertToResultVersion2(results) {
   return copyAndTransformResults(results, convertLintErrorsVersion3To2);
+};
+
+/**
+ * Formats lint results to an array of strings.
+ *
+ * @param {LintResults|undefined} lintResults Lint results.
+ * @returns {string[]} Lint error strings.
+ */
+module.exports.formatLintResults = function formatLintResults(lintResults) {
+  const results = [];
+  const entries = Object.entries(lintResults || {});
+  entries.sort((a, b) => a[0].localeCompare(b[0]));
+  for (const [ source, lintErrors ] of entries) {
+    for (const lintError of lintErrors) {
+      results.push(
+        source + ": " +
+        lintError.lineNumber + ": " +
+        lintError.ruleNames.join("/") + " " +
+        lintError.ruleDescription +
+        (lintError.errorDetail ?
+          " [" + lintError.errorDetail + "]" :
+          "") +
+        (lintError.errorContext ?
+          " [Context: \"" + lintError.errorContext + "\"]" :
+          ""));
+    }
+  }
+  return results;
 };

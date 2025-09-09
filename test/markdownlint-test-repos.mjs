@@ -5,6 +5,7 @@ const { join } = path.posix;
 import { globby } from "globby";
 import jsoncParser from "jsonc-parser";
 import jsYaml from "js-yaml";
+import { formatLintResults } from "markdownlint/helpers";
 import { lint, readConfig } from "markdownlint/promise";
 import { markdownlintParallel } from "./markdownlint-test-parallel.mjs";
 
@@ -49,9 +50,8 @@ export function lintTestRepo(t, globPatterns, configPath, configOverrides, paral
       files,
       config
     }).then((results) => {
-      const resultsString = results.toString();
       t.snapshot(
-        resultsString,
+        formatLintResults(results).join("\n"),
         "Expected linting violations"
       );
     });

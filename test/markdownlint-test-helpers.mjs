@@ -5,7 +5,7 @@ import path from "node:path";
 import test from "ava";
 import { characterEntities } from "character-entities";
 import { gemoji } from "gemoji";
-import helpers from "../helpers/helpers.cjs";
+import helpers, { formatLintResults } from "../helpers/helpers.cjs";
 import { lint } from "markdownlint/promise";
 import { forEachInlineCodeSpan } from "../lib/markdownit.cjs";
 import { getReferenceLinkImageData } from "../lib/cache.mjs";
@@ -528,4 +528,18 @@ test("hasOverlap", (t) => {
     t.false(helpers.hasOverlap(rangeA, rangeB), JSON.stringify({ rangeA, rangeB }));
     t.false(helpers.hasOverlap(rangeB, rangeA), JSON.stringify({ rangeB, rangeA }));
   }
+});
+
+test("formatLintResults", async(t) => {
+  t.plan(2);
+  t.deepEqual(formatLintResults(undefined), []);
+  const lintResults = await lint({ "strings": { "content": "#  Heading <br/>" } });
+  t.deepEqual(
+    formatLintResults(lintResults),
+    [
+      "content: 1: MD019/no-multiple-space-atx Multiple spaces after hash on atx style heading [Context: \"#  Heading <br/>\"]",
+      "content: 1: MD033/no-inline-html Inline HTML [Element: br]",
+      "content: 1: MD047/single-trailing-newline Files should end with a single newline character"
+    ]
+  );
 });

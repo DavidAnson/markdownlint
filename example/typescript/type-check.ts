@@ -171,13 +171,15 @@ lintAsync(options, assertLintResultsCallback);
   assertLintResultsCallback(null, await lintPromise(options));
 })();
 
+const needsFixing = "#  Heading\n";
+
 assert.equal(
   applyFix(
-    "# Fixing\n",
+    needsFixing,
     {
-      "insertText": "Head",
-      "editColumn": 3,
-      "deleteCount": 3
+      "insertText": " ",
+      "editColumn": 2,
+      "deleteCount": 2
     },
     "\n"
   ),
@@ -186,17 +188,12 @@ assert.equal(
 
 assert.equal(
   applyFixes(
-    "# Fixing\n",
-    [
-      {
-        "lineNumber": 1,
-        "fixInfo": {
-          "insertText": "Head",
-          "editColumn": 3,
-          "deleteCount": 3
-        }
+    needsFixing,
+    lintSync({
+      "strings": {
+        needsFixing
       }
-    ]
+    })["needsFixing"]
   ),
   "# Heading\n"
 );
