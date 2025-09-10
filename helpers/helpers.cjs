@@ -660,17 +660,15 @@ module.exports.formatLintResults = function formatLintResults(lintResults) {
   entries.sort((a, b) => a[0].localeCompare(b[0]));
   for (const [ source, lintErrors ] of entries) {
     for (const lintError of lintErrors) {
-      results.push(
-        source + ": " +
-        lintError.lineNumber + ": " +
-        lintError.ruleNames.join("/") + " " +
-        lintError.ruleDescription +
-        (lintError.errorDetail ?
-          " [" + lintError.errorDetail + "]" :
-          "") +
-        (lintError.errorContext ?
-          " [Context: \"" + lintError.errorContext + "\"]" :
-          ""));
+      const { lineNumber, ruleNames, ruleDescription, errorDetail, errorContext, errorRange } = lintError;
+      const rule = ruleNames.join("/");
+      const line = `:${lineNumber}`;
+      const rangeStart = (errorRange && errorRange[0]) || 0;
+      const column = rangeStart ? `:${rangeStart}` : "";
+      const description = ruleDescription;
+      const detail = (errorDetail ? ` [${errorDetail}]` : "");
+      const context = (errorContext ? ` [Context: "${errorContext}"]` : "");
+      results.push(`${source}${line}${column} ${rule} ${description}${detail}${context}`);
     }
   }
   return results;

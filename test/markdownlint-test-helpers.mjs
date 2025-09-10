@@ -533,13 +533,14 @@ test("hasOverlap", (t) => {
 test("formatLintResults", async(t) => {
   t.plan(2);
   t.deepEqual(formatLintResults(undefined), []);
-  const lintResults = await lint({ "strings": { "content": "#  Heading <br/>" } });
+  const lintResults = await lint({ "strings": { "content": "#  Heading\n<br/>" } });
   t.deepEqual(
     formatLintResults(lintResults),
     [
-      "content: 1: MD019/no-multiple-space-atx Multiple spaces after hash on atx style heading [Context: \"#  Heading <br/>\"]",
-      "content: 1: MD033/no-inline-html Inline HTML [Element: br]",
-      "content: 1: MD047/single-trailing-newline Files should end with a single newline character"
+      "content:1:3 MD019/no-multiple-space-atx Multiple spaces after hash on atx style heading [Context: \"#  Heading\"]",
+      "content:1 MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Below] [Context: \"#  Heading\"]",
+      "content:2:1 MD033/no-inline-html Inline HTML [Element: br]",
+      "content:2:5 MD047/single-trailing-newline Files should end with a single newline character"
     ]
   );
 });
