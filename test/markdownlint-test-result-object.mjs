@@ -370,7 +370,8 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "fixInfo": {
             "editColumn": 10,
             "deleteCount": 3
-          }
+          },
+          "severity": "error"
         },
         {
           "lineNumber": 3,
@@ -384,7 +385,8 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
             "editColumn": 5,
             "deleteCount": 1,
             "insertText": " "
-          }
+          },
+          "severity": "error"
         },
         {
           "lineNumber": 3,
@@ -398,7 +400,8 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
             "editColumn": 10,
             "deleteCount": 2,
             "insertText": "  "
-          }
+          },
+          "severity": "error"
         },
         {
           "lineNumber": 4,
@@ -411,7 +414,8 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "fixInfo": {
             "editColumn": 7,
             "deleteCount": 1
-          }
+          },
+          "severity": "error"
         },
         {
           "lineNumber": 4,
@@ -424,7 +428,8 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "fixInfo": {
             "editColumn": 16,
             "deleteCount": 1
-          }
+          },
+          "severity": "error"
         },
         {
           "lineNumber": 4,
@@ -437,7 +442,8 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "fixInfo": {
             "insertText": "\n",
             "editColumn": 23
-          }
+          },
+          "severity": "error"
         }
       ]
     };
@@ -568,7 +574,8 @@ test("manyPerLineResultVersion3", (t) => new Promise((resolve) => {
             "editColumn": 10,
             "deleteCount": 1,
             "insertText": " "
-          }
+          },
+          "severity": "error"
         },
         {
           "lineNumber": 1,
@@ -583,7 +590,8 @@ test("manyPerLineResultVersion3", (t) => new Promise((resolve) => {
             "editColumn": 18,
             "deleteCount": 2,
             "insertText": "  "
-          }
+          },
+          "severity": "error"
         }
       ]
     };
@@ -617,7 +625,8 @@ test("frontMatterResultVersion3", (t) => new Promise((resolve) => {
           "fixInfo": {
             "lineNumber": 4,
             "insertText": "\n"
-          }
+          },
+          "severity": "error"
         }
       ]
     };

@@ -59,7 +59,8 @@ function assertLintResults(results: LintResults) {
           "editColumn": 1,
           "deleteCount": 1,
           "insertText": "text"
-        }
+        },
+        "severity": "error"
       }
     ]
   };

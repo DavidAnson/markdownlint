@@ -970,7 +970,8 @@ test("customRulesDefinitionStatic", (t) => new Promise((resolve) => {
           "errorDetail": null,
           "errorContext": null,
           "errorRange": null,
-          "fixInfo": null
+          "fixInfo": null,
+          "severity": "error"
         }
       ]
     };
@@ -1428,7 +1429,8 @@ test("customRulesOnErrorLazy", (t) => new Promise((resolve) => {
           "errorDetail": null,
           "errorContext": null,
           "errorRange": [ 1, 1 ],
-          "fixInfo": null
+          "fixInfo": null,
+          "severity": "error"
         }
       ]
     };
@@ -1492,7 +1494,8 @@ test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
             "editColumn": 1,
             "deleteCount": 2,
             "insertText": "text"
-          }
+          },
+          "severity": "error"
         }
       ]
     };
@@ -1535,7 +1538,8 @@ test("customRulesOnErrorInvalidHandled", (t) => new Promise((resolve) => {
             "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
           "errorContext": null,
           "errorRange": null,
-          "fixInfo": null
+          "fixInfo": null,
+          "severity": "error"
         }
       ]
     };
@@ -1578,7 +1582,8 @@ test("customRulesOnErrorInvalidHandledSync", (t) => {
           "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
         "errorContext": null,
         "errorRange": null,
-        "fixInfo": null
+        "fixInfo": null,
+        "severity": "error"
       }
     ]
   };
@@ -1895,7 +1900,8 @@ test("customRulesLintJavaScript", (t) => new Promise((resolve) => {
           "errorDetail": "'console' is not defined.",
           "errorContext": "console.log(x);",
           "errorRange": null,
-          "fixInfo": null
+          "fixInfo": null,
+          "severity": "error"
         }
       ]
     };
@@ -1923,7 +1929,8 @@ test("customRulesValidateJson", (t) => new Promise((resolve) => {
           "ruleInformation": null,
           "errorContext": null,
           "errorRange": null,
-          "fixInfo": null
+          "fixInfo": null,
+          "severity": "error"
         }
       ]
     };
@@ -2179,7 +2186,8 @@ test("customRulesAsyncReadFiles", (t) => {
         "fixInfo": {
           "editColumn": 10,
           "insertText": "\n"
-        }
+        },
+        "severity": "error"
       },
       {
         "lineNumber": 1,
@@ -2189,7 +2197,8 @@ test("customRulesAsyncReadFiles", (t) => {
         "errorDetail": "detail1",
         "errorContext": "context1",
         "errorRange": [ 2, 3 ],
-        "fixInfo": null
+        "fixInfo": null,
+        "severity": "error"
       },
       {
         "lineNumber": 1,
@@ -2199,7 +2208,8 @@ test("customRulesAsyncReadFiles", (t) => {
         "errorDetail": "detail2",
         "errorContext": "context2",
         "errorRange": null,
-        "fixInfo": null
+        "fixInfo": null,
+        "severity": "error"
       }
     ]
   };
@@ -2250,7 +2260,8 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "errorDetail": null,
         "errorContext": null,
         "errorRange": null,
-        "fixInfo": null
+        "fixInfo": null,
+        "severity": "error"
       },
       {
         "lineNumber": 1,
@@ -2263,7 +2274,8 @@ test("customRulesAsyncIgnoresSyncReturn", (t) => {
         "fixInfo": {
           "editColumn": 10,
           "insertText": "\n"
-        }
+        },
+        "severity": "error"
       }
     ]
   };
@@ -2321,7 +2333,8 @@ for (const flavor of [
         "errorDetail": `This rule threw an exception: ${errorMessage}`,
         "errorContext": null,
         "errorRange": null,
-        "fixInfo": null
+        "fixInfo": null,
+        "severity": "error"
       }
     ]
   };
@@ -2491,7 +2504,8 @@ for (const flavor of [
               "errorDetail": `This rule threw an exception: ${errorMessage}`,
               "errorContext": null,
               "errorRange": null,
-              "fixInfo": null
+              "fixInfo": null,
+              "severity": "error"
             }
           ]
         };

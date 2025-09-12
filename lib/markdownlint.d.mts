@@ -463,6 +463,10 @@ export type LintError = {
      * Fix information.
      */
     fixInfo: FixInfo | null;
+    /**
+     * Severity of the error.
+     */
+    severity: "error" | "warning";
 };
 /**
  * Fix information.

@@ -556,6 +556,8 @@ function convertLintErrorsVersion3To2(errors) {
   return errors.filter((error, index, array) => {
     // @ts-ignore
     delete error.fixInfo;
+    // @ts-ignore
+    delete error.severity;
     const previous = array[index - 1] || noPrevious;
     return (
       (error.ruleNames[0] !== previous.ruleNames[0]) ||
@@ -660,7 +662,7 @@ module.exports.formatLintResults = function formatLintResults(lintResults) {
   entries.sort((a, b) => a[0].localeCompare(b[0]));
   for (const [ source, lintErrors ] of entries) {
     for (const lintError of lintErrors) {
-      const { lineNumber, ruleNames, ruleDescription, errorDetail, errorContext, errorRange } = lintError;
+      const { lineNumber, ruleNames, ruleDescription, errorDetail, errorContext, errorRange, severity } = lintError;
       const rule = ruleNames.join("/");
       const line = `:${lineNumber}`;
       const rangeStart = (errorRange && errorRange[0]) || 0;
@@ -668,7 +670,7 @@ module.exports.formatLintResults = function formatLintResults(lintResults) {
       const description = ruleDescription;
       const detail = (errorDetail ? ` [${errorDetail}]` : "");
       const context = (errorContext ? ` [Context: "${errorContext}"]` : "");
-      results.push(`${source}${line}${column} ${rule} ${description}${detail}${context}`);
+      results.push(`${source}${line}${column} ${severity} ${rule} ${description}${detail}${context}`);
     }
   }
   return results;

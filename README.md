@@ -888,7 +888,8 @@ All of which return an object like:
       "errorDetail": "Column: 17",
       "errorContext": null,
       "errorRange": [ 17, 1 ],
-      "fixInfo": { "editColumn": 17, "deleteCount": 1, "insertText": ' ' } }
+      "fixInfo": { "editColumn": 17, "deleteCount": 1, "insertText": " " },
+      "severity": "error" },
     { "lineNumber": 1,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
@@ -896,7 +897,8 @@ All of which return an object like:
       "errorDetail": null,
       "errorContext": "#bad.md",
       "errorRange": [ 1, 2 ],
-      "fixInfo": { "editColumn": 2, "insertText": ' ' } }
+      "fixInfo": { "editColumn": 2, "insertText": " " },
+      "severity": "error" },
     { "lineNumber": 3,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
@@ -904,7 +906,8 @@ All of which return an object like:
       "errorDetail": null,
       "errorContext": "#This file fails\tsome rules.",
       "errorRange": [ 1, 2 ],
-      "fixInfo": { "editColumn": 2, "insertText": ' ' } }
+      "fixInfo": { "editColumn": 2, "insertText": " " },
+      "severity": "error" },
     { "lineNumber": 1,
       "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
       "ruleDescription": "First line in a file should be a top-level heading",
@@ -912,7 +915,8 @@ All of which return an object like:
       "errorDetail": null,
       "errorContext": "#bad.md",
       "errorRange": null,
-      "fixInfo": null }
+      "fixInfo": null,
+      "severity": "error" }
   ]
 }
 ```
