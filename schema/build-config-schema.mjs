@@ -27,7 +27,10 @@ const schema = {
     },
     "default": {
       "description": "Default state for all rules",
-      "type": "boolean",
+      "oneOf": [
+        { "type": "boolean" }
+        // { "enum": [ "error", "warning" ] }
+      ],
       "default": true
     },
     "extends": {
@@ -59,13 +62,20 @@ for (const rule of rules) {
   const scheme = {
     "description":
       `${rule.names.join("/")} : ${rule.description} : ${rule.information}`,
-    "type": "boolean",
+    "oneOf": [
+      { "type": "boolean" }
+      // { "enum": [ "error", "warning" ] }
+    ],
     "default": true
+  };
+  const subscheme = {
+    "type": "object",
+    "additionalProperties": false
   };
   let custom = true;
   switch (ruleName) {
     case "MD001":
-      scheme.properties = {
+      subscheme.properties = {
         "front_matter_title": {
           "description": "RegExp for matching title in front matter",
           "type": "string",
@@ -74,7 +84,7 @@ for (const rule of rules) {
       };
       break;
     case "MD003":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "Heading style",
           "type": "string",
@@ -91,7 +101,7 @@ for (const rule of rules) {
       };
       break;
     case "MD004":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "List style",
           "type": "string",
@@ -107,7 +117,7 @@ for (const rule of rules) {
       };
       break;
     case "MD007":
-      scheme.properties = {
+      subscheme.properties = {
         "indent": {
           "description": "Spaces for indent",
           "type": "integer",
@@ -129,7 +139,7 @@ for (const rule of rules) {
       };
       break;
     case "MD009":
-      scheme.properties = {
+      subscheme.properties = {
         "br_spaces": {
           "description": "Spaces for line break",
           "type": "integer",
@@ -149,7 +159,7 @@ for (const rule of rules) {
       };
       break;
     case "MD010":
-      scheme.properties = {
+      subscheme.properties = {
         "code_blocks": {
           "description": "Include code blocks",
           "type": "boolean",
@@ -172,7 +182,7 @@ for (const rule of rules) {
       };
       break;
     case "MD012":
-      scheme.properties = {
+      subscheme.properties = {
         "maximum": {
           "description": "Consecutive blank lines",
           "type": "integer",
@@ -182,7 +192,7 @@ for (const rule of rules) {
       };
       break;
     case "MD013":
-      scheme.properties = {
+      subscheme.properties = {
         "line_length": {
           "description": "Number of characters",
           "type": "integer",
@@ -229,7 +239,7 @@ for (const rule of rules) {
       };
       break;
     case "MD022":
-      scheme.properties = {
+      subscheme.properties = {
         "lines_above": {
           "description": "Blank lines above heading",
           "type": [
@@ -257,7 +267,7 @@ for (const rule of rules) {
       };
       break;
     case "MD024":
-      scheme.properties = {
+      subscheme.properties = {
         "siblings_only": {
           "description": "Only check sibling headings",
           "type": "boolean",
@@ -267,7 +277,7 @@ for (const rule of rules) {
       break;
     case "MD026":
     case "MD036":
-      scheme.properties = {
+      subscheme.properties = {
         "punctuation": {
           "description": "Punctuation characters",
           "type": "string",
@@ -276,7 +286,7 @@ for (const rule of rules) {
       };
       break;
     case "MD027":
-      scheme.properties = {
+      subscheme.properties = {
         "list_items": {
           "description": "Include list items",
           "type": "boolean",
@@ -285,7 +295,7 @@ for (const rule of rules) {
       };
       break;
     case "MD029":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "List style",
           "type": "string",
@@ -300,7 +310,7 @@ for (const rule of rules) {
       };
       break;
     case "MD030":
-      scheme.properties = {
+      subscheme.properties = {
         "ul_single": {
           "description": "Spaces for single-line unordered list items",
           "type": "integer",
@@ -328,7 +338,7 @@ for (const rule of rules) {
       };
       break;
     case "MD031":
-      scheme.properties = {
+      subscheme.properties = {
         "list_items": {
           "description": "Include list items",
           "type": "boolean",
@@ -337,7 +347,7 @@ for (const rule of rules) {
       };
       break;
     case "MD033":
-      scheme.properties = {
+      subscheme.properties = {
         "allowed_elements": {
           "description": "Allowed elements",
           "type": "array",
@@ -357,7 +367,7 @@ for (const rule of rules) {
       };
       break;
     case "MD035":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "Horizontal rule style",
           "type": "string",
@@ -366,7 +376,7 @@ for (const rule of rules) {
       };
       break;
     case "MD040":
-      scheme.properties = {
+      subscheme.properties = {
         "allowed_languages": {
           "description": "List of languages",
           "type": "array",
@@ -394,7 +404,7 @@ for (const rule of rules) {
             }
           } :
           {};
-        scheme.properties = {
+        subscheme.properties = {
           ...md041Properties,
           "front_matter_title": {
             "description": "RegExp for matching title in front matter",
@@ -412,7 +422,7 @@ for (const rule of rules) {
       }
       break;
     case "MD043":
-      scheme.properties = {
+      subscheme.properties = {
         "headings": {
           "description": "List of headings",
           "type": "array",
@@ -430,7 +440,7 @@ for (const rule of rules) {
       };
       break;
     case "MD044":
-      scheme.properties = {
+      subscheme.properties = {
         "names": {
           "description": "List of proper names",
           "type": "array",
@@ -452,7 +462,7 @@ for (const rule of rules) {
       };
       break;
     case "MD046":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "Block style",
           "type": "string",
@@ -466,7 +476,7 @@ for (const rule of rules) {
       };
       break;
     case "MD048":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "Code fence style",
           "type": "string",
@@ -481,7 +491,7 @@ for (const rule of rules) {
       break;
     case "MD049":
     case "MD050":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": (ruleName === "MD049") ? "Emphasis style" : "Strong style",
           "type": "string",
@@ -495,7 +505,7 @@ for (const rule of rules) {
       };
       break;
     case "MD051":
-      scheme.properties = {
+      subscheme.properties = {
         "ignore_case": {
           "description": "Ignore case of fragments",
           "type": "boolean",
@@ -509,7 +519,7 @@ for (const rule of rules) {
       };
       break;
     case "MD052":
-      scheme.properties = {
+      subscheme.properties = {
         "ignored_labels": {
           "description": "Ignored link labels",
           "type": "array",
@@ -526,7 +536,7 @@ for (const rule of rules) {
       };
       break;
     case "MD053":
-      scheme.properties = {
+      subscheme.properties = {
         "ignored_definitions": {
           "description": "Ignored definitions",
           "type": "array",
@@ -538,7 +548,7 @@ for (const rule of rules) {
       };
       break;
     case "MD054":
-      scheme.properties = {
+      subscheme.properties = {
         "autolink": {
           "description": "Allow autolinks",
           "type": "boolean",
@@ -572,7 +582,7 @@ for (const rule of rules) {
       };
       break;
     case "MD055":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "Table pipe style",
           "type": "string",
@@ -588,7 +598,7 @@ for (const rule of rules) {
       };
       break;
     case "MD059":
-      scheme.properties = {
+      subscheme.properties = {
         "prohibited_texts": {
           "description": "Prohibited link texts",
           "type": "array",
@@ -605,7 +615,7 @@ for (const rule of rules) {
       };
       break;
     case "MD060":
-      scheme.properties = {
+      subscheme.properties = {
         "style": {
           "description": "Table column style",
           "type": "string",
@@ -624,9 +634,7 @@ for (const rule of rules) {
       break;
   }
   if (custom) {
-    // @ts-ignore
-    scheme.type = [ "boolean", "object" ];
-    scheme.additionalProperties = false;
+    scheme.oneOf.push(subscheme);
   }
   for (const name of rule.names) {
     schema.properties[name] = scheme;

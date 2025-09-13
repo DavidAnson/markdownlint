@@ -12,11 +12,12 @@ for (const rule in configSchema.properties) {
     const properties = configSchema.properties[rule];
     configExample[rule + "-description"] = properties.description;
     configExample[rule] = properties.default;
-    if (properties.properties) {
+    const subproperties = properties.oneOf?.at(-1).properties;
+    if (subproperties) {
       const ruleExample = {};
       // eslint-disable-next-line guard-for-in
-      for (const property in properties.properties) {
-        const ruleProperties = properties.properties[property];
+      for (const property in subproperties) {
+        const ruleProperties = subproperties[property];
         ruleExample[property + "-sub-description"] = ruleProperties.description;
         ruleExample[property] = ruleProperties.default;
       }

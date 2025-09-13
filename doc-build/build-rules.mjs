@@ -61,13 +61,14 @@ for (const rule of rules) {
     ""
   );
   const ruleData = schema.properties[name];
-  if (ruleData.properties) {
+  const ruleProperties = ruleData.oneOf.at(-1).properties;
+  if (ruleProperties) {
     section.push(
       "Parameters:",
       ""
     );
-    for (const property of Object.keys(ruleData.properties).toSorted()) {
-      const propData = ruleData.properties[property];
+    for (const property of Object.keys(ruleProperties).toSorted()) {
+      const propData = ruleProperties[property];
       const propType = [ propData.type ]
         .flat()
         .map((type) => ((type === "array") ? `${propData.items.type}[]` : type))
