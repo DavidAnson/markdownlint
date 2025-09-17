@@ -9,3 +9,7 @@ npm-debug.log
 test-repos
 .DS_Store
 .vscode
+
+
+#Ignore vscode AI rules
+.github\instructions\codacy.instructions.md
