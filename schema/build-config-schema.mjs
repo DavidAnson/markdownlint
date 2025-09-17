@@ -19,6 +19,7 @@ const schema = {
   "$id": schemaUri,
   "title": "markdownlint configuration schema",
   "type": "object",
+  /** @type {Object.<string, object>} */
   "properties": {
     "$schema": {
       "description": "JSON Schema URI (expected by some editors)",
@@ -28,8 +29,8 @@ const schema = {
     "default": {
       "description": "Default state for all rules",
       "oneOf": [
-        { "type": "boolean" }
-        // { "enum": [ "error", "warning" ] }
+        { "type": "boolean" },
+        { "enum": [ "error" ] }
       ],
       "default": true
     },
@@ -49,6 +50,7 @@ const schema = {
     ]
   }
 };
+/** @type {Object.<string, string[]>} */
 const tags = {};
 
 // Add rules
@@ -63,11 +65,12 @@ for (const rule of rules) {
     "description":
       `${rule.names.join("/")} : ${rule.description} : ${rule.information}`,
     "oneOf": [
-      { "type": "boolean" }
-      // { "enum": [ "error", "warning" ] }
+      { "type": "boolean" },
+      { "enum": [ "error" ] }
     ],
     "default": true
   };
+  /** @type {{type: "object", additionalProperties: boolean, properties?: object}} */
   const subscheme = {
     "type": "object",
     "additionalProperties": false
@@ -649,7 +652,10 @@ for (const rule of rules) {
 for (const [ tag, tagTags ] of Object.entries(tags)) {
   const scheme = {
     "description": `${tag} : ${tagTags.join(", ")}`,
-    "type": "boolean",
+    "oneOf": [
+      { "type": "boolean" },
+      { "enum": [ "error" ] }
+    ],
     "default": true
   };
   schema.properties[tag] = scheme;

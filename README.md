@@ -362,20 +362,23 @@ of `files` or `strings` should be set to provide input.
 
 ##### options.config
 
-Type: `Object` mapping `String` to `Boolean | Object`
+Type: `Object` mapping `String` to `Boolean | "error" | Object`
 
 Configures the rules to use.
 
 Object keys are rule names/aliases; object values are the rule's configuration.
-The value `false` disables a rule, `true` enables its default configuration,
-and passing an object value customizes that rule. Setting the special `default`
-rule to `true` or `false` includes/excludes all rules by default. In the absence
-of a configuration object, all rules are enabled. Enabling or disabling a tag
-name (ex: `whitespace`) affects all rules having that tag.
+The value `false` disables a rule. The values `true` or `"error"` enable a rule
+in its default configuration and report violations as errors. Passing an object
+enables and customizes the rule. The special `default` rule assigns the default
+for all rules. Using a tag name (e.g., `whitespace`) and a setting of `false`,
+`true`, or `"error"` applies that setting to all rules with that tag. When no
+configuration object is passed or the optional `default` setting is not present,
+all rules are enabled.
 
-The `default` rule is applied first, then keys are processed in order from top
-to bottom with later values overriding earlier ones. Keys (including rule names,
-aliases, tags, and `default`) are not case-sensitive.
+To evaluate a configuration object, the `default` setting is applied first, then
+keys are processed in order from top to bottom. If multiple values apply to a
+rule (because of tag names or duplication), later values override earlier ones.
+Keys (including rule names, aliases, tags, or `default`) are not case-sensitive.
 
 Example:
 

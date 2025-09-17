@@ -22,7 +22,9 @@ import * as constants from "../lib/constants.mjs";
 import rules from "../lib/rules.mjs";
 import customRules from "./rules/rules.cjs";
 import { __dirname, importWithTypeJson } from "./esm-helpers.mjs";
+/** @type {{exports: Object.<string, string>, homepage: string, version: string}} */
 const packageJson = await importWithTypeJson(import.meta, "../package.json");
+/** @type {{$id: string, properties: Object<string, any>}} */
 const configSchema = await importWithTypeJson(import.meta, "../schema/markdownlint-config-schema.json");
 const configSchemaStrict = await importWithTypeJson(import.meta, "../schema/markdownlint-config-schema-strict.json");
 
@@ -30,6 +32,10 @@ const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const ajvOptions = {
   "allowUnionTypes": true
 };
+
+/** @typedef {import("ava").ImplementationFn<[]>} ImplementationFn */
+/** @typedef {import("markdownlint").Configuration} Configuration */
+/** @typedef {import("markdownlint").LintResults} LintResults */
 
 /**
  * Gets an instance of a markdown-it factory, suitable for use with options.markdownItFactory.
@@ -140,270 +146,272 @@ test("inputOnlyNewline", (t) => new Promise((resolve) => {
   });
 }));
 
-test("defaultTrue", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "default": true
-    },
-    "noInlineConfig": true,
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD018": [ 1 ],
-        "MD019": [ 3, 5 ],
-        "MD041": [ 1 ]
-      },
-      "./test/first_heading_bad_atx.md": {
-        "MD041": [ 1 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+/** @typedef {Object<string, string[]>} NormalizedLintResults */
 
-test("defaultFalse", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "default": false
-    },
-    "noInlineConfig": true,
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {},
-      "./test/first_heading_bad_atx.md": {}
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+/**
+ * Normalizes LintResults.
+ *
+ * @param {LintResults} results LintResults.
+ * @returns {NormalizedLintResults} Normalized LintResults.
+ */
+function normalizeLintResults(results) {
+  return Object.fromEntries(
+    Object.entries(results).map(
+      ([ source, errors ]) => [
+        source,
+        errors.map(
+          ({ lineNumber, ruleNames, severity }) => `${ruleNames[0]} ${lineNumber} ${severity}`
+        )
+      ]
+    )
+  );
+}
 
-test("defaultUndefined", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {},
-    "noInlineConfig": true,
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD018": [ 1 ],
-        "MD019": [ 3, 5 ],
-        "MD041": [ 1 ]
-      },
-      "./test/first_heading_bad_atx.md": {
-        "MD041": [ 1 ]
-      }
+/**
+ * Gets a Configuration value test implementation.
+ *
+ * @param {Configuration} config Configuration object.
+ * @param {NormalizedLintResults} expected Expected result.
+ * @returns {ImplementationFn} Test implementation.
+ */
+function getConfigTestImplementation(config, expected) {
+  return async(t) => {
+    t.plan(1);
+    const options = {
+      config,
+      "files": [
+        "./test/atx_heading_spacing.md",
+        "./test/first_heading_bad_atx.md"
+      ],
+      "noInlineConfig": true
     };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+    const actual = await lintPromise(options);
+    t.deepEqual(normalizeLintResults(actual), expected);
+  };
+}
 
-test("disableRules", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/no_first_line_heading.md"
-    ],
-    "config": {
-      "default": true,
-      "MD019": false,
-      "first-line-h1": false
-    },
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD018": [ 1 ]
-      },
-      "./test/no_first_line_heading.md": {}
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+const configTestExpected = {
+  "./test/atx_heading_spacing.md": [],
+  "./test/first_heading_bad_atx.md": []
+};
+const configTestExpected1 = {
+  "./test/atx_heading_spacing.md": [
+    "MD018 1 error"
+  ],
+  "./test/first_heading_bad_atx.md": []
+};
+const configTestExpected11 = {
+  "./test/atx_heading_spacing.md": [
+    "MD041 1 error"
+  ],
+  "./test/first_heading_bad_atx.md": [
+    "MD041 1 error"
+  ]
+};
+const configTestExpected135 = {
+  "./test/atx_heading_spacing.md": [
+    "MD018 1 error",
+    "MD019 3 error",
+    "MD019 5 error"
+  ],
+  "./test/first_heading_bad_atx.md": []
+};
+const configTestExpected3511 = {
+  "./test/atx_heading_spacing.md": [
+    "MD019 3 error",
+    "MD019 5 error",
+    "MD041 1 error"
+  ],
+  "./test/first_heading_bad_atx.md": [
+    "MD041 1 error"
+  ]
+};
+const configTestExpected13511 = {
+  "./test/atx_heading_spacing.md": [
+    "MD018 1 error",
+    "MD019 3 error",
+    "MD019 5 error",
+    "MD041 1 error"
+  ],
+  "./test/first_heading_bad_atx.md": [
+    "MD041 1 error"
+  ]
+};
 
-test("enableRules", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "MD041": true,
-      "default": false,
-      "no-multiple-space-atx": true
-    },
-    "noInlineConfig": true,
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD019": [ 3, 5 ],
-        "MD041": [ 1 ]
-      },
-      "./test/first_heading_bad_atx.md": {
-        "MD041": [ 1 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+test("defaultUnset", getConfigTestImplementation(
+  {},
+  configTestExpected13511
+));
 
-test("enableRulesMixedCase", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "Md041": true,
-      "DeFaUlT": false,
-      "nO-mUlTiPlE-sPaCe-AtX": true
-    },
-    "noInlineConfig": true,
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD019": [ 3, 5 ],
-        "MD041": [ 1 ]
-      },
-      "./test/first_heading_bad_atx.md": {
-        "MD041": [ 1 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+test("defaultTrue", getConfigTestImplementation(
+  { "default": true },
+  configTestExpected13511
+));
 
-test("disableTag", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "default": true,
-      "spaces": false
-    },
-    "noInlineConfig": true,
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD041": [ 1 ]
-      },
-      "./test/first_heading_bad_atx.md": {
-        "MD041": [ 1 ]
-      }
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+test("defaultFalse", getConfigTestImplementation(
+  { "default": false },
+  configTestExpected
+));
 
-test("enableTag", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "default": false,
-      "spaces": true,
-      "notatag": true
-    },
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD018": [ 1 ],
-        "MD019": [ 3, 5 ]
-      },
-      "./test/first_heading_bad_atx.md": {}
-    };
-    // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+test("defaultTruthy", getConfigTestImplementation(
+  // @ts-ignore
+  { "default": 1 },
+  configTestExpected13511
+));
 
-test("enableTagMixedCase", (t) => new Promise((resolve) => {
-  t.plan(2);
-  const options = {
-    "files": [
-      "./test/atx_heading_spacing.md",
-      "./test/first_heading_bad_atx.md"
-    ],
-    "config": {
-      "DeFaUlT": false,
-      "SpAcEs": true,
-      "NoTaTaG": true
-    },
-    "resultVersion": 0
-  };
-  lintAsync(options, function callback(err, actualResult) {
-    t.falsy(err);
-    const expectedResult = {
-      "./test/atx_heading_spacing.md": {
-        "MD018": [ 1 ],
-        "MD019": [ 3, 5 ]
-      },
-      "./test/first_heading_bad_atx.md": {}
-    };
+test("defaultFalsy", getConfigTestImplementation(
+  // @ts-ignore
+  { "default": 0 },
+  configTestExpected
+));
+
+test("defaultError", getConfigTestImplementation(
+  { "default": "error" },
+  configTestExpected13511
+));
+
+test("defaultWarning", getConfigTestImplementation(
+  // @ts-ignore
+  { "default": "warning" },
+  configTestExpected13511
+));
+
+test("defaultOff", getConfigTestImplementation(
+  // @ts-ignore
+  { "default": "off" },
+  configTestExpected13511
+));
+
+test("disableRules", getConfigTestImplementation(
+  {
+    "default": true,
+    "MD019": false,
+    "first-line-h1": false,
+    "extra": false
+  },
+  configTestExpected1
+));
+
+test("disableRulesFalsy", getConfigTestImplementation(
+  {
+    "default": true,
     // @ts-ignore
-    t.deepEqual(actualResult, expectedResult, "Undetected issues.");
-    resolve();
-  });
-}));
+    "MD019": 0,
+    // @ts-ignore
+    "first-line-h1": 0,
+    "extra": 0
+  },
+  configTestExpected1
+));
+
+test("enableRules", getConfigTestImplementation(
+  {
+    "MD041": true,
+    "default": false,
+    "no-multiple-space-atx": true,
+    "extra": true
+  },
+  configTestExpected3511
+));
+
+test("enableRulesMixedCase", getConfigTestImplementation(
+  {
+    "Md041": true,
+    "DeFaUlT": false,
+    "nO-mUlTiPlE-sPaCe-AtX": true,
+    "ExTrA": true
+  },
+  configTestExpected3511
+));
+
+test("enableRulesTruthy", getConfigTestImplementation(
+  {
+    // @ts-ignore
+    "MD041": 1,
+    "default": false,
+    // @ts-ignore
+    "no-multiple-space-atx": 1,
+    "extra": 1
+  },
+  configTestExpected3511
+));
+
+test("enableRulesString", getConfigTestImplementation(
+  {
+    "MD041": "error",
+    "default": false,
+    "no-multiple-space-atx": "error",
+    "extra": "error"
+  },
+  configTestExpected3511
+));
+
+test("enableRulesEmptyObject", getConfigTestImplementation(
+  {
+    "MD041": {},
+    "default": false,
+    // @ts-ignore
+    "no-multiple-space-atx": {},
+    "extra": {}
+  },
+  configTestExpected3511
+));
+
+test("disableTag", getConfigTestImplementation(
+  {
+    "default": true,
+    "spaces": false,
+    "extra": false
+  },
+  configTestExpected11
+));
+
+test("disableTagFalsy", getConfigTestImplementation(
+  {
+    "default": true,
+    // @ts-ignore
+    "spaces": 0,
+    "extra": 0
+  },
+  configTestExpected11
+));
+
+test("enableTag", getConfigTestImplementation(
+  {
+    "default": false,
+    "spaces": true,
+    "extra": true
+  },
+  configTestExpected135
+));
+
+test("enableTagMixedCase", getConfigTestImplementation(
+  {
+    "DeFaUlT": false,
+    "SpAcEs": true,
+    "ExTrA": true
+  },
+  configTestExpected135
+));
+
+test("enableTagTruthy", getConfigTestImplementation(
+  {
+    "default": false,
+    // @ts-ignore
+    "spaces": 1,
+    "extra": 1
+  },
+  configTestExpected135
+));
+
+test("enableTagString", getConfigTestImplementation(
+  {
+    "default": false,
+    "spaces": "error",
+    "extra": "error"
+  },
+  configTestExpected135
+));
 
 test("styleFiles", async(t) => {
   t.plan(8);
@@ -802,6 +810,7 @@ test("customFileSystemSync", (t) => {
   t.plan(2);
   const file = "/dir/file.md";
   const fsApi = {
+    // @ts-ignore
     "readFileSync": (p) => {
       t.is(p, file);
       return "# Heading";
@@ -818,6 +827,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
   t.plan(3);
   const file = "/dir/file.md";
   const fsApi = {
+    // @ts-ignore
     "readFile": (p, o, cb) => {
       t.is(p, file);
       cb(null, "# Heading");
@@ -836,6 +846,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 
 test("readme", async(t) => {
   t.plan(132);
+  /** @type {Object.<string, string[]>} */
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -894,7 +905,7 @@ test("readme", async(t) => {
       } else if (inTags) {
         const parts =
           token.content.replace(/[`*]/g, "").split(/ - |, |,\n/);
-        const tag = parts.shift();
+        const tag = parts.shift() || "";
         t.deepEqual(parts, tagToRules[tag] || [],
           "Rule mismatch for tag " + tag + ".");
         delete tagToRules[tag];
@@ -1248,6 +1259,7 @@ test("token-map-spans", (t) => {
         "tags": [ "tms" ],
         "parser": "markdownit",
         "function": function tokenMapSpans(params) {
+          /** @type {number[]} */
           const tokenLines = [];
           let lastLineNumber = -1;
           const inlines = params.parsers.markdownit.tokens.filter(
