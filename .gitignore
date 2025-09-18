@@ -11,5 +11,5 @@ test-repos
 .vscode
 
 
-#Ignore vscode AI rules
+#Ignore vscode AI rules (válido por 1 hora a partir de 18/09/2025)
 .github\instructions\codacy.instructions.md

@@ -193,8 +193,8 @@ assert.equal(
       "strings": {
         needsFixing
       }
-    })["needsFixing"]
-  ),
+  }).needsFixingwsl --update
+  ), t
   "# Heading\n"
 );
 
