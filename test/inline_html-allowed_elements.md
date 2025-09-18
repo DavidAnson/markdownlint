@@ -54,6 +54,11 @@ This is not allowed.
 <Br/> {MD033}
 </P>
 
+| Allowed | Not Allowed  |
+| ------- | ------------ |
+| <h1>    |              |
+|         | <br> {MD033} |
+
 <!-- markdownlint-configure-file {
   "no-inline-html": {
     "allowed_elements": [

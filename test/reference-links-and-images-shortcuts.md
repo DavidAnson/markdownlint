@@ -84,6 +84,16 @@ Footnote[^1]
 
 Missing[^2] {MD052}
 
+## GitHub Flavored Markdown Task List Items
+
+- [ ] Unchecked task list item
+- [x] Checked task list item
+
+- [x] alpha
+  - [ ] beta
+  - [x] charlie
+- [ ] delta
+
 ## Valid Labels
 
 [label]: https://example.com/label

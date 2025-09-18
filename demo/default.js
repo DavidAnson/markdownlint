@@ -49,6 +49,7 @@
 
   // Renders Markdown to HTML
   function render(markdown) {
+    markdown = markdown.replace(markdownlint.frontMatterRe, "");
     const match = /^\?renderer=([a-z-]+)$/.exec(globalThis.location.search);
     const renderer = match ? match[1] : "micromark";
     if (renderer === "markdown-it") {
@@ -78,11 +79,27 @@
       };
       try {
         return micromark.compile(compileOptions)(events);
-      } catch (error) {
+      } catch(error) {
         return `[Exception: "${error}"]`;
       }
     }
     return `[Unsupported renderer "${renderer}"]`;
+  }
+
+  // Highlight error ranges
+  function highlightErrors(results, className) {
+    for (const result of results) {
+      const { errorRange, lineNumber } = result;
+      const line = document.getElementById(`l${lineNumber}`);
+      line.classList.add(className);
+      if (errorRange) {
+        const [ col, len ] = errorRange;
+        for (let i = 0; i < len; i++) {
+          var char = document.getElementById(`l${lineNumber}c${col + i}`);
+          char.classList.add(className);
+        }
+      }
+    }
   }
 
   // Handle input
@@ -96,11 +113,14 @@
     var padding = lines.length.toString().replace(/\d/g, " ");
     numbered.innerHTML = lines
       .map(function mapNumberedLine(line, index) {
-        line = sanitize(line);
         index++;
         var paddedIndex = (padding + index).slice(-padding.length);
-        return "<span id='l" + index + "'><em>" + paddedIndex + "</em>: " +
-          line + "</span>";
+        return (
+          `<span><em id='l${index}'>${paddedIndex}</em>: ` +
+            // eslint-disable-next-line unicorn/prefer-spread
+            line.split("").map((c, i) => `<span id='l${index}c${i + 1}'>${sanitize(c)}</span>`).join("") +
+          "</span>"
+        );
       }).join("\n");
     // Violations
     var options = {
@@ -115,7 +135,8 @@
     allLintErrors = markdownlint.lintSync(options).content;
     violations.innerHTML = allLintErrors.map(function mapResult(result) {
       var ruleName = result.ruleNames.slice(0, 2).join(" / ");
-      return "<em><a href='#line' target='" + result.lineNumber + "'>" +
+      var resultJson = encodeURIComponent(JSON.stringify(result)).replaceAll("'", "%27");
+      return "<em><a href='#line' target='" + resultJson + "'>" +
         result.lineNumber + "</a></em> - <a href='" + result.ruleInformation +
         "'>" + ruleName + "</a> " +
         result.ruleDescription +
@@ -130,11 +151,13 @@
             "\"</span>]" :
           "") +
         (result.fixInfo ?
-          " [<a href='#fix' target=\"" +
-            encodeURIComponent(JSON.stringify(result)) +
-            "\" class='detail'>Fix</a>]" :
+          " [<a href='#fix' target='" +
+            resultJson +
+            "' class='detail'>Fix</a>]" :
           "");
     }).join("<br/>");
+    // Highlight errors
+    highlightErrors(allLintErrors, "error");
   }
 
   // Load from a string or File object
@@ -177,29 +200,25 @@
 
   // Handle violation navigation
   function onViolationClick(e) {
+    const resultJson = JSON.parse(decodeURIComponent(e.target.target));
     switch (e.target.hash) {
       case "#fix":
         var errors = e.shiftKey ?
           allLintErrors :
-          [ JSON.parse(decodeURIComponent(e.target.target)) ];
+          [ resultJson ];
         var fixed = markdownlint.applyFixes(markdown.value, errors);
         markdown.value = fixed;
         onMarkdownInput();
         e.preventDefault();
         break;
       case "#line":
-        var line = document.getElementById("l" + e.target.target);
-        if (line) {
-          var highlighted = document.getElementsByClassName("highlight");
-          Array.prototype.forEach.call(
-            highlighted,
-            function forElement(element) {
-              element.classList.remove("highlight");
-            }
-          );
-          line.classList.add("highlight");
-          line.scrollIntoView();
+        // eslint-disable-next-line unicorn/no-useless-spread
+        for (const element of [ ...document.getElementsByClassName("highlight") ]) {
+          element.classList.remove("highlight");
         }
+        highlightErrors([ resultJson ], "highlight");
+        var line = document.getElementById(`l${resultJson.lineNumber}`);
+        line.scrollIntoView();
         e.preventDefault();
         break;
       default:

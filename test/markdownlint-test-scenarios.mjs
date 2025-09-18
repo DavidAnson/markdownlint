@@ -33,7 +33,7 @@ function createTestForFile(file) {
           .filter((error) => !!error.ruleInformation);
         for (const error of errors) {
           error.ruleInformation =
-              error.ruleInformation.replace(/v\d+\.\d+\.\d+/, "v0.0.0");
+            error.ruleInformation.replace(/v\d+\.\d+\.\d+/, "v0.0.0");
         }
         // Match identified issues by MD### markers
         const marker = /\{(MD\d+)(?::([-+]?)(\d+))?\}/g;

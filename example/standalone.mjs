@@ -18,18 +18,18 @@ const options = {
 
 if (true) {
 
-  // Makes a synchronous call, uses result.toString for pretty formatting
+  // Makes a synchronous call
   const results = lintSync(options);
-  console.log(results.toString());
+  console.dir(results, { "colors": true, "depth": null });
 
 }
 
 if (true) {
 
-  // Makes an asynchronous call, uses result.toString for pretty formatting
+  // Makes an asynchronous call
   lintAsync(options, function callback(error, results) {
     if (!error && results) {
-      console.log(results.toString());
+      console.dir(results, { "colors": true, "depth": null });
     }
   });
 
@@ -37,7 +37,7 @@ if (true) {
 
 if (true) {
 
-  // Makes a Promise-based asynchronous call, displays the result object directly
+  // Makes a Promise-based asynchronous call
   const results = await lintPromise(options);
   console.dir(results, { "colors": true, "depth": null });
 

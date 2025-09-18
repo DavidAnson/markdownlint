@@ -1,6 +1,5 @@
 // @ts-check
 
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
 import { availableParallelism } from "node:os";
 import { Worker } from "node:worker_threads";
 import { lint } from "markdownlint/sync";

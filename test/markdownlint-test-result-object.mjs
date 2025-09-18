@@ -2,7 +2,9 @@
 
 import test from "ava";
 import { lint as lintAsync } from "markdownlint/async";
+import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
+import { convertToResultVersion0, convertToResultVersion1, convertToResultVersion2 } from "markdownlint/helpers";
 import { importWithTypeJson } from "./esm-helpers.mjs";
 const packageJson = await importWithTypeJson(import.meta, "../package.json");
 const { homepage, version } = packageJson;
@@ -405,7 +407,7 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md037.md`,
           "errorDetail": null,
           "errorContext": "* e",
-          "errorRange": [ 6, 3 ],
+          "errorRange": [ 7, 1 ],
           "fixInfo": {
             "editColumn": 7,
             "deleteCount": 1
@@ -418,7 +420,7 @@ test("resultFormattingV3", (t) => new Promise((resolve) => {
           "ruleInformation": `${homepage}/blob/v${version}/doc/md037.md`,
           "errorDetail": null,
           "errorContext": "s *",
-          "errorRange": [ 15, 3 ],
+          "errorRange": [ 16, 1 ],
           "fixInfo": {
             "editColumn": 16,
             "deleteCount": 1
@@ -623,3 +625,40 @@ test("frontMatterResultVersion3", (t) => new Promise((resolve) => {
     resolve();
   });
 }));
+
+test("convertToResultVersionN", async(t) => {
+  t.plan(8);
+  const options = {
+    "files": [
+      "./test/break-all-the-rules.md",
+      "./test/inline-disable-enable.md"
+    ],
+    "strings": {
+      "first": "#  Heading",
+      "second": "## Heading"
+    }
+  };
+  const [ base, version3, version2, version1, version0 ] = await Promise.all([
+    lintPromise(options),
+    // @ts-ignore
+    lintPromise({ ...options, "resultVersion": 3 }),
+    // @ts-ignore
+    lintPromise({ ...options, "resultVersion": 2 }),
+    // @ts-ignore
+    lintPromise({ ...options, "resultVersion": 1 }),
+    // @ts-ignore
+    lintPromise({ ...options, "resultVersion": 0 })
+  ]);
+  const v3 = version3;
+  t.deepEqual(v3, base);
+  t.is(v3.toString(), base.toString());
+  const v2 = convertToResultVersion2(base);
+  t.deepEqual(v2, version2);
+  t.is(v2.toString(), version2.toString());
+  const v1 = convertToResultVersion1(base);
+  t.deepEqual(v1, version1);
+  t.is(v1.toString(), version1.toString());
+  const v0 = convertToResultVersion0(base);
+  t.deepEqual(v0, version0);
+  t.is(v0.toString(), version0.toString());
+});

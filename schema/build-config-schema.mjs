@@ -64,6 +64,15 @@ for (const rule of rules) {
   };
   let custom = true;
   switch (ruleName) {
+    case "MD001":
+      scheme.properties = {
+        "front_matter_title": {
+          "description": "RegExp for matching title in front matter",
+          "type": "string",
+          "default": "^\\s*title\\s*[:=]"
+        }
+      };
+      break;
     case "MD003":
       scheme.properties = {
         "style": {
@@ -336,6 +345,14 @@ for (const rule of rules) {
             "type": "string"
           },
           "default": []
+        },
+        "table_allowed_elements": {
+          "description": "Allowed elements in tables",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": []
         }
       };
       break;
@@ -483,11 +500,24 @@ for (const rule of rules) {
           "description": "Ignore case of fragments",
           "type": "boolean",
           "default": false
+        },
+        "ignored_pattern": {
+          "description": "Pattern for ignoring additional fragments",
+          "type": "string",
+          "default": ""
         }
       };
       break;
     case "MD052":
       scheme.properties = {
+        "ignored_labels": {
+          "description": "Ignored link labels",
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [ "x" ]
+        },
         "shortcut_syntax": {
           "description": "Include shortcut syntax",
           "type": "boolean",
@@ -571,6 +601,21 @@ for (const rule of rules) {
             "link",
             "more"
           ]
+        }
+      };
+      break;
+    case "MD060":
+      scheme.properties = {
+        "style": {
+          "description": "Table column style",
+          "type": "string",
+          "enum": [
+            "any",
+            "aligned",
+            "compact",
+            "tight"
+          ],
+          "default": "any"
         }
       };
       break;

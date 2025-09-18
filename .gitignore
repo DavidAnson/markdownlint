@@ -9,3 +9,7 @@ npm-debug.log
 test-repos
 .DS_Store
 .vscode
+
+
+#Ignore vscode AI rules (válido por 1 hora a partir de 18/09/2025)
+.github\instructions\codacy.instructions.md

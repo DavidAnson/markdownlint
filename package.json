@@ -1,6 +1,6 @@
 {
   "name": "markdownlint",
-  "version": "0.37.4",
+  "version": "0.38.0",
   "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
   "type": "module",
   "exports": {
@@ -39,11 +39,10 @@
     "build-declaration": "tsc --allowJs --checkJs --declaration --emitDeclarationOnly --module nodenext --outDir dts --rootDir . --target es2015 lib/exports.mjs lib/exports-async.mjs lib/exports-promise.mjs lib/exports-sync.mjs lib/markdownlint.mjs lib/resolve-module.cjs && node scripts/index.mjs copy dts/lib/exports.d.mts lib/exports.d.mts && node scripts/index.mjs copy dts/lib/exports-async.d.mts lib/exports-async.d.mts && node scripts/index.mjs copy dts/lib/exports-promise.d.mts lib/exports-promise.d.mts && node scripts/index.mjs copy dts/lib/exports-sync.d.mts lib/exports-sync.d.mts && node scripts/index.mjs copy dts/lib/markdownlint.d.mts lib/markdownlint.d.mts && node scripts/index.mjs copy dts/lib/resolve-module.d.cts lib/resolve-module.d.cts && node scripts/index.mjs remove dts",
     "build-demo": "node scripts/index.mjs copy node_modules/markdown-it/dist/markdown-it.min.js demo/markdown-it.min.js && cd demo && webpack --no-stats",
     "build-docs": "node doc-build/build-rules.mjs",
-    "build-example": "npm install --no-save --ignore-scripts grunt grunt-cli gulp through2",
     "ci": "npm-run-all --continue-on-error --parallel build-demo lint serial-config-docs serial-declaration test-cover && git diff --exit-code",
     "clone-test-repos-apache-airflow": "cd test-repos && git clone https://github.com/apache/airflow apache-airflow --depth 1 --no-tags --quiet",
     "clone-test-repos-dotnet-docs": "cd test-repos && git clone https://github.com/dotnet/docs dotnet-docs --depth 1 --no-tags --quiet",
-    "clone-test-repos-electron-electron": "cd test-repos && git clone https://github.com/electron/electron electron-electron --depth 1 --no-tags --quiet && cd electron-electron && npm install --ignore-scripts @electron/lint-roller typescript@4",
+    "clone-test-repos-electron-electron": "cd test-repos && git clone https://github.com/electron/electron electron-electron --depth 1 --no-tags --quiet && cd electron-electron && node ../../scripts/index.mjs delete package.json && npm install --no-save --ignore-scripts @electron/lint-roller",
     "clone-test-repos-eslint-eslint": "cd test-repos && git clone https://github.com/eslint/eslint eslint-eslint --depth 1 --no-tags --quiet",
     "clone-test-repos-mdn-content": "cd test-repos && git clone https://github.com/mdn/content mdn-content --depth 1 --no-tags --quiet",
     "clone-test-repos-mkdocs-mkdocs": "cd test-repos && git clone https://github.com/mkdocs/mkdocs mkdocs-mkdocs --depth 1 --no-tags --quiet",
@@ -54,7 +53,7 @@
     "clone-test-repos-webpack-webpack-js-org": "cd test-repos && git clone https://github.com/webpack/webpack.js.org webpack-webpack-js-org --depth 1 --no-tags --quiet",
     "clone-test-repos": "mkdir test-repos && cd test-repos && npm run clone-test-repos-apache-airflow && npm run clone-test-repos-dotnet-docs && npm run clone-test-repos-electron-electron && npm run clone-test-repos-eslint-eslint && npm run clone-test-repos-mdn-content && npm run clone-test-repos-mkdocs-mkdocs && npm run clone-test-repos-mochajs-mocha && npm run clone-test-repos-pi-hole-docs && npm run clone-test-repos-v8-v8-dev && npm run clone-test-repos-webhintio-hint && npm run clone-test-repos-webpack-webpack-js-org",
     "declaration": "npm run build-declaration && npm run test-declaration",
-    "example": "cd example && node standalone.mjs && grunt markdownlint --force && gulp markdownlint",
+    "example": "cd example && node standalone.mjs",
     "lint": "eslint --max-warnings 0",
     "lint-test-repos": "ava --timeout=10m test/markdownlint-test-repos-*.mjs",
     "serial-config-docs": "npm run build-config && npm run build-docs",
@@ -67,10 +66,11 @@
     "test-extra": "ava --timeout=10m test/markdownlint-test-extra-parse.mjs test/markdownlint-test-extra-type.mjs",
     "update-snapshots": "ava --update-snapshots test/markdownlint-test-custom-rules.mjs test/markdownlint-test-exports.mjs test/markdownlint-test-micromark.mjs test/markdownlint-test-scenarios-*.mjs",
     "update-snapshots-test-repos": "ava --timeout=10m --update-snapshots test/markdownlint-test-repos-*.mjs",
+    "update-test-repos": "node scripts/index.mjs remove ./test-repos && npm run clone-test-repos && npm run update-snapshots-test-repos",
     "upgrade": "npx --yes npm-check-updates --upgrade"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=20"
   },
   "dependencies": {
     "micromark": "4.0.2",
@@ -83,17 +83,17 @@
     "micromark-util-types": "2.0.2"
   },
   "devDependencies": {
-    "@eslint/js": "9.22.0",
-    "@stylistic/eslint-plugin": "4.2.0",
+    "@eslint/js": "9.35.0",
+    "@stylistic/eslint-plugin": "5.3.1",
     "ajv": "8.17.1",
-    "ava": "6.2.0",
+    "ava": "6.4.1",
     "c8": "10.1.3",
     "character-entities": "2.0.2",
-    "eslint": "9.22.0",
-    "eslint-plugin-jsdoc": "50.6.8",
-    "eslint-plugin-n": "17.16.2",
-    "eslint-plugin-regexp": "2.7.0",
-    "eslint-plugin-unicorn": "57.0.0",
+    "eslint": "9.35.0",
+    "eslint-plugin-jsdoc": "57.2.0",
+    "eslint-plugin-n": "17.23.0",
+    "eslint-plugin-regexp": "2.10.0",
+    "eslint-plugin-unicorn": "61.0.2",
     "gemoji": "8.1.0",
     "globby": "14.1.0",
     "js-yaml": "4.1.0",
@@ -104,12 +104,12 @@
     "markdown-it-sub": "2.0.0",
     "markdown-it-sup": "2.0.0",
     "markdownlint-rule-extended-ascii": "0.2.1",
-    "nano-spawn": "0.2.0",
+    "nano-spawn": "1.0.3",
     "npm-run-all": "4.1.5",
     "terser-webpack-plugin": "5.3.14",
     "toml": "3.0.0",
-    "typescript": "5.8.2",
-    "webpack": "5.98.0",
+    "typescript": "5.9.2",
+    "webpack": "5.101.3",
     "webpack-cli": "6.0.1"
   },
   "keywords": [

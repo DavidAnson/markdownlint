@@ -18,13 +18,13 @@ jobs:
         node-version: [ latest ]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install --no-package-lock
+      run: npm install
     - name: Clone Test Repos
       run: npm run clone-test-repos
     - name: Lint Test Repos

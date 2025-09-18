@@ -17,16 +17,16 @@ jobs:
       fail-fast: false
       matrix:
         os: [macos-latest, ubuntu-latest, windows-latest]
-        node-version: [ 18, 20, 22, 23 ]
+        node-version: [ 20, 22, 24 ]
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install Dependencies
-      run: npm install --no-package-lock
+      run: npm install
     - name: Run CI Tests
       run: npm run ci
 
@@ -34,13 +34,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - name: Use pnpm latest
       uses: pnpm/action-setup@v4
       with:
         version: latest
     - name: Use Node.js latest
-      uses: actions/setup-node@v4
+      uses: actions/setup-node@v5
       with:
         node-version: latest
     - name: Install dependencies

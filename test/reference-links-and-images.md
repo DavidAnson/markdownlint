@@ -242,3 +242,8 @@ Text with a [^footnote] in it
 [^footnote]: Footnote with an [embedded-reference][] in it
 
 [embedded-reference]: https://example.com/embedded-reference
+
+## GitHub Flavored Markdown Task List Items
+
+- [ ] Unchecked task list item
+- [x] Checked task list item

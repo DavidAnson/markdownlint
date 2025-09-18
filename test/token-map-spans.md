@@ -32,7 +32,7 @@ code
 3. List
 
 | Table | Column 1   | Column 2   | Column 3 | Column 4                    |
-|-------|------------|------------|----------|----------------------------|
+|-------|------------|------------|----------|-----------------------------|
 | Text  | *emphasis* | __strong__ | `code`   | [link](https://example.com) |
 | Text  | *emphasis* | __strong__ | `code`   | [link](https://example.com) |
 

@@ -17,6 +17,7 @@ import { getVersion } from "markdownlint";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
+import * as cache from "../lib/cache.mjs";
 import * as constants from "../lib/constants.mjs";
 import rules from "../lib/rules.mjs";
 import customRules from "./rules/rules.cjs";
@@ -48,46 +49,42 @@ function getMarkdownItFactory(markdownItPlugins) {
 }
 
 test("simpleAsync", (t) => new Promise((resolve) => {
+  t.plan(3);
+  const options = {
+    "strings": {
+      "content": "# Heading"
+    }
+  };
+  lintAsync(options, (err, actual) => {
+    t.falsy(err);
+    t.is(actual?.content.length, 1);
+    t.is(actual?.content[0].ruleNames[0], "MD047");
+    resolve();
+  });
+}));
+
+test("simpleSync", (t) => {
   t.plan(2);
   const options = {
     "strings": {
       "content": "# Heading"
     }
   };
-  const expected = "content: 1: MD047/single-trailing-newline " +
-    "Files should end with a single newline character";
-  lintAsync(options, (err, actual) => {
-    t.falsy(err);
-    // @ts-ignore
-    t.is(actual.toString(), expected, "Unexpected results.");
-    resolve();
-  });
-}));
-
-test("simpleSync", (t) => {
-  t.plan(1);
-  const options = {
-    "strings": {
-      "content": "# Heading"
-    }
-  };
-  const expected = "content: 1: MD047/single-trailing-newline " +
-    "Files should end with a single newline character";
-  const actual = lintSync(options).toString();
-  t.is(actual, expected, "Unexpected results.");
+  const actual = lintSync(options);
+  t.is(actual.content.length, 1);
+  t.is(actual.content[0].ruleNames[0], "MD047");
 });
 
 test("simplePromise", (t) => {
-  t.plan(1);
+  t.plan(2);
   const options = {
     "strings": {
       "content": "# Heading"
     }
   };
-  const expected = "content: 1: MD047/single-trailing-newline " +
-    "Files should end with a single newline character";
   return lintPromise(options).then((actual) => {
-    t.is(actual.toString(), expected, "Unexpected results.");
+    t.is(actual.content.length, 1);
+    t.is(actual.content[0].ruleNames[0], "MD047");
   });
 });
 
@@ -467,7 +464,7 @@ test("styleAll", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 140 ],
+      "MD047": [ 144 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -475,8 +472,10 @@ test("styleAll", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ],
-      "MD058": [ 117, 119 ]
+      "MD056": [ 116 ],
+      "MD058": [ 119, 121 ],
+      "MD059": [ 124 ],
+      "MD060": [ 110 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -515,7 +514,7 @@ test("styleRelaxed", async(t) => {
       "MD042": [ 81 ],
       "MD045": [ 85 ],
       "MD046": [ 49, 73, 77 ],
-      "MD047": [ 140 ],
+      "MD047": [ 144 ],
       "MD048": [ 77 ],
       "MD049": [ 90 ],
       "MD050": [ 94 ],
@@ -523,8 +522,10 @@ test("styleRelaxed", async(t) => {
       "MD052": [ 98 ],
       "MD053": [ 100 ],
       "MD055": [ 110 ],
-      "MD056": [ 114 ],
-      "MD058": [ 117, 119 ]
+      "MD056": [ 116 ],
+      "MD058": [ 119, 121 ],
+      "MD059": [ 124 ],
+      "MD060": [ 110 ]
     }
   };
   t.deepEqual(actualResult, expectedResult, "Undetected issues.");
@@ -541,6 +542,7 @@ test("nullFrontMatter", (t) => new Promise((resolve) => {
       "default": false,
       "MD010": true
     },
+    // @ts-ignore
     "resultVersion": 0
   }, function callback(err, result) {
     t.falsy(err);
@@ -593,6 +595,7 @@ test("noInlineConfig", (t) => new Promise((resolve) => {
       ].join("\n")
     },
     "noInlineConfig": true,
+    // @ts-ignore
     "resultVersion": 0
   }, function callback(err, result) {
     t.falsy(err);
@@ -641,7 +644,7 @@ test("readmeHeadings", (t) => new Promise((resolve) => {
           "##### options.handleRuleFailures",
           "##### options.markdownItFactory",
           "##### options.noInlineConfig",
-          "##### options.resultVersion",
+          "##### ~~options.resultVersion~~",
           "##### options.strings",
           "#### callback",
           "#### result",
@@ -832,7 +835,7 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
 }));
 
 test("readme", async(t) => {
-  t.plan(130);
+  t.plan(132);
   const tagToRules = {};
   for (const rule of rules) {
     for (const tag of rule.tags) {
@@ -907,7 +910,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(196);
+  t.plan(211);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1029,7 +1032,7 @@ test("validateConfigExampleJson", (t) => {
 });
 
 test("allBuiltInRulesHaveValidUrl", (t) => {
-  t.plan(156);
+  t.plan(159);
   for (const rule of rules) {
     // @ts-ignore
     t.truthy(rule.information);
@@ -1062,6 +1065,71 @@ test("someCustomRulesHaveValidUrl", (t) => {
     }
   }
 });
+
+test("coverageForCacheMicromarkTokensWhenUndefined", (t) => {
+  t.plan(1);
+  cache.initialize(undefined);
+  t.is(cache.micromarkTokens().length, 0);
+});
+
+test("micromarkParseCalledWhenNeeded", (t) => new Promise((resolve) => {
+  t.plan(3);
+  /** @type {import("markdownlint").Rule} */
+  const markdownItRule = {
+    "names": [ "markdown-it-rule" ],
+    "description": "markdown-it rule",
+    "tags": [ "test" ],
+    "parser": "markdownit",
+    "function": () => {
+      t.true(cache.micromarkTokens().length > 0);
+    }
+  };
+  lintAsync({
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    "config": {
+      "markdown-it-rule": true
+    },
+    "customRules": [ markdownItRule ],
+    "markdownItFactory": getMarkdownItFactory([])
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
+
+test("micromarkParseSkippedWhenNotNeeded", (t) => new Promise((resolve) => {
+  t.plan(3);
+  /** @type {import("markdownlint").Rule} */
+  const markdownItRule = {
+    "names": [ "markdown-it-rule" ],
+    "description": "markdown-it rule",
+    "tags": [ "test" ],
+    "parser": "markdownit",
+    "function": () => {
+      t.true(cache.micromarkTokens().length === 0);
+    }
+  };
+  lintAsync({
+    "strings": {
+      "string": "# Heading\n\nText\n"
+    },
+    "config": {
+      "default": false,
+      "markdown-it-rule": true
+    },
+    "customRules": [ markdownItRule ],
+    "markdownItFactory": getMarkdownItFactory([])
+  }, function callback(err, actual) {
+    t.falsy(err);
+    const expected = { "string": [] };
+    t.deepEqual(actual, expected, "Unexpected issues.");
+    resolve();
+  });
+}));
 
 test("markdownItPluginsSingle", (t) => new Promise((resolve) => {
   t.plan(4);
@@ -1159,6 +1227,7 @@ Text with: [^footnote]
 [reference]: https://example.com
 `
     },
+    // @ts-ignore
     "resultVersion": 0
   }, (err, actual) => {
     t.falsy(err);
@@ -1208,7 +1277,7 @@ test("token-map-spans", (t) => {
 });
 
 test("configParsersInvalid", async(t) => {
-  t.plan(1);
+  t.plan(2);
   const options = {
     "strings": {
       "content": [
@@ -1221,10 +1290,9 @@ test("configParsersInvalid", async(t) => {
       ].join("\n")
     }
   };
-  const expected = "content: 1: MD041/first-line-heading/first-line-h1 " +
-    "First line in a file should be a top-level heading [Context: \"Text\"]";
   const actual = await lintPromise(options);
-  t.is(actual.toString(), expected, "Unexpected results.");
+  t.is(actual.content.length, 1);
+  t.is(actual.content[0].ruleNames[0], "MD041");
 });
 
 test("configParsersJSON", async(t) => {
@@ -1244,7 +1312,7 @@ test("configParsersJSON", async(t) => {
     }
   };
   const actual = await lintPromise(options);
-  t.is(actual.toString(), "", "Unexpected results.");
+  t.is(actual.content.length, 0);
 });
 
 test("configParsersJSONC", async(t) => {
@@ -1266,7 +1334,7 @@ test("configParsersJSONC", async(t) => {
     "configParsers": [ jsoncParser.parse ]
   };
   const actual = await lintPromise(options);
-  t.is(actual.toString(), "", "Unexpected results.");
+  t.is(actual.content.length, 0);
 });
 
 test("configParsersYAML", async(t) => {
@@ -1287,7 +1355,7 @@ test("configParsersYAML", async(t) => {
   };
   // @ts-ignore
   const actual = await lintPromise(options);
-  t.is(actual.toString(), "", "Unexpected results.");
+  t.is(actual.content.length, 0);
 });
 
 test("configParsersTOML", async(t) => {
@@ -1309,7 +1377,7 @@ test("configParsersTOML", async(t) => {
     ]
   };
   const actual = await lintPromise(options);
-  t.is(actual.toString(), "", "Unexpected results.");
+  t.is(actual.content.length, 0);
 });
 
 test("getVersion", (t) => {

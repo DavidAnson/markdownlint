@@ -53,5 +53,6 @@
 | cell  | cell           |
 
 <!-- markdownlint-configure-file {
+  "table-column-style": false,
   "table-pipe-style": false
 } -->

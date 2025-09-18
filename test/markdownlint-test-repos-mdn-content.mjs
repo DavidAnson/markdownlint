@@ -9,5 +9,5 @@ test("https://github.com/mdn/content", (t) => {
   const rootDir = "./test-repos/mdn-content";
   const globPatterns = [ join(rootDir, "**/*.md") ];
   const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
-  return lintTestRepo(t, globPatterns, configPath, true);
+  return lintTestRepo(t, globPatterns, configPath, { "table-column-style": false }, true);
 });

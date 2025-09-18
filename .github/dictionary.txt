@@ -32,6 +32,7 @@ config.
 CVE-\d+-\d+
 docs-util
 ECMAScript
+encodings
 ES2015
 ES6
 ESLint

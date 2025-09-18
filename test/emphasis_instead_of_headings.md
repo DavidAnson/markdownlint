@@ -44,3 +44,15 @@ detected as a heading because it's on multiple lines**
 **This shouldn't be detected as a heading as it ends in full-width punctuation。**
 
 **[This as well since it is a link](https://example.com)**
+
+*Section 4: emphasis as heading {MD036}* <!-- comment -->
+
+Emphasis as heading followed by an HTML comment
+
+<!-- comment --> __Section 5: emphasis as heading {MD036}__
+
+Emphasis as heading following an HTML comment
+
+*Section 6: emphasis <!-- comment --> as non-heading*
+
+Embedded HTML comments are unusual and cause the emphasis to be ignored/allowed

@@ -1,6 +1,5 @@
 // @ts-check
 
-// eslint-disable-next-line n/no-unsupported-features/node-builtins
 import { constants, copyFile, rm, unlink } from "node:fs/promises";
 import { globby } from "globby";
 
@@ -19,7 +18,7 @@ if (command === "copy") {
     )
   );
 } else if (command === "remove") {
-  await Promise.all(args.map((dir) => rm(dir, { "recursive": true })));
+  await Promise.all(args.map((dir) => rm(dir, { "force": true, "recursive": true })));
 } else {
   throw new Error(`Unsupported command: ${command}`);
 }

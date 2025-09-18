@@ -12,6 +12,11 @@ Tags: `headings`
 
 Aliases: `heading-increment`
 
+Parameters:
+
+- `front_matter_title`: RegExp for matching title in front matter (`string`,
+  default `^\s*title\s*[:=]`)
+
 This rule is triggered when you skip heading levels in a Markdown document, for
 example:
 
@@ -39,6 +44,15 @@ level at a time:
 
 ### Another Heading 3
 ```
+
+If [YAML](https://en.wikipedia.org/wiki/YAML) front matter is present and
+contains a `title` property (commonly used with blog posts), this rule treats
+that as a top level heading and will report a violation if the actual first
+heading is not a level 2 heading. To use a different property name in the
+front matter, specify the text of a regular expression via the
+`front_matter_title` parameter. To disable the use of front matter by this
+rule, specify `""` for `front_matter_title`. When front matter is not present,
+the first heading can be any level.
 
 Rationale: Headings represent the structure of a document and can be confusing
 when skipped - especially for accessibility scenarios. More information:
@@ -382,6 +396,12 @@ parameter to the desired value.
 
 Rationale: Hard tabs are often rendered inconsistently by different editors and
 can be harder to work with than spaces.
+
+More information:
+
+- <https://agiletribe.wordpress.com/2011/10/27/18-dont-use-tab-characters/>
+- <https://www.jwz.org/doc/tabs-vs-spaces.html>
+- <https://adamspiers.org/computing/why_no_tabs.html>
 
 <a name="md011"></a>
 
@@ -1026,6 +1046,8 @@ Parameters:
 - `style`: List style (`string`, default `one_or_ordered`, values `one` /
   `one_or_ordered` / `ordered` / `zero`)
 
+Fixable: Some violations can be fixed by tooling
+
 This rule is triggered for ordered lists that do not either start with '1.' or
 do not have a prefix that increases in numerical order (depending on the
 configured style). The less-common pattern of using '0.' as a first prefix or
@@ -1321,6 +1343,8 @@ Aliases: `no-inline-html`
 Parameters:
 
 - `allowed_elements`: Allowed elements (`string[]`, default `[]`)
+- `table_allowed_elements`: Allowed elements in tables (`string[]`, default
+  `[]`)
 
 This rule is triggered whenever raw HTML is used in a Markdown document:
 
@@ -1334,7 +1358,11 @@ To fix this, use 'pure' Markdown instead of including raw HTML:
 # Markdown heading
 ```
 
-Note: To allow specific HTML elements, use the `allowed_elements` parameter.
+To allow specific HTML elements anywhere in Markdown content, set the
+`allowed_elements` parameter to a list of HTML element names. To allow a
+specific set of HTML elements within Markdown tables, set the
+`table_allowed_elements` parameter to a list of HTML element names. This can be
+used to permit the use of `<br>`-style line breaks only within Markdown tables.
 
 Rationale: Raw HTML is allowed in Markdown, but this rule is included for
 those who want their documents to only include "pure" Markdown, or for those
@@ -1908,7 +1936,7 @@ Tags: `accessibility`, `images`
 
 Aliases: `no-alt-text`
 
-This rule is triggered when an image is missing alternate text (alt text)
+This rule reports a violation when an image is missing alternate text (alt text)
 information.
 
 Alternate text is commonly specified inline as:
@@ -1933,12 +1961,20 @@ Or with HTML as:
 <img src="image.jpg" alt="Alternate text" />
 ```
 
+Note: If the [HTML `aria-hidden` attribute][aria-hidden] is used to hide the
+image from assistive technology, this rule does not report a violation:
+
+```html
+<img src="image.jpg" aria-hidden="true" />
+```
+
 Guidance for writing alternate text is available from the [W3C][w3c],
 [Wikipedia][wikipedia], and [other locations][phase2technology].
 
 Rationale: Alternate text is important for accessibility and describes the
 content of an image for people who may not be able to see it.
 
+[aria-hidden]: https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Reference/Attributes/aria-hidden
 [phase2technology]: https://www.phase2technology.com/blog/no-more-excuses
 [w3c]: https://www.w3.org/WAI/alt/
 [wikipedia]: https://en.wikipedia.org/wiki/Alt_attribute
@@ -2156,6 +2192,8 @@ Aliases: `link-fragments`
 Parameters:
 
 - `ignore_case`: Ignore case of fragments (`boolean`, default `false`)
+- `ignored_pattern`: Pattern for ignoring additional fragments (`string`,
+  default ``)
 
 Fixable: Some violations can be fixed by tooling
 
@@ -2235,6 +2273,12 @@ And this link to content starting within line 19 running into line 21:
 [Link](#L19C5-L21C11)
 ```
 
+Some Markdown generators dynamically create and insert headings when building
+documents, for example by combining a fixed prefix like `figure-` and an
+incrementing numeric counter. To ignore such generated fragments, set the
+`ignored_pattern` [regular expression][RegEx] parameter to a pattern that
+matches (e.g., `^figure-`).
+
 Rationale: [GitHub section links][github-section-links] are created
 automatically for every heading when Markdown content is displayed on GitHub.
 This makes it easy to link directly to different sections within a document.
@@ -2250,6 +2294,7 @@ append an incrementing integer as needed for uniqueness.
 [github-heading-algorithm]: https://github.com/gjtorikian/html-pipeline/blob/f13a1534cb650ba17af400d1acd3a22c28004c09/lib/html/pipeline/toc_filter.rb
 [github-linking-to-content]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/creating-a-permanent-link-to-a-code-snippet#linking-to-markdown#linking-to-markdown
 [html-top-fragment]: https://html.spec.whatwg.org/multipage/browsing-the-web.html#scrolling-to-a-fragment
+[RegEx]: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_expressions
 
 <a name="md052"></a>
 
@@ -2261,6 +2306,7 @@ Aliases: `reference-links-images`
 
 Parameters:
 
+- `ignored_labels`: Ignored link labels (`string[]`, default `["x"]`)
 - `shortcut_syntax`: Include shortcut syntax (`boolean`, default `false`)
 
 Links and images in Markdown can provide the link destination or image source
@@ -2293,6 +2339,17 @@ so "shortcut" syntax is ignored by default. To include "shortcut" syntax, set
 the `include_shortcut` parameter to `true`. Note that doing so produces warnings
 for *all* text in the document that *could* be a shortcut. If bracketed text is
 intentional, brackets can be escaped with the `\` character: `\[example\]`.
+
+If there are link labels that are deliberately unreferenced, they can be ignored
+by setting the `ignored_labels` parameter to the list of strings to ignore. The
+default value of this parameter ignores the checkbox syntax used by
+[GitHub Flavored Markdown task list items][gfm-tasklist]:
+
+```markdown
+- [x] Checked task list item
+```
+
+[gfm-tasklist]: https://github.github.com/gfm/#task-list-items-extension-
 
 <a name="md053"></a>
 
@@ -2327,9 +2384,9 @@ reference has the corresponding label. The "full", "collapsed", and "shortcut"
 formats are all supported.
 
 If there are reference definitions that are deliberately unreferenced, they can
-be ignored by setting the `ignored_definitions` parameter. The default value of
-this parameter ignores the following convention for adding non-HTML comments to
-Markdown:
+be ignored by setting the `ignored_definitions` parameter to the list of strings
+to ignore. The default value of this parameter ignores the following convention
+for adding non-HTML comments to Markdown:
 
 ```markdown
 [//]: # (This behaves like a comment)
@@ -2494,7 +2551,7 @@ Rationale: Some parsers have difficulty with tables that are missing their
 leading or trailing pipe characters. The use of leading/trailing pipes can also
 help provide visual clarity.
 
-[gfm-table-055]: https://github.github.com/gfm/#tables-extension-
+[gfm-table-055]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
 
 <a name="md056"></a>
 
@@ -2534,7 +2591,7 @@ of cells or it will not be recognized as a table (per specification).
 Rationale: Extra cells in a row are usually not shown, so their data is lost.
 Missing cells in a row create holes in the table and suggest an omission.
 
-[gfm-table-056]: https://github.github.com/gfm/#tables-extension-
+[gfm-table-056]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
 
 <a name="md058"></a>
 
@@ -2618,7 +2675,83 @@ translations for every language.
 
 Note: This rule checks Markdown links; HTML links are ignored.
 
-More information: <https://webaim.org/techniques/hypertext/>
+More information:
+
+- <https://webaim.org/techniques/hypertext/>
+- <https://www.w3.org/WAI/WCAG21/Understanding/link-purpose-link-only.html>
+
+<a name="md060"></a>
+
+## `MD060` - Table column style
+
+Tags: `table`
+
+Aliases: `table-column-style`
+
+Parameters:
+
+- `style`: Table column style (`string`, default `any`, values `aligned` /
+  `any` / `compact` / `tight`)
+
+This rule is triggered when the column separators of a
+[GitHub Flavored Markdown table][gfm-table-060] are used inconsistently.
+
+This rule recognizes three table column styles based on popular use:
+
+Style `aligned` looks the most like a table:
+
+```markdown
+| Character | Meaning |
+| --------- | ------- |
+| Y         | Yes     |
+| N         | No      |
+```
+
+Style `compact` uses a single space to pad cell content:
+
+```markdown
+| Character | Meaning |
+| --- | --- |
+| Y | Yes |
+| N | No |
+```
+
+Style `tight` uses no padding for cell content:
+
+```markdown
+|Character|Meaning|
+|---|---|
+|Y|Yes|
+|N|No|
+```
+
+When this rule's `style` parameter is set to `aligned`, `compact`, or `tight`,
+every table must match the corresponding pattern and errors will be reported for
+any violations. By default, or when the `any` style is used, each table is
+analyzed to see if it satisfies any supported style. If so, no errors are
+reported. If not, errors are be reported for whichever style would produce the
+*fewest* errors (i.e., whichever style is the closest match).
+
+Note: Pipe alignment for the `aligned` style is based on character count, so
+wide characters and multi-character encodings can produce unexpected results.
+The following table is correctly aligned based on character count, though some
+editors render the emoji wider:
+
+<!-- markdownlint-capture -->
+<!-- markdownlint-disable extended-ascii -->
+
+```markdown
+| Response | Emoji |
+| -------- | ----- |
+| Yes      | ✅     |
+| No       | ❎     |
+```
+
+<!-- markdownlint-restore -->
+
+Rationale: Consistent formatting makes it easier to understand a document.
+
+[gfm-table-060]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {

@@ -149,6 +149,7 @@ playground for learning and exploring.
 - **[MD056](doc/md056.md)** *table-column-count* - Table column count
 - **[MD058](doc/md058.md)** *blanks-around-tables* - Tables should be surrounded by blank lines
 - **[MD059](doc/md059.md)** *descriptive-link-text* - Link text should be descriptive
+- **[MD060](doc/md060.md)** *table-column-style* - Table column style
 
 <!-- markdownlint-restore -->
 
@@ -190,7 +191,7 @@ rules at once.
 - **`ol`** - `MD029`, `MD030`, `MD032`
 - **`spaces`** - `MD018`, `MD019`, `MD020`, `MD021`, `MD023`
 - **`spelling`** - `MD044`
-- **`table`** - `MD055`, `MD056`, `MD058`
+- **`table`** - `MD055`, `MD056`, `MD058`, `MD060`
 - **`ul`** - `MD004`, `MD005`, `MD007`, `MD030`, `MD032`
 - **`url`** - `MD034`
 - **`whitespace`** - `MD009`, `MD010`, `MD012`, `MD027`, `MD028`, `MD030`,
@@ -421,9 +422,9 @@ object.
 See [ValidatingConfiguration.md](schema/ValidatingConfiguration.md) for ways to
 use the JSON Schema to validate configuration.
 
-For more advanced scenarios, styles can reference and extend other styles.
-The `readConfig` and `readConfigSync` functions can be used to read such
-styles.
+For more advanced scenarios, styles can reference and build upon other styles
+via the `extends` keyword and a file path or (installed) package name. The
+`readConfig` function can be used to read such aggregate styles from code.
 
 For example, assuming a `base.json` configuration file:
 
@@ -619,28 +620,15 @@ By default, properly-formatted inline comments can be used to create exceptions
 for parts of a document. Setting `noInlineConfig` to `true` ignores all such
 comments.
 
-##### options.resultVersion
+##### ~~options.resultVersion~~
 
-Type: `Number`
+This property is *deprecated* and should be removed. The default format of the
+`result` object remains the same as setting `resultVersion` to `3`. For
+continued access to other (previously *deprecated*) formats:
 
-Specifies which version of the `result` object to return (see the "Usage"
-section below for examples).
-
-Passing a `resultVersion` of `0` corresponds to the original, simple format
-where each error is identified by rule name and line number. *Deprecated*
-
-Passing a `resultVersion` of `1` corresponds to a detailed format where each
-error includes information about the line number, rule name, alias, description,
-as well as any additional detail or context that is available. *Deprecated*
-
-Passing a `resultVersion` of `2` corresponds to a detailed format where each
-error includes information about the line number, rule names, description, as
-well as any additional detail or context that is available. *Deprecated*
-
-Passing a `resultVersion` of `3` corresponds to the detailed version `2` format
-with additional information about how to fix automatically-fixable errors. In
-this mode, all errors that occur on each line are reported (other versions
-report only the first error for each rule). This is the default behavior.
+```javascript
+import { convertToResultVersion0, convertToResultVersion1, convertToResultVersion2 } from "markdownlint/helpers";
+```
 
 ##### options.strings
 
@@ -671,16 +659,16 @@ Standard completion callback.
 
 Type: `Object`
 
-Call `result.toString()` for convenience or see below for an example of the
-structure of the `result` object. Passing the value `true` to `toString()`
-uses rule aliases (ex: `no-hard-tabs`) instead of names (ex: `MD010`).
+Map of input file names and string identifiers to issues within.
+
+See the [Usage section](#usage) for an example of the structure of this object.
 
 ### Config
 
 The `options.config` configuration object is simple and can be stored in a file
-for readability and easy reuse. The `readConfig` and `readConfigSync` functions
-load configuration settings and support the `extends` keyword for referencing
-other files (see above).
+for readability and easy reuse. The `readConfig` function loads configuration
+settings and supports the `extends` keyword for referencing files or packages
+(see above).
 
 By default, configuration files are parsed as JSON (and named
 `.markdownlint.json`). Custom parsers can be provided to handle other formats
@@ -849,7 +837,7 @@ console.log(getVersion());
 
 ## Usage
 
-Invoke `lint` and use the `result` object's `toString` method:
+Invoke `lint` as an asynchronous call:
 
 ```javascript
 import { lint as lintAsync } from "markdownlint/async";
@@ -864,22 +852,9 @@ const options = {
 
 lintAsync(options, function callback(error, results) {
   if (!error && results) {
-    console.log(results.toString());
+    console.dir(results, { "colors": true, "depth": null });
   }
 });
-```
-
-Output:
-
-```text
-bad.string: 3: MD010/no-hard-tabs Hard tabs [Column: 19]
-bad.string: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.string"]
-bad.string: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This string fails        some rules."]
-bad.string: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.string"]
-bad.md: 3: MD010/no-hard-tabs Hard tabs [Column: 17]
-bad.md: 1: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#bad.md"]
-bad.md: 3: MD018/no-missing-space-atx No space after hash on atx style heading [Context: "#This file fails      some rules."]
-bad.md: 1: MD041/first-line-heading/first-line-h1 First line in a file should be a top-level heading [Context: "#bad.md"]
 ```
 
 Or as a synchronous call:
@@ -888,10 +863,10 @@ Or as a synchronous call:
 import { lint as lintSync } from "markdownlint/sync";
 
 const results = lintSync(options);
-console.log(results.toString());
+console.dir(results, { "colors": true, "depth": null });
 ```
 
-To examine the `result` object directly via a `Promise`-based call:
+Or as a `Promise`-based call:
 
 ```javascript
 import { lint as lintPromise } from "markdownlint/promise";
@@ -900,7 +875,7 @@ const results = await lintPromise(options);
 console.dir(results, { "colors": true, "depth": null });
 ```
 
-Output:
+All of which return an object like:
 
 ```json
 {
@@ -912,37 +887,35 @@ Output:
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md010.md",
       "errorDetail": "Column: 17",
       "errorContext": null,
-      "errorRange": [ 17, 1 ] },
+      "errorRange": [ 17, 1 ],
+      "fixInfo": { "editColumn": 17, "deleteCount": 1, "insertText": ' ' } }
     { "lineNumber": 1,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md018.md",
       "errorDetail": null,
       "errorContext": "#bad.md",
-      "errorRange": [ 1, 2 ] },
+      "errorRange": [ 1, 2 ],
+      "fixInfo": { "editColumn": 2, "insertText": ' ' } }
     { "lineNumber": 3,
       "ruleNames": [ "MD018", "no-missing-space-atx" ],
       "ruleDescription": "No space after hash on atx style heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md018.md",
       "errorDetail": null,
       "errorContext": "#This file fails\tsome rules.",
-      "errorRange": [ 1, 2 ] },
+      "errorRange": [ 1, 2 ],
+      "fixInfo": { "editColumn": 2, "insertText": ' ' } }
     { "lineNumber": 1,
       "ruleNames": [ "MD041", "first-line-heading", "first-line-h1" ],
       "ruleDescription": "First line in a file should be a top-level heading",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md041.md",
       "errorDetail": null,
       "errorContext": "#bad.md",
-      "errorRange": null }
+      "errorRange": null,
+      "fixInfo": null }
   ]
 }
 ```
-
-Integration with the [gulp](https://gulpjs.com/) build system is
-straightforward: [`gulpfile.cjs`](example/gulpfile.cjs).
-
-Integration with the [Grunt](https://gruntjs.com/) build system is similar:
-[`Gruntfile.cjs`](example/Gruntfile.cjs).
 
 ## Browser
 
@@ -969,7 +942,7 @@ const options = {
   }
 };
 
-const results = globalThis.markdownlint.lintSync(options).toString();
+const results = globalThis.markdownlint.lintSync(options);
 ```
 
 ## Examples
