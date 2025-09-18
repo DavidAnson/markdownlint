@@ -103,10 +103,18 @@ function createTestForFile(file) {
 
 const dir = await fs.readdir("./test");
 const files = dir.filter((file) => /\.md$/.test(file));
-for (const file of files) {
-  // @ts-ignore
-  test(
-    file,
-    createTestForFile(path.join("./test", file))
-  );
+
+/**
+ * Creates tests for chunk N/M of the set.
+ *
+ * @param {number} number Chunk number.
+ * @param {number} total Total chunks.
+ * @returns {void}
+ */
+export function createTests(number, total) {
+  const start = Math.floor(((number - 1) * files.length) / total);
+  const end = Math.floor((number * files.length) / total);
+  for (const file of files.slice(start, end)) {
+    test(file, createTestForFile(path.join("./test", file)));
+  }
 }
