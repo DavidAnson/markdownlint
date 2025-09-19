@@ -6,14 +6,20 @@ import yaml from "js-yaml";
 import { __dirname, importWithTypeJson } from "../test/esm-helpers.mjs";
 const configSchema = await importWithTypeJson(import.meta, "../schema/markdownlint-config-schema.json");
 
+/** @type {Object<string, any>} */
 const configExample = {};
 for (const rule in configSchema.properties) {
   if (/^(?:MD\d{3}|default|extends)$/.test(rule)) {
     const properties = configSchema.properties[rule];
     configExample[rule + "-description"] = properties.description;
     configExample[rule] = properties.default;
-    const subproperties = properties.oneOf?.at(-1).properties;
-    if (subproperties) {
+    const subproperties = Object.fromEntries(
+      Object.entries(
+        properties.oneOf?.at(-1).properties || []
+      ).filter(([ key ]) => key !== "severity")
+    );
+    if (Object.keys(subproperties).length > 0) {
+      /** @type {Object<string, any>} */
       const ruleExample = {};
       // eslint-disable-next-line guard-for-in
       for (const property in subproperties) {
@@ -26,6 +32,13 @@ for (const rule in configSchema.properties) {
   }
 }
 
+/**
+ * Transforms comments to use the specified prefix.
+ *
+ * @param {string} input Markdown input.
+ * @param {string} commentPrefix Comment prefix.
+ * @returns {string} Transformed input.
+ */
 const transformComments = (input, commentPrefix) => (
   commentPrefix +
   " Example markdownlint configuration with all properties set to their default value\n" +

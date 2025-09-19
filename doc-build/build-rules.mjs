@@ -61,8 +61,12 @@ for (const rule of rules) {
     ""
   );
   const ruleData = schema.properties[name];
-  const ruleProperties = ruleData.oneOf.at(-1).properties;
-  if (ruleProperties) {
+  const ruleProperties = Object.fromEntries(
+    Object.entries(
+      ruleData.oneOf.at(-1).properties
+    ).filter(([ key ]) => key !== "severity")
+  );
+  if (Object.keys(ruleProperties).length > 0) {
     section.push(
       "Parameters:",
       ""

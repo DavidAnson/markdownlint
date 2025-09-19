@@ -375,12 +375,48 @@ for all rules. Using a tag name (e.g., `whitespace`) and a setting of `false`,
 configuration object is passed or the optional `default` setting is not present,
 all rules are enabled.
 
+The following syntax disables the specified rule, tag, or `default`:
+
+```javascript
+{
+  "rule_name": false
+}
+```
+
+The following syntax enables the specified rule, tag, or `default`:
+
+```javascript
+{
+  "rule_name": true
+  // OR
+  "rule_name": "error"
+}
+```
+
+The following syntax enables and configures the specified rule:
+
+```javascript
+{
+  "rule_name": {
+    "parameter": "value"
+  }
+  // OR
+  "rule_name": {
+    "parameter": "value",
+    "severity": "error"
+  }
+}
+```
+
+> Note that `error` and `severity` are not supported by library versions earlier
+> than `0.39.0`. However, all examples above behave the same.
+
 To evaluate a configuration object, the `default` setting is applied first, then
 keys are processed in order from top to bottom. If multiple values apply to a
 rule (because of tag names or duplication), later values override earlier ones.
 Keys (including rule names, aliases, tags, or `default`) are not case-sensitive.
 
-Example:
+Example using `default`, rule names, and tag names together:
 
 ```json
 {

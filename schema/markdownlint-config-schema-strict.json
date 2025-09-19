@@ -46,6 +46,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "front_matter_title": {
               "description": "RegExp for matching title in front matter",
               "type": "string",
@@ -71,6 +79,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "front_matter_title": {
               "description": "RegExp for matching title in front matter",
               "type": "string",
@@ -96,6 +112,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Heading style",
               "type": "string",
@@ -129,6 +153,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Heading style",
               "type": "string",
@@ -162,6 +194,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "List style",
               "type": "string",
@@ -194,6 +234,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "List style",
               "type": "string",
@@ -221,6 +269,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -235,6 +297,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -254,6 +330,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "indent": {
               "description": "Spaces for indent",
               "type": "integer",
@@ -291,6 +375,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "indent": {
               "description": "Spaces for indent",
               "type": "integer",
@@ -328,6 +420,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "br_spaces": {
               "description": "Spaces for line break",
               "type": "integer",
@@ -364,6 +464,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "br_spaces": {
               "description": "Spaces for line break",
               "type": "integer",
@@ -400,6 +508,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "code_blocks": {
               "description": "Include code blocks",
               "type": "boolean",
@@ -439,6 +555,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "code_blocks": {
               "description": "Include code blocks",
               "type": "boolean",
@@ -473,6 +597,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -487,6 +625,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -506,6 +658,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "maximum": {
               "description": "Consecutive blank lines",
               "type": "integer",
@@ -532,6 +692,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "maximum": {
               "description": "Consecutive blank lines",
               "type": "integer",
@@ -558,6 +726,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "line_length": {
               "description": "Number of characters",
               "type": "integer",
@@ -621,6 +797,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "line_length": {
               "description": "Number of characters",
               "type": "integer",
@@ -679,6 +863,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -693,6 +891,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -707,6 +919,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -721,6 +947,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -735,6 +975,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -749,6 +1003,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -763,6 +1031,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -777,6 +1059,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -791,6 +1087,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -805,6 +1115,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -824,6 +1148,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "lines_above": {
               "description": "Blank lines above heading",
               "type": [
@@ -868,6 +1200,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "lines_above": {
               "description": "Blank lines above heading",
               "type": [
@@ -907,6 +1247,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -921,6 +1275,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -940,6 +1308,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "siblings_only": {
               "description": "Only check sibling headings",
               "type": "boolean",
@@ -965,6 +1341,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "siblings_only": {
               "description": "Only check sibling headings",
               "type": "boolean",
@@ -990,6 +1374,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "front_matter_title": {
               "description": "RegExp for matching title in front matter",
               "type": "string",
@@ -1022,6 +1414,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "front_matter_title": {
               "description": "RegExp for matching title in front matter",
               "type": "string",
@@ -1054,6 +1454,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "front_matter_title": {
               "description": "RegExp for matching title in front matter",
               "type": "string",
@@ -1086,6 +1494,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "punctuation": {
               "description": "Punctuation characters",
               "type": "string",
@@ -1111,6 +1527,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "punctuation": {
               "description": "Punctuation characters",
               "type": "string",
@@ -1136,6 +1560,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "list_items": {
               "description": "Include list items",
               "type": "boolean",
@@ -1161,6 +1593,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "list_items": {
               "description": "Include list items",
               "type": "boolean",
@@ -1181,6 +1621,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1195,6 +1649,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1214,6 +1682,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "List style",
               "type": "string",
@@ -1245,6 +1721,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "List style",
               "type": "string",
@@ -1276,6 +1760,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ul_single": {
               "description": "Spaces for single-line unordered list items",
               "type": "integer",
@@ -1320,6 +1812,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ul_single": {
               "description": "Spaces for single-line unordered list items",
               "type": "integer",
@@ -1364,6 +1864,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "list_items": {
               "description": "Include list items",
               "type": "boolean",
@@ -1389,6 +1897,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "list_items": {
               "description": "Include list items",
               "type": "boolean",
@@ -1409,6 +1925,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1423,6 +1953,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1442,6 +1986,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allowed_elements": {
               "description": "Allowed elements",
               "type": "array",
@@ -1478,6 +2030,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allowed_elements": {
               "description": "Allowed elements",
               "type": "array",
@@ -1509,6 +2069,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1523,6 +2097,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1542,6 +2130,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Horizontal rule style",
               "type": "string",
@@ -1567,6 +2163,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Horizontal rule style",
               "type": "string",
@@ -1592,6 +2196,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "punctuation": {
               "description": "Punctuation characters",
               "type": "string",
@@ -1617,6 +2229,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "punctuation": {
               "description": "Punctuation characters",
               "type": "string",
@@ -1637,6 +2257,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1651,6 +2285,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1665,6 +2313,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1679,6 +2341,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1693,6 +2369,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1707,6 +2397,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1726,6 +2430,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allowed_languages": {
               "description": "List of languages",
               "type": "array",
@@ -1759,6 +2471,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allowed_languages": {
               "description": "List of languages",
               "type": "array",
@@ -1792,6 +2512,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allow_preamble": {
               "description": "Allow content before first heading",
               "type": "boolean",
@@ -1829,6 +2557,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allow_preamble": {
               "description": "Allow content before first heading",
               "type": "boolean",
@@ -1866,6 +2602,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "allow_preamble": {
               "description": "Allow content before first heading",
               "type": "boolean",
@@ -1898,6 +2642,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1912,6 +2670,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -1931,6 +2703,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "headings": {
               "description": "List of headings",
               "type": "array",
@@ -1965,6 +2745,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "headings": {
               "description": "List of headings",
               "type": "array",
@@ -1999,6 +2787,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "names": {
               "description": "List of proper names",
               "type": "array",
@@ -2037,6 +2833,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "names": {
               "description": "List of proper names",
               "type": "array",
@@ -2070,6 +2874,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2084,6 +2902,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2103,6 +2935,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Block style",
               "type": "string",
@@ -2133,6 +2973,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Block style",
               "type": "string",
@@ -2158,6 +3006,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2172,6 +3034,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2191,6 +3067,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Code fence style",
               "type": "string",
@@ -2221,6 +3105,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Code fence style",
               "type": "string",
@@ -2251,6 +3143,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Emphasis style",
               "type": "string",
@@ -2281,6 +3181,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Emphasis style",
               "type": "string",
@@ -2311,6 +3219,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Strong style",
               "type": "string",
@@ -2341,6 +3257,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Strong style",
               "type": "string",
@@ -2371,6 +3295,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ignore_case": {
               "description": "Ignore case of fragments",
               "type": "boolean",
@@ -2401,6 +3333,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ignore_case": {
               "description": "Ignore case of fragments",
               "type": "boolean",
@@ -2431,6 +3371,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ignored_labels": {
               "description": "Ignored link labels",
               "type": "array",
@@ -2466,6 +3414,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ignored_labels": {
               "description": "Ignored link labels",
               "type": "array",
@@ -2501,6 +3457,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ignored_definitions": {
               "description": "Ignored definitions",
               "type": "array",
@@ -2531,6 +3495,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "ignored_definitions": {
               "description": "Ignored definitions",
               "type": "array",
@@ -2561,6 +3533,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "autolink": {
               "description": "Allow autolinks",
               "type": "boolean",
@@ -2611,6 +3591,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "autolink": {
               "description": "Allow autolinks",
               "type": "boolean",
@@ -2661,6 +3649,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Table pipe style",
               "type": "string",
@@ -2693,6 +3689,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Table pipe style",
               "type": "string",
@@ -2720,6 +3724,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2734,6 +3752,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2748,6 +3780,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2762,6 +3808,20 @@
           "enum": [
             "error"
           ]
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            }
+          }
         }
       ],
       "default": true
@@ -2781,6 +3841,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "prohibited_texts": {
               "description": "Prohibited link texts",
               "type": "array",
@@ -2814,6 +3882,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "prohibited_texts": {
               "description": "Prohibited link texts",
               "type": "array",
@@ -2847,6 +3923,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Table column style",
               "type": "string",
@@ -2878,6 +3962,14 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "severity": {
+              "description": "Rule severity",
+              "type": "string",
+              "enum": [
+                "error"
+              ],
+              "default": "error"
+            },
             "style": {
               "description": "Table column style",
               "type": "string",

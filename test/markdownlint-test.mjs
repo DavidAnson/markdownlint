@@ -346,13 +346,100 @@ test("enableRulesString", getConfigTestImplementation(
   configTestExpected3511
 ));
 
-test("enableRulesEmptyObject", getConfigTestImplementation(
+test("enableRulesObjectEmpty", getConfigTestImplementation(
   {
     "MD041": {},
     "default": false,
-    // @ts-ignore
     "no-multiple-space-atx": {},
     "extra": {}
+  },
+  configTestExpected3511
+));
+
+test("enableRulesObjectTruthy", getConfigTestImplementation(
+  {
+    "MD041": {
+      // @ts-ignore
+      "severity": 1
+    },
+    "default": false,
+    "no-multiple-space-atx": {
+      // @ts-ignore
+      "severity": 1
+    },
+    "extra": {
+      "severity": 1
+    }
+  },
+  configTestExpected3511
+));
+
+test("enableRulesObjectFalsy", getConfigTestImplementation(
+  {
+    "MD041": {
+      // @ts-ignore
+      "severity": 0
+    },
+    "default": false,
+    "no-multiple-space-atx": {
+      // @ts-ignore
+      "severity": 0
+    },
+    "extra": {
+      "severity": 0
+    }
+  },
+  configTestExpected3511
+));
+
+test("enableRulesObjectError", getConfigTestImplementation(
+  {
+    "MD041": {
+      "severity": "error"
+    },
+    "default": false,
+    "no-multiple-space-atx": {
+      "severity": "error"
+    },
+    "extra": {
+      "severity": "error"
+    }
+  },
+  configTestExpected3511
+));
+
+test("enableRulesObjectWarning", getConfigTestImplementation(
+  {
+    "MD041": {
+      // @ts-ignore
+      "severity": "warning"
+    },
+    "default": false,
+    "no-multiple-space-atx": {
+      // @ts-ignore
+      "severity": "warning"
+    },
+    "extra": {
+      "severity": "warning"
+    }
+  },
+  configTestExpected3511
+));
+
+test("enableRulesObjectOff", getConfigTestImplementation(
+  {
+    "MD041": {
+      // @ts-ignore
+      "severity": "off"
+    },
+    "default": false,
+    "no-multiple-space-atx": {
+      // @ts-ignore
+      "severity": "off"
+    },
+    "extra": {
+      "severity": "off"
+    }
   },
   configTestExpected3511
 ));
@@ -921,7 +1008,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(211);
+  t.plan(212);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
