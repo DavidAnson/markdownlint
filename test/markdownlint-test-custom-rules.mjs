@@ -2016,7 +2016,7 @@ test("customRulesParamsAreFrozen", (t) => {
 });
 
 test("customRulesParamsAreStable", (t) => {
-  t.plan(4);
+  t.plan(6);
   const config1 = { "value1": 10 };
   const config2 = { "value2": 20 };
   /** @type {import("markdownlint").Options} */
@@ -2038,17 +2038,10 @@ test("customRulesParamsAreStable", (t) => {
         "function":
           (params) => {
             const { config } = params;
-            t.deepEqual(
-              config,
-              config1,
-              `Unexpected config in sync path: ${config}.`
-            );
+            t.deepEqual(config, config1, `Unexpected config in sync path: ${config}.`);
             return Promise.resolve().then(() => {
-              t.deepEqual(
-                config,
-                config1,
-                `Unexpected config in async path: ${config}.`
-              );
+              t.deepEqual(config, config1, `Unexpected config in async path: ${config}.`);
+              config.extra = 1;
             });
           }
       },
@@ -2061,19 +2054,62 @@ test("customRulesParamsAreStable", (t) => {
         "function":
           (params) => {
             const { config } = params;
-            t.deepEqual(
-              config,
-              config2,
-              `Unexpected config in sync path: ${config}.`
-            );
+            t.deepEqual(config, config2, `Unexpected config in sync path: ${config}.`);
             return Promise.resolve().then(() => {
-              t.deepEqual(
-                config,
-                config2,
-                `Unexpected config in async path: ${config}.`
-              );
+              t.deepEqual(config, config2, `Unexpected config in async path: ${config}.`);
+              config.extra = 2;
             });
           }
+      }
+    ],
+    "strings": {
+      "string": "# Heading"
+    }
+  };
+  return lintPromise(options).then(() => {
+    t.deepEqual(config1, { "value1": 10 });
+    t.deepEqual(config2, { "value2": 20 });
+  });
+});
+
+test("customRulesParamsAreExpected", (t) => {
+  t.plan(4);
+  /** @type {import("markdownlint").Options} */
+  const options = {
+    "config": {
+      // "name1" default enabled
+      "name2": true,
+      "name3": {},
+      "name4": { "value": 10 }
+    },
+    "customRules": [
+      {
+        "names": [ "name1" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": (params) => t.deepEqual(params.config, true)
+      },
+      {
+        "names": [ "name2" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": (params) => t.deepEqual(params.config, {})
+      },
+      {
+        "names": [ "name3" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": (params) => t.deepEqual(params.config, {})
+      },
+      {
+        "names": [ "name4" ],
+        "description": "description",
+        "tags": [ "tag" ],
+        "parser": "none",
+        "function": (params) => t.deepEqual(params.config, { "value": 10 })
       }
     ],
     "strings": {
