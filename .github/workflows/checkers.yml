@@ -15,7 +15,7 @@ jobs:
     - uses: actions/checkout@v5
     - uses: JustinBeckwith/linkinator-action@v1.11.0
       with:
-        linksToSkip: '^https://github.com/ ^https://www.jwz.org/ ^https://opensource.org/ ^https://unix.stackexchange.com/'
+        linksToSkip: '^https://github.com/ ^https://www.jwz.org/ ^https://www.npmjs.com/ ^https://opensource.org/ ^https://unix.stackexchange.com/'
         paths: '*.md doc/*.md helpers/*.md'
 
   spellcheck:
