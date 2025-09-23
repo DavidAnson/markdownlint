@@ -30,7 +30,7 @@ const schema = {
       "description": "Default state for all rules",
       "oneOf": [
         { "type": "boolean" },
-        { "enum": [ "error" ] }
+        { "enum": [ "error", "warning" ] }
       ],
       "default": true
     },
@@ -66,7 +66,7 @@ for (const rule of rules) {
       `${rule.names.join("/")} : ${rule.description} : ${rule.information}`,
     "oneOf": [
       { "type": "boolean" },
-      { "enum": [ "error" ] }
+      { "enum": [ "error", "warning" ] }
     ],
     "default": true
   };
@@ -74,12 +74,15 @@ for (const rule of rules) {
     "type": "object",
     "additionalProperties": false,
     "properties": {
+      "enabled": {
+        "description": "Whether to enable the rule",
+        "type": "boolean",
+        "default": true
+      },
       "severity": {
         "description": "Rule severity",
         "type": "string",
-        "enum": [
-          "error"
-        ],
+        "enum": [ "error", "warning" ],
         "default": "error"
       }
     }
@@ -656,7 +659,7 @@ for (const [ tag, tagTags ] of Object.entries(tags)) {
     "description": `${tag} : ${tagTags.join(", ")}`,
     "oneOf": [
       { "type": "boolean" },
-      { "enum": [ "error" ] }
+      { "enum": [ "error", "warning" ] }
     ],
     "default": true
   };

@@ -16,7 +16,7 @@ for (const rule in configSchema.properties) {
     const subproperties = Object.fromEntries(
       Object.entries(
         properties.oneOf?.at(-1).properties || []
-      ).filter(([ key ]) => key !== "severity")
+      ).filter(([ key ]) => ((key !== "enabled") && (key !== "severity")))
     );
     if (Object.keys(subproperties).length > 0) {
       /** @type {Object<string, any>} */

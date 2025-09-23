@@ -13,7 +13,7 @@ export interface ConfigurationStrict {
   /**
    * Default state for all rules
    */
-  default?: boolean | "error";
+  default?: boolean | ("error" | "warning");
   /**
    * Path to configuration file to extend
    */
@@ -23,12 +23,16 @@ export interface ConfigurationStrict {
    */
   MD001?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * RegExp for matching title in front matter
          */
@@ -39,12 +43,16 @@ export interface ConfigurationStrict {
    */
   "heading-increment"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * RegExp for matching title in front matter
          */
@@ -55,12 +63,16 @@ export interface ConfigurationStrict {
    */
   MD003?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Heading style
          */
@@ -71,12 +83,16 @@ export interface ConfigurationStrict {
    */
   "heading-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Heading style
          */
@@ -87,12 +103,16 @@ export interface ConfigurationStrict {
    */
   MD004?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List style
          */
@@ -103,12 +123,16 @@ export interface ConfigurationStrict {
    */
   "ul-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List style
          */
@@ -119,36 +143,48 @@ export interface ConfigurationStrict {
    */
   MD005?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD005/list-indent : Inconsistent indentation for list items at the same level : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md005.md
    */
   "list-indent"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD007/ul-indent : Unordered list indentation : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md007.md
    */
   MD007?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Spaces for indent
          */
@@ -167,12 +203,16 @@ export interface ConfigurationStrict {
    */
   "ul-indent"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Spaces for indent
          */
@@ -191,12 +231,16 @@ export interface ConfigurationStrict {
    */
   MD009?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Spaces for line break
          */
@@ -215,12 +259,16 @@ export interface ConfigurationStrict {
    */
   "no-trailing-spaces"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Spaces for line break
          */
@@ -239,12 +287,16 @@ export interface ConfigurationStrict {
    */
   MD010?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Include code blocks
          */
@@ -263,12 +315,16 @@ export interface ConfigurationStrict {
    */
   "no-hard-tabs"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Include code blocks
          */
@@ -287,36 +343,48 @@ export interface ConfigurationStrict {
    */
   MD011?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD011/no-reversed-links : Reversed link syntax : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md011.md
    */
   "no-reversed-links"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD012/no-multiple-blanks : Multiple consecutive blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md012.md
    */
   MD012?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Consecutive blank lines
          */
@@ -327,12 +395,16 @@ export interface ConfigurationStrict {
    */
   "no-multiple-blanks"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Consecutive blank lines
          */
@@ -343,12 +415,16 @@ export interface ConfigurationStrict {
    */
   MD013?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Number of characters
          */
@@ -387,12 +463,16 @@ export interface ConfigurationStrict {
    */
   "line-length"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Number of characters
          */
@@ -431,132 +511,176 @@ export interface ConfigurationStrict {
    */
   MD014?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md014.md
    */
   "commands-show-output"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD018/no-missing-space-atx : No space after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md018.md
    */
   MD018?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD018/no-missing-space-atx : No space after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md018.md
    */
   "no-missing-space-atx"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD019/no-multiple-space-atx : Multiple spaces after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md019.md
    */
   MD019?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD019/no-multiple-space-atx : Multiple spaces after hash on atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md019.md
    */
   "no-multiple-space-atx"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD020/no-missing-space-closed-atx : No space inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md020.md
    */
   MD020?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD020/no-missing-space-closed-atx : No space inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md020.md
    */
   "no-missing-space-closed-atx"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md021.md
    */
   MD021?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD021/no-multiple-space-closed-atx : Multiple spaces inside hashes on closed atx style heading : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md021.md
    */
   "no-multiple-space-closed-atx"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD022/blanks-around-headings : Headings should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md022.md
    */
   MD022?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Blank lines above heading
          */
@@ -571,12 +695,16 @@ export interface ConfigurationStrict {
    */
   "blanks-around-headings"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Blank lines above heading
          */
@@ -591,36 +719,48 @@ export interface ConfigurationStrict {
    */
   MD023?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD023/heading-start-left : Headings must start at the beginning of the line : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md023.md
    */
   "heading-start-left"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD024/no-duplicate-heading : Multiple headings with the same content : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md024.md
    */
   MD024?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Only check sibling headings
          */
@@ -631,12 +771,16 @@ export interface ConfigurationStrict {
    */
   "no-duplicate-heading"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Only check sibling headings
          */
@@ -647,12 +791,16 @@ export interface ConfigurationStrict {
    */
   MD025?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * RegExp for matching title in front matter
          */
@@ -667,12 +815,16 @@ export interface ConfigurationStrict {
    */
   "single-title"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * RegExp for matching title in front matter
          */
@@ -687,12 +839,16 @@ export interface ConfigurationStrict {
    */
   "single-h1"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * RegExp for matching title in front matter
          */
@@ -707,12 +863,16 @@ export interface ConfigurationStrict {
    */
   MD026?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Punctuation characters
          */
@@ -723,12 +883,16 @@ export interface ConfigurationStrict {
    */
   "no-trailing-punctuation"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Punctuation characters
          */
@@ -739,12 +903,16 @@ export interface ConfigurationStrict {
    */
   MD027?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Include list items
          */
@@ -755,12 +923,16 @@ export interface ConfigurationStrict {
    */
   "no-multiple-space-blockquote"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Include list items
          */
@@ -771,36 +943,48 @@ export interface ConfigurationStrict {
    */
   MD028?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD028/no-blanks-blockquote : Blank line inside blockquote : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md028.md
    */
   "no-blanks-blockquote"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD029/ol-prefix : Ordered list item prefix : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md029.md
    */
   MD029?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List style
          */
@@ -811,12 +995,16 @@ export interface ConfigurationStrict {
    */
   "ol-prefix"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List style
          */
@@ -827,12 +1015,16 @@ export interface ConfigurationStrict {
    */
   MD030?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Spaces for single-line unordered list items
          */
@@ -855,12 +1047,16 @@ export interface ConfigurationStrict {
    */
   "list-marker-space"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Spaces for single-line unordered list items
          */
@@ -883,12 +1079,16 @@ export interface ConfigurationStrict {
    */
   MD031?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Include list items
          */
@@ -899,12 +1099,16 @@ export interface ConfigurationStrict {
    */
   "blanks-around-fences"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Include list items
          */
@@ -915,36 +1119,48 @@ export interface ConfigurationStrict {
    */
   MD032?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD032/blanks-around-lists : Lists should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md032.md
    */
   "blanks-around-lists"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md033.md
    */
   MD033?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allowed elements
          */
@@ -959,12 +1175,16 @@ export interface ConfigurationStrict {
    */
   "no-inline-html"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allowed elements
          */
@@ -979,36 +1199,48 @@ export interface ConfigurationStrict {
    */
   MD034?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md034.md
    */
   "no-bare-urls"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD035/hr-style : Horizontal rule style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md035.md
    */
   MD035?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Horizontal rule style
          */
@@ -1019,12 +1251,16 @@ export interface ConfigurationStrict {
    */
   "hr-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Horizontal rule style
          */
@@ -1035,12 +1271,16 @@ export interface ConfigurationStrict {
    */
   MD036?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Punctuation characters
          */
@@ -1051,12 +1291,16 @@ export interface ConfigurationStrict {
    */
   "no-emphasis-as-heading"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Punctuation characters
          */
@@ -1067,84 +1311,112 @@ export interface ConfigurationStrict {
    */
   MD037?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD037/no-space-in-emphasis : Spaces inside emphasis markers : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md037.md
    */
   "no-space-in-emphasis"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD038/no-space-in-code : Spaces inside code span elements : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md038.md
    */
   MD038?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD038/no-space-in-code : Spaces inside code span elements : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md038.md
    */
   "no-space-in-code"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD039/no-space-in-links : Spaces inside link text : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md039.md
    */
   MD039?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD039/no-space-in-links : Spaces inside link text : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md039.md
    */
   "no-space-in-links"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD040/fenced-code-language : Fenced code blocks should have a language specified : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md040.md
    */
   MD040?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List of languages
          */
@@ -1159,12 +1431,16 @@ export interface ConfigurationStrict {
    */
   "fenced-code-language"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List of languages
          */
@@ -1179,12 +1455,16 @@ export interface ConfigurationStrict {
    */
   MD041?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allow content before first heading
          */
@@ -1203,12 +1483,16 @@ export interface ConfigurationStrict {
    */
   "first-line-heading"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allow content before first heading
          */
@@ -1227,12 +1511,16 @@ export interface ConfigurationStrict {
    */
   "first-line-h1"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allow content before first heading
          */
@@ -1251,36 +1539,48 @@ export interface ConfigurationStrict {
    */
   MD042?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD042/no-empty-links : No empty links : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md042.md
    */
   "no-empty-links"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD043/required-headings : Required heading structure : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md043.md
    */
   MD043?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List of headings
          */
@@ -1295,12 +1595,16 @@ export interface ConfigurationStrict {
    */
   "required-headings"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List of headings
          */
@@ -1315,12 +1619,16 @@ export interface ConfigurationStrict {
    */
   MD044?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List of proper names
          */
@@ -1339,12 +1647,16 @@ export interface ConfigurationStrict {
    */
   "proper-names"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * List of proper names
          */
@@ -1363,36 +1675,48 @@ export interface ConfigurationStrict {
    */
   MD045?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD045/no-alt-text : Images should have alternate text (alt text) : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md045.md
    */
   "no-alt-text"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD046/code-block-style : Code block style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md046.md
    */
   MD046?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Block style
          */
@@ -1403,12 +1727,16 @@ export interface ConfigurationStrict {
    */
   "code-block-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Block style
          */
@@ -1419,36 +1747,48 @@ export interface ConfigurationStrict {
    */
   MD047?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD047/single-trailing-newline : Files should end with a single newline character : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md047.md
    */
   "single-trailing-newline"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD048/code-fence-style : Code fence style : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md048.md
    */
   MD048?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Code fence style
          */
@@ -1459,12 +1799,16 @@ export interface ConfigurationStrict {
    */
   "code-fence-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Code fence style
          */
@@ -1475,12 +1819,16 @@ export interface ConfigurationStrict {
    */
   MD049?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Emphasis style
          */
@@ -1491,12 +1839,16 @@ export interface ConfigurationStrict {
    */
   "emphasis-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Emphasis style
          */
@@ -1507,12 +1859,16 @@ export interface ConfigurationStrict {
    */
   MD050?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Strong style
          */
@@ -1523,12 +1879,16 @@ export interface ConfigurationStrict {
    */
   "strong-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Strong style
          */
@@ -1539,12 +1899,16 @@ export interface ConfigurationStrict {
    */
   MD051?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Ignore case of fragments
          */
@@ -1559,12 +1923,16 @@ export interface ConfigurationStrict {
    */
   "link-fragments"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Ignore case of fragments
          */
@@ -1579,12 +1947,16 @@ export interface ConfigurationStrict {
    */
   MD052?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Ignored link labels
          */
@@ -1599,12 +1971,16 @@ export interface ConfigurationStrict {
    */
   "reference-links-images"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Ignored link labels
          */
@@ -1619,12 +1995,16 @@ export interface ConfigurationStrict {
    */
   MD053?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Ignored definitions
          */
@@ -1635,12 +2015,16 @@ export interface ConfigurationStrict {
    */
   "link-image-reference-definitions"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Ignored definitions
          */
@@ -1651,12 +2035,16 @@ export interface ConfigurationStrict {
    */
   MD054?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allow autolinks
          */
@@ -1687,12 +2075,16 @@ export interface ConfigurationStrict {
    */
   "link-image-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Allow autolinks
          */
@@ -1723,12 +2115,16 @@ export interface ConfigurationStrict {
    */
   MD055?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Table pipe style
          */
@@ -1739,12 +2135,16 @@ export interface ConfigurationStrict {
    */
   "table-pipe-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Table pipe style
          */
@@ -1755,60 +2155,80 @@ export interface ConfigurationStrict {
    */
   MD056?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md056.md
    */
   "table-column-count"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md058.md
    */
   MD058?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD058/blanks-around-tables : Tables should be surrounded by blank lines : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md058.md
    */
   "blanks-around-tables"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
       };
   /**
    * MD059/descriptive-link-text : Link text should be descriptive : https://github.com/DavidAnson/markdownlint/blob/v0.38.0/doc/md059.md
    */
   MD059?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Prohibited link texts
          */
@@ -1819,12 +2239,16 @@ export interface ConfigurationStrict {
    */
   "descriptive-link-text"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Prohibited link texts
          */
@@ -1835,12 +2259,16 @@ export interface ConfigurationStrict {
    */
   MD060?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Table column style
          */
@@ -1851,12 +2279,16 @@ export interface ConfigurationStrict {
    */
   "table-column-style"?:
     | boolean
-    | "error"
+    | ("error" | "warning")
     | {
+        /**
+         * Whether to enable the rule
+         */
+        enabled?: boolean;
         /**
          * Rule severity
          */
-        severity?: "error";
+        severity?: "error" | "warning";
         /**
          * Table column style
          */
@@ -1865,97 +2297,97 @@ export interface ConfigurationStrict {
   /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043
    */
-  headings?: boolean | "error";
+  headings?: boolean | ("error" | "warning");
   /**
    * bullet : MD004, MD005, MD007, MD032
    */
-  bullet?: boolean | "error";
+  bullet?: boolean | ("error" | "warning");
   /**
    * ul : MD004, MD005, MD007, MD030, MD032
    */
-  ul?: boolean | "error";
+  ul?: boolean | ("error" | "warning");
   /**
    * indentation : MD005, MD007, MD027
    */
-  indentation?: boolean | "error";
+  indentation?: boolean | ("error" | "warning");
   /**
    * whitespace : MD009, MD010, MD012, MD027, MD028, MD030, MD037, MD038, MD039
    */
-  whitespace?: boolean | "error";
+  whitespace?: boolean | ("error" | "warning");
   /**
    * hard_tab : MD010
    */
-  hard_tab?: boolean | "error";
+  hard_tab?: boolean | ("error" | "warning");
   /**
    * links : MD011, MD034, MD039, MD042, MD051, MD052, MD053, MD054, MD059
    */
-  links?: boolean | "error";
+  links?: boolean | ("error" | "warning");
   /**
    * blank_lines : MD012, MD022, MD031, MD032, MD047
    */
-  blank_lines?: boolean | "error";
+  blank_lines?: boolean | ("error" | "warning");
   /**
    * line_length : MD013
    */
-  line_length?: boolean | "error";
+  line_length?: boolean | ("error" | "warning");
   /**
    * code : MD014, MD031, MD038, MD040, MD046, MD048
    */
-  code?: boolean | "error";
+  code?: boolean | ("error" | "warning");
   /**
    * atx : MD018, MD019
    */
-  atx?: boolean | "error";
+  atx?: boolean | ("error" | "warning");
   /**
    * spaces : MD018, MD019, MD020, MD021, MD023
    */
-  spaces?: boolean | "error";
+  spaces?: boolean | ("error" | "warning");
   /**
    * atx_closed : MD020, MD021
    */
-  atx_closed?: boolean | "error";
+  atx_closed?: boolean | ("error" | "warning");
   /**
    * blockquote : MD027, MD028
    */
-  blockquote?: boolean | "error";
+  blockquote?: boolean | ("error" | "warning");
   /**
    * ol : MD029, MD030, MD032
    */
-  ol?: boolean | "error";
+  ol?: boolean | ("error" | "warning");
   /**
    * html : MD033
    */
-  html?: boolean | "error";
+  html?: boolean | ("error" | "warning");
   /**
    * url : MD034
    */
-  url?: boolean | "error";
+  url?: boolean | ("error" | "warning");
   /**
    * hr : MD035
    */
-  hr?: boolean | "error";
+  hr?: boolean | ("error" | "warning");
   /**
    * emphasis : MD036, MD037, MD049, MD050
    */
-  emphasis?: boolean | "error";
+  emphasis?: boolean | ("error" | "warning");
   /**
    * language : MD040
    */
-  language?: boolean | "error";
+  language?: boolean | ("error" | "warning");
   /**
    * spelling : MD044
    */
-  spelling?: boolean | "error";
+  spelling?: boolean | ("error" | "warning");
   /**
    * accessibility : MD045, MD059
    */
-  accessibility?: boolean | "error";
+  accessibility?: boolean | ("error" | "warning");
   /**
    * images : MD045, MD052, MD053, MD054
    */
-  images?: boolean | "error";
+  images?: boolean | ("error" | "warning");
   /**
    * table : MD055, MD056, MD058, MD060
    */
-  table?: boolean | "error";
+  table?: boolean | ("error" | "warning");
 }

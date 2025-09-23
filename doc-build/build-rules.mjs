@@ -64,7 +64,7 @@ for (const rule of rules) {
   const ruleProperties = Object.fromEntries(
     Object.entries(
       ruleData.oneOf.at(-1).properties
-    ).filter(([ key ]) => key !== "severity")
+    ).filter(([ key ]) => ((key !== "enabled") && (key !== "severity")))
   );
   if (Object.keys(ruleProperties).length > 0) {
     section.push(

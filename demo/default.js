@@ -86,8 +86,8 @@
     return `[Unsupported renderer "${renderer}"]`;
   }
 
-  // Highlight error ranges
-  function highlightErrors(results, className) {
+  // Highlight ranges
+  function highlightRanges(results, className) {
     for (const result of results) {
       const { errorRange, lineNumber } = result;
       const line = document.getElementById(`l${lineNumber}`);
@@ -150,14 +150,18 @@
             sanitize(result.errorContext) +
             "\"</span>]" :
           "") +
+        " [<span class='detail'>" +
+            result.severity +
+            "</span>]" +
         (result.fixInfo ?
           " [<a href='#fix' target='" +
             resultJson +
             "' class='detail'>Fix</a>]" :
           "");
     }).join("<br/>");
-    // Highlight errors
-    highlightErrors(allLintErrors, "error");
+    // Highlight errors and warnings
+    highlightRanges(allLintErrors.filter((error) => error.severity === "warning"), "warning");
+    highlightRanges(allLintErrors.filter((error) => error.severity === "error"), "error");
   }
 
   // Load from a string or File object
@@ -216,7 +220,7 @@
         for (const element of [ ...document.getElementsByClassName("highlight") ]) {
           element.classList.remove("highlight");
         }
-        highlightErrors([ resultJson ], "highlight");
+        highlightRanges([ resultJson ], "highlight");
         var line = document.getElementById(`l${resultJson.lineNumber}`);
         line.scrollIntoView();
         e.preventDefault();

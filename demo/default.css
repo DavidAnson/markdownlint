@@ -47,6 +47,9 @@ textarea {
   font-style: italic;
   white-space: pre-wrap;
 }
+.warning {
+  background: rgb(255, 255, 0, 0.5);
+}
 .error {
   background: rgb(255, 0, 0, 0.3);
 }
@@ -67,7 +70,7 @@ textarea {
   min-height: 0;
 }
 .highlight {
-  background: rgb(255, 0, 0, 0.8);
+  background: rgb(0, 255, 255, 0.8);
 }
 .inset {
   box-sizing: border-box;

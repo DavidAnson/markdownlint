@@ -190,6 +190,16 @@ function getConfigTestImplementation(config, expected) {
   };
 }
 
+/**
+ * Converts a config test scenario from errors to warnings.
+ *
+ * @param {Object.<string, string[]>} configTest Config test scenario.
+ * @returns {Object.<string, string[]>} Converted scenario.
+ */
+function configTestAsWarnings(configTest) {
+  return JSON.parse(JSON.stringify(configTest).replaceAll("error", "warning"));
+}
+
 const configTestExpected = {
   "./test/atx_heading_spacing.md": [],
   "./test/first_heading_bad_atx.md": []
@@ -273,13 +283,23 @@ test("defaultError", getConfigTestImplementation(
 test("defaultWarning", getConfigTestImplementation(
   // @ts-ignore
   { "default": "warning" },
+  configTestAsWarnings(configTestExpected13511)
+));
+
+test("defaultMultipleTrue", getConfigTestImplementation(
+  {
+    "default": true,
+    "DEFAULT": false
+  },
   configTestExpected13511
 ));
 
-test("defaultOff", getConfigTestImplementation(
-  // @ts-ignore
-  { "default": "off" },
-  configTestExpected13511
+test("defaultMultipleFalse", getConfigTestImplementation(
+  {
+    "DEFAULT": false,
+    "default": true
+  },
+  configTestExpected
 ));
 
 test("disableRules", getConfigTestImplementation(
@@ -336,7 +356,7 @@ test("enableRulesTruthy", getConfigTestImplementation(
   configTestExpected3511
 ));
 
-test("enableRulesString", getConfigTestImplementation(
+test("enableRulesError", getConfigTestImplementation(
   {
     "MD041": "error",
     "default": false,
@@ -344,6 +364,16 @@ test("enableRulesString", getConfigTestImplementation(
     "extra": "error"
   },
   configTestExpected3511
+));
+
+test("enableRulesWarning", getConfigTestImplementation(
+  {
+    "MD041": "warning",
+    "default": false,
+    "no-multiple-space-atx": "warning",
+    "extra": "warning"
+  },
+  configTestAsWarnings(configTestExpected3511)
 ));
 
 test("enableRulesObjectEmpty", getConfigTestImplementation(
@@ -356,7 +386,7 @@ test("enableRulesObjectEmpty", getConfigTestImplementation(
   configTestExpected3511
 ));
 
-test("enableRulesObjectTruthy", getConfigTestImplementation(
+test("enableRulesObjectSeverityTruthy", getConfigTestImplementation(
   {
     "MD041": {
       // @ts-ignore
@@ -374,7 +404,7 @@ test("enableRulesObjectTruthy", getConfigTestImplementation(
   configTestExpected3511
 ));
 
-test("enableRulesObjectFalsy", getConfigTestImplementation(
+test("enableRulesObjectSeverityFalsy", getConfigTestImplementation(
   {
     "MD041": {
       // @ts-ignore
@@ -392,7 +422,7 @@ test("enableRulesObjectFalsy", getConfigTestImplementation(
   configTestExpected3511
 ));
 
-test("enableRulesObjectError", getConfigTestImplementation(
+test("enableRulesObjectSeverityError", getConfigTestImplementation(
   {
     "MD041": {
       "severity": "error"
@@ -408,40 +438,88 @@ test("enableRulesObjectError", getConfigTestImplementation(
   configTestExpected3511
 ));
 
-test("enableRulesObjectWarning", getConfigTestImplementation(
+test("enableRulesObjectSeverityWarning", getConfigTestImplementation(
   {
     "MD041": {
-      // @ts-ignore
       "severity": "warning"
     },
     "default": false,
     "no-multiple-space-atx": {
-      // @ts-ignore
       "severity": "warning"
     },
     "extra": {
       "severity": "warning"
+    }
+  },
+  configTestAsWarnings(configTestExpected3511)
+));
+
+test("enableRulesObjectEnabledTrue", getConfigTestImplementation(
+  {
+    "MD041": {
+      "enabled": true
+    },
+    "default": false,
+    "no-multiple-space-atx": {
+      "enabled": true
+    },
+    "extra": {
+      "enabled": true
     }
   },
   configTestExpected3511
 ));
 
-test("enableRulesObjectOff", getConfigTestImplementation(
+test("enableRulesObjectEnabledFalse", getConfigTestImplementation(
+  {
+    "MD041": {
+      "enabled": false
+    },
+    "default": true,
+    "no-multiple-space-atx": {
+      "enabled": false
+    },
+    "extra": {
+      "enabled": false
+    }
+  },
+  configTestExpected1
+));
+
+test("enableRulesObjectEnabledTruthy", getConfigTestImplementation(
   {
     "MD041": {
       // @ts-ignore
-      "severity": "off"
+      "enabled": 1
     },
     "default": false,
     "no-multiple-space-atx": {
       // @ts-ignore
-      "severity": "off"
+      "enabled": 1
     },
     "extra": {
-      "severity": "off"
+      "enabled": 1
     }
   },
   configTestExpected3511
+));
+
+test("enableRulesObjectEnabledFalsy", getConfigTestImplementation(
+  {
+    "MD041": {
+      // @ts-ignore
+      "enabled": 0
+    },
+    "default": true,
+    "no-multiple-space-atx": {
+      // @ts-ignore
+      "enabled": 0
+    },
+    "extra": {
+      "enabled": 0
+    }
+  },
+  configTestExpected1
 ));
 
 test("disableTag", getConfigTestImplementation(
@@ -491,13 +569,22 @@ test("enableTagTruthy", getConfigTestImplementation(
   configTestExpected135
 ));
 
-test("enableTagString", getConfigTestImplementation(
+test("enableTagError", getConfigTestImplementation(
   {
     "default": false,
     "spaces": "error",
     "extra": "error"
   },
   configTestExpected135
+));
+
+test("enableTagWarning", getConfigTestImplementation(
+  {
+    "default": false,
+    "spaces": "warning",
+    "extra": "warning"
+  },
+  configTestAsWarnings(configTestExpected135)
 ));
 
 test("styleFiles", async(t) => {
@@ -1008,7 +1095,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(212);
+  t.plan(215);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);

@@ -362,54 +362,111 @@ of `files` or `strings` should be set to provide input.
 
 ##### options.config
 
-Type: `Object` mapping `String` to `Boolean | "error" | Object`
+Type: `Object` mapping `String` to `Boolean | "error" | "warning" | Object`
 
 Configures the rules to use.
 
 Object keys are rule names/aliases; object values are the rule's configuration.
 The value `false` disables a rule. The values `true` or `"error"` enable a rule
-in its default configuration and report violations as errors. Passing an object
-enables and customizes the rule. The special `default` rule assigns the default
-for all rules. Using a tag name (e.g., `whitespace`) and a setting of `false`,
-`true`, or `"error"` applies that setting to all rules with that tag. When no
-configuration object is passed or the optional `default` setting is not present,
-all rules are enabled.
+in its default configuration and report violations as errors. The value
+`"warning"` enables a rule in its default configuration and reports violations
+as warnings. Passing an object enables *and* customizes the rule; the properties
+`severity` (`"error" | "warning"`) and `enabled` (`false | true`) can be used in
+this context. The special `default` rule assigns the default for all rules.
+Using a tag name (e.g., `whitespace`) and a setting of `false`, `true`,
+`"error"`, or `"warning"` applies that setting to all rules with that tag. When
+no configuration object is passed or the optional `default` setting is not
+present, all rules are enabled.
 
 The following syntax disables the specified rule, tag, or `default`:
 
 ```javascript
 {
-  "rule_name": false
+  "rule_tag_or_default": false
 }
 ```
 
-The following syntax enables the specified rule, tag, or `default`:
+The following syntax enables the specified rule, tag, or `default` to report
+violations as errors:
 
 ```javascript
 {
-  "rule_name": true
+  "rule_tag_or_default": true
   // OR
-  "rule_name": "error"
+  "rule_tag_or_default": "error"
 }
 ```
 
-The following syntax enables and configures the specified rule:
+The following syntax enables the specified rule, tag, or `default` to report
+violations as warnings:
 
 ```javascript
 {
-  "rule_name": {
-    "parameter": "value"
-  }
-  // OR
-  "rule_name": {
-    "parameter": "value",
+  "rule_tag_or_default": "warning"
+}
+```
+
+The following syntax enables and configures the specified rule to report
+violations as errors:
+
+```javascript
+{
+  "rule": {
     "severity": "error"
   }
+  // OR
+  "rule": {
+    "rule_parameter": "value"
+  }
+  // OR
+  "rule": {
+    "severity": "error",
+    "rule_parameter": "value"
+  }
 }
 ```
 
-> Note that `error` and `severity` are not supported by library versions earlier
-> than `0.39.0`. However, all examples above behave the same.
+The following syntax enables and configures the specified rule to report
+violations as warnings:
+
+```javascript
+{
+  "rule": {
+    "severity": "warning"
+  }
+  // OR
+  "rule": {
+    "severity": "warning",
+    "rule_parameter": "value"
+  }
+}
+```
+
+> Note that values `"error"` and `"warning"` and the property `severity` are not
+> supported by library versions earlier than `0.39.0`. However, the examples
+> above behave the same there, with warnings being reported as errors.
+
+The following syntax disables and configures the specified rule:
+
+```javascript
+{
+  "rule": {
+    "enabled": false,
+    "rule_parameter": "value"
+  }
+  // OR
+  "rule": {
+    "enabled": false,
+    "severity": "warning",
+    "rule_parameter": "value"
+  }
+}
+```
+
+> Note that this example behaves **differently** with library versions earlier
+> than `0.39.0` because the property `enabled` is not supported: it **enables**
+> the rule instead of **disabling** it. As such, this syntax is discouraged when
+> interoperability is important.
 
 To evaluate a configuration object, the `default` setting is applied first, then
 keys are processed in order from top to bottom. If multiple values apply to a

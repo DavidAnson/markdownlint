@@ -2037,7 +2037,7 @@ test("customRulesParamsAreFrozen", (t) => {
     const pending = [ params ];
     let current = null;
     while ((current = pending.shift())) {
-      t.true(Object.isFrozen(current) || (current === params));
+      t.true(Object.isFrozen(current));
       for (const name of Object.getOwnPropertyNames(current)) {
         // @ts-ignore
         const value = current[name];
@@ -2083,7 +2083,7 @@ test("customRulesParamsAreFrozen", (t) => {
 });
 
 test("customRulesParamsAreStable", (t) => {
-  t.plan(6);
+  t.plan(4);
   const config1 = { "value1": 10 };
   const config2 = { "value2": 20 };
   /** @type {import("markdownlint").Options} */
@@ -2108,7 +2108,6 @@ test("customRulesParamsAreStable", (t) => {
             t.deepEqual(config, config1, `Unexpected config in sync path: ${config}.`);
             return Promise.resolve().then(() => {
               t.deepEqual(config, config1, `Unexpected config in async path: ${config}.`);
-              config.extra = 1;
             });
           }
       },
@@ -2124,7 +2123,6 @@ test("customRulesParamsAreStable", (t) => {
             t.deepEqual(config, config2, `Unexpected config in sync path: ${config}.`);
             return Promise.resolve().then(() => {
               t.deepEqual(config, config2, `Unexpected config in async path: ${config}.`);
-              config.extra = 2;
             });
           }
       }
@@ -2133,10 +2131,7 @@ test("customRulesParamsAreStable", (t) => {
       "string": "# Heading"
     }
   };
-  return lintPromise(options).then(() => {
-    t.deepEqual(config1, { "value1": 10 });
-    t.deepEqual(config2, { "value2": 20 });
-  });
+  return lintPromise(options);
 });
 
 test("customRulesParamsAreExpected", (t) => {
@@ -2155,7 +2150,7 @@ test("customRulesParamsAreExpected", (t) => {
         "description": "description",
         "tags": [ "tag" ],
         "parser": "none",
-        "function": (params) => t.deepEqual(params.config, true)
+        "function": (params) => t.deepEqual(params.config, {})
       },
       {
         "names": [ "name2" ],

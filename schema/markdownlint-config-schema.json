@@ -17,7 +17,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -39,18 +40,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -72,18 +80,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -105,18 +120,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -146,18 +168,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -187,18 +216,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -227,18 +263,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -267,18 +310,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -295,18 +345,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -323,18 +380,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -368,18 +432,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -413,18 +484,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -457,18 +535,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -501,18 +586,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -548,18 +640,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -595,18 +694,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -623,18 +729,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -651,18 +764,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -685,18 +805,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -719,18 +846,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -790,18 +924,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -861,18 +1002,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -889,18 +1037,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -917,18 +1072,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -945,18 +1107,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -973,18 +1142,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1001,18 +1177,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1029,18 +1212,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1057,18 +1247,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1085,18 +1282,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1113,18 +1317,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1141,18 +1352,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1193,18 +1411,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1245,18 +1470,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1273,18 +1505,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1301,18 +1540,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1334,18 +1580,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1367,18 +1620,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1407,18 +1667,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1447,18 +1714,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1487,18 +1761,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1520,18 +1801,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1553,18 +1841,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1586,18 +1881,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1619,18 +1921,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1647,18 +1956,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1675,18 +1991,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1714,18 +2037,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1753,18 +2083,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1805,18 +2142,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1857,18 +2201,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1890,18 +2241,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -1923,18 +2281,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1951,18 +2316,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -1979,18 +2351,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2023,18 +2402,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2067,18 +2453,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2095,18 +2488,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2123,18 +2523,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2156,18 +2563,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2189,18 +2603,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2222,18 +2643,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2255,18 +2683,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2283,18 +2718,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2311,18 +2753,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2339,18 +2788,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2367,18 +2823,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2395,18 +2858,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2423,18 +2893,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2464,18 +2941,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2505,18 +2989,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2550,18 +3041,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2595,18 +3093,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2640,18 +3145,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2668,18 +3180,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2696,18 +3215,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2738,18 +3264,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2780,18 +3313,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2826,18 +3366,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2872,18 +3419,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2900,18 +3454,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -2928,18 +3489,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -2966,18 +3534,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3004,18 +3579,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -3032,18 +3614,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -3060,18 +3649,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3098,18 +3694,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3136,18 +3739,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3174,18 +3784,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3212,18 +3829,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3250,18 +3874,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3288,18 +3919,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3326,18 +3964,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3364,18 +4009,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3407,18 +4059,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3450,18 +4109,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3488,18 +4154,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3526,18 +4199,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3584,18 +4264,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3642,18 +4329,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3682,18 +4376,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3722,18 +4423,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -3750,18 +4458,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -3778,18 +4493,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -3806,18 +4528,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             }
@@ -3834,18 +4563,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3875,18 +4611,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3916,18 +4659,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3955,18 +4705,25 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         },
         {
           "type": "object",
           "additionalProperties": false,
           "properties": {
+            "enabled": {
+              "description": "Whether to enable the rule",
+              "type": "boolean",
+              "default": true
+            },
             "severity": {
               "description": "Rule severity",
               "type": "string",
               "enum": [
-                "error"
+                "error",
+                "warning"
               ],
               "default": "error"
             },
@@ -3994,7 +4751,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4008,7 +4766,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4022,7 +4781,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4036,7 +4796,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4050,7 +4811,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4064,7 +4826,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4078,7 +4841,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4092,7 +4856,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4106,7 +4871,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4120,7 +4886,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4134,7 +4901,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4148,7 +4916,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4162,7 +4931,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4176,7 +4946,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4190,7 +4961,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4204,7 +4976,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4218,7 +4991,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4232,7 +5006,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4246,7 +5021,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4260,7 +5036,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4274,7 +5051,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4288,7 +5066,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4302,7 +5081,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],
@@ -4316,7 +5096,8 @@
         },
         {
           "enum": [
-            "error"
+            "error",
+            "warning"
           ]
         }
       ],

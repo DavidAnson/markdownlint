@@ -83,6 +83,23 @@ export function applyFixes(input: string, errors: LintError[]): string;
  */
 export function getVersion(): string;
 /**
+ * Result object for getEffectiveConfig.
+ */
+export type GetEffectiveConfigResult = {
+    /**
+     * Effective configuration.
+     */
+    effectiveConfig: Configuration;
+    /**
+     * Rules enabled.
+     */
+    rulesEnabled: Map<string, boolean>;
+    /**
+     * Rules severity.
+     */
+    rulesSeverity: Map<string, "error" | "warning">;
+};
+/**
  * Result object for getEnabledRulesPerLineNumber.
  */
 export type EnabledRulesPerLineNumberResult = {
@@ -93,11 +110,15 @@ export type EnabledRulesPerLineNumberResult = {
     /**
      * Enabled rules per line number.
      */
-    enabledRulesPerLineNumber: any[];
+    enabledRulesPerLineNumber: Map<string, boolean>[];
     /**
      * Enabled rule list.
      */
     enabledRuleList: Rule[];
+    /**
+     * Rules severity.
+     */
+    rulesSeverity: Map<string, "error" | "warning">;
 };
 /**
  * Function to implement rule logic.
