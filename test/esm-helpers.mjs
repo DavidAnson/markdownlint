@@ -26,6 +26,8 @@ export const __filename = (meta) => fileURLToPath(meta.url);
 // eslint-disable-next-line no-underscore-dangle
 export const __dirname = (meta) => path.dirname(__filename(meta));
 
+/* eslint-disable jsdoc/reject-any-type */
+
 /**
  * Imports a file as JSON.
  * Avoids "ExperimentalWarning: Importing JSON modules is an experimental feature and might change at any time".
