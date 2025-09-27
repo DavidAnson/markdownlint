@@ -6,7 +6,7 @@ import yaml from "js-yaml";
 import { __dirname, importWithTypeJson } from "../test/esm-helpers.mjs";
 const configSchema = await importWithTypeJson(import.meta, "../schema/markdownlint-config-schema.json");
 
-/** @type {Object<string, any>} */
+/** @type {import("markdownlint").Configuration} */
 const configExample = {};
 for (const rule in configSchema.properties) {
   if (/^(?:MD\d{3}|default|extends)$/.test(rule)) {
@@ -19,7 +19,7 @@ for (const rule in configSchema.properties) {
       ).filter(([ key ]) => ((key !== "enabled") && (key !== "severity")))
     );
     if (Object.keys(subproperties).length > 0) {
-      /** @type {Object<string, any>} */
+      /** @type {import("markdownlint").Configuration} */
       const ruleExample = {};
       // eslint-disable-next-line guard-for-in
       for (const property in subproperties) {

@@ -1216,16 +1216,18 @@ test("customRulesOnErrorBad", (t) => {
   ]) {
     const { propertyName, subPropertyName, propertyValues } = testCase;
     for (const propertyValue of propertyValues) {
-      /** @type {Object<string, any>} */
       const badObject = {
         "lineNumber": 1
       };
       let propertyNames = null;
       if (subPropertyName) {
+        // @ts-ignore
         badObject[propertyName] = {};
+        // @ts-ignore
         badObject[propertyName][subPropertyName] = propertyValue;
         propertyNames = `${propertyName}.${subPropertyName}`;
       } else {
+        // @ts-ignore
         badObject[propertyName] = propertyValue;
         propertyNames = propertyName;
       }
@@ -1290,16 +1292,18 @@ test("customRulesOnErrorInvalid", (t) => {
   ]) {
     const { propertyName, subPropertyName, propertyValues } = testCase;
     for (const propertyValue of propertyValues) {
-      /** @type {Object<string, any>} */
       const badObject = {
         "lineNumber": 1
       };
       let propertyNames = null;
       if (subPropertyName) {
+        // @ts-ignore
         badObject[propertyName] = {};
+        // @ts-ignore
         badObject[propertyName][subPropertyName] = propertyValue;
         propertyNames = `${propertyName}.${subPropertyName}`;
       } else {
+        // @ts-ignore
         badObject[propertyName] = propertyValue;
         propertyNames = propertyName;
       }
@@ -1370,14 +1374,16 @@ test("customRulesOnErrorValid", (t) => {
   ]) {
     const { propertyName, subPropertyName, propertyValues } = testCase;
     for (const propertyValue of propertyValues) {
-      /** @type {Object<string, any>} */
       const goodObject = {
         "lineNumber": 1
       };
       if (subPropertyName) {
+        // @ts-ignore
         goodObject[propertyName] = {};
+        // @ts-ignore
         goodObject[propertyName][subPropertyName] = propertyValue;
       } else {
+        // @ts-ignore
         goodObject[propertyName] = propertyValue;
       }
       /** @type {import("markdownlint").Options} */

@@ -24,7 +24,7 @@ import customRules from "./rules/rules.cjs";
 import { __dirname, importWithTypeJson } from "./esm-helpers.mjs";
 /** @type {{exports: Object.<string, string>, homepage: string, version: string}} */
 const packageJson = await importWithTypeJson(import.meta, "../package.json");
-/** @type {{$id: string, properties: Object<string, any>}} */
+/** @type {{$id: string, properties: Object<string, Object>}} */
 const configSchema = await importWithTypeJson(import.meta, "../schema/markdownlint-config-schema.json");
 const configSchemaStrict = await importWithTypeJson(import.meta, "../schema/markdownlint-config-schema-strict.json");
 
@@ -1190,6 +1190,7 @@ test("validateConfigExampleJson", (t) => {
     configSchema.$id.replace(/^.*\/v(?<ver>\d+\.\d+\.\d+)\/.*$/u, "$<ver>"),
     packageJson.version
   );
+  // @ts-ignore
   t.is(configSchema.$id, configSchema.properties.$schema.default);
 
   // Validate JSONC
