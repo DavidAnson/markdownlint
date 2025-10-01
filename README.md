@@ -1053,7 +1053,6 @@ following projects or one of the tools in the [Related section](#related):
 - [.NET Documentation][dot-net-doc] ([Search repository][dot-net-doc-search])
 - [ally.js][ally-js] ([Search repository][ally-js-search])
 - [Apache Airflow][airflow] ([Search repository][airflow-search])
-- [Boostnote][boostnote] ([Search repository][boostnote-search])
 - [CodiMD][codimd] ([Search repository][codimd-search])
 - [Electron][electron] ([Search repository][electron-search])
 - [ESLint][eslint] ([Search repository][eslint-search])
@@ -1077,8 +1076,6 @@ For more advanced integration scenarios:
 [ally-js-search]: https://github.com/medialize/ally.js/search?q=markdownlint
 [airflow]: https://airflow.apache.org
 [airflow-search]: https://github.com/apache/airflow/search?q=markdownlint
-[boostnote]: https://boostnote.io/
-[boostnote-search]: https://github.com/BoostIO/Boostnote/search?q=markdownlint
 [codimd]: https://github.com/hackmdio/codimd
 [codimd-search]: https://github.com/hackmdio/codimd/search?q=markdownlint
 [content-linter]: https://docs.github.com/en/contributing/collaborating-on-github-docs/using-the-content-linter
