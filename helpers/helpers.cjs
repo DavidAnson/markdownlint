@@ -111,10 +111,11 @@ module.exports.cloneIfArray = cloneIfArray;
 /**
  * Clones the input if it is a URL.
  *
- * @param {Object} url Object of unknown type.
+ * @param {Object | undefined} url Object of unknown type.
  * @returns {Object} Clone of obj iff obj is a URL.
  */
 function cloneIfUrl(url) {
+  // @ts-ignore
   return isUrl(url) ? new URL(url) : url;
 }
 module.exports.cloneIfUrl = cloneIfUrl;
@@ -139,7 +140,7 @@ module.exports.getHtmlAttributeRe = function getHtmlAttributeRe(name) {
 function isBlankLine(line) {
   const startComment = "<!--";
   const endComment = "-->";
-  const removeComments = (s) => {
+  const removeComments = (/** @type {string} */ s) => {
     while (true) {
       const start = s.indexOf(startComment);
       const end = s.indexOf(endComment);
@@ -177,8 +178,8 @@ const startsWithPipeRe = /^ *\|/;
 const notCrLfRe = /[^\r\n]/g;
 const notSpaceCrLfRe = /[^ \r\n]/g;
 const trailingSpaceRe = / +[\r\n]/g;
-const replaceTrailingSpace = (s) => s.replace(notCrLfRe, safeCommentCharacter);
-module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
+const replaceTrailingSpace = (/** @type {string} */ s) => s.replace(notCrLfRe, safeCommentCharacter);
+module.exports.clearHtmlCommentText = function clearHtmlCommentText(/** @type {string} */ text) {
   let i = 0;
   while ((i = text.indexOf(htmlCommentBegin, i)) !== -1) {
     const j = text.indexOf(htmlCommentEnd, i + 2);
@@ -220,7 +221,7 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(text) {
 };
 
 // Escapes a string for use in a RegExp
-module.exports.escapeForRegExp = function escapeForRegExp(str) {
+module.exports.escapeForRegExp = function escapeForRegExp(/** @type {string} */ str) {
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
@@ -355,7 +356,7 @@ module.exports.hasOverlap = function hasOverlap(rangeA, rangeB) {
 
 // Determines if the front matter includes a title
 module.exports.frontMatterHasTitle =
-  function frontMatterHasTitle(frontMatterLines, frontMatterTitlePattern) {
+  function frontMatterHasTitle(/** @type {readonly string[]} */ frontMatterLines, /** @type {string} */ frontMatterTitlePattern) {
     const ignoreFrontMatter =
       (frontMatterTitlePattern !== undefined) && !frontMatterTitlePattern;
     const frontMatterTitleRe =
@@ -368,17 +369,30 @@ module.exports.frontMatterHasTitle =
   };
 
 /**
+ * Result object for getReferenceLinkImageData.
+ *
+ * @typedef {Object} GetReferenceLinkImageDataResult
+ * @property {Map<string, number[][]>} references References.
+ * @property {Map<string, number[][]>} shortcuts Shortcuts.
+ * @property {Map<string, [number, string]>} definitions Definitions.
+ * @property {[string, number][]} duplicateDefinitions Duplicate definitions.
+ * @property {number[]} definitionLineIndices Definition line indices.
+ */
+
+/**
  * Returns an object with information about reference links and images.
  *
  * @param {MicromarkToken[]} tokens Micromark tokens.
- * @returns {Object} Reference link/image data.
+ * @returns {GetReferenceLinkImageDataResult} Reference link/image data.
  */
 function getReferenceLinkImageData(tokens) {
-  const normalizeReference = (s) => s.toLowerCase().trim().replace(/\s+/g, " ");
-  const getText = (t) => t?.children.filter((c) => c.type !== "blockQuotePrefix").map((c) => c.text).join("");
+  const normalizeReference = (/** @type {string} */ s) => s.toLowerCase().trim().replace(/\s+/g, " ");
+  const getText = (/** @type {MicromarkToken} */ t) => t?.children.filter((c) => c.type !== "blockQuotePrefix").map((c) => c.text).join("");
+  /** @type {Map<string, number[][]>} */
   const references = new Map();
+  /** @type {Map<string, number[][]>} */
   const shortcuts = new Map();
-  const addReferenceToDictionary = (token, label, isShortcut) => {
+  const addReferenceToDictionary = (/** @type {MicromarkToken} */ token, /** @type {string} */ label, /** @type {boolean} */ isShortcut) => {
     const referenceDatum = [
       token.startLine - 1,
       token.startColumn - 1,
@@ -390,8 +404,11 @@ function getReferenceLinkImageData(tokens) {
     referenceData.push(referenceDatum);
     dictionary.set(reference, referenceData);
   };
+  /** @type {Map<string, [number, string]>} */
   const definitions = new Map();
+  /** @type {number[]} */
   const definitionLineIndices = [];
+  /** @type {[string, number][]} */
   const duplicateDefinitions = [];
   const filteredTokens =
     micromark.filterByTypes(
@@ -433,7 +450,7 @@ function getReferenceLinkImageData(tokens) {
               micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
             definitions.set(
               reference,
-              [ token.startLine - 1, destinationString ]
+              [ token.startLine - 1, destinationString || "" ]
             );
           }
         }
@@ -490,7 +507,7 @@ module.exports.getReferenceLinkImageData = getReferenceLinkImageData;
  * Gets the most common line ending, falling back to the platform default.
  *
  * @param {string} input Markdown content to analyze.
- * @param {Object} [os] Node.js "os" module.
+ * @param {{EOL: string}} [os] Node.js "os" module.
  * @returns {string} Preferred line ending.
  */
 function getPreferredLineEnding(input, os) {
@@ -530,7 +547,7 @@ module.exports.getPreferredLineEnding = getPreferredLineEnding;
  * Expands a path with a tilde to an absolute path.
  *
  * @param {string} file Path that may begin with a tilde.
- * @param {Object} os Node.js "os" module.
+ * @param {{homedir: () => string}} os Node.js "os" module.
  * @returns {string} Absolute path (or original path).
  */
 function expandTildePath(file, os) {
@@ -591,6 +608,7 @@ function convertLintErrorsVersion2To1(errors) {
  * @returns {LintErrors} Lint errors (v0).
  */
 function convertLintErrorsVersion2To0(errors) {
+  /** @type {Object.<string, number[]>} */
   const dictionary = {};
   for (const error of errors) {
     const ruleName = error.ruleNames[0];
@@ -606,10 +624,11 @@ function convertLintErrorsVersion2To0(errors) {
  * Copies and transforms lint results from resultVersion 3 to ?.
  *
  * @param {LintResults} results Lint results (v3).
- * @param {(LintErrors) => LintErrors} transform Lint errors (v?).
+ * @param {(errors: LintErrors) => LintErrors} transform Lint errors (v?).
  * @returns {LintResults} Lint results (v?).
  */
 function copyAndTransformResults(results, transform) {
+  /** @type {Object.<string, LintErrors>} */
   const newResults = {};
   Object.defineProperty(newResults, "toString", { "value": results.toString });
   for (const key of Object.keys(results)) {

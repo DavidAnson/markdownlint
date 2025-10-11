@@ -54,6 +54,7 @@ export default [
       "multiline-comment-style": [ "error", "separate-lines" ],
       "no-empty-function": "off",
       "no-implicit-coercion": "off",
+      "no-inline-comments": [ "error", { "ignorePattern": " @type \\{.+\\} " } ],
       "no-magic-numbers": "off",
       "no-param-reassign": "off",
       "no-plusplus": "off",

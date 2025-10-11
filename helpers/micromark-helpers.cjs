@@ -17,6 +17,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.cjs");
  * @returns {boolean} True iff the token is within an htmlFlow type.
  */
 function inHtmlFlow(token) {
+  // @ts-ignore
   return Boolean(token[htmlFlowSymbol]);
 }
 
@@ -126,8 +127,11 @@ function filterByPredicate(tokens, allowed, transformChildren) {
  * @returns {Token[]} Filtered tokens.
  */
 function filterByTypes(tokens, types, htmlFlow) {
-  const predicate = (token) => types.includes(token.type) && (htmlFlow || !inHtmlFlow(token));
-  const flatTokens = tokens[flatTokensSymbol];
+  const predicate = (/** @type {Token} */ token) => types.includes(token.type) && (htmlFlow || !inHtmlFlow(token));
+  /** @type {Token[]} */
+  const flatTokens =
+    // @ts-ignore
+    tokens[flatTokensSymbol];
   if (flatTokens) {
     return flatTokens.filter(predicate);
   }
@@ -163,7 +167,7 @@ function getBlockQuotePrefixText(tokens, lineNumber, count = 1) {
 function getDescendantsByType(parent, typePath) {
   let tokens = Array.isArray(parent) ? parent : [ parent ];
   for (const type of typePath) {
-    const predicate = (token) => Array.isArray(type) ? type.includes(token.type) : (type === token.type);
+    const predicate = (/** @type {Token} */ token) => Array.isArray(type) ? type.includes(token.type) : (type === token.type);
     tokens = tokens.flatMap((t) => t.children.filter(predicate));
   }
   return tokens;
