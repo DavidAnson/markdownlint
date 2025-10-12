@@ -161,6 +161,12 @@ for (const rule of rules) {
         "default": 2
       };
       // @ts-ignore
+      subscheme.properties.code_blocks = {
+        "description": "Include code blocks",
+        "type": "boolean",
+        "default": false
+      };
+      // @ts-ignore
       subscheme.properties.list_item_empty_lines = {
         "description": "Allow spaces for empty lines in list items",
         "type": "boolean",

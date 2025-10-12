@@ -512,6 +512,11 @@
               "minimum": 0,
               "default": 2
             },
+            "code_blocks": {
+              "description": "Include code blocks",
+              "type": "boolean",
+              "default": false
+            },
             "list_item_empty_lines": {
               "description": "Allow spaces for empty lines in list items",
               "type": "boolean",
@@ -562,6 +567,11 @@
               "type": "integer",
               "minimum": 0,
               "default": 2
+            },
+            "code_blocks": {
+              "description": "Include code blocks",
+              "type": "boolean",
+              "default": false
             },
             "list_item_empty_lines": {
               "description": "Allow spaces for empty lines in list items",

@@ -246,6 +246,10 @@ export interface ConfigurationStrict {
          */
         br_spaces?: number;
         /**
+         * Include code blocks
+         */
+        code_blocks?: boolean;
+        /**
          * Allow spaces for empty lines in list items
          */
         list_item_empty_lines?: boolean;
@@ -273,6 +277,10 @@ export interface ConfigurationStrict {
          * Spaces for line break
          */
         br_spaces?: number;
+        /**
+         * Include code blocks
+         */
+        code_blocks?: boolean;
         /**
          * Allow spaces for empty lines in list items
          */

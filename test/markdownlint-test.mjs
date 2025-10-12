@@ -984,6 +984,9 @@ test("customFileSystemSync", (t) => {
   t.plan(2);
   const file = "/dir/file.md";
   const fsApi = {
+    "access": () => { throw new Error("access"); },
+    "accessSync": () => { throw new Error("accessSync"); },
+    "readFile": () => { throw new Error("readFile"); },
     // @ts-ignore
     "readFileSync": (p) => {
       t.is(p, file);
@@ -1001,11 +1004,14 @@ test("customFileSystemAsync", (t) => new Promise((resolve) => {
   t.plan(3);
   const file = "/dir/file.md";
   const fsApi = {
+    "access": () => { throw new Error("access"); },
+    "accessSync": () => { throw new Error("accessSync"); },
     // @ts-ignore
     "readFile": (p, o, cb) => {
       t.is(p, file);
       cb(null, "# Heading");
-    }
+    },
+    "readFileSync": () => { throw new Error("readFileSync"); }
   };
   lintAsync({
     "files": file,
@@ -1095,7 +1101,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(215);
+  t.plan(218);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
