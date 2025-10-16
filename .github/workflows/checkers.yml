@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
-    - uses: JustinBeckwith/linkinator-action@v1.11.0
+    - uses: JustinBeckwith/linkinator-action@v2
       with:
         linksToSkip: '^https://github.com/ ^https://www.jwz.org/ ^https://www.npmjs.com/ ^https://opensource.org/ ^https://unix.stackexchange.com/'
         paths: '*.md doc/*.md helpers/*.md'
