@@ -400,12 +400,12 @@ test("customRulesNpmPackage", (t) => new Promise((resolve) => {
   };
   lintAsync(options, function callback(err, actualResult) {
     t.falsy(err);
-    const expectedResult = {};
-    expectedResult.string = {
-      "extended-ascii": [ 5 ],
-      "sample-rule": [ 3 ]
+    const expectedResult = {
+      "string": {
+        "extended-ascii": [ 5 ],
+        "sample-rule": [ 3 ]
+      }
     };
-    // @ts-ignore
     t.deepEqual(actualResult, expectedResult, "Undetected issues.");
     resolve();
   });
@@ -448,9 +448,10 @@ test("customRulesBadProperty", (t) => {
   ]) {
     const { propertyName, propertyValues } = testCase;
     for (const propertyValue of propertyValues) {
-      const badRule = { ...customRules.firstLine };
-      // @ts-ignore
-      badRule[propertyName] = propertyValue;
+      const badRule = {
+        ...customRules.firstLine,
+        [propertyName]: propertyValue
+      };
       /** @type {import("markdownlint").Options} */
       const options = {
         "customRules": [ badRule ]
@@ -1952,7 +1953,7 @@ test("customRulesValidateJson", (t) => new Promise((resolve) => {
       ]
     };
     t.true(
-      actual && (actual["test/validate-json.md"][0].errorDetail.length > 0),
+      actual && (actual["test/validate-json.md"][0].errorDetail?.length !== 0),
       "Missing errorDetail"
     );
     // @ts-ignore

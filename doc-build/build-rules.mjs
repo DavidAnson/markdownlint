@@ -43,11 +43,10 @@ for (const rule of rules) {
     `<a name="${name.toLowerCase()}"></a>`,
     ""
   );
-  const section = [];
-  section.push(
+  const section = [
     `## ${decorator}\`${name}\` - ${rule.description}${decorator}`,
     ""
-  );
+  ];
   if (deprecated) {
     section.push(
       "> This rule is deprecated and provided for backward-compatibility",
