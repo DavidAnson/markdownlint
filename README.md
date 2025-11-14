@@ -206,11 +206,10 @@ issues reported. Two kinds of text are ignored by most rules:
 - [Front matter](https://jekyllrb.com/docs/frontmatter/) (see
   `options.frontMatter` below)
 
-Rules can be enabled, disabled, and configured via `options.config`
-(described below) to define the expected behavior for a set of inputs.
-To enable or disable rules at a particular location within a file, add
-one of these markers to the appropriate place (HTML comments don't
-appear in the final markup):
+All rules are enabled by default. Rules can be enabled, disabled, and configured
+for each call to the `lint` API by passing an `options.config` object (described
+below). To enable or disable rules within a file, use one of the following HTML
+comments (which are not rendered):
 
 - Disable all rules: `<!-- markdownlint-disable -->`
 - Enable all rules: `<!-- markdownlint-enable -->`
