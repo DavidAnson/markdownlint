@@ -14,20 +14,20 @@ import { markdownlintParallel } from "./markdownlint-test-parallel.mjs";
 /**
  * Lints a test repository.
  *
- * @param {Object} t Test instance.
+ * @param {import("ava").ExecutionContext<unknown>} t Test instance.
  * @param {string[]} globPatterns Array of files to in/exclude.
  * @param {string} configPath Path to config file.
  * @param {Configuration} [configOverrides] Configuration overrides.
  * @param {boolean} [parallel] True to lint in parallel.
- * @returns {Promise} Test result.
+ * @returns {Promise<void>} Test result.
  */
 export function lintTestRepo(t, globPatterns, configPath, configOverrides, parallel) {
   t.plan(1);
-  const jsoncParse = (json) => {
+  const jsoncParse = (/** @type {string} */ json) => {
     const config = jsoncParser.parse(json, [], { "allowTrailingComma": true });
     return config.config || config;
   };
-  const yamlParse = (yaml) => jsYaml.load(yaml);
+  const yamlParse = (/** @type {string} */ yaml) => jsYaml.load(yaml);
   return Promise.all([
     globby(globPatterns),
     readConfig(configPath, [ jsoncParse, yamlParse ])
