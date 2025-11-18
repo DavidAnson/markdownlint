@@ -95,7 +95,7 @@
     "eslint-plugin-regexp": "2.10.0",
     "eslint-plugin-unicorn": "62.0.0",
     "gemoji": "8.1.0",
-    "globby": "15.0.0",
+    "globby": "16.0.0",
     "js-yaml": "4.1.1",
     "json-schema-to-typescript": "15.0.4",
     "jsonc-parser": "3.3.1",
