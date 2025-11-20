@@ -84,7 +84,7 @@
   },
   "devDependencies": {
     "@eslint/js": "9.39.1",
-    "@stylistic/eslint-plugin": "5.6.0",
+    "@stylistic/eslint-plugin": "5.6.1",
     "ajv": "8.17.1",
     "ava": "6.4.1",
     "c8": "10.1.3",
