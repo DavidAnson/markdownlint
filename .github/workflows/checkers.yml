@@ -12,7 +12,7 @@ jobs:
   linkcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: JustinBeckwith/linkinator-action@v2
       with:
         linksToSkip: '^https://github.com/ ^https://www.jwz.org/ ^https://www.npmjs.com/ ^https://opensource.org/ ^https://unix.stackexchange.com/'
@@ -21,7 +21,7 @@ jobs:
   spellcheck:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v5
+    - uses: actions/checkout@v6
     - uses: tbroadley/spellchecker-cli-action@v1
       with:
         dictionaries: '.github/dictionary.txt'
