@@ -2696,6 +2696,8 @@ Parameters:
 
 - `style`: Table column style (`string`, default `any`, values `aligned` /
   `any` / `compact` / `tight`)
+- `wide_character`: RegExp for matching wide character(s) (`string`, default
+  `undefined`)
 
 This rule is triggered when the column separators of a
 [GitHub Flavored Markdown table][gfm-table-060] are used inconsistently.
@@ -2736,8 +2738,7 @@ analyzed to see if it satisfies any supported style. If so, no errors are
 reported. If not, errors are be reported for whichever style would produce the
 *fewest* errors (i.e., whichever style is the closest match).
 
-Note: Pipe alignment for the `aligned` style is based on character count, so
-wide characters and multi-character encodings can produce unexpected results.
+Note: Pipe alignment for the `aligned` style is based on ...
 The following table is correctly aligned based on character count, though some
 editors render the emoji wider:
 
@@ -2747,8 +2748,8 @@ editors render the emoji wider:
 ```markdown
 | Response | Emoji |
 | -------- | ----- |
-| Yes      | ✅     |
-| No       | ❎     |
+| Yes      | ✅    |
+| No       | ❎    |
 ```
 
 <!-- markdownlint-restore -->

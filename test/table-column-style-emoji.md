@@ -4,9 +4,9 @@
 
 | Response | Emoji |
 | -------- | ----- |
-| Yes      | ✅     |
-| No       | ❎     |
-| Oops     | ❌    |
+| Yes      | ✅    |
+| No       | ❎    |
+| Oops     | ❌     |
 
 {MD060:-2}
 

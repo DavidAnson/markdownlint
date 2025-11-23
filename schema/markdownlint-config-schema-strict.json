@@ -4701,6 +4701,10 @@
                 "tight"
               ],
               "default": "any"
+            },
+            "wide_character": {
+              "description": "RegExp for matching wide character(s)",
+              "type": "string"
             }
           }
         }
@@ -4747,6 +4751,10 @@
                 "tight"
               ],
               "default": "any"
+            },
+            "wide_character": {
+              "description": "RegExp for matching wide character(s)",
+              "type": "string"
             }
           }
         }

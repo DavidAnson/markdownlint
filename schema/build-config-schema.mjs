@@ -645,6 +645,12 @@ for (const rule of rules) {
         ],
         "default": "any"
       };
+      // @ts-ignore
+      subscheme.properties.wide_character = {
+        "description": "RegExp for matching wide character(s)",
+        "type": "string",
+        "default": undefined
+      };
       break;
     default:
       break;

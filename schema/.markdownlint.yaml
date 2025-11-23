@@ -304,3 +304,4 @@ MD059:
 MD060:
   # Table column style
   style: "any"
+  # RegExp for matching wide character(s)
