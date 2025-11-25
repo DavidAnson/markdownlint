@@ -1587,3 +1587,35 @@ test("constants", (t) => {
   // @ts-ignore
   t.is(constants.version, packageJson.version);
 });
+
+test("version numbers match", async(t) => {
+  t.plan(441);
+  const files = [
+    // See previous test
+    // "./package.json",
+    "./CHANGELOG.md",
+    "./README.md",
+    "./helpers/README.md",
+    "./lib/configuration-strict.d.ts",
+    // See previous test
+    // "./lib/constants.mjs",
+    "./schema/.markdownlint.jsonc",
+    "./schema/.markdownlint.yaml",
+    "./schema/markdownlint-config-schema.json",
+    "./schema/markdownlint-config-schema-strict.json"
+  ];
+  const contents = await Promise.all(files.map((file) => fs.promises.readFile(file, "utf8")));
+  for (const content of contents) {
+    // eslint-disable-next-line init-declarations
+    let match;
+    const githubProjectOrFileRe = /(?:DavidAnson\/markdownlint|markdownlint\/blob)\/v(\d+\.\d+\.\d+)/gu;
+    while ((match = githubProjectOrFileRe.exec(content)) !== null) {
+      t.is(match[1], packageJson.version);
+    }
+    const firstChangelogRe = /## (\d+\.\d+\.\d+)/u;
+    match = firstChangelogRe.exec(content);
+    if (match) {
+      t.is(match[1], packageJson.version);
+    }
+  }
+});
