@@ -80,7 +80,8 @@
     "micromark-extension-gfm-footnote": "2.1.0",
     "micromark-extension-gfm-table": "2.1.1",
     "micromark-extension-math": "3.1.0",
-    "micromark-util-types": "2.0.2"
+    "micromark-util-types": "2.0.2",
+    "string-width": "8.1.0"
   },
   "devDependencies": {
     "@eslint/js": "9.39.1",

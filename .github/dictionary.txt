@@ -21,6 +21,7 @@ changelog
 Changelog
 changelogs
 Changelogs
+CJK
 CLI
 coc-markdownlint
 CodeQL
@@ -67,6 +68,7 @@ mdl
 MDN
 minified
 MkDocs
+monospaced
 MSBuild
 namespace
 Neovim
