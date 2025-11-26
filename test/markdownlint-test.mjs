@@ -1101,7 +1101,7 @@ test("readme", async(t) => {
 });
 
 test("validateJsonUsingConfigSchemaStrict", async(t) => {
-  t.plan(220);
+  t.plan(221);
   // @ts-ignore
   const ajv = new Ajv(ajvOptions);
   const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1112,6 +1112,7 @@ test("validateJsonUsingConfigSchemaStrict", async(t) => {
     "test/inline-configure-file-invalid.md",
     "test/inline-configure-file-violations.md",
     "test/invalid-ul-style-style.md",
+    "test/long-lines-negative-line-length.md",
     "test/wrong-types-in-config-file.md"
   ]);
   const files = await globby([
