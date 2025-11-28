@@ -920,6 +920,11 @@
               "description": "Stern length checking",
               "type": "boolean",
               "default": false
+            },
+            "wide_characters": {
+              "description": "Expand wide characters",
+              "type": "boolean",
+              "default": false
             }
           }
         }
@@ -996,6 +1001,11 @@
             },
             "stern": {
               "description": "Stern length checking",
+              "type": "boolean",
+              "default": false
+            },
+            "wide_characters": {
+              "description": "Expand wide characters",
               "type": "boolean",
               "default": false
             }

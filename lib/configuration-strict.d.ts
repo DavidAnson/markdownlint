@@ -465,6 +465,10 @@ export interface ConfigurationStrict {
          * Stern length checking
          */
         stern?: boolean;
+        /**
+         * Expand wide characters
+         */
+        wide_characters?: boolean;
       };
   /**
    * MD013/line-length : Line length : https://github.com/DavidAnson/markdownlint/blob/v0.39.0/doc/md013.md
@@ -513,6 +517,10 @@ export interface ConfigurationStrict {
          * Stern length checking
          */
         stern?: boolean;
+        /**
+         * Expand wide characters
+         */
+        wide_characters?: boolean;
       };
   /**
    * MD014/commands-show-output : Dollar signs used before commands without showing output : https://github.com/DavidAnson/markdownlint/blob/v0.39.0/doc/md014.md

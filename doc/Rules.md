@@ -496,6 +496,7 @@ Parameters:
 - `stern`: Stern length checking (`boolean`, default `false`)
 - `strict`: Strict length checking (`boolean`, default `false`)
 - `tables`: Include tables (`boolean`, default `true`)
+- `wide_characters`: Expand wide characters (`boolean`, default `false`)
 
 This rule is triggered when there are lines that are longer than the
 configured `line_length` (default: 80 characters). To fix this, split the line
@@ -506,11 +507,11 @@ up into multiple lines. To set a different maximum length for headings, use
 This rule has an exception when there is no whitespace beyond the configured
 line length. This allows you to include items such as long URLs without being
 forced to break them in the middle. To disable this exception, set the `strict`
-parameter to `true` and an issue will be reported when any line is too long. To
-warn for lines that are too long and could be fixed but allow long lines
+parameter to `true` and a violation will be reported when any line is too long.
+To warn for lines that are too long and could be fixed while allowing long lines
 without spaces, set the `stern` parameter to `true`.
 
-For example (assuming normal behavior):
+For example (assuming default behavior):
 
 ```markdown
 IF THIS LINE IS THE MAXIMUM LENGTH
@@ -525,17 +526,28 @@ mode, the middle two lines above are both violations, but the last is okay.
 You have the option to exclude this rule for code blocks, tables, or headings.
 To do so, set the `code_blocks`, `tables`, or `headings` parameter(s) to false.
 
-Code blocks are included in this rule by default since it is often a
-requirement for document readability, and tentatively compatible with code
-rules. Still, some languages do not lend themselves to short lines.
+Code blocks are included in this rule by default since it is often a requirement
+for document readability, and tentatively compatible with code rules. However,
+some languages do not lend themselves to short lines.
+
+By default, this rule treats the number of characters in the line as its length.
+Many editors render [emoji][emoji-013] and [CJK characters][cjk-characters-013]
+at *twice* the width of [Latin characters][latin-script-013], so the
+`wide_characters` parameter can be set to `true` to treat the "visual" width of
+the line as its length instead.
 
 Lines with link/image reference definitions and standalone lines (i.e., not part
-of a paragraph) with only a link/image (possibly using (strong) emphasis) are
-always exempted from this rule (even in `strict` mode) because there is often no
-way to split such lines without breaking the URL.
+of a paragraph) with only a link/image (possibly using emphasis) are always
+exempted from this rule (even in `strict` mode) because there is often no way to
+split such lines without breaking the URL.
 
 Rationale: Extremely long lines can be difficult to work with in some editors.
+
 More information: <https://cirosantilli.com/markdown-style-guide#line-wrapping>.
+
+[cjk-characters-013]: https://en.wikipedia.org/wiki/CJK_characters
+[emoji-013]: https://en.wikipedia.org/wiki/Emoji
+[latin-script-013]: https://en.wikipedia.org/wiki/Latin_script
 
 <a name="md014"></a>
 
@@ -2746,11 +2758,11 @@ not, violations are be reported for whichever style would produce the *fewest*
 issues (i.e., whichever style is the closest match).
 
 Note: Delimiter placement for the `aligned` style is based on visual appearance
-and not character count. Because editors typically render [emoji][emoji] and
-[CJK characters][cjk-characters] at *twice* the width of
-[Latin characters][latin-script], this rule takes that into account for tables
-using the `aligned` style. The following table is correctly formatted and will
-appear aligned in most editors and monospaced fonts:
+and not character count. Because editors typically render [emoji][emoji-060] and
+[CJK characters][cjk-characters-060] at *twice* the width of
+[Latin characters][latin-script-060], this rule takes that into account for
+tables using the `aligned` style. The following table is correctly formatted and
+will appear aligned in most editors and monospaced fonts:
 
 <!-- markdownlint-capture -->
 <!-- markdownlint-disable extended-ascii -->
@@ -2766,10 +2778,10 @@ appear aligned in most editors and monospaced fonts:
 
 Rationale: Consistent formatting makes it easier to understand a document.
 
-[cjk-characters]: https://en.wikipedia.org/wiki/CJK_characters
-[emoji]: https://en.wikipedia.org/wiki/Emoji
+[cjk-characters-060]: https://en.wikipedia.org/wiki/CJK_characters
+[emoji-060]: https://en.wikipedia.org/wiki/Emoji
 [gfm-table-060]: https://docs.github.com/en/get-started/writing-on-github/working-with-advanced-formatting/organizing-information-with-tables
-[latin-script]: https://en.wikipedia.org/wiki/Latin_script
+[latin-script-060]: https://en.wikipedia.org/wiki/Latin_script
 
 <!-- markdownlint-configure-file {
   "no-inline-html": {

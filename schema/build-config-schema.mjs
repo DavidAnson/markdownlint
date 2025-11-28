@@ -264,6 +264,12 @@ for (const rule of rules) {
         "type": "boolean",
         "default": false
       };
+      // @ts-ignore
+      subscheme.properties.wide_characters = {
+        "description": "Expand wide characters",
+        "type": "boolean",
+        "default": false
+      };
       break;
     case "MD022":
       // @ts-ignore
