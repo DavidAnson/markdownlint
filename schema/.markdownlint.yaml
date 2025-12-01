@@ -304,3 +304,5 @@ MD059:
 MD060:
   # Table column style
   style: "any"
+  # Aligned delimiter columns
+  aligned_delimiter: false

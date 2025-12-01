@@ -2281,6 +2281,10 @@ export interface ConfigurationStrict {
          * Table column style
          */
         style?: "any" | "aligned" | "compact" | "tight";
+        /**
+         * Aligned delimiter columns
+         */
+        aligned_delimiter?: boolean;
       };
   /**
    * MD060/table-column-style : Table column style : https://github.com/DavidAnson/markdownlint/blob/v0.39.0/doc/md060.md
@@ -2301,6 +2305,10 @@ export interface ConfigurationStrict {
          * Table column style
          */
         style?: "any" | "aligned" | "compact" | "tight";
+        /**
+         * Aligned delimiter columns
+         */
+        aligned_delimiter?: boolean;
       };
   /**
    * headings : MD001, MD003, MD018, MD019, MD020, MD021, MD022, MD023, MD024, MD025, MD026, MD036, MD041, MD043

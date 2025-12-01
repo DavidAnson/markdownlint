@@ -4701,6 +4701,11 @@
                 "tight"
               ],
               "default": "any"
+            },
+            "aligned_delimiter": {
+              "description": "Aligned delimiter columns",
+              "type": "boolean",
+              "default": false
             }
           }
         }
@@ -4747,6 +4752,11 @@
                 "tight"
               ],
               "default": "any"
+            },
+            "aligned_delimiter": {
+              "description": "Aligned delimiter columns",
+              "type": "boolean",
+              "default": false
             }
           }
         }

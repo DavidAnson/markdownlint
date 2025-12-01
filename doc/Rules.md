@@ -2694,15 +2694,16 @@ Aliases: `table-column-style`
 
 Parameters:
 
+- `aligned_delimiter`: Aligned delimiter columns (`boolean`, default `false`)
 - `style`: Table column style (`string`, default `any`, values `aligned` /
   `any` / `compact` / `tight`)
 
-This rule is triggered when the column separators of a
+This rule is triggered when the column separator pipe characters (`|`) of a
 [GitHub Flavored Markdown table][gfm-table-060] are used inconsistently.
 
 This rule recognizes three table column styles based on popular use.
 
-Style `aligned` ensures table delimiters are vertically aligned:
+Style `aligned` ensures pipe characters are vertically aligned:
 
 ```markdown
 | Character | Meaning |
@@ -2745,7 +2746,40 @@ see if it satisfies any supported style. If so, no violations are reported. If
 not, violations are be reported for whichever style would produce the *fewest*
 issues (i.e., whichever style is the closest match).
 
-Note: Delimiter placement for the `aligned` style is based on visual appearance
+Setting the `aligned_delimiter` parameter to `true` requires pipe characters in
+the delimiter row to align with those in the header row. This can be used with
+`compact` and `tight` tables to make the header text more obvious. (It's already
+required for tables with style `aligned`.)
+
+Style `compact` with `aligned_delimiter`:
+
+```markdown
+| Character | Meaning |
+| --------- | ------- |
+| Y | Yes |
+| N | No |
+```
+
+Style `tight` with `aligned_delimiter`:
+
+```markdown
+|Character|Meaning|
+|---------|-------|
+|Y|Yes|
+|N|No|
+```
+
+**Note**: This rule does not require leading/trailing pipe characters, so this
+is also a valid table for style `compact`:
+
+```markdown
+Character | Meaning
+--- | ---
+Y | Yes
+N | No
+```
+
+**Note**: Pipe alignment for the `aligned` style is based on visual appearance
 and not character count. Because editors typically render [emoji][emoji] and
 [CJK characters][cjk-characters] at *twice* the width of
 [Latin characters][latin-script], this rule takes that into account for tables

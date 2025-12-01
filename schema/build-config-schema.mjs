@@ -645,6 +645,12 @@ for (const rule of rules) {
         ],
         "default": "any"
       };
+      // @ts-ignore
+      subscheme.properties.aligned_delimiter = {
+        "description": "Aligned delimiter columns",
+        "type": "boolean",
+        "default": false
+      };
       break;
     default:
       break;
