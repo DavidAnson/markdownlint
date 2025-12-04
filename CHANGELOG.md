@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.40.0
+
+- Improve MD011/MD013/MD051/MD060
+- Update dependencies
+
 ## 0.39.0
 
 - Add MD060/table-column-style
