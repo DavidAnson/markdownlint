@@ -50,24 +50,6 @@ test("https://github.com/mkdocs/mkdocs", (t) => {
   return lintTestRepo(t, globPatterns, configPath);
 });
 
-test("https://github.com/mochajs/mocha", (t) => {
-  const rootDir = "./test-repos/mochajs-mocha";
-  const globPatterns = [
-    join(rootDir, "*.md"),
-    join(rootDir, "docs/**/*.md"),
-    join(rootDir, ".github/*.md"),
-    join(rootDir, "lib/**/*.md"),
-    join(rootDir, "test/**/*.md"),
-    join(rootDir, "example/**/*.md"),
-    ...excludeGlobs(
-      rootDir,
-      "CHANGELOG.md"
-    )
-  ];
-  const configPath = join(rootDir, ".markdownlint.json");
-  return lintTestRepo(t, globPatterns, configPath);
-});
-
 test("https://github.com/pi-hole/docs", (t) => {
   const rootDir = "./test-repos/pi-hole-docs";
   const globPatterns = [ join(rootDir, "**/*.md") ];

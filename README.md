@@ -1058,7 +1058,6 @@ following projects or one of the tools in the [Related section](#related):
 - [Garden React Components][garden] ([Search repository][garden-search])
 - [MDN Web Docs][mdn] ([Search repository][mdn-search])
 - [MkDocs][mkdocs] ([Search repository][mkdocs-search])
-- [Mocha][mocha] ([Search repository][mocha-search])
 - [Pi-hole documentation][pi-hole] ([Search repository][pi-hole-search])
 - [Reactable][reactable] ([Search repository][reactable-search])
 - [V8][v8] ([Search repository][v8-search])
@@ -1091,8 +1090,6 @@ For more advanced integration scenarios:
 [mdn-search]: https://github.com/mdn/content/search?q=markdownlint
 [mkdocs]: https://www.mkdocs.org/
 [mkdocs-search]: https://github.com/mkdocs/mkdocs/search?q=markdownlint
-[mocha]: https://mochajs.org/
-[mocha-search]: https://github.com/mochajs/mocha/search?q=markdownlint
 [pi-hole]: https://docs.pi-hole.net
 [pi-hole-search]: https://github.com/pi-hole/docs/search?q=markdownlint
 [reactable]: https://glittershark.github.io/reactable/

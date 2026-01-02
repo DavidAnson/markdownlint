@@ -16,7 +16,7 @@ import { markdownlintParallel } from "./markdownlint-test-parallel.mjs";
  *
  * @param {import("ava").ExecutionContext<unknown>} t Test instance.
  * @param {string[]} globPatterns Array of files to in/exclude.
- * @param {string} configPath Path to config file.
+ * @param {string} [configPath] Path to config file.
  * @param {Configuration} [configOverrides] Configuration overrides.
  * @param {boolean} [parallel] True to lint in parallel.
  * @returns {Promise<void>} Test result.
@@ -30,9 +30,8 @@ export function lintTestRepo(t, globPatterns, configPath, configOverrides, paral
   const yamlParse = (/** @type {string} */ yaml) => jsYaml.load(yaml);
   return Promise.all([
     globby(globPatterns),
-    readConfig(configPath, [ jsoncParse, yamlParse ])
-  ]).then((globbyAndReadConfigResults) => {
-    const [ files, rawConfig ] = globbyAndReadConfigResults;
+    configPath ? readConfig(configPath, [ jsoncParse, yamlParse ]) : {}
+  ]).then(([ files, rawConfig ]) => {
     // eslint-disable-next-line no-console
     console.log(`${t.title}: Linting ${files.length} files...`);
     const cookedConfig = Object.fromEntries(
