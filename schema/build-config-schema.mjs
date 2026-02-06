@@ -12,6 +12,8 @@ const schemaName = "markdownlint-config-schema.json";
 const schemaUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/${schemaName}`;
 const schemaStrictName = "markdownlint-config-schema-strict.json";
 const schemaStrictUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/${schemaStrictName}`;
+const schemaJsoncName = "markdownlint-config-schema-jsonc.json";
+const schemaJsoncUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/${schemaJsoncName}`;
 
 // Schema scaffolding
 const schema = {
@@ -690,6 +692,15 @@ const schemaStrict = {
 };
 const schemaFileStrict = path.join(__dirname(import.meta), schemaStrictName);
 await fs.writeFile(schemaFileStrict, JSON.stringify(schemaStrict, null, "  "));
+
+// Create and write JSONC schema
+const schemaJsonc = {
+  ...schemaStrict,
+  "$id": schemaJsoncUri,
+  "allowTrailingCommas": true
+};
+const schemaFileJsonc = path.join(__dirname(import.meta), schemaJsoncName);
+await fs.writeFile(schemaFileJsonc, JSON.stringify(schemaJsonc, null, "  "));
 
 // Write TypeScript declaration file
 const declarationStrictName = path.join(__dirname(import.meta), "..", "lib", "configuration-strict.d.ts");

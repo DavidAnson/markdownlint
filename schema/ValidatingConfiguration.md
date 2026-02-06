@@ -19,8 +19,13 @@ npx ajv-cli validate -s ./markdownlint/schema/markdownlint-config-schema.json -d
 By default, any rule name is valid because of custom rules. To allow only
 built-in rules, use the
 [`markdownlint-config-schema-strict.json`][markdownlint-config-schema-strict]
-JSON Schema instead.
+schema instead.
+
+To allow trailing commas in a JSONC file, use the
+[`markdownlint-config-schema-jsonc.json`][markdownlint-config-schema-jsonc]
+schema instead. (This is based on the strict schema.)
 
 [json-schema]: https://json-schema.org
 [markdownlint-config-schema]: markdownlint-config-schema.json
 [markdownlint-config-schema-strict]: markdownlint-config-schema-strict.json
+[markdownlint-config-schema-jsonc]: markdownlint-config-schema-jsonc.json
