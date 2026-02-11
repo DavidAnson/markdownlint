@@ -94,7 +94,7 @@
     "eslint-plugin-jsdoc": "62.5.4",
     "eslint-plugin-n": "17.23.2",
     "eslint-plugin-regexp": "3.0.0",
-    "eslint-plugin-unicorn": "62.0.0",
+    "eslint-plugin-unicorn": "63.0.0",
     "gemoji": "8.1.0",
     "globby": "16.1.0",
     "js-yaml": "4.1.1",
