@@ -36,7 +36,7 @@ jobs:
     steps:
     - uses: actions/checkout@v6
     - name: Use pnpm latest
-      uses: pnpm/action-setup@v4
+      uses: pnpm/action-setup@v5
       with:
         version: latest
     - name: Use Node.js latest
