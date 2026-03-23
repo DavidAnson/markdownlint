@@ -90,7 +90,7 @@
     "ava": "7.0.0",
     "c8": "11.0.0",
     "character-entities": "2.0.2",
-    "eslint": "10.0.3",
+    "eslint": "10.1.0",
     "eslint-plugin-jsdoc": "62.8.0",
     "eslint-plugin-n": "17.24.0",
     "eslint-plugin-regexp": "3.1.0",
