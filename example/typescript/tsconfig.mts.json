@@ -12,6 +12,7 @@
     "noUnusedParameters": true,
     "strict": true,
     "types": [
+      "markdown-it",
       "node"
     ]
   },

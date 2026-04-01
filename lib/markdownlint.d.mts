@@ -260,7 +260,7 @@ export type MarkdownItBaseToken = {
     /**
      * Arbitrary data.
      */
-    meta: any;
+    meta: Object;
     /**
      * Level change.
      */
@@ -348,23 +348,23 @@ export type RuleOnErrorInfo = {
     /**
      * Detail about the error.
      */
-    detail?: string;
+    detail?: string | undefined;
     /**
      * Context for the error.
      */
-    context?: string;
+    context?: string | undefined;
     /**
      * Link to more information.
      */
-    information?: URL;
+    information?: URL | undefined;
     /**
      * Column number (1-based) and length.
      */
-    range?: number[];
+    range?: number[] | undefined;
     /**
      * Fix information.
      */
-    fixInfo?: RuleOnErrorFixInfo;
+    fixInfo?: RuleOnErrorFixInfo | undefined;
 };
 /**
  * Fix information for RuleOnErrorInfo.
@@ -373,19 +373,19 @@ export type RuleOnErrorFixInfo = {
     /**
      * Line number (1-based).
      */
-    lineNumber?: number;
+    lineNumber?: number | undefined;
     /**
      * Column of the fix (1-based).
      */
-    editColumn?: number;
+    editColumn?: number | undefined;
     /**
      * Count of characters to delete.
      */
-    deleteCount?: number;
+    deleteCount?: number | undefined;
     /**
      * Text to insert (after deleting).
      */
-    insertText?: string;
+    insertText?: string | undefined;
 };
 /**
  * Rule definition.
@@ -402,7 +402,7 @@ export type Rule = {
     /**
      * Link to more information.
      */
-    information?: URL;
+    information?: URL | undefined;
     /**
      * Rule tag(s).
      */
@@ -414,7 +414,7 @@ export type Rule = {
     /**
      * True if asynchronous.
      */
-    asynchronous?: boolean;
+    asynchronous?: boolean | undefined;
     /**
      * Rule implementation.
      */
@@ -423,7 +423,7 @@ export type Rule = {
 /**
  * Method used by the markdown-it parser to parse input.
  */
-export type MarkdownItParse = (src: string, env: any) => MarkdownItBaseToken[];
+export type MarkdownItParse = (src: string, env: Object) => MarkdownItBaseToken[];
 /**
  * Instance of the markdown-it parser.
  */
@@ -444,50 +444,50 @@ export type Options = {
     /**
      * Configuration object.
      */
-    config?: Configuration;
+    config?: import("./configuration.d.ts").Configuration | undefined;
     /**
      * Configuration parsers.
      */
-    configParsers?: ConfigurationParser[];
+    configParsers?: ConfigurationParser[] | undefined;
     /**
      * Custom rules.
      */
-    customRules?: Rule[] | Rule;
+    customRules?: Rule | Rule[] | undefined;
     /**
      * Files to lint.
      */
-    files?: string[] | string;
+    files?: string | string[] | undefined;
     /**
      * Front matter pattern.
      */
-    frontMatter?: RegExp | null;
+    frontMatter?: RegExp | null | undefined;
     /**
      * File system implementation.
      */
-    fs?: FsLike;
+    fs?: FsLike | undefined;
     /**
      * True to catch exceptions.
      */
-    handleRuleFailures?: boolean;
+    handleRuleFailures?: boolean | undefined;
     /**
      * Function to create a markdown-it parser.
      */
-    markdownItFactory?: MarkdownItFactory;
+    markdownItFactory?: MarkdownItFactory | undefined;
     /**
      * True to ignore HTML directives.
      */
-    noInlineConfig?: boolean;
+    noInlineConfig?: boolean | undefined;
     /**
      * Strings to lint.
      */
     strings?: {
         [x: string]: string;
-    };
+    } | undefined;
 };
 /**
  * A markdown-it plugin.
  */
-export type Plugin = any[];
+export type Plugin = Object[];
 /**
  * Lint results.
  */
@@ -542,19 +542,19 @@ export type FixInfo = {
     /**
      * Line number (1-based).
      */
-    lineNumber?: number;
+    lineNumber?: number | undefined;
     /**
      * Column of the fix (1-based).
      */
-    editColumn?: number;
+    editColumn?: number | undefined;
     /**
      * Count of characters to delete.
      */
-    deleteCount?: number;
+    deleteCount?: number | undefined;
     /**
      * Text to insert (after deleting).
      */
-    insertText?: string;
+    insertText?: string | undefined;
 };
 /**
  * FixInfo with all optional properties present.
@@ -580,11 +580,13 @@ export type FixInfoNormalized = {
 /**
  * Called with the result of linting a string or document.
  */
-export type LintContentCallback = (error: Error | null, result?: LintError[]) => void;
+export type LintContentCallback = (error: Error | null, result?: LintError[] | undefined) => void;
 /**
  * Called with the result of the lint function.
  */
-export type LintCallback = (error: Error | null, results?: LintResults) => void;
+export type LintCallback = (error: Error | null, results?: {
+    [x: string]: LintError[];
+} | undefined) => void;
 /**
  * Configuration object for linting rules. For the JSON schema, see
  * {@link  ../schema/markdownlint-config-schema.json}.
@@ -596,18 +598,18 @@ export type Configuration = import("./configuration.d.ts").Configuration;
  */
 export type ConfigurationStrict = import("./configuration-strict.d.ts").ConfigurationStrict;
 /**
- * Rule configuration.
- */
-export type RuleConfiguration = boolean | any;
-/**
  * Parses a configuration string and returns a configuration object.
  */
 export type ConfigurationParser = (text: string) => Configuration;
 /**
  * Called with the result of the readConfig function.
  */
-export type ReadConfigCallback = (err: Error | null, config?: Configuration) => void;
+export type ReadConfigCallback = (err: Error | null, config?: import("./configuration.d.ts").Configuration | undefined) => void;
 /**
  * Called with the result of the resolveConfigExtends function.
  */
-export type ResolveConfigExtendsCallback = (err: Error | null, path?: string) => void;
+export type ResolveConfigExtendsCallback = (err: Error | null, path?: string | undefined) => void;
+/**
+ * Rule configuration.
+ */
+export type RuleConfiguration = boolean | any;

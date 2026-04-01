@@ -2,7 +2,7 @@ export type RequireResolveOptions = {
     /**
      * Additional paths to resolve from.
      */
-    paths?: string[];
+    paths?: string[] | undefined;
 };
 export type RequireResolve = (id: string, options: RequireResolveOptions) => string;
 /**
