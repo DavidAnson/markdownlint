@@ -438,59 +438,59 @@ function getReferenceLinkImageData(tokens) {
       case "gfmFootnoteDefinitionLabelString":
         labelPrefix = "^";
       case "definitionLabelString": // eslint-disable-line no-fallthrough
-        {
-          // definitions and definitionLineIndices
-          const reference = normalizeReference(`${labelPrefix}${token.text}`);
-          if (definitions.has(reference)) {
-            duplicateDefinitions.push([ reference, token.startLine - 1 ]);
-          } else {
-            const parent =
-              micromark.getParentOfType(token, [ "definition" ]);
-            const destinationString = parent &&
-              micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
-            definitions.set(
-              reference,
-              [ token.startLine - 1, destinationString || "" ]
-            );
-          }
+      {
+        // definitions and definitionLineIndices
+        const reference = normalizeReference(`${labelPrefix}${token.text}`);
+        if (definitions.has(reference)) {
+          duplicateDefinitions.push([ reference, token.startLine - 1 ]);
+        } else {
+          const parent =
+            micromark.getParentOfType(token, [ "definition" ]);
+          const destinationString = parent &&
+            micromark.getDescendantsByType(parent, [ "definitionDestination", "definitionDestinationRaw", "definitionDestinationString" ])[0]?.text;
+          definitions.set(
+            reference,
+            [ token.startLine - 1, destinationString || "" ]
+          );
         }
         break;
+      }
       case "gfmFootnoteCall":
       case "image":
       case "link":
-        {
-          // Identify if shortcut or full/collapsed
-          let isShortcut = (token.children.length === 1);
-          const isFullOrCollapsed = (token.children.length === 2) && !token.children.some((t) => t.type === "resource");
-          const [ labelText ] = micromark.getDescendantsByType(token, [ "label", "labelText" ]);
-          const [ referenceString ] = micromark.getDescendantsByType(token, [ "reference", "referenceString" ]);
-          let label = getText(labelText);
-          // Identify if footnote
-          if (!isShortcut && !isFullOrCollapsed) {
-            const [ footnoteCallMarker, footnoteCallString ] = token.children.filter(
-              (t) => [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ].includes(t.type)
-            );
-            if (footnoteCallMarker && footnoteCallString) {
-              label = `${footnoteCallMarker.text}${footnoteCallString.text}`;
-              isShortcut = true;
-            }
-          }
-          // Track link (handle shortcuts separately due to ambiguity in "text [text] text")
-          if (isShortcut || isFullOrCollapsed) {
-            addReferenceToDictionary(token, getText(referenceString) || label, isShortcut);
+      {
+        // Identify if shortcut or full/collapsed
+        let isShortcut = (token.children.length === 1);
+        const isFullOrCollapsed = (token.children.length === 2) && !token.children.some((t) => t.type === "resource");
+        const [ labelText ] = micromark.getDescendantsByType(token, [ "label", "labelText" ]);
+        const [ referenceString ] = micromark.getDescendantsByType(token, [ "reference", "referenceString" ]);
+        let label = getText(labelText);
+        // Identify if footnote
+        if (!isShortcut && !isFullOrCollapsed) {
+          const [ footnoteCallMarker, footnoteCallString ] = token.children.filter(
+            (t) => [ "gfmFootnoteCallMarker", "gfmFootnoteCallString" ].includes(t.type)
+          );
+          if (footnoteCallMarker && footnoteCallString) {
+            label = `${footnoteCallMarker.text}${footnoteCallString.text}`;
+            isShortcut = true;
           }
         }
+        // Track link (handle shortcuts separately due to ambiguity in "text [text] text")
+        if (isShortcut || isFullOrCollapsed) {
+          addReferenceToDictionary(token, getText(referenceString) || label, isShortcut);
+        }
         break;
+      }
       case "undefinedReferenceCollapsed":
       case "undefinedReferenceFull":
       case "undefinedReferenceShortcut":
-        {
-          const undefinedReference = micromark.getDescendantsByType(token, [ "undefinedReference" ])[0];
-          const label = undefinedReference.children.map((t) => t.text).join("");
-          const isShortcut = (token.type === "undefinedReferenceShortcut");
-          addReferenceToDictionary(token, label, isShortcut);
-        }
+      {
+        const undefinedReference = micromark.getDescendantsByType(token, [ "undefinedReference" ])[0];
+        const label = undefinedReference.children.map((t) => t.text).join("");
+        const isShortcut = (token.type === "undefinedReferenceShortcut");
+        addReferenceToDictionary(token, label, isShortcut);
         break;
+      }
     }
   }
   return {
