@@ -389,6 +389,13 @@ for (const rule of rules) {
         },
         "default": []
       };
+      // @ts-ignore
+      subscheme.properties.fix_strategy = {
+        "description": "Fix strategy to handle disallowed elements",
+        "type": "string",
+        "enum": [ "wrap", "escape", "none" ],
+        "default": "none"
+      };
       break;
     case "MD035":
       // @ts-ignore

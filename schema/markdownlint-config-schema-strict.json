@@ -2398,6 +2398,16 @@
                 "type": "string"
               },
               "default": []
+            },
+            "fix_strategy": {
+              "description": "Fix strategy to handle disallowed elements",
+              "type": "string",
+              "enum": [
+                "wrap",
+                "escape",
+                "none"
+              ],
+              "default": "none"
             }
           }
         }
@@ -2449,6 +2459,16 @@
                 "type": "string"
               },
               "default": []
+            },
+            "fix_strategy": {
+              "description": "Fix strategy to handle disallowed elements",
+              "type": "string",
+              "enum": [
+                "wrap",
+                "escape",
+                "none"
+              ],
+              "default": "none"
             }
           }
         }

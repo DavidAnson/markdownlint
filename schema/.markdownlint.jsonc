@@ -176,7 +176,9 @@
     // Allowed elements
     "allowed_elements": [],
     // Allowed elements in tables
-    "table_allowed_elements": []
+    "table_allowed_elements": [],
+    // Fix strategy to handle disallowed elements
+    "fix_strategy": "none"
   },
 
   // MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.40.0/doc/md034.md

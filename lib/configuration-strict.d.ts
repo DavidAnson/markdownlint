@@ -1177,6 +1177,10 @@ export interface ConfigurationStrict {
          * Allowed elements in tables
          */
         table_allowed_elements?: string[];
+        /**
+         * Fix strategy to handle disallowed elements
+         */
+        fix_strategy?: "wrap" | "escape" | "none";
       };
   /**
    * MD033/no-inline-html : Inline HTML : https://github.com/DavidAnson/markdownlint/blob/v0.40.0/doc/md033.md
@@ -1201,6 +1205,10 @@ export interface ConfigurationStrict {
          * Allowed elements in tables
          */
         table_allowed_elements?: string[];
+        /**
+         * Fix strategy to handle disallowed elements
+         */
+        fix_strategy?: "wrap" | "escape" | "none";
       };
   /**
    * MD034/no-bare-urls : Bare URL used : https://github.com/DavidAnson/markdownlint/blob/v0.40.0/doc/md034.md
