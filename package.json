@@ -86,7 +86,7 @@
     "@stylistic/eslint-plugin": "5.10.0",
     "@types/markdown-it": "14.1.2",
     "ajv": "8.20.0",
-    "ava": "7.0.0",
+    "ava": "8.0.0",
     "c8": "11.0.0",
     "character-entities": "2.0.2",
     "eslint": "10.3.0",
