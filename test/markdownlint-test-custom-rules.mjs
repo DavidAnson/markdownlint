@@ -10,7 +10,7 @@ import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
 import customRules from "./rules/rules.cjs";
-import { newLineRe } from "../helpers/helpers.cjs";
+import { newlineRe } from "../helpers/shared.cjs";
 import packageJson from "../package.json" with { "type": "json" };
 const { homepage, version } = packageJson;
 
@@ -897,7 +897,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     await fs
       .readFile("./test/every-markdown-syntax.md", "utf8")
       .then((content) => {
-        options.strings = { "content": content.split(newLineRe).join("\n") };
+        options.strings = { "content": content.split(newlineRe).join("\n") };
         return lintPromise(options);
       });
   });
@@ -923,7 +923,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     await fs
       .readFile("./test/every-markdown-syntax.md", "utf8")
       .then((content) => {
-        options.strings = { "content": content.split(newLineRe).join("\n") };
+        options.strings = { "content": content.split(newlineRe).join("\n") };
         return lintPromise(options);
       });
   });

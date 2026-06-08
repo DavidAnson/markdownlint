@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { EOL } from "node:os";
 import rules from "../lib/rules.mjs";
-import { newLineRe } from "../helpers/helpers.cjs";
+import { newlineRe } from "../helpers/shared.cjs";
 import { deprecatedRuleNames, fixableRuleNames } from "../lib/constants.mjs";
 
 const maxLineLength = 80;
@@ -9,7 +9,7 @@ const maxLineLength = 80;
 const pathFor = (relativePath) => new URL(relativePath, import.meta.url);
 const inCode = (items) => items.map((item) => `\`${item}\``);
 const sortedComma = (items) => items.toSorted().join(", ");
-const linesFrom = (text) => text.split(newLineRe);
+const linesFrom = (text) => text.split(newlineRe);
 const wrapListItem = (line) => {
   const wrappedLines = [];
   let remainingLine = line;

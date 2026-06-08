@@ -178,6 +178,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "",
       " ",
       "  ",
+      // eslint-disable-next-line unicorn/prefer-string-repeat
       "\t\t\t",
       "\r",
       "\n",

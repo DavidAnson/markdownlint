@@ -86,6 +86,7 @@ export default [
       "unicorn/prefer-switch": "off",
       "unicorn/prevent-abbreviations": "off",
       "unicorn/switch-case-braces": [ "error", "avoid" ],
+      "unicorn/try-complexity": "off",
       "vars-on-top": "off"
     },
     "settings": {
@@ -128,6 +129,7 @@ export default [
       "no-invalid-this": "off",
       "no-shadow": "off",
       "no-var": "off",
+      "unicorn/no-this-outside-of-class": "off",
       "unicorn/prefer-module": "off",
       "unicorn/prefer-query-selector": "off"
     }

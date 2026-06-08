@@ -16,7 +16,7 @@
   var copyLink = document.getElementById("copyLink");
 
   // Variables
-  var newLineRe = /\r\n|\r|\n/;
+  var newlineRe = /\r\n|\r|\n/;
   var hashPrefix = "%m";
   var allLintErrors = [];
 
@@ -114,7 +114,7 @@
     // Markup
     markup.innerHTML = render(content);
     // Numbered
-    var lines = content.split(newLineRe);
+    var lines = content.split(newlineRe);
     var padding = lines.length.toString().replace(/\d/g, " ");
     numbered.innerHTML = lines
       .map(function mapNumberedLine(line, index) {

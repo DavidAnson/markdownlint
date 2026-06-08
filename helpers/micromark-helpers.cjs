@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { flatTokensSymbol, htmlFlowSymbol, newLineRe } = require("./shared.cjs");
+const { flatTokensSymbol, htmlFlowSymbol, newlineRe } = require("./shared.cjs");
 
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {import("micromark-util-types", { with: { "resolution-mode": "import" } }).TokenType} TokenType */
@@ -152,7 +152,6 @@ function getBlockQuotePrefixText(tokens, lineNumber, count = 1) {
     .map((prefix) => prefix.text)
     .join("")
     .trimEnd()
-    // eslint-disable-next-line unicorn/prefer-spread
     .concat("\n")
     .repeat(count);
 };
@@ -224,7 +223,7 @@ function getHeadingText(heading) {
     .flatMap((descendant) => descendant.children.filter((child) => child.type !== "htmlText"))
     .map((data) => data.text)
     .join("")
-    .replace(newLineRe, " ");
+    .replace(newlineRe, " ");
 }
 
 /**
@@ -285,7 +284,9 @@ function isDocfxTab(heading) {
   // See https://dotnet.github.io/docfx/docs/markdown.html?tabs=linux%2Cdotnet#tabs
   if (heading?.type === "atxHeading") {
     const headingTexts = getDescendantsByType(heading, [ "atxHeadingText" ]);
+    // eslint-disable-next-line unicorn/better-dom-traversing
     if ((headingTexts.length === 1) && (headingTexts[0].children.length === 1) && (headingTexts[0].children[0].type === "link")) {
+      // eslint-disable-next-line unicorn/better-dom-traversing
       const resourceDestinationStrings = filterByTypes(headingTexts[0].children[0].children, [ "resourceDestinationString" ]);
       return (resourceDestinationStrings.length === 1) && docfxTabSyntaxRe.test(resourceDestinationStrings[0].text);
     }

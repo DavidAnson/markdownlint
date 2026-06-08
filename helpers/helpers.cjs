@@ -4,9 +4,9 @@
 
 const micromark = require("./micromark-helpers.cjs");
 
-const { newLineRe, nextLinesRe } = require("./shared.cjs");
+const { newlineRe, nextLinesRe } = require("./shared.cjs");
 
-module.exports.newLineRe = newLineRe;
+module.exports.newLineRe = newlineRe;
 module.exports.nextLinesRe = nextLinesRe;
 
 /** @typedef {import("../lib/exports.mjs").RuleOnError} RuleOnError */
@@ -311,7 +311,7 @@ module.exports.addErrorDetailIf = addErrorDetailIf;
  */
 function addErrorContext(onError, lineNumber, context, start, end, range, fixInfo) {
   // Normalize new line characters so Linux and Windows trim consistently
-  context = ellipsify(context.replace(newLineRe, "\n"), start, end);
+  context = ellipsify(context.replace(newlineRe, "\n"), start, end);
   addError(onError, lineNumber, undefined, context, range, fixInfo);
 }
 module.exports.addErrorContext = addErrorContext;
@@ -514,7 +514,7 @@ function getPreferredLineEnding(input, os) {
   let cr = 0;
   let lf = 0;
   let crlf = 0;
-  const endings = input.match(newLineRe) || [];
+  const endings = input.match(newlineRe) || [];
   for (const ending of endings) {
     // eslint-disable-next-line default-case
     switch (ending) {

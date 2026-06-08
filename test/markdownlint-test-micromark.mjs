@@ -3,11 +3,11 @@
 import fs from "node:fs/promises";
 import test from "node:test";
 import stringifySafe from "json-stringify-safe";
-import { newLineRe } from "../helpers/helpers.cjs";
+import { newlineRe } from "../helpers/shared.cjs";
 import { filterByPredicate, filterByTypes } from "../helpers/micromark-helpers.cjs";
 import { getEvents, parse } from "../lib/micromark-parse.mjs";
 
-const normalize = (/** @type {string} */ content) => content.split(newLineRe).join("\n");
+const normalize = (/** @type {string} */ content) => content.split(newlineRe).join("\n");
 
 const testContent = new Promise((resolve, reject) => {
   fs

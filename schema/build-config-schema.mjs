@@ -14,6 +14,7 @@ const schemaStrictUri = `https://raw.githubusercontent.com/DavidAnson/markdownli
 
 // Schema scaffolding
 const schema = {
+  // eslint-disable-next-line unicorn/prefer-https
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": schemaUri,
   "title": "markdownlint configuration schema",
