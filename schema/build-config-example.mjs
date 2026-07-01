@@ -2,7 +2,7 @@
 
 import fs from "node:fs/promises";
 import path from "node:path";
-import yaml from "js-yaml";
+import { dump as yamlDump } from "js-yaml";
 import configSchema from "../schema/markdownlint-config-schema.json" with { "type": "json" };
 
 /** @type {import("markdownlint").Configuration} */
@@ -43,8 +43,8 @@ const transformComments = (input, commentPrefix) => (
   commentPrefix +
   " Example markdownlint configuration with all properties set to their default value\n" +
   input
-    .replace(/^(\s*)[^-\s]+-sub-description"?: "?([^"\n]+)"?,?$/gm, "$1" + commentPrefix + " $2")
-    .replace(/^(\s*)[^-\s]+-description"?: "?([^"\n]+)"?,?$/gm, "\n$1" + commentPrefix + " $2")
+    .replace(/^(\s*)[^-\s]+-sub-description"?: ['"]?([^'"\n]+)['"]?,?$/gm, "$1" + commentPrefix + " $2")
+    .replace(/^(\s*)[^-\s]+-description"?: ['"]?([^'"\n]+)['"]?,?$/gm, "\n$1" + commentPrefix + " $2")
 );
 
 const configStringJson = JSON.stringify(configExample, null, 2);
@@ -54,12 +54,10 @@ await fs.writeFile(
   "utf8"
 );
 
-const configStringYaml = yaml.dump(
+const configStringYaml = yamlDump(
   configExample,
   {
-    "forceQuotes": true,
-    "lineWidth": -1,
-    "quotingType": "\""
+    "lineWidth": -1
   }
 );
 await fs.writeFile(

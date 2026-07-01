@@ -8,7 +8,7 @@ import test from "node:test";
 import Ajv from "ajv";
 import { globby } from "globby";
 import jsoncParser from "jsonc-parser";
-import jsYaml from "js-yaml";
+import { load as yamlLoad } from "js-yaml";
 import markdownIt from "markdown-it";
 import pluginInline from "markdown-it-for-inline";
 import pluginSub from "markdown-it-sub";
@@ -1215,7 +1215,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       path.join(import.meta.dirname, "../schema", fileYaml),
       "utf8"
     );
-    const yamlObject = jsYaml.load(dataYaml);
+    const yamlObject = yamlLoad(dataYaml);
     t.assert.deepEqual(yamlObject, jsonObject,
       "YAML example does not match JSON example.");
   });
@@ -1543,7 +1543,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
           ""
         ].join("\n")
       },
-      "configParsers": [ jsYaml.load ]
+      "configParsers": [ yamlLoad ]
     };
     // @ts-ignore
     const actual = await lintPromise(options);

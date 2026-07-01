@@ -4,7 +4,7 @@ import path from "node:path";
 const { join } = path.posix;
 import { globby } from "globby";
 import jsoncParser from "jsonc-parser";
-import jsYaml from "js-yaml";
+import { load as yamlLoad } from "js-yaml";
 import { formatLintResults } from "markdownlint/helpers";
 import { lint, readConfig } from "markdownlint/promise";
 import { markdownlintParallel } from "./markdownlint-test-parallel.mjs";
@@ -27,7 +27,7 @@ export function lintTestRepo(t, globPatterns, configPath, configOverrides, paral
     const config = jsoncParser.parse(json, [], { "allowTrailingComma": true });
     return config.config || config;
   };
-  const yamlParse = (/** @type {string} */ yaml) => jsYaml.load(yaml);
+  const yamlParse = (/** @type {string} */ yaml) => yamlLoad(yaml);
   return Promise.all([
     globby(globPatterns),
     configPath ? readConfig(configPath, [ jsoncParse, yamlParse ]) : {}
