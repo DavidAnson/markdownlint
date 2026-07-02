@@ -3,7 +3,8 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 import { dump as yamlDump } from "js-yaml";
-import configSchema from "../schema/markdownlint-config-schema.json" with { "type": "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import configSchema from "../schema/markdownlint-config-schema.json" with { type: "json" };
 
 /** @type {import("markdownlint").Configuration} */
 const configExample = {};

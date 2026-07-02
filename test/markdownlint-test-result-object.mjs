@@ -5,7 +5,8 @@ import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { convertToResultVersion0, convertToResultVersion1, convertToResultVersion2 } from "markdownlint/helpers";
 import firstLine from "./rules/first-line.cjs";
-import packageJson from "../package.json" with { "type": "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import packageJson from "../package.json" with { type: "json" };
 const { homepage, version } = packageJson;
 
 test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {

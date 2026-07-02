@@ -2,7 +2,8 @@
 
 import webpack from "webpack";
 import TerserPlugin from "terser-webpack-plugin";
-import libraryPackageJson from "../package.json" with { "type": "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import libraryPackageJson from "../package.json" with { type: "json" };
 
 // eslint-disable-next-line jsdoc/require-jsdoc, jsdoc/reject-any-type
 function config(/** @type {any} */ options) {

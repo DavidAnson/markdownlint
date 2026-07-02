@@ -4,7 +4,8 @@ import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 import test from "node:test";
 import spawn from "nano-spawn";
-import packageJson from "../package.json" with { "type": "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import packageJson from "../package.json" with { type: "json" };
 
 const exportMappings = new Map([
   [ ".", "../lib/exports.mjs" ],

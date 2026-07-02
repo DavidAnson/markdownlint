@@ -90,7 +90,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const tokens = await testTokens;
     const byPredicate = filterByPredicate(tokens, () => true);
     const allTypes = new Set(byPredicate.map((token) => token.type));
-    const byTypes = filterByTypes(tokens, [ ...allTypes.values() ], true);
+    const byTypes = filterByTypes(tokens, [ ...allTypes ], true);
     t.assert.deepEqual(byPredicate, byTypes);
   });
 

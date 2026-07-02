@@ -2,8 +2,9 @@
 
 "use strict";
 
-const micromark = require("./micromark-helpers.cjs");
+/* eslint-disable unicorn/comment-content */
 
+const micromark = require("./micromark-helpers.cjs");
 const { newlineRe, nextLinesRe } = require("./shared.cjs");
 
 module.exports.newLineRe = newlineRe;
@@ -20,6 +21,7 @@ module.exports.nextLinesRe = nextLinesRe;
 // Regular expression for matching common front matter (YAML and TOML)
 // @ts-ignore
 module.exports.frontMatterRe =
+  // eslint-disable-next-line unicorn/prefer-unicode-code-point-escapes
   /((^---[^\S\r\n\u2028\u2029]*$[\s\S]+?^---\s*)|(^\+\+\+[^\S\r\n\u2028\u2029]*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{[^\S\r\n\u2028\u2029]*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching the start of inline disable/enable comments
@@ -178,6 +180,7 @@ const startsWithPipeRe = /^ *\|/;
 const notCrLfRe = /[^\r\n]/g;
 const notSpaceCrLfRe = /[^ \r\n]/g;
 const trailingSpaceRe = / +[\r\n]/g;
+// eslint-disable-next-line unicorn/no-unsafe-string-replacement
 const replaceTrailingSpace = (/** @type {string} */ s) => s.replace(notCrLfRe, safeCommentCharacter);
 module.exports.clearHtmlCommentText = function clearHtmlCommentText(/** @type {string} */ text) {
   let i = 0;
@@ -207,7 +210,9 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(/** @type {s
       // If a valid block/inline comment...
       if (isValid) {
         const clearedContent = content
+          // eslint-disable-next-line unicorn/no-unsafe-string-replacement
           .replace(notSpaceCrLfRe, safeCommentCharacter)
+          // eslint-disable-next-line unicorn/no-unsafe-string-replacement
           .replace(trailingSpaceRe, replaceTrailingSpace);
         text =
           text.slice(0, i + htmlCommentBegin.length) +
@@ -222,6 +227,7 @@ module.exports.clearHtmlCommentText = function clearHtmlCommentText(/** @type {s
 
 // Escapes a string for use in a RegExp
 module.exports.escapeForRegExp = function escapeForRegExp(/** @type {string} */ str) {
+  // eslint-disable-next-line unicorn/prefer-regexp-escape
   return str.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&");
 };
 
@@ -552,6 +558,7 @@ module.exports.getPreferredLineEnding = getPreferredLineEnding;
  */
 function expandTildePath(file, os) {
   const homedir = os && os.homedir && os.homedir();
+  // eslint-disable-next-line unicorn/no-unsafe-string-replacement
   return homedir ? file.replace(/^~($|\/|\\)/, `${homedir}$1`) : file;
 }
 module.exports.expandTildePath = expandTildePath;
@@ -630,8 +637,8 @@ function convertLintErrorsVersion2To0(errors) {
 function copyAndTransformResults(results, transform) {
   /** @type {Object.<string, LintErrors>} */
   const newResults = {};
-  for (const key of Object.keys(results)) {
-    const arr = results[key].map((r) => ({ ...r }));
+  for (const [ key, value ] of Object.entries(results)) {
+    const arr = value.map((r) => ({ ...r }));
     newResults[key] = transform(arr);
   }
   // @ts-ignore

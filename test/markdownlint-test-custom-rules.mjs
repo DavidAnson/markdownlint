@@ -12,7 +12,8 @@ import { lint as lintSync } from "markdownlint/sync";
 import { convertToResultVersion0 } from "markdownlint/helpers";
 import customRules from "./rules/rules.cjs";
 import { newlineRe } from "../helpers/shared.cjs";
-import packageJson from "../package.json" with { "type": "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import packageJson from "../package.json" with { type: "json" };
 const { homepage, version } = packageJson;
 
 const markdownItFactory = () => markdownIt({ "html": true });

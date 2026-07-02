@@ -22,7 +22,7 @@ test.suite(__filename.replace(/^.*?\/(?<name>[^/]*\/[^/]*)$/u, "$<name>"), () =>
   for (const [ exportName, exportPath ] of exportMappings) {
     test(exportName, (t) => {
       t.assert.equal(
-        require(exportName.replace(/^\./u, name)),
+        require(exportName.replace(/^\./u, () => name)),
         require(exportPath)
       );
     });

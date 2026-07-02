@@ -17,8 +17,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newlineRe } = require("./shared.cjs");
  * @returns {boolean} True iff the token is within an htmlFlow type.
  */
 function inHtmlFlow(token) {
-  // @ts-ignore
-  return Boolean(token[htmlFlowSymbol]);
+  return Object.hasOwn(token, htmlFlowSymbol);
 }
 
 /**

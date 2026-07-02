@@ -48,7 +48,7 @@ function createTestForFile(file) {
             const [ , rule, delta, value ] = match;
             let lineNumber = index + 1;
             if (value) {
-              const valueInt = Number.parseInt(value, 10);
+              const valueInt = Number(value);
               if (delta) {
                 lineNumber += ((delta === "+") ? 1 : -1) * valueInt;
               } else {
@@ -56,7 +56,7 @@ function createTestForFile(file) {
               }
             }
             // eslint-disable-next-line no-multi-assign
-            const indices = expected[rule] = expected[rule] || [];
+            const indices = (expected[rule] ||= []);
             if (!indices.includes(lineNumber)) {
               indices.push(lineNumber);
             }
@@ -70,7 +70,7 @@ function createTestForFile(file) {
         for (const error of errors) {
           const rule = error.ruleNames[0];
           // eslint-disable-next-line no-multi-assign
-          const indices = actual[rule] = actual[rule] || [];
+          const indices = (actual[rule] ||= []);
           if (indices[indices.length - 1] !== error.lineNumber) {
             indices.push(error.lineNumber);
           }

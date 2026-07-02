@@ -2,7 +2,7 @@ import { readFile } from "node:fs/promises";
 import { lint } from "markdownlint/promise";
 import { parse } from "../lib/micromark-parse.mjs";
 
-/* eslint-disable no-await-in-loop, no-console */
+/* eslint-disable no-await-in-loop, no-console, unicorn/no-top-level-assignment-in-function */
 
 /**
  * Log the structure of a Micromark token list.

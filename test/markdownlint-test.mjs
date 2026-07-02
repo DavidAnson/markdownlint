@@ -22,11 +22,12 @@ import * as cache from "../lib/cache.mjs";
 import * as constants from "../lib/constants.mjs";
 import rules from "../lib/rules.mjs";
 import customRules from "./rules/rules.cjs";
-/** @type {{exports: Object.<string, string>, homepage: string, version: string}} */
-import packageJson from "../package.json" with { "type": "json" };
-/** @type {{$id: string, properties: Object<string, Object>}} */
-import configSchema from "../schema/markdownlint-config-schema.json" with { "type": "json" };
-import configSchemaStrict from "../schema/markdownlint-config-schema-strict.json" with { "type": "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import packageJson from "../package.json" with { type: "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import configSchema from "../schema/markdownlint-config-schema.json" with { type: "json" };
+// eslint-disable-next-line @stylistic/quote-props
+import configSchemaStrict from "../schema/markdownlint-config-schema-strict.json" with { type: "json" };
 
 const deprecatedRuleNames = new Set(constants.deprecatedRuleNames);
 const ajvOptions = {
@@ -1226,7 +1227,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       // @ts-ignore
       t.assert.equal(!!rule.information, true);
       // @ts-ignore
-      t.assert.equal(Object.getPrototypeOf(rule.information, true) === URL.prototype, true);
+      t.assert.equal(Object.getPrototypeOf(rule.information) === URL.prototype, true);
       const ruleName = rule.names[0].toLowerCase();
       t.assert.equal(
         // @ts-ignore

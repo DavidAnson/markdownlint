@@ -4,6 +4,8 @@ import rules from "../lib/rules.mjs";
 import { newlineRe } from "../helpers/shared.cjs";
 import { deprecatedRuleNames, fixableRuleNames } from "../lib/constants.mjs";
 
+/* eslint-disable unicorn/require-array-sort-compare */
+
 const maxLineLength = 80;
 
 const pathFor = (relativePath) => new URL(relativePath, import.meta.url);

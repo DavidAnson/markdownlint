@@ -122,7 +122,6 @@
         var paddedIndex = (padding + index).slice(-padding.length);
         return (
           `<span><em id='l${index}'>${paddedIndex}</em>: ` +
-            // eslint-disable-next-line unicorn/prefer-spread
             line.split("").map((c, i) => `<span id='l${index}c${i + 1}'>${sanitize(c)}</span>`).join("") +
           "</span>"
         );
@@ -256,6 +255,7 @@
   document.body.addEventListener("drop", onDrop);
   openFile.addEventListener("change", onOpenFileChange);
   markdown.addEventListener("input", onMarkdownInput);
+  // eslint-disable-next-line unicorn/prefer-add-event-listener-options
   violations.addEventListener("click", onViolationClick, true);
   copyLink.addEventListener("click", onCopyLinkClick);
 
