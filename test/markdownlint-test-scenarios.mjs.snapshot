@@ -37361,6 +37361,98 @@ exports[`markdownlint-test-scenarios.mjs > ordered-list-item-prefix-zero-alterna
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > ordered-list-item-prefix-zero-padded.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 10,
+      "ruleNames": [
+        "MD029",
+        "ol-prefix"
+      ],
+      "ruleDescription": "Ordered list item prefix",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md029.md",
+      "errorDetail": "Expected: 1; Actual: 8; Style: 1/2/3",
+      "errorContext": null,
+      "errorRange": [
+        1,
+        4
+      ],
+      "fixInfo": {
+        "editColumn": 1,
+        "deleteCount": 2,
+        "insertText": "1"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 11,
+      "ruleNames": [
+        "MD029",
+        "ol-prefix"
+      ],
+      "ruleDescription": "Ordered list item prefix",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md029.md",
+      "errorDetail": "Expected: 2; Actual: 9; Style: 1/2/3",
+      "errorContext": null,
+      "errorRange": [
+        1,
+        4
+      ],
+      "fixInfo": {
+        "editColumn": 1,
+        "deleteCount": 2,
+        "insertText": "2"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 12,
+      "ruleNames": [
+        "MD029",
+        "ol-prefix"
+      ],
+      "ruleDescription": "Ordered list item prefix",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md029.md",
+      "errorDetail": "Expected: 3; Actual: 10; Style: 1/2/3",
+      "errorContext": null,
+      "errorRange": [
+        1,
+        4
+      ],
+      "fixInfo": {
+        "editColumn": 1,
+        "deleteCount": 2,
+        "insertText": "3"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 13,
+      "ruleNames": [
+        "MD029",
+        "ol-prefix"
+      ],
+      "ruleDescription": "Ordered list item prefix",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md029.md",
+      "errorDetail": "Expected: 4; Actual: 11; Style: 1/2/3",
+      "errorContext": null,
+      "errorRange": [
+        1,
+        4
+      ],
+      "fixInfo": {
+        "editColumn": 1,
+        "deleteCount": 2,
+        "insertText": "4"
+      },
+      "severity": "error"
+    }
+  ],
+  "fixed": "# Ordered list item prefix zero-padded\\n\\nRegression test: zero-padded, multi-character list item markers used to be\\nmis-fixed because the delete count for the fix was computed from\\n\`Number(text).toString().length\` (the re-stringified numeric value) rather\\nthan the actual source text length. For \\"08.\\" that produced a delete count of\\n1 instead of 2, so fixing it inserted \\"1\\" without removing the full \\"08\\" and\\nleft \\"18.\\" behind instead of \\"1.\\".\\n\\n1. Item {MD029}\\n2. Item {MD029}\\n3. Item {MD029}\\n4. Item {MD029}\\n\\n<!-- markdownlint-configure-file {\\n  \\"ol-prefix\\": {\\n    \\"style\\": \\"ordered\\"\\n  }\\n} -->\\n"
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > ordered-list-item-prefix-zero.md 1`] = `
 {
   "errors": [
