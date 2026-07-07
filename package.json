@@ -89,7 +89,7 @@
     "concurrently": "10.0.3",
     "eslint": "10.5.0",
     "eslint-node-test": "0.1.0",
-    "eslint-plugin-jsdoc": "63.0.8",
+    "eslint-plugin-jsdoc": "63.0.9",
     "eslint-plugin-n": "18.2.1",
     "eslint-plugin-regexp": "3.1.1",
     "eslint-plugin-unicorn": "69.0.0",
