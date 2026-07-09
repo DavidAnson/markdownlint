@@ -2,7 +2,7 @@
 
 "use strict";
 
-// Symbol for identifing the flat tokens array from micromark parse
+// Symbol for identifying the flat tokens array from micromark parse
 module.exports.flatTokensSymbol = Symbol("flat-tokens");
 
 // Symbol for identifying the htmlFlow token from micromark parse
