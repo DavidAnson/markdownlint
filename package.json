@@ -107,7 +107,7 @@
     "markdownlint-rule-extended-ascii": "0.2.1",
     "nano-spawn": "2.1.0",
     "terser-webpack-plugin": "5.6.1",
-    "toml": "4.1.1",
+    "toml": "4.1.2",
     "typescript": "6.0.3",
     "webpack": "5.108.3",
     "webpack-cli": "7.1.0"
