@@ -364,7 +364,11 @@ exports[`markdownlint-test-scenarios.mjs > MD011-MD021.md 1`] = `
         81,
         19
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 20,
+        "insertText": "\\n123456789 123456789"
+      },
       "severity": "error"
     },
     {
@@ -527,7 +531,7 @@ exports[`markdownlint-test-scenarios.mjs > MD011-MD021.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Top level heading\\n\\n<!-- markdownlint-disable MD003 -->\\n\\nA [reversed](link) example. {MD011}\\n\\n123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789\\n\\n## 123456789 123456789 123456789 123456789 123456789 123456789\\n\\n    command with no output {MD014}\\n\\n## No space A {MD018}\\n\\n## Multiple spaces B {MD019}\\n\\n## No space C {MD020} ##\\n\\n## No space D {MD020} ##\\n\\n## Multiple spaces E {MD021} ##\\n\\n## Multiple spaces F {MD021} ##\\n\\n*Another* [reversed](link) example. {MD011}\\n\\n{MD012:7} {MD013:8} {MD013:10}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"heading_line_length\\": 40\\n  }\\n} -->\\n"
+  "fixed": "# Top level heading\\n\\n<!-- markdownlint-disable MD003 -->\\n\\nA [reversed](link) example. {MD011}\\n\\n123456789 123456789 123456789 123456789 123456789 123456789 123456789 123456789\\n123456789 123456789\\n\\n## 123456789 123456789 123456789 123456789 123456789 123456789\\n\\n    command with no output {MD014}\\n\\n## No space A {MD018}\\n\\n## Multiple spaces B {MD019}\\n\\n## No space C {MD020} ##\\n\\n## No space D {MD020} ##\\n\\n## Multiple spaces E {MD021} ##\\n\\n## Multiple spaces F {MD021} ##\\n\\n*Another* [reversed](link) example. {MD011}\\n\\n{MD012:7} {MD013:8} {MD013:10}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"heading_line_length\\": 40\\n  }\\n} -->\\n"
 }
 `;
 
@@ -6025,7 +6029,11 @@ exports[`markdownlint-test-scenarios.mjs > break-all-the-rules.md 1`] = `
         81,
         17
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 18,
+        "insertText": "\\nlong line {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -6921,7 +6929,7 @@ exports[`markdownlint-test-scenarios.mjs > break-all-the-rules.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "## Heading 1 {MD041:1}\\n\\n#### Heading 2 {MD001:3}\\n\\n# Heading 3 {MD003} {MD043} #\\n\\n* list {MD032}\\n\\n* list {MD004} {MD007} {MD030} {MD032}\\n\\n* list\\n  * list {MD007}\\n  * list {MD005}\\n\\n {MD009} {MD010}\\n\\n[name](link) {MD011}\\n\\n{MD012:18}\\n\\nlong line long line long line long line long line long line long line long line long line {MD013}\\n\\n    dollar {MD014}\\n\\n# Heading 4 {MD018}\\n\\n# Heading 5 {MD019}\\n\\n# Heading 6 {MD020} #\\n\\n# Heading 7 {MD021} {MD003} #\\n\\n# Heading 8\\n\\n# Heading 8\\n\\n{MD024:35}\\nNote: Can not break MD025 and MD041 in the same file\\n\\n# Heading 9 {MD023} {MD026}\\n\\n> {MD027}\\n\\n> {MD028:43}\\n\\n1. list\\n2. list {MD029}\\n\\n\`\`\`js\\n\`\`\`\\n\\n* list {MD032} {MD046:49}\\n\\n{MD031:50}\\n\\n<br/> {MD033}\\n\\n<https://example.com/page> {MD034}\\n\\n---\\n\\n***\\n\\n{MD035:61}\\n\\n_Section {MD036} Heading_\\n\\nEmphasis _with_ space {MD037}\\n\\nCode \`with\` space {MD038}\\n\\n[link with space](link) {MD039}\\n\\n\`\`\`\\ncode fence without language {MD040:73} {MD046:73}\\n\`\`\`\\n\\n~~~js\\ncode fence with different style {MD048:77} {MD046:77}\\n~~~\\n\\n[empty link]() {MD042}\\n\\nmarkdownlint {MD044}\\n\\n![](image.jpg) {MD045}\\n\\n## Heading 10 {MD022}\\n\\nEmphasis _with_ underscore style\\n\\nEmphasis _with_ different style {MD049}\\n\\nStrong __with__ underscore style\\n\\nStrong __with__ different style {MD050}\\n\\n[Missing link fragment](#missing) {MD051}\\n\\n[Missing link][label] {MD052}\\n\\n{MD053:100}\\n\\n[text](https://example.com/page) {MD054}\\n\\n<!-- markdownlint-disable-next-line MD053 -->\\n[url]: https://example.com/page\\n\\n| table  | header |\\n|--------|--------|\\n {MD055} | cell  |\\n\\n{MD060:-2}\\n\\n| table   | header |\\n|---------|--------|\\n| {MD056} |\\n\\nText\\n\\n| table {MD058} |\\n| ------- |\\n| cell  {MD058} |\\n\\n> Blockquote\\n\\n[click here](https://example.org) {MD059}\\n\\n<!-- markdownlint-configure-file {\\n  \\"required-headings\\": {\\n    \\"headings\\": [\\n      \\"## Heading 1 {MD041:1}\\",\\n      \\"#### Heading 2 {MD001:3}\\",\\n      \\"# Broken\\"\\n    ]\\n  },\\n  \\"proper-names\\": {\\n    \\"names\\": [\\n      \\"markdownlint\\"\\n    ]\\n  },\\n  \\"link-image-style\\": {\\n    \\"full\\": false\\n  }\\n} -->\\n\\nEOF {MD047}\\n"
+  "fixed": "## Heading 1 {MD041:1}\\n\\n#### Heading 2 {MD001:3}\\n\\n# Heading 3 {MD003} {MD043} #\\n\\n* list {MD032}\\n\\n* list {MD004} {MD007} {MD030} {MD032}\\n\\n* list\\n  * list {MD007}\\n  * list {MD005}\\n\\n {MD009} {MD010}\\n\\n[name](link) {MD011}\\n\\n{MD012:18}\\n\\nlong line long line long line long line long line long line long line long line\\nlong line {MD013}\\n\\n    dollar {MD014}\\n\\n# Heading 4 {MD018}\\n\\n# Heading 5 {MD019}\\n\\n# Heading 6 {MD020} #\\n\\n# Heading 7 {MD021} {MD003} #\\n\\n# Heading 8\\n\\n# Heading 8\\n\\n{MD024:35}\\nNote: Can not break MD025 and MD041 in the same file\\n\\n# Heading 9 {MD023} {MD026}\\n\\n> {MD027}\\n\\n> {MD028:43}\\n\\n1. list\\n2. list {MD029}\\n\\n\`\`\`js\\n\`\`\`\\n\\n* list {MD032} {MD046:49}\\n\\n{MD031:50}\\n\\n<br/> {MD033}\\n\\n<https://example.com/page> {MD034}\\n\\n---\\n\\n***\\n\\n{MD035:61}\\n\\n_Section {MD036} Heading_\\n\\nEmphasis _with_ space {MD037}\\n\\nCode \`with\` space {MD038}\\n\\n[link with space](link) {MD039}\\n\\n\`\`\`\\ncode fence without language {MD040:73} {MD046:73}\\n\`\`\`\\n\\n~~~js\\ncode fence with different style {MD048:77} {MD046:77}\\n~~~\\n\\n[empty link]() {MD042}\\n\\nmarkdownlint {MD044}\\n\\n![](image.jpg) {MD045}\\n\\n## Heading 10 {MD022}\\n\\nEmphasis _with_ underscore style\\n\\nEmphasis _with_ different style {MD049}\\n\\nStrong __with__ underscore style\\n\\nStrong __with__ different style {MD050}\\n\\n[Missing link fragment](#missing) {MD051}\\n\\n[Missing link][label] {MD052}\\n\\n{MD053:100}\\n\\n[text](https://example.com/page) {MD054}\\n\\n<!-- markdownlint-disable-next-line MD053 -->\\n[url]: https://example.com/page\\n\\n| table  | header |\\n|--------|--------|\\n {MD055} | cell  |\\n\\n{MD060:-2}\\n\\n| table   | header |\\n|---------|--------|\\n| {MD056} |\\n\\nText\\n\\n| table {MD058} |\\n| ------- |\\n| cell  {MD058} |\\n\\n> Blockquote\\n\\n[click here](https://example.org) {MD059}\\n\\n<!-- markdownlint-configure-file {\\n  \\"required-headings\\": {\\n    \\"headings\\": [\\n      \\"## Heading 1 {MD041:1}\\",\\n      \\"#### Heading 2 {MD001:3}\\",\\n      \\"# Broken\\"\\n    ]\\n  },\\n  \\"proper-names\\": {\\n    \\"names\\": [\\n      \\"markdownlint\\"\\n    ]\\n  },\\n  \\"link-image-style\\": {\\n    \\"full\\": false\\n  }\\n} -->\\n\\nEOF {MD047}\\n"
 }
 `;
 
@@ -8034,7 +8042,11 @@ exports[`markdownlint-test-scenarios.mjs > code-blocks-prefixed-by-spaces.md 1`]
         81,
         18
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 19,
+        "insertText": "\\ntext text. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -8051,7 +8063,11 @@ exports[`markdownlint-test-scenarios.mjs > code-blocks-prefixed-by-spaces.md 1`]
         81,
         18
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 19,
+        "insertText": "\\ntext text. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -8068,7 +8084,11 @@ exports[`markdownlint-test-scenarios.mjs > code-blocks-prefixed-by-spaces.md 1`]
         81,
         18
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 19,
+        "insertText": "\\ntext text. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -8086,7 +8106,7 @@ exports[`markdownlint-test-scenarios.mjs > code-blocks-prefixed-by-spaces.md 1`]
       "severity": "error"
     }
   ],
-  "fixed": "# md013-code-blocks-spaces\\n\\nText text text text text text text text text text text text text text text text text text. {MD013}\\n\\n\`\`\`text\\nText text text text text text text text text text text text text text text text text text.\\n\`\`\`\\n\\n \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n \`\`\`\\n\\n  \`\`\`text\\n  Text text text text text text text text text text text text text text text text text text.\\n  \`\`\`\\n\\n   \`\`\`text\\n   Text text text text text text text text text text text text text text text text text text.\\n   \`\`\`\\n\\n    \`\`\`text\\n    Text text text text text text text text text text text text text text text text text text. {MD046:21}\\n    \`\`\`\\n\\nText text text text text text text text text text text text text text text text text text. {MD013}\\n\\n \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n\`\`\`\\n\\n   \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n\`\`\`\\n\\n  \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n \`\`\`\\n\\nText text text text text text text text text text text text text text text text text text. {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"code_blocks\\": false\\n  }\\n} -->\\n"
+  "fixed": "# md013-code-blocks-spaces\\n\\nText text text text text text text text text text text text text text text text\\ntext text. {MD013}\\n\\n\`\`\`text\\nText text text text text text text text text text text text text text text text text text.\\n\`\`\`\\n\\n \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n \`\`\`\\n\\n  \`\`\`text\\n  Text text text text text text text text text text text text text text text text text text.\\n  \`\`\`\\n\\n   \`\`\`text\\n   Text text text text text text text text text text text text text text text text text text.\\n   \`\`\`\\n\\n    \`\`\`text\\n    Text text text text text text text text text text text text text text text text text text. {MD046:21}\\n    \`\`\`\\n\\nText text text text text text text text text text text text text text text text\\ntext text. {MD013}\\n\\n \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n\`\`\`\\n\\n   \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n\`\`\`\\n\\n  \`\`\`text\\n Text text text text text text text text text text text text text text text text text text.\\n \`\`\`\\n\\nText text text text text text text text text text text text text text text text\\ntext text. {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"code_blocks\\": false\\n  }\\n} -->\\n"
 }
 `;
 
@@ -18237,7 +18257,11 @@ exports[`markdownlint-test-scenarios.mjs > inline-configure-file-single-line.md 
         71,
         8
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 71,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -18258,7 +18282,7 @@ exports[`markdownlint-test-scenarios.mjs > inline-configure-file-single-line.md 
       "severity": "error"
     }
   ],
-  "fixed": "# Inline Configure File Single Line\\n\\nNot normally too long of a line, but it is here from an inline config. {MD013}\\n\\n<!-- markdownlint-configure-file { \\"line-length\\": { \\"line_length\\": 70 } } --> {MD013}\\n"
+  "fixed": "# Inline Configure File Single Line\\n\\nNot normally too long of a line, but it is here from an inline config.\\n{MD013}\\n\\n<!-- markdownlint-configure-file { \\"line-length\\": { \\"line_length\\": 70 } } --> {MD013}\\n"
 }
 `;
 
@@ -24743,7 +24767,7 @@ exports[`markdownlint-test-scenarios.mjs > link-style-inline-only.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Link Style Inline Only\\n\\nText [url](https://example.com) text\\n\\nText ![url](https://example.com) text\\n\\nText [url](<https://example.com>) text\\n\\nText ![url](<https://example.com>) text\\n\\nText [url](https://example.com \\"title\\") text\\n\\nText ![url](https://example.com \\"title\\") text\\n\\nText [url](https://example.com\\n\\"title\\") text\\n\\nText ![url](https://example.com\\n\\"title\\") text\\n\\nText [text](https://example.com) text {MD054}\\n\\nText ![text](https://example.com) text {MD054}\\n\\nText [url](https://example.com) text {MD054}\\n\\nText ![url](https://example.com) text {MD054}\\n\\nText [url](https://example.com) text {MD054}\\n\\nText ![url](https://example.com) text {MD054}\\n\\nText [https://example.com](https://example.com) text {MD054}\\n\\n[url]: https://example.com \\"title\\"\\n\\n[undefined]\\n\\nText [url](https://example.com/embedded\\\\3backslash) text\\n\\nText [url](https://example.com/backslash\\\\[escape) text\\n\\nText [embedded-backslash](https://example.com/embedded\\\\3backslash) text {MD054}\\n\\nText [backslash-escape](https://example.com/backslash\\\\[escape) text {MD054}\\n\\nText [https://example.com/embedded\\\\3backslash](https://example.com/embedded\\\\3backslash) text {MD054}\\n\\nText [https://example.com/backslash\\\\[no-escape](https://example.com/backslash[no-escape) text {MD054}\\n\\n[embedded-backslash]: https://example.com/embedded\\\\3backslash\\n\\n[backslash-escape]: https://example.com/backslash\\\\[escape\\n\\nText [url](<https://example.com/embedded space>) text\\n\\nText [url](<https://example.com/embedded)paren>) text\\n\\nText [url](https://example.com/\\\\(parens\\\\)) text\\n\\nText [url](https://example.com/pa(re(ns))) text\\n\\nText [url](relative/path) text\\n\\nText [url](#fragment) text\\n\\nText [https://example.com/pa)re(ns](https://example.com/pa\\\\)re\\\\(ns) text {MD054}\\n\\nText [url](https://example.com/an>g<le>) text\\n\\nText [user@example.com](user@example.com) text {MD054}\\n\\nText [user@example.com](user@example.com)\\n\\nText [user@example.com](user@example.com) text {MD054}\\n\\nText [email](user@example.com) text {MD054}\\n\\nText [email](user@example.com) text {MD054}\\n\\n[email]: user@example.com\\n\\n<!-- markdownlint-configure-file {\\n  \\"link-fragments\\": false,\\n  \\"link-image-reference-definitions\\": false,\\n  \\"link-image-style\\": {\\n    \\"autolink\\": false,\\n    \\"full\\": false,\\n    \\"collapsed\\": false,\\n    \\"shortcut\\": false\\n  }\\n} -->\\n"
+  "fixed": "# Link Style Inline Only\\n\\nText [url](https://example.com) text\\n\\nText ![url](https://example.com) text\\n\\nText [url](<https://example.com>) text\\n\\nText ![url](<https://example.com>) text\\n\\nText [url](https://example.com \\"title\\") text\\n\\nText ![url](https://example.com \\"title\\") text\\n\\nText [url](https://example.com\\n\\"title\\") text\\n\\nText ![url](https://example.com\\n\\"title\\") text\\n\\nText [text](https://example.com) text {MD054}\\n\\nText ![text](https://example.com) text {MD054}\\n\\nText [url](https://example.com) text {MD054}\\n\\nText ![url](https://example.com) text {MD054}\\n\\nText [url](https://example.com) text {MD054}\\n\\nText ![url](https://example.com) text {MD054}\\n\\nText [https://example.com](https://example.com) text {MD054}\\n\\n[url]: https://example.com \\"title\\"\\n\\n[undefined]\\n\\nText [url](https://example.com/embedded\\\\3backslash) text\\n\\nText [url](https://example.com/backslash\\\\[escape) text\\n\\nText [embedded-backslash](https://example.com/embedded\\\\3backslash) text {MD054}\\n\\nText [backslash-escape](https://example.com/backslash\\\\[escape) text {MD054}\\n\\nText [https://example.com/embedded\\\\3backslash](https://example.com/embedded\\\\3backslash) text {MD054}\\n\\nText [https://example.com/backslash\\\\[no-escape](https://example.com/backslash[no-escape) text {MD054}\\n\\n[embedded-backslash]: https://example.com/embedded\\\\3backslash\\n\\n[backslash-escape]: https://example.com/backslash\\\\[escape\\n\\nText [url](<https://example.com/embedded space>) text\\n\\nText [url](<https://example.com/embedded)paren>) text\\n\\nText [url](https://example.com/\\\\(parens\\\\)) text\\n\\nText [url](https://example.com/pa(re(ns))) text\\n\\nText [url](relative/path) text\\n\\nText [url](#fragment) text\\n\\nText [https://example.com/pa)re(ns](https://example.com/pa\\\\)re\\\\(ns) text {MD054}\\n\\nText [url](https://example.com/an>g<le>) text\\n\\nText [user@example.com](user@example.com) text {MD054}\\n\\nText [user@example.com](user@example.com)\\n\\nText [user@example.com](user@example.com) text {MD054}\\n\\nText [email](user@example.com) text {MD054}\\n\\nText [email](user@example.com) text {MD054}\\n\\n[email]: user@example.com\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": false,\\n  \\"link-fragments\\": false,\\n  \\"link-image-reference-definitions\\": false,\\n  \\"link-image-style\\": {\\n    \\"autolink\\": false,\\n    \\"full\\": false,\\n    \\"collapsed\\": false,\\n    \\"shortcut\\": false\\n  }\\n} -->\\n"
 }
 `;
 
@@ -24856,7 +24880,7 @@ exports[`markdownlint-test-scenarios.mjs > link-style-inline-or-reference.md 1`]
       "severity": "error"
     }
   ],
-  "fixed": "# Link Style Inline or Reference\\n\\nText [url](https://example.com) text\\n\\nText ![url](https://example.com) text\\n\\nText [url](<https://example.com>) text\\n\\nText ![url](<https://example.com>) text\\n\\nText [url](https://example.com \\"title\\") text\\n\\nText ![url](https://example.com \\"title\\") text\\n\\nText [url](https://example.com\\n\\"title\\") text\\n\\nText ![url](https://example.com\\n\\"title\\") text\\n\\nText [text][url] text\\n\\nText ![text][url] text\\n\\nText [url][] text\\n\\nText ![url][] text\\n\\nText [url] text\\n\\nText ![url] text\\n\\nText [https://example.com](https://example.com) text {MD054}\\n\\n[url]: https://example.com \\"title\\"\\n\\n[undefined]\\n\\nText [url](https://example.com/embedded\\\\3backslash) text\\n\\nText [url](https://example.com/backslash\\\\[escape) text\\n\\nText [embedded-backslash] text\\n\\nText [backslash-escape] text\\n\\nText [https://example.com/embedded\\\\3backslash](https://example.com/embedded\\\\3backslash) text {MD054}\\n\\nText [https://example.com/backslash\\\\[no-escape](https://example.com/backslash[no-escape) text {MD054}\\n\\n[embedded-backslash]: https://example.com/embedded\\\\3backslash\\n\\n[backslash-escape]: https://example.com/backslash\\\\[escape\\n\\nText [url](<https://example.com/embedded space>) text\\n\\nText [url](<https://example.com/embedded)paren>) text\\n\\nText [url](https://example.com/\\\\(parens\\\\)) text\\n\\nText [url](https://example.com/pa(re(ns))) text\\n\\nText [url](relative/path) text\\n\\nText [url](#fragment) text\\n\\nText [https://example.com/pa)re(ns](https://example.com/pa\\\\)re\\\\(ns) text {MD054}\\n\\nText [url](https://example.com/an>g<le>) text\\n\\nText [user@example.com](user@example.com) text {MD054}\\n\\nText [user@example.com](user@example.com) text\\n\\nText [user@example.com][email] text\\n\\nText [email][] text\\n\\nText [email] text\\n\\n[email]: user@example.com\\n\\n<!-- markdownlint-configure-file {\\n  \\"link-fragments\\": false,\\n  \\"link-image-style\\": {\\n    \\"autolink\\": false\\n  }\\n} -->\\n"
+  "fixed": "# Link Style Inline or Reference\\n\\nText [url](https://example.com) text\\n\\nText ![url](https://example.com) text\\n\\nText [url](<https://example.com>) text\\n\\nText ![url](<https://example.com>) text\\n\\nText [url](https://example.com \\"title\\") text\\n\\nText ![url](https://example.com \\"title\\") text\\n\\nText [url](https://example.com\\n\\"title\\") text\\n\\nText ![url](https://example.com\\n\\"title\\") text\\n\\nText [text][url] text\\n\\nText ![text][url] text\\n\\nText [url][] text\\n\\nText ![url][] text\\n\\nText [url] text\\n\\nText ![url] text\\n\\nText [https://example.com](https://example.com) text {MD054}\\n\\n[url]: https://example.com \\"title\\"\\n\\n[undefined]\\n\\nText [url](https://example.com/embedded\\\\3backslash) text\\n\\nText [url](https://example.com/backslash\\\\[escape) text\\n\\nText [embedded-backslash] text\\n\\nText [backslash-escape] text\\n\\nText [https://example.com/embedded\\\\3backslash](https://example.com/embedded\\\\3backslash) text {MD054}\\n\\nText [https://example.com/backslash\\\\[no-escape](https://example.com/backslash[no-escape) text {MD054}\\n\\n[embedded-backslash]: https://example.com/embedded\\\\3backslash\\n\\n[backslash-escape]: https://example.com/backslash\\\\[escape\\n\\nText [url](<https://example.com/embedded space>) text\\n\\nText [url](<https://example.com/embedded)paren>) text\\n\\nText [url](https://example.com/\\\\(parens\\\\)) text\\n\\nText [url](https://example.com/pa(re(ns))) text\\n\\nText [url](relative/path) text\\n\\nText [url](#fragment) text\\n\\nText [https://example.com/pa)re(ns](https://example.com/pa\\\\)re\\\\(ns) text {MD054}\\n\\nText [url](https://example.com/an>g<le>) text\\n\\nText [user@example.com](user@example.com) text {MD054}\\n\\nText [user@example.com](user@example.com) text\\n\\nText [user@example.com][email] text\\n\\nText [email][] text\\n\\nText [email] text\\n\\n[email]: user@example.com\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": false,\\n  \\"link-fragments\\": false,\\n  \\"link-image-style\\": {\\n    \\"autolink\\": false\\n  }\\n} -->\\n"
 }
 `;
 
@@ -33120,7 +33144,11 @@ exports[`markdownlint-test-scenarios.mjs > long-heading-exceptions.md 1`] = `
         81,
         47
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 48,
+        "insertText": "\\ntext text text text text text text text {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33137,7 +33165,11 @@ exports[`markdownlint-test-scenarios.mjs > long-heading-exceptions.md 1`] = `
         81,
         47
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 48,
+        "insertText": "\\ntext text text text text text text text {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33154,11 +33186,338 @@ exports[`markdownlint-test-scenarios.mjs > long-heading-exceptions.md 1`] = `
         81,
         47
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 48,
+        "insertText": "\\ntext text text text text text text text {MD013}"
+      },
       "severity": "error"
     }
   ],
-  "fixed": "# Heading\\n\\nText\\n\\n## Heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading\\n\\nText\\n\\nText text text text text text text text text text text text text text text text text text text text text text text text {MD013}\\n\\n## Heading heading\\n\\nText\\n\\nText text text text text text text text text text text text text text text text text text text text text text text text {MD013}\\n\\n### Heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading\\n\\nText\\n\\nText text text text text text text text text text text text text text text text text text text text text text text text {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"headings\\": false\\n  }\\n} -->\\n"
+  "fixed": "# Heading\\n\\nText\\n\\n## Heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading\\n\\nText\\n\\nText text text text text text text text text text text text text text text text\\ntext text text text text text text text {MD013}\\n\\n## Heading heading\\n\\nText\\n\\nText text text text text text text text text text text text text text text text\\ntext text text text text text text text {MD013}\\n\\n### Heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading heading\\n\\nText\\n\\nText text text text text text text text text text text text text text text text\\ntext text text text text text text text {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"headings\\": false\\n  }\\n} -->\\n"
+}
+`;
+
+exports[`markdownlint-test-scenarios.mjs > long-lines-fix.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 3,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 111",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        31
+      ],
+      "fixInfo": {
+        "editColumn": 84,
+        "deleteCount": 28,
+        "insertText": "\\nto satisfy the rule {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 5,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 199",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        119
+      ],
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 120,
+        "insertText": "\\nlonger so that it needs to be wrapped two times or more times to satisfy the length\\nrule for every line of text {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 7,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 115",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        35
+      ],
+      "fixInfo": {
+        "editColumn": 88,
+        "deleteCount": 28,
+        "insertText": "\\n> to satisfy the rule {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 11,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 104",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        24
+      ],
+      "fixInfo": {
+        "editColumn": 84,
+        "deleteCount": 21,
+        "insertText": "\\n> > and prefixed {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 13,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 118",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        38
+      ],
+      "fixInfo": {
+        "editColumn": 82,
+        "deleteCount": 37,
+        "insertText": "\\n  indented to satisfy the rule {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 15,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 117",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        37
+      ],
+      "fixInfo": {
+        "editColumn": 81,
+        "deleteCount": 37,
+        "insertText": "\\n   indented to satisfy the rule {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 18,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 102",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        22
+      ],
+      "fixInfo": {
+        "editColumn": 82,
+        "deleteCount": 21,
+        "insertText": "\\n  and indented {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 20,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 122",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        42
+      ],
+      "fixInfo": {
+        "editColumn": 85,
+        "deleteCount": 38,
+        "insertText": "\\nso wrapping happens elsewhere {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 22,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 130",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        50
+      ],
+      "fixInfo": {
+        "editColumn": 96,
+        "deleteCount": 35,
+        "insertText": "\\nso wrapping happens nearby {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 24,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 122",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        42
+      ],
+      "fixInfo": {
+        "editColumn": 84,
+        "deleteCount": 39,
+        "insertText": "\\nso wrapping happens after both {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 26,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 112",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        32
+      ],
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 33,
+        "insertText": "\\nthat would create a list {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 28,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 117",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        37
+      ],
+      "fixInfo": {
+        "editColumn": 85,
+        "deleteCount": 33,
+        "insertText": "\\ncreate a hard line break {MD013}"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 30,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 114",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        34
+      ],
+      "fixInfo": {
+        "editColumn": 82,
+        "deleteCount": 33,
+        "insertText": "\\nwith a hard line break {MD013}  "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 32,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 95",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        15
+      ],
+      "fixInfo": {
+        "editColumn": 83,
+        "deleteCount": 13,
+        "insertText": "\\n\`a code span"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 35,
+      "ruleNames": [
+        "MD013",
+        "line-length"
+      ],
+      "ruleDescription": "Line length",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md013.md",
+      "errorDetail": "Expected: 80; Actual: 130",
+      "errorContext": null,
+      "errorRange": [
+        81,
+        50
+      ],
+      "fixInfo": {
+        "editColumn": 113,
+        "deleteCount": 18,
+        "insertText": "\\ninside it {MD013}"
+      },
+      "severity": "error"
+    }
+  ],
+  "fixed": "# Long Lines Fix\\n\\nThis paragraph of ordinary text is long enough that it needs to be wrapped one time\\nto satisfy the rule {MD013}\\n\\nThis paragraph of ordinary text is much much much much much much much much much\\nlonger so that it needs to be wrapped two times or more times to satisfy the length\\nrule for every line of text {MD013}\\n\\n> This quoted paragraph of text is long enough that it needs to be wrapped and prefixed\\n> to satisfy the rule {MD013}\\n\\nText between the block quotes.\\n\\n> > This nested quoted paragraph of text is long enough that it needs to be wrapped\\n> > and prefixed {MD013}\\n\\n- This unordered list item of text is long enough that it needs to be wrapped and\\n  indented to satisfy the rule {MD013}\\n\\n1. This ordered list item of text is long enough that it needs to be wrapped and\\n   indented to satisfy the rule {MD013}\\n\\n- Short first line\\n  followed by a continuation line of text long enough that it needs to be wrapped\\n  and indented {MD013}\\n\\nThis paragraph contains \`a code span that is not an acceptable position for a break\`\\nso wrapping happens elsewhere {MD013}\\n\\nThis paragraph contains <!-- an HTML comment that is not an acceptable position for a break -->\\nso wrapping happens nearby {MD013}\\n\\nThis paragraph contains <!-- one HTML comment --> and <!-- another HTML comment -->\\nso wrapping happens after both {MD013}\\n\\nThis paragraph would otherwise be wrapped right before the following dash - but\\nthat would create a list {MD013}\\n\\nThis paragraph would otherwise be wrapped right after this backslash\\\\ but that would\\ncreate a hard line break {MD013}\\n\\nThis paragraph of ordinary text is long enough that it needs wrapping and it ends\\nwith a hard line break {MD013}  \\n\\nThis paragraph of ordinary text is long enough that it needs to be wrapped and has\\n\`a code span\\nthat spans lines\` {MD013:-1}\\n\\nThis paragraph has one long link [link text](https://example.com/a-long-link-destination-that-can-not-be-broken)\\ninside it {MD013}\\n"
 }
 `;
 
@@ -33207,7 +33566,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-short-code.md 1`] = `
         81,
         12
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 13,
+        "insertText": "\\ntext {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33245,7 +33608,7 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-short-code.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Long Lines, Short Code\\n\\nText text text text text text text text text text text text text text text\\n\\nText text text text text text text text text text text text text text text text text {MD013}\\n\\nText\\n\\n    Code code code code\\n\\nText\\n\\n    Code code code code code code code {MD013}\\n\\nText\\n\\n\`\`\`text\\nCode code code code code\\n\`\`\`\\n\\nText\\n\\n\`\`\`text\\nCode code code code code code code code {MD013}\\n\`\`\`\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"code_block_line_length\\": 30\\n  },\\n  \\"code-block-style\\": false\\n} -->\\n"
+  "fixed": "# Long Lines, Short Code\\n\\nText text text text text text text text text text text text text text text\\n\\nText text text text text text text text text text text text text text text text\\ntext {MD013}\\n\\nText\\n\\n    Code code code code\\n\\nText\\n\\n    Code code code code code code code {MD013}\\n\\nText\\n\\n\`\`\`text\\nCode code code code code\\n\`\`\`\\n\\nText\\n\\n\`\`\`text\\nCode code code code code code code code {MD013}\\n\`\`\`\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"code_block_line_length\\": 30\\n  },\\n  \\"code-block-style\\": false\\n} -->\\n"
 }
 `;
 
@@ -33266,7 +33629,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-short-headings.md 1`] = `
         81,
         12
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 13,
+        "insertText": "\\ntext {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33321,7 +33688,7 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-short-headings.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Long Lines, Short Headings\\n\\nText text text text text text text text text text text text text text text text text {MD013}\\n\\n## Short heading text text text\\n\\nText\\n\\n## Long heading text text text {MD013}\\n\\nText\\n\\n## Long heading text text {MD013} ##\\n\\nText\\n\\nLong heading of text text text text text text {MD013}\\n-----------------------------------------------------\\n\\nText\\n\\n<!-- markdownlint-configure-file {\\n  \\"heading-style\\": false,\\n  \\"line-length\\": {\\n    \\"heading_line_length\\": 30\\n  }\\n} -->\\n"
+  "fixed": "# Long Lines, Short Headings\\n\\nText text text text text text text text text text text text text text text text\\ntext {MD013}\\n\\n## Short heading text text text\\n\\nText\\n\\n## Long heading text text text {MD013}\\n\\nText\\n\\n## Long heading text text {MD013} ##\\n\\nText\\n\\nLong heading of text text text text text text {MD013}\\n-----------------------------------------------------\\n\\nText\\n\\n<!-- markdownlint-configure-file {\\n  \\"heading-style\\": false,\\n  \\"line-length\\": {\\n    \\"heading_line_length\\": 30\\n  }\\n} -->\\n"
 }
 `;
 
@@ -33342,7 +33709,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         2
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 78,
+        "deleteCount": 5,
+        "insertText": "\\ntext"
+      },
       "severity": "error"
     },
     {
@@ -33359,7 +33730,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         1
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 2,
+        "insertText": "\\nt"
+      },
       "severity": "error"
     },
     {
@@ -33376,7 +33751,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         7
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 23,
+        "deleteCount": 65,
+        "insertText": "\\ntexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext"
+      },
       "severity": "error"
     },
     {
@@ -33427,7 +33806,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         4
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 5,
+        "insertText": "\\n  text"
+      },
       "severity": "error"
     },
     {
@@ -33444,7 +33827,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         4
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 5,
+        "insertText": "\\n  text"
+      },
       "severity": "error"
     },
     {
@@ -33461,7 +33848,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         5
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 81,
+        "deleteCount": 5,
+        "insertText": "\\n> text"
+      },
       "severity": "error"
     },
     {
@@ -33478,11 +33869,15 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-stern.md 1`] = `
         81,
         4
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 5,
+        "insertText": "\\n> > text"
+      },
       "severity": "error"
     }
   ],
-  "fixed": "# Long Lines Stern\\n\\n12345678901234567890123456789012345678901234567890123456789012345678901234567890\\n\\nThis line is too long. text text text text text text text text text text text text\\n\\nThis line is barely too long. text text text text text text text text text text t\\n\\nThis line is just okay. text text text text text text text text text text text t\\n\\nThis line is not a problem. text text text text text text text text text text t\\n\\nThis line is too long. texttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext\\n\\nThisLineIsOkaytexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext\\n\\n## This heading is way too long\\n\\n## This heading is long but ok\\n\\n## This heading is short + ok\\n\\n## ThisTooLongHeadingIsOkaytext\\n\\n\`\`\`text\\nThis code is too long\\nThis code is a-okay.\\nThis code is short.\\nThisTooLongCodeIsOkay.\\n\`\`\`\\n\\n* This list item line is too long. text text text text text text text text text text\\n* This list item line is okay. text text text text text text text text text\\n  This list item line is okay. text text text text text text text text text\\n  This list item line is too long. text text text text text text text text text text\\n  ThisTooLongListItemLineIsOkaytexttexttexttexttexttexttexttexttexttexttexttexttext\\n\\n> This blockquote line is too long. text text text text text text text text text text\\n> This blockquote line is okay. text text text text text text text text text\\n> ThisTooLongBlockquoteLineIsOkaytexttexttexttexttexttexttexttexttexttexttexttexttext\\n>\\n> > This double blockquote line is too long. text text text text text text text text\\n> > This double blockquote line is okay. text text text text text text text\\n> > ThisTooLongDoubleBlockquoteLineIsOkaytexttexttexttexttexttexttexttexttexttexttext\\n\\n  ThisLineIsTooLongButIsNotReportedBecauseItLooksLikePartOfAListItemtexttexttexttext\\n\\n{MD013:5}\\n{MD013:7}\\n{MD013:13}\\n{MD013:17}\\n{MD013:26}\\n{MD013:32}\\n{MD013:35}\\n{MD013:38}\\n{MD013:42}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"stern\\": true,\\n    \\"heading_line_length\\": 30,\\n    \\"code_block_line_length\\": 20\\n  }\\n} -->\\n"
+  "fixed": "# Long Lines Stern\\n\\n12345678901234567890123456789012345678901234567890123456789012345678901234567890\\n\\nThis line is too long. text text text text text text text text text text text\\ntext\\n\\nThis line is barely too long. text text text text text text text text text text\\nt\\n\\nThis line is just okay. text text text text text text text text text text text t\\n\\nThis line is not a problem. text text text text text text text text text text t\\n\\nThis line is too long.\\ntexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext\\n\\nThisLineIsOkaytexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttexttext\\n\\n## This heading is way too long\\n\\n## This heading is long but ok\\n\\n## This heading is short + ok\\n\\n## ThisTooLongHeadingIsOkaytext\\n\\n\`\`\`text\\nThis code is too long\\nThis code is a-okay.\\nThis code is short.\\nThisTooLongCodeIsOkay.\\n\`\`\`\\n\\n* This list item line is too long. text text text text text text text text text\\n  text\\n* This list item line is okay. text text text text text text text text text\\n  This list item line is okay. text text text text text text text text text\\n  This list item line is too long. text text text text text text text text text\\n  text\\n  ThisTooLongListItemLineIsOkaytexttexttexttexttexttexttexttexttexttexttexttexttext\\n\\n> This blockquote line is too long. text text text text text text text text text\\n> text\\n> This blockquote line is okay. text text text text text text text text text\\n> ThisTooLongBlockquoteLineIsOkaytexttexttexttexttexttexttexttexttexttexttexttexttext\\n>\\n> > This double blockquote line is too long. text text text text text text text\\n> > text\\n> > This double blockquote line is okay. text text text text text text text\\n> > ThisTooLongDoubleBlockquoteLineIsOkaytexttexttexttexttexttexttexttexttexttexttext\\n\\n  ThisLineIsTooLongButIsNotReportedBecauseItLooksLikePartOfAListItemtexttexttexttext\\n\\n{MD013:5}\\n{MD013:7}\\n{MD013:13}\\n{MD013:17}\\n{MD013:26}\\n{MD013:32}\\n{MD013:35}\\n{MD013:38}\\n{MD013:42}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"stern\\": true,\\n    \\"heading_line_length\\": 30,\\n    \\"code_block_line_length\\": 20\\n  }\\n} -->\\n"
 }
 `;
 
@@ -33503,7 +33898,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-strict.md 1`] = `
         81,
         2
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 78,
+        "deleteCount": 5,
+        "insertText": "\\ntext"
+      },
       "severity": "error"
     },
     {
@@ -33520,7 +33919,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-strict.md 1`] = `
         81,
         6
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 77,
+        "deleteCount": 10,
+        "insertText": "\\ntext text"
+      },
       "severity": "error"
     },
     {
@@ -33537,7 +33940,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-strict.md 1`] = `
         81,
         1
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 2,
+        "insertText": "\\nt"
+      },
       "severity": "error"
     },
     {
@@ -33575,7 +33982,7 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-strict.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Long Lines Strict\\n\\n12345678901234567890123456789012345678901234567890123456789012345678901234567890\\n\\nThis line is too long. text text text text text text text text text text text text\\n\\nThis line is way too long. text text text text text text text text text text text text\\n\\nThis line is barely too long. text text text text text text text text text text t\\n\\nThis line is just okay. text text text text text text text text text text text t\\n\\nThis line is not a problem. text text text text text text text text text text t\\n\\n## This heading is way too long\\n\\n## This heading is long but ok\\n\\n## This heading is short + ok\\n\\n\`\`\`text\\nThis code is too long\\nThis code is a-okay.\\nThis code is short.\\n\`\`\`\\n\\n{MD013:5}\\n{MD013:7}\\n{MD013:9}\\n{MD013:15}\\n{MD013:22}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"strict\\": true,\\n    \\"heading_line_length\\": 30,\\n    \\"code_block_line_length\\": 20\\n  }\\n} -->\\n"
+  "fixed": "# Long Lines Strict\\n\\n12345678901234567890123456789012345678901234567890123456789012345678901234567890\\n\\nThis line is too long. text text text text text text text text text text text\\ntext\\n\\nThis line is way too long. text text text text text text text text text text\\ntext text\\n\\nThis line is barely too long. text text text text text text text text text text\\nt\\n\\nThis line is just okay. text text text text text text text text text text text t\\n\\nThis line is not a problem. text text text text text text text text text text t\\n\\n## This heading is way too long\\n\\n## This heading is long but ok\\n\\n## This heading is short + ok\\n\\n\`\`\`text\\nThis code is too long\\nThis code is a-okay.\\nThis code is short.\\n\`\`\`\\n\\n{MD013:5}\\n{MD013:7}\\n{MD013:9}\\n{MD013:15}\\n{MD013:22}\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"strict\\": true,\\n    \\"heading_line_length\\": 30,\\n    \\"code_block_line_length\\": 20\\n  }\\n} -->\\n"
 }
 `;
 
@@ -33596,7 +34003,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-thresholds.md 1`] = `
         41,
         4
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 40,
+        "deleteCount": 5,
+        "insertText": "\\ntext"
+      },
       "severity": "error"
     },
     {
@@ -33613,7 +34024,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-thresholds.md 1`] = `
         41,
         5
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 41,
+        "deleteCount": 5,
+        "insertText": "\\ntext"
+      },
       "severity": "error"
     },
     {
@@ -33630,7 +34045,11 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-thresholds.md 1`] = `
         41,
         6
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 42,
+        "deleteCount": 5,
+        "insertText": "\\ntext"
+      },
       "severity": "error"
     },
     {
@@ -33787,7 +34206,7 @@ exports[`markdownlint-test-scenarios.mjs > long-lines-thresholds.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Long Lines Thresholds\\n\\n00000000011111111112222222222333333333344444444445\\n12345678901234567890123456789012345678901234567890\\n\\nText text text text text text text te text\\n\\nText text text text text text text tex text\\n\\nText text text text text text text text text\\n\\nText text text text text text text textx text\\n\\nText text text text text text text textxe text\\n\\n{MD013:-2} {MD013:-4} {MD013:-6}\\n\\n## Text text text text text te text\\n\\n## Text text text text text tex text\\n\\n## Text text text text text text text\\n\\n## Text text text text text textx text\\n\\n## Text text text text text textxe text\\n\\n{MD013:-2} {MD013:-4} {MD013:-6}\\n\\n\`\`\`text\\nText text text te text\\nText text text tex text\\nText text text text text\\nText text text textx text\\nText text text textxe text\\n\`\`\`\\n\\n{MD013:-3} {MD013:-4} {MD013:-5}\\n\\n    Text text tex text\\n    Text text text text\\n    Text text textx text\\n    Text text textxe text\\n    Text text textxet text\\n\\n{MD013:-2} {MD013:-3} {MD013:-4}\\n\\n<!-- markdownlint-configure-file {\\n  \\"code-block-style\\": false,\\n  \\"line-length\\": {\\n    \\"line_length\\": 40,\\n    \\"heading_line_length\\": 33,\\n    \\"code_block_line_length\\": 20\\n  }\\n} -->\\n"
+  "fixed": "# Long Lines Thresholds\\n\\n00000000011111111112222222222333333333344444444445\\n12345678901234567890123456789012345678901234567890\\n\\nText text text text text text text te text\\n\\nText text text text text text text tex text\\n\\nText text text text text text text text\\ntext\\n\\nText text text text text text text textx\\ntext\\n\\nText text text text text text text textxe\\ntext\\n\\n{MD013:-2} {MD013:-4} {MD013:-6}\\n\\n## Text text text text text te text\\n\\n## Text text text text text tex text\\n\\n## Text text text text text text text\\n\\n## Text text text text text textx text\\n\\n## Text text text text text textxe text\\n\\n{MD013:-2} {MD013:-4} {MD013:-6}\\n\\n\`\`\`text\\nText text text te text\\nText text text tex text\\nText text text text text\\nText text text textx text\\nText text text textxe text\\n\`\`\`\\n\\n{MD013:-3} {MD013:-4} {MD013:-5}\\n\\n    Text text tex text\\n    Text text text text\\n    Text text textx text\\n    Text text textxe text\\n    Text text textxet text\\n\\n{MD013:-2} {MD013:-3} {MD013:-4}\\n\\n<!-- markdownlint-configure-file {\\n  \\"code-block-style\\": false,\\n  \\"line-length\\": {\\n    \\"line_length\\": 40,\\n    \\"heading_line_length\\": 33,\\n    \\"code_block_line_length\\": 20\\n  }\\n} -->\\n"
 }
 `;
 
@@ -33808,7 +34227,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         17
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 18,
+        "insertText": "\\nlong line {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33859,7 +34282,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         27
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 41,
+        "deleteCount": 67,
+        "insertText": "\\nlink](https://example.com \\"This is the long link's title\\") {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33876,7 +34303,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         32
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 41,
+        "deleteCount": 72,
+        "insertText": "\\nlink](https://example.com \\"This is the long link's title\\") text {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33893,7 +34324,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         24
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 87,
+        "deleteCount": 18,
+        "insertText": "\\nthe rule. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -33910,7 +34345,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         29
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 30,
+        "insertText": "\\nis backslash-escaped {MD013}\\""
+      },
       "severity": "error"
     },
     {
@@ -34012,7 +34451,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         33
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 106,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34029,7 +34472,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
         81,
         36
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 109,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34232,7 +34679,7 @@ exports[`markdownlint-test-scenarios.mjs > long_lines.md 1`] = `
       "severity": "error"
     }
   ],
-  "fixed": "# Long Lines\\n\\nThis is a very very very very very very very very very very very very very very long line {MD013}\\n\\nThis line however, while very long, doesn't have whitespace after the 80th columnwhichallowsforURLsandotherlongthings.\\n\\n[This long line is comprised entirely of a link](https://example.com \\"This is the long link's title\\")\\n\\n> [This long line is comprised entirely of a link](https://example.com \\"This is the long link's title\\")\\n\\n    [This long line is comprised entirely of a link](https://example.com \\"But is inside a code block\\") {MD013}\\n\\n\`\`\`markdown\\n[This long line is comprised entirely of a link](https://example.com \\"But is inside a code block\\") {MD013} {MD046:13}\\n\`\`\`\\n\\nThis [long line is comprised mostly of a link](https://example.com \\"This is the long link's title\\") {MD013}\\n\\n[This long line is comprised mostly of a link](https://example.com \\"This is the long link's title\\") text {MD013}\\n\\nThis long line includes a simple [reference][label] link and is long enough to violate the rule. {MD013}\\n\\n[This long line is comprised entirely of a reference link and is long enough to violate the rule][label]\\n\\n[label]: https://example.org \\"Title for a link reference that is itself long enough to violate the rule\\"\\n\\n[Link to broken label][notlabel] {MD052}\\n\\n[notlabel\\\\]: notlink \\"Invalid syntax for a link label because the right bracket is backslash-escaped {MD013}\\"\\n\\n[](https://example.com \\"This long line is comprised entirely of a link with empty text and a non-empty title\\")\\n\\n*[This long line is comprised of an emphasized link](https://example.com \\"This is the long link's title\\")*\\n\\n*[This long line is comprised of an emphasized link {MD049}](https://example.com \\"This is the long link's title\\")*\\n\\n**[This long line is comprised of a bolded link](https://example.com \\"This is the long link's title\\")**\\n\\n**[This long line is comprised of a bolded link {MD050}](https://example.com \\"This is the long link's title\\")**\\n\\n***[This long line is comprised of an emphasized and bolded link {MD049}](https://example.com \\"This is the long link's title\\")***\\n\\n***[This long line is comprised of an emphasized and bolded link {MD049}](https://example.com \\"This is the long link's title\\")***\\n\\n*[](https://example.com \\"This long line is comprised of an emphasized link with empty text and a non-empty title\\")*\\n\\n**[](https://example.com \\"This long line is comprised of a bolded link with empty text and a non-empty title\\")**\\n\\n![Alternate text for long line image example](https://example.com \\"Title text for long line image example\\")\\n\\n*![Alternate text for long line image example](https://example.com \\"Title text for long line image example\\")*\\n\\n**![Alternate text for long line image example](https://example.com \\"Title text for long line image example\\")**\\n\\n![Reference style for long line image which is itself an example of a long line with content][image]\\n\\n*![Reference style for long line image which is itself an example of a long line with content][image]*\\n\\n**![Reference style for long line image which is itself an example of a long line with content][image]**\\n\\n[image]: https://example.com \\"Title text for long line image example using reference style for image details\\"\\n\\n<!--\\nLong lines inside HTML comments should also produce a violation of the line-length rule. {MD013}\\n-->\\n\\n<!--\\nLong lines inside HTML comments should also produce a violation of the line-length rule. {MD013}\\nLong lines inside HTML comments should also produce a violation of the line-length rule. {MD013}\\n-->\\n\\n<!-- Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013} -->\\n\\nLong lines inside HTML comments should also <!-- produce a violation of the line-length rule. {MD013} -->\\n\\n<https://example.com/long-line-comprised-entirely-of-an-autolink-long-line-comprised-entirely-of-an-autolink>\\n\\nhttps://example.com/long-line-comprised-entirely-of-a-bare-link-long-line-comprised-entirely-of-a-bare-link\\n\\nLong <https://example.com/line-comprised-mostly-of-an-autolink-long-line-comprised-mostly-of-an-autolink> {MD013}\\n\\nLong https://example.com/long-line-comprised-mostly-of-a-bare-link-long-line-comprised-mostly-of-a-bare-link {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"no-bare-urls\\": false\\n} -->\\n"
+  "fixed": "# Long Lines\\n\\nThis is a very very very very very very very very very very very very very very\\nlong line {MD013}\\n\\nThis line however, while very long, doesn't have whitespace after the 80th columnwhichallowsforURLsandotherlongthings.\\n\\n[This long line is comprised entirely of a link](https://example.com \\"This is the long link's title\\")\\n\\n> [This long line is comprised entirely of a link](https://example.com \\"This is the long link's title\\")\\n\\n    [This long line is comprised entirely of a link](https://example.com \\"But is inside a code block\\") {MD013}\\n\\n\`\`\`markdown\\n[This long line is comprised entirely of a link](https://example.com \\"But is inside a code block\\") {MD013} {MD046:13}\\n\`\`\`\\n\\nThis [long line is comprised mostly of a\\nlink](https://example.com \\"This is the long link's title\\") {MD013}\\n\\n[This long line is comprised mostly of a\\nlink](https://example.com \\"This is the long link's title\\") text {MD013}\\n\\nThis long line includes a simple [reference][label] link and is long enough to violate\\nthe rule. {MD013}\\n\\n[This long line is comprised entirely of a reference link and is long enough to violate the rule][label]\\n\\n[label]: https://example.org \\"Title for a link reference that is itself long enough to violate the rule\\"\\n\\n[Link to broken label][notlabel] {MD052}\\n\\n[notlabel\\\\]: notlink \\"Invalid syntax for a link label because the right bracket\\nis backslash-escaped {MD013}\\"\\n\\n[](https://example.com \\"This long line is comprised entirely of a link with empty text and a non-empty title\\")\\n\\n*[This long line is comprised of an emphasized link](https://example.com \\"This is the long link's title\\")*\\n\\n*[This long line is comprised of an emphasized link {MD049}](https://example.com \\"This is the long link's title\\")*\\n\\n**[This long line is comprised of a bolded link](https://example.com \\"This is the long link's title\\")**\\n\\n**[This long line is comprised of a bolded link {MD050}](https://example.com \\"This is the long link's title\\")**\\n\\n***[This long line is comprised of an emphasized and bolded link {MD049}](https://example.com \\"This is the long link's title\\")***\\n\\n***[This long line is comprised of an emphasized and bolded link {MD049}](https://example.com \\"This is the long link's title\\")***\\n\\n*[](https://example.com \\"This long line is comprised of an emphasized link with empty text and a non-empty title\\")*\\n\\n**[](https://example.com \\"This long line is comprised of a bolded link with empty text and a non-empty title\\")**\\n\\n![Alternate text for long line image example](https://example.com \\"Title text for long line image example\\")\\n\\n*![Alternate text for long line image example](https://example.com \\"Title text for long line image example\\")*\\n\\n**![Alternate text for long line image example](https://example.com \\"Title text for long line image example\\")**\\n\\n![Reference style for long line image which is itself an example of a long line with content][image]\\n\\n*![Reference style for long line image which is itself an example of a long line with content][image]*\\n\\n**![Reference style for long line image which is itself an example of a long line with content][image]**\\n\\n[image]: https://example.com \\"Title text for long line image example using reference style for image details\\"\\n\\n<!--\\nLong lines inside HTML comments should also produce a violation of the line-length rule. {MD013}\\n-->\\n\\n<!--\\nLong lines inside HTML comments should also produce a violation of the line-length rule. {MD013}\\nLong lines inside HTML comments should also produce a violation of the line-length rule. {MD013}\\n-->\\n\\n<!-- Long lines inside HTML comments should also produce a violation of the line-length rule. {MD013} -->\\n\\nLong lines inside HTML comments should also <!-- produce a violation of the line-length rule. {MD013} -->\\n\\n<https://example.com/long-line-comprised-entirely-of-an-autolink-long-line-comprised-entirely-of-an-autolink>\\n\\nhttps://example.com/long-line-comprised-entirely-of-a-bare-link-long-line-comprised-entirely-of-a-bare-link\\n\\nLong <https://example.com/line-comprised-mostly-of-an-autolink-long-line-comprised-mostly-of-an-autolink>\\n{MD013}\\n\\nLong https://example.com/long-line-comprised-mostly-of-a-bare-link-long-line-comprised-mostly-of-a-bare-link\\n{MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"no-bare-urls\\": false\\n} -->\\n"
 }
 `;
 
@@ -34253,11 +34700,15 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_100.md 1`] = `
         101,
         11
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 104,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     }
   ],
-  "fixed": "# long_lines_100\\n\\nThis is a very very very very very very very very long line over 80 chars but less than 100\\n\\nThis is a very very very very very very very very very very long line over 80 chars, and also over 100. {MD013}\\n\\nThis is a very very very very very very very very very long line that is exactly 100 characters long\\n\\nThis line however, while very long, doesn't have whitespace after the 100th columnwhichallowsforURLsandotherlongthings.\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"line_length\\": 100\\n  }\\n} -->\\n"
+  "fixed": "# long_lines_100\\n\\nThis is a very very very very very very very very long line over 80 chars but less than 100\\n\\nThis is a very very very very very very very very very very long line over 80 chars, and also over 100.\\n{MD013}\\n\\nThis is a very very very very very very very very very long line that is exactly 100 characters long\\n\\nThis line however, while very long, doesn't have whitespace after the 100th columnwhichallowsforURLsandotherlongthings.\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"line_length\\": 100\\n  }\\n} -->\\n"
 }
 `;
 
@@ -34278,7 +34729,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         48
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 49,
+        "insertText": "\\nvery very very very very very long line. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34312,7 +34767,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 76,
+        "deleteCount": 36,
+        "insertText": "\\nHeading  | Sixth  Heading | {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34329,7 +34788,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 104,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34346,7 +34809,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 78,
+        "deleteCount": 34,
+        "insertText": "\\nCell   | Content Cell   | {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34363,7 +34830,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 104,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34380,7 +34851,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 77,
+        "deleteCount": 35,
+        "insertText": "\\nCell    | Footer Cell    | {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34397,7 +34872,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         48
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 49,
+        "insertText": "\\nvery very very very very very long line. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34414,7 +34893,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 76,
+        "deleteCount": 36,
+        "insertText": "\\nHeading  | Sixth  Heading | {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34431,7 +34914,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 104,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34448,7 +34935,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 78,
+        "deleteCount": 34,
+        "insertText": "\\nCell   | Content Cell   | {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34465,7 +34956,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 104,
+        "deleteCount": 8,
+        "insertText": "\\n{MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34482,11 +34977,15 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code-default.md 1`] = `
         81,
         31
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 77,
+        "deleteCount": 35,
+        "insertText": "\\nCell    | Footer Cell    | {MD013}"
+      },
       "severity": "error"
     }
   ],
-  "fixed": "# long_lines_code-default\\n\\nThis is a short line.\\n\\nThis is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}\\n\\nThis is a short line.\\n\\n\`\`\`text\\nHere is a short line in a code block.\\nHere is a very very very very very very very very very very very very very very very very very very very long line in a code block. {MD013}\\n\`\`\`\\n\\nThis is a short line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading | {MD013}\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | {MD013}\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | {MD013}\\n| ============== | ============== | ============== | ============== | ============== | ============== | {MD013}\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | {MD013}\\n\\nThis is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}\\n\\nAnother line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading | {MD013}\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- | {MD013}\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | {MD013}\\n| ============== | ============== | ============== | ============== | ============== | ============== | {MD013}\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | {MD013}\\n"
+  "fixed": "# long_lines_code-default\\n\\nThis is a short line.\\n\\nThis is a very very very very very very very very very very very very very very\\nvery very very very very very long line. {MD013}\\n\\nThis is a short line.\\n\\n\`\`\`text\\nHere is a short line in a code block.\\nHere is a very very very very very very very very very very very very very very very very very very very long line in a code block. {MD013}\\n\`\`\`\\n\\nThis is a short line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth\\nHeading  | Sixth  Heading | {MD013}\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n{MD013}\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content\\nCell   | Content Cell   | {MD013}\\n| ============== | ============== | ============== | ============== | ============== | ============== |\\n{MD013}\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer\\nCell    | Footer Cell    | {MD013}\\n\\nThis is a very very very very very very very very very very very very very very\\nvery very very very very very long line. {MD013}\\n\\nAnother line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth\\nHeading  | Sixth  Heading | {MD013}\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n{MD013}\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content\\nCell   | Content Cell   | {MD013}\\n| ============== | ============== | ============== | ============== | ============== | ============== |\\n{MD013}\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer\\nCell    | Footer Cell    | {MD013}\\n"
 }
 `;
 
@@ -34507,7 +35006,11 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code.md 1`] = `
         81,
         48
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 49,
+        "insertText": "\\nvery very very very very very long line. {MD013}"
+      },
       "severity": "error"
     },
     {
@@ -34524,11 +35027,15 @@ exports[`markdownlint-test-scenarios.mjs > long_lines_code.md 1`] = `
         81,
         48
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 49,
+        "insertText": "\\nvery very very very very very long line. {MD013}"
+      },
       "severity": "error"
     }
   ],
-  "fixed": "# long_lines_code\\n\\nThis is a short line.\\n\\nThis is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}\\n\\nThis is a short line.\\n\\n\`\`\`text\\nHere is a short line in a code block.\\nHere is a very very very very very very very very very very very very very very very very very very very long line in a code block.\\n\`\`\`\\n\\n\`\`\`text\\ntest\\ntest\\n\\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut\\n\`\`\`\\n\\nThis is a short line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| ============== | ============== | ============== | ============== | ============== | ============== |\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |\\n\\nThis is a very very very very very very very very very very very very very very very very very very very very long line. {MD013}\\n\\nAnother line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| ============== | ============== | ============== | ============== | ============== | ============== |\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"code_blocks\\": false,\\n    \\"tables\\": false\\n  }\\n} -->\\n"
+  "fixed": "# long_lines_code\\n\\nThis is a short line.\\n\\nThis is a very very very very very very very very very very very very very very\\nvery very very very very very long line. {MD013}\\n\\nThis is a short line.\\n\\n\`\`\`text\\nHere is a short line in a code block.\\nHere is a very very very very very very very very very very very very very very very very very very very long line in a code block.\\n\`\`\`\\n\\n\`\`\`text\\ntest\\ntest\\n\\nLorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut\\n\`\`\`\\n\\nThis is a short line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| ============== | ============== | ============== | ============== | ============== | ============== |\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |\\n\\nThis is a very very very very very very very very very very very very very very\\nvery very very very very very long line. {MD013}\\n\\nAnother line.\\n\\n| First Heading  | Second Heading | Third Heading  | Fourth Heading | Fifth Heading  | Sixth  Heading |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| -------------- | -------------- | -------------- | -------------- | -------------- | -------------- |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   | Content Cell   |\\n| ============== | ============== | ============== | ============== | ============== | ============== |\\n| Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    | Footer Cell    |\\n\\n<!-- markdownlint-configure-file {\\n  \\"line-length\\": {\\n    \\"code_blocks\\": false,\\n    \\"tables\\": false\\n  }\\n} -->\\n"
 }
 `;
 
@@ -64252,10 +64759,14 @@ exports[`markdownlint-test-scenarios.mjs > wrong-types-in-config-file.md 1`] = `
         81,
         27
       ],
-      "fixInfo": null,
+      "fixInfo": {
+        "editColumn": 80,
+        "deleteCount": 28,
+        "insertText": "\\nlong line long line {MD013}"
+      },
       "severity": "error"
     }
   ],
-  "fixed": "# Wrong Types in Config File\\n\\nLong line long line long line long line long line long line long line long line long line long line {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"heading-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"ul-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"ul-indent\\": {\\n    \\"indent\\": \\"2\\",\\n    \\"start_indented\\": 0\\n  },\\n  \\"no-trailing-spaces\\": {\\n    \\"br_spaces\\": \\"2\\",\\n    \\"list_item_empty_lines\\": 0,\\n    \\"strict\\": 0\\n  },\\n  \\"no-hard-tabs\\": {\\n    \\"code_blocks\\": 1\\n  },\\n  \\"no-multiple-blanks\\": {\\n    \\"maximum\\": \\"1\\"\\n  },\\n  \\"line-length\\": {\\n    \\"code_block_line_length\\": \\"80\\",\\n    \\"code_blocks\\": 1,\\n    \\"heading_line_length\\": \\"80\\",\\n    \\"headings\\": 1,\\n    \\"line_length\\": \\"80\\",\\n    \\"strict\\": 0,\\n    \\"tables\\": 1\\n  },\\n  \\"blanks-around-headings\\": {\\n    \\"lines_above\\": \\"1\\",\\n    \\"lines_below\\": \\"1\\"\\n  },\\n  \\"no-duplicate-heading\\": {\\n    \\"siblings_only\\": 0\\n  },\\n  \\"single-title\\": {\\n    \\"front_matter_title\\": 0,\\n    \\"level\\": \\"1\\"\\n  },\\n  \\"no-trailing-punctuation\\": {\\n    \\"punctuation\\": 0\\n  },\\n  \\"ol-prefix\\": {\\n    \\"style\\": 0\\n  },\\n  \\"list-marker-space\\": {\\n    \\"ol_multi\\": \\"1\\",\\n    \\"ol_single\\": \\"1\\",\\n    \\"ul_multi\\": \\"1\\",\\n    \\"ul_single\\": \\"1\\"\\n  },\\n  \\"blanks-around-fences\\": {\\n    \\"list_items\\": 1\\n  },\\n  \\"no-inline-html\\": {\\n    \\"allowed_elements\\": 0\\n  },\\n  \\"hr-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"no-emphasis-as-heading\\": {\\n    \\"punctuation\\": 0\\n  },\\n  \\"first-line-heading\\": {\\n    \\"front_matter_title\\": 0,\\n    \\"level\\": \\"1\\"\\n  },\\n  \\"required-headings\\": {\\n    \\"headings\\": 0\\n  },\\n  \\"proper-names\\": {\\n    \\"code_blocks\\": 1,\\n    \\"names\\": 0\\n  },\\n  \\"code-block-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"code-fence-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"$schema\\": \\"../schema/markdownlint-config-schema.json\\"\\n} -->\\n"
+  "fixed": "# Wrong Types in Config File\\n\\nLong line long line long line long line long line long line long line long line\\nlong line long line {MD013}\\n\\n<!-- markdownlint-configure-file {\\n  \\"heading-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"ul-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"ul-indent\\": {\\n    \\"indent\\": \\"2\\",\\n    \\"start_indented\\": 0\\n  },\\n  \\"no-trailing-spaces\\": {\\n    \\"br_spaces\\": \\"2\\",\\n    \\"list_item_empty_lines\\": 0,\\n    \\"strict\\": 0\\n  },\\n  \\"no-hard-tabs\\": {\\n    \\"code_blocks\\": 1\\n  },\\n  \\"no-multiple-blanks\\": {\\n    \\"maximum\\": \\"1\\"\\n  },\\n  \\"line-length\\": {\\n    \\"code_block_line_length\\": \\"80\\",\\n    \\"code_blocks\\": 1,\\n    \\"heading_line_length\\": \\"80\\",\\n    \\"headings\\": 1,\\n    \\"line_length\\": \\"80\\",\\n    \\"strict\\": 0,\\n    \\"tables\\": 1\\n  },\\n  \\"blanks-around-headings\\": {\\n    \\"lines_above\\": \\"1\\",\\n    \\"lines_below\\": \\"1\\"\\n  },\\n  \\"no-duplicate-heading\\": {\\n    \\"siblings_only\\": 0\\n  },\\n  \\"single-title\\": {\\n    \\"front_matter_title\\": 0,\\n    \\"level\\": \\"1\\"\\n  },\\n  \\"no-trailing-punctuation\\": {\\n    \\"punctuation\\": 0\\n  },\\n  \\"ol-prefix\\": {\\n    \\"style\\": 0\\n  },\\n  \\"list-marker-space\\": {\\n    \\"ol_multi\\": \\"1\\",\\n    \\"ol_single\\": \\"1\\",\\n    \\"ul_multi\\": \\"1\\",\\n    \\"ul_single\\": \\"1\\"\\n  },\\n  \\"blanks-around-fences\\": {\\n    \\"list_items\\": 1\\n  },\\n  \\"no-inline-html\\": {\\n    \\"allowed_elements\\": 0\\n  },\\n  \\"hr-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"no-emphasis-as-heading\\": {\\n    \\"punctuation\\": 0\\n  },\\n  \\"first-line-heading\\": {\\n    \\"front_matter_title\\": 0,\\n    \\"level\\": \\"1\\"\\n  },\\n  \\"required-headings\\": {\\n    \\"headings\\": 0\\n  },\\n  \\"proper-names\\": {\\n    \\"code_blocks\\": 1,\\n    \\"names\\": 0\\n  },\\n  \\"code-block-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"code-fence-style\\": {\\n    \\"style\\": 0\\n  },\\n  \\"$schema\\": \\"../schema/markdownlint-config-schema.json\\"\\n} -->\\n"
 }
 `;

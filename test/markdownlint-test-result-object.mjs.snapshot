@@ -229,7 +229,11 @@ exports[`markdownlint-test-result-object.mjs > convertToResultVersionN 1`] = `
           81,
           17
         ],
-        "fixInfo": null,
+        "fixInfo": {
+          "editColumn": 80,
+          "deleteCount": 18,
+          "insertText": "\\nlong line {MD013}"
+        },
         "severity": "error"
       },
       {

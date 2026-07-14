@@ -81,6 +81,7 @@ Text [email] text
 [email]: user@example.com
 
 <!-- markdownlint-configure-file {
+  "line-length": false,
   "link-fragments": false,
   "link-image-style": {
     "autolink": false
