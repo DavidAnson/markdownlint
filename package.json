@@ -110,7 +110,7 @@
     "toml": "4.1.2",
     "typescript": "6.0.3",
     "webpack": "5.108.4",
-    "webpack-cli": "7.1.0"
+    "webpack-cli": "7.2.1"
   },
   "keywords": [
     "markdown",
