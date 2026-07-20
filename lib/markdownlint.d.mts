@@ -1,89 +1,3 @@
-/**
- * Lint specified Markdown files.
- *
- * @param {Options | null} options Configuration options.
- * @param {LintCallback} callback Callback (err, result) function.
- * @returns {void}
- */
-export function lintAsync(options: Options | null, callback: LintCallback): void;
-/**
- * Lint specified Markdown files.
- *
- * @param {Options | null} options Configuration options.
- * @returns {Promise<LintResults>} Results object.
- */
-export function lintPromise(options: Options | null): Promise<LintResults>;
-/**
- * Lint specified Markdown files.
- *
- * @param {Options | null} options Configuration options.
- * @returns {LintResults} Results object.
- */
-export function lintSync(options: Options | null): LintResults;
-/**
- * Extend specified configuration object.
- *
- * @param {Configuration} config Configuration object.
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | undefined} parsers Parsing function(s).
- * @param {FsLike} fs File system implementation.
- * @returns {Promise<Configuration>} Configuration object.
- */
-export function extendConfigPromise(config: Configuration, file: string, parsers: ConfigurationParser[] | undefined, fs: FsLike): Promise<Configuration>;
-/**
- * Read specified configuration file.
- *
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[] | ReadConfigCallback} [parsers] Parsing function(s).
- * @param {FsLike | ReadConfigCallback} [fs] File system implementation.
- * @param {ReadConfigCallback} [callback] Callback (err, result) function.
- * @returns {void}
- */
-export function readConfigAsync(file: string, parsers?: ConfigurationParser[] | ReadConfigCallback, fs?: FsLike | ReadConfigCallback, callback?: ReadConfigCallback): void;
-/**
- * Read specified configuration file.
- *
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[]} [parsers] Parsing function(s).
- * @param {FsLike} [fs] File system implementation.
- * @returns {Promise<Configuration>} Configuration object.
- */
-export function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: FsLike): Promise<Configuration>;
-/**
- * Read specified configuration file.
- *
- * @param {string} file Configuration file name.
- * @param {ConfigurationParser[]} [parsers] Parsing function(s).
- * @param {FsLike} [fs] File system implementation.
- * @returns {Configuration} Configuration object.
- */
-export function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: FsLike): Configuration;
-/**
- * Applies the specified fix to a Markdown content line.
- *
- * @param {string} line Line of Markdown content.
- * @param {FixInfo} fixInfo FixInfo instance.
- * @param {string} [lineEnding] Line ending to use.
- * @returns {string | null} Fixed content or null if deleted.
- */
-export function applyFix(line: string, fixInfo: FixInfo, lineEnding?: string): string | null;
-/**
- * Applies as many of the specified fixes as possible to Markdown content.
- *
- * @param {string} input Lines of Markdown content.
- * @param {LintError[]} errors LintError instances.
- * @returns {string} Fixed content.
- */
-export function applyFixes(input: string, errors: LintError[]): string;
-/**
- * Gets the (semantic) version of the library.
- *
- * @returns {string} SemVer string.
- */
-export function getVersion(): string;
-/**
- * Result object for removeFrontMatter.
- */
 export type RemoveFrontMatterResult = {
     /**
      * Markdown content.
@@ -94,9 +8,6 @@ export type RemoveFrontMatterResult = {
      */
     frontMatterLines: string[];
 };
-/**
- * Result object for getEffectiveConfig.
- */
 export type GetEffectiveConfigResult = {
     /**
      * Effective configuration.
@@ -111,9 +22,6 @@ export type GetEffectiveConfigResult = {
      */
     rulesSeverity: Map<string, "error" | "warning">;
 };
-/**
- * Result object for getEnabledRulesPerLineNumber.
- */
 export type EnabledRulesPerLineNumberResult = {
     /**
      * Effective configuration.
@@ -133,8 +41,27 @@ export type EnabledRulesPerLineNumberResult = {
     rulesSeverity: Map<string, "error" | "warning">;
 };
 /**
- * Node fs instance (or compatible object).
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
+ * @param {LintCallback} callback Callback (err, result) function.
+ * @returns {void}
  */
+export declare function lintAsync(options: Options | null, callback: LintCallback): void;
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
+ * @returns {Promise<LintResults>} Results object.
+ */
+export declare function lintPromise(options: Options | null): Promise<LintResults>;
+/**
+ * Lint specified Markdown files.
+ *
+ * @param {Options | null} options Configuration options.
+ * @returns {LintResults} Results object.
+ */
+export declare function lintSync(options: Options | null): LintResults;
 export type FsLike = {
     /**
      * access method.
@@ -154,12 +81,67 @@ export type FsLike = {
     readFileSync: (path: string, encoding: string) => string;
 };
 /**
- * Function to implement rule logic.
+ * Extend specified configuration object.
+ *
+ * @param {Configuration} config Configuration object.
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[] | undefined} parsers Parsing function(s).
+ * @param {FsLike} fs File system implementation.
+ * @returns {Promise<Configuration>} Configuration object.
  */
-export type RuleFunction = (params: RuleParams, onError: RuleOnError) => void;
+export declare function extendConfigPromise(config: Configuration, file: string, parsers: ConfigurationParser[] | undefined, fs: FsLike): Promise<Configuration>;
 /**
- * Rule parameters.
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[] | ReadConfigCallback} [parsers] Parsing function(s).
+ * @param {FsLike | ReadConfigCallback} [fs] File system implementation.
+ * @param {ReadConfigCallback} [callback] Callback (err, result) function.
+ * @returns {void}
  */
+export declare function readConfigAsync(file: string, parsers?: ConfigurationParser[] | ReadConfigCallback, fs?: FsLike | ReadConfigCallback, callback?: ReadConfigCallback): void;
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {FsLike} [fs] File system implementation.
+ * @returns {Promise<Configuration>} Configuration object.
+ */
+export declare function readConfigPromise(file: string, parsers?: ConfigurationParser[], fs?: FsLike): Promise<Configuration>;
+/**
+ * Read specified configuration file.
+ *
+ * @param {string} file Configuration file name.
+ * @param {ConfigurationParser[]} [parsers] Parsing function(s).
+ * @param {FsLike} [fs] File system implementation.
+ * @returns {Configuration} Configuration object.
+ */
+export declare function readConfigSync(file: string, parsers?: ConfigurationParser[], fs?: FsLike): Configuration;
+/**
+ * Applies the specified fix to a Markdown content line.
+ *
+ * @param {string} line Line of Markdown content.
+ * @param {FixInfo} fixInfo FixInfo instance.
+ * @param {string} [lineEnding] Line ending to use.
+ * @returns {string | null} Fixed content or null if deleted.
+ */
+export declare function applyFix(line: string, fixInfo: FixInfo, lineEnding?: string): string | null;
+/**
+ * Applies as many of the specified fixes as possible to Markdown content.
+ *
+ * @param {string} input Lines of Markdown content.
+ * @param {LintError[]} errors LintError instances.
+ * @returns {string} Fixed content.
+ */
+export declare function applyFixes(input: string, errors: LintError[]): string;
+/**
+ * Gets the (semantic) version of the library.
+ *
+ * @returns {string} SemVer string.
+ */
+export declare function getVersion(): string;
+export type RuleFunction = (params: RuleParams, onError: RuleOnError) => void;
 export type RuleParams = {
     /**
      * File/string name.
@@ -186,9 +168,6 @@ export type RuleParams = {
      */
     version: string;
 };
-/**
- * Markdown parser data.
- */
 export type MarkdownParsers = {
     /**
      * Markdown parser data from markdown-it (only present when Rule.parser is "markdownit").
@@ -199,27 +178,18 @@ export type MarkdownParsers = {
      */
     micromark: ParserMicromark;
 };
-/**
- * Markdown parser data from markdown-it.
- */
 export type ParserMarkdownIt = {
     /**
      * Token objects from markdown-it.
      */
     tokens: MarkdownItToken[];
 };
-/**
- * Markdown parser data from micromark.
- */
 export type ParserMicromark = {
     /**
      * Token objects from micromark.
      */
     tokens: MicromarkToken[];
 };
-/**
- * markdown-it base token.
- */
 export type MarkdownItBaseToken = {
     /**
      * HTML attributes.
@@ -274,9 +244,6 @@ export type MarkdownItBaseToken = {
      */
     type: string;
 };
-/**
- * markdown-it extended token.
- */
 export type MarkdownItExtendedToken = {
     /**
      * Child nodes.
@@ -291,14 +258,8 @@ export type MarkdownItExtendedToken = {
      */
     line: string;
 };
-/**
- * markdown-it token.
- */
 export type MarkdownItToken = MarkdownItBaseToken & MarkdownItExtendedToken;
 export type MicromarkTokenType = import("micromark-util-types").TokenType;
-/**
- * micromark token.
- */
 export type MicromarkToken = {
     /**
      * Token type.
@@ -333,13 +294,7 @@ export type MicromarkToken = {
      */
     parent: MicromarkToken | null;
 };
-/**
- * Error-reporting callback.
- */
 export type RuleOnError = (onErrorInfo: RuleOnErrorInfo) => void;
-/**
- * Fix information for RuleOnError callback.
- */
 export type RuleOnErrorInfo = {
     /**
      * Line number (1-based).
@@ -348,48 +303,42 @@ export type RuleOnErrorInfo = {
     /**
      * Detail about the error.
      */
-    detail?: string | undefined;
+    detail?: string;
     /**
      * Context for the error.
      */
-    context?: string | undefined;
+    context?: string;
     /**
      * Link to more information.
      */
-    information?: URL | undefined;
+    information?: URL;
     /**
      * Column number (1-based) and length.
      */
-    range?: number[] | undefined;
+    range?: number[];
     /**
      * Fix information.
      */
-    fixInfo?: RuleOnErrorFixInfo | undefined;
+    fixInfo?: RuleOnErrorFixInfo;
 };
-/**
- * Fix information for RuleOnErrorInfo.
- */
 export type RuleOnErrorFixInfo = {
     /**
      * Line number (1-based).
      */
-    lineNumber?: number | undefined;
+    lineNumber?: number;
     /**
      * Column of the fix (1-based).
      */
-    editColumn?: number | undefined;
+    editColumn?: number;
     /**
      * Count of characters to delete.
      */
-    deleteCount?: number | undefined;
+    deleteCount?: number;
     /**
      * Text to insert (after deleting).
      */
-    insertText?: string | undefined;
+    insertText?: string;
 };
-/**
- * Rule definition.
- */
 export type Rule = {
     /**
      * Rule name(s).
@@ -402,7 +351,7 @@ export type Rule = {
     /**
      * Link to more information.
      */
-    information?: URL | undefined;
+    information?: URL;
     /**
      * Rule tag(s).
      */
@@ -414,89 +363,66 @@ export type Rule = {
     /**
      * True if asynchronous.
      */
-    asynchronous?: boolean | undefined;
+    asynchronous?: boolean;
     /**
      * Rule implementation.
      */
     function: RuleFunction;
 };
-/**
- * Method used by the markdown-it parser to parse input.
- */
 export type MarkdownItParse = (src: string, env: Object) => MarkdownItBaseToken[];
-/**
- * Instance of the markdown-it parser.
- */
 export type MarkdownIt = {
     /**
      * Method to parse input.
      */
     parse: MarkdownItParse;
 };
-/**
- * Gets an instance of the markdown-it parser. Any plugins should already have been loaded.
- */
 export type MarkdownItFactory = () => MarkdownIt | Promise<MarkdownIt>;
-/**
- * Configuration options.
- */
 export type Options = {
     /**
      * Configuration object.
      */
-    config?: import("./configuration.d.ts").Configuration | undefined;
+    config?: Configuration;
     /**
      * Configuration parsers.
      */
-    configParsers?: ConfigurationParser[] | undefined;
+    configParsers?: ConfigurationParser[];
     /**
      * Custom rules.
      */
-    customRules?: Rule | Rule[] | undefined;
+    customRules?: Rule[] | Rule;
     /**
      * Files to lint.
      */
-    files?: string | string[] | undefined;
+    files?: string[] | string;
     /**
      * Front matter pattern.
      */
-    frontMatter?: RegExp | null | undefined;
+    frontMatter?: RegExp | null;
     /**
      * File system implementation.
      */
-    fs?: FsLike | undefined;
+    fs?: FsLike;
     /**
      * True to catch exceptions.
      */
-    handleRuleFailures?: boolean | undefined;
+    handleRuleFailures?: boolean;
     /**
      * Function to create a markdown-it parser.
      */
-    markdownItFactory?: MarkdownItFactory | undefined;
+    markdownItFactory?: MarkdownItFactory;
     /**
      * True to ignore HTML directives.
      */
-    noInlineConfig?: boolean | undefined;
+    noInlineConfig?: boolean;
     /**
      * Strings to lint.
      */
-    strings?: {
-        [x: string]: string;
-    } | undefined;
+    strings?: Record<string, string>;
 };
-/**
- * A markdown-it plugin.
- */
 export type Plugin = Object[];
-/**
- * Lint results.
- */
 export type LintResults = {
-    [x: string]: LintError[];
+    [k: string]: LintError[];
 };
-/**
- * Lint error.
- */
 export type LintError = {
     /**
      * Line number (1-based).
@@ -535,30 +461,24 @@ export type LintError = {
      */
     severity: "error" | "warning";
 };
-/**
- * Fix information.
- */
 export type FixInfo = {
     /**
      * Line number (1-based).
      */
-    lineNumber?: number | undefined;
+    lineNumber?: number;
     /**
      * Column of the fix (1-based).
      */
-    editColumn?: number | undefined;
+    editColumn?: number;
     /**
      * Count of characters to delete.
      */
-    deleteCount?: number | undefined;
+    deleteCount?: number;
     /**
      * Text to insert (after deleting).
      */
-    insertText?: string | undefined;
+    insertText?: string;
 };
-/**
- * FixInfo with all optional properties present.
- */
 export type FixInfoNormalized = {
     /**
      * Line number (1-based).
@@ -577,39 +497,266 @@ export type FixInfoNormalized = {
      */
     insertText: string;
 };
+export type LintContentCallback = (error: Error | null, result?: LintError[]) => void;
+export type LintCallback = (error: Error | null, results?: LintResults) => void;
+export type Configuration = import("./configuration.d.ts").Configuration;
+export type ConfigurationStrict = import("./configuration-strict.d.ts").ConfigurationStrict;
+export type ConfigurationParser = (text: string) => Configuration;
+export type ReadConfigCallback = (err: Error | null, config?: Configuration) => void;
+export type ResolveConfigExtendsCallback = (err: Error | null, path?: string) => void;
+export type RuleConfiguration = boolean | any;
+/**
+ * Function to implement rule logic.
+ *
+ * @callback RuleFunction
+ * @param {RuleParams} params Rule parameters.
+ * @param {RuleOnError} onError Error-reporting callback.
+ * @returns {void}
+ */
+/**
+ * Rule parameters.
+ *
+ * @typedef {Object} RuleParams
+ * @property {string} name File/string name.
+ * @property {MarkdownParsers} parsers Markdown parser data.
+ * @property {readonly string[]} lines File/string lines.
+ * @property {readonly string[]} frontMatterLines Front matter lines.
+ * @property {RuleConfiguration} config Rule configuration.
+ * @property {string} version Version of the markdownlint library.
+ */
+/**
+ * Markdown parser data.
+ *
+ * @typedef {Object} MarkdownParsers
+ * @property {ParserMarkdownIt} markdownit Markdown parser data from markdown-it (only present when Rule.parser is "markdownit").
+ * @property {ParserMicromark} micromark Markdown parser data from micromark (only present when Rule.parser is "micromark").
+ */
+/**
+ * Markdown parser data from markdown-it.
+ *
+ * @typedef {Object} ParserMarkdownIt
+ * @property {MarkdownItToken[]} tokens Token objects from markdown-it.
+ */
+/**
+ * Markdown parser data from micromark.
+ *
+ * @typedef {Object} ParserMicromark
+ * @property {MicromarkToken[]} tokens Token objects from micromark.
+ */
+/**
+ * markdown-it base token.
+ *
+ * @typedef {Object} MarkdownItBaseToken
+ * @property {string[][] | null} attrs HTML attributes.
+ * @property {boolean} block Block-level token.
+ * @property {MarkdownItBaseToken[] | null} children Child nodes.
+ * @property {string} content Tag contents.
+ * @property {boolean} hidden Ignore element.
+ * @property {string} info Fence info.
+ * @property {number} level Nesting level.
+ * @property {number[] | null} map Beginning/ending line numbers.
+ * @property {string} markup Markup text.
+ * @property {Object} meta Arbitrary data.
+ * @property {number} nesting Level change.
+ * @property {string} tag HTML tag name.
+ * @property {string} type Token type.
+ */
+/**
+ * markdown-it extended token.
+ *
+ * @typedef {Object} MarkdownItExtendedToken
+ * @property {MarkdownItExtendedToken[] | null} children Child nodes.
+ * @property {number} lineNumber Line number (1-based).
+ * @property {string} line Line content.
+ */
+/**
+ * markdown-it token.
+ *
+ * @typedef {MarkdownItBaseToken & MarkdownItExtendedToken} MarkdownItToken
+ */
+/** @typedef {import("micromark-util-types").TokenType} MicromarkTokenType */
+/**
+ * micromark token.
+ *
+ * @typedef {Object} MicromarkToken
+ * @property {MicromarkTokenType} type Token type.
+ * @property {number} startLine Start line (1-based).
+ * @property {number} startColumn Start column (1-based).
+ * @property {number} endLine End line (1-based).
+ * @property {number} endColumn End column (1-based).
+ * @property {string} text Token text.
+ * @property {MicromarkToken[]} children Child tokens.
+ * @property {MicromarkToken | null} parent Parent token.
+ */
+/**
+ * Error-reporting callback.
+ *
+ * @callback RuleOnError
+ * @param {RuleOnErrorInfo} onErrorInfo Error information.
+ * @returns {void}
+ */
+/**
+ * Fix information for RuleOnError callback.
+ *
+ * @typedef {Object} RuleOnErrorInfo
+ * @property {number} lineNumber Line number (1-based).
+ * @property {string} [detail] Detail about the error.
+ * @property {string} [context] Context for the error.
+ * @property {URL} [information] Link to more information.
+ * @property {number[]} [range] Column number (1-based) and length.
+ * @property {RuleOnErrorFixInfo} [fixInfo] Fix information.
+ */
+/**
+ * Fix information for RuleOnErrorInfo.
+ *
+ * @typedef {Object} RuleOnErrorFixInfo
+ * @property {number} [lineNumber] Line number (1-based).
+ * @property {number} [editColumn] Column of the fix (1-based).
+ * @property {number} [deleteCount] Count of characters to delete.
+ * @property {string} [insertText] Text to insert (after deleting).
+ */
+/**
+ * Rule definition.
+ *
+ * @typedef {Object} Rule
+ * @property {string[]} names Rule name(s).
+ * @property {string} description Rule description.
+ * @property {URL} [information] Link to more information.
+ * @property {string[]} tags Rule tag(s).
+ * @property {"markdownit" | "micromark" | "none"} parser Parser used.
+ * @property {boolean} [asynchronous] True if asynchronous.
+ * @property {RuleFunction} function Rule implementation.
+ */
+/**
+ * Method used by the markdown-it parser to parse input.
+ *
+ * @callback MarkdownItParse
+ * @param {string} src Source string.
+ * @param {Object} env Environment sandbox.
+ * @returns {MarkdownItBaseToken[]} Tokens.
+ */
+/**
+ * Instance of the markdown-it parser.
+ *
+ * @typedef MarkdownIt
+ * @property {MarkdownItParse} parse Method to parse input.
+ */
+/**
+ * Gets an instance of the markdown-it parser. Any plugins should already have been loaded.
+ *
+ * @callback MarkdownItFactory
+ * @returns {MarkdownIt|Promise<MarkdownIt>} Instance of the markdown-it parser.
+ */
+/**
+ * Configuration options.
+ *
+ * @typedef {Object} Options
+ * @property {Configuration} [config] Configuration object.
+ * @property {ConfigurationParser[]} [configParsers] Configuration parsers.
+ * @property {Rule[] | Rule} [customRules] Custom rules.
+ * @property {string[] | string} [files] Files to lint.
+ * @property {RegExp | null} [frontMatter] Front matter pattern.
+ * @property {FsLike} [fs] File system implementation.
+ * @property {boolean} [handleRuleFailures] True to catch exceptions.
+ * @property {MarkdownItFactory} [markdownItFactory] Function to create a markdown-it parser.
+ * @property {boolean} [noInlineConfig] True to ignore HTML directives.
+ * @property {Object.<string, string>} [strings] Strings to lint.
+ */
+/**
+ * A markdown-it plugin.
+ *
+ * @typedef {Object[]} Plugin
+ */
+/**
+ * Lint results.
+ *
+ * @typedef {{[k: string]: LintError[]}} LintResults
+ */
+/**
+ * Lint error.
+ *
+ * @typedef {Object} LintError
+ * @property {number} lineNumber Line number (1-based).
+ * @property {string[]} ruleNames Rule name(s).
+ * @property {string} ruleDescription Rule description.
+ * @property {string | null} ruleInformation Link to more information.
+ * @property {string | null} errorDetail Detail about the error.
+ * @property {string | null} errorContext Context for the error.
+ * @property {number[] | null} errorRange Column number (1-based) and length.
+ * @property {FixInfo | null} fixInfo Fix information.
+ * @property {"error" | "warning"} severity Severity of the error.
+ */
+/**
+ * Fix information.
+ *
+ * @typedef {Object} FixInfo
+ * @property {number} [lineNumber] Line number (1-based).
+ * @property {number} [editColumn] Column of the fix (1-based).
+ * @property {number} [deleteCount] Count of characters to delete.
+ * @property {string} [insertText] Text to insert (after deleting).
+ */
+/**
+ * FixInfo with all optional properties present.
+ *
+ * @typedef {Object} FixInfoNormalized
+ * @property {number} lineNumber Line number (1-based).
+ * @property {number} editColumn Column of the fix (1-based).
+ * @property {number} deleteCount Count of characters to delete.
+ * @property {string} insertText Text to insert (after deleting).
+ */
 /**
  * Called with the result of linting a string or document.
+ *
+ * @callback LintContentCallback
+ * @param {Error | null} error Error iff failed.
+ * @param {LintError[]} [result] Result iff successful.
+ * @returns {void}
  */
-export type LintContentCallback = (error: Error | null, result?: LintError[] | undefined) => void;
 /**
  * Called with the result of the lint function.
+ *
+ * @callback LintCallback
+ * @param {Error | null} error Error object iff failed.
+ * @param {LintResults} [results] Lint results iff succeeded.
+ * @returns {void}
  */
-export type LintCallback = (error: Error | null, results?: {
-    [x: string]: LintError[];
-} | undefined) => void;
 /**
  * Configuration object for linting rules. For the JSON schema, see
- * {@link  ../schema/markdownlint-config-schema.json}.
+ * {@link ../schema/markdownlint-config-schema.json}.
+ *
+ * @typedef {import("./configuration.d.ts").Configuration} Configuration
  */
-export type Configuration = import("./configuration.d.ts").Configuration;
 /**
  * Configuration object for linting rules strictly. For the JSON schema, see
- * {@link  ../schema/markdownlint-config-schema-strict.json}.
+ * {@link ../schema/markdownlint-config-schema-strict.json}.
+ *
+ * @typedef {import("./configuration-strict.d.ts").ConfigurationStrict} ConfigurationStrict
  */
-export type ConfigurationStrict = import("./configuration-strict.d.ts").ConfigurationStrict;
 /**
  * Parses a configuration string and returns a configuration object.
+ *
+ * @callback ConfigurationParser
+ * @param {string} text Configuration string.
+ * @returns {Configuration}
  */
-export type ConfigurationParser = (text: string) => Configuration;
 /**
  * Called with the result of the readConfig function.
+ *
+ * @callback ReadConfigCallback
+ * @param {Error | null} err Error object or null.
+ * @param {Configuration} [config] Configuration object.
+ * @returns {void}
  */
-export type ReadConfigCallback = (err: Error | null, config?: import("./configuration.d.ts").Configuration | undefined) => void;
 /**
  * Called with the result of the resolveConfigExtends function.
+ *
+ * @callback ResolveConfigExtendsCallback
+ * @param {Error | null} err Error object or null.
+ * @param {string} [path] Resolved path to file.
+ * @returns {void}
  */
-export type ResolveConfigExtendsCallback = (err: Error | null, path?: string | undefined) => void;
 /**
- * Rule configuration.
+ * Rule configuration object.
+ *
+ * @typedef {boolean | any} RuleConfiguration Rule configuration.
  */
-export type RuleConfiguration = boolean | any;

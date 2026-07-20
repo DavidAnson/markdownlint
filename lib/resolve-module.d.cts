@@ -1,18 +1,15 @@
+declare const _exports: {
+    resolveModule: typeof resolveModule;
+    resolveModuleCustomResolve: typeof resolveModuleCustomResolve;
+};
+export = _exports;
 export type RequireResolveOptions = {
     /**
      * Additional paths to resolve from.
      */
-    paths?: string[] | undefined;
+    paths?: string[];
 };
 export type RequireResolve = (id: string, options: RequireResolveOptions) => string;
-/**
- * Resolves modules according to Node's resolution rules.
- *
- * @param {string} id Module name or path.
- * @param {string[]} [paths] Additional paths to resolve from.
- * @returns {string} Resolved module path.
- */
-export function resolveModule(id: string, paths?: string[]): string;
 /**
  * @typedef RequireResolveOptions
  * @property {string[]} [paths] Additional paths to resolve from.
@@ -31,4 +28,12 @@ export function resolveModule(id: string, paths?: string[]): string;
  * @param {string[]} [paths] Additional paths to resolve from.
  * @returns {string} Resolved module path.
  */
-export function resolveModuleCustomResolve(resolve: RequireResolve, id: string, paths?: string[]): string;
+declare const resolveModuleCustomResolve: (resolve: RequireResolve, id: string, paths?: string[]) => string;
+/**
+ * Resolves modules according to Node's resolution rules.
+ *
+ * @param {string} id Module name or path.
+ * @param {string[]} [paths] Additional paths to resolve from.
+ * @returns {string} Resolved module path.
+ */
+declare const resolveModule: (id: string, paths?: string[]) => string;

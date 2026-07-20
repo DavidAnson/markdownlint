@@ -14,9 +14,9 @@ module.exports.nextLinesRe = nextLinesRe;
 /** @typedef {import("../lib/exports.mjs").RuleOnErrorFixInfo} RuleOnErrorFixInfo */
 /** @typedef {import("../lib/exports.mjs").MicromarkToken} MicromarkToken */
 // eslint-disable-next-line jsdoc/valid-types
-/** @typedef {import("micromark-extension-gfm-footnote", { with: { "resolution-mode": "import" } })} */
+/** @typedef {typeof import("micromark-extension-gfm-footnote", { with: { "resolution-mode": "import" } })} _ambient_ */
 // eslint-disable-next-line jsdoc/valid-types
-/** @typedef {import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} */
+/** @typedef {typeof import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} _ambient_2_ */
 
 // Regular expression for matching common front matter (YAML and TOML)
 // @ts-ignore

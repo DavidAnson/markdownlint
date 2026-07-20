@@ -8,7 +8,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newlineRe } = require("./shared.cjs");
 /** @typedef {import("micromark-util-types", { with: { "resolution-mode": "import" } }).TokenType} TokenType */
 /** @typedef {import("../lib/exports.mjs").MicromarkToken} Token */
 // eslint-disable-next-line jsdoc/valid-types
-/** @typedef {import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} */
+/** @typedef {typeof import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} _ambient_ */
 
 /**
  * Determines if a Micromark token is within an htmlFlow type.
