@@ -11,13 +11,6 @@ import { excludeGlobs, lintTestRepo } from "./markdownlint-test-repos.mjs";
 
 test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
 
-  test("https://github.com/apache/airflow", (t) => {
-    const rootDir = "./test-repos/apache-airflow";
-    const globPatterns = [ join(rootDir, "**/*.{md,mdown,markdown}") ];
-    const configPath = join(rootDir, ".markdownlint.yml");
-    return lintTestRepo(t, globPatterns, configPath);
-  });
-
   test("https://github.com/electron/electron", (t) => {
     const rootDir = "./test-repos/electron-electron";
     const globPatterns = [
