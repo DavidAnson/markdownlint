@@ -13,11 +13,12 @@ const testContent = new Promise((resolve, reject) => {
   fs
     .readFile("./test/every-markdown-syntax.md", "utf8")
     .then(normalize)
-    .then(resolve, reject);
+    .then(resolve)
+    .catch(reject);
 });
 
 const testTokens = new Promise((resolve, reject) => {
-  testContent.then(parse).then(resolve, reject);
+  testContent.then(parse).then(resolve).catch(reject);
 });
 
 test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
