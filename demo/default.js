@@ -238,7 +238,7 @@
   function onCopyLinkClick(e) {
     globalThis.location.hash = encodeURIComponent(hashPrefix + markdown.value);
     if (navigator.clipboard && navigator.clipboard.writeText) {
-      navigator.clipboard.writeText(globalThis.location).then(noop, noop);
+      navigator.clipboard.writeText(globalThis.location).catch(noop);
     } else {
       /* eslint-disable-next-line no-alert */
       alert("Document URL updated, select and copy it now.");
