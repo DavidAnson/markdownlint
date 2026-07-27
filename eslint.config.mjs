@@ -74,6 +74,7 @@ export default [
       "node-test/no-conditional-tests": "off",
       "node-test/no-constant-assertion": "off",
       "node-test/no-identical-assertion-arguments": "off",
+      "node-test/no-import-test-files": "off",
       "node-test/prefer-async-await": "off",
       "node-test/prefer-lowercase-title": "off",
       "node-test/prefer-strict-assert": "off",
