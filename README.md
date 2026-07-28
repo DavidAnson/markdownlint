@@ -574,7 +574,7 @@ ones.
 For example:
 
 ```javascript
-[ JSON.parse, require("toml").parse, require("js-yaml").load ]
+[ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]
 ```
 
 ##### options.customRules
@@ -830,7 +830,7 @@ parsers should come before flexible parsers.
 For example:
 
 ```javascript
-[ JSON.parse, require("toml").parse, require("js-yaml").load ]
+[ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]
 ```
 
 #### fs

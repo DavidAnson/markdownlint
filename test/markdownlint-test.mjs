@@ -1568,7 +1568,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         ].join("\n")
       },
       "configParsers": [
-        require("toml").parse
+        require("smol-toml").parse
       ]
     };
     const actual = await lintPromise(options);

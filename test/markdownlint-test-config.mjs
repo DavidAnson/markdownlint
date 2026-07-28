@@ -231,7 +231,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     readConfigAsync(
       "./test/config/config-grandparent-hybrid.yaml",
       // @ts-ignore
-      [ JSON.parse, require("toml").parse, require("js-yaml").load ],
+      [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ],
       function callback(err, actual) {
         t.assert.equal(err, null);
         const expected = {
@@ -251,7 +251,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     readConfigAsync(
       "./test/config/config-badcontent.txt",
       // @ts-ignore
-      [ JSON.parse, require("toml").parse, require("js-yaml").load ],
+      [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ],
       function callback(err, result) {
         t.assert.notEqual(err, null, "Did not get an error for bad child JSON.");
         t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
@@ -383,7 +383,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const actual = readConfigSync(
       "./test/config/config-grandparent-hybrid.yaml",
       // @ts-ignore
-      [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
+      [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]);
     const expected = {
       ...require("./config/config-child.json"),
       ...require("./config/config-parent.json"),
@@ -439,7 +439,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         readConfigSync(
           "./test/config/config-badcontent.txt",
           // @ts-ignore
-          [ JSON.parse, require("toml").parse, require("js-yaml").load ]);
+          [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]);
       },
       {
         "message": /^Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/
