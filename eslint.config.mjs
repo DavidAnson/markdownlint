@@ -1,38 +1,42 @@
+// @ts-check
+
+import { defineConfig } from "eslint/config";
 import js from "@eslint/js";
 import eslintNodeTest from "eslint-node-test";
 import eslintPluginJsdoc from "eslint-plugin-jsdoc";
-import eslintPluginNode from "eslint-plugin-n";
+import eslintPluginN from "eslint-plugin-n";
 import eslintPluginRegexp from "eslint-plugin-regexp";
 import eslintPluginStylistic from "@stylistic/eslint-plugin";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
 
-export default [
-  js.configs.all,
-  eslintNodeTest.configs.all,
-  eslintPluginJsdoc.configs["flat/recommended"],
-  eslintPluginNode.configs["flat/recommended"],
-  eslintPluginRegexp.configs["flat/recommended"],
-  eslintPluginStylistic.configs.customize({
-    "arrowParens": true,
-    "braceStyle": "1tbs",
-    "commaDangle": "never",
-    "jsx": false,
-    "quoteProps": "always",
-    "quotes": "double",
-    "semi": true
-  }),
-  eslintPluginUnicorn.configs["flat/all"],
+export default defineConfig(
   {
-    "ignores": [
-      "demo/markdown-it.min.js",
-      "demo/markdownlint-browser.js",
-      "demo/markdownlint-browser.min.js",
-      "example/typescript/type-check-*",
-      "test/resolve-module-webpack.cjs",
-      "test-repos/**"
-    ]
-  },
-  {
+    "plugins": {
+      js,
+      "jsdoc": eslintPluginJsdoc,
+      "n": eslintPluginN,
+      "node-test": eslintNodeTest,
+      "regexp": eslintPluginRegexp,
+      "unicorn": eslintPluginUnicorn,
+      "@stylistic": eslintPluginStylistic
+    },
+    "extends": [
+      "js/all",
+      "jsdoc/recommended",
+      "n/all",
+      "node-test/all",
+      "regexp/recommended",
+      "unicorn/all",
+      eslintPluginStylistic.configs.customize({
+        "arrowParens": true,
+        "braceStyle": "1tbs",
+        "commaDangle": "never",
+        "jsx": false,
+        "quoteProps": "always",
+        "quotes": "double",
+        "semi": true
+      })
+    ],
     "linterOptions": {
       "reportUnusedDisableDirectives": true
     },
@@ -65,6 +69,7 @@ export default [
       "no-undef-init": "off",
       "no-undefined": "off",
       "no-useless-assignment": "off",
+      "n/no-sync": "off",
       "node-test/consistent-assert-throws-callback-style": "off",
       "node-test/consistent-test-filename": "off",
       "node-test/consistent-test-it": "off",
@@ -131,6 +136,16 @@ export default [
         }
       }
     }
+  },
+  {
+    "ignores": [
+      "demo/markdown-it.min.js",
+      "demo/markdownlint-browser.js",
+      "demo/markdownlint-browser.min.js",
+      "example/typescript/type-check-*",
+      "test/resolve-module-webpack.cjs",
+      "test-repos/**"
+    ]
   },
   {
     "files": [
@@ -214,4 +229,4 @@ export default [
       "unicorn/prefer-module": "off"
     }
   }
-];
+);

@@ -22,7 +22,9 @@ test.suite(__filename.replace(/^.*?\/(?<name>[^/]*\/[^/]*)$/u, "$<name>"), () =>
   for (const [ exportName, exportPath ] of exportMappings) {
     test(exportName, (t) => {
       t.assert.equal(
+        // eslint-disable-next-line n/global-require
         require(exportName.replace(/^\./u, () => name)),
+        // eslint-disable-next-line n/global-require
         require(exportPath)
       );
     });
