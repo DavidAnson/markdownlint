@@ -1,6 +1,6 @@
 # markdownlint
 
-> A Node.js style checker and lint tool for Markdown/CommonMark files.
+> A Node.js style checker and lint tool for Markdown/CommonMark files
 
 [![npm version][npm-image]][npm-url]
 [![License][license-image]][license-url]

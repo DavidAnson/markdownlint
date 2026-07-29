@@ -10,11 +10,7 @@
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DavidAnson/markdownlint.git"
-  },
-  "bugs": "https://github.com/DavidAnson/markdownlint/issues",
+  "repository": "github:DavidAnson/markdownlint",
   "funding": "https://github.com/sponsors/DavidAnson",
   "engines": {
     "node": ">=22"

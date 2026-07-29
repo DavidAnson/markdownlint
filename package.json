@@ -1,7 +1,7 @@
 {
   "name": "markdownlint",
   "version": "0.41.1",
-  "description": "A Node.js style checker and lint tool for Markdown/CommonMark files.",
+  "description": "A Node.js style checker and lint tool for Markdown/CommonMark files",
   "type": "module",
   "exports": {
     ".": "./lib/exports.mjs",
@@ -26,11 +26,7 @@
   "author": "David Anson (https://dlaa.me/)",
   "license": "MIT",
   "homepage": "https://github.com/DavidAnson/markdownlint",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/DavidAnson/markdownlint.git"
-  },
-  "bugs": "https://github.com/DavidAnson/markdownlint/issues",
+  "repository": "github:DavidAnson/markdownlint",
   "funding": "https://github.com/sponsors/DavidAnson",
   "scripts": {
     "build-config": "npm run build-config-schema && npm run build-config-example",
@@ -88,6 +84,7 @@
     "character-entities": "2.0.2",
     "concurrently": "10.0.3",
     "eslint-node-test": "0.3.0",
+    "eslint-package-json": "0.3.0",
     "eslint-plugin-jsdoc": "63.1.0",
     "eslint-plugin-n": "18.2.2",
     "eslint-plugin-regexp": "3.1.1",
@@ -115,7 +112,6 @@
     "markdown",
     "lint",
     "md",
-    "CommonMark",
-    "markdownlint"
+    "commonmark"
   ]
 }
