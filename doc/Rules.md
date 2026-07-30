@@ -2773,6 +2773,18 @@ Style `compact` avoids extra padding with a single space around cell content:
 | N | No |
 ```
 
+An empty cell has no content, so a single space around that content is a gap of
+two characters. Both that and a single space are accepted for style `compact`,
+because table formatters differ in which of the two they emit:
+
+```markdown
+| Character | Meaning |
+| --- | --- |
+| Y | Yes |
+|  |  |
+| | |
+```
+
 Style `tight` uses no padding at all for cell content:
 
 ```markdown

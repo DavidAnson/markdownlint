@@ -54276,9 +54276,49 @@ exports[`markdownlint-test-scenarios.mjs > table-column-style-compact.md 1`] = `
         "insertText": " "
       },
       "severity": "error"
+    },
+    {
+      "lineNumber": 151,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has extra space to the right for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        1,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 2,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 151,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has extra space to the right for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 6,
+        "deleteCount": 1
+      },
+      "severity": "error"
     }
   ],
-  "fixed": "# Table Column Style - Compact\\n\\n## Aligned / Edge Pipes\\n\\n| Heading | Heading | Heading |\\n| ------- | --------- | ------- |\\n| Text | Text text | Text |\\n| Text | Text text | Text |\\n| Text | Text text | Text |\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n| Heading | Heading | Heading |\\n| ------- | -------- | ------- |\\n| Text | Text text | Text |\\n| Text | Text text | Text |\\n| Text | Text tex | Text |\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Aligned / No Edge Pipes\\n\\nHeading | Heading | Heading\\n------- | --------- | -------\\nText | Text text | Text\\nText | Text text | Text\\nText | Text text | Text\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\nHeading | Heading | Heading\\n------- | -------- | --------\\nText | Text text | Text\\nText | Text text | Text\\nText | Text tex | Text\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Compact / Edge Pipes\\n\\n| Heading | Heading | Heading |\\n| ------- | ------- | ------- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n| Heading | Heading | Heading |\\n| - | - | - |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n| Heading | Heading | Heading |\\n| - | --- | - |\\n| Text | Text text | Text |\\n| Text | Text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Compact / No Edge Pipes\\n\\nHeading | Heading | Heading\\n------- | ------- | -------\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\nHeading | Heading | Heading\\n-- | -- | --\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\nHeading | Heading | Heading\\n-- | --- | --\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-2}\\n\\n## Tight / Edge Pipes\\n\\n| Heading | Heading | Heading |\\n| ------- | ------- | ------- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n| Heading | Heading | Heading |\\n| -- | -- | -- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n| Heading | Heading | Heading |\\n| ------- | ------- | ------- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Tight / No Edge Pipes\\n\\nHeading | Heading | Heading\\n------- | ------- | -------\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\nHeading | Heading | Heading\\n-- | -- | --\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\nHeading | Heading | Heading\\n------- | ------- | -------\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n<!-- markdownlint-configure-file {\\n  \\"table-column-style\\": {\\n    \\"style\\": \\"compact\\"\\n  },\\n  \\"table-pipe-style\\": false\\n} -->\\n"
+  "fixed": "# Table Column Style - Compact\\n\\n## Aligned / Edge Pipes\\n\\n| Heading | Heading | Heading |\\n| ------- | --------- | ------- |\\n| Text | Text text | Text |\\n| Text | Text text | Text |\\n| Text | Text text | Text |\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n| Heading | Heading | Heading |\\n| ------- | -------- | ------- |\\n| Text | Text text | Text |\\n| Text | Text text | Text |\\n| Text | Text tex | Text |\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Aligned / No Edge Pipes\\n\\nHeading | Heading | Heading\\n------- | --------- | -------\\nText | Text text | Text\\nText | Text text | Text\\nText | Text text | Text\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\nHeading | Heading | Heading\\n------- | -------- | --------\\nText | Text text | Text\\nText | Text text | Text\\nText | Text tex | Text\\n\\n{MD060:-6} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Compact / Edge Pipes\\n\\n| Heading | Heading | Heading |\\n| ------- | ------- | ------- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n| Heading | Heading | Heading |\\n| - | - | - |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n| Heading | Heading | Heading |\\n| - | --- | - |\\n| Text | Text text | Text |\\n| Text | Text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Compact / No Edge Pipes\\n\\nHeading | Heading | Heading\\n------- | ------- | -------\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\nHeading | Heading | Heading\\n-- | -- | --\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\nHeading | Heading | Heading\\n-- | --- | --\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-2}\\n\\n## Tight / Edge Pipes\\n\\n| Heading | Heading | Heading |\\n| ------- | ------- | ------- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n| Heading | Heading | Heading |\\n| -- | -- | -- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n| Heading | Heading | Heading |\\n| ------- | ------- | ------- |\\n| Text | Text text | Text |\\n| Text text | Text text text | Text |\\n| Text | Text | Text |\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Tight / No Edge Pipes\\n\\nHeading | Heading | Heading\\n------- | ------- | -------\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\nHeading | Heading | Heading\\n-- | -- | --\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\nHeading | Heading | Heading\\n------- | ------- | -------\\nText | Text text | Text\\nText text | Text text text | Text\\nText | Text | Text\\n\\n{MD060:-6} {MD060:-5} {MD060:-4} {MD060:-3} {MD060:-2}\\n\\n## Compact / Empty Cells\\n\\nAn empty cell has no content, so one space on each side of that content is a\\ntwo-character gap. Both that and a single space are accepted.\\n\\n| Heading | Heading |\\n| ------- | ------- |\\n|  |  |\\n| | |\\n| Text | Text |\\n| Text |  |\\n\\nA gap of three or more spaces is still extra padding, reported once per cell.\\n\\n| Heading | Heading |\\n| ------- | ------- |\\n|  |  |\\n\\n{MD060:-2} {MD060:-2}\\n\\n<!-- markdownlint-configure-file {\\n  \\"table-column-style\\": {\\n    \\"style\\": \\"compact\\"\\n  },\\n  \\"table-pipe-style\\": false\\n} -->\\n"
 }
 `;
 
