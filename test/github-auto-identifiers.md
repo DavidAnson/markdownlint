@@ -52,6 +52,10 @@
 
 # Fullwidth ８ and ？
 
+# HTML <!-- comment -->
+
+# <!-- H --> T <!-- M -->L  <!-- comments -->
+
 > Update the links below by visiting this page on GitHub, running the following in the JavaScript console, and copy+paste-ing the output:
 
 ```js
@@ -112,11 +116,16 @@ Array.from(document.querySelector("article").querySelectorAll("div.markdown-head
 
 [Fullwidth ８ and ？ > #fullwidth-%EF%BC%98-and-](#fullwidth-%EF%BC%98-and-)
 
+[HTML  > #html-](#html-)
+
+[ T L   > #-t-l--](#-t-l--)
+
 <!-- markdownlint-configure-file {
   "line-length": false,
   "no-duplicate-heading": false,
   "no-inline-html": false,
   "no-multiple-space-atx": false,
+  "no-space-in-links": false,
   "no-trailing-punctuation": false,
   "no-trailing-spaces": false,
   "single-title": false
