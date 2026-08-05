@@ -49,6 +49,21 @@
 | Underline | \u001B[4mUnderline\u001B[0m                             |
 | Link      | \u001B]8;;https://example.com\u0007Link\u001B]8;;\u0007 |
 
+## Arrows
+
+| Dir | Icon |
+| --- | ---- |
+| Up  | ↑   |
+| Dn  | ↓   |
+| LfR | ←→ |
+
+## Rare CJK
+
+| Rare | Note |
+| ---- | ---- |
+| 𠀀   | ExtB |
+| 〇   | Zero |
+
 <!-- markdownlint-configure-file {
   "no-bare-urls": false,
   "table-column-style": {
