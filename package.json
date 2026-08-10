@@ -99,7 +99,7 @@
     "markdown-it-for-inline": "2.0.1",
     "markdown-it-sub": "2.0.0",
     "markdown-it-sup": "2.0.0",
-    "markdown-it": "14.3.0",
+    "markdown-it": "15.0.0",
     "markdownlint-rule-extended-ascii": "0.2.1",
     "nano-spawn": "2.1.0",
     "smol-toml": "1.7.1",
