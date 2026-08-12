@@ -370,12 +370,7 @@ export type Rule = {
     function: RuleFunction;
 };
 export type MarkdownItParse = (src: string, env: Object) => MarkdownItBaseToken[];
-export type MarkdownIt = {
-    /**
-     * Method to parse input.
-     */
-    parse: MarkdownItParse;
-};
+export type MarkdownIt = import("markdown-it").MarkdownIt;
 export type MarkdownItFactory = () => MarkdownIt | Promise<MarkdownIt>;
 export type Options = {
     /**
@@ -635,12 +630,7 @@ export type RuleConfiguration = boolean | any;
  * @param {Object} env Environment sandbox.
  * @returns {MarkdownItBaseToken[]} Tokens.
  */
-/**
- * Instance of the markdown-it parser.
- *
- * @typedef MarkdownIt
- * @property {MarkdownItParse} parse Method to parse input.
- */
+/** @typedef {import("markdown-it").MarkdownIt} MarkdownIt */
 /**
  * Gets an instance of the markdown-it parser. Any plugins should already have been loaded.
  *
