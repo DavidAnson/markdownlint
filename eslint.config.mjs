@@ -143,7 +143,7 @@ export default defineConfig(
   },
   {
     "ignores": [
-      "demo/markdown-it.min.js",
+      "demo/markdown-it.umd.min.js",
       "demo/markdownlint-browser.js",
       "demo/markdownlint-browser.min.js",
       "example/typescript/type-check-*",
