@@ -81,7 +81,7 @@
     "@stylistic/eslint-plugin": "5.10.0",
     "ajv": "8.20.0",
     "character-entities": "2.0.2",
-    "concurrently": "10.0.4",
+    "concurrently": "10.0.5",
     "eslint-node-test": "0.4.0",
     "eslint-package-json": "0.3.0",
     "eslint-plugin-jsdoc": "64.1.0",
