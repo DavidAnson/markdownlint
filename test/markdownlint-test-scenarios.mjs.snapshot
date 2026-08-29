@@ -36396,6 +36396,78 @@ exports[`markdownlint-test-scenarios.mjs > no-alt-text.md 1`] = `
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > no-multiple-blanks-maximum-0.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 2,
+      "ruleNames": [
+        "MD012",
+        "no-multiple-blanks"
+      ],
+      "ruleDescription": "Multiple consecutive blank lines",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md012.md",
+      "errorDetail": "Expected: 0; Actual: 1",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": {
+        "deleteCount": -1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 4,
+      "ruleNames": [
+        "MD012",
+        "no-multiple-blanks"
+      ],
+      "ruleDescription": "Multiple consecutive blank lines",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md012.md",
+      "errorDetail": "Expected: 0; Actual: 1",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": {
+        "deleteCount": -1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 5,
+      "ruleNames": [
+        "MD012",
+        "no-multiple-blanks"
+      ],
+      "ruleDescription": "Multiple consecutive blank lines",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md012.md",
+      "errorDetail": "Expected: 0; Actual: 2",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": {
+        "deleteCount": -1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 8,
+      "ruleNames": [
+        "MD012",
+        "no-multiple-blanks"
+      ],
+      "ruleDescription": "Multiple consecutive blank lines",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md012.md",
+      "errorDetail": "Expected: 0; Actual: 1",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": {
+        "deleteCount": -1
+      },
+      "severity": "error"
+    }
+  ],
+  "fixed": "# Heading\\nText {MD012:-1}\\nText {MD012:-1} {MD012:-2}\\nText {MD012:+1}\\n<!-- markdownlint-configure-file {\\n  \\"blanks-around-headings\\": false,\\n  \\"no-multiple-blanks\\": {\\n    \\"maximum\\": 0\\n  }\\n} -->"
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > no-multiple-blanks-maximum.md 1`] = `
 {
   "errors": [

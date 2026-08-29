@@ -1106,6 +1106,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "test/inline-configure-file-violations.md",
       "test/invalid-ul-style-style.md",
       "test/long-lines-negative-line-length.md",
+      "test/no-multiple-blanks-maximum-0.md",
       "test/wrong-types-in-config-file.md"
     ]);
     const files = await globby([
