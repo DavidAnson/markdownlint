@@ -4,6 +4,7 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 import test from "node:test";
+import { globby } from "globby";
 import stringifySafe from "json-stringify-safe";
 import markdownIt from "markdown-it";
 import { lint as lintAsync } from "markdownlint/async";
@@ -11,6 +12,7 @@ import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
 import { convertToResultVersion0 } from "markdownlint/helpers";
 import customRules from "./rules/rules.cjs";
+import frontMatterYaml from "./rules/front-matter-yaml.mjs";
 import { newlineRe } from "../helpers/shared.cjs";
 // eslint-disable-next-line @stylistic/quote-props
 import packageJson from "../package.json" with { type: "json" };
@@ -1738,6 +1740,28 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       resolve();
     });
   }));
+
+  test("customRulesFrontMatterYaml", async(t) => {
+    t.plan(1);
+    const files = await globby([
+      "*.md",
+      "test/**/*.md",
+      "!test/*-json*.md"
+    ]);
+    /** @type {import("markdownlint").Options} */
+    const options = {
+      "customRules": [ frontMatterYaml ],
+      "config": {
+        "default": false,
+        [ frontMatterYaml.names[0] ]: true
+      },
+      files,
+      "noInlineConfig": true
+    };
+    const results = await lintPromise(options);
+    const errorFiles = Object.entries(results).filter(([ file, errors ]) => errors.length > 0);
+    t.assert.deepEqual(errorFiles, [], "Unexpected issues.");
+  });
 
   test("customRulesAsyncThrowsInSyncContext", (t) => {
     t.plan(1);

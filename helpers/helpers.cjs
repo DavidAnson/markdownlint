@@ -45,6 +45,17 @@ module.exports.allPunctuation = allPunctuation;
 module.exports.allPunctuationNoQuestion = allPunctuation.replace(/[?？]/gu, "");
 
 /**
+ * Returns true iff the input is a Boolean.
+ *
+ * @param {Object} obj Object of unknown type.
+ * @returns {boolean} True iff obj is a Boolean.
+ */
+function isBoolean(obj) {
+  return typeof obj === "boolean";
+}
+module.exports.isBoolean = isBoolean;
+
+/**
  * Returns true iff the input is a Number.
  *
  * @param {Object} obj Object of unknown type.

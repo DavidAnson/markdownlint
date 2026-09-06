@@ -46,6 +46,7 @@ exports[`markdownlint-test-exports.mjs > exported names 1`] = `
     "hasOverlap",
     "inlineCommentStartRe",
     "isBlankLine",
+    "isBoolean",
     "isEmptyString",
     "isNumber",
     "isObject",
