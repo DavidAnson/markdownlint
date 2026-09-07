@@ -1,3 +1,50 @@
+exports[`markdownlint-test-custom-rules.mjs > customRulesFrontMatterYaml 1`] = `
+[
+  [
+    "test/front-matter-title-pandoc-spaces.md",
+    [
+      {
+        "lineNumber": 2,
+        "ruleNames": [
+          "front-matter-yaml"
+        ],
+        "ruleDescription": "Rule that verifies front matter is YAML",
+        "ruleInformation": null,
+        "errorDetail": "end of the stream or a document separator is expected",
+        "errorContext": null,
+        "errorRange": [
+          6,
+          1
+        ],
+        "fixInfo": null,
+        "severity": "error"
+      }
+    ]
+  ],
+  [
+    "test/front-matter-title-pandoc.md",
+    [
+      {
+        "lineNumber": 2,
+        "ruleNames": [
+          "front-matter-yaml"
+        ],
+        "ruleDescription": "Rule that verifies front matter is YAML",
+        "ruleInformation": null,
+        "errorDetail": "end of the stream or a document separator is expected",
+        "errorContext": null,
+        "errorRange": [
+          6,
+          1
+        ],
+        "fixInfo": null,
+        "severity": "error"
+      }
+    ]
+  ]
+]
+`;
+
 exports[`markdownlint-test-custom-rules.mjs > customRulesMarkdownItTokensSnapshot 1`] = `
 [
   {

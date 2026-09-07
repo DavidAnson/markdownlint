@@ -905,7 +905,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       t.assert.equal(
         // @ts-ignore
         err.message,
-        "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
+        "Value of 'onErrorInfo' passed to onError by 'NAME' is incorrect for 'string'.",
         "Did not get correct exception for null object."
       );
       t.assert.equal(!result, true, "Got result for function thrown.");
@@ -938,15 +938,19 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         lintSync(options);
       },
       {
-        "message": "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'."
+        "message": "Value of 'onErrorInfo' passed to onError by 'NAME' is incorrect for 'string'."
       },
       "Did not get correct exception for null object."
     );
   });
 
   test("customRulesOnErrorBad", (t) => {
-    t.plan(25);
+    t.plan(27);
     for (const testCase of [
+      {
+        "propertyName": "frontMatter",
+        "propertyValues": [ null, 10 ]
+      },
       {
         "propertyName": "lineNumber",
         "propertyValues": [ null, "string" ]
@@ -1118,8 +1122,12 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
   });
 
   test("customRulesOnErrorValid", (t) => {
-    t.plan(24);
+    t.plan(25);
     for (const testCase of [
+      {
+        "propertyName": "frontMatter",
+        "propertyValues": [ false ]
+      },
       {
         "propertyName": "lineNumber",
         "propertyValues": [ 1, 2 ]
@@ -1237,6 +1245,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
   test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
     t.plan(2);
     const errorObject = {
+      "frontMatter": false,
       "lineNumber": 1,
       "detail": "detail",
       "context": "context",
@@ -1258,6 +1267,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
           "parser": "none",
           "function": function onErrorModified(params, onError) {
             onError(errorObject);
+            errorObject.frontMatter = true;
             errorObject.lineNumber = 2;
             errorObject.detail = "changed";
             errorObject.context = "changed";
@@ -1745,22 +1755,21 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     t.plan(1);
     const files = await globby([
       "*.md",
-      "test/**/*.md",
-      "!test/*-json*.md"
+      "test/**/*.md"
     ]);
     /** @type {import("markdownlint").Options} */
     const options = {
       "customRules": [ frontMatterYaml ],
       "config": {
         "default": false,
-        [ frontMatterYaml.names[0] ]: true
+        [frontMatterYaml.names[0]]: true
       },
       files,
       "noInlineConfig": true
     };
     const results = await lintPromise(options);
-    const errorFiles = Object.entries(results).filter(([ file, errors ]) => errors.length > 0);
-    t.assert.deepEqual(errorFiles, [], "Unexpected issues.");
+    const issues = Object.entries(results).filter(([ , errors ]) => errors.length > 0);
+    t.assert.snapshot(issues);
   });
 
   test("customRulesAsyncThrowsInSyncContext", (t) => {
