@@ -92,7 +92,7 @@
     "gemoji": "8.1.0",
     "globby": "16.2.4",
     "js-yaml": "5.3.0",
-    "json-schema-to-typescript": "15.0.4",
+    "json-schema-to-typescript": "16.0.0",
     "json-stringify-safe": "5.0.1",
     "jsonc-parser": "3.3.1",
     "markdown-it-for-inline": "2.0.1",
