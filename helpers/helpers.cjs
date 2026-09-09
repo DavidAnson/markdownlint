@@ -2,8 +2,6 @@
 
 "use strict";
 
-/* eslint-disable unicorn/comment-content */
-
 const micromark = require("./micromark-helpers.cjs");
 const { newlineRe, nextLinesRe } = require("./shared.cjs");
 
