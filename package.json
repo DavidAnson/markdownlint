@@ -105,7 +105,7 @@
     "terser-webpack-plugin": "5.6.1",
     "typescript": "7.0.2",
     "webpack-cli": "7.2.3",
-    "webpack": "5.110.1"
+    "webpack": "5.110.2"
   },
   "keywords": [
     "markdown",
