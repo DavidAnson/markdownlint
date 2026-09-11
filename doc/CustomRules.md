@@ -117,12 +117,14 @@ A rule is implemented as an `Object`:
     - `lines` is an `Array` of `String` values corresponding to the lines of the
       input file/string.
     - `frontMatterLines` is an `Array` of `String` values corresponding to any
-      front matter (not present in `lines`).
+      lines of front matter (not present in the `lines` `Array`).
     - `config` is an `Object` corresponding to the rule's entry in
       `options.config` (if present).
     - `version` is a `String` that corresponds to the version of `markdownlint`
   - `onError` is a function that takes a single `Object` parameter with one
-    required and four optional properties:
+    required and various optional properties:
+    - `frontMatter` is an optional `Boolean` value specifying whether the error
+      refers to `frontMatterLines` (instead of `lines` which is the default)
     - `lineNumber` is a required `Number` specifying the 1-based line number of
       the error.
     - `detail` is an optional `String` with information about what caused the
@@ -147,8 +149,8 @@ A rule is implemented as an `Object`:
         is the platform-independent way to add a line break; line breaks should
         be added at the beginning of a line instead of at the end.
 
-The collection of helper functions shared by the built-in rules is available for
-use by custom rules in the [markdownlint-rule-helpers package][rule-helpers].
+A collection of helper functions (formerly) used by built-in rules is available
+for custom rules in the [markdownlint-rule-helpers package][rule-helpers].
 
 ### Asynchronous Rules
 

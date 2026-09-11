@@ -4,13 +4,17 @@ import fs from "node:fs/promises";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);
 import test from "node:test";
+import { globby } from "globby";
 import stringifySafe from "json-stringify-safe";
 import markdownIt from "markdown-it";
+import { applyFixes } from "markdownlint";
 import { lint as lintAsync } from "markdownlint/async";
 import { lint as lintPromise } from "markdownlint/promise";
 import { lint as lintSync } from "markdownlint/sync";
 import { convertToResultVersion0 } from "markdownlint/helpers";
 import customRules from "./rules/rules.cjs";
+import validateFrontMatter from "./rules/validate-front-matter.mjs";
+import capitalizeFrontMatterTitle from "./rules/capitalize-front-matter-title.mjs";
 import { newlineRe } from "../helpers/shared.cjs";
 // eslint-disable-next-line @stylistic/quote-props
 import packageJson from "../package.json" with { type: "json" };
@@ -903,7 +907,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       t.assert.equal(
         // @ts-ignore
         err.message,
-        "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'.",
+        "Value of 'onErrorInfo' passed to onError by 'NAME' is incorrect for 'string'.",
         "Did not get correct exception for null object."
       );
       t.assert.equal(!result, true, "Got result for function thrown.");
@@ -936,15 +940,19 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         lintSync(options);
       },
       {
-        "message": "Value of 'lineNumber' passed to onError by 'NAME' is incorrect for 'string'."
+        "message": "Value of 'onErrorInfo' passed to onError by 'NAME' is incorrect for 'string'."
       },
       "Did not get correct exception for null object."
     );
   });
 
   test("customRulesOnErrorBad", (t) => {
-    t.plan(25);
+    t.plan(27);
     for (const testCase of [
+      {
+        "propertyName": "frontMatter",
+        "propertyValues": [ null, 10 ]
+      },
       {
         "propertyName": "lineNumber",
         "propertyValues": [ null, "string" ]
@@ -1116,8 +1124,12 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
   });
 
   test("customRulesOnErrorValid", (t) => {
-    t.plan(24);
+    t.plan(25);
     for (const testCase of [
+      {
+        "propertyName": "frontMatter",
+        "propertyValues": [ false ]
+      },
       {
         "propertyName": "lineNumber",
         "propertyValues": [ 1, 2 ]
@@ -1186,6 +1198,208 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     }
   });
 
+  test("customRulesOnErrorBounds", (t) => {
+    t.plan(62);
+    /** @type {[ string, number[], number[], number[], number[], number[][], number[][], number[][], number[][] ][]} */
+    const scenarios = [
+      // lineNumber
+      [ "", [ 1 ], [ 0, 2 ], [], [], [], [], [], [] ],
+      [ "# Heading", [ 1 ], [ 0, 2 ], [], [], [], [], [], [] ],
+      [ "# Heading\nText", [ 1, 2 ], [ 0, 3 ], [], [], [], [], [], [] ],
+      [ "# Heading\nText\nText", [ 1, 2, 3 ], [ 0, 4 ], [], [], [], [], [], [] ],
+      // frontMatter / lineNumber
+      [ "", [], [], [], [ 0, 1 ], [], [], [], [] ],
+      [ "---\nYAML\n---", [], [], [ 1, 2, 3 ], [ 0, 4 ], [], [], [], [] ],
+      [ "---\nYAML\nYAML\n---", [], [], [ 1, 2, 3, 4 ], [ 0, 5 ], [], [], [], [] ],
+      [ "---\nYAML\n---\n# Heading\nText\nText", [ 1, 2, 3 ], [ 0, 4 ], [ 1, 2, 3 ], [ 0, 4 ], [], [], [], [] ],
+      // range and fixInfo
+      [ "# Heading\nText", [], [], [], [], [ [ 1, 1 ], [ 1, 4 ], [ 4, 1 ] ], [ [ 0, 1 ], [ 1, 5 ], [ 5, 1 ] ], [], [] ],
+      // frontMatter / range and fixInfo
+      [ "---\nYAML\n---", [], [], [], [], [], [], [ [ 1, 1 ], [ 1, 4 ], [ 4, 1 ] ], [ [ 0, 1 ], [ 1, 5 ], [ 5, 1 ] ] ]
+    ];
+    /** @type {import("markdownlint").Rule} */
+    const rule = {
+      "names": [ "name" ],
+      "description": "description",
+      "tags": [ "tag" ],
+      "parser": "none",
+      "function": function onErrorBounds(params, onError) {
+        const onErrorInfo = JSON.parse(params.name);
+        onError(onErrorInfo);
+      }
+    };
+    for (const scenario of scenarios) {
+      const [
+        input,
+        validLineNumbers, invalidLineNumbers,
+        validYamlLineNumbers, invalidYamlLineNumbers,
+        validRanges, invalidRanges,
+        validYamlRanges, invalidYamlRanges
+      ] = scenario;
+      for (const validLineNumber of validLineNumbers) {
+        /** @type {import("markdownlint").RuleOnErrorInfo} */
+        const onErrorInfo = {
+          "lineNumber": validLineNumber
+        };
+        // eslint-disable-next-line node-test/no-useless-assertion
+        t.assert.doesNotThrow(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify(onErrorInfo)]: input
+            }
+          })
+        );
+      }
+      for (const invalidLineNumber of invalidLineNumbers) {
+        /** @type {import("markdownlint").RuleOnErrorInfo} */
+        const onErrorInfo = {
+          "lineNumber": invalidLineNumber
+        };
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify(onErrorInfo)]: input
+            }
+          }),
+          /is incorrect/u
+        );
+      }
+      for (const validYamlLineNumber of validYamlLineNumbers) {
+        /** @type {import("markdownlint").RuleOnErrorInfo} */
+        const onErrorInfo = {
+          "frontMatter": true,
+          "lineNumber": validYamlLineNumber
+        };
+        // eslint-disable-next-line node-test/no-useless-assertion
+        t.assert.doesNotThrow(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify(onErrorInfo)]: input
+            }
+          })
+        );
+      }
+      for (const invalidYamlLineNumber of invalidYamlLineNumbers) {
+        /** @type {import("markdownlint").RuleOnErrorInfo} */
+        const onErrorInfo = {
+          "frontMatter": true,
+          "lineNumber": invalidYamlLineNumber
+        };
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify(onErrorInfo)]: input
+            }
+          }),
+          /is incorrect/u
+        );
+      }
+      for (const validRange of validRanges) {
+        /** @type {import("markdownlint").RuleOnErrorInfo} */
+        const onErrorInfo = {
+          "lineNumber": 2,
+          "range": validRange,
+          "fixInfo": {
+            "editColumn": validRange[0],
+            "deleteCount": validRange[1]
+          }
+        };
+        // eslint-disable-next-line node-test/no-useless-assertion
+        t.assert.doesNotThrow(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify(onErrorInfo)]: input
+            }
+          })
+        );
+      }
+      for (const invalidRange of invalidRanges) {
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify({ "lineNumber": 2, "range": invalidRange })]: input
+            }
+          }),
+          /is incorrect/u
+        );
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify({ "lineNumber": 2, "fixInfo": { "editColumn": invalidRange[0], "deleteCount": invalidRange[1] } })]: input
+            }
+          }),
+          /is incorrect/u
+        );
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify({ "lineNumber": 1, "fixInfo": { "lineNumber": 2, "editColumn": invalidRange[0], "deleteCount": invalidRange[1] } })]: input
+            }
+          }),
+          /is incorrect/u
+        );
+      }
+      for (const validYamlRange of validYamlRanges) {
+        /** @type {import("markdownlint").RuleOnErrorInfo} */
+        const onErrorInfo = {
+          "frontMatter": true,
+          "lineNumber": 2,
+          "range": validYamlRange,
+          "fixInfo": {
+            "editColumn": validYamlRange[0],
+            "deleteCount": validYamlRange[1]
+          }
+        };
+        // eslint-disable-next-line node-test/no-useless-assertion
+        t.assert.doesNotThrow(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify(onErrorInfo)]: input
+            }
+          })
+        );
+      }
+      for (const invalidYamlRange of invalidYamlRanges) {
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify({ "frontMatter": true, "lineNumber": 2, "range": invalidYamlRange })]: input
+            }
+          }),
+          /is incorrect/u
+        );
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify({ "frontMatter": true, "lineNumber": 2, "fixInfo": { "editColumn": invalidYamlRange[0], "deleteCount": invalidYamlRange[1] } })]: input
+            }
+          }),
+          /is incorrect/u
+        );
+        t.assert.throws(
+          () => lintSync({
+            "customRules": rule,
+            "strings": {
+              [JSON.stringify({ "frontMatter": true, "lineNumber": 1, "fixInfo": { "lineNumber": 2, "editColumn": invalidYamlRange[0], "deleteCount": invalidYamlRange[1] } })]: input
+            }
+          }),
+          /is incorrect/u
+        );
+      }
+    }
+  });
+
   test("customRulesOnErrorLazy", (t) => new Promise((resolve) => {
     t.plan(2);
     /** @type {import("markdownlint").Options} */
@@ -1235,6 +1449,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
   test("customRulesOnErrorModified", (t) => new Promise((resolve) => {
     t.plan(2);
     const errorObject = {
+      "frontMatter": false,
       "lineNumber": 1,
       "detail": "detail",
       "context": "context",
@@ -1256,6 +1471,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
           "parser": "none",
           "function": function onErrorModified(params, onError) {
             onError(errorObject);
+            errorObject.frontMatter = true;
             errorObject.lineNumber = 2;
             errorObject.detail = "changed";
             errorObject.context = "changed";
@@ -1738,6 +1954,92 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       resolve();
     });
   }));
+
+  test("customRulesValidateFrontMatter", async(t) => {
+    t.plan(1);
+    const files = await globby([
+      "*.md",
+      "test/**/*.md"
+    ]);
+    /** @type {import("markdownlint").Options} */
+    const options = {
+      "customRules": [ validateFrontMatter ],
+      "config": {
+        "default": false,
+        [validateFrontMatter.names[0]]: true
+      },
+      files,
+      "noInlineConfig": true
+    };
+    const results = await lintPromise(options);
+    const issues = Object.entries(results).filter(([ , errors ]) => errors.length > 0);
+    t.assert.snapshot(issues);
+  });
+
+  test("customRulesCapitalizeFrontMatterTitle", async(t) => {
+    t.plan(1);
+    const files = await globby([ "test/**/*.md" ]);
+    /** @type {import("markdownlint").Options} */
+    const options = {
+      "customRules": [ capitalizeFrontMatterTitle ],
+      "config": {
+        "default": false,
+        [capitalizeFrontMatterTitle.names[0]]: true
+      },
+      files,
+      "noInlineConfig": true
+    };
+    const results = await lintPromise(options);
+    const issues = Object.entries(results).filter(([ , errors ]) => errors.length > 0);
+    t.assert.snapshot(issues);
+  });
+
+  test("customRulesFrontMatterIssuesAndFixes", async(t) => {
+    t.plan(3);
+    /** @type {import("markdownlint").Rule} */
+    const rule = {
+      "names": [ "rule" ],
+      "description": "description",
+      "tags": [ "tag" ],
+      "parser": "none",
+      "function": (params, onError) => {
+        onError({
+          "frontMatter": true,
+          "lineNumber": 2,
+          "fixInfo": {
+            "editColumn": 2,
+            "deleteCount": 2,
+            "insertText": "am"
+          }
+        });
+        onError({
+          "lineNumber": 1,
+          "fixInfo": {
+            "editColumn": 5,
+            "deleteCount": 2,
+            "insertText": "AD"
+          }
+        });
+      }
+    };
+    const content = "---\nYAML\n---\n# Heading\n";
+    /** @type {import("markdownlint").Options} */
+    const options = {
+      "customRules": rule,
+      "strings": { content }
+    };
+    const results = await lintPromise(options);
+    t.assert.equal(results.content.length, 2);
+    const fixed = applyFixes(content, results.content);
+    t.assert.snapshot({
+      results,
+      fixed
+    });
+    const contentDisabled = `${content}\n<!-- markdownlint-disable-file rule -->\n`;
+    options.strings = { "content": contentDisabled };
+    const resultsDisabled = await lintPromise(options);
+    t.assert.equal(resultsDisabled.content.length, 0);
+  });
 
   test("customRulesAsyncThrowsInSyncContext", (t) => {
     t.plan(1);

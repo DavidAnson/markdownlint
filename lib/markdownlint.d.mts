@@ -297,6 +297,10 @@ export type MicromarkToken = {
 export type RuleOnError = (onErrorInfo: RuleOnErrorInfo) => void;
 export type RuleOnErrorInfo = {
     /**
+     * True if applies to front matter.
+     */
+    frontMatter?: boolean;
+    /**
      * Line number (1-based).
      */
     lineNumber: number;
@@ -594,6 +598,7 @@ export type RuleConfiguration = boolean | any;
  * Fix information for RuleOnError callback.
  *
  * @typedef {Object} RuleOnErrorInfo
+ * @property {boolean} [frontMatter] True if applies to front matter.
  * @property {number} lineNumber Line number (1-based).
  * @property {string} [detail] Detail about the error.
  * @property {string} [context] Context for the error.
