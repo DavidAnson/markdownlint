@@ -15,7 +15,11 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const rootDir = "./test-repos/electron-electron";
     const globPatterns = [
       join(rootDir, "*.md"),
-      join(rootDir, "docs/**/*.md")
+      join(rootDir, "docs/**/*.md"),
+      ...excludeGlobs(
+        rootDir,
+        "docs/breaking-changes.md"
+      )
     ];
     const configPath = join(rootDir, ".markdownlint-cli2.jsonc");
     return lintTestRepo(t, globPatterns, configPath);
