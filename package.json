@@ -85,7 +85,7 @@
     "concurrently": "10.0.5",
     "eslint-node-test": "0.4.0",
     "eslint-package-json": "0.3.0",
-    "eslint-plugin-jsdoc": "64.3.10",
+    "eslint-plugin-jsdoc": "64.4.0",
     "eslint-plugin-n": "18.3.0",
     "eslint-plugin-redos": "4.5.0",
     "eslint-plugin-regexp": "3.3.0",
