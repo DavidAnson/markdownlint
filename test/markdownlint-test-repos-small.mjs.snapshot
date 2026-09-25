@@ -61,7 +61,14 @@ exports[`markdownlint-test-repos-small.mjs > https://github.com/mkdocs/mkdocs 1`
 `;
 
 exports[`markdownlint-test-repos-small.mjs > https://github.com/pi-hole/docs 1`] = `
-[]
+[
+  "test-repos/pi-hole-docs/docs/main/contact.md:2 error MD003/heading-style Heading style [Expected: atx; Actual: setext]",
+  "test-repos/pi-hole-docs/docs/main/contact.md:2 error MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] [Context: \\"title: Getting in touch\\"]",
+  "test-repos/pi-hole-docs/docs/main/origins.md:2 error MD003/heading-style Heading style [Expected: atx; Actual: setext]",
+  "test-repos/pi-hole-docs/docs/main/origins.md:2 error MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] [Context: \\"title: Pi-hole Origins\\"]",
+  "test-repos/pi-hole-docs/docs/main/projects.md:2 error MD003/heading-style Heading style [Expected: atx; Actual: setext]",
+  "test-repos/pi-hole-docs/docs/main/projects.md:2 error MD022/blanks-around-headings Headings should be surrounded by blank lines [Expected: 1; Actual: 0; Above] [Context: \\"title: Community Projects\\"]"
+]
 `;
 
 exports[`markdownlint-test-repos-small.mjs > https://github.com/v8/v8.dev 1`] = `
