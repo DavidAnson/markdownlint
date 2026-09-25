@@ -74,6 +74,7 @@
     "micromark-extension-math": "3.1.0",
     "micromark-util-types": "2.0.2",
     "micromark": "4.0.2",
+    "re2js": "2.8.6",
     "string-width": "8.2.2"
   },
   "devDependencies": {
@@ -86,6 +87,7 @@
     "eslint-package-json": "0.3.0",
     "eslint-plugin-jsdoc": "64.3.10",
     "eslint-plugin-n": "18.3.0",
+    "eslint-plugin-redos": "4.5.0",
     "eslint-plugin-regexp": "3.3.0",
     "eslint-plugin-unicorn": "74.0.0",
     "eslint": "10.10.0",

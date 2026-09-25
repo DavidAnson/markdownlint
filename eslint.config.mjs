@@ -6,6 +6,7 @@ import eslintNodeTest from "eslint-node-test";
 import eslintPackageJson from "eslint-package-json";
 import eslintPluginJsdoc from "eslint-plugin-jsdoc";
 import eslintPluginN from "eslint-plugin-n";
+import eslintPluginRedos from "eslint-plugin-redos";
 import eslintPluginRegexp from "eslint-plugin-regexp";
 import eslintPluginStylistic from "@stylistic/eslint-plugin";
 import eslintPluginUnicorn from "eslint-plugin-unicorn";
@@ -235,6 +236,18 @@ export default defineConfig(
     },
     "rules": {
       "unicorn/prefer-module": "off"
+    }
+  },
+  {
+    "files": [
+      "lib/**/*.*js"
+    ],
+    "plugins": {
+      // @ts-ignore
+      "redos": eslintPluginRedos
+    },
+    "rules": {
+      "redos/no-vulnerable": "error"
     }
   },
   {
