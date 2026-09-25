@@ -17,9 +17,9 @@ module.exports.nextLinesRe = nextLinesRe;
 /** @typedef {typeof import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} _ambient_2_ */
 
 // Regular expression for matching common front matter (YAML and TOML)
-// @ts-ignore
+// Potential for regular expression denial of service is mitigated at point-of-use via "re2js" package
 module.exports.frontMatterRe =
-  // eslint-disable-next-line unicorn/prefer-unicode-code-point-escapes
+  // eslint-disable-next-line redos/no-vulnerable, unicorn/prefer-unicode-code-point-escapes
   /((^---[^\S\r\n\u2028\u2029]*$[\s\S]+?^---\s*)|(^\+\+\+[^\S\r\n\u2028\u2029]*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{[^\S\r\n\u2028\u2029]*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
 
 // Regular expression for matching the start of inline disable/enable comments
@@ -188,7 +188,7 @@ const safeCommentCharacter = ".";
 const startsWithPipeRe = /^ *\|/;
 const notCrLfRe = /[^\r\n]/g;
 const notSpaceCrLfRe = /[^ \r\n]/g;
-const trailingSpaceRe = / +[\r\n]/g;
+const trailingSpaceRe = /(?<=^|[^ ]) +[\r\n]/g;
 // eslint-disable-next-line unicorn/no-unsafe-string-replacement
 const replaceTrailingSpace = (/** @type {string} */ s) => s.replace(notCrLfRe, safeCommentCharacter);
 module.exports.clearHtmlCommentText = function clearHtmlCommentText(/** @type {string} */ text) {

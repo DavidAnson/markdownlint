@@ -240,6 +240,7 @@ export default defineConfig(
   },
   {
     "files": [
+      "helpers/**/*.*js",
       "lib/**/*.*js"
     ],
     "plugins": {
