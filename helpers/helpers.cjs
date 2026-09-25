@@ -18,9 +18,11 @@ module.exports.nextLinesRe = nextLinesRe;
 
 // Regular expression for matching common front matter (YAML and TOML)
 // Potential for regular expression denial of service is mitigated at point-of-use via "re2js" package
+/* eslint-disable redos/no-vulnerable */
 module.exports.frontMatterRe =
-  // eslint-disable-next-line redos/no-vulnerable, unicorn/prefer-unicode-code-point-escapes
+  // eslint-disable-next-line unicorn/prefer-unicode-code-point-escapes
   /((^---[^\S\r\n\u2028\u2029]*$[\s\S]+?^---\s*)|(^\+\+\+[^\S\r\n\u2028\u2029]*$[\s\S]+?^(\+\+\+|\.\.\.)\s*)|(^\{[^\S\r\n\u2028\u2029]*$[\s\S]+?^\}\s*))(\r\n|\r|\n|$)/m;
+/* eslint-enable redos/no-vulnerable */
 
 // Regular expression for matching the start of inline disable/enable comments
 const inlineCommentStartRe =
