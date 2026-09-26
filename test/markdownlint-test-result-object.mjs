@@ -210,13 +210,32 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     t.plan(2);
     const options = {
       "strings": {
-        "input": "---\n---\n# Heading\nText\n"
+        "inputLF": "---\n---\n# Heading\nText\n",
+        "inputCRLF": "---\r\n---\r\n# Heading\r\nText\r\n"
       }
     };
     lintAsync(options, function callback(err, actualResult) {
       t.assert.equal(err, null);
       const expectedResult = {
-        "input": [
+        "inputLF": [
+          {
+            "lineNumber": 3,
+            "ruleNames":
+              [ "MD022", "blanks-around-headings" ],
+            "ruleDescription": "Headings should be surrounded by blank lines",
+            "ruleInformation":
+              `${homepage}/blob/v${version}/doc/md022.md`,
+            "errorDetail": "Expected: 1; Actual: 0; Below",
+            "errorContext": "# Heading",
+            "errorRange": null,
+            "fixInfo": {
+              "lineNumber": 4,
+              "insertText": "\n"
+            },
+            "severity": "error"
+          }
+        ],
+        "inputCRLF": [
           {
             "lineNumber": 3,
             "ruleNames":
