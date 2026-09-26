@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v7
-    - run: 'npx linkinator "*.md" "doc/*.md" "helpers/*.md" --directory-listing --skip "^https://github.com/.*/search\?q=" --skip "^https://www.jwz.org/" --skip "^https://wikipedia.org/"'
+    - run: 'npx linkinator "*.md" "doc/*.md" "helpers/*.md" --directory-listing --skip "^https://github.com/.*/search\?q=" --skip "^https://www.jwz.org/" --skip "^https://opensource.org/" --skip "^https://wikipedia.org/"'
 
   spellcheck:
     runs-on: ubuntu-latest
