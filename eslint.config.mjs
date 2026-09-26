@@ -248,7 +248,7 @@ export default defineConfig(
       "redos": eslintPluginRedos
     },
     "rules": {
-      "redos/no-vulnerable": "error"
+      "redos/no-vulnerable": [ "error", { "timeout": 120_000 } ]
     }
   },
   {
