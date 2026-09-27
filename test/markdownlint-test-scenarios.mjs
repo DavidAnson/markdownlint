@@ -85,11 +85,11 @@ function createTestForFile(file) {
         }
         t.assert.deepEqual(actual, expected, "Too few or too many issues found.");
         // Create snapshot
-        const fixed = applyFixes(content, errors)
-          .replace(/\r\n/g, "\n");
+        const fixed = applyFixes(content, errors);
+        const fixedLines = fixed.split(helpers.newLineRe);
         t.assert.snapshot({
           errors,
-          fixed
+          "fixed": fixedLines
         });
         // Identify missing fixes
         return lint({
