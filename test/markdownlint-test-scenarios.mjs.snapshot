@@ -70693,6 +70693,1016 @@ exports[`markdownlint-test-scenarios.mjs > table-column-style-irregular-trailing
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > table-column-style-no-leading-pipe.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 8,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 10,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 12,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 18,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 20,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 22,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 28,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 30,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 32,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 40,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        2,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 42,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        2,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 44,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        2,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 50,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 52,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 54,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 60,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 62,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 64,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe does not align with header for style \\"aligned\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 74,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 3,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 76,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 3,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 78,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 3,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 84,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 4,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 86,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 4,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 88,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 4,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 94,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 5,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 96,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 5,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 98,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 5,
+        "insertText": " "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 106,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        2,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 108,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        2,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 110,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        2,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 116,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 118,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 120,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 126,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 128,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 130,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe is missing space to the left for style \\"compact\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 140,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 3,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 142,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 3,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 144,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        4,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 3,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 150,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 4,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 152,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 4,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 154,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        5,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 4,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 160,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        6,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 5,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 162,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        6,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 5,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 164,
+      "ruleNames": [
+        "MD060",
+        "table-column-style"
+      ],
+      "ruleDescription": "Table column style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md060.md",
+      "errorDetail": "Table pipe has space to the left for style \\"tight\\"",
+      "errorContext": null,
+      "errorRange": [
+        6,
+        1
+      ],
+      "fixInfo": {
+        "editColumn": 5,
+        "deleteCount": 1
+      },
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Table Column Style No Leading Pipe",
+    "",
+    "## Auto-detected as \\"aligned\\"",
+    "",
+    "### Not fixable (no fixes for aligned style)",
+    "",
+    "HH |",
+    "--|",
+    "TT |",
+    "++|",
+    "TT |",
+    "**|",
+    "TT |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    " HH |",
+    " --|",
+    " TT |",
+    " ++|",
+    " TT |",
+    " **|",
+    " TT |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "> HH |",
+    "> --|",
+    "> TT |",
+    "> ++|",
+    "> TT |",
+    "> **|",
+    "> TT |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "### Not fixable (adding space creates unordered list)",
+    "",
+    "H |",
+    "-|",
+    "T |",
+    "+|",
+    "T |",
+    "*|",
+    "T |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    " H |",
+    " -|",
+    " T |",
+    " +|",
+    " T |",
+    " *|",
+    " T |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "> H |",
+    "> -|",
+    "> T |",
+    "> +|",
+    "> T |",
+    "> *|",
+    "> T |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "## Auto-detected as \\"compact\\"",
+    "",
+    "### Fixable",
+    "",
+    "Header |",
+    "-- |",
+    "Text |",
+    "++ |",
+    "Text |",
+    "** |",
+    "Text |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    " Header |",
+    " -- |",
+    " Text |",
+    " ++ |",
+    " Text |",
+    " ** |",
+    " Text |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "> Header |",
+    "> -- |",
+    "> Text |",
+    "> ++ |",
+    "> Text |",
+    "> ** |",
+    "> Text |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "### Not fixable (adding space creates unordered list)",
+    "",
+    "Header |",
+    "-|",
+    "Text |",
+    "+|",
+    "Text |",
+    "*|",
+    "Text |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    " Header |",
+    " -|",
+    " Text |",
+    " +|",
+    " Text |",
+    " *|",
+    " Text |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "> Header |",
+    "> -|",
+    "> Text |",
+    "> +|",
+    "> Text |",
+    "> *|",
+    "> Text |",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "## Auto-detected as \\"tight\\"",
+    "",
+    "### Fixable",
+    "",
+    "Header|",
+    "--|",
+    "Text|",
+    "++|",
+    "Text|",
+    "**|",
+    "Text|",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    " Header|",
+    " --|",
+    " Text|",
+    " ++|",
+    " Text|",
+    " **|",
+    " Text|",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "> Header|",
+    "> --|",
+    "> Text|",
+    "> ++|",
+    "> Text|",
+    "> **|",
+    "> Text|",
+    "",
+    "{MD060:-3} {MD060:-5} {MD060:-7}",
+    "",
+    "### Not a table (space creates unordered list)",
+    "",
+    "\`\`\`markdown",
+    "Header|",
+    "- |",
+    "Text|",
+    "+ |",
+    "Text|",
+    "* |",
+    "Text|",
+    "\`\`\`",
+    "",
+    "<!-- markdownlint-disable-file no-duplicate-heading -->",
+    ""
+  ]
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > table-column-style-tight.md 1`] = `
 {
   "errors": [
