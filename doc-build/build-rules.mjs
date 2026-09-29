@@ -49,6 +49,7 @@ for (const rule of rules) {
     `## ${decorator}\`${name}\` - ${rule.description}${decorator}`,
     ""
   ];
+  // eslint-disable-next-line unicorn/no-immediate-mutation
   if (deprecated) {
     section.push(
       "> This rule is deprecated and provided for backward-compatibility",
