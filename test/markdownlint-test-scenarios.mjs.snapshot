@@ -28594,7 +28594,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 289,
+      "lineNumber": 297,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28611,7 +28611,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 291,
+      "lineNumber": 299,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28628,7 +28628,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 293,
+      "lineNumber": 301,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28645,24 +28645,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 295,
-      "ruleNames": [
-        "MD051",
-        "link-fragments"
-      ],
-      "ruleDescription": "Link fragments should be valid",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md051.md",
-      "errorDetail": null,
-      "errorContext": "[Invalid](#hyphen--run)",
-      "errorRange": [
-        1,
-        23
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 297,
+      "lineNumber": 303,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28679,7 +28662,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 299,
+      "lineNumber": 305,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28696,7 +28679,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 301,
+      "lineNumber": 307,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28713,7 +28696,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 303,
+      "lineNumber": 309,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28730,7 +28713,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 305,
+      "lineNumber": 311,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28751,7 +28734,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 307,
+      "lineNumber": 313,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28768,7 +28751,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 309,
+      "lineNumber": 315,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28785,7 +28768,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 311,
+      "lineNumber": 317,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28802,7 +28785,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 313,
+      "lineNumber": 319,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28819,7 +28802,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 315,
+      "lineNumber": 321,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28836,7 +28819,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 317,
+      "lineNumber": 323,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28853,7 +28836,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 319,
+      "lineNumber": 325,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28870,7 +28853,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 321,
+      "lineNumber": 327,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28887,7 +28870,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 323,
+      "lineNumber": 329,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28904,7 +28887,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 325,
+      "lineNumber": 331,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28921,7 +28904,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 327,
+      "lineNumber": 333,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28938,7 +28921,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 329,
+      "lineNumber": 335,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28955,7 +28938,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 331,
+      "lineNumber": 337,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28972,7 +28955,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 333,
+      "lineNumber": 339,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -28989,7 +28972,7 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 339,
+      "lineNumber": 345,
       "ruleNames": [
         "MD051",
         "link-fragments"
@@ -29276,24 +29259,32 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
     "",
     "[Valid](#valid-heading-with-another-named-fragment-another_fragment_123)",
     "",
+    "[Valid](#multiple--dashes---fragment__name)",
+    "",
+    "[Valid](#valid-heading-with-named-fragment-and-multiple-dashes-multiple--dashes---fragment__name)",
+    "",
     "[Valid](#closed-atx)",
     "",
     "[Valid](#setext)",
     "",
+    "[Valid](#hyphen--run)",
+    "",
     "### Valid Heading with Named Fragment {#named-fragment}",
     "",
     "### Valid Heading with Another Named Fragment {#another_fragment_123}",
+    "",
+    "### Valid Heading with Named Fragment and Multiple Dashes {#multiple--dashes---fragment__name}",
     "",
     "### Valid Closed ATX Heading with Named Fragment {#closed-atx} ###",
     "",
     "Valid Setext Heading with Named Fragment {#setext}",
     "--------------------------------------------------",
     "",
+    "### Valid Heading with Named Fragment {#hyphen--run}",
+    "",
     "## Invalid Named Fragments",
     "",
     "### Invalid Heading with Named Fragment {#embedded space}",
-    "",
-    "### Invalid Heading with Named Fragment {#hyphen--run}",
     "",
     "### Invalid Heading with Named Fragment {#UpperCase}",
     "",
@@ -29304,8 +29295,6 @@ exports[`markdownlint-test-scenarios.mjs > link-fragments.md 1`] = `
     "[Invalid](#embedded_space) {MD051}",
     "",
     "[Invalid](#embedded) {MD051}",
-    "",
-    "[Invalid](#hyphen--run) {MD051}",
     "",
     "[Invalid](#hyphen-run) {MD051}",
     "",

@@ -263,24 +263,32 @@ Text
 
 [Valid](#valid-heading-with-another-named-fragment-another_fragment_123)
 
+[Valid](#multiple--dashes---fragment__name)
+
+[Valid](#valid-heading-with-named-fragment-and-multiple-dashes-multiple--dashes---fragment__name)
+
 [Valid](#closed-atx)
 
 [Valid](#setext)
 
+[Valid](#hyphen--run)
+
 ### Valid Heading with Named Fragment {#named-fragment}
 
 ### Valid Heading with Another Named Fragment {#another_fragment_123}
+
+### Valid Heading with Named Fragment and Multiple Dashes {#multiple--dashes---fragment__name}
 
 ### Valid Closed ATX Heading with Named Fragment {#closed-atx} ###
 
 Valid Setext Heading with Named Fragment {#setext}
 --------------------------------------------------
 
+### Valid Heading with Named Fragment {#hyphen--run}
+
 ## Invalid Named Fragments
 
 ### Invalid Heading with Named Fragment {#embedded space}
-
-### Invalid Heading with Named Fragment {#hyphen--run}
 
 ### Invalid Heading with Named Fragment {#UpperCase}
 
@@ -291,8 +299,6 @@ Valid Setext Heading with Named Fragment {#setext}
 [Invalid](#embedded_space) {MD051}
 
 [Invalid](#embedded) {MD051}
-
-[Invalid](#hyphen--run) {MD051}
 
 [Invalid](#hyphen-run) {MD051}
 
