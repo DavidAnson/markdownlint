@@ -2144,7 +2144,13 @@ export interface ConfigurationStrict {
         /**
          * Table pipe style
          */
-        style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
+        style?:
+          | "consistent"
+          | "leading_only"
+          | "trailing_only"
+          | "leading_and_trailing"
+          | "no_leading_or_trailing"
+          | "per_table";
       };
   /**
    * MD055/table-pipe-style : Table pipe style : https://github.com/DavidAnson/markdownlint/blob/v0.41.1/doc/md055.md
@@ -2164,7 +2170,13 @@ export interface ConfigurationStrict {
         /**
          * Table pipe style
          */
-        style?: "consistent" | "leading_only" | "trailing_only" | "leading_and_trailing" | "no_leading_or_trailing";
+        style?:
+          | "consistent"
+          | "leading_only"
+          | "trailing_only"
+          | "leading_and_trailing"
+          | "no_leading_or_trailing"
+          | "per_table";
       };
   /**
    * MD056/table-column-count : Table column count : https://github.com/DavidAnson/markdownlint/blob/v0.41.1/doc/md056.md

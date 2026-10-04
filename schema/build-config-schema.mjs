@@ -617,7 +617,8 @@ for (const rule of rules) {
           "leading_only",
           "trailing_only",
           "leading_and_trailing",
-          "no_leading_or_trailing"
+          "no_leading_or_trailing",
+          "per_table"
         ],
         "default": "consistent"
       };

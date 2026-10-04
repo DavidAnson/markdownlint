@@ -78217,6 +78217,119 @@ exports[`markdownlint-test-scenarios.mjs > table-pipe-style-explicit-none.md 1`]
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > table-pipe-style-explicit-per-table.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 8,
+      "ruleNames": [
+        "MD055",
+        "table-pipe-style"
+      ],
+      "ruleDescription": "Table pipe style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md055.md",
+      "errorDetail": "Expected: leading_and_trailing; Actual: leading_only; Missing trailing pipe",
+      "errorContext": null,
+      "errorRange": [
+        14,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 15,
+      "ruleNames": [
+        "MD055",
+        "table-pipe-style"
+      ],
+      "ruleDescription": "Table pipe style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md055.md",
+      "errorDetail": "Expected: no_leading_or_trailing; Actual: trailing_only; Unexpected trailing pipe",
+      "errorContext": null,
+      "errorRange": [
+        14,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 22,
+      "ruleNames": [
+        "MD055",
+        "table-pipe-style"
+      ],
+      "ruleDescription": "Table pipe style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md055.md",
+      "errorDetail": "Expected: leading_only; Actual: no_leading_or_trailing; Missing leading pipe",
+      "errorContext": null,
+      "errorRange": [
+        3,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 29,
+      "ruleNames": [
+        "MD055",
+        "table-pipe-style"
+      ],
+      "ruleDescription": "Table pipe style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md055.md",
+      "errorDetail": "Expected: trailing_only; Actual: no_leading_or_trailing; Missing trailing pipe",
+      "errorContext": null,
+      "errorRange": [
+        12,
+        1
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Table Pipe Style Per Table",
+    "",
+    "## Style: both {MD055:+5}",
+    "",
+    "| Table | Heading |",
+    "| ----- | ------- |",
+    "| Cell  | Cell    |",
+    "| Cell  | Cell",
+    "",
+    "## Style: none {MD055:+5}",
+    "",
+    "Table | Heading",
+    "----- | -------",
+    "Cell  | Cell",
+    "Cell  | Cell |",
+    "",
+    "## Style: leading {MD055:+5}",
+    "",
+    "| Table | Heading",
+    "| ----- | -------",
+    "| Cell  | Cell",
+    "  Cell  | Cell",
+    "",
+    "## Style: trailing {MD055:+5}",
+    "",
+    "Table | Heading |",
+    "----- | ------- |",
+    "Cell  | Cell    |",
+    "Cell  | Cell",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"table-pipe-style\\": {",
+    "    \\"style\\": \\"per_table\\"",
+    "  }",
+    "} -->",
+    ""
+  ]
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > table-pipe-style-explicit-trailing.md 1`] = `
 {
   "errors": [
