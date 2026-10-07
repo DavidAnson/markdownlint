@@ -54778,7 +54778,7 @@ exports[`markdownlint-test-scenarios.mjs > required-headings-none.md 1`] = `
       ],
       "ruleDescription": "Required heading structure",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md043.md",
-      "errorDetail": "Expected: [None]; Actual: # One {MD043}",
+      "errorDetail": "Expected: [No heading]; Actual: # One {MD043}",
       "errorContext": null,
       "errorRange": null,
       "fixInfo": null,
@@ -55109,6 +55109,142 @@ exports[`markdownlint-test-scenarios.mjs > required-headings-question-missing.md
     "} -->",
     "",
     "{MD043:+1}",
+    ""
+  ]
+}
+`;
+
+exports[`markdownlint-test-scenarios.mjs > required-headings-regexp-case.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 1,
+      "ruleNames": [
+        "MD043",
+        "required-headings"
+      ],
+      "ruleDescription": "Required heading structure",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md043.md",
+      "errorDetail": "Expected: % heading; Actual: # Heading {MD043}",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Heading {MD043}",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"required-headings\\": {",
+    "    \\"headings\\": [",
+    "      \\"% heading\\"",
+    "    ],",
+    "    \\"match_case\\": true",
+    "  }",
+    "} -->",
+    ""
+  ]
+}
+`;
+
+exports[`markdownlint-test-scenarios.mjs > required-headings-regexp-invalid.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 1,
+      "ruleNames": [
+        "MD043",
+        "required-headings"
+      ],
+      "ruleDescription": "Required heading structure",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md043.md",
+      "errorDetail": "Expected: [Invalid syntax]; Actual: # Heading {MD043}",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Heading {MD043}",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"required-headings\\": {",
+    "    \\"headings\\": [",
+    "      \\"\\"",
+    "    ]",
+    "  }",
+    "} -->",
+    ""
+  ]
+}
+`;
+
+exports[`markdownlint-test-scenarios.mjs > required-headings-regexp-level.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 3,
+      "ruleNames": [
+        "MD043",
+        "required-headings"
+      ],
+      "ruleDescription": "Required heading structure",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md043.md",
+      "errorDetail": "Expected: % [a-zA-Z]+; Actual: ## Subheading {MD043}",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Heading",
+    "",
+    "## Subheading {MD043}",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"required-headings\\": {",
+    "    \\"headings\\": [",
+    "      \\"% [a-zA-Z]+\\",",
+    "      \\"% [a-zA-Z]+\\"",
+    "    ]",
+    "  }",
+    "} -->",
+    ""
+  ]
+}
+`;
+
+exports[`markdownlint-test-scenarios.mjs > required-headings-regexp.md 1`] = `
+{
+  "errors": [],
+  "fixed": [
+    "# One",
+    "",
+    "## Two",
+    "",
+    "### THREE",
+    "",
+    "## four",
+    "",
+    "## Five",
+    "",
+    "### SiX",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"required-headings\\": {",
+    "    \\"headings\\": [",
+    "      \\"% One\\",",
+    "      \\"%% T.o\\",",
+    "      \\"%%% [a-zA-Z]{4,}\\",",
+    "      \\"%% \\\\\\\\S+\\",",
+    "      \\"%% [Ff]ive\\",",
+    "      \\"%%% six\\"",
+    "    ]",
+    "  }",
+    "} -->",
     ""
   ]
 }

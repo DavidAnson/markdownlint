@@ -6,6 +6,7 @@ import path from "node:path";
 import rules from "../lib/rules.mjs";
 import jsonSchemaToTypeScript from "json-schema-to-typescript";
 import { version } from "../lib/constants.mjs";
+import { headingsItemsRe } from "../lib/md043.mjs";
 
 const schemaName = "markdownlint-config-schema.json";
 const schemaUri = `https://raw.githubusercontent.com/DavidAnson/markdownlint/v${version}/schema/${schemaName}`;
@@ -450,12 +451,15 @@ for (const rule of rules) {
       // @ts-ignore
       subscheme.properties.headings = {
         "description": "List of headings",
-        "type": "array",
+        "type": [
+          "array",
+          "null"
+        ],
         "items": {
           "type": "string",
-          "pattern": "^(\\*|\\+|\\?|#{1,6}\\s+\\S.*)$"
+          "pattern": headingsItemsRe.source
         },
-        "default": []
+        "default": null
       };
       // @ts-ignore
       subscheme.properties.match_case = {

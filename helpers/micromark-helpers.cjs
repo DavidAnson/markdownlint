@@ -218,7 +218,8 @@ function getHeadingText(heading) {
     .flatMap((descendant) => descendant.children.filter((child) => child.type !== "htmlText"))
     .map((data) => data.text)
     .join("")
-    .replace(newlineRe, " ");
+    .replace(newlineRe, " ")
+    .trim();
 }
 
 /**

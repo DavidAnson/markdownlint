@@ -1094,7 +1094,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
   });
 
   test("validateJsonUsingConfigSchemaStrict", async(t) => {
-    t.plan(237);
+    t.plan(240);
     // @ts-ignore
     const ajv = new Ajv(ajvOptions);
     const validateSchemaStrict = ajv.compile(configSchemaStrict);
@@ -1107,6 +1107,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "test/invalid-ul-style-style.md",
       "test/long-lines-negative-line-length.md",
       "test/no-multiple-blanks-maximum-0.md",
+      "test/required-headings-regexp-invalid.md",
       "test/wrong-types-in-config-file.md"
     ]);
     const files = await globby([

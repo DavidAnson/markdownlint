@@ -1600,7 +1600,7 @@ export interface ConfigurationStrict {
         /**
          * List of headings
          */
-        headings?: string[];
+        headings?: string[] | null;
         /**
          * Match case of headings
          */
@@ -1624,7 +1624,7 @@ export interface ConfigurationStrict {
         /**
          * List of headings
          */
-        headings?: string[];
+        headings?: string[] | null;
         /**
          * Match case of headings
          */

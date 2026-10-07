@@ -3259,12 +3259,15 @@
             },
             "headings": {
               "description": "List of headings",
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "string",
-                "pattern": "^(\\*|\\+|\\?|#{1,6}\\s+\\S.*)$"
+                "pattern": "^([*+?]|[#%]{1,6}\\s+\\S.*)$"
               },
-              "default": []
+              "default": null
             },
             "match_case": {
               "description": "Match case of headings",
@@ -3308,12 +3311,15 @@
             },
             "headings": {
               "description": "List of headings",
-              "type": "array",
+              "type": [
+                "array",
+                "null"
+              ],
               "items": {
                 "type": "string",
-                "pattern": "^(\\*|\\+|\\?|#{1,6}\\s+\\S.*)$"
+                "pattern": "^([*+?]|[#%]{1,6}\\s+\\S.*)$"
               },
-              "default": []
+              "default": null
             },
             "match_case": {
               "description": "Match case of headings",

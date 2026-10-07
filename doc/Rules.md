@@ -859,7 +859,7 @@ If the parameter `siblings_only` is set to `true`, duplication is allowed for
 headings with different parents (as is common in changelogs):
 
 ```markdown
-# Change log
+# Changelog
 
 ## 1.0.0
 
@@ -1840,7 +1840,7 @@ Aliases: `required-headings`
 
 Parameters:
 
-- `headings`: List of headings (`string[]`, default `[]`)
+- `headings`: List of headings (`string[]|null`, default `null`)
 - `match_case`: Match case of headings (`boolean`, default `false`)
 
 This rule is triggered when the headings in a file do not match the array of
@@ -1871,13 +1871,15 @@ To allow optional headings as with the following structure:
 # Heading
 ## Item
 ### Detail (optional)
+### Example (optional)
 ## Foot
 ### Notes (optional)
 ```
 
-Use the special value `"*"` meaning "zero or more unspecified headings" or the
-special value `"+"` meaning "one or more unspecified headings" and set the
-`headings` parameter to:
+Use the special value `"*"` meaning "zero or more unspecified headings", the
+special value `"+"` meaning "one or more unspecified headings", or the special
+value `"?"` meaning "exactly one unspecified heading at any level" and set the
+`headings` parameter to something like:
 
 ```json
 [
@@ -1885,23 +1887,26 @@ special value `"+"` meaning "one or more unspecified headings" and set the
     "## Item",
     "*",
     "## Foot",
-    "*"
+    "+"
 ]
 ```
 
-To allow a single required heading to vary as with a project name:
+To require a heading with a specific level and text matching a specific pattern
+(for example, a one-word project name):
 
 ```markdown
-# Project Name
+# Project
 ## Description
 ## Examples
 ```
 
-Use the special value `"?"` meaning "exactly one unspecified heading":
+Replace the `#` prefix character(s) with `%` and specify a regular expression;
+the following example requires a level 1 heading with a single word made up of
+at least 4 letters:
 
 ```json
 [
-    "?",
+    "% [a-zA-Z]{4,}",
     "## Description",
     "## Examples"
 ]
