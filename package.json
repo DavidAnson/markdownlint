@@ -72,7 +72,7 @@
     "micromark-extension-gfm-footnote": "2.1.0",
     "micromark-extension-gfm-table": "2.1.2",
     "micromark-extension-math": "3.1.0",
-    "micromark-util-types": "2.0.2",
+    "micromark-util-types": "2.0.3",
     "micromark": "4.0.3",
     "re2js": "2.8.6",
     "string-width": "8.3.0"
