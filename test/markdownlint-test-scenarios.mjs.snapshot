@@ -19122,9 +19122,24 @@ exports[`markdownlint-test-scenarios.mjs > headings-with-invalid-spaces.md 1`] =
     "",
     "## Extra tab (right) {MD021}\\t##",
     "",
+    "<div>",
+    "##Missing left space in HTML block",
+    "##  Extra left space in HTML block",
+    "## Missing right space in HTML block##",
+    "## Extra right space in HTML block  ##",
+    "</div>",
+    "",
+    "$$",
+    "##Missing left space in math block",
+    "##  Extra left space in math block",
+    "## Missing right space in math block##",
+    "## Extra right space in math block  ##",
+    "$$",
+    "",
     "<!-- markdownlint-configure-file {",
     "    \\"heading-style\\": false,",
-    "    \\"no-hard-tabs\\": false",
+    "    \\"no-hard-tabs\\": false,",
+    "    \\"no-inline-html\\": false",
     "} -->",
     ""
   ]
@@ -55712,6 +55727,48 @@ exports[`markdownlint-test-scenarios.mjs > reversed_link.md 1`] = `
         "insertText": "[reversed](link)"
       },
       "severity": "error"
+    },
+    {
+      "lineNumber": 89,
+      "ruleNames": [
+        "MD011",
+        "no-reversed-links"
+      ],
+      "ruleDescription": "Reversed link syntax",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md011.md",
+      "errorDetail": "(reversed)[link]",
+      "errorContext": null,
+      "errorRange": [
+        12,
+        16
+      ],
+      "fixInfo": {
+        "editColumn": 12,
+        "deleteCount": 16,
+        "insertText": "[reversed](link)"
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 91,
+      "ruleNames": [
+        "MD011",
+        "no-reversed-links"
+      ],
+      "ruleDescription": "Reversed link syntax",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md011.md",
+      "errorDetail": "(reversed)[link]",
+      "errorContext": null,
+      "errorRange": [
+        17,
+        16
+      ],
+      "fixInfo": {
+        "editColumn": 17,
+        "deleteCount": 16,
+        "insertText": "[reversed](link)"
+      },
+      "severity": "error"
     }
   ],
   "fixed": [
@@ -55800,6 +55857,30 @@ exports[`markdownlint-test-scenarios.mjs > reversed_link.md 1`] = `
     "Text ()[text] text",
     "",
     "Text (text()[text] text",
+    "",
+    "## HTML Spans and Blocks",
+    "",
+    "Text <span>[reversed](link)</span> text {MD011}",
+    "",
+    "Text <span>text [reversed](link) text</span> text {MD011}",
+    "",
+    "<div>",
+    "  <p>",
+    "    (reversed)[link]",
+    "  </p>",
+    "</div>",
+    "",
+    "<pre>",
+    "(reversed)[link]",
+    "</pre>",
+    "",
+    "## Math Spans and Blocks",
+    "",
+    "Text $(reversed)[link]$ text",
+    "",
+    "$$",
+    "(reversed)[link]",
+    "$$",
     "",
     "<!-- markdownlint-configure-file {",
     "  \\"code-block-style\\": false,",

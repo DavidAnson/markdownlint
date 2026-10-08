@@ -84,6 +84,30 @@ Text ()[text] text
 
 Text (text()[text] text
 
+## HTML Spans and Blocks
+
+Text <span>(reversed)[link]</span> text {MD011}
+
+Text <span>text (reversed)[link] text</span> text {MD011}
+
+<div>
+  <p>
+    (reversed)[link]
+  </p>
+</div>
+
+<pre>
+(reversed)[link]
+</pre>
+
+## Math Spans and Blocks
+
+Text $(reversed)[link]$ text
+
+$$
+(reversed)[link]
+$$
+
 <!-- markdownlint-configure-file {
   "code-block-style": false,
   "line-length": false,

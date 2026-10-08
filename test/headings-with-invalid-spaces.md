@@ -36,7 +36,22 @@
 
 ## Extra tab (right) {MD021}		##
 
+<div>
+##Missing left space in HTML block
+##  Extra left space in HTML block
+## Missing right space in HTML block##
+## Extra right space in HTML block  ##
+</div>
+
+$$
+##Missing left space in math block
+##  Extra left space in math block
+## Missing right space in math block##
+## Extra right space in math block  ##
+$$
+
 <!-- markdownlint-configure-file {
     "heading-style": false,
-    "no-hard-tabs": false
+    "no-hard-tabs": false,
+    "no-inline-html": false
 } -->
