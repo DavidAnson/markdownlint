@@ -1912,6 +1912,37 @@ at least 4 letters:
 ]
 ```
 
+To handle repeating heading sections (common in `CHANGELOG` files) like the
+following:
+
+```markdown
+# Changelog
+## 1.0.0
+### Fixes
+### Features
+## 2.0.0
+### Fixes
+### Features
+```
+
+Use the `"^"` special value meaning "if the next heading does not match, go back
+to the previous matching marker":
+
+```json
+[
+    "# Changelog",
+    "^",
+    "%% \\d+\\.\\d+\\.\\d+",
+    "### Fixes",
+    "### Features",
+    "^"
+]
+```
+
+The simple form shown above works for most scenarios; if multiple loops are
+needed, the value `"^^"`, `"^^^"`, etc. can be used in conjunction. To avoid
+infinite loops, matching fails if there are more than 10,000 loops.
+
 When an error is detected, this rule outputs the line number of the first
 problematic heading (otherwise, it outputs the last line number of the file).
 

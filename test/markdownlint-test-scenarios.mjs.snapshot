@@ -54429,6 +54429,48 @@ exports[`markdownlint-test-scenarios.mjs > required-headings-all-present.md 1`] 
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > required-headings-changelog-example.md 1`] = `
+{
+  "errors": [],
+  "fixed": [
+    "# Changelog",
+    "",
+    "## 1.0.0",
+    "",
+    "### Fixes",
+    "",
+    "### Features",
+    "",
+    "## 2.0.0",
+    "",
+    "### Fixes",
+    "",
+    "### Features",
+    "",
+    "## 2.1.0",
+    "",
+    "### Fixes",
+    "",
+    "### Features",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"required-headings\\": {",
+    "    \\"headings\\": [",
+    "      \\"# Changelog\\",",
+    "      \\"^\\",",
+    "      \\"%% \\\\\\\\d+\\\\\\\\.\\\\\\\\d+\\\\\\\\.\\\\\\\\d+\\",",
+    "      \\"### Fixes\\",",
+    "      \\"### Features\\",",
+    "      \\"^\\"",
+    "    ]",
+    "  },",
+    "  \\"no-duplicate-heading\\": false",
+    "} -->",
+    ""
+  ]
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > required-headings-match-case.md 1`] = `
 {
   "errors": [],
