@@ -533,3 +533,14 @@
 
 - Initial release
 - Includes tests MD001-MD032
+
+<!-- markdownlint-configure-file {
+  "required-headings": {
+    "headings": [
+      "# Changelog",
+      "^",
+      "%% ^\\d+\\.\\d+\\.\\d+$",
+      "^"
+    ]
+  }
+} -->
