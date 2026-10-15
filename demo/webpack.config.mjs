@@ -67,6 +67,7 @@ const entryLibrary = {
   "entry": "./browser-exports.mjs",
   "packageJson": libraryPackageJson
 };
+// eslint-disable-next-line unicorn/no-top-level-side-effects
 export default [
   config({
     ...entryLibrary,
