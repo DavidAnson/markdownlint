@@ -29,7 +29,7 @@ const wrapListItem = (line) => {
 
 // import { default as schema } from "file.json" assert { type: "json" };
 const importJson =
-  async(file) => JSON.parse(await readFile(pathFor(file)));
+  async(file) => JSON.parse(await readFile(pathFor(file), "utf8"));
 const schema = await importJson("../schema/markdownlint-config-schema.json");
 
 const lines = [];
