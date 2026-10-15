@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.42.0
+
+- Improve MD011/MD018/MD020/MD043/MD051/MD055/MD060
+- Add regular expression denial of service protection
+- Add support for reporting issues with front matter
+- Update dependencies
+
 ## 0.41.1
 
 - Improve MD029
