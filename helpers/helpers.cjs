@@ -384,6 +384,18 @@ module.exports.frontMatterHasTitle =
   };
 
 /**
+ * Normalizes link label text.
+ *
+ * @param {string} text Link label text.
+ * @returns {string} Normalized link label text.
+ */
+function normalizeLinkLabelText(text) {
+  // Note that toLowerCase() should ideally perform a Unicode case fold instead
+  return text.toLowerCase().trim().replace(/\s+/g, " ");
+}
+module.exports.normalizeLinkLabelText = normalizeLinkLabelText;
+
+/**
  * Result object for getReferenceLinkImageData.
  *
  * @typedef {Object} GetReferenceLinkImageDataResult
@@ -401,7 +413,6 @@ module.exports.frontMatterHasTitle =
  * @returns {GetReferenceLinkImageDataResult} Reference link/image data.
  */
 function getReferenceLinkImageData(tokens) {
-  const normalizeReference = (/** @type {string} */ s) => s.toLowerCase().trim().replace(/\s+/g, " ");
   const getText = (/** @type {MicromarkToken} */ t) => t?.children.filter((c) => c.type !== "blockQuotePrefix").map((c) => c.text).join("");
   /** @type {Map<string, number[][]>} */
   const references = new Map();
@@ -413,7 +424,7 @@ function getReferenceLinkImageData(tokens) {
       token.startColumn - 1,
       token.text.length
     ];
-    const reference = normalizeReference(label);
+    const reference = normalizeLinkLabelText(label);
     const dictionary = isShortcut ? shortcuts : references;
     const referenceData = dictionary.get(reference) || [];
     referenceData.push(referenceDatum);
@@ -455,7 +466,7 @@ function getReferenceLinkImageData(tokens) {
       case "definitionLabelString": // eslint-disable-line no-fallthrough
       {
         // definitions and definitionLineIndices
-        const reference = normalizeReference(`${labelPrefix}${token.text}`);
+        const reference = normalizeLinkLabelText(`${labelPrefix}${token.text}`);
         if (definitions.has(reference)) {
           duplicateDefinitions.push([ reference, token.startLine - 1 ]);
         } else {

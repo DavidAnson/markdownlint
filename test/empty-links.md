@@ -24,6 +24,8 @@
 
 [text][ frag ] {MD042}
 
+[text][		fRAg		] {MD010} {MD042}
+
 [frag][] {MD042}
 
 [frag] {MD042}

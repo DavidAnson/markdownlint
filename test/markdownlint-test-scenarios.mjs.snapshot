@@ -14004,6 +14004,48 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
 {
   "errors": [
     {
+      "lineNumber": 27,
+      "ruleNames": [
+        "MD010",
+        "no-hard-tabs"
+      ],
+      "ruleDescription": "Hard tabs",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md010.md",
+      "errorDetail": "Column: 8",
+      "errorContext": null,
+      "errorRange": [
+        8,
+        2
+      ],
+      "fixInfo": {
+        "editColumn": 8,
+        "deleteCount": 2,
+        "insertText": "  "
+      },
+      "severity": "error"
+    },
+    {
+      "lineNumber": 27,
+      "ruleNames": [
+        "MD010",
+        "no-hard-tabs"
+      ],
+      "ruleDescription": "Hard tabs",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md010.md",
+      "errorDetail": "Column: 14",
+      "errorContext": null,
+      "errorRange": [
+        14,
+        2
+      ],
+      "fixInfo": {
+        "editColumn": 14,
+        "deleteCount": 2,
+        "insertText": "  "
+      },
+      "severity": "error"
+    },
+    {
       "lineNumber": 5,
       "ruleNames": [
         "MD042",
@@ -14199,6 +14241,23 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
       "ruleDescription": "No empty links",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md042.md",
       "errorDetail": null,
+      "errorContext": "[text][\\t\\tfRAg\\t\\t]",
+      "errorRange": [
+        1,
+        16
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 29,
+      "ruleNames": [
+        "MD042",
+        "no-empty-links"
+      ],
+      "ruleDescription": "No empty links",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md042.md",
+      "errorDetail": null,
       "errorContext": "[frag][]",
       "errorRange": [
         1,
@@ -14208,7 +14267,7 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 29,
+      "lineNumber": 31,
       "ruleNames": [
         "MD042",
         "no-empty-links"
@@ -14225,24 +14284,7 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 74,
-      "ruleNames": [
-        "MD042",
-        "no-empty-links"
-      ],
-      "ruleDescription": "No empty links",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md042.md",
-      "errorDetail": null,
-      "errorContext": "[text]()",
-      "errorRange": [
-        1,
-        8
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 78,
+      "lineNumber": 76,
       "ruleNames": [
         "MD042",
         "no-empty-links"
@@ -14276,7 +14318,7 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
       "severity": "error"
     },
     {
-      "lineNumber": 83,
+      "lineNumber": 82,
       "ruleNames": [
         "MD042",
         "no-empty-links"
@@ -14294,6 +14336,23 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
     },
     {
       "lineNumber": 85,
+      "ruleNames": [
+        "MD042",
+        "no-empty-links"
+      ],
+      "ruleDescription": "No empty links",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md042.md",
+      "errorDetail": null,
+      "errorContext": "[text]()",
+      "errorRange": [
+        1,
+        8
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 87,
       "ruleNames": [
         "MD042",
         "no-empty-links"
@@ -14336,6 +14395,8 @@ exports[`markdownlint-test-scenarios.mjs > empty-links.md 1`] = `
     "[text][frag] {MD042}",
     "",
     "[text][ frag ] {MD042}",
+    "",
+    "[text][  fRAg  ] {MD010} {MD042}",
     "",
     "[frag][] {MD042}",
     "",
@@ -33563,6 +33624,204 @@ exports[`markdownlint-test-scenarios.mjs > link-style-none.md 1`] = `
     "    \\"collapsed\\": false,",
     "    \\"shortcut\\": false",
     "  }",
+    "} -->",
+    ""
+  ]
+}
+`;
+
+exports[`markdownlint-test-scenarios.mjs > link-style-normalization.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 3,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[Link text][link label one]",
+      "errorRange": [
+        1,
+        27
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 5,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[link label one][]",
+      "errorRange": [
+        1,
+        18
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 7,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[link label one]",
+      "errorRange": [
+        1,
+        16
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 9,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[Link text][liNk lAbEl oNe]",
+      "errorRange": [
+        1,
+        27
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 11,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[ link  label  one ][]",
+      "errorRange": [
+        1,
+        22
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 13,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[linK\\tLabeL\\tOne]",
+      "errorRange": [
+        1,
+        16
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 17,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[Link text][link label two]",
+      "errorRange": [
+        1,
+        27
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 19,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[link label two][]",
+      "errorRange": [
+        1,
+        18
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 21,
+      "ruleNames": [
+        "MD054",
+        "link-image-style"
+      ],
+      "ruleDescription": "Link and image style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md054.md",
+      "errorDetail": null,
+      "errorContext": "[link label two]",
+      "errorRange": [
+        1,
+        16
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Link Style Normalization",
+    "",
+    "[Link text][link label one] {MD054}",
+    "",
+    "[link label one][] {MD054}",
+    "",
+    "[link label one] {MD054}",
+    "",
+    "[Link text][liNk lAbEl oNe] {MD054}",
+    "",
+    "[ link  label  one ][] {MD054}",
+    "",
+    "[linK\\tLabeL\\tOne] {MD054}",
+    "",
+    "[link label one]: https://example.com",
+    "",
+    "[Link text][link label two] {MD054}",
+    "",
+    "[link label two][] {MD054}",
+    "",
+    "[link label two] {MD054}",
+    "",
+    "[ lINk  laBel\\t\\tTWO  ]: https://example.com",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"link-image-style\\": {",
+    "    \\"autolink\\": false,",
+    "    \\"inline\\": false,",
+    "    \\"full\\": false,",
+    "    \\"collapsed\\": false,",
+    "    \\"shortcut\\": false",
+    "  },",
+    "  \\"no-hard-tabs\\": false,",
+    "  \\"no-space-in-links\\": false",
     "} -->",
     ""
   ]

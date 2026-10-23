@@ -53,7 +53,8 @@ exports[`markdownlint-test-exports.mjs > exported names 1`] = `
     "isString",
     "isUrl",
     "newLineRe",
-    "nextLinesRe"
+    "nextLinesRe",
+    "normalizeLinkLabelText"
   ],
   "markdownlint/style/all": [
     "comment",
