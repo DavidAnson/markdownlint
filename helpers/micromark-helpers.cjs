@@ -9,6 +9,7 @@ const { flatTokensSymbol, htmlFlowSymbol, newlineRe } = require("./shared.cjs");
 /** @typedef {import("../lib/exports.mjs").MicromarkToken} Token */
 // eslint-disable-next-line jsdoc/valid-types
 /** @typedef {typeof import("../lib/micromark-types.d.mts", { with: { "resolution-mode": "import" } })} _ambient_ */
+/** @type {import("micromark-extension-gfm-footnote")} */
 
 /**
  * Determines if a Micromark token is within an htmlFlow type.
@@ -178,11 +179,10 @@ function getDescendantsByType(parent, typePath) {
  */
 function getHeadingLevel(heading) {
   let level = 1;
-  const headingSequence = heading.children.find(
+  // @ts-ignore
+  const { text } = heading.children.find(
     (child) => [ "atxHeadingSequence", "setextHeadingLine" ].includes(child.type)
   );
-  // @ts-ignore
-  const { text } = headingSequence;
   if (text[0] === "#") {
     level = Math.min(text.length, 6);
   } else if (text[0] === "-") {

@@ -98,6 +98,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "MD041": true
     };
     const fsApi = {
+      // eslint-disable-next-line unicorn/prefer-default-parameters
       "access": (/** @type {string} */ p, /** @type {() => void} */ m, /** @type {() => void} */ cb) => {
         t.assert.equal(p, expanded);
         return (cb || m)();
@@ -472,6 +473,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "MD041": true
     };
     const fsApi = {
+      // eslint-disable-next-line unicorn/prefer-default-parameters
       "access": (/** @type {string} */ p, /** @type {() => void} */ m, /** @type {() => void} */ cb) => {
         t.assert.equal(p, extended);
         return (cb || m)();
@@ -567,6 +569,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "MD041": true
     };
     const fsApi = {
+      // eslint-disable-next-line unicorn/prefer-default-parameters
       "access": (/** @type {string} */ p, /** @type {() => void} */ m, /** @type {() => void} */ cb) => {
         t.assert.equal(p, extended);
         return (cb || m)();
