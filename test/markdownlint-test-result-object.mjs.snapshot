@@ -1125,6 +1125,34 @@ exports[`markdownlint-test-result-object.mjs > convertToResultVersionN 1`] = `
         "severity": "error"
       }
     ],
+    "./test/front-matter.md": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [
+          "first-line"
+        ],
+        "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null,
+        "fixInfo": null,
+        "severity": "error"
+      },
+      {
+        "lineNumber": 4,
+        "ruleNames": [
+          "first-line"
+        ],
+        "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null,
+        "fixInfo": null,
+        "severity": "error"
+      }
+    ],
     "./test/inline-disable-enable.md": [
       {
         "lineNumber": 1,
@@ -3196,6 +3224,12 @@ exports[`markdownlint-test-result-object.mjs > convertToResultVersionN 1`] = `
         110
       ]
     },
+    "./test/front-matter.md": {
+      "first-line": [
+        1,
+        4
+      ]
+    },
     "./test/inline-disable-enable.md": {
       "first-line": [
         1
@@ -4032,6 +4066,28 @@ exports[`markdownlint-test-result-object.mjs > convertToResultVersionN 1`] = `
         ],
         "ruleName": "MD060",
         "ruleAlias": "table-column-style"
+      }
+    ],
+    "./test/front-matter.md": [
+      {
+        "lineNumber": 1,
+        "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null,
+        "ruleName": "first-line",
+        "ruleAlias": "first-line"
+      },
+      {
+        "lineNumber": 4,
+        "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null,
+        "ruleName": "first-line",
+        "ruleAlias": "first-line"
       }
     ],
     "./test/inline-disable-enable.md": [
@@ -6096,6 +6152,30 @@ exports[`markdownlint-test-result-object.mjs > convertToResultVersionN 1`] = `
           18,
           1
         ]
+      }
+    ],
+    "./test/front-matter.md": [
+      {
+        "lineNumber": 1,
+        "ruleNames": [
+          "first-line"
+        ],
+        "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null
+      },
+      {
+        "lineNumber": 4,
+        "ruleNames": [
+          "first-line"
+        ],
+        "ruleDescription": "Rule that reports an error for the first line",
+        "ruleInformation": null,
+        "errorDetail": null,
+        "errorContext": null,
+        "errorRange": null
       }
     ],
     "./test/inline-disable-enable.md": [

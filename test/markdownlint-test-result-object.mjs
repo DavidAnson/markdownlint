@@ -295,6 +295,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "customRules": [ firstLine ],
       "files": [
         "./test/break-all-the-rules.md",
+        "./test/front-matter.md",
         "./test/inline-disable-enable.md"
       ],
       "strings": {

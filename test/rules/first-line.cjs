@@ -9,9 +9,16 @@ module.exports = {
   "tags": [ "test" ],
   "parser": "none",
   "function": function rule(params, onError) {
-    // Unconditionally report an error for line 1
+    // Unconditionally report an error for line 1 of content
     onError({
       "lineNumber": 1
     });
+    // Report an error for line 1 of front matter if present
+    if (params.frontMatterLines.length > 0) {
+      onError({
+        "frontMatter": true,
+        "lineNumber": 1
+      });
+    }
   }
 };
