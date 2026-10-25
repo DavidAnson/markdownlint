@@ -256,6 +256,9 @@ export default defineConfig(
     "files": [
       "**/package.json"
     ],
+    "ignores": [
+      "test/typescript/package.json"
+    ],
     "plugins": {
       "package-json": eslintPackageJson
     },
@@ -279,6 +282,9 @@ export default defineConfig(
   {
     "files": [
       "test/**/package.json"
+    ],
+    "ignores": [
+      "test/typescript/package.json"
     ],
     "rules": {
       "package-json/require-engines": "off"

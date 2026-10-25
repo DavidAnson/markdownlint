@@ -1,0 +1,11 @@
+{
+  "private": true,
+  "dependencies": {
+    "markdownlint": "../..",
+    "typescript": "*"
+  },
+  "scripts": {
+    "setup": "npm install && cd ../.. && npm install --production",
+    "test": "tsc --checkJs --noEmit markdownlint.configuration.mjs"
+  }
+}
