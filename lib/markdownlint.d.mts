@@ -194,7 +194,7 @@ export type MarkdownItBaseToken = {
     /**
      * HTML attributes.
      */
-    attrs: string[][] | null;
+    attrs: [string, string | number][] | null;
     /**
      * Block-level token.
      */
@@ -230,7 +230,7 @@ export type MarkdownItBaseToken = {
     /**
      * Arbitrary data.
      */
-    meta: Object;
+    meta: Record<string, unknown> | null;
     /**
      * Level change.
      */
@@ -373,8 +373,13 @@ export type Rule = {
      */
     function: RuleFunction;
 };
-export type MarkdownItParse = (src: string, env: Object) => MarkdownItBaseToken[];
-export type MarkdownIt = import("markdown-it").MarkdownIt;
+export type MarkdownItParse = (src: string, env: Record<string | symbol, unknown>) => MarkdownItBaseToken[];
+export type MarkdownIt = {
+    /**
+     * Markdown parse function.
+     */
+    parse: MarkdownItParse;
+};
 export type MarkdownItFactory = () => MarkdownIt | Promise<MarkdownIt>;
 export type Options = {
     /**
@@ -546,7 +551,7 @@ export type RuleConfiguration = boolean | any;
  * markdown-it base token.
  *
  * @typedef {Object} MarkdownItBaseToken
- * @property {string[][] | null} attrs HTML attributes.
+ * @property {[string, string | number][] | null} attrs HTML attributes.
  * @property {boolean} block Block-level token.
  * @property {MarkdownItBaseToken[] | null} children Child nodes.
  * @property {string} content Tag contents.
@@ -555,7 +560,7 @@ export type RuleConfiguration = boolean | any;
  * @property {number} level Nesting level.
  * @property {number[] | null} map Beginning/ending line numbers.
  * @property {string} markup Markup text.
- * @property {Object} meta Arbitrary data.
+ * @property {Record<string, unknown> | null} meta Arbitrary data.
  * @property {number} nesting Level change.
  * @property {string} tag HTML tag name.
  * @property {string} type Token type.
@@ -628,19 +633,24 @@ export type RuleConfiguration = boolean | any;
  * @property {RuleFunction} function Rule implementation.
  */
 /**
- * Method used by the markdown-it parser to parse input.
+ * Function used by the markdown-it parser to parse input.
  *
  * @callback MarkdownItParse
  * @param {string} src Source string.
- * @param {Object} env Environment sandbox.
+ * @param {Record<string | symbol, unknown>} env Environment sandbox.
  * @returns {MarkdownItBaseToken[]} Tokens.
  */
-/** @typedef {import("markdown-it").MarkdownIt} MarkdownIt */
+/**
+ * Type of the markdown-it parser.
+ *
+ * @typedef {Object} MarkdownIt
+ * @property {MarkdownItParse} parse Markdown parse function.
+ */
 /**
  * Gets an instance of the markdown-it parser. Any plugins should already have been loaded.
  *
  * @callback MarkdownItFactory
- * @returns {MarkdownIt|Promise<MarkdownIt>} Instance of the markdown-it parser.
+ * @returns {MarkdownIt | Promise<MarkdownIt>} Instance of the markdown-it parser.
  */
 /**
  * Configuration options.
