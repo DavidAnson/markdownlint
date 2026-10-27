@@ -82374,6 +82374,41 @@ exports[`markdownlint-test-scenarios.mjs > table-pipe-style-implicit-trailing.md
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > table-pipe-style-invalid-style.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 1,
+      "ruleNames": [
+        "MD055",
+        "table-pipe-style"
+      ],
+      "ruleDescription": "Table pipe style",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md055.md",
+      "errorDetail": "Expected: no_leading_and_trailing; Actual: consistent, leading_and_trailing, leading_only, no_leading_or_trailing, per_table, trailing_only; Invalid style 'no_leading_and_trailing'",
+      "errorContext": null,
+      "errorRange": null,
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Table Pipe Style Invalid Style {MD055:1}",
+    "",
+    "| Table | Heading |",
+    "| ----- | ------- |",
+    "| Cell  | Cell    |",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"table-pipe-style\\": {",
+    "    \\"style\\": \\"no_leading_and_trailing\\"",
+    "  }",
+    "} -->",
+    ""
+  ]
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > table-pipe-style.md 1`] = `
 {
   "errors": [
