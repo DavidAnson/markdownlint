@@ -1,10 +1,10 @@
-# Invalid ul-style style
+# Invalid ul-style style {MD004:1}
 
-* Item {MD004}
-  * Item {MD004}
+* Item
+  * Item
 
-+ Item {MD004}
-  + Item {MD004}
++ Item
+  + Item
 
 - Item
   - Item

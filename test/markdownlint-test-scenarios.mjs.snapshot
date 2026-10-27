@@ -27553,98 +27553,28 @@ exports[`markdownlint-test-scenarios.mjs > invalid-ul-style-style.md 1`] = `
 {
   "errors": [
     {
-      "lineNumber": 3,
+      "lineNumber": 1,
       "ruleNames": [
         "MD004",
         "ul-style"
       ],
       "ruleDescription": "Unordered list style",
       "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md004.md",
-      "errorDetail": "Expected: dash; Actual: asterisk",
+      "errorDetail": "Expected: invalid; Actual: asterisk, consistent, dash, plus, sublist; Invalid style 'invalid'",
       "errorContext": null,
-      "errorRange": [
-        1,
-        1
-      ],
-      "fixInfo": {
-        "editColumn": 1,
-        "deleteCount": 1,
-        "insertText": "-"
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 4,
-      "ruleNames": [
-        "MD004",
-        "ul-style"
-      ],
-      "ruleDescription": "Unordered list style",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md004.md",
-      "errorDetail": "Expected: dash; Actual: asterisk",
-      "errorContext": null,
-      "errorRange": [
-        3,
-        1
-      ],
-      "fixInfo": {
-        "editColumn": 3,
-        "deleteCount": 1,
-        "insertText": "-"
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 6,
-      "ruleNames": [
-        "MD004",
-        "ul-style"
-      ],
-      "ruleDescription": "Unordered list style",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md004.md",
-      "errorDetail": "Expected: dash; Actual: plus",
-      "errorContext": null,
-      "errorRange": [
-        1,
-        1
-      ],
-      "fixInfo": {
-        "editColumn": 1,
-        "deleteCount": 1,
-        "insertText": "-"
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 7,
-      "ruleNames": [
-        "MD004",
-        "ul-style"
-      ],
-      "ruleDescription": "Unordered list style",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md004.md",
-      "errorDetail": "Expected: dash; Actual: plus",
-      "errorContext": null,
-      "errorRange": [
-        3,
-        1
-      ],
-      "fixInfo": {
-        "editColumn": 3,
-        "deleteCount": 1,
-        "insertText": "-"
-      },
+      "errorRange": null,
+      "fixInfo": null,
       "severity": "error"
     }
   ],
   "fixed": [
-    "# Invalid ul-style style",
+    "# Invalid ul-style style {MD004:1}",
     "",
-    "- Item {MD004}",
-    "  - Item {MD004}",
+    "* Item",
+    "  * Item",
     "",
-    "- Item {MD004}",
-    "  - Item {MD004}",
+    "+ Item",
+    "  + Item",
     "",
     "- Item",
     "  - Item",
