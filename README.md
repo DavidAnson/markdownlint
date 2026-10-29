@@ -225,6 +225,10 @@ comments (which are not rendered):
 - Capture the current rule configuration: `<!-- markdownlint-capture -->`
 - Restore the captured rule configuration: `<!-- markdownlint-restore -->`
 
+The entire HTML comment (including open and close tags) must occupy a single
+line. Other content can appear on the same line, but that is discouraged for
+clarity.
+
 For example:
 
 ```markdown
@@ -280,12 +284,16 @@ the following syntax is supported:
 - Disable one or more rules by name: `<!-- markdownlint-disable-file MD001 -->`
 - Enable one or more rules by name: `<!-- markdownlint-enable-file MD001 -->`
 
-This can be used to "hide" `markdownlint` comments at the bottom of a file.
+This can be used to "hide" `markdownlint` comments at the bottom of a file. As
+above, the entire comment must occupy a single line.
 
 In cases where it is desirable to change the configuration of one or
 more rules for a file, the following more advanced syntax is supported:
 
 - Configure: `<!-- markdownlint-configure-file { options.config JSON } -->`
+
+Unlike other inline comments, this comment may occupy multiple lines (as long as
+it remains a valid HTML comment).
 
 For example:
 
