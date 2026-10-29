@@ -86,7 +86,7 @@
     "cross-env": "10.1.0",
     "eslint-node-test": "1.0.1",
     "eslint-package-json": "3.0.0",
-    "eslint-plugin-jsdoc": "65.3.11",
+    "eslint-plugin-jsdoc": "65.3.12",
     "eslint-plugin-n": "18.5.0",
     "eslint-plugin-redos": "4.5.0",
     "eslint-plugin-regexp": "3.3.1",
