@@ -376,6 +376,7 @@ module.exports.frontMatterHasTitle =
       (frontMatterTitlePattern !== undefined) && !frontMatterTitlePattern;
     const frontMatterTitleRe =
       new RegExp(
+        // eslint-disable-next-line unicorn/no-useless-coercion
         String(frontMatterTitlePattern || "^\\s*\"?title\"?\\s*[:=]"),
         "i"
       );
