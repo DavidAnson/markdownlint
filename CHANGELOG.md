@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.42.1
+
+- Improve MD042/MD054
+- Update dependencies
+
 ## 0.42.0
 
 - Improve MD011/MD018/MD020/MD043/MD051/MD055/MD060
