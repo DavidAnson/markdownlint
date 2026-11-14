@@ -53736,6 +53736,149 @@ exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-ignored-la
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-inlines.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 3,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"one\\"",
+      "errorContext": "[one][]",
+      "errorRange": [
+        1,
+        7
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 5,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"\`two\`\\"",
+      "errorContext": "[\`two\`][]",
+      "errorRange": [
+        1,
+        9
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 7,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"*three*\\"",
+      "errorContext": "[*three*][]",
+      "errorRange": [
+        1,
+        11
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 9,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"__four__\\"",
+      "errorContext": "[__four__][]",
+      "errorRange": [
+        1,
+        12
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 11,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"<b>five</b>\\"",
+      "errorContext": "[<b>five</b>][]",
+      "errorRange": [
+        1,
+        15
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 13,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"<https://example.com/six>\\"",
+      "errorContext": "[<https://example.com/six>][]",
+      "errorRange": [
+        1,
+        29
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Reference Links and Images (Inlines)",
+    "",
+    "[one][] {MD052}",
+    "",
+    "[\`two\`][] {MD052}",
+    "",
+    "[*three*][] {MD052}",
+    "",
+    "[__four__][] {MD052}",
+    "",
+    "[<b>five</b>][] {MD052}",
+    "",
+    "[<https://example.com/six>][] {MD052}",
+    "",
+    "\`\`\`comment",
+    "[one]: file.md",
+    "[\`two\`]: file.md",
+    "[*three*]: file.md",
+    "[__four__]: file.md",
+    "[<b>five</b>]: file.md",
+    "[<https://example.com/six>]: file.md",
+    "\`\`\`",
+    "",
+    "<!-- markdownlint-configure-file { \\"no-inline-html\\": false } -->",
+    "",
+    "[![text][image]][label]",
+    "",
+    "[![text][image]][missing]",
+    "",
+    "[label]: file",
+    "[image]: file",
+    ""
+  ]
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-shortcuts.md 1`] = `
 {
   "errors": [
@@ -53986,510 +54129,6 @@ exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-shortcuts.
     "    \\"shortcut_syntax\\": true",
     "  }",
     "} -->",
-    ""
-  ]
-}
-`;
-
-exports[`markdownlint-test-scenarios.mjs > reference-links-and-images.md 1`] = `
-{
-  "errors": [
-    {
-      "lineNumber": 186,
-      "ruleNames": [
-        "MD034",
-        "no-bare-urls"
-      ],
-      "ruleDescription": "Bare URL used",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md034.md",
-      "errorDetail": null,
-      "errorContext": "https://example.com/footnote",
-      "errorRange": [
-        7,
-        28
-      ],
-      "fixInfo": {
-        "editColumn": 7,
-        "deleteCount": 28,
-        "insertText": "<https://example.com/footnote>"
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 72,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing\\"",
-      "errorContext": "[text][missing]",
-      "errorRange": [
-        16,
-        15
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 74,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing\\"",
-      "errorContext": "[text][missing]",
-      "errorRange": [
-        36,
-        15
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 76,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing label\\"",
-      "errorContext": "[text][missing",
-      "errorRange": [
-        35,
-        14
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 79,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing\\"",
-      "errorContext": "[text][missing]",
-      "errorRange": [
-        32,
-        15
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 125,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing\\"",
-      "errorContext": "![text][missing]",
-      "errorRange": [
-        13,
-        16
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 127,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing\\"",
-      "errorContext": "![text][missing]",
-      "errorRange": [
-        17,
-        16
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 222,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"missing\\"",
-      "errorContext": "[![text][image]][missing]",
-      "errorRange": [
-        21,
-        25
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 236,
-      "ruleNames": [
-        "MD052",
-        "reference-links-images"
-      ],
-      "ruleDescription": "Reference links and images should use a label that is defined",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
-      "errorDetail": "Missing link or image reference definition: \\"hidden\\"",
-      "errorContext": "[hidden][]",
-      "errorRange": [
-        19,
-        10
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 198,
-      "ruleNames": [
-        "MD053",
-        "link-image-reference-definitions"
-      ],
-      "ruleDescription": "Link and image reference definitions should be needed",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md053.md",
-      "errorDetail": "Duplicate link or image reference definition: \\"label\\"",
-      "errorContext": "[label]: {MD053}",
-      "errorRange": [
-        1,
-        16
-      ],
-      "fixInfo": {
-        "deleteCount": -1
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 200,
-      "ruleNames": [
-        "MD053",
-        "link-image-reference-definitions"
-      ],
-      "ruleDescription": "Link and image reference definitions should be needed",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md053.md",
-      "errorDetail": "Unused link or image reference definition: \\"unused\\"",
-      "errorContext": "[unused]: {MD053}",
-      "errorRange": [
-        1,
-        17
-      ],
-      "fixInfo": {
-        "deleteCount": -1
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 202,
-      "ruleNames": [
-        "MD053",
-        "link-image-reference-definitions"
-      ],
-      "ruleDescription": "Link and image reference definitions should be needed",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md053.md",
-      "errorDetail": "Unused link or image reference definition: \\"^3\\"",
-      "errorContext": "[^3]: {MD053}",
-      "errorRange": [
-        1,
-        13
-      ],
-      "fixInfo": {
-        "deleteCount": -1
-      },
-      "severity": "error"
-    },
-    {
-      "lineNumber": 206,
-      "ruleNames": [
-        "MD053",
-        "link-image-reference-definitions"
-      ],
-      "ruleDescription": "Link and image reference definitions should be needed",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md053.md",
-      "errorDetail": "Unused link or image reference definition: \\"duplicate unused multi-line label {md053}\\"",
-      "errorContext": "[Duplicate unused multi-line l...",
-      "errorRange": [
-        1,
-        44
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    },
-    {
-      "lineNumber": 209,
-      "ruleNames": [
-        "MD053",
-        "link-image-reference-definitions"
-      ],
-      "ruleDescription": "Link and image reference definitions should be needed",
-      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md053.md",
-      "errorDetail": "Duplicate link or image reference definition: \\"duplicate unused multi-line label {md053}\\"",
-      "errorContext": "[Duplicate unused multi-line l...",
-      "errorRange": [
-        1,
-        44
-      ],
-      "fixInfo": null,
-      "severity": "error"
-    }
-  ],
-  "fixed": [
-    "# Reference Links and Images",
-    "",
-    "## Valid Links",
-    "",
-    "Full reference link: [text][label]",
-    "",
-    "Collapsed reference link: [label][]",
-    "",
-    "Shortcut reference link: [label]",
-    "",
-    "Same line: [text][label] [label][] [label]",
-    "",
-    "Mixed case: [TEXT][LABEL] [LABEL][] [LABEL]",
-    "",
-    "With spaces: [text][label with spaces] [text][ label  with spaces ]",
-    "",
-    "With nested brackets: [t[ex]t][label]",
-    "",
-    "With inline content: [*text*][label]",
-    "",
-    "With inline code span: [\`code\`][label]",
-    "",
-    "Shortcut inline code span: [\`code\`]",
-    "",
-    "Multi-line full text: [multi",
-    "line][multi line full text]",
-    "",
-    "Multi-line full label: [text][multi",
-    "line full label]",
-    "",
-    "Multi-line collapsed label: [multi",
-    "line collapsed label][]",
-    "",
-    "Multi-line shortcut label: [multi line",
-    "shortcut label]",
-    "",
-    "> Multi-line full text: [multi",
-    "> line][blockquote multi line full text]",
-    ">",
-    "> Multi-line full label: [text][blockquote multi",
-    "> line full label]",
-    ">",
-    "> Multi-line collapsed label: [blockquote multi",
-    "> line collapsed label][]",
-    ">",
-    "> Multi-line shortcut label: [blockquote multi line",
-    "> shortcut label]",
-    ">",
-    "> > Multi-line shortcut label: [blockquote blockquote",
-    "> > multi line shortcut label]",
-    "",
-    "Dedicated line:",
-    "[text][label]",
-    "",
-    "Dedicated line with trailing colon:",
-    "[text][label]:",
-    "",
-    "Shortcut ending in colon: [colon]:",
-    "",
-    "Use of multi-line label: [multi-line-label][]",
-    "",
-    "Use of link in label: [link-in-label][]",
-    "",
-    "Standard link: [text](https://example.com/standard)",
-    "",
-    "Wrapped in brackets: [[text][unique0]] [[unique1][]] [[unique2]]",
-    "",
-    "[Embedded [text][unique3] in [unique4][] brackets [unique5]]",
-    "",
-    "## Invalid Links",
-    "",
-    "Missing label: [text][missing] {MD052}",
-    "",
-    "Mixed valid/invalid: [text][label] [text][missing] {MD052}",
-    "",
-    "Missing multi-line label {MD052}: [text][missing",
-    "label]",
-    "",
-    "> Missing label in blockquote: [text][missing] {MD052}",
-    "",
-    "## Non-Links",
-    "",
-    "Space: [text] [wrong]",
-    "",
-    "Empty: [text][ ]",
-    "",
-    "Code span: \`[wrong]\`",
-    "",
-    "Code span: \`[wrong][]\`",
-    "",
-    "Code span: \`[text][wrong]\`",
-    "",
-    "Code span: \`[[wrong]]\`",
-    "",
-    "Code span: \`[[wrong][]]\`",
-    "",
-    "Code span: \`[[text][wrong]]\`",
-    "",
-    "Escaped left text: \\\\[text][wrong]",
-    "",
-    "Escaped right text: [text\\\\][wrong]",
-    "",
-    "Escaped left label: [text]\\\\[wrong]",
-    "",
-    "Escaped right label: [text][wrong\\\\]",
-    "",
-    "## Valid Images",
-    "",
-    "Full style: ![text][image0]",
-    "",
-    "Collapsed style: ![image1][]",
-    "",
-    "Shortcut style: ![image2]",
-    "",
-    "Image in link: [![text][image3]](link) [![image4][]](link) [![image5]](link)",
-    "",
-    "Image in shortcut link: [![text][image6]][unique6] [![image7][]][unique7] [![image8]][unique8]",
-    "",
-    "Wrapped in brackets: [![text][unique9]]",
-    "",
-    "Embedded [in ![text][unique10] brackets]",
-    "",
-    "## Invalid Images",
-    "",
-    "Image only: ![text][missing] {MD052}",
-    "",
-    "Image in link: [![text][missing]][label] {MD052}",
-    "",
-    "## Non-Images",
-    "",
-    "Escaped left text: !\\\\[text][wrong]",
-    "",
-    "Escaped right text: ![text\\\\][wrong]",
-    "",
-    "Escaped left label: ![text]\\\\[wrong]",
-    "",
-    "Escaped right label: ![text][wrong\\\\]",
-    "",
-    "## Valid Footnotes",
-    "",
-    "Footnote[^1]",
-    "",
-    "## Invalid Footnotes",
-    "",
-    "Missing[^2]",
-    "",
-    "## Valid Labels",
-    "",
-    "[label]: https://example.com/label",
-    "[ label with  spaces ]: https://example.com/label-with-spaces",
-    "[image]:https://example.com/image",
-    "[image0]: https://example.com/image0",
-    "[image1]: https://example.com/image1",
-    "[image2]: https://example.com/image2",
-    "[image3]: https://example.com/image3",
-    "[image4]: https://example.com/image4",
-    "[image5]: https://example.com/image5",
-    "[image6]: https://example.com/image6",
-    "[image7]: https://example.com/image7",
-    "[image8]: https://example.com/image8",
-    "[\`code\`]: https://example.com/code",
-    "[multi line full text]: https://example.com/multi-line-full-text",
-    "[multi line full label]: https://example.com/multi-line-full-label",
-    "[multi line collapsed label]: https://example.com/multi-line-collapsed-label",
-    "[multi line shortcut label]: https://example.com/multi-line-shortcut-label",
-    "[blockquote multi line full text]: https://example.com/blockquote-multi-line-full-text",
-    "[blockquote multi line full label]: https://example.com/blockquote-multi-line-full-label",
-    "[blockquote multi line collapsed label]: https://example.com/blockquote-multi-line-collapsed-label",
-    "[blockquote multi line shortcut label]: https://example.com/blockquote-multi-line-shortcut-label",
-    "[blockquote blockquote multi line shortcut label]: https://example.com/blockquote-blockquote-multi-line-shortcut-label",
-    "[colon]: https://example.com/colon",
-    "[multi-line-label]:",
-    "https://example.com/multi-line-label",
-    "[link-in-label]: https://example.com/path?[brackets][]",
-    "[unique0]: https://example.com/unique0",
-    "[unique1]: https://example.com/unique1",
-    "[unique2]: https://example.com/unique2",
-    "[unique3]: https://example.com/unique3",
-    "[unique4]: https://example.com/unique4",
-    "[unique5]: https://example.com/unique5",
-    "[unique6]: https://example.com/unique6",
-    "[unique7]: https://example.com/unique7",
-    "[unique8]: https://example.com/unique8",
-    "[unique9]: https://example.com/unique9",
-    "[unique10]: https://example.com/unique10",
-    "[^1]: <https://example.com/footnote> {MD034}",
-    "",
-    "## Ignored Labels",
-    "",
-    "[//]: # (This is a technique for putting comments in Markdown)",
-    "",
-    "[//]: <> (Here is another variant)",
-    "",
-    "## Invalid Labels",
-    "",
-    "Duplicate/unused:",
-    "",
-    "[blank-line-filler-0]: https://example.com",
-    "[blank-line-filler-1]: https://example.com",
-    "",
-    "[blank-line-filler-0][] [blank-line-filler-1][]",
-    "",
-    "[Duplicate unused multi-line label {MD053}]:",
-    "https://example.com/duplicate-unused-multi-line-label",
-    "",
-    "[Duplicate unused multi-line label {MD053}]:",
-    "https://example.com/duplicate-unused-multi-line-label",
-    "",
-    "\\\\[Escaped left]: text",
-    "",
-    "[Escaped right\\\\]: text",
-    "",
-    "## Valid Links and Images after Labels",
-    "",
-    "Link and image: [text][label] [![text][image]][label]",
-    "",
-    "## More Invalid Links and Images after Labels",
-    "",
-    "Bad link with image [![text][image]][missing] {MD052}",
-    "",
-    "## Shortcut One-Way Handling",
-    "",
-    "Validates the label: [shortcut]",
-    "",
-    "[shortcut]: https://example.com/shortcut",
-    "",
-    "Not flagged due to ambiguity: [ignored]",
-    "",
-    "## Open Bracket Pairs",
-    "",
-    "Unmatched [ in text",
-    "",
-    "Hidden reference: [hidden][] {MD052}",
-    "",
-    "## Link references inside reference definitions",
-    "",
-    "Text with a [^footnote] in it",
-    "",
-    "[^footnote]: Footnote with an [embedded-reference][] in it",
-    "",
-    "[embedded-reference]: https://example.com/embedded-reference",
-    "",
-    "## GitHub Flavored Markdown Task List Items",
-    "",
-    "- [ ] Unchecked task list item",
-    "- [x] Checked task list item",
     ""
   ]
 }
