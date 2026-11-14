@@ -53736,6 +53736,285 @@ exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-ignored-la
 }
 `;
 
+exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-inlines.md 1`] = `
+{
+  "errors": [
+    {
+      "lineNumber": 3,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"one\\"",
+      "errorContext": "[one][]",
+      "errorRange": [
+        1,
+        7
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 5,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"\`two\`\\"",
+      "errorContext": "[\`two\`][]",
+      "errorRange": [
+        1,
+        9
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 7,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"\` three \`\\"",
+      "errorContext": "[\` three \`][]",
+      "errorRange": [
+        1,
+        13
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 9,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"*four*\\"",
+      "errorContext": "[*four*][]",
+      "errorRange": [
+        1,
+        10
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 11,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"__five__\\"",
+      "errorContext": "[__five__][]",
+      "errorRange": [
+        1,
+        12
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 13,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"<b>six</b>\\"",
+      "errorContext": "[<b>six</b>][]",
+      "errorRange": [
+        1,
+        14
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 15,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"<b> seven </b>\\"",
+      "errorContext": "[<b> seven </b>][]",
+      "errorRange": [
+        1,
+        18
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 17,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"https://example.com/eight\\"",
+      "errorContext": "[https://example.com/eight][]",
+      "errorRange": [
+        1,
+        29
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 19,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"<https://example.com/nine>\\"",
+      "errorContext": "[<https://example.com/nine>][]",
+      "errorRange": [
+        1,
+        30
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 21,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"mailto:ten@example.com\\"",
+      "errorContext": "[mailto:ten@example.com][]",
+      "errorRange": [
+        1,
+        26
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 23,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"<mailto:eleven@example.com>\\"",
+      "errorContext": "[<mailto:eleven@example.com>][]",
+      "errorRange": [
+        1,
+        31
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 25,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"$cos(twelve)$\\"",
+      "errorContext": "[$cos(twelve)$][]",
+      "errorRange": [
+        1,
+        17
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    },
+    {
+      "lineNumber": 27,
+      "ruleNames": [
+        "MD052",
+        "reference-links-images"
+      ],
+      "ruleDescription": "Reference links and images should use a label that is defined",
+      "ruleInformation": "https://github.com/DavidAnson/markdownlint/blob/v0.0.0/doc/md052.md",
+      "errorDetail": "Missing link or image reference definition: \\"$ cos(thirteen) $\\"",
+      "errorContext": "[$ cos(thirteen) $][]",
+      "errorRange": [
+        1,
+        21
+      ],
+      "fixInfo": null,
+      "severity": "error"
+    }
+  ],
+  "fixed": [
+    "# Reference Links and Images (Inlines)",
+    "",
+    "[one][] {MD052}",
+    "",
+    "[\`two\`][] {MD052}",
+    "",
+    "[\` three \`][] {MD052}",
+    "",
+    "[*four*][] {MD052}",
+    "",
+    "[__five__][] {MD052}",
+    "",
+    "[<b>six</b>][] {MD052}",
+    "",
+    "[<b> seven </b>][] {MD052}",
+    "",
+    "[https://example.com/eight][] {MD052}",
+    "",
+    "[<https://example.com/nine>][] {MD052}",
+    "",
+    "[mailto:ten@example.com][] {MD052}",
+    "",
+    "[<mailto:eleven@example.com>][] {MD052}",
+    "",
+    "[$cos(twelve)$][] {MD052}",
+    "",
+    "[$ cos(thirteen) $][] {MD052}",
+    "",
+    "\`\`\`comment",
+    "[one]: file.md",
+    "[\`two\`]: file.md",
+    "[\` three \`]: file.md",
+    "[*four*]: file.md",
+    "[__five__]: file.md",
+    "[<b>six</b>]: file.md",
+    "[<b> seven </b>]: file.md",
+    "[https://example.com/eight]: file.md",
+    "[<https://example.com/nine>]: file.md",
+    "[mailto:ten@example.com]: file.md",
+    "[<mailto:eleven@example.com>]: file.md",
+    "[$cos(twelve)$]: file.md",
+    "[$ cos(thirteen) $]: file.md",
+    "\`\`\`",
+    "",
+    "<!-- markdownlint-configure-file {",
+    "  \\"no-inline-html\\": false,",
+    "  \\"no-space-in-code\\": false",
+    "} -->",
+    ""
+  ]
+}
+`;
+
 exports[`markdownlint-test-scenarios.mjs > reference-links-and-images-shortcuts.md 1`] = `
 {
   "errors": [
