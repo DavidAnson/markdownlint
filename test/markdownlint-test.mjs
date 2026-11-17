@@ -1473,12 +1473,29 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     lintSync(options);
   });
 
+  test("configWithNullPrototype", async(t) => {
+    t.plan(1);
+    const lineLength = Object.create(null);
+    // eslint-disable-next-line dot-notation
+    lineLength["line_length"] = 100;
+    const config = Object.create(null);
+    config["line-length"] = lineLength;
+    const options = {
+      config,
+      "strings": {
+        "content": "# Heading heading heading heading heading heading heading heading heading heading heading\n"
+      }
+    };
+    const actual = await lintPromise(options);
+    t.assert.equal(actual.content.length, 0);
+  });
+
   test("configParsersInvalid", async(t) => {
-    t.plan(2);
+    t.plan(3);
     const options = {
       "strings": {
         "content": [
-          "Text",
+          "Text text text text text text text text text text text text text text text text text text",
           "",
           "<!-- markdownlint-configure-file",
           "  \"first-line-heading\": false",
@@ -1488,8 +1505,9 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       }
     };
     const actual = await lintPromise(options);
-    t.assert.equal(actual.content.length, 1);
-    t.assert.equal(actual.content[0].ruleNames[0], "MD041");
+    t.assert.equal(actual.content.length, 2);
+    t.assert.equal(actual.content[0].ruleNames[0], "MD013");
+    t.assert.equal(actual.content[1].ruleNames[0], "MD041");
   });
 
   test("configParsersJSON", async(t) => {
@@ -1497,11 +1515,12 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const options = {
       "strings": {
         "content": [
-          "Text",
+          "Text text text text text text text text text text text text text text text text text text",
           "",
           "<!-- markdownlint-configure-file",
           "{",
-          "  \"first-line-heading\": false",
+          "  \"first-line-heading\": false,",
+          "  \"line-length\": { \"line_length\": 100 }",
           "}",
           "-->",
           ""
@@ -1517,12 +1536,13 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const options = {
       "strings": {
         "content": [
-          "Text",
+          "Text text text text text text text text text text text text text text text text text text",
           "",
           "<!-- markdownlint-configure-file",
           "/* Comment */",
           "{",
-          "  \"first-line-heading\": false // Comment",
+          "  \"first-line-heading\": false, // Comment",
+          "  \"line-length\": { \"line_length\": 100 }",
           "}",
           "-->",
           ""
@@ -1539,11 +1559,13 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const options = {
       "strings": {
         "content": [
-          "Text",
+          "Text text text text text text text text text text text text text text text text text text",
           "",
           "<!-- markdownlint-configure-file",
           "# Comment",
           "first-line-heading: false",
+          "line-length:",
+          "  line_length: 100",
           "-->",
           ""
         ].join("\n")
@@ -1560,11 +1582,13 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     const options = {
       "strings": {
         "content": [
-          "Text",
+          "Text text text text text text text text text text text text text text text text text text",
           "",
           "<!-- markdownlint-configure-file",
           "# Comment",
           "first-line-heading = false",
+          "[line-length]",
+          "line_length = 100",
           "-->",
           ""
         ].join("\n")
