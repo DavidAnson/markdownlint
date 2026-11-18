@@ -82,7 +82,7 @@
     "@stylistic/eslint-plugin": "5.10.0",
     "ajv": "8.20.0",
     "character-entities": "2.0.2",
-    "concurrently": "10.0.6",
+    "concurrently": "10.0.7",
     "cross-env": "10.1.0",
     "eslint-node-test": "1.0.1",
     "eslint-package-json": "3.0.0",
