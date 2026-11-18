@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.42.2
+
+- Improve MD052
+- Handle null prototype configuration objects
+- Update dependencies
+
 ## 0.42.1
 
 - Improve MD042/MD054
