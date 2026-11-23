@@ -75,7 +75,7 @@
     "micromark-util-types": "2.0.3",
     "micromark": "4.0.3",
     "re2js": "2.9.1",
-    "string-width": "8.3.0"
+    "string-width": "9.0.0"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
