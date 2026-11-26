@@ -297,8 +297,7 @@ module.exports.addError = addError;
  * @param {RuleOnErrorFixInfo} [fixInfo] RuleOnErrorFixInfo instance.
  * @returns {void}
  */
-function addErrorDetailIf(
-  onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
+function addErrorDetailIf(onError, lineNumber, expected, actual, detail, context, range, fixInfo) {
   if (expected !== actual) {
     addError(
       onError,
@@ -307,7 +306,8 @@ function addErrorDetailIf(
         (detail ? "; " + detail : ""),
       context,
       range,
-      fixInfo);
+      fixInfo
+    );
   }
 }
 module.exports.addErrorDetailIf = addErrorDetailIf;
@@ -442,13 +442,19 @@ function getReferenceLinkImageData(tokens) {
       tokens,
       [
         // definitionLineIndices
-        "definition", "gfmFootnoteDefinition",
+        "definition",
+        "gfmFootnoteDefinition",
         // definitions and definitionLineIndices
-        "definitionLabelString", "gfmFootnoteDefinitionLabelString",
+        "definitionLabelString",
+        "gfmFootnoteDefinitionLabelString",
         // references and shortcuts
-        "gfmFootnoteCall", "image", "link",
+        "gfmFootnoteCall",
+        "image",
+        "link",
         // undefined link labels
-        "undefinedReferenceCollapsed", "undefinedReferenceFull", "undefinedReferenceShortcut"
+        "undefinedReferenceCollapsed",
+        "undefinedReferenceFull",
+        "undefinedReferenceShortcut"
       ]
     );
   for (const token of filteredTokens) {

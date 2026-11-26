@@ -46,9 +46,9 @@ export default defineConfig(
       "reportUnusedDisableDirectives": true
     },
     "rules": {
-      "@stylistic/array-bracket-spacing": [ "error", "always" ],
       "@stylistic/indent": [ "error", 2 ],
       "@stylistic/indent-binary-ops": [ "off" ],
+      "@stylistic/list-style": [ "error", { "singleLine": { "spacing": "never" }, "overrides": { "[]": { "singleLine": { "spacing": "always" } } } } ],
       "@stylistic/operator-linebreak": [ "error", "after" ],
       "@stylistic/padded-blocks": "off",
       "@stylistic/space-before-function-paren": [ "error", "never" ],

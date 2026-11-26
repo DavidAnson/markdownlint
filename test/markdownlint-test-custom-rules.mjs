@@ -37,27 +37,30 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       t.assert.equal(err, null);
       const expectedResult = {
         [customRulesMd]: [
-          { "lineNumber": 12,
+          {
+            "lineNumber": 12,
             "ruleNames": [ "any-blockquote-markdown-it" ],
             "ruleDescription": "Rule that reports an error for any blockquote",
-            "ruleInformation":
-              `${homepage}/blob/main/test/rules/any-blockquote.js`,
+            "ruleInformation": `${homepage}/blob/main/test/rules/any-blockquote.js`,
             "errorDetail": "Blockquote spans 1 line(s).",
             "errorContext": "> Blockquote",
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 12,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 12,
             "ruleNames": [ "any-blockquote-micromark" ],
             "ruleDescription": "Rule that reports an error for any blockquote",
-            "ruleInformation":
-              `${homepage}/blob/main/test/rules/any-blockquote.js`,
+            "ruleInformation": `${homepage}/blob/main/test/rules/any-blockquote.js`,
             "errorDetail": "Blockquote spans 1 line(s).",
             "errorContext": "> Blockquote",
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 2,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 2,
             "ruleNames": [ "every-n-lines" ],
             "ruleDescription": "Rule that reports an error every N lines",
             "ruleInformation": null,
@@ -65,8 +68,10 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
             "errorContext": null,
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 4,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 4,
             "ruleNames": [ "every-n-lines" ],
             "ruleDescription": "Rule that reports an error every N lines",
             "ruleInformation": null,
@@ -74,8 +79,10 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
             "errorContext": null,
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 6,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 6,
             "ruleNames": [ "every-n-lines" ],
             "ruleDescription": "Rule that reports an error every N lines",
             "ruleInformation": null,
@@ -83,8 +90,10 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
             "errorContext": null,
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 10,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 10,
             "ruleNames": [ "every-n-lines" ],
             "ruleDescription": "Rule that reports an error every N lines",
             "ruleInformation": null,
@@ -92,8 +101,10 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
             "errorContext": null,
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 12,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 12,
             "ruleNames": [ "every-n-lines" ],
             "ruleDescription": "Rule that reports an error every N lines",
             "ruleInformation": null,
@@ -101,8 +112,10 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
             "errorContext": null,
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 1,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 1,
             "ruleNames": [ "first-line" ],
             "ruleDescription": "Rule that reports an error for the first line",
             "ruleInformation": null,
@@ -110,27 +123,30 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
             "errorContext": null,
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 3,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 3,
             "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
-            "ruleDescription":
-              "Rule that reports an error for lines with the letters 'EX'",
+            "ruleDescription": "Rule that reports an error for lines with the letters 'EX'",
             "ruleInformation": `${homepage}/blob/main/test/rules/letters-E-X.js`,
             "errorDetail": null,
             "errorContext": "text",
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" },
-          { "lineNumber": 7,
+            "severity": "error"
+          },
+          {
+            "lineNumber": 7,
             "ruleNames": [ "letters-E-X", "letter-E-letter-X", "contains-ex" ],
-            "ruleDescription":
-              "Rule that reports an error for lines with the letters 'EX'",
+            "ruleDescription": "Rule that reports an error for lines with the letters 'EX'",
             "ruleInformation": `${homepage}/blob/main/test/rules/letters-E-X.js`,
             "errorDetail": null,
             "errorContext": "text",
             "errorRange": null,
             "fixInfo": null,
-            "severity": "error" }
+            "severity": "error"
+          }
         ]
       };
       t.assert.deepEqual(actualResult, expectedResult);
@@ -270,11 +286,11 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       ]
     }, function callback(err, result) {
       t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
-      // @ts-ignore
-      t.assert.equal(err.message,
-        "Name 'NO-missing-SPACE-atx' of custom rule at index 0 is " +
-          "already used as a name or tag.",
-        "Incorrect message for duplicate name.");
+      t.assert.equal(
+        err?.message,
+        "Name 'NO-missing-SPACE-atx' of custom rule at index 0 is already used as a name or tag.",
+        "Incorrect message for duplicate name."
+      );
       t.assert.equal(!result, true, "Got result for duplicate name.");
       resolve();
     });
@@ -295,10 +311,11 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       ]
     }, function callback(err, result) {
       t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
-      // @ts-ignore
-      t.assert.equal(err.message,
+      t.assert.equal(
+        err?.message,
         "Name 'HtMl' of custom rule at index 0 is already used as a name or tag.",
-        "Incorrect message for duplicate name.");
+        "Incorrect message for duplicate name."
+      );
       t.assert.equal(!result, true, "Got result for duplicate name.");
       resolve();
     });
@@ -326,11 +343,11 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       ]
     }, function callback(err, result) {
       t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
-      // @ts-ignore
-      t.assert.equal(err.message,
-        "Tag 'NO-missing-SPACE-atx' of custom rule at index 1 is " +
-          "already used as a name.",
-        "Incorrect message for duplicate name.");
+      t.assert.equal(
+        err?.message,
+        "Tag 'NO-missing-SPACE-atx' of custom rule at index 1 is already used as a name.",
+        "Incorrect message for duplicate name."
+      );
       t.assert.equal(!result, true, "Got result for duplicate tag.");
       resolve();
     });
@@ -787,9 +804,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "files": [ "./test/custom-rules.md" ]
     }, function callback(err, result) {
       t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
-      // @ts-ignore
-      t.assert.equal(err.message, exceptionMessage,
-        "Incorrect message for function thrown.");
+      t.assert.equal(err?.message, exceptionMessage, "Incorrect message for function thrown.");
       t.assert.equal(!result, true, "Got result for function thrown.");
       resolve();
     });
@@ -844,9 +859,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       }
     }, function callback(err, result) {
       t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
-      // @ts-ignore
-      t.assert.equal(err.message, exceptionMessage,
-        "Incorrect message for function thrown.");
+      t.assert.equal(err?.message, exceptionMessage, "Incorrect message for function thrown.");
       t.assert.equal(!result, true, "Got result for function thrown.");
       resolve();
     });
@@ -884,35 +897,36 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
 
   test("customRulesOnErrorNull", (t) => new Promise((resolve) => {
     t.plan(3);
-    lintAsync({
-      /** @type {import("markdownlint").Rule[]} */
-      "customRules": [
-        {
-          "names": [ "name" ],
-          "description": "description",
-          "tags": [ "tag" ],
-          "parser": "none",
-          "function": function onErrorNull(params, onError) {
-            // @ts-ignore
-            onError(null);
+    lintAsync(
+      {
+        /** @type {import("markdownlint").Rule[]} */
+        "customRules": [
+          {
+            "names": [ "name" ],
+            "description": "description",
+            "tags": [ "tag" ],
+            "parser": "none",
+            "function": function onErrorNull(params, onError) {
+              // @ts-ignore
+              onError(null);
+            }
           }
+        ],
+        "strings": {
+          "string": "String"
         }
-      ],
-      "strings": {
-        "string": "String"
+      },
+      function callback(err, result) {
+        t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
+        t.assert.equal(
+          err?.message,
+          "Value of 'onErrorInfo' passed to onError by 'NAME' is incorrect for 'string'.",
+          "Did not get correct exception for null object."
+        );
+        t.assert.equal(!result, true, "Got result for function thrown.");
+        resolve();
       }
-    },
-    function callback(err, result) {
-      t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
-      t.assert.equal(
-        // @ts-ignore
-        err.message,
-        "Value of 'onErrorInfo' passed to onError by 'NAME' is incorrect for 'string'.",
-        "Did not get correct exception for null object."
-      );
-      t.assert.equal(!result, true, "Got result for function thrown.");
-      resolve();
-    });
+    );
   }));
 
   test("customRulesOnErrorNullSync", (t) => {
@@ -1231,10 +1245,14 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     for (const scenario of scenarios) {
       const [
         input,
-        validLineNumbers, invalidLineNumbers,
-        validYamlLineNumbers, invalidYamlLineNumbers,
-        validRanges, invalidRanges,
-        validYamlRanges, invalidYamlRanges
+        validLineNumbers,
+        invalidLineNumbers,
+        validYamlLineNumbers,
+        invalidYamlLineNumbers,
+        validRanges,
+        invalidRanges,
+        validYamlRanges,
+        invalidYamlRanges
       ] = scenario;
       for (const validLineNumber of validLineNumbers) {
         /** @type {import("markdownlint").RuleOnErrorInfo} */
