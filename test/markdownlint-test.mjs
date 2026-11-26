@@ -1062,8 +1062,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       } else if (token.type === "inline") {
         if (inRules) {
           const rule = rulesLeft.shift();
-          t.assert.equal(!!rule, true,
-            "Missing rule implementation for " + token.content + ".");
+          t.assert.equal(!!rule, true, "Missing rule implementation for " + token.content + ".");
           if (rule) {
             const ruleName = rule.names[0];
             const ruleAliases = rule.names.slice(1);
@@ -1079,16 +1078,13 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
           const parts =
             token.content.replace(/[`*]/g, "").split(/ - |, |,\n/);
           const tag = parts.shift() || "";
-          t.assert.deepEqual(parts, tagToRules[tag] || [],
-            "Rule mismatch for tag " + tag + ".");
+          t.assert.deepEqual(parts, tagToRules[tag] || [], "Rule mismatch for tag " + tag + ".");
           delete tagToRules[tag];
         }
       }
     }
     const ruleLeft = rulesLeft.shift();
-    t.assert.equal(!ruleLeft, true,
-      "Missing rule documentation for " +
-        (ruleLeft || "[NO RULE]").toString() + ".");
+    t.assert.equal(!ruleLeft, true, "Missing rule documentation for " + (ruleLeft || "[NO RULE]").toString() + ".");
     const tagLeft = Object.keys(tagToRules).shift();
     t.assert.equal(!tagLeft, true, "Undocumented tag " + tagLeft + ".");
   });
@@ -1221,8 +1217,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       "utf8"
     );
     const yamlObject = yamlLoad(dataYaml);
-    t.assert.deepEqual(yamlObject, jsonObject,
-      "YAML example does not match JSON example.");
+    t.assert.deepEqual(yamlObject, jsonObject, "YAML example does not match JSON example.");
   });
 
   test("allBuiltInRulesHaveValidUrl", (t) => {
@@ -1246,7 +1241,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     for (const rule of customRules.all) {
       t.assert.equal(
         !rule.information || (Object.getPrototypeOf(rule.information) === URL.prototype),
-        true);
+        true
+      );
       if (rule === customRules.anyBlockquote) {
         t.assert.equal(
           rule.information?.href,
@@ -1410,17 +1406,18 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     t.plan(2);
     lintAsync({
       "strings": {
-        "string":
-  `# Heading
-
-  Text with: [^footnote]
-
-  [^footnote]: Footnote text on multiple
-
-      lines including a [reference][]
-
-  [reference]: https://example.com
-  `
+        "string": [
+          "# Heading",
+          "",
+          "Text with: [^footnote]",
+          "",
+          "[^footnote]: Footnote text on multiple",
+          "",
+          "    lines including a [reference][]",
+          "",
+          "[reference]: https://example.com",
+          ""
+        ].join("\n")
       }
     }, (err, actual) => {
       t.assert.equal(err, null);

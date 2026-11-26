@@ -16,24 +16,28 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
 
   test("configSingle", (t) => new Promise((resolve) => {
     t.plan(2);
-    readConfigAsync("./test/config/config-child.json",
+    readConfigAsync(
+      "./test/config/config-child.json",
       function callback(err, actual) {
         t.assert.equal(err, null);
         const expected = require("./config/config-child.json");
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configAbsolute", (t) => new Promise((resolve) => {
     t.plan(2);
-    readConfigAsync(path.join(import.meta.dirname, "config", "config-child.json"),
+    readConfigAsync(
+      path.join(import.meta.dirname, "config", "config-child.json"),
       function callback(err, actual) {
         t.assert.equal(err, null);
         const expected = require("./config/config-child.json");
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   if (sameFileSystem) {
@@ -46,13 +50,15 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
           const expected = require("./config/config-child.json");
           t.assert.deepEqual(actual, expected, "Config object not correct.");
           resolve();
-        });
+        }
+      );
     }));
   }
 
   test("configMultiple", (t) => new Promise((resolve) => {
     t.plan(2);
-    readConfigAsync("./test/config/config-grandparent.json",
+    readConfigAsync(
+      "./test/config/config-grandparent.json",
       function callback(err, actual) {
         t.assert.equal(err, null);
         const expected = {
@@ -64,12 +70,14 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         delete expected.extends;
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configMultipleWithRequireResolve", (t) => new Promise((resolve) => {
     t.plan(2);
-    readConfigAsync("./test/config/config-packageparent.json",
+    readConfigAsync(
+      "./test/config/config-packageparent.json",
       function callback(err, actual) {
         t.assert.equal(err, null);
         const expected = {
@@ -80,7 +88,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         delete expected.extends;
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configCustomFileSystem", (t) => new Promise((resolve) => {
@@ -127,12 +136,14 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         delete expected.extends;
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configBadFile", (t) => new Promise((resolve) => {
     t.plan(4);
-    readConfigAsync("./test/config/config-badfile.json",
+    readConfigAsync(
+      "./test/config/config-badfile.json",
       function callback(err, result) {
         t.assert.notEqual(err, null, "Did not get an error for bad file.");
         t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
@@ -140,57 +151,64 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         t.assert.equal(err.code, "ENOENT", "Error code for bad file not ENOENT.");
         t.assert.equal(!result, true, "Got result for bad file.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configBadChildFile", (t) => new Promise((resolve) => {
     t.plan(4);
-    readConfigAsync("./test/config/config-badchildfile.json",
+    readConfigAsync(
+      "./test/config/config-badchildfile.json",
       function callback(err, result) {
         t.assert.notEqual(err, null, "Did not get an error for bad child file.");
         t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
         // @ts-ignore
-        t.assert.equal(err.code, "ENOENT",
-          "Error code for bad child file not ENOENT.");
+        t.assert.equal(err.code, "ENOENT", "Error code for bad child file not ENOENT.");
         t.assert.equal(!result, true, "Got result for bad child file.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configBadChildPackage", (t) => new Promise((resolve) => {
     t.plan(4);
-    readConfigAsync("./test/config/config-badchildpackage.json",
+    readConfigAsync(
+      "./test/config/config-badchildpackage.json",
       function callback(err, result) {
         t.assert.notEqual(err, null, "Did not get an error for bad child package.");
         t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
         // @ts-ignore
-        t.assert.equal(err.code, "ENOENT",
-          "Error code for bad child package not ENOENT.");
+        t.assert.equal(err.code, "ENOENT", "Error code for bad child package not ENOENT.");
         t.assert.equal(!result, true, "Got result for bad child package.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configBadJson", (t) => new Promise((resolve) => {
     t.plan(3);
-    readConfigAsync("./test/config/config-badjson.json",
+    readConfigAsync(
+      "./test/config/config-badjson.json",
       function callback(err, result) {
         t.assert.notEqual(err, null, "Did not get an error for bad JSON.");
         t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
         t.assert.equal(!result, true, "Got result for bad JSON.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configBadChildJson", (t) => new Promise((resolve) => {
     t.plan(3);
-    readConfigAsync("./test/config/config-badchildjson.json",
+    readConfigAsync(
+      "./test/config/config-badchildjson.json",
       function callback(err, result) {
         t.assert.notEqual(err, null, "Did not get an error for bad child JSON.");
         t.assert.equal(err instanceof Error, true, "Error not instance of Error.");
         t.assert.equal(!result, true, "Got result for bad child JSON.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configSingleYaml", (t) => new Promise((resolve) => {
@@ -204,7 +222,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         const expected = require("./config/config-child.json");
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configMultipleYaml", (t) => new Promise((resolve) => {
@@ -224,7 +243,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         delete expected.extends;
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configMultipleHybrid", (t) => new Promise((resolve) => {
@@ -244,7 +264,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         delete expected.extends;
         t.assert.deepEqual(actual, expected, "Config object not correct.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configBadHybrid", (t) => new Promise((resolve) => {
@@ -259,7 +280,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
         t.assert.match(err?.message || "", /^Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/, "Error message unexpected.");
         t.assert.equal(!result, true, "Got result for bad child JSON.");
         resolve();
-      });
+      }
+    );
   }));
 
   test("configSingleSync", (t) => {
@@ -271,8 +293,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
 
   test("configAbsoluteSync", (t) => {
     t.plan(1);
-    const actual = readConfigSync(
-      path.join(import.meta.dirname, "config", "config-child.json"));
+    const actual = readConfigSync(path.join(import.meta.dirname, "config", "config-child.json"));
     const expected = require("./config/config-child.json");
     t.assert.deepEqual(actual, expected, "Config object not correct.");
   });
@@ -280,8 +301,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
   if (sameFileSystem) {
     test("configTildeSync", (t) => {
       t.plan(1);
-      const actual = readConfigSync(
-        `~/${path.relative(os.homedir(), "./test/config/config-child.json")}`);
+      const actual = readConfigSync(`~/${path.relative(os.homedir(), "./test/config/config-child.json")}`);
       const expected = require("./config/config-child.json");
       t.assert.deepEqual(actual, expected, "Config object not correct.");
     });
@@ -289,8 +309,7 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
 
   test("configMultipleSync", (t) => {
     t.plan(1);
-    const actual =
-      readConfigSync("./test/config/config-grandparent.json");
+    const actual = readConfigSync("./test/config/config-grandparent.json");
     const expected = {
       ...require("./config/config-child.json"),
       ...require("./config/config-parent.json"),
@@ -357,18 +376,14 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
 
   test("configSingleYamlSync", (t) => {
     t.plan(1);
-    const actual = readConfigSync(
-      // @ts-ignore
-      "./test/config/config-child.yaml", [ require("js-yaml").load ]);
+    const actual = readConfigSync("./test/config/config-child.yaml", [ require("js-yaml").load ]);
     const expected = require("./config/config-child.json");
     t.assert.deepEqual(actual, expected, "Config object not correct.");
   });
 
   test("configMultipleYamlSync", (t) => {
     t.plan(1);
-    const actual = readConfigSync(
-      // @ts-ignore
-      "./test/config/config-grandparent.yaml", [ require("js-yaml").load ]);
+    const actual = readConfigSync("./test/config/config-grandparent.yaml", [ require("js-yaml").load ]);
     const expected = {
       ...require("./config/config-child.json"),
       ...require("./config/config-parent.json"),
@@ -383,8 +398,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
     t.plan(1);
     const actual = readConfigSync(
       "./test/config/config-grandparent-hybrid.yaml",
-      // @ts-ignore
-      [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]);
+      [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]
+    );
     const expected = {
       ...require("./config/config-child.json"),
       ...require("./config/config-parent.json"),
@@ -439,8 +454,8 @@ test.suite(import.meta.url.replace(/^.*?\/(?<name>[^/]*)$/u, "$<name>"), () => {
       function badHybridCall() {
         readConfigSync(
           "./test/config/config-badcontent.txt",
-          // @ts-ignore
-          [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]);
+          [ JSON.parse, require("smol-toml").parse, require("js-yaml").load ]
+        );
       },
       {
         "message": /^Unable to parse '[^']*'; Parser \d+: (Unexpected token|Expected property name)/
